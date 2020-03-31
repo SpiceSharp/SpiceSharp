@@ -20,14 +20,18 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         public static void Prepare(SubcircuitSimulation simulation)
         {
             var parameters = simulation.GetParameterSet<BaseParameters>();
-            if (parameters.LocalBiasingSolver && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
+            if (simulation.UsesState<IBiasingSimulationState>())
             {
                 var parent = simulation.GetState<IBiasingSimulationState>();
-                var state = new SimulationState(parent, LUHelper.CreateSparseRealSolver());
+                IBiasingSimulationState state;
+                if (parameters.LocalBiasingSolver && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
+                    state = new LocalSimulationState(simulation.InstanceName, simulation.Nodes, parent, LUHelper.CreateSparseRealSolver());
+                else
+                    state = new FlatSimulationState(simulation.InstanceName, simulation.Nodes, parent);
                 simulation.LocalStates.Add(state);
             }
         }
-        private readonly SimulationState _state;
+        private readonly LocalSimulationState _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -38,7 +42,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             : base(name, simulation)
         {
             if (simulation.LocalStates.TryGetValue(out _state))
-                _state.Initialize(simulation.SharedVariables);
+                _state.Initialize(simulation.Nodes);
             _convergenceBehaviors = simulation.EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
         }
 

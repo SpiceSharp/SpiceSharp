@@ -28,10 +28,10 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            _pos1 = BiasingState.Map[BiasingState.MapNode(context.Nodes[0])];
-            _neg1 = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            _pos2 = BiasingState.Map[BiasingState.MapNode(context.Nodes[2])];
-            _neg2 = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
+            _pos1 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[0])];
+            _neg1 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            _pos2 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[2])];
+            _neg2 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
             _br1 = BiasingState.Map[Branch1];
             _br2 = BiasingState.Map[Branch2];
             _elements = new ElementSet<double>(BiasingState.Solver, null, new[] { _br1, _br2 });

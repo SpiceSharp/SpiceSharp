@@ -15,13 +15,13 @@ namespace SpiceSharp.Validation
         /// <value>
         /// The variables.
         /// </value>
-        public IVariableFactory<IVariable> Factory { get; }
+        public IVariableFactory Factory { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentRuleParameters"/> class.
         /// </summary>
         /// <param name="factory">The variable factory.</param>
-        public ComponentRuleParameters(IVariableFactory<IVariable> factory)
+        public ComponentRuleParameters(IVariableFactory factory)
         {
             Factory = factory.ThrowIfNull(nameof(factory));
         }

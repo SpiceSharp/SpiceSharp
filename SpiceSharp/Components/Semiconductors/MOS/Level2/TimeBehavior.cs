@@ -118,8 +118,8 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         {
             _time = context.GetState<ITimeSimulationState>();
 
-            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            _bulkNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
+            _gateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            _bulkNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
             _drainNodePrime = BiasingState.Map[DrainPrime];
             _sourceNodePrime = BiasingState.Map[SourcePrime];
             

@@ -21,12 +21,21 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         protected SubcircuitDefinition Definition { get; }
 
         /// <summary>
-        /// Gets the variables that are shared between the subcircuit simulation and the parent simulation.
+        /// Gets the name of the subcircuit instance.
         /// </summary>
         /// <value>
-        /// The shared variables.
+        /// The name of the instance.
         /// </value>
-        public IEnumerable<IVariable> SharedVariables { get; }
+        public string InstanceName { get; }
+
+        /// <summary>
+        /// Gets a dictionary that maps internal nodes to nodes external to the subcircuit. Any node that isn't
+        /// part of this map, is considered a local node.
+        /// </summary>
+        /// <value>
+        /// The node map.
+        /// </value>
+        public IReadOnlyList<Bridge<string>> Nodes { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitSimulation" /> class.
@@ -34,15 +43,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="definition">The subcircuit definition.</param>
-        /// <param name="shared">The shared variables.</param>
-        public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IEnumerable<IVariable> shared)
+        /// <param name="nodes">The nodes.</param>
+        public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IReadOnlyList<Bridge<string>> nodes)
             : base(parent,
                   new BehaviorContainerCollection(),
-                  new InterfaceTypeDictionary<ISimulationState>(),
-                  new SubcircuitVariableSet(name, parent?.Variables))
+                  new InterfaceTypeDictionary<ISimulationState>())
         {
             Definition = definition.ThrowIfNull(nameof(definition));
-            SharedVariables = shared.ThrowIfNull(nameof(shared));
+            Nodes = nodes.ThrowIfNull(nameof(nodes));
+            InstanceName = name.ThrowIfNull(nameof(name));
         }
 
         /// <summary>

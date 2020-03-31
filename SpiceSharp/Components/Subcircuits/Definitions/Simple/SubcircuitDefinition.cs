@@ -5,6 +5,7 @@ using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SpiceSharp.Components
@@ -74,20 +75,17 @@ namespace SpiceSharp.Components
         {
             if (Entities.Count == 0)
                 return;
-            var nodes = subcircuit.MapNodes(parentSimulation.Variables).ToArray();
-            if ((nodes == null && _pins.Length > 0) || nodes.Length != _pins.Length)
-                throw new NodeMismatchException(_pins.Length, nodes?.Length ?? 0);
 
-            // Keep all local behaviors in our subcircuit simulation
-            string name = behaviors.Name;
-            IVariable[] sharedNodes = new Variable[_pins.Length];
-            for (var i = 0; i < sharedNodes.Length; i++)
-                sharedNodes[i] = parentSimulation.Variables.MapNode(subcircuit.GetNode(i), Units.Volt);
-            var simulation = new SubcircuitSimulation(name, parentSimulation, this, sharedNodes);
+            // Make a list of node bridges
+            var outNodes = subcircuit.Nodes;
+            if ((outNodes == null && _pins.Length > 0) || outNodes.Count != _pins.Length)
+                throw new NodeMismatchException(_pins.Length, outNodes?.Count ?? 0);
+            var nodes = new Bridge<string>[_pins.Length];
+            for (var i = 0; i < _pins.Length; i++)
+                nodes[i] = new Bridge<string>(_pins[i], outNodes[i]);
 
-            // We can now prepare the subcircuit simulation
-            for (var i = 0; i < sharedNodes.Length; i++)
-                simulation.Variables.AliasNode(sharedNodes[i], _pins[i]);
+            // Keep all local behaviors in our subcircuit simulation instead of adding them to the parent simulation.
+            var simulation = new SubcircuitSimulation(subcircuit.Name, parentSimulation, this, nodes);
             BiasingBehavior.Prepare(simulation);
             FrequencyBehavior.Prepare(simulation);
 
@@ -96,14 +94,14 @@ namespace SpiceSharp.Components
 
             // Create the behaviors necessary for the subcircuit
             behaviors
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(name, simulation))
-                .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdateBehavior(name, simulation))
-                .AddIfNo<ITimeBehavior>(parentSimulation, () => new TimeBehavior(name, simulation))
-                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new BiasingBehavior(name, simulation))
-                .AddIfNo<IAcceptBehavior>(parentSimulation, () => new AcceptBehavior(name, simulation))
-                .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(name, simulation))
-                .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(name, simulation))
-                .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(name, simulation));
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(subcircuit.Name, simulation))
+                .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdateBehavior(subcircuit.Name, simulation))
+                .AddIfNo<ITimeBehavior>(parentSimulation, () => new TimeBehavior(subcircuit.Name, simulation))
+                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new BiasingBehavior(subcircuit.Name, simulation))
+                .AddIfNo<IAcceptBehavior>(parentSimulation, () => new AcceptBehavior(subcircuit.Name, simulation))
+                .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(subcircuit.Name, simulation))
+                .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(subcircuit.Name, simulation))
+                .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(subcircuit.Name, simulation));
         }
 
         /// <summary>
@@ -113,7 +111,17 @@ namespace SpiceSharp.Components
         /// <param name="rules">The rule provider.</param>
         public void Apply(Subcircuit subcircuit, IRules rules)
         {
-            var newRules = new SubcircuitRules(subcircuit.Name, rules);
+            // Make a list of node bridges
+            var outNodes = subcircuit.Nodes;
+            if ((outNodes == null && _pins.Length > 0) || outNodes.Count != _pins.Length)
+                throw new NodeMismatchException(_pins.Length, outNodes?.Count ?? 0);
+            var nodes = new Bridge<string>[_pins.Length];
+            for (var i = 0; i < _pins.Length; i++)
+                nodes[i] = new Bridge<string>(_pins[i], outNodes[i]);
+
+
+            var newRules = new SubcircuitRules(rules, new ComponentRuleParameters(
+                new VariableFactory(subcircuit.Name, nodes, rules.GetParameterSet<ComponentRuleParameters>().Factory)));
             foreach (var c in Entities)
             {
                 if (c is IRuleSubject subject)

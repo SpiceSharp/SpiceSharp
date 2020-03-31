@@ -9,9 +9,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// An <see cref="IBiasingSimulationState" /> that can be used with a local solver and solution.
         /// </summary>
-        /// <seealso cref="LocalSolverState{T}" />
+        /// <seealso cref="LocalSolverState{T, S}" />
         /// <seealso cref="IBiasingSimulationState" />
-        protected class SimulationState : LocalSolverState<double>, IBiasingSimulationState
+        protected class LocalSimulationState : LocalSolverState<double, IBiasingSimulationState>, IBiasingSimulationState
         {
             /// <summary>
             /// Gets the previous solution vector.
@@ -22,21 +22,24 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             public IVector<double> OldSolution { get; private set; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulationState"/> class.
+            /// Initializes a new instance of the <see cref="LocalSimulationState"/> class.
             /// </summary>
+            /// <param name="name">The name of the subcircuit instance.</param>
             /// <param name="parent">The parent simulation state.</param>
             /// <param name="solver">The solver.</param>
-            public SimulationState(IBiasingSimulationState parent, ISparseSolver<double> solver)
-                : base(parent, solver)
+            /// <param name="nodes">The nodes.</param>
+            public LocalSimulationState(string name, IEnumerable<Bridge<string>> nodes, IBiasingSimulationState parent, ISparseSolver<double> solver)
+                : base(name, nodes, parent, solver)
             {
             }
 
             /// <summary>
-            /// Initializes the simulation state.
+            /// Initializes the specified shared.
             /// </summary>
-            public override void Initialize(IEnumerable<IVariable> shared)
+            /// <param name="nodes">The nodes.</param>
+            public override void Initialize(IReadOnlyList<Bridge<string>> nodes)
             {
-                base.Initialize(shared);
+                base.Initialize(nodes);
                 OldSolution = new DenseVector<double>(Solver.Size);
             }
 

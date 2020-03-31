@@ -56,18 +56,18 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
         {
             _complex = context.GetState<IComplexSimulationState>();
 
-            _pos1 = _complex.Map[_complex.MapNode(context.Nodes[0])];
-            _neg1 = _complex.Map[_complex.MapNode(context.Nodes[1])];
-            _pos2 = _complex.Map[_complex.MapNode(context.Nodes[2])];
-            _neg2 = _complex.Map[_complex.MapNode(context.Nodes[3])];
+            _pos1 = _complex.Map[_complex.GetSharedVariable(context.Nodes[0])];
+            _neg1 = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
+            _pos2 = _complex.Map[_complex.GetSharedVariable(context.Nodes[2])];
+            _neg2 = _complex.Map[_complex.GetSharedVariable(context.Nodes[3])];
 
-            Internal1 = _complex.Create(Name.Combine("int1"), Units.Volt);
+            Internal1 = _complex.CreatePrivateVariable(Name.Combine("int1"), Units.Volt);
             _int1 = _complex.Map[Internal1];
-            Internal2 = _complex.Create(Name.Combine("int2"), Units.Volt);
+            Internal2 = _complex.CreatePrivateVariable(Name.Combine("int2"), Units.Volt);
             _int2 = _complex.Map[Internal2];
-            Branch1 = _complex.Create(Name.Combine("branch1"), Units.Ampere);
+            Branch1 = _complex.CreatePrivateVariable(Name.Combine("branch1"), Units.Ampere);
             _br1 = _complex.Map[Branch1];
-            Branch2 = _complex.Create(Name.Combine("branch2"), Units.Ampere);
+            Branch2 = _complex.CreatePrivateVariable(Name.Combine("branch2"), Units.Ampere);
             _br2 = _complex.Map[Branch2];
 
             _elements = new ElementSet<Complex>(_complex.Solver,

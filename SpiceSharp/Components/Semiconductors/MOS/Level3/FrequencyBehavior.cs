@@ -39,21 +39,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         {
             _complex = context.GetState<IComplexSimulationState>();
 
-            DrainPrime = _complex.MapNode(context.Nodes[0]);
+            DrainPrime = _complex.GetSharedVariable(context.Nodes[0]);
             _drainNode = _complex.Map[DrainPrime];
-            _gateNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
-            SourcePrime = _complex.MapNode(context.Nodes[2]);
+            _gateNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
+            SourcePrime = _complex.GetSharedVariable(context.Nodes[2]);
             _sourceNode = _complex.Map[SourcePrime];
-            _bulkNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
+            _bulkNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[3])];
 
             // Add series drain node if necessary
             if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
-                DrainPrime = _complex.Create(Name.Combine("drain"), Units.Volt);
+                DrainPrime = _complex.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
             _drainNodePrime = _complex.Map[DrainPrime];
 
             // Add series source node if necessary
             if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
-                SourcePrime = _complex.Create(Name.Combine("source"), Units.Volt);
+                SourcePrime = _complex.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
             _sourceNodePrime = _complex.Map[SourcePrime];
 
             _elements = new ElementSet<Complex>(_complex.Solver,

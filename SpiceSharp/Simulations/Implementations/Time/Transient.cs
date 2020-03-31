@@ -123,8 +123,8 @@ namespace SpiceSharp.Simulations
             var state = GetState<IBiasingSimulationState>();
             foreach (var ic in TimeParameters.InitialConditions)
             {
-                if (state.HasNode(ic.Key))
-                    _initialConditions.Add(new ConvergenceAid(state.MapNode(ic.Key), GetState<IBiasingSimulationState>(), ic.Value));
+                if (state.Variables.ContainsKey(ic.Key))
+                    _initialConditions.Add(new ConvergenceAid(state.GetSharedVariable(ic.Key), GetState<IBiasingSimulationState>(), ic.Value));
                 else
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(ic.Key));
             }

@@ -50,6 +50,8 @@ namespace SpiceSharp.Simulations
             }
         }
 
+        IVariable IVariableSet.this[string name] => this[name];
+
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableSet{V}"/> class.
         /// </summary>
@@ -74,7 +76,16 @@ namespace SpiceSharp.Simulations
         public void Add(V variable) => _map.Add(variable.Name, variable);
 
         /// <summary>
-        /// Clear all variables.
+        /// Removes a variable with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the variable.</param>
+        /// <returns>
+        /// <c>true</c> if the variable was removed; otherwise <c>false</c>.
+        /// </returns>
+        public bool Remove(string name) => _map.Remove(name);
+
+        /// <summary>
+        /// Clears all variables.
         /// </summary>
         public void Clear() => _map.Clear();
 

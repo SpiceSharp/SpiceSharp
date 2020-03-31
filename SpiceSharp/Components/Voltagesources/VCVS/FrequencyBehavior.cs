@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
         {
             _complex = context.GetState<IComplexSimulationState>();
             _variables = new TwoPort<Complex>(_complex, context);
-            Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
+            Branch = _complex.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             var pos = _complex.Map[_variables.Right.Positive];
             var neg = _complex.Map[_variables.Right.Negative];
             var contPos = _complex.Map[_variables.Left.Positive];

@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
             _biasing = context.GetState<IBiasingSimulationState>();
             _variables = new OnePort<double>(_biasing, context);
             _control = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>().Branch;
-            Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
+            Branch = _biasing.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
 
             var pos = _biasing.Map[_variables.Positive];
             var neg = _biasing.Map[_variables.Negative];

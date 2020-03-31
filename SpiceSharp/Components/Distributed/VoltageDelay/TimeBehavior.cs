@@ -33,8 +33,8 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             _time = context.GetState<ITimeSimulationState>();
             _biasing = context.GetState<IBiasingSimulationState>();
-            _contPosNode = _biasing.Map[_biasing.MapNode(context.Nodes[2])];
-            _contNegNode = _biasing.Map[_biasing.MapNode(context.Nodes[3])];
+            _contPosNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[2])];
+            _contNegNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[3])];
             _branchEq = _biasing.Map[Branch];
             _elements = new ElementSet<double>(_biasing.Solver, null, new[] { _branchEq });
             Signal = new DelayedSignal(1, Parameters.Delay);

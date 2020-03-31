@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
             Parameters = context.GetParameterSet<BaseParameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
             _variables = new TwoPort<double>(_biasing, context);
-            Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
+            Branch = _biasing.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             var pos = _biasing.Map[_variables.Right.Positive];
             var neg = _biasing.Map[_variables.Right.Negative];
             var contPos = _biasing.Map[_variables.Left.Positive];

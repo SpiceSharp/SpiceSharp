@@ -116,7 +116,7 @@ namespace SpiceSharp.Components
             {
                 var variables = new IVariable[_connections.Length];
                 for (var i = 0; i < _connections.Length; i++)
-                    variables[i] = p.Factory.MapNode(_connections[i]);
+                    variables[i] = p.Factory.GetSharedVariable(_connections[i]);
 
                 foreach (var rule in rules.GetRules<IConductiveRule>())
                     rule.AddPath(this, variables);

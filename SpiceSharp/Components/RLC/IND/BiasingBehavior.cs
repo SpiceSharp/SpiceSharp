@@ -58,9 +58,9 @@ namespace SpiceSharp.Components.InductorBehaviors
             context.Nodes.CheckNodes(2);
 
             BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[0])];
-            _negNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            Branch = BiasingState.Create(Name.Combine("branch"), Units.Ampere);
+            _posNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[0])];
+            _negNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            Branch = BiasingState.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             _branchEq = BiasingState.Map[Branch];
 
             _elements = new ElementSet<double>(BiasingState.Solver,

@@ -53,13 +53,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitRules"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="parent">The parent.</param>
-        public SubcircuitRules(string name, IRules parent)
+        /// <param name="parameters">The parameters.</param>
+        public SubcircuitRules(IRules parent, ComponentRuleParameters parameters)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
             _parentValidationParameters = _parent.GetParameterSet<ComponentRuleParameters>();
-            _validationParameters = new ComponentRuleParameters(new SubcircuitVariableSet(name, _parentValidationParameters.Variables));
+            _validationParameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
         /// <summary>

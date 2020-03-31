@@ -163,21 +163,21 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             Von = 0;
             Mode = 1;
 
-            DrainPrime = BiasingState.MapNode(context.Nodes[0]);
+            DrainPrime = BiasingState.GetSharedVariable(context.Nodes[0]);
             _drainNode = BiasingState.Map[DrainPrime];
-            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            SourcePrime = BiasingState.MapNode(context.Nodes[2]);
+            _gateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            SourcePrime = BiasingState.GetSharedVariable(context.Nodes[2]);
             _sourceNode = BiasingState.Map[SourcePrime];
-            _bulkNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
+            _bulkNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
 
             // Add series drain node if necessary
             if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
-                DrainPrime = BiasingState.Create(Name.Combine("drain"), Units.Volt);
+                DrainPrime = BiasingState.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
             _drainNodePrime = BiasingState.Map[DrainPrime];
 
             // Add series source node if necessary
             if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
-                SourcePrime = BiasingState.Create(Name.Combine("source"), Units.Volt);
+                SourcePrime = BiasingState.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
             _sourceNodePrime = BiasingState.Map[SourcePrime];
 
             // Get matrix pointers

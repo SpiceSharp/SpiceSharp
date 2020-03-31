@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             var complex = context.GetState<IComplexSimulationState>();
             _noise = context.GetState<INoiseSimulationState>();
             BipolarJunctionTransistorNoise.Bind(context, 
-                complex.MapNode(context.Nodes[0]), complex.MapNode(context.Nodes[1]), complex.MapNode(context.Nodes[2]), complex.MapNode(context.Nodes[3]),
+                complex.GetSharedVariable(context.Nodes[0]), complex.GetSharedVariable(context.Nodes[1]), complex.GetSharedVariable(context.Nodes[2]), complex.GetSharedVariable(context.Nodes[3]),
                 CollectorPrime, BasePrime, EmitterPrime);
         }
         

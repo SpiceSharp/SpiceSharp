@@ -67,18 +67,18 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             ComplexState = context.GetState<IComplexSimulationState>();
 
-            DrainPrime = ComplexState.MapNode(context.Nodes[0]);
+            DrainPrime = ComplexState.GetSharedVariable(context.Nodes[0]);
             _drainNode = ComplexState.Map[DrainPrime];
-            _gateNode = ComplexState.Map[ComplexState.MapNode(context.Nodes[1])];
-            SourcePrime = ComplexState.MapNode(context.Nodes[2]);
+            _gateNode = ComplexState.Map[ComplexState.GetSharedVariable(context.Nodes[1])];
+            SourcePrime = ComplexState.GetSharedVariable(context.Nodes[2]);
             _sourceNode = ComplexState.Map[SourcePrime];
 
             if (ModelParameters.DrainResistance > 0)
-                DrainPrime = ComplexState.Create(Name.Combine("drain"), Units.Volt);
+                DrainPrime = ComplexState.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
             _drainPrimeNode = ComplexState.Map[DrainPrime];
 
             if (ModelParameters.SourceResistance > 0)
-                SourcePrime = ComplexState.Create(Name.Combine("source"), Units.Volt);
+                SourcePrime = ComplexState.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
             _sourcePrimeNode = ComplexState.Map[SourcePrime];
 
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,

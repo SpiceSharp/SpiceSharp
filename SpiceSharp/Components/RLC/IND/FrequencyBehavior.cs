@@ -42,9 +42,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         {
             ComplexState = context.GetState<IComplexSimulationState>();
             
-            _posNode = ComplexState.Map[ComplexState.MapNode(context.Nodes[0])];
-            _negNode = ComplexState.Map[ComplexState.MapNode(context.Nodes[1])];
-            Branch = ComplexState.Create(Name.Combine("branch"), Units.Ampere);
+            _posNode = ComplexState.Map[ComplexState.GetSharedVariable(context.Nodes[0])];
+            _negNode = ComplexState.Map[ComplexState.GetSharedVariable(context.Nodes[1])];
+            Branch = ComplexState.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             _branchEq = ComplexState.Map[Branch];
 
             ComplexElements = new ElementSet<Complex>(ComplexState.Solver,

@@ -20,6 +20,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
             IVector<double> IBiasingSimulationState.OldSolution => _parent.OldSolution;
             ISparseSolver<double> ISolverSimulationState<double>.Solver => _solver;
             IVariableMap ISolverSimulationState<double>.Map => _parent.Map;
+            IVariableSet<IVariable<double>> IVariableFactory<IVariable<double>>.Variables => _parent.Variables;
+            IVariableSet IVariableFactory.Variables => _parent.Variables;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="BiasingSimulationState"/> class.
@@ -54,16 +56,9 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <returns>
             /// The shared node variable.
             /// </returns>
-            public IVariable<double> MapNode(string name) => _parent.MapNode(name);
+            public IVariable<double> GetSharedVariable(string name) => _parent.GetSharedVariable(name);
 
-            /// <summary>
-            /// Maps a number of nodes.
-            /// </summary>
-            /// <param name="names">The nodes.</param>
-            /// <returns>
-            /// The shared node variables.
-            /// </returns>
-            public IEnumerable<IVariable<double>> MapNodes(IEnumerable<string> names) => _parent.MapNodes(names);
+            IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
 
             /// <summary>
             /// Creates a local variable that should not be shared by the state with anyone else.
@@ -73,16 +68,9 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <returns>
             /// The local variable.
             /// </returns>
-            public IVariable<double> Create(string name, IUnit unit) => _parent.Create(name, unit);
+            public IVariable<double> CreatePrivateVariable(string name, IUnit unit) => _parent.CreatePrivateVariable(name, unit);
 
-            /// <summary>
-            /// Determines whether the specified variable is a node without mapping it.
-            /// </summary>
-            /// <param name="name">The name of the node.</param>
-            /// <returns>
-            /// <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
-            /// </returns>
-            public bool HasNode(string name) => _parent.HasNode(name);
+            IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
         }
     }
 }

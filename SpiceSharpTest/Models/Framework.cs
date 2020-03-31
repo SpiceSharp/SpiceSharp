@@ -28,8 +28,7 @@ namespace SpiceSharpTest.Models
                     context.ThrowIfNull(nameof(context));
                     _nodes = nodes;
                     var state = context.GetState<IBiasingSimulationState>();
-                    foreach (var node in _nodes)
-                        state.MapNode(node);
+                    _nodes.Select(name => state.GetSharedVariable(name));
                 }
                 void IBiasingBehavior.Load() { }
             }

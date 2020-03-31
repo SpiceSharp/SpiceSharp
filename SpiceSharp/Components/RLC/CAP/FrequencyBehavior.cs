@@ -58,8 +58,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             context.Nodes.CheckNodes(2);
 
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
+            _posNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),

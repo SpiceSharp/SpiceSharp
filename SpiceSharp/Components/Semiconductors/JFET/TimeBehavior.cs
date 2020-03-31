@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             _qgs = method.CreateDerivative();
             _qgd = method.CreateDerivative();
 
-            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
+            _gateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
             _drainPrimeNode = BiasingState.Map[DrainPrime];
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
 

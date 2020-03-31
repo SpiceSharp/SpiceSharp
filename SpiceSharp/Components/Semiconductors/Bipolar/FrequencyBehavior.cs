@@ -47,27 +47,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             _complex = context.GetState<IComplexSimulationState>();
 
-            CollectorPrime = _complex.MapNode(context.Nodes[0]);
-            BasePrime = _complex.MapNode(context.Nodes[1]);
-            EmitterPrime = _complex.MapNode(context.Nodes[2]);
+            CollectorPrime = _complex.GetSharedVariable(context.Nodes[0]);
+            BasePrime = _complex.GetSharedVariable(context.Nodes[1]);
+            EmitterPrime = _complex.GetSharedVariable(context.Nodes[2]);
             _collectorNode = _complex.Map[CollectorPrime];
             _baseNode = _complex.Map[BasePrime];
             _emitterNode = _complex.Map[EmitterPrime];
-            _substrateNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
+            _substrateNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[3])];
 
             // Add a series collector node if necessary
             if (ModelParameters.CollectorResistance > 0)
-                CollectorPrime = _complex.Create(Name.Combine("col"), Units.Volt);
+                CollectorPrime = _complex.CreatePrivateVariable(Name.Combine("col"), Units.Volt);
             _collectorPrimeNode = _complex.Map[CollectorPrime];
 
             // Add a series base node if necessary
             if (ModelParameters.BaseResist > 0)
-                BasePrime = _complex.Create(Name.Combine("base"), Units.Volt);
+                BasePrime = _complex.CreatePrivateVariable(Name.Combine("base"), Units.Volt);
             _basePrimeNode = _complex.Map[BasePrime];
 
             // Add a series emitter node if necessary
             if (ModelParameters.EmitterResistance > 0)
-                EmitterPrime = _complex.Create(Name.Combine("emit"), Units.Volt);
+                EmitterPrime = _complex.CreatePrivateVariable(Name.Combine("emit"), Units.Volt);
             _emitterPrimeNode = _complex.Map[EmitterPrime];
 
             _elements = new ElementSet<Complex>(_complex.Solver,

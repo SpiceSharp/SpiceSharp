@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
@@ -9,12 +10,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// An <see cref="IComplexSimulationState"/> that can be used with a local solver and solution.
         /// </summary>
-        /// <seealso cref="LocalSolverState{T}" />
+        /// <seealso cref="LocalSolverState{T, S}" />
         /// <seealso cref="IComplexSimulationState" />
-        protected class SimulationState : LocalSolverState<Complex>, IComplexSimulationState
+        protected class LocalSimulationState : LocalSolverState<Complex, IComplexSimulationState>, IComplexSimulationState
         {
-            private readonly IComplexSimulationState _parent;
-
             /// <summary>
             /// Gets or sets a value indicating whether the solution converges.
             /// </summary>
@@ -23,19 +22,19 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <summary>
             /// Gets or sets the current laplace variable.
             /// </summary>
-            public Complex Laplace => _parent.Laplace;
+            public Complex Laplace => Parent.Laplace;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulationState"/> class.
+            /// Initializes a new instance of the <see cref="LocalSimulationState"/> class.
             /// </summary>
-            /// <param name="parent">The parent simulation state.</param>
+            /// <param name="name">The name.</param>
+            /// <param name="nodes">The nodes.</param>
+            /// <param name="parent">The parent.</param>
             /// <param name="solver">The solver.</param>
-            public SimulationState(IComplexSimulationState parent, ISparseSolver<Complex> solver)
-                : base(parent, solver)
+            public LocalSimulationState(string name, IEnumerable<Bridge<string>> nodes, IComplexSimulationState parent, ISparseSolver<Complex> solver)
+                : base(name, nodes, parent, solver)
             {
-                _parent = parent.ThrowIfNull(nameof(parent));
             }
-
 
             /// <summary>
             /// Applies the local solver to the parent solver.

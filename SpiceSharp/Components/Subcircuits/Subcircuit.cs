@@ -13,8 +13,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity, IComponent,
-        IRuleSubject
+    public class Subcircuit : Entity, IComponent, IRuleSubject
     {
         private string[] _connections;
 
@@ -78,20 +77,6 @@ namespace SpiceSharp.Components
             for (var i = 0; i < nodes.Length; i++)
                 _connections[i] = nodes[i].ThrowIfNull($"node {0}".FormatString(i + 1));
             return this;
-        }
-
-        /// <summary>
-        /// Gets the node name by pin index.
-        /// </summary>
-        /// <param name="index">The pin index.</param>
-        /// <returns>
-        /// The node index.
-        /// </returns>
-        public string GetNode(int index)
-        {
-            if (index < 0 || index >= _connections.Length)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return _connections[index];
         }
 
         /// <summary>

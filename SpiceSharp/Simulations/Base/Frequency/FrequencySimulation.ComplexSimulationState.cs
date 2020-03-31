@@ -14,7 +14,16 @@ namespace SpiceSharp.Simulations
         protected class ComplexSimulationState : IComplexSimulationState
         {
             private readonly VariableMap _map;
-            private readonly VariableSet<IVariable<Complex>> _solved;
+
+            /// <summary>
+            /// Gets all shared variables.
+            /// </summary>
+            /// <value>
+            /// The shared variables.
+            /// </value>
+            public IVariableSet<IVariable<Complex>> Variables { get; }
+
+            IVariableSet IVariableFactory.Variables => Variables;
 
             /// <summary>
             /// Gets the solution.
@@ -53,8 +62,8 @@ namespace SpiceSharp.Simulations
 
                 var gnd = new GroundVariable<Complex>();
                 _map = new VariableMap(gnd);
-                _solved = solvedVariables;
-                _solved.Add(gnd);
+                Variables = solvedVariables.ThrowIfNull(nameof(solvedVariables));
+                Variables.Add(gnd);
             }
 
             /// <summary>
@@ -64,26 +73,15 @@ namespace SpiceSharp.Simulations
             /// <returns>
             /// The shared node variable.
             /// </returns>
-            public IVariable<Complex> MapNode(string name)
+            public IVariable<Complex> GetSharedVariable(string name)
             {
-                if (_solved.TryGetValue(name, out var result))
+                if (Variables.TryGetValue(name, out var result))
                     return result;
-                result = Create(name, Units.Volt);
-                _solved.Add(result);
-                return result;
-            }
 
-            /// <summary>
-            /// Maps a number of nodes.
-            /// </summary>
-            /// <param name="names">The nodes.</param>
-            /// <returns>
-            /// The shared node variables.
-            /// </returns>
-            public IEnumerable<IVariable<Complex>> MapNodes(IEnumerable<string> names)
-            {
-                foreach (var name in names)
-                    yield return MapNode(name);
+                // We create a private variable and then make it shared
+                result = CreatePrivateVariable(name, Units.Volt);
+                Variables.Add(result);
+                return result;
             }
 
             /// <summary>
@@ -94,12 +92,16 @@ namespace SpiceSharp.Simulations
             /// <returns>
             /// The local variable.
             /// </returns>
-            public IVariable<Complex> Create(string name, IUnit unit)
+            public IVariable<Complex> CreatePrivateVariable(string name, IUnit unit)
             {
-                var result = new SolverVariable<Complex>(this, name, _map.Count, unit);
-                _map.Add(result, _map.Count);
+                var index = _map.Count;
+                var result = new SolverVariable<Complex>(this, name, index, unit);
+                _map.Add(result, index);
                 return result;
             }
+
+            IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
+            IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
 
             /// <summary>
             /// Set up the simulation state for the simulation.
@@ -108,15 +110,6 @@ namespace SpiceSharp.Simulations
             {
                 Solution = new DenseVector<Complex>(Solver.Size);
             }
-
-            /// <summary>
-            /// Determines whether the specified variable is a node without mapping it.
-            /// </summary>
-            /// <param name="name">The name of the node.</param>
-            /// <returns>
-            /// <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
-            /// </returns>
-            public bool HasNode(string name) => _solved.ContainsKey(name);
         }
     }
 }

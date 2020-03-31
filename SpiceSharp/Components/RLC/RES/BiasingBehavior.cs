@@ -48,8 +48,8 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             context.Nodes.CheckNodes(2);
             _biasing = context.GetState<IBiasingSimulationState>();
-            _posNode = _biasing.Map[_biasing.MapNode(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.MapNode(context.Nodes[1])];
+            _posNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[0])];
+            _negNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[1])];
             _elements = new ElementSet<double>(_biasing.Solver,
                 new MatrixLocation(_posNode, _posNode),
                 new MatrixLocation(_posNode, _negNode),

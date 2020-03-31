@@ -32,8 +32,8 @@ namespace SpiceSharp.Components.CommonBehaviors
         public OnePort(IVariableFactory<IVariable<T>> factory, IComponentBindingContext context)
         {
             context.Nodes.CheckNodes(2);
-            Positive = factory.MapNode(context.Nodes[0]);
-            Negative = factory.MapNode(context.Nodes[1]);
+            Positive = factory.GetSharedVariable(context.Nodes[0]);
+            Negative = factory.GetSharedVariable(context.Nodes[1]);
         }
 
         /// <summary>

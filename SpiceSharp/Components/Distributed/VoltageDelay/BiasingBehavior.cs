@@ -46,11 +46,11 @@ namespace SpiceSharp.Components.DelayBehaviors
 
             Parameters = context.GetParameterSet<BaseParameters>();
             var state = context.GetState<IBiasingSimulationState>();
-            _posNode = state.Map[state.MapNode(context.Nodes[0])];
-            _negNode = state.Map[state.MapNode(context.Nodes[1])];
-            _contPosNode = state.Map[state.MapNode(context.Nodes[2])];
-            _contNegNode = state.Map[state.MapNode(context.Nodes[3])];
-            Branch = state.Create(Name.Combine("branch"), Units.Ampere);
+            _posNode = state.Map[state.GetSharedVariable(context.Nodes[0])];
+            _negNode = state.Map[state.GetSharedVariable(context.Nodes[1])];
+            _contPosNode = state.Map[state.GetSharedVariable(context.Nodes[2])];
+            _contNegNode = state.Map[state.GetSharedVariable(context.Nodes[3])];
+            Branch = state.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             _branchEq = state.Map[Branch];
 
             BiasingElements = new ElementSet<double>(state.Solver, new[] {

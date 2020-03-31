@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public NoiseBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             var state = context.GetState<IComplexSimulationState>();
-            ResistorNoise.Bind(context, state.MapNode(context.Nodes[0]), state.MapNode(context.Nodes[1]));
+            ResistorNoise.Bind(context, state.GetSharedVariable(context.Nodes[0]), state.GetSharedVariable(context.Nodes[1]));
         }
 
         /// <summary>

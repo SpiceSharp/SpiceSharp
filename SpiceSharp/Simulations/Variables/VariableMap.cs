@@ -13,7 +13,6 @@ namespace SpiceSharp.Simulations
     /// </remarks>
     public class VariableMap : IVariableMap
     {
-        private readonly IVariable _ground;
         private readonly Dictionary<IVariable, int> _map = new Dictionary<IVariable, int>();
 
         /// <summary>
@@ -52,11 +51,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableMap"/> class.
         /// </summary>
-        /// <param name="ground">The ground variable.</param>
+        /// <param name="ground">The ground variable that receives index 0.</param>
         public VariableMap(IVariable ground)
         {
-            _ground = ground.ThrowIfNull(nameof(ground));
-            _map.Add(_ground, 0);
+            _map.Add(ground, 0);
         }
 
         /// <summary>
@@ -84,10 +82,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Clears the map.
         /// </summary>
-        public void Clear()
-        {
-            _map.Clear();
-        }
+        public void Clear() => _map.Clear();
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

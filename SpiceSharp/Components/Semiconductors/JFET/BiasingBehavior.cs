@@ -111,18 +111,18 @@ namespace SpiceSharp.Components.JFETBehaviors
             context.TryGetState(out _time);
             context.TryGetState(out _method);
 
-            DrainPrime = BiasingState.MapNode(context.Nodes[0]);
+            DrainPrime = BiasingState.GetSharedVariable(context.Nodes[0]);
             _drainNode = BiasingState.Map[DrainPrime];
-            _gateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            SourcePrime = BiasingState.MapNode(context.Nodes[2]);
+            _gateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            SourcePrime = BiasingState.GetSharedVariable(context.Nodes[2]);
             _sourceNode = BiasingState.Map[SourcePrime];
 
             if (ModelParameters.DrainResistance > 0)
-                DrainPrime = BiasingState.Create(Name.Combine("drain"), Units.Volt);
+                DrainPrime = BiasingState.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
             _drainPrimeNode = BiasingState.Map[DrainPrime];
 
             if (ModelParameters.SourceResistance > 0)
-                SourcePrime = BiasingState.Create(Name.Combine("source"), Units.Volt);
+                SourcePrime = BiasingState.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
             
             _elements = new ElementSet<double>(BiasingState.Solver, new[] {

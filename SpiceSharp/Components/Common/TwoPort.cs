@@ -34,11 +34,11 @@ namespace SpiceSharp.Components.CommonBehaviors
         {
             context.Nodes.CheckNodes(4);
             Right = new OnePort<T>(
-                factory.MapNode(context.Nodes[0]),
-                factory.MapNode(context.Nodes[1]));
+                factory.GetSharedVariable(context.Nodes[0]),
+                factory.GetSharedVariable(context.Nodes[1]));
             Left = new OnePort<T>(
-                factory.MapNode(context.Nodes[2]),
-                factory.MapNode(context.Nodes[3]));
+                factory.GetSharedVariable(context.Nodes[2]),
+                factory.GetSharedVariable(context.Nodes[3]));
         }
     }
 }

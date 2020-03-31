@@ -47,11 +47,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
 
             var mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
 
-            Positive = factory.MapNode(context.Nodes[0]);
-            Negative = factory.MapNode(context.Nodes[1]);
+            Positive = factory.GetSharedVariable(context.Nodes[0]);
+            Negative = factory.GetSharedVariable(context.Nodes[1]);
 
             if (mbp.Resistance > 0)
-                PosPrime = factory.Create(name.Combine("pos"), Units.Volt);
+                PosPrime = factory.CreatePrivateVariable(name.Combine("pos"), Units.Volt);
             else
                 PosPrime = Positive;
         }

@@ -29,11 +29,11 @@ namespace SpiceSharp.Components.DelayBehaviors
         {
             _complex = context.GetState<IComplexSimulationState>();
 
-            _posNode = _complex.Map[_complex.MapNode(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.MapNode(context.Nodes[1])];
-            _contPosNode = _complex.Map[_complex.MapNode(context.Nodes[2])];
-            _contNegNode = _complex.Map[_complex.MapNode(context.Nodes[3])];
-            Branch = _complex.Create(Name.Combine("branch"), Units.Ampere);
+            _posNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[0])];
+            _negNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
+            _contPosNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[2])];
+            _contNegNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[3])];
+            Branch = _complex.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             _branchEq = _complex.Map[Branch];
 
             _elements = new ElementSet<Complex>(this._complex.Solver, new[] {

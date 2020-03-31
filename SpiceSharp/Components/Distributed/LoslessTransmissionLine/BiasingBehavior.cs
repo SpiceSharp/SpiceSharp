@@ -90,18 +90,18 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             // Get parameters
             BaseParameters = context.GetParameterSet<BaseParameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
-            _pos1 = BiasingState.Map[BiasingState.MapNode(context.Nodes[0])];
-            _neg1 = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            _pos2 = BiasingState.Map[BiasingState.MapNode(context.Nodes[2])];
-            _neg2 = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
+            _pos1 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[0])];
+            _neg1 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            _pos2 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[2])];
+            _neg2 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
 
-            Internal1 = BiasingState.Create(Name.Combine("int1"), Units.Volt);
+            Internal1 = BiasingState.CreatePrivateVariable(Name.Combine("int1"), Units.Volt);
             _int1 = BiasingState.Map[Internal1];
-            Internal2 = BiasingState.Create(Name.Combine("int2"), Units.Volt);
+            Internal2 = BiasingState.CreatePrivateVariable(Name.Combine("int2"), Units.Volt);
             _int2 = BiasingState.Map[Internal2];
-            Branch1 = BiasingState.Create(Name.Combine("branch1"), Units.Ampere);
+            Branch1 = BiasingState.CreatePrivateVariable(Name.Combine("branch1"), Units.Ampere);
             _br1 = BiasingState.Map[Branch1];
-            Branch2 = BiasingState.Create(Name.Combine("branch2"), Units.Ampere);
+            Branch2 = BiasingState.CreatePrivateVariable(Name.Combine("branch2"), Units.Ampere);
             _br2 = BiasingState.Map[Branch2];
 
             BiasingElements = new ElementSet<double>(BiasingState.Solver,

@@ -171,26 +171,26 @@ namespace SpiceSharp.Components.BipolarBehaviors
 
             // Get states
             Iteration = context.GetState<IIterationSimulationState>();
-            CollectorPrime = BiasingState.MapNode(context.Nodes[0]);
-            BasePrime = BiasingState.MapNode(context.Nodes[1]);
-            EmitterPrime = BiasingState.MapNode(context.Nodes[2]);
+            CollectorPrime = BiasingState.GetSharedVariable(context.Nodes[0]);
+            BasePrime = BiasingState.GetSharedVariable(context.Nodes[1]);
+            EmitterPrime = BiasingState.GetSharedVariable(context.Nodes[2]);
             _collectorNode = BiasingState.Map[CollectorPrime];
             _baseNode = BiasingState.Map[BasePrime];
             _emitterNode = BiasingState.Map[EmitterPrime];
 
             // Add a series collector node if necessary
             if (ModelParameters.CollectorResistance > 0)
-                CollectorPrime = BiasingState.Create(Name.Combine("col"), Units.Volt);
+                CollectorPrime = BiasingState.CreatePrivateVariable(Name.Combine("col"), Units.Volt);
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
 
             // Add a series base node if necessary
             if (ModelParameters.BaseResist > 0)
-                BasePrime = BiasingState.Create(Name.Combine("base"), Units.Volt);
+                BasePrime = BiasingState.CreatePrivateVariable(Name.Combine("base"), Units.Volt);
             _basePrimeNode = BiasingState.Map[BasePrime];
 
             // Add a series emitter node if necessary
             if (ModelParameters.EmitterResistance > 0)
-                EmitterPrime = BiasingState.Create(Name.Combine("emit"), Units.Volt);
+                EmitterPrime = BiasingState.CreatePrivateVariable(Name.Combine("emit"), Units.Volt);
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];
 
             // Get solver pointers

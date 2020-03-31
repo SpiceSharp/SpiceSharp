@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.Variables;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -13,7 +12,16 @@ namespace SpiceSharp.Simulations
         private class SimulationState : IBiasingSimulationState
         {
             private readonly VariableMap _map;
-            private readonly VariableSet<IVariable<double>> _solved;
+
+            /// <summary>
+            /// Gets the variables.
+            /// </summary>
+            /// <value>
+            /// The variables.
+            /// </value>
+            public IVariableSet<IVariable<double>> Variables { get; }
+
+            IVariableSet IVariableFactory.Variables => Variables;
 
             /// <summary>
             /// Gets the solution vector.
@@ -52,49 +60,32 @@ namespace SpiceSharp.Simulations
             public SimulationState(ISparseSolver<double> solver, VariableSet<IVariable<double>> solvedVariables)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
+                Variables = solvedVariables.ThrowIfNull(nameof(solvedVariables));
                 var gnd = new GroundVariable<double>();
                 _map = new VariableMap(gnd);
-                _solved = solvedVariables;
-                _solved.Add(gnd);
+                Variables.Add(gnd);
             }
 
             /// <summary>
-            /// Maps a shared node in the simulation.
+            /// Gets a variable that can be shared with other behaviors by the factory. If another variable
+            /// already exists with the same name, that is returned instead.
             /// </summary>
-            /// <param name="name">The name of the shared node.</param>
+            /// <param name="name">The name of the shared variable.</param>
             /// <returns>
-            /// The shared node variable.
+            /// The shared variable.
             /// </returns>
-            public IVariable<double> MapNode(string name)
+            public IVariable<double> GetSharedVariable(string name)
             {
-                if (_solved.TryGetValue(name, out var result))
+                if (Variables.TryGetValue(name, out var result))
                     return result;
-                result = Create(name, Units.Volt);
-                _solved.Add(result);
+
+                // We create a private variable and then make it shared by adding it to the solved variable set
+                result = CreatePrivateVariable(name, Units.Volt);
+                Variables.Add(result);
                 return result;
             }
 
-            /// <summary>
-            /// Maps a number of nodes.
-            /// </summary>
-            /// <param name="names">The nodes.</param>
-            /// <returns>
-            /// The shared node variables.
-            /// </returns>
-            public IEnumerable<IVariable<double>> MapNodes(IEnumerable<string> names)
-            {
-                foreach (var name in names)
-                    yield return MapNode(name);
-            }
-
-            /// <summary>
-            /// Determines whether the specified variable is a node without mapping it.
-            /// </summary>
-            /// <param name="name">The name of the node.</param>
-            /// <returns>
-            /// <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
-            /// </returns>
-            public bool HasNode(string name) => _solved.ContainsKey(name);
+            IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
 
             /// <summary>
             /// Creates a local variable that should not be shared by the state with anyone else.
@@ -104,12 +95,15 @@ namespace SpiceSharp.Simulations
             /// <returns>
             /// The local variable.
             /// </returns>
-            public IVariable<double> Create(string name, IUnit unit)
+            public IVariable<double> CreatePrivateVariable(string name, IUnit unit)
             {
-                var result = new SolverVariable<double>(this, name, _map.Count, unit);
-                _map.Add(result, _map.Count);
+                var index = _map.Count;
+                var result = new SolverVariable<double>(this, name, index, unit);
+                _map.Add(result, index);
                 return result;
             }
+
+            IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
 
             /// <summary>
             /// Sets up the simulation state.

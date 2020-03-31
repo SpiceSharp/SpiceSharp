@@ -21,6 +21,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
             ISparseSolver<Complex> ISolverSimulationState<Complex>.Solver => _solver;
             IVector<Complex> ISolverSimulationState<Complex>.Solution => _parent.Solution;
             IVariableMap ISolverSimulationState<Complex>.Map => _parent.Map;
+            IVariableSet<IVariable<Complex>> IVariableFactory<IVariable<Complex>>.Variables => _parent.Variables;
+            IVariableSet IVariableFactory.Variables => _parent.Variables;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
@@ -55,16 +57,9 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <returns>
             /// The shared node variable.
             /// </returns>
-            public IVariable<Complex> MapNode(string name) => _parent.MapNode(name);
+            public IVariable<Complex> GetSharedVariable(string name) => _parent.GetSharedVariable(name);
 
-            /// <summary>
-            /// Maps a number of nodes.
-            /// </summary>
-            /// <param name="names">The nodes.</param>
-            /// <returns>
-            /// The shared node variables.
-            /// </returns>
-            public IEnumerable<IVariable<Complex>> MapNodes(IEnumerable<string> names) => _parent.MapNodes(names);
+            IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
 
             /// <summary>
             /// Creates a local variable that should not be shared by the state with anyone else.
@@ -74,16 +69,9 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// <returns>
             /// The local variable.
             /// </returns>
-            public IVariable<Complex> Create(string name, IUnit unit) => _parent.Create(name, unit);
+            public IVariable<Complex> CreatePrivateVariable(string name, IUnit unit) => _parent.CreatePrivateVariable(name, unit);
 
-            /// <summary>
-            /// Determines whether the specified variable is a node without mapping it.
-            /// </summary>
-            /// <param name="name">The name of the node.</param>
-            /// <returns>
-            /// <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
-            /// </returns>
-            public bool HasNode(string name) => _parent.HasNode(name);
+            IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
         }
     }
 }

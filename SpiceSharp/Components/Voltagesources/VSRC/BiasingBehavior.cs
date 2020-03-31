@@ -93,7 +93,7 @@ namespace SpiceSharp.Components.VoltageSourceBehaviors
             context.TryGetState(out _method);
 
             _variables = new OnePort<double>(_biasing, context);
-            Branch = _biasing.Create(Name.Combine("branch"), Units.Ampere);
+            Branch = _biasing.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             var pos = _biasing.Map[_variables.Positive];
             var neg = _biasing.Map[_variables.Negative];
             var br = _biasing.Map[Branch];

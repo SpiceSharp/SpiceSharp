@@ -104,8 +104,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.MapNode(noiseconfig.Output)] : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.MapNode(noiseconfig.OutputRef)] : 0;
+            var posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
+            var negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.OutputRef)] : 0;
 
             // Initialize
             var freq = FrequencyParameters.Frequencies.GetEnumerator();

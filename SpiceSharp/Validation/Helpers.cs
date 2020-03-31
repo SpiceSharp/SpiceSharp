@@ -14,7 +14,7 @@ namespace SpiceSharp.Validation
         private static readonly Func<IRules> _defaultRules = () =>
         {
             var factory = new VariableFactory();
-            var gnd = factory.MapNode("0");
+            var gnd = factory.GetSharedVariable("0");
             return new Simulations.Biasing.Rules(factory);
         };
 

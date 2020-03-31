@@ -1,49 +1,76 @@
 ﻿using SpiceSharp.Simulations.Variables;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// A template for a variable mapper that can create variables and map them to indices.
+    /// A template for a variable factory.
     /// </summary>
-    /// <typeparam name="V"></typeparam>
-    public interface IVariableFactory<out V> where V : IVariable
+    /// <typeparam name="V">The base variable type.</typeparam>
+    public interface IVariableFactory<V> : IVariableFactory where V : IVariable
     {
         /// <summary>
-        /// Maps a shared node in the simulation.
+        /// Gets all shared variables.
         /// </summary>
-        /// <param name="name">The name of the shared node.</param>
-        /// <returns>
-        /// The shared node variable.
-        /// </returns>
-        V MapNode(string name);
+        /// <value>
+        /// The shared variables.
+        /// </value>
+        new IVariableSet<V> Variables { get; }
 
         /// <summary>
-        /// Maps a number of nodes.
+        /// Gets a variable that can be shared with other behaviors by the factory. If another variable
+        /// already exists with the same name, that is returned instead.
         /// </summary>
-        /// <param name="names">The nodes.</param>
+        /// <param name="name">The name of the shared variable.</param>
         /// <returns>
-        /// The shared node variables.
+        /// The shared variable.
         /// </returns>
-        IEnumerable<V> MapNodes(IEnumerable<string> names);
+        new V GetSharedVariable(string name);
 
         /// <summary>
-        /// Creates a local variable that should not be shared by the state with anyone else.
+        /// Creates a variable that is private to whoever requested it. The factory will not shared this
+        /// variable with anyone else, and the name is only used for display purposes.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="name">The name of the private variable.</param>
         /// <param name="unit">The unit of the variable.</param>
         /// <returns>
-        /// The local variable.
+        /// The private variable.
         /// </returns>
-        V Create(string name, IUnit unit);
+        new V CreatePrivateVariable(string name, IUnit unit);
+    }
+
+    /// <summary>
+    /// A variable factory that is not strongly typed.
+    /// </summary>
+    /// <seealso cref="IVariableFactory" />
+    public interface IVariableFactory
+    {
+        /// <summary>
+        /// Gets the variables.
+        /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
+        IVariableSet Variables { get; }
 
         /// <summary>
-        /// Determines whether the specified variable is a node without mapping it.
+        /// Gets a variable that can be shared with other behaviors by the factory. If another variable
+        /// already exists with the same name, that is returned instead.
         /// </summary>
-        /// <param name="name">The name of the node.</param>
+        /// <param name="name">The name of the shared variable.</param>
         /// <returns>
-        ///   <c>true</c> if the specified variable has node; otherwise, <c>false</c>.
+        /// The shared variable.
         /// </returns>
-        bool HasNode(string name);
+        IVariable GetSharedVariable(string name);
+
+        /// <summary>
+        /// Creates a variable that is private to whoever requested it. The factory will not shared this
+        /// variable with anyone else, and the name is only used for display purposes.
+        /// </summary>
+        /// <param name="name">The name of the private variable.</param>
+        /// <param name="unit">The unit of the variable.</param>
+        /// <returns>
+        /// The private variable.
+        /// </returns>
+        IVariable CreatePrivateVariable(string name, IUnit unit);
     }
 }

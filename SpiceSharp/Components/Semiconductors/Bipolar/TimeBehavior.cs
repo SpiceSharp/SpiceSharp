@@ -97,8 +97,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         {
             _time = context.GetState<ITimeSimulationState>();
             
-            _baseNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[1])];
-            _substrateNode = BiasingState.Map[BiasingState.MapNode(context.Nodes[3])];
+            _baseNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            _substrateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
             _basePrimeNode = BiasingState.Map[BasePrime];
             _emitterPrimeNode = BiasingState.Map[EmitterPrime];

@@ -17,17 +17,19 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(SubcircuitSimulation simulation)
         {
-            if (simulation.TryGetParameterSet(out FrequencyParameters result))
+            var parameters = simulation.GetParameterSet<BaseParameters>();
+            if (simulation.UsesState<IComplexSimulationState>())
             {
-                if (result.LocalSolver && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
-                {
-                    var parent = simulation.GetState<IComplexSimulationState>();
-                    var state = new SimulationState(parent, LUHelper.CreateSparseComplexSolver());
-                    simulation.LocalStates.Add(state);
-                }
+                var parent = simulation.GetState<IComplexSimulationState>();
+                IComplexSimulationState state;
+                if (parameters.LocalComplexSolver && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
+                    state = new LocalSimulationState(simulation.InstanceName, simulation.Nodes, parent, LUHelper.CreateSparseComplexSolver());
+                else
+                    state = new FlatSimulationState(simulation.InstanceName, simulation.Nodes, parent);
+                simulation.LocalStates.Add(state);
             }
         }
-        private readonly SimulationState _state;
+        private readonly LocalSimulationState _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
@@ -38,7 +40,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             : base(name, simulation)
         {
             if (simulation.LocalStates.TryGetValue(out _state))
-                _state.Initialize(simulation.SharedVariables);
+                _state.Initialize(simulation.Nodes);
         }
 
         /// <summary>
