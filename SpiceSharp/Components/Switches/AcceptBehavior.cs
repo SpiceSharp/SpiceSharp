@@ -12,7 +12,8 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public AcceptBehavior(string name, ComponentBindingContext context) : base(name, context)
+        /// <param name="controller">The controller.</param>
+        public AcceptBehavior(string name, ComponentBindingContext context, Controller controller) : base(name, context, controller)
         {
         }
 

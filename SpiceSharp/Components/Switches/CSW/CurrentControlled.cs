@@ -9,7 +9,15 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <seealso cref="Controller" />
     public class CurrentControlled : Controller
     {
-        private int _brNode;
+        private readonly IVariable<double> _branch;
+
+        /// <summary>
+        /// Gets the value of the controlling value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        public override double Value => _branch.Value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlled"/> class.
@@ -19,16 +27,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             var state = context.GetState<IBiasingSimulationState>();
             var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>();
-            _brNode = state.Map[behavior.Branch];
+            _branch = behavior.Branch;
         }
-
-        /// <summary>
-        /// Gets the value that is controlling the switch.
-        /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns>
-        /// The controlling value.
-        /// </returns>
-        public override double GetValue(IBiasingSimulationState state) => state.Solution[_brNode];
     }
 }

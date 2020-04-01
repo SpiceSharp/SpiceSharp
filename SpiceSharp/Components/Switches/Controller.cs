@@ -8,10 +8,11 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public abstract class Controller
     {
         /// <summary>
-        /// Gets the value that is controlling the switch.
+        /// Gets the value of the controlling value.
         /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        public abstract double GetValue(IBiasingSimulationState state);
+        /// <value>
+        /// The value.
+        /// </value>
+        public abstract double Value { get; }
     }
 }

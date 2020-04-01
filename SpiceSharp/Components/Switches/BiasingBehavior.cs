@@ -12,9 +12,10 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public class BiasingBehavior : Behavior, IBiasingBehavior,
         IParameterized<BaseParameters>
     {
-        private readonly int _posNode, _negNode;
+        private readonly Controller _controller;
         private readonly IIterationSimulationState _iteration;
         private readonly ElementSet<double> _elements;
+        private readonly OnePort<double> _variables;
 
         /// <summary>
         /// Gets the parameter set.
@@ -55,14 +56,14 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
-        public double Voltage => BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
+        public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the current through the switch.
         /// </summary>
         /// <returns></returns>
         [ParameterName("i"), ParameterInfo("Switch current")]
-        public double Current => (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]) * Conductance;
+        public double Current => Voltage * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the switch.
@@ -73,48 +74,29 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             get
             {
-                var v = (BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode]);
+                var v = Voltage;
                 return v * v * Conductance;
             }
         }
-
-        /// <summary>
-        /// Gets the method used for switching.
-        /// </summary>
-        protected Controller Method { get; }
-
-        /// <summary>
-        /// Gets the state of the biasing.
-        /// </summary>
-        /// <value>
-        /// The state of the biasing.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
+        /// <param name="controller">The controller.</param>
+        public BiasingBehavior(string name, ComponentBindingContext context, Controller controller) : base(name)
         {
             context.ThrowIfNull(nameof(context));
 
             _iteration = context.GetState<IIterationSimulationState>();
-            if (context is CurrentControlledBindingContext ctx)
-                Method = new CurrentControlled(ctx);
-            else
-                Method = new VoltageControlled(context);
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[0])];
-            _negNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
+            _controller = controller.ThrowIfNull(nameof(controller));
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
             Parameters = context.GetParameterSet<BaseParameters>();
-            _elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_posNode, _negNode),
-                new MatrixLocation(_negNode, _posNode),
-                new MatrixLocation(_negNode, _negNode));
+
+            var state = context.GetState<IBiasingSimulationState>();
+            _variables = new OnePort<double>(state.GetSharedVariable(context.Nodes[0]), state.GetSharedVariable(context.Nodes[1]));
+            _elements = new ElementSet<double>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
         /// <summary>
@@ -143,7 +125,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
             else
             {
                 // Get the previous state
-                var ctrl = Method.GetValue(BiasingState);
+                var ctrl = _controller.Value;
                 if (UseOldState)
                 {
                     // Calculate the current state

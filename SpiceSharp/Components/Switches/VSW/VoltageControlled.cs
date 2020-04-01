@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.SwitchBehaviors
 {
@@ -8,15 +9,15 @@ namespace SpiceSharp.Components.SwitchBehaviors
     /// <seealso cref="Controller" />
     public class VoltageControlled : Controller
     {
-        /// <summary>
-        /// Gets the controlling positive node index.
-        /// </summary>
-        protected int ContPosNode { get; private set; }
+        private readonly OnePort<double> _variables;
 
         /// <summary>
-        /// Gets the controlling negative node index.
+        /// Gets the value of the controlling value.
         /// </summary>
-        protected int ContNegNode { get; private set; }
+        /// <value>
+        /// The value.
+        /// </value>
+        public override double Value => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageControlled"/> class.
@@ -26,16 +27,7 @@ namespace SpiceSharp.Components.SwitchBehaviors
         {
             context.Nodes.CheckNodes(4);
             var state = context.GetState<IBiasingSimulationState>();
-            ContPosNode = state.Map[state.GetSharedVariable(context.Nodes[2])];
-            ContNegNode = state.Map[state.GetSharedVariable(context.Nodes[3])];
+            _variables = new OnePort<double>(state.GetSharedVariable(context.Nodes[2]), state.GetSharedVariable(context.Nodes[3]));
         }
-
-        /// <summary>
-        /// Gets the value that is controlling the switch.
-        /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        public override double GetValue(IBiasingSimulationState state) =>
-            state.Solution[ContPosNode] - state.Solution[ContNegNode];
     }
 }

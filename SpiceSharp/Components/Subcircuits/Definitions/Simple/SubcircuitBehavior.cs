@@ -12,18 +12,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// Gets the simulation.
         /// </summary>
-        /// <value>
-        /// The simulation.
-        /// </value>
-        protected SubcircuitSimulation Simulation { get; }
+        protected readonly SubcircuitSimulation Simulation;
 
         /// <summary>
         /// Gets the behaviors.
         /// </summary>
-        /// <value>
-        /// The behaviors.
-        /// </value>
-        protected BehaviorList<B> Behaviors { get; private set; }
+        protected readonly BehaviorList<B> Behaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitBehavior{B}"/> class.

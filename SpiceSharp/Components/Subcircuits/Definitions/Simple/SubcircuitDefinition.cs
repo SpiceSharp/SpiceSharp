@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
     public class SubcircuitDefinition : Parameterized, ISubcircuitDefinition,
         IParameterized<BaseParameters>
     {
-        private string[] _pins;
+        private readonly string[] _pins;
 
         /// <summary>
         /// Gets the parameters.

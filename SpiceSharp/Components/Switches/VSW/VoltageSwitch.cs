@@ -66,9 +66,9 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new ModelNotFoundException(Model);
             behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
+                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new VoltageControlled(context)))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new VoltageControlled(context)))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context, new VoltageControlled(context)));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

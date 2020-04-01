@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
     /// <seealso cref="ITimeBehavior" />
     public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
-        private BehaviorList<ITimeBehavior> _behaviors;
+        private readonly BehaviorList<ITimeBehavior> _behaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
