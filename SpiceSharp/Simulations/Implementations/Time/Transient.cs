@@ -123,7 +123,7 @@ namespace SpiceSharp.Simulations
             var state = GetState<IBiasingSimulationState>();
             foreach (var ic in TimeParameters.InitialConditions)
             {
-                if (state.Variables.ContainsKey(ic.Key))
+                if (state.ContainsKey(ic.Key))
                     _initialConditions.Add(new ConvergenceAid(state.GetSharedVariable(ic.Key), GetState<IBiasingSimulationState>(), ic.Value));
                 else
                     SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(ic.Key));
@@ -142,7 +142,7 @@ namespace SpiceSharp.Simulations
             if (TimeParameters.Validate)
             {
                 var state = GetState<IBiasingSimulationState>();
-                var rules = new Biasing.Rules(state);
+                var rules = new Biasing.Rules(state, BiasingParameters.NodeComparer);
 
                 // We want to add our own connections for initial conditions
                 foreach (var ic in _initialConditions)

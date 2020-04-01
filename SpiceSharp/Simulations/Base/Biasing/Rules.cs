@@ -26,12 +26,13 @@ namespace SpiceSharp.Simulations.Biasing
         /// Initializes a new instance of the <see cref="Rules"/> class.
         /// </summary>
         /// <param name="factory">The variable factory.</param>
-        public Rules(IVariableFactory factory)
+        /// <param name="comparer">The comparer for variable names.</param>
+        public Rules(IVariableFactory<IVariable> factory, IEqualityComparer<string> comparer)
         {
             var ground = factory.GetSharedVariable(Constants.Ground);
             _floatingNode = new FloatingNodeRule(ground);
             _groundPresence = new VariablePresenceRule(ground);
-            Parameters = new ComponentRuleParameters(factory);
+            Parameters = new ComponentRuleParameters(factory, comparer);
         }
 
         /// <summary>

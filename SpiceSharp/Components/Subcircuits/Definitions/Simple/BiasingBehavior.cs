@@ -25,9 +25,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                 var parent = simulation.GetState<IBiasingSimulationState>();
                 IBiasingSimulationState state;
                 if (parameters.LocalBiasingSolver && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
-                    state = new LocalSimulationState(simulation.InstanceName, simulation.Nodes, parent, LUHelper.CreateSparseRealSolver());
+                    state = new LocalSimulationState(simulation.InstanceName, parent, simulation.Nodes, LUHelper.CreateSparseRealSolver());
                 else
-                    state = new FlatSimulationState(simulation.InstanceName, simulation.Nodes, parent);
+                    state = new FlatSimulationState(simulation.InstanceName, parent, simulation.Nodes);
                 simulation.LocalStates.Add(state);
             }
         }

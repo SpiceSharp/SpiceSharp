@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <summary>
         /// An <see cref="IBiasingSimulationState"/> that just maps nodes but uses the same solver.
         /// </summary>
-        /// <seealso cref="FlatSolverState{T, S}" />
+        /// <seealso cref="SubcircuitSolverState{T, S}" />
         /// <seealso cref="IBiasingSimulationState" />
         protected class FlatSimulationState : FlatSolverState<double, IBiasingSimulationState>, IBiasingSimulationState
         {
@@ -28,10 +28,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// Initializes a new instance of the <see cref="FlatSimulationState"/> class.
             /// </summary>
             /// <param name="name">The name.</param>
-            /// <param name="nodes">The nodes.</param>
             /// <param name="parent">The parent.</param>
-            public FlatSimulationState(string name, IEnumerable<Bridge<string>> nodes, IBiasingSimulationState parent)
-                : base(name, nodes, parent)
+            /// <param name="nodes">The nodes.</param>
+            public FlatSimulationState(string name, IBiasingSimulationState parent, IEnumerable<Bridge<string>> nodes)
+                : base(name, parent, nodes)
             {
             }
         }

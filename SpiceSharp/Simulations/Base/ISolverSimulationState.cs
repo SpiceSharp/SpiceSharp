@@ -4,10 +4,14 @@ using System;
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// An <see cref="ISimulationState"/> that describes a solver.
+    /// An <see cref="ISimulationState"/> that describes a simulation state that uses a solver for modified nodal analysis.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface ISolverSimulationState<T> : ISimulationState, IVariableFactory<IVariable<T>> where T : IFormattable
+    public interface ISolverSimulationState<T> : 
+        ISimulationState,
+        IVariableFactory<IVariable<T>>,
+        IVariableDictionary<IVariable<T>>
+        where T : IFormattable
     {
         /// <summary>
         /// Gets the solver used to solve the system of equations.

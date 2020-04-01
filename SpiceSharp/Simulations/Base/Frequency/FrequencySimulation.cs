@@ -25,7 +25,6 @@ namespace SpiceSharp.Simulations
         private LoadStateEventArgs _loadStateEventArgs;
         private bool _shouldReorderAc;
         private ComplexSimulationState _state;
-        private VariableSet<IVariable<Complex>> _variables;
 
         /// <summary>
         /// Gets the frequency parameters.
@@ -63,7 +62,7 @@ namespace SpiceSharp.Simulations
 
         IComplexSimulationState IStateful<IComplexSimulationState>.State => _state;
         FrequencyParameters IParameterized<FrequencyParameters>.Parameters => FrequencyParameters;
-        IVariableSet<IVariable<Complex>> ISimulation<IVariable<Complex>>.Solved => _variables;
+        IVariableDictionary<IVariable<Complex>> ISimulation<IVariable<Complex>>.Solved => _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
@@ -94,9 +93,6 @@ namespace SpiceSharp.Simulations
         protected override void Setup(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
-
-            // Create the variables and use the same node comparer as the biasing simulation.
-            _variables = new VariableSet<IVariable<Complex>>(BiasingParameters.NodeComparer);
 
             // Setup the rest of the behaviors
             base.Setup(entities);
@@ -137,7 +133,7 @@ namespace SpiceSharp.Simulations
         {
             _state = new ComplexSimulationState(
                 FrequencyParameters.Solver ?? LUHelper.CreateSparseComplexSolver(),
-                _variables
+                BiasingParameters.NodeComparer
                 );
             /* var strategy = ComplexState.Solver.Strategy;
             strategy.RelativePivotThreshold = config.RelativePivotThreshold;

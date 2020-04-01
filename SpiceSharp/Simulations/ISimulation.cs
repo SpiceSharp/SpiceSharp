@@ -16,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The variables.
         /// </value>
-        IVariableSet<V> Solved { get; }
+        IVariableDictionary<V> Solved { get; }
     }
 
     /// <summary>

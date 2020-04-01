@@ -11,19 +11,9 @@ namespace SpiceSharp.Simulations
         /// A simulation state using complex numbers.
         /// </summary>
         /// <seealso cref="IComplexSimulationState" />
-        protected class ComplexSimulationState : IComplexSimulationState
+        protected class ComplexSimulationState : VariableDictionary<IVariable<Complex>>, IComplexSimulationState
         {
             private readonly VariableMap _map;
-
-            /// <summary>
-            /// Gets all shared variables.
-            /// </summary>
-            /// <value>
-            /// The shared variables.
-            /// </value>
-            public IVariableSet<IVariable<Complex>> Variables { get; }
-
-            IVariableSet IVariableFactory.Variables => Variables;
 
             /// <summary>
             /// Gets the solution.
@@ -52,18 +42,18 @@ namespace SpiceSharp.Simulations
             public ISparseSolver<Complex> Solver { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="ComplexSimulationState" /> class.
+            /// Initializes a new instance of the <see cref="ComplexSimulationState"/> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            /// <param name="solvedVariables">The set with solved variables.</param>
-            public ComplexSimulationState(ISparseSolver<Complex> solver, VariableSet<IVariable<Complex>> solvedVariables)
+            /// <param name="comparer">The comparer.</param>
+            public ComplexSimulationState(ISparseSolver<Complex> solver, IEqualityComparer<string> comparer)
+                : base(comparer)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
 
-                var gnd = new GroundVariable<Complex>();
+                var gnd = new SolverVariable<Complex>(this, Constants.Ground, 0, Units.Volt);
                 _map = new VariableMap(gnd);
-                Variables = solvedVariables.ThrowIfNull(nameof(solvedVariables));
-                Variables.Add(gnd);
+                Add(Constants.Ground, gnd);
             }
 
             /// <summary>
@@ -75,12 +65,12 @@ namespace SpiceSharp.Simulations
             /// </returns>
             public IVariable<Complex> GetSharedVariable(string name)
             {
-                if (Variables.TryGetValue(name, out var result))
+                if (TryGetValue(name, out var result))
                     return result;
 
                 // We create a private variable and then make it shared
                 result = CreatePrivateVariable(name, Units.Volt);
-                Variables.Add(result);
+                Add(name, result);
                 return result;
             }
 
@@ -99,9 +89,6 @@ namespace SpiceSharp.Simulations
                 _map.Add(result, index);
                 return result;
             }
-
-            IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
-            IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
 
             /// <summary>
             /// Set up the simulation state for the simulation.

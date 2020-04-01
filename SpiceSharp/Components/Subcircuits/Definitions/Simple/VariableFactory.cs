@@ -8,19 +8,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
     /// A factory for variables shielding
     /// </summary>
     /// <seealso cref="IVariableFactory{V}" />
-    public class VariableFactory : IVariableFactory
+    public class VariableFactory : IVariableFactory<IVariable>
     {
         private readonly string _name;
-        private readonly IVariableFactory _parent;
+        private readonly IVariableFactory<IVariable> _parent;
         private readonly Dictionary<string, string> _nodeMap;
-
-        /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IVariableSet Variables => _parent.Variables;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableFactory"/> class.
@@ -28,12 +20,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="name">The subcircuit instance name.</param>
         /// <param name="nodes">The nodes.</param>
         /// <param name="parent">The parent.</param>
-        public VariableFactory(string name, IReadOnlyList<Bridge<string>> nodes, IVariableFactory parent)
+        /// <param name="comparer">The equality comparer for nodes.</param>
+        public VariableFactory(string name, IVariableFactory<IVariable> parent, IEnumerable<Bridge<string>> nodes, IEqualityComparer<string> comparer)
         {
             _name = name.ThrowIfNull(nameof(name));
             _parent = parent.ThrowIfNull(nameof(parent));
 
-            _nodeMap = new Dictionary<string, string>(parent.Variables.Comparer);
+            _nodeMap = new Dictionary<string, string>(comparer);
             _nodeMap.Add(Constants.Ground, Constants.Ground);
             foreach (var bridge in nodes)
                 _nodeMap.Add(bridge.Local, bridge.Global);
@@ -49,9 +42,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// </returns>
         public IVariable GetSharedVariable(string name)
         {
-            if (_nodeMap.TryGetValue(name, out var mapped))
-                return _parent.GetSharedVariable(mapped);
-            return _parent.GetSharedVariable(_name.Combine(name));
+            if (!_nodeMap.TryGetValue(name, out var mapped))
+                mapped = _name.Combine(name);
+            return _parent.GetSharedVariable(mapped);
         }
 
         /// <summary>

@@ -22,10 +22,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// Initializes a new instance of the <see cref="FlatSimulationState"/> class.
             /// </summary>
             /// <param name="name">The name.</param>
-            /// <param name="nodes">The nodes.</param>
             /// <param name="parent">The parent.</param>
-            public FlatSimulationState(string name, IEnumerable<Bridge<string>> nodes, IComplexSimulationState parent)
-                : base(name, nodes, parent)
+            /// <param name="nodes">The nodes.</param>
+            public FlatSimulationState(string name, IComplexSimulationState parent, IEnumerable<Bridge<string>> nodes)
+                : base(name, parent, nodes)
             {
             }
         }

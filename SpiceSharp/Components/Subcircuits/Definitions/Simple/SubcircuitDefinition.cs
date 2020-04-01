@@ -119,9 +119,10 @@ namespace SpiceSharp.Components
             for (var i = 0; i < _pins.Length; i++)
                 nodes[i] = new Bridge<string>(_pins[i], outNodes[i]);
 
-
+            var crp = rules.GetParameterSet<ComponentRuleParameters>();
             var newRules = new SubcircuitRules(rules, new ComponentRuleParameters(
-                new VariableFactory(subcircuit.Name, nodes, rules.GetParameterSet<ComponentRuleParameters>().Factory)));
+                new VariableFactory(subcircuit.Name, crp.Factory, nodes, crp.Comparer),
+                crp.Comparer));
             foreach (var c in Entities)
             {
                 if (c is IRuleSubject subject)

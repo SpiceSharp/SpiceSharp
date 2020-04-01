@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.Variables;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -9,19 +10,9 @@ namespace SpiceSharp.Simulations
         /// A simulation state for simulations using real numbers.
         /// </summary>
         /// <seealso cref="IBiasingSimulationState" />
-        private class SimulationState : IBiasingSimulationState
+        private class SimulationState : VariableDictionary<IVariable<double>>, IBiasingSimulationState
         {
             private readonly VariableMap _map;
-
-            /// <summary>
-            /// Gets the variables.
-            /// </summary>
-            /// <value>
-            /// The variables.
-            /// </value>
-            public IVariableSet<IVariable<double>> Variables { get; }
-
-            IVariableSet IVariableFactory.Variables => Variables;
 
             /// <summary>
             /// Gets the solution vector.
@@ -53,17 +44,18 @@ namespace SpiceSharp.Simulations
             public ISparseSolver<double> Solver { get; }
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SimulationState" /> class.
+            /// Initializes a new instance of the <see cref="SimulationState"/> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
-            /// <param name="solvedVariables">The set of variables that tracks the solved variables.</param>
-            public SimulationState(ISparseSolver<double> solver, VariableSet<IVariable<double>> solvedVariables)
+            /// <param name="comparer">The comparer.</param>
+            public SimulationState(ISparseSolver<double> solver, IEqualityComparer<string> comparer)
+                : base(comparer)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));
-                Variables = solvedVariables.ThrowIfNull(nameof(solvedVariables));
-                var gnd = new GroundVariable<double>();
+
+                var gnd = new SolverVariable<double>(this, Constants.Ground, 0, Units.Volt);
                 _map = new VariableMap(gnd);
-                Variables.Add(gnd);
+                Add(Constants.Ground, gnd);
             }
 
             /// <summary>
@@ -76,16 +68,14 @@ namespace SpiceSharp.Simulations
             /// </returns>
             public IVariable<double> GetSharedVariable(string name)
             {
-                if (Variables.TryGetValue(name, out var result))
+                if (TryGetValue(name, out var result))
                     return result;
 
                 // We create a private variable and then make it shared by adding it to the solved variable set
                 result = CreatePrivateVariable(name, Units.Volt);
-                Variables.Add(result);
+                Add(name, result);
                 return result;
             }
-
-            IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
 
             /// <summary>
             /// Creates a local variable that should not be shared by the state with anyone else.
@@ -102,8 +92,6 @@ namespace SpiceSharp.Simulations
                 _map.Add(result, index);
                 return result;
             }
-
-            IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
 
             /// <summary>
             /// Sets up the simulation state.

@@ -6,25 +6,15 @@ namespace SpiceSharp.Simulations.Variables
     /// A simple variable factory where the variables don't have any extra functionality.
     /// </summary>
     /// <seealso cref="IVariableFactory{V}" />
-    public class VariableFactory : IVariableFactory<IVariable>
+    public class VariableFactory : VariableDictionary<IVariable>, IVariableFactory<IVariable>
     {
-        /// <summary>
-        /// Gets all shared variables.
-        /// </summary>
-        /// <value>
-        /// The shared variables.
-        /// </value>
-        public IVariableSet<IVariable> Variables { get; }
-
-        IVariableSet IVariableFactory.Variables => Variables;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableFactory"/> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
         public VariableFactory(IEqualityComparer<string> comparer = null)
+            : base(comparer)
         {
-            Variables = new VariableSet<IVariable>(comparer);
         }
 
         /// <summary>
@@ -36,10 +26,10 @@ namespace SpiceSharp.Simulations.Variables
         /// </returns>
         public IVariable GetSharedVariable(string name)
         {
-            if (Variables.TryGetValue(name, out var result))
+            if (TryGetValue(name, out var result))
                 return result;
             result = new Variable(name, Units.Volt);
-            Variables.Add(result);
+            Add(name, result);
             return result;
         }
 

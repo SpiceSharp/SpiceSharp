@@ -7,27 +7,20 @@ using System.Collections.Generic;
 namespace SpiceSharp.Components.SubcircuitBehaviors
 {
     /// <summary>
-    /// A solver simulation state.
+    /// A solver simulation state that only maps the names of the variables.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
+    /// <typeparam name="S">The parent simulation state type.</typeparam>
     /// <seealso cref="ISolverSimulationState{T}" />
-    public abstract class FlatSolverState<T, S> : ISolverSimulationState<T> where S : ISolverSimulationState<T> where T : IFormattable
+    public class FlatSolverState<T, S> : SubcircuitSolverState<T, S> where S : ISolverSimulationState<T> where T : IFormattable
     {
-        private readonly string _name;
-        private readonly Dictionary<string, string> _nodeMap;
-
-        /// <summary>
-        /// The parent simulation state.
-        /// </summary>
-        protected readonly S Parent;
-
         /// <summary>
         /// Gets the solver used to solve the system of equations.
         /// </summary>
         /// <value>
         /// The solver.
         /// </value>
-        public ISparseSolver<T> Solver => Parent.Solver;
+        public override ISparseSolver<T> Solver => Parent.Solver;
 
         /// <summary>
         /// Gets the solution.
@@ -35,7 +28,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The solution.
         /// </value>
-        public IVector<T> Solution => Parent.Solution;
+        public override IVector<T> Solution => Parent.Solution;
 
         /// <summary>
         /// Gets the map that maps variables to indices for the solver.
@@ -43,32 +36,23 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The map.
         /// </value>
-        public IVariableMap Map => Parent.Map;
+        public override IVariableMap Map => Parent.Map;
 
         /// <summary>
-        /// Gets all shared variables.
-        /// </summary>
-        /// <value>
-        /// The shared variables.
-        /// </value>
-        public IVariableSet<IVariable<T>> Variables => Parent.Variables;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FlatSolverState{T, S}"/> class.
+        /// Initializes a new instance of the <see cref="SubcircuitSolverState{T, S}"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="nodes">The nodes.</param>
         /// <param name="parent">The parent.</param>
-        protected FlatSolverState(string name, IEnumerable<Bridge<string>> nodes, S parent)
+        /// <param name="nodes">The nodes.</param>
+        protected FlatSolverState(string name, S parent, IEnumerable<Bridge<string>> nodes)
+            : base(name, parent)
         {
-            _name = name.ThrowIfNull(nameof(name));
-            _nodeMap = new Dictionary<string, string>(parent.Variables.Comparer);
-            Parent = parent;
-
-            // We make sure that the ground node is never made local
-            _nodeMap.Add(Constants.Ground, Constants.Ground);
-            foreach (var node in nodes)
-                _nodeMap.Add(node.Local, node.Global);
+            // Create aliases for each node
+            foreach (var bridge in nodes)
+            {
+                var elt = Parent.GetSharedVariable(bridge.Global);
+                Add(bridge.Local, elt);
+            }
         }
 
         /// <summary>
@@ -79,11 +63,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// The shared variable.
         /// </returns>
-        public IVariable<T> GetSharedVariable(string name)
+        public override IVariable<T> GetSharedVariable(string name)
         {
-            if (!_nodeMap.TryGetValue(name, out var mapped))
-                mapped = _name.Combine(name);
-            return Parent.GetSharedVariable(mapped);
+            // Don't make the ground node local
+            if (Parent.Comparer.Equals(name, Constants.Ground))
+                return Parent.GetSharedVariable(name);
+
+            return Parent.GetSharedVariable(Name.Combine(name));
         }
 
         /// <summary>
@@ -95,10 +81,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// The private variable.
         /// </returns>
-        public IVariable<T> CreatePrivateVariable(string name, IUnit unit) => Parent.CreatePrivateVariable(_name.Combine(name), unit);
-
-        IVariableSet IVariableFactory.Variables => Parent.Variables;
-        IVariable IVariableFactory.GetSharedVariable(string name) => Parent.GetSharedVariable(name);
-        IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => Parent.CreatePrivateVariable(name, unit);
+        public override IVariable<T> CreatePrivateVariable(string name, IUnit unit) => Parent.CreatePrivateVariable(Name.Combine(name), unit);
     }
 }

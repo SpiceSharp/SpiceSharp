@@ -24,7 +24,7 @@ namespace SpiceSharp.Simulations.Frequency
         /// <param name="state">The biasing simulation state.</param>
         /// <param name="frequencies">The frequencies that will be evaluated.</param>
         public Rules(ISolverSimulationState<double> state, IEnumerable<double> frequencies)
-            : base(state)
+            : base(state, state.Comparer)
         {
             FrequencyParameters = new RuleParameters(frequencies);
         }

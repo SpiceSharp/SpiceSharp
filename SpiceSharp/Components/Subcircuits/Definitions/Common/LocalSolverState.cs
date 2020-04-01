@@ -12,31 +12,43 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <typeparam name="T">The solver value type.</typeparam>
     /// <typeparam name="S">The parent simulation state type.</typeparam>
     /// <seealso cref="ISolverSimulationState{T}" />
-    public abstract partial class LocalSolverState<T, S> : ISolverSimulationState<T>
+    public abstract partial class LocalSolverState<T, S> : SubcircuitSolverState<T, S>
         where S : ISolverSimulationState<T>
         where T : IFormattable
     {
-        private readonly string _name;
         private bool _shouldPreorder, _shouldReorder;
-        private readonly List<Bridge<Element<T>>> _bridges = new List<Bridge<Element<T>>>();
-        private readonly Dictionary<int, int> _variableMap = new Dictionary<int, int>();
-        private readonly Dictionary<string, string> _nodeMap;
+        private readonly List<Bridge<Element<T>>> _elements = new List<Bridge<Element<T>>>();
+        private readonly List<Bridge<int>> _indices = new List<Bridge<int>>();
         private readonly VariableMap _map;
 
         /// <summary>
-        /// The parent simulation state.
+        /// The local solution vector.
         /// </summary>
-        protected readonly S Parent;
+        protected IVector<T> LocalSolution;
 
         /// <summary>
-        /// Gets all shared variables.
+        /// Gets the solver used to solve the system of equations.
         /// </summary>
         /// <value>
-        /// The shared variables.
+        /// The solver.
         /// </value>
-        public IVariableSet<IVariable<T>> Variables => Parent.Variables;
+        public override ISparseSolver<T> Solver { get; }
 
-        IVariableSet IVariableFactory.Variables => Parent.Variables;
+        /// <summary>
+        /// Gets the solution.
+        /// </summary>
+        /// <value>
+        /// The solution.
+        /// </value>
+        public override IVector<T> Solution => LocalSolution;
+
+        /// <summary>
+        /// Gets the map that maps variables to indices for the solver.
+        /// </summary>
+        /// <value>
+        /// The map.
+        /// </value>
+        public override IVariableMap Map => _map;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="LocalSolverState{T,S}"/> has updated its solution.
@@ -47,47 +59,20 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         protected bool Updated { get; private set; }
 
         /// <summary>
-        /// Gets the solver used to solve the system of equations.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
-        public ISparseSolver<T> Solver { get; }
-
-        /// <summary>
-        /// Gets the solution.
-        /// </summary>
-        /// <value>
-        /// The solution.
-        /// </value>
-        public IVector<T> Solution { get; protected set; }
-
-        /// <summary>
-        /// Gets the map that maps <see cref="Variable" /> to indices for the solver.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
-        public IVariableMap Map => _map;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="LocalSolverState{T,S}"/> class.
         /// </summary>
         /// <param name="name">The name of the subcircuit instance.</param>
         /// <param name="nodes">The nodes.</param>
         /// <param name="parent">The parent simulation state.</param>
         /// <param name="solver">The local solver.</param>
-        protected LocalSolverState(string name, IEnumerable<Bridge<string>> nodes, S parent, ISparseSolver<T> solver)
+        protected LocalSolverState(string name, S parent, IEnumerable<Bridge<string>> nodes, ISparseSolver<T> solver)
+            : base(name, parent)
         {
-            _name = name.ThrowIfNull(nameof(name));
-            Parent = parent;
             Solver = solver.ThrowIfNull(nameof(solver));
-            _map = new VariableMap(parent.GetSharedVariable(Constants.Ground));
 
-            _nodeMap = new Dictionary<string, string>(parent.Variables.Comparer);
-            _nodeMap.Add(Constants.Ground, Constants.Ground);
-            foreach (var bridge in nodes)
-                _nodeMap.Add(bridge.Local, bridge.Global);
+            // We will keep our own map! We will use the parent's variable set though, to make sure our parent can find back
+            // our solved variables.
+            _map = new VariableMap(parent.Map[0]);
         }
 
         /// <summary>
@@ -96,7 +81,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="nodes">The node map.</param>
         public virtual void Initialize(IReadOnlyList<Bridge<string>> nodes)
         {
-            Solution = new DenseVector<T>(Solver.Size);
+            LocalSolution = new DenseVector<T>(Solver.Size);
             _shouldPreorder = true;
             _shouldReorder = true;
             Updated = true;
@@ -109,35 +94,39 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="nodes">The nodes.</param>
         private void ReorderLocalSolver(IReadOnlyList<Bridge<string>> nodes)
         {
-            // Create a list of shared variables
-            var shared = new IVariable<T>[nodes.Count];
+            // Map each local node on the global node
+            _indices.Clear();
+            foreach (var bridge in nodes)
+            {
+                var loc = GetSharedVariable(bridge.Local);
+                var glob = Parent.GetSharedVariable(bridge.Global);
+                _indices.Add(new Bridge<int>(_map[loc], Parent.Map[glob]));
+            }
 
             Solver.Precondition((matrix, vector) =>
             {
-                for (var i = 0; i < nodes.Count; i++)
+                for (var i = 0; i < _indices.Count; i++)
                 {
-                    shared[i] = GetSharedVariable(nodes[i].Local);
-
                     // Let's move these variables to the back of the matrix
-                    int index = Map[shared[i]];
+                    int index = _indices[i].Local;
                     var location = Solver.ExternalToInternal(new MatrixLocation(index, index));
                     int target = matrix.Size - i;
                     matrix.SwapColumns(location.Column, target);
                     matrix.SwapRows(location.Row, target);
                 }
             });
-            Solver.Degeneracy = shared.Length;
-            Solver.PivotSearchReduction = shared.Length;
+            Solver.Degeneracy = _indices.Count;
+            Solver.PivotSearchReduction = _indices.Count;
 
             // Get the elements that need to be shared
             Solver.Precondition((m, v) =>
             {
                 var matrix = (ISparseMatrix<T>)m;
                 var vector = (ISparseVector<T>)v;
-                foreach (var row in shared)
+                foreach (var row in _indices)
                 {
                     LinkElement(vector, row);
-                    foreach (var col in shared)
+                    foreach (var col in _indices)
                         LinkElement(matrix, row, col);
                 }
             });
@@ -148,26 +137,24 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="vector">The vector.</param>
         /// <param name="row">The row variable.</param>
-        private void LinkElement(ISparseVector<T> vector, IVariable row)
+        private void LinkElement(ISparseVector<T> vector, Bridge<int> row)
         {
-            var local_index = Map[row];
-            var parent_index = Parent.Map[row];
-            _variableMap.Add(parent_index, local_index);
+            var loc = Solver.ExternalToInternal(new MatrixLocation(row.Local, row.Local));
 
             // Do we need to create an element?
-            var local_elt = Solver.FindElement(local_index);
+            var local_elt = vector.FindElement(loc.Row);
             if (local_elt == null)
             {
                 // Check if solving will result in an element
                 var first = vector.GetFirstInVector();
                 if (first == null || first.Index > Solver.Size - Solver.Degeneracy)
                     return;
-                local_elt = vector.GetElement(local_index);
+                local_elt = vector.GetElement(loc.Row);
             }
             if (local_elt == null)
                 return;
-            var parent_elt = Parent.Solver.GetElement(parent_index);
-            _bridges.Add(new Bridge<Element<T>>(local_elt, parent_elt));
+            var parent_elt = Parent.Solver.GetElement(row.Global);
+            _elements.Add(new Bridge<Element<T>>(local_elt, parent_elt));
         }
 
         /// <summary>
@@ -176,9 +163,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="matrix">The matrix.</param>
         /// <param name="row">The row variable.</param>
         /// <param name="column">The column variable.</param>
-        private void LinkElement(ISparseMatrix<T> matrix, IVariable row, IVariable column)
+        private void LinkElement(ISparseMatrix<T> matrix, Bridge<int> row, Bridge<int> column)
         {
-            var loc = Solver.ExternalToInternal(new MatrixLocation(Map[row], Map[column]));
+            var loc = Solver.ExternalToInternal(new MatrixLocation(row.Local, column.Local));
 
             // Do we need to create an element?
             var local_elt = matrix.FindElement(loc.Row, loc.Column);
@@ -198,8 +185,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
             if (local_elt == null)
                 return;
-            var parent_elt = Parent.Solver.GetElement(Parent.Map[row], Parent.Map[column]);
-            _bridges.Add(new Bridge<Element<T>>(local_elt, parent_elt));
+            var parent_elt = Parent.Solver.GetElement(row.Global, column.Global);
+            _elements.Add(new Bridge<Element<T>>(local_elt, parent_elt));
         }
 
         /// <summary>
@@ -233,7 +220,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             }
 
             // Copy the necessary elements
-            foreach (var bridge in _bridges)
+            foreach (var bridge in _elements)
                 bridge.Global.Add(bridge.Local.Value);
             Updated = false;
             return true;
@@ -249,8 +236,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                 return;
 
             // Fill in the shared variables
-            foreach (var pair in _variableMap)
-                Solution[pair.Value] = Parent.Solution[pair.Key];
+            foreach (var pair in _indices)
+                Solution[pair.Local] = Parent.Solution[pair.Global];
             Solver.Solve(Solution);
             Solution[0] = default;
             Updated = true;
@@ -263,26 +250,15 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// The shared node variable.
         /// </returns>
-        public IVariable<T> GetSharedVariable(string name)
+        public override IVariable<T> GetSharedVariable(string name)
         {
-            IVariable<T> result;
-            if (_nodeMap.TryGetValue(name, out var mapped))
+            // Get the local node!
+            if (!TryGetValue(name, out var result))
             {
-                // The variable is a global pin node, so let's get it in from the parent state!
-                result = Parent.GetSharedVariable(mapped);
-                if (!_map.Contains(result))
-                    _map.Add(result, _map.Count);
-            }
-            else
-            {
-                mapped = _name.Combine(name);
-                if (!Variables.TryGetValue(mapped, out result))
-                {
-                    int index = _map.Count;
-                    result = new SolverVariable<T>(this, mapped, index, Units.Volt);
-                    _map.Add(result, index);
-                    Variables.Add(result);
-                }
+                var index = _map.Count;
+                result = new SolverVariable<T>(this, name, index, Units.Volt);
+                Add(name, result);
+                _map.Add(result, index);
             }
             return result;
         }
@@ -295,15 +271,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <returns>
         /// The local variable.
         /// </returns>
-        public IVariable<T> CreatePrivateVariable(string name, IUnit unit)
+        public override IVariable<T> CreatePrivateVariable(string name, IUnit unit)
         {
             var index = _map.Count;
-            var result = new SolverVariable<T>(this, _name.Combine(name), index, unit);
+            var result = new SolverVariable<T>(this, name, index, unit);
             _map.Add(result, index);
             return result;
         }
-
-        IVariable IVariableFactory.GetSharedVariable(string name) => GetSharedVariable(name);
-        IVariable IVariableFactory.CreatePrivateVariable(string name, IUnit unit) => CreatePrivateVariable(name, unit);
     }
 }

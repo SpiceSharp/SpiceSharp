@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                 if (parameters.LocalComplexSolver && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
                     state = new LocalSimulationState(simulation.InstanceName, simulation.Nodes, parent, LUHelper.CreateSparseComplexSolver());
                 else
-                    state = new FlatSimulationState(simulation.InstanceName, simulation.Nodes, parent);
+                    state = new FlatSimulationState(simulation.InstanceName, parent, simulation.Nodes);
                 simulation.LocalStates.Add(state);
             }
         }

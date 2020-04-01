@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <param name="parent">The parent.</param>
             /// <param name="solver">The solver.</param>
             public LocalSimulationState(string name, IEnumerable<Bridge<string>> nodes, IComplexSimulationState parent, ISparseSolver<Complex> solver)
-                : base(name, nodes, parent, solver)
+                : base(name, parent, nodes, solver)
             {
             }
 

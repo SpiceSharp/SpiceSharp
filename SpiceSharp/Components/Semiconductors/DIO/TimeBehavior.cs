@@ -10,7 +10,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
     public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
         private readonly IDerivative _capCharge;
-        private readonly int _negNode, _posPrimeNode;
         private readonly ITimeSimulationState _time;
 
         /// <summary>
