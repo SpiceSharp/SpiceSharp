@@ -2,6 +2,7 @@
 using SpiceSharp.Simulations;
 using System.Numerics;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -10,23 +11,9 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>
     {
-        /// <summary>
-        /// Gets the complex matrix elements.
-        /// </summary>
-        /// <value>
-        /// The complex matrix elements.
-        /// </value>
-        protected ElementSet<Complex> ComplexElements { get; private set; }
-
-        /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        /// <value>
-        /// The complex simulation state.
-        /// </value>
-        protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _posNode, _negNode, _branchEq;
+        private readonly IComplexSimulationState _complex;
+        private readonly ElementSet<Complex> _elements;
+        private readonly OnePort<Complex> _variables;
 
         /// <summary>
         /// Gets the branch equation index.
@@ -40,19 +27,20 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
-            ComplexState = context.GetState<IComplexSimulationState>();
-            
-            _posNode = ComplexState.Map[ComplexState.GetSharedVariable(context.Nodes[0])];
-            _negNode = ComplexState.Map[ComplexState.GetSharedVariable(context.Nodes[1])];
-            Branch = ComplexState.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
-            _branchEq = ComplexState.Map[Branch];
+            _complex = context.GetState<IComplexSimulationState>();
+            _variables = new OnePort<Complex>(_complex, context);
+            Branch = _complex.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
 
-            ComplexElements = new ElementSet<Complex>(ComplexState.Solver,
-                new MatrixLocation(_posNode, _branchEq),
-                new MatrixLocation(_negNode, _branchEq),
-                new MatrixLocation(_branchEq, _negNode),
-                new MatrixLocation(_branchEq, _posNode),
-                new MatrixLocation(_branchEq, _branchEq));
+            var pos = _complex.Map[_variables.Positive];
+            var neg = _complex.Map[_variables.Negative];
+            var br = _complex.Map[Branch];
+
+            _elements = new ElementSet<Complex>(_complex.Solver,
+                new MatrixLocation(pos, br),
+                new MatrixLocation(neg, br),
+                new MatrixLocation(br, neg),
+                new MatrixLocation(br, pos),
+                new MatrixLocation(br, br));
         }
 
         /// <summary>
@@ -67,8 +55,8 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// </summary>
         void IFrequencyBehavior.Load()
         {
-            var val = ComplexState.Laplace * Inductance;
-            ComplexElements.Add(1, -1, -1, 1, -val);
+            var val = _complex.Laplace * Inductance;
+            _elements.Add(1, -1, -1, 1, -val);
         }
     }
 }

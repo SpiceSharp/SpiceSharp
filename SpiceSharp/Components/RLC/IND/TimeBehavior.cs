@@ -12,7 +12,6 @@ namespace SpiceSharp.Components.InductorBehaviors
     public class TimeBehavior : BiasingBehavior, ITimeBehavior
     {
         private readonly ElementSet<double> _elements;
-        private readonly int _branchEq;
         private readonly IDerivative _flux;
         private readonly ITimeSimulationState _time;
 
@@ -35,11 +34,12 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <param name="context">The context.</param>
         public TimeBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
-            _branchEq = BiasingState.Map[Branch];
+            var state = context.GetState<IBiasingSimulationState>();
+            var br = state.Map[Branch];
             _time = context.GetState<ITimeSimulationState>();
-            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(_branchEq, _branchEq)
-            }, new[] { _branchEq });
+            _elements = new ElementSet<double>(state.Solver, new[] {
+                new MatrixLocation(br, br)
+            }, new[] { br });
 
             var method = context.GetState<IIntegrationMethod>();
             _flux = method.CreateDerivative();
@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             if (Parameters.InitialCondition.Given)
                 _flux.Value = Parameters.InitialCondition * Inductance;
             else
-                _flux.Value = BiasingState.Solution[_branchEq] * Inductance;
+                _flux.Value = Branch.Value * Inductance;
         }
 
         /// <summary>
@@ -67,12 +67,12 @@ namespace SpiceSharp.Components.InductorBehaviors
                 return;
 
             // Initialize
-            _flux.Value = Inductance * BiasingState.Solution[_branchEq];
+            _flux.Value = Inductance * Branch.Value;
             
             // Allow alterations of the flux
             if (UpdateFlux != null)
             {
-                var args = new UpdateFluxEventArgs(Inductance, BiasingState.Solution[_branchEq], _flux, BiasingState);
+                var args = new UpdateFluxEventArgs(Inductance, Branch.Value, _flux);
                 UpdateFlux.Invoke(this, args);
             }
 

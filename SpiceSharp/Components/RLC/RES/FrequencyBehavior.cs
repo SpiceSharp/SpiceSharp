@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -11,28 +12,20 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
-        private readonly int _posNode, _negNode;
-        private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
+        private readonly OnePort<Complex> _variables;
 
         /// <summary>
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
         [ParameterName("v_c"), ParameterInfo("Complex voltage across the capacitor.")]
-        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
+        public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the (complex) current through the resistor.
         /// </summary>
         [ParameterName("i_c"), ParameterInfo("Complex current through the capacitor.")]
-        public Complex ComplexCurrent
-        {
-            get
-            {
-                var voltage = _complex.Solution[_posNode] - _complex.Solution[_negNode];
-                return voltage * Conductance;
-            }
-        }
+        public Complex ComplexCurrent => ComplexVoltage * Conductance;
 
         /// <summary>
         /// Gets the (complex) power dissipated by the resistor.
@@ -42,7 +35,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             get
             {
-                var voltage = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                var voltage = ComplexVoltage;
                 return voltage * Complex.Conjugate(voltage) * Conductance;
             }
         }
@@ -54,15 +47,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <param name="context">The context.</param>
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
-            _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
-            _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_posNode, _negNode),
-                new MatrixLocation(_negNode, _posNode),
-                new MatrixLocation(_negNode, _negNode)
-                );
+            var state = context.GetState<IComplexSimulationState>();
+            _variables = new OnePort<Complex>(state, context);
+            _elements = new ElementSet<Complex>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
         /// <summary>

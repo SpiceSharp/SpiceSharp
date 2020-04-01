@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
@@ -10,21 +11,20 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior
     {
-        private readonly int _posNode, _negNode;
         private readonly ElementSet<double> _elements;
-        private readonly IBiasingSimulationState _biasing;
+        private readonly OnePort<double> _variables;
 
         /// <summary>
         /// Gets the voltage across the resistor.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+        public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the current through the resistor.
         /// </summary>
         [ParameterName("i"), ParameterInfo("Current")]
-        public double Current => (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]) * Conductance;
+        public double Current => Voltage * Conductance;
 
         /// <summary>
         /// Gets the power dissipated by the resistor.
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             get
             {
-                var v = _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+                var v = Voltage;
                 return v * v * Conductance;
             }
         }
@@ -47,14 +47,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public BiasingBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
-            _biasing = context.GetState<IBiasingSimulationState>();
-            _posNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[1])];
-            _elements = new ElementSet<double>(_biasing.Solver,
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_posNode, _negNode),
-                new MatrixLocation(_negNode, _posNode),
-                new MatrixLocation(_negNode, _negNode));
+            var state = context.GetState<IBiasingSimulationState>();
+            _variables = new OnePort<double>(state, context);
+            _elements = new ElementSet<double>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
         /// <summary>

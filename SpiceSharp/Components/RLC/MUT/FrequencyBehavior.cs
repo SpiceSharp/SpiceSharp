@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     /// </summary>
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
-        private readonly int _br1, _br2;
+        private readonly IVariable<Complex> _branch1, _branch2;
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
         
@@ -22,14 +22,14 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public FrequencyBehavior(string name, MutualInductanceBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
-            var bias = context.Inductor1Behaviors.GetValue<IBranchedBehavior<Complex>>();
-            _br1 = _complex.Map[bias.Branch];
-            bias = context.Inductor2Behaviors.GetValue<IBranchedBehavior<Complex>>();
-            _br2 = _complex.Map[bias.Branch];
+            _branch1 = context.Inductor1Behaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
+            _branch2 = context.Inductor2Behaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
 
+            var br1 = _complex.Map[_branch1];
+            var br2 = _complex.Map[_branch2];
             _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_br1, _br2),
-                new MatrixLocation(_br2, _br1));
+                new MatrixLocation(br1, br2),
+                new MatrixLocation(br2, br1));
         }
 
         /// <summary>

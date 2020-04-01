@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
@@ -15,8 +16,8 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         private readonly IBiasingSimulationState _biasing;
         private readonly ElementSet<double> _elements;
         private readonly IDerivative _qcap;
-        private readonly int _posNode, _negNode;
         private readonly ITimeSimulationState _time;
+        private readonly OnePort<double> _variables;
 
         /// <summary>
         /// Gets the current through the capacitor.
@@ -29,14 +30,14 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// </summary>
         /// <returns></returns>
         [ParameterName("p"), ParameterInfo("Instantaneous device power")]
-        public double Power => _qcap.Derivative * (_biasing.Solution[_posNode] - _biasing.Solution[_negNode]);
+        public double Power => -Current * Voltage;
 
         /// <summary>
         /// Gets the voltage across the capacitor.
         /// </summary>
         /// <returns></returns>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double Voltage => _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+        public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -48,15 +49,10 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             context.Nodes.CheckNodes(2);
             _biasing = context.GetState<IBiasingSimulationState>();
             _time = context.GetState<ITimeSimulationState>();
-            _posNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[0])];
-            _negNode = _biasing.Map[_biasing.GetSharedVariable(context.Nodes[1])];
-            _elements = new ElementSet<double>(_biasing.Solver, new[] {
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_posNode, _negNode),
-                new MatrixLocation(_negNode, _posNode),
-                new MatrixLocation(_negNode, _negNode)
-            }, new[] { _posNode, _negNode });
-
+            _variables = new OnePort<double>(_biasing, context);
+            _elements = new ElementSet<double>(_biasing.Solver,
+                _variables.GetMatrixLocations(_biasing.Map),
+                _variables.GetRhsIndices(_biasing.Map));
             var method = context.GetState<IIntegrationMethod>();
             _qcap = method.CreateDerivative();
         }
@@ -71,7 +67,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             if (_time.UseIc)
                 _qcap.Value = Capacitance * Parameters.InitialCondition;
             else
-                _qcap.Value = Capacitance * (sol[_posNode] - sol[_negNode]);
+                _qcap.Value = Capacitance * (_variables.Positive.Value - _variables.Negative.Value);
         }
 
         /// <summary>
@@ -82,7 +78,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             // Don't matter for DC analysis
             if (_time.UseDc)
                 return;
-            var vcap = _biasing.Solution[_posNode] - _biasing.Solution[_negNode];
+            var vcap = _variables.Positive.Value - _variables.Negative.Value;
 
             // Integrate
             _qcap.Value = Capacitance * vcap;

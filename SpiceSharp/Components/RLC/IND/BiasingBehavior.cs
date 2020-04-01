@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
@@ -10,8 +11,8 @@ namespace SpiceSharp.Components.InductorBehaviors
     /// </summary>
     public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IBranchedBehavior<double>
     {
-        private readonly int _posNode, _negNode, _branchEq;
         private readonly ElementSet<double> _elements;
+        private readonly OnePort<double> _variables;
 
         /// <summary>
         /// Gets the branch equation index.
@@ -22,31 +23,19 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
-        public double Current => BiasingState.Solution[_branchEq];
+        public double Current => Branch.Value;
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Voltage")]
-        public double Voltage => BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
+        public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the power dissipated by the inductor.
         /// </summary>
         [ParameterName("p"), ParameterInfo("Power")]
-        public double Power
-        {
-            get
-            {
-                var v = BiasingState.Solution[_posNode] - BiasingState.Solution[_negNode];
-                return v * BiasingState.Solution[_branchEq];
-            }
-        }
-
-        /// <summary>
-        /// Gets the state.
-        /// </summary>
-        protected IBiasingSimulationState BiasingState { get; private set; }
+        public double Power => -Voltage * Current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
@@ -56,18 +45,18 @@ namespace SpiceSharp.Components.InductorBehaviors
         public BiasingBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             context.Nodes.CheckNodes(2);
+            var state = context.GetState<IBiasingSimulationState>();
+            _variables = new OnePort<double>(state, context);
+            Branch = state.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
 
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            _posNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[0])];
-            _negNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
-            Branch = BiasingState.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
-            _branchEq = BiasingState.Map[Branch];
-
-            _elements = new ElementSet<double>(BiasingState.Solver,
-                new MatrixLocation(_posNode, _branchEq),
-                new MatrixLocation(_negNode, _branchEq),
-                new MatrixLocation(_branchEq, _negNode),
-                new MatrixLocation(_branchEq, _posNode));
+            var pos = state.Map[_variables.Positive];
+            var neg = state.Map[_variables.Negative];
+            var br = state.Map[Branch];
+            _elements = new ElementSet<double>(state.Solver,
+                new MatrixLocation(pos, br),
+                new MatrixLocation(neg, br),
+                new MatrixLocation(br, neg),
+                new MatrixLocation(br, pos));
         }
 
         /// <summary>

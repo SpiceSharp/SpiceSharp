@@ -3,6 +3,7 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
@@ -12,27 +13,20 @@ namespace SpiceSharp.Components.CapacitorBehaviors
     public class FrequencyBehavior : TemperatureBehavior, IFrequencyBehavior
     {
         private readonly IComplexSimulationState _complex;
-        private readonly int _posNode, _negNode;
         private readonly ElementSet<Complex> _elements;
+        private readonly OnePort<Complex> _variables;
 
         /// <summary>
         /// Gets the voltage.
         /// </summary>
         [ParameterName("v"), ParameterInfo("Capacitor voltage")]
-        public Complex ComplexVoltage => _complex.Solution[_posNode] - _complex.Solution[_negNode];
+        public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the current.
         /// </summary>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
-        public Complex ComplexCurrent
-        {
-            get
-            {
-                var conductance = _complex.Laplace * Capacitance;
-                return (_complex.Solution[_posNode] - _complex.Solution[_negNode]) * conductance;
-            }
-        }
+        public Complex ComplexCurrent => ComplexVoltage * _complex.Laplace * Capacitance;
 
         /// <summary>
         /// Gets the power.
@@ -43,7 +37,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             get
             {
                 var conductance = _complex.Laplace * Capacitance;
-                var voltage = _complex.Solution[_posNode] - _complex.Solution[_negNode];
+                var voltage = ComplexVoltage;
                 return voltage * Complex.Conjugate(voltage * conductance);
             }
         }
@@ -56,16 +50,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
         {
             context.Nodes.CheckNodes(2);
-
             _complex = context.GetState<IComplexSimulationState>();
-            _posNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
-            _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_posNode, _posNode),
-                new MatrixLocation(_posNode, _negNode),
-                new MatrixLocation(_negNode, _posNode),
-                new MatrixLocation(_negNode, _negNode)
-                );
+            _variables = new OnePort<Complex>(_complex, context);
+            _elements = new ElementSet<Complex>(_complex.Solver, _variables.GetMatrixLocations(_complex.Map));
         }
 
         /// <summary>

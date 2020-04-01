@@ -12,10 +12,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     {
         private readonly ElementSet<double> _elements;
         private double _conductance;
-        private readonly InductorBehaviors.TimeBehavior _load1, _load2;
-        private readonly int _br1, _br2;
+        private readonly IVariable<double> _branch1, _branch2;
         private readonly ITimeSimulationState _time;
-        private readonly IBiasingSimulationState _biasing;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
@@ -25,19 +23,21 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         public TimeBehavior(string name, MutualInductanceBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            _biasing = context.GetState<IBiasingSimulationState>();
-            _load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
-            _br1 = _biasing.Map[_load1.Branch];
-            _load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
-            _br2 = _biasing.Map[_load2.Branch];
+            var state = context.GetState<IBiasingSimulationState>();
+            var load1 = context.Inductor1Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
+            _branch1 = load1.Branch;
+            var load2 = context.Inductor2Behaviors.GetValue<InductorBehaviors.TimeBehavior>();
+            _branch2 = load2.Branch;
 
             // Register events for modifying the flux through the inductors
-            _load1.UpdateFlux += UpdateFlux1;
-            _load2.UpdateFlux += UpdateFlux2;
+            load1.UpdateFlux += UpdateFlux1;
+            load2.UpdateFlux += UpdateFlux2;
 
-            _elements = new ElementSet<double>(_biasing.Solver,
-                new MatrixLocation(_br1, _br2),
-                new MatrixLocation(_br2, _br1));
+            var br1 = state.Map[_branch1];
+            var br2 = state.Map[_branch2];
+            _elements = new ElementSet<double>(state.Solver,
+                new MatrixLocation(br1, br2),
+                new MatrixLocation(br2, br1));
         }
 
         /// <summary>
@@ -47,8 +47,7 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="args">Arguments</param>
         private void UpdateFlux2(object sender, UpdateFluxEventArgs args)
         {
-            var state = args.State;
-            args.Flux.Value += Factor * state.Solution[_br1];
+            args.Flux.Value += Factor * _branch1.Value;
         }
 
         /// <summary>
@@ -58,9 +57,8 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <param name="args">Arguments</param>
         private void UpdateFlux1(object sender, UpdateFluxEventArgs args)
         {
-            var state = args.State;
             _conductance = args.Flux.GetContributions(Factor).Jacobian;
-            args.Flux.Value += Factor * state.Solution[_br2];
+            args.Flux.Value += Factor * _branch2.Value;
         }
 
         /// <summary>
