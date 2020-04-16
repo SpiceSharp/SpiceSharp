@@ -56,8 +56,9 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             double capacitance;
             if (!Parameters.Capacitance.Given)
             {
+                // We need a model!
                 if (_mbp == null)
-                    throw new ModelNotFoundException(Name);
+                    throw new NoModelException(Name);
 
                 var width = Parameters.Width.Given
                     ? Parameters.Width.Value

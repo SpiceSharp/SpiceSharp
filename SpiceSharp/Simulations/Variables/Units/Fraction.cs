@@ -35,15 +35,6 @@ namespace SpiceSharp.Simulations.Variables
         /// <summary>
         /// Initializes a new instance of the <see cref="Fraction"/> struct.
         /// </summary>
-        /// <param name="fraction">The fraction.</param>
-        private Fraction(sbyte fraction)
-        {
-            _fraction = fraction;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Fraction"/> struct.
-        /// </summary>
         /// <param name="numerator">The numerator.</param>
         /// <param name="denominator">The denominator.</param>
         /// <exception cref="DivideByZeroException">Thrown if the denominator is zero.</exception>
@@ -134,22 +125,20 @@ namespace SpiceSharp.Simulations.Variables
         }
 
         /// <summary>
-        /// Performs an implicit conversion from <see cref="sbyte"/> to <see cref="Fraction"/>.
-        /// </summary>
-        /// <param name="b">The b.</param>
-        /// <returns>
-        /// The result of the conversion.
-        /// </returns>
-        public static implicit operator Fraction(sbyte b) => new Fraction(b);
-
-        /// <summary>
         /// Performs an implicit conversion from <see cref="Fraction"/> to <see cref="sbyte"/>.
         /// </summary>
         /// <param name="fraction">The fraction.</param>
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static implicit operator sbyte(Fraction fraction) => fraction._fraction;
+        public static explicit operator sbyte(Fraction fraction) => fraction._fraction;
+
+        /// <summary>
+        /// Performs an implicit conversion from <see cref="int"/> to <see cref="Fraction"/>. The denominator is 1.
+        /// </summary>
+        /// <param name="numerator">The numerator.</param>
+        /// <returns>The result of the conversion.</returns>
+        public static implicit operator Fraction(int numerator) => new Fraction(numerator, 1);
 
         /// <summary>
         /// Implements the operator ==.

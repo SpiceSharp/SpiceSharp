@@ -74,9 +74,17 @@ namespace SpiceSharp.Simulations
         /// <exception cref="IndexOutOfRangeException">Thrown if the index is not strictly positive.</exception>
         public void Add(IVariable variable, int index)
         {
+            variable.ThrowIfNull(nameof(variable));
             if (index <= 0)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            _map.Add(variable, index);
+            try
+            {
+                _map.Add(variable, index);
+            }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException(Properties.Resources.VariableMap_KeyExists.FormatString(variable));
+            }
         }
 
         /// <summary>

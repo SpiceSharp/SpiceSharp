@@ -15,6 +15,22 @@ namespace SpiceSharpTest.Models
     public class ResistorTests : Framework
     {
         [Test]
+        public void When_SmallResistor_Expect_Reference()
+        {
+            var ckt = new Circuit(
+                new Resistor("R1", "in", "0", 0.0),
+                new CurrentSource("I1", "in", "0", 1));
+            var op = new OP("op");
+            op.AfterLoad += (sender, args) =>
+            {
+                var solver = op.GetState<IBiasingSimulationState>().Solver;
+                var elt = solver.FindElement(1, 1);
+                Assert.AreEqual(1e3, elt.Value, 1e-20);
+            };
+            op.Run(ckt);
+        }
+
+        [Test]
         public void When_ClonedResistor_Expect_Original()
         {
             var resistor = new Resistor("R1", "a", "b", 1.0e3);

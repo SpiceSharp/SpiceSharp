@@ -316,8 +316,9 @@ namespace SpiceSharp.Simulations
                 if (_shouldReorder)
                 {
                     base.Statistics.ReorderTime.Start();
-                    if (solver.OrderAndFactor() < solver.Size)
-                        throw new SingularException();
+                    var eliminated = solver.OrderAndFactor();
+                    if (eliminated < solver.Size)
+                        throw new SingularException(eliminated + 1);
                     base.Statistics.ReorderTime.Stop();
                     _shouldReorder = false;
                 }

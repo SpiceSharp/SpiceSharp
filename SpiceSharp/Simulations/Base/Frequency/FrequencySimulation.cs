@@ -180,8 +180,9 @@ namespace SpiceSharp.Simulations
             if (_shouldReorderAc)
             {
                 Statistics.ComplexReorderTime.Start();
-                if (solver.OrderAndFactor() < solver.Size)
-                    throw new SingularException();
+                var eliminated = solver.OrderAndFactor();
+                if (eliminated < solver.Size)
+                    throw new SingularException(eliminated + 1);
                 Statistics.ComplexReorderTime.Stop();
                 _shouldReorderAc = false;
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
@@ -73,7 +74,18 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="variable">The variable.</param>
-        public void Add(string id, V variable) => _map.Add(id, variable);
+        public void Add(string id, V variable)
+        {
+            id.ThrowIfNull(nameof(id));
+            try
+            {
+                _map.Add(id, variable);
+            }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException(Properties.Resources.VariableDictionary_KeyExists.FormatString(id));
+            }
+        }
 
         /// <summary>
         /// Determines whether the read-only dictionary contains an element that has the specified key.

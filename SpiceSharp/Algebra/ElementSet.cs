@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// A set of matrix and right-hand-side vector elements
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public class ElementSet<T> : IDisposable, IFormattable where T : IFormattable
+    public class ElementSet<T> : IFormattable where T : IFormattable
     {
         /// <summary>
         /// Gets the elements.
@@ -81,15 +81,6 @@ namespace SpiceSharp.Algebra
         {
             for (var i = 0; i < values.Length; i++)
                 _elements[i].Subtract(values[i]);
-        }
-
-        /// <summary>
-        /// Destroys this instance.
-        /// </summary>
-        public void Dispose()
-        {
-            for (var i = 0; i < _elements.Length; i++)
-                _elements[i] = null;
         }
 
         /// <summary>

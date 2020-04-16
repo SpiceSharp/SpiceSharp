@@ -147,6 +147,10 @@ namespace SpiceSharp.Entities
             {
                 _entities.Add(item.Name, item);
             }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException(Properties.Resources.EntityCollection_KeyExists.FormatString(item.Name));
+            }
             finally
             {
                 _lock.ExitWriteLock();

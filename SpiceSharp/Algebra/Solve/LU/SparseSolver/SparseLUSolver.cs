@@ -17,7 +17,7 @@ namespace SpiceSharp.Algebra
         where T : IFormattable, IEquatable<T>
     {
         /// <summary>
-        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
+        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that the last equation is
         /// expected to be linearly dependent on the others.
         /// </summary>
         /// <value>
@@ -339,7 +339,7 @@ namespace SpiceSharp.Algebra
             row = Row[row];
             var elt = Vector.GetElement(row);
 
-            // If we created a new row, let's move it backto still have the same equations as linearly dependent
+            // If we created a new row, let's move it back to still have the same equations that are considered linearly dependent
             if (Degeneracy > 0)
             {
                 if (row == Size)

@@ -76,7 +76,16 @@ namespace SpiceSharp.General
         {
             // Add a regular class entry
             var ctype = value.GetType();
-            _dictionary.Add(value.GetType(), value);
+            try
+            {
+                _dictionary.Add(value.GetType(), value);
+            }
+            catch (ArgumentException)
+            {
+                // This exception is thrown if the dictonary already contains the key
+                // Just make it bit more verbose.
+                throw new ArgumentException(Properties.Resources.TypeAlreadyExists.FormatString(value.GetType()));
+            }
 
             // Make references for the interfaces as well
             foreach (var type in InterfaceCache.Get(ctype))

@@ -188,15 +188,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No model found for component &apos;{0}&apos;..
-        /// </summary>
-        internal static string Components_ModelNotFound {
-            get {
-                return ResourceManager.GetString("Components.ModelNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Node mismatch: {0} nodes expected, but {1} were given..
         /// </summary>
         internal static string Components_NodeMismatch {
@@ -211,6 +202,15 @@ namespace SpiceSharp.Properties {
         internal static string Components_NodeMismatchNamed {
             get {
                 return ResourceManager.GetString("Components.NodeMismatchNamed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No model was specified for component &apos;{0}&apos;..
+        /// </summary>
+        internal static string Components_NoModel {
+            get {
+                return ResourceManager.GetString("Components.NoModel", resourceCulture);
             }
         }
         
@@ -292,6 +292,15 @@ namespace SpiceSharp.Properties {
         internal static string Diodes_ImpossibleFwdRevMatch {
             get {
                 return ResourceManager.GetString("Diodes.ImpossibleFwdRevMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An entity with the name &quot;{0}&quot; already exists..
+        /// </summary>
+        internal static string EntityCollection_KeyExists {
+            get {
+                return ResourceManager.GetString("EntityCollection.KeyExists", resourceCulture);
             }
         }
         
@@ -692,7 +701,7 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Unexpected type encountered: expected {0}, but got {1}..
+        ///   Looks up a localized string similar to Unexpected type encountered: expected {0}, but got {1}..
         /// </summary>
         internal static string UnexpectedType {
             get {
@@ -796,6 +805,24 @@ namespace SpiceSharp.Properties {
         internal static string ValueNotFound {
             get {
                 return ResourceManager.GetString("ValueNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A variable with id &apos;{0}&apos; already exists..
+        /// </summary>
+        internal static string VariableDictionary_KeyExists {
+            get {
+                return ResourceManager.GetString("VariableDictionary.KeyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The variable &apos;{0}&apos; is already mapped..
+        /// </summary>
+        internal static string VariableMap_KeyExists {
+            get {
+                return ResourceManager.GetString("VariableMap.KeyExists", resourceCulture);
             }
         }
         

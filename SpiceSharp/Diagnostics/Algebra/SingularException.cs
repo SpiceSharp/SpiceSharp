@@ -22,7 +22,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SingularException"/> class.
         /// </summary>
-        /// <param name="index">The index where the exception occurred.</param>
+        /// <param name="index">The row/column index where the exception occurred.</param>
         public SingularException(int index)
             : base(Properties.Resources.Algebra_SingularMatrixIndexed.FormatString(index))
         {

@@ -87,7 +87,14 @@ namespace SpiceSharp.Entities
         public void Add(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
-            _entities.Add(item.Name, item);
+            try
+            {
+                _entities.Add(item.Name, item);
+            }
+            catch (ArgumentException)
+            {
+                throw new ArgumentException(Properties.Resources.EntityCollection_KeyExists.FormatString(item.Name));
+            }
         }
 
         /// <summary>

@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
             if (context.ModelBehaviors == null)
-                throw new ModelNotFoundException(Model);
+                throw new NoModelException(Name);
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
