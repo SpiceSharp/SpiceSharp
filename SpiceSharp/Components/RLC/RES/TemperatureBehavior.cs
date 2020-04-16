@@ -9,15 +9,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// Temperature behavior for a <see cref="Resistor"/>
     /// </summary>
     public class TemperatureBehavior : Behavior, ITemperatureBehavior,
-        IParameterized<BaseParameters>
+        IParameterized<Parameters>
     {
         private readonly ITemperatureSimulationState _temperature;
         private readonly ModelBaseParameters _mbp = null;
-
-        /// <summary>
-        /// The minimum resistance for any resistor.
-        /// </summary>
-        public const double MinimumResistance = 1e-3;
 
         /// <summary>
         /// Gets the base parameters.
@@ -25,7 +20,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <value>
         /// The base parameters.
         /// </value>
-        public BaseParameters Parameters { get; }
+        public Parameters Parameters { get; }
 
         /// <summary>
         /// Gets the default conductance for this model
@@ -42,7 +37,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            Parameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<Parameters>();
             if (context.ModelBehaviors != null)
                 _mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
         }
@@ -86,10 +81,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 factor = 1.0;
             }
 
-            if (resistance < MinimumResistance)
+            if (resistance < Parameters.MinimumResistance)
             {
-                SpiceSharpWarning.Warning(this, Properties.Resources.Resistors_ResistanceTooSmall.FormatString(resistance, MinimumResistance));
-                resistance = MinimumResistance;
+                SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString("resistance", resistance, Parameters.MinimumResistance));
+                resistance = Parameters.MinimumResistance;
             }
 
             // Calculate the final conductance

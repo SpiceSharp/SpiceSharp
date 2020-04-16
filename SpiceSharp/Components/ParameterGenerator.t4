@@ -1,0 +1,184 @@
+﻿<#@ output extension=".cs" #>
+<#@ import namespace = "System.Text" #>
+<#@ import namespace = "System.Collections.Generic" #><#+
+    public class Bound
+    {
+        public string Limit;
+        public bool IsError;
+        public bool IncludeEquality;
+        public Bound(string limit, bool isError, bool includeEquality)
+        {
+            Limit = limit;
+            IsError = isError;
+            IncludeEquality = includeEquality;
+        }
+
+        public string Build(string value, string op)
+        {
+            var eq = IncludeEquality ? "=" : "";
+            return $"{value} {op}{eq} {Limit}";
+        }
+    }
+
+    public class PropertyMethods
+    {
+        public string Getter;
+        public string Setter;
+    }
+
+    public class Parameter
+    {
+        public readonly string[] Names;
+        public readonly string Variable;
+        public readonly string Description;
+
+        private string _type = "double";
+        private string _units = null;
+        private bool _isPrincipal = false;
+        private bool _isInteresting = true;
+
+        private PropertyMethods _derived = null;
+        public string _default = null;
+        private Bound _min = null, _max = null;
+
+        public Parameter(string name, string variable, string description)
+            : this(new[] { name }, variable, description)
+        {
+        }
+
+        public Parameter(string[] names, string variable, string description)
+        {
+            Names = names;
+            Variable = variable;
+            Description = description;
+        }
+
+        public Parameter GreaterThan(string minimum, bool isError = false) { _min = new Bound(minimum, isError, true); return this; }
+        public Parameter LessThan(string maximum, bool isError = false) { _max = new Bound(maximum, isError, true); return this; }
+        public Parameter GreaterThanOrEqual(string minimum, bool isError = false) { _min = new Bound(minimum, isError, false); return this; }
+        public Parameter LessThanOrEqual(string maximum, bool isError = false) { _max = new Bound(maximum, isError, false); return this; }
+        public Parameter Units(string units) { _units = units; return this; }
+        public Parameter Default(string def) { _default = def; return this; }
+        public Parameter Type(string type) { _type = type; return this; }
+        public Parameter Principal() { _isPrincipal = true; return this; }
+        public Parameter Uninteresting() { _isInteresting = false; return this; }
+        public Parameter Derived(string getter, string setter) { _derived = new PropertyMethods { Getter = getter, Setter = setter }; return this; }
+
+        public override string ToString()
+        {
+            return ToString(2);
+        }
+
+        public string ToString(int indentation)
+        {
+            var indent = new string('\t', indentation);
+            var result = new StringBuilder();
+
+
+            // Write the comments
+            result.AppendLine("/// <summary>"); // Skip the indentation on the first line so it looks nicer in the .tt file
+            result.AppendLine(indent + $@"/// {Description}");
+            result.AppendLine(indent + "/// </summary>");
+
+            // Write the attributes
+            result.Append(indent);
+            result.Append($@"[ParameterName(""{Names[0]}"")");
+            for (var i = 1; i < Names.Length; i++)
+                result.Append($@", ParameterName(""{Names[i]}"")");
+            if (_derived != null)
+                result.Append(", DerivedProperty()");
+            result.Append($@", ParameterInfo(""{Description}""");
+            if (_units != null)
+                result.Append($@", Units = ""{_units}""");
+            if (_isPrincipal)
+                result.Append($@", IsPrincipal = true");
+            if (!_isInteresting)
+                result.Append($@", Interesting = false");
+            result.Append(")");
+            result.AppendLine("]");
+
+            // Write the property definition
+            result.Append(indent);
+            result.Append($@"public {_type} {Variable}");
+            if (_derived != null)
+            {
+                result.AppendLine();
+                result.AppendLine(indent + "{");
+                if (_derived.Getter != null)
+                    result.AppendLine(indent + $"\tget => {_derived.Getter};");
+                if (_derived.Setter != null)
+                    result.AppendLine(indent + $"\tset => {_derived.Setter};");
+                result.AppendLine(indent + "}");
+            }
+            else if (_min != null || _max != null)
+            {
+                var privateVariable = "_" + char.ToLowerInvariant(Variable[0]) + Variable.Substring(1);
+                result.AppendLine();
+                result.AppendLine(indent + "{");
+                result.AppendLine(indent + $"\tget => {privateVariable};");
+                result.AppendLine(indent + "\tset");
+                result.AppendLine(indent + "\t{");
+
+                if (_min != null)
+                {
+                    result.AppendLine(indent + $"\t\tif ({_min.Build("value", "<")})");
+                    if (_min.IsError)
+                        result.AppendLine(indent + $"\t\t\tthrow new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(\"{string.Join("\", \"", Names)}\", value, {_min.Limit}));");
+                    else
+                    {
+                        result.AppendLine(indent + "\t\t{");
+                        result.AppendLine(indent + $"\t\t\t{privateVariable} = {_min.Limit};");
+                        result.AppendLine(indent + $"\t\t\tSpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(\"{string.Join("\", \"", Names)}\", value, {_min.Limit}));");
+                        result.AppendLine(indent + "\t\t\treturn;");
+                        result.AppendLine(indent + "\t\t}");
+                    }
+                }
+
+                if (_max != null)
+                {
+                    result.AppendLine(indent + $"\t\tif ({_max.Build("value", ">")})");
+                    if (_max.IsError)
+                        result.AppendLine(indent + $"\t\t\tthrow new ArgumentException(Properties.Resources.Parameters_TooLarge.FormatString(\"{string.Join("\", \"", Names)}\", value, {_max.Limit}));");
+                    else
+                    {
+                        result.AppendLine(indent + "\t\t{");
+                        result.AppendLine(indent + $"\t\t\t{privateVariable} = {_max.Limit};");
+                        result.AppendLine(indent + $"\t\t\tSpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(\"{string.Join("\", \"", Names)}\", value, {_max.Limit}));");
+                        result.AppendLine(indent + "\t\t\treturn;");
+                        result.AppendLine(indent + "\t\t}");
+                    }
+                }
+                result.AppendLine(indent + $"\t\t{privateVariable} = value;");
+
+                result.AppendLine(indent + "\t}");
+                result.AppendLine(indent + "}");
+                result.Append(indent + $@"private {_type} {privateVariable}");
+                if (_default != null)
+                    result.Append($@" = {_default}");
+                result.AppendLine(";");
+            }
+            else
+            {
+                result.Append(" { get; set; }");
+                if (_default != null)
+                    result.Append($@" = {_default};");
+                result.AppendLine();
+            }
+
+            return result.ToString();
+        }
+    }
+
+    void WriteParameters(IEnumerable<Parameter> parameters, int indentation = 2)
+    {
+        bool isFirst = true;
+        foreach (var parameter in parameters)
+        {
+            if (isFirst)
+                isFirst = false;
+            else
+                Write(Environment.NewLine + new string('\t', indentation));
+            Write(parameter.ToString(indentation));
+        }
+    }
+#>

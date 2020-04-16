@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Simulations
                 dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
                 dc.ExportSimulationData += (sender, args) =>
                 {
-                    var resistance = Math.Max(dc.GetSweepValues()[0], SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.MinimumResistance);
+                    var resistance = Math.Max(dc.GetSweepValues()[0], SpiceSharp.Components.ResistorBehaviors.Parameters.MinimumResistance);
                     var voltage = dc.GetSweepValues()[1];
                     var expected = voltage * resistance / (resistance + 1.0e4);
                     Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);

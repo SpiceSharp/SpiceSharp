@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "R+"), Pin(1, "R-")]
     public class Resistor : Component,
-        IParameterized<BaseParameters>
+        IParameterized<Parameters>
     {
         /// <summary>
         /// Gets the parameter set.
@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The parameter set.
         /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
         /// Constants

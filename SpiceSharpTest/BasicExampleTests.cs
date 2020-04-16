@@ -20,13 +20,13 @@ namespace SpiceSharpTest
             );
 
             // Change the value of the resistor
-            ckt["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance = 2.0e3;
+            ckt["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.Parameters>().Resistance = 2.0e3;
             // </example_structure_resistor>
 
             // <example_structure_resistor_2>
             // Using the ParameterNameAttribute
             ckt["R1"].SetParameter("resistance", 2.0e3);
-            ckt["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().SetParameter("resistance", 2.0e3);
+            ckt["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.Parameters>().SetParameter("resistance", 2.0e3);
             // </example_structure_resistor_2>
         }
 
@@ -247,7 +247,7 @@ namespace SpiceSharpTest
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation) sender;
-                sim.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.BaseParameters>().Resistance = value;
+                sim.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.ResistorBehaviors.Parameters>().Resistance = value;
             };
             op.AfterExecute += (sender, args) =>
             {

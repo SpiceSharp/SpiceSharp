@@ -33,6 +33,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Update="Components\RLC\RES\Parameters.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Parameters.tt</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -48,6 +53,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Components\RLC\RES\Parameters.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Parameters.cs</LastGenOutput>
+    </None>
     <None Update="Simulations\Variables\Units.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Units.cs</LastGenOutput>
@@ -57,5 +66,4 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-
 </Project>

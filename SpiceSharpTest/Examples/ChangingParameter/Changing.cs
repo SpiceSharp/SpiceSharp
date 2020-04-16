@@ -33,7 +33,7 @@ namespace SpiceSharpTest.Examples
             // <example_change_parameter_setup>
             // Now we need to make sure we have a reference to both the base parameters and temperature behavior
             // of the resistor
-            SpiceSharp.Components.ResistorBehaviors.BaseParameters bp = null;
+            SpiceSharp.Components.ResistorBehaviors.Parameters bp = null;
             SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
             tran.AfterSetup += (sender, args) =>
             {

@@ -386,6 +386,42 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter {0} should be at most {2}, but was {1}..
+        /// </summary>
+        internal static string Parameters_TooLarge {
+            get {
+                return ResourceManager.GetString("Parameters.TooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter {0} was {1} and was set the maximum {2}..
+        /// </summary>
+        internal static string Parameters_TooLargeSet {
+            get {
+                return ResourceManager.GetString("Parameters.TooLargeSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter {0} should be at least {2}, but was {1}..
+        /// </summary>
+        internal static string Parameters_TooSmall {
+            get {
+                return ResourceManager.GetString("Parameters.TooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter {0} was {1} and was set to the minimum {2}..
+        /// </summary>
+        internal static string Parameters_TooSmallSet {
+            get {
+                return ResourceManager.GetString("Parameters.TooSmallSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The resistance {0} is too small, increased to {1}..
         /// </summary>
         internal static string Resistors_ResistanceTooSmall {

@@ -225,6 +225,18 @@
   <data name="Parameters.ParameterSetNotFound" xml:space="preserve">
     <value>A parameter set of type '{0}' could not be found.</value>
   </data>
+  <data name="Parameters.TooLarge" xml:space="preserve">
+    <value>The parameter {0} should be at most {2}, but was {1}.</value>
+  </data>
+  <data name="Parameters.TooLargeSet" xml:space="preserve">
+    <value>The parameter {0} was {1} and was set the maximum {2}.</value>
+  </data>
+  <data name="Parameters.TooSmall" xml:space="preserve">
+    <value>The parameter {0} should be at least {2}, but was {1}.</value>
+  </data>
+  <data name="Parameters.TooSmallSet" xml:space="preserve">
+    <value>The parameter {0} was {1} and was set to the minimum {2}.</value>
+  </data>
   <data name="Resistors.ResistanceTooSmall" xml:space="preserve">
     <value>The resistance {0} is too small, increased to {1}.</value>
   </data>
