@@ -21,5 +21,10 @@ namespace SpiceSharp.Simulations
         /// Coulomb.
         /// </summary>
         public static readonly IUnit Coulomb = new SIUnitDefinition("C", new SIUnits(1, 0, 0, 1, 0, 0, 0));
+
+        /// <summary>
+        /// Ohm.
+        /// </summary>
+        public static readonly IUnit Ohm = new SIUnitDefinition("\u03a9", new SIUnits(-3, 2, 1, 0, 0, 0, 0));
     }
 }
