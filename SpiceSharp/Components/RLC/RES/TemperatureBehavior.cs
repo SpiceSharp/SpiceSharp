@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// The minimum resistance for any resistor.
         /// </summary>
-        protected const double MinimumResistance = 1e-12;
+        public const double MinimumResistance = 1e-3;
 
         /// <summary>
         /// Gets the base parameters.
@@ -87,7 +87,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
             }
 
             if (resistance < MinimumResistance)
+            {
+                SpiceSharpWarning.Warning(this, Properties.Resources.Resistors_ResistanceTooSmall.FormatString(resistance, MinimumResistance));
                 resistance = MinimumResistance;
+            }
 
             // Calculate the final conductance
             Conductance = Parameters.ParallelMultiplier / Parameters.SeriesMultiplier / (resistance * factor);

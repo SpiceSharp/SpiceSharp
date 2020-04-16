@@ -75,6 +75,7 @@
     <Compile Include="Examples\CustomResistor\BiasingBehavior.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistorTests.cs" />
     <Compile Include="General\InheritedTypeDictionaryTests.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Models\Check.cs" />
     <Compile Include="Models\ComponentHelper.cs" />
     <Compile Include="Models\ComponentRules.cs" />

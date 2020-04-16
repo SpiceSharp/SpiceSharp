@@ -377,6 +377,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The resistance {0} is too small, increased to {1}..
+        /// </summary>
+        internal static string Resistors_ResistanceTooSmall {
+            get {
+                return ResourceManager.GetString("Resistors.ResistanceTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: resistance is 0, set to 1000..
         /// </summary>
         internal static string Resistors_ZeroResistance {

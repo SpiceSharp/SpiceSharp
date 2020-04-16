@@ -9,49 +9,114 @@ namespace SpiceSharpTest.Algebra
     public class SolveFramework
     {
         /// <summary>
-        /// Read a .MTX file
+        /// Read a file for matrices.
         /// </summary>
-        /// <param name="filename">Filename</param>
-        /// <returns></returns>
-        protected SparseRealSolver<SparseMatrix<double>, SparseVector<double>> ReadMtxFile(string filename)
+        /// <param name="solver">The solver.</param>
+        /// <param name="filename">The filename.</param>
+        protected static void ReadMatrix(SparseRealSolver<SparseMatrix<double>, SparseVector<double>> solver, string filename)
         {
-            SparseRealSolver<SparseMatrix<double>, SparseVector<double>> result;
+            using var sr = new StreamReader(filename);
 
-            using (var sr = new StreamReader(filename))
+            // The first line is a comment
+            sr.ReadLine();
+
+            // The second line tells us the dimensions
+            var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+            var match = Regex.Match(line, @"^(?<rows>\d+)\s+(?<columns>\d+)\s+(\d+)");
+            var size = int.Parse(match.Groups["rows"].Value);
+            if (int.Parse(match.Groups["columns"].Value) != size)
+                throw new Exception("Matrix is not square");
+
+            // All subsequent lines are of the format [row] [column] [value]
+            while (!sr.EndOfStream)
             {
-                // The first line is a comment
-                sr.ReadLine();
+                // Read the next line
+                line = sr.ReadLine();
+                if (line == null)
+                    break;
 
-                // The second line tells us the dimensions
-                var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
-                var match = Regex.Match(line, @"^(?<rows>\d+)\s+(?<columns>\d+)\s+(\d+)");
-                var size = int.Parse(match.Groups["rows"].Value);
-                if (int.Parse(match.Groups["columns"].Value) != size)
-                    throw new Exception("Matrix is not square");
+                match = Regex.Match(line, @"^(?<row>\d+)\s+(?<column>\d+)\s+(?<value>.*)\s*$");
+                if (!match.Success)
+                    throw new Exception("Could not recognize file");
+                var row = int.Parse(match.Groups["row"].Value);
+                var column = int.Parse(match.Groups["column"].Value);
+                var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
 
-                result = LUHelper.CreateSparseRealSolver(size);
-
-                // All subsequent lines are of the format [row] [column] [value]
-                while (!sr.EndOfStream)
-                {
-                    // Read the next line
-                    line = sr.ReadLine();
-                    if (line == null)
-                        break;
-
-                    match = Regex.Match(line, @"^(?<row>\d+)\s+(?<column>\d+)\s+(?<value>.*)\s*$");
-                    if (!match.Success)
-                        throw new Exception("Could not recognize file");
-                    var row = int.Parse(match.Groups["row"].Value);
-                    var column = int.Parse(match.Groups["column"].Value);
-                    var value = double.Parse(match.Groups["value"].Value, System.Globalization.CultureInfo.InvariantCulture);
-
-                    // Set the value in the matrix
-                    result.GetElement(row, column).Value = value;
-                }
+                // Set the value in the matrix
+                solver.GetElement(row, column).Value = value;
             }
+        }
 
-            return result;
+        /// <summary>
+        /// Reads a file for vectors.
+        /// </summary>
+        /// <param name="solver">The solver.</param>
+        /// <param name="filename">The filename.</param>
+        protected static void ReadRhs(SparseRealSolver<SparseMatrix<double>, SparseVector<double>> solver, string filename)
+        {
+            using var sr = new StreamReader(filename);
+
+            // The first line is a comment
+            sr.ReadLine();
+
+            // The second line tells us the dimensions
+            var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+            var match = Regex.Match(line, @"^(?<rows>\d+)\s+(\d+)");
+            var size = int.Parse(match.Groups["rows"].Value);
+
+            // All subsequent lines are of the format [row] [column] [value]
+            while (!sr.EndOfStream)
+            {
+                // Read the next line
+                line = sr.ReadLine();
+                if (line == null)
+                    break;
+
+                match = Regex.Match(line, @"^(?<row>\d+)\s+(?<value>.*)\s*$");
+                if (!match.Success)
+                    throw new Exception("Could not recognize file");
+                var row = int.Parse(match.Groups["row"].Value);
+                var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
+
+                // Set the value in the matrix
+                solver.GetElement(row).Value = value;
+            }
+        }
+
+        /// <summary>
+        /// Reads a file for a vector.
+        /// </summary>
+        /// <param name="vector">The vector.</param>
+        /// <param name="filename">The filename.</param>
+        protected static void ReadVector(IVector<double> vector, string filename)
+        {
+            using var sr = new StreamReader(filename);
+
+            // The first line is a comment
+            sr.ReadLine();
+
+            // The second line tells us the dimensions
+            var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+            var match = Regex.Match(line, @"^(?<rows>\d+)\s+(\d+)");
+            var size = int.Parse(match.Groups["rows"].Value);
+
+            // All subsequent lines are of the format [row] [column] [value]
+            while (!sr.EndOfStream)
+            {
+                // Read the next line
+                line = sr.ReadLine();
+                if (line == null)
+                    break;
+
+                match = Regex.Match(line, @"^(?<row>\d+)\s+(?<value>.*)\s*$");
+                if (!match.Success)
+                    throw new Exception("Could not recognize file");
+                var row = int.Parse(match.Groups["row"].Value);
+                var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
+
+                // Set the value in the matrix
+                vector[row] = value;
+            }
         }
 
         /// <summary>
