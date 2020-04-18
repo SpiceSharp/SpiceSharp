@@ -1,18 +1,34 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Components.InductorBehaviors
 {
     /// <summary>
-    /// Base parameters for a <see cref="Inductor"/>
+    /// Base parameters for a <see cref="Inductor" />
     /// </summary>
+    /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public class BaseParameters : ParameterSet
     {
+        private double _seriesMultiplier = 1.0;
+        private double _parallelMultiplier = 1.0;
+        private double _inductance;
+
         /// <summary>
         /// Gets the inductance parameter.
         /// </summary>
         [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units = "H", IsPrincipal = true)]
-        public double Inductance { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double Inductance
+        {
+            get => _inductance;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Inductance), value, 0));
+                _inductance = value;
+            }
+        }
 
         /// <summary>
         /// Gets the initial current parameter.
@@ -24,7 +40,17 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// Gets or sets the parallel multiplier.
         /// </summary>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        public double ParallelMultiplier { get; set; } = 1.0;
+        [GreaterThan(0)]
+        public double ParallelMultiplier
+        {
+            get => _parallelMultiplier;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ParallelMultiplier), value, 0));
+                _parallelMultiplier = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the series multiplier.
@@ -33,7 +59,17 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// The series multiplier.
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
-        public double SeriesMultiplier { get; set; } = 1.0;
+        [GreaterThanOrEquals(0)]
+        public double SeriesMultiplier
+        {
+            get => _seriesMultiplier;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SeriesMultiplier), value, 0));
+                _seriesMultiplier = value;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseParameters"/> class.

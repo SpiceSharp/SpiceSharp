@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
     /// <summary>
     /// Parameters for a <see cref="Resistor" />.
     /// </summary>
-	[GeneratedParameters()]
+	[GeneratedParameters]
     public class Parameters : ParameterSet
     {
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature);
@@ -22,11 +22,6 @@ namespace SpiceSharp.Components.ResistorBehaviors
         public const double MinimumResistance = 1e-3;
 
         /// <summary>
-        /// Forces a minimum resistance on the resistor.
-        /// </summary>
-        public const bool ForceMinimumResistance = true;
-
-        /// <summary>
         /// Gets the temperature parameter in degrees Kelvin.
         /// </summary>
         [GreaterThanOrEquals(0)]
@@ -40,8 +35,10 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 _temperature = value;
             }
         }
+
         /// <summary>
-        /// Resistance
+        /// The resistance of the resistor. If the resistance is limited to <see cref="MinimumResistance"/> to avoid
+        /// numerical instability issues. If a 0 Ohm resistance is wanted, consider using an ideal voltage source instead.
         /// </summary>
         [ParameterName("resistance"), ParameterName("r"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
         [GreaterThan(0), GreaterThanOrEquals(MinimumResistance, RaisesException = false)]
@@ -121,6 +118,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
                 _parallelMultiplier = value;
             }
         }
+
         /// <summary>
         /// Series multiplier
         /// </summary>

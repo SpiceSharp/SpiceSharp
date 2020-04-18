@@ -108,7 +108,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cd = csat * (evd - 1) + BiasingParameters.Gmin * vd;
                 gd = csat * evd / Vte + BiasingParameters.Gmin;
             }
-            else if (double.IsNaN(ModelParameters.BreakdownVoltage) || vd >= -TempBreakdownVoltage)
+            else if (!ModelParameters.BreakdownVoltage.Given || vd >= -TempBreakdownVoltage)
             {
                 // Reverse bias
                 var arg = 3 * Vte / (vd * Math.E);

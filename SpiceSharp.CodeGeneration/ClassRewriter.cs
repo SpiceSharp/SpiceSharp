@@ -13,6 +13,9 @@ namespace SpiceSharp.CodeGeneration
     /// <seealso cref="CSharpSyntaxRewriter" />
     public class ClassRewriter : CSharpSyntaxRewriter
     {
+        /// <summary>
+        /// The default value of RaiseException for rule attributes.
+        /// </summary>
         public const bool DefaultRaiseException = true;
 
         private readonly Dictionary<string, (TypeSyntax Type, ExpressionSyntax Default)> _requiredPrivateFields
