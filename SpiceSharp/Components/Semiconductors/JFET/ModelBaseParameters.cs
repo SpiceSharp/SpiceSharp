@@ -203,7 +203,7 @@ namespace SpiceSharp.Components.JFETBehaviors
                 if (value > 0.95)
                 {
                     _depletionCapCoefficient = 0.95;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
                     return;
                 }
 

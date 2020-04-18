@@ -98,26 +98,31 @@ namespace SpiceSharp.CodeGeneration
             foreach (var attr in node.AttributeLists.SelectMany(list => list.Attributes))
             {
                 SyntaxKind boundKind = SyntaxKind.None;
+                string warningPrefix = null;
                 switch (attr.Name.ToString())
                 {
                     case "GreaterThan":
                     case "GreaterThanAttribute":
                         boundKind = SyntaxKind.LessThanOrEqualExpression;
+                        warningPrefix = "Properties.Resources.Parameters_TooSmall";
                         break;
 
                     case "GreaterThanOrEquals":
                     case "GreaterThanOrEqualsAttribute":
                         boundKind = SyntaxKind.LessThanExpression;
+                        warningPrefix = "Properties.Resources.Parameters_TooSmall";
                         break;
 
                     case "LessThan":
                     case "LessThanAttribute":
-                        boundKind = SyntaxKind.GreaterThanOrEqualExpression; 
+                        boundKind = SyntaxKind.GreaterThanOrEqualExpression;
+                        warningPrefix = "Properties.Resources.Parameters_TooLarge";
                         break;
 
                     case "LessThanOrEquals":
                     case "LessThanOrEqualsAttribute":
                         boundKind = SyntaxKind.GreaterThanExpression;
+                        warningPrefix = "Properties.Resources.Parameters_TooLarge";
                         break;
 
                     case "DerivedProperty":
@@ -148,11 +153,11 @@ namespace SpiceSharp.CodeGeneration
                         case LiteralExpressionSyntax les when les.Token.Value.Equals(false):
                             consequence = Block(
                                 ParseStatement($"{privateVariable} = {limit};"),
-                                ParseStatement($"SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
+                                ParseStatement($"SpiceSharpWarning.Warning(this, {warningPrefix}Set.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
                                 ReturnStatement());
                             break;
                         case LiteralExpressionSyntax les when les.Token.Value.Equals(true):
-                            consequence = ParseStatement($"throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));");
+                            consequence = ParseStatement($"throw new ArgumentException({warningPrefix}.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));");
                             break;
                         default:
                             consequence = Block(

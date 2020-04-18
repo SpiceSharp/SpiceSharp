@@ -723,7 +723,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 if (value >= 0.9999)
                 {
                     _depletionCapCoefficient = 0.9999;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(DepletionCapCoefficient), value, 0.9999));
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(DepletionCapCoefficient), value, 0.9999));
                     return;
                 }
 

@@ -215,15 +215,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The absolute tolerance should be greater than 0..
-        /// </summary>
-        internal static string Delays_AbsoluteToleranceTooSmall {
-            get {
-                return ResourceManager.GetString("Delays.AbsoluteToleranceTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Non-causal delay detected. Delays should be greater than 0..
         /// </summary>
         internal static string Delays_NonCausalDelay {
@@ -242,47 +233,11 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The relative tolerance should be greater than 0..
-        /// </summary>
-        internal static string Delays_RelativeToleranceTooSmall {
-            get {
-                return ResourceManager.GetString("Delays.RelativeToleranceTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}: activation energy too small, limited to {1:g}..
-        /// </summary>
-        internal static string Diodes_ActivationEnergyTooSmall {
-            get {
-                return ResourceManager.GetString("Diodes.ActivationEnergyTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}: breakdown current increased to {1:g5} to resolve incompatibility with specified saturation current..
         /// </summary>
         internal static string Diodes_BreakdownCurrentIncreased {
             get {
                 return ResourceManager.GetString("Diodes.BreakdownCurrentIncreased", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}: depletion capacitance coefficient too large, limited to {1}..
-        /// </summary>
-        internal static string Diodes_DepletionCapCoefficientTooLarge {
-            get {
-                return ResourceManager.GetString("Diodes.DepletionCapCoefficientTooLarge", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}: grading coefficient too large, limited to {1:g}..
-        /// </summary>
-        internal static string Diodes_GradingCoefficientTooLarge {
-            get {
-                return ResourceManager.GetString("Diodes.GradingCoefficientTooLarge", resourceCulture);
             }
         }
         
@@ -323,15 +278,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: depletion capacitance coefficient too large, limited to {1:g}..
-        /// </summary>
-        internal static string JFETs_DepletionCapCoefficientTooLarge {
-            get {
-                return ResourceManager.GetString("JFETs.DepletionCapCoefficientTooLarge", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}: effective channel length less than zero..
         /// </summary>
         internal static string Mosfets_EffectiveChannelTooSmall {
@@ -346,15 +292,6 @@ namespace SpiceSharp.Properties {
         internal static string Mosfets_NsubTooSmall {
             get {
                 return ResourceManager.GetString("Mosfets.NsubTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The oxide thickness is invalid..
-        /// </summary>
-        internal static string Mosfets_OxideThicknessTooSmall {
-            get {
-                return ResourceManager.GetString("Mosfets.OxideThicknessTooSmall", resourceCulture);
             }
         }
         
@@ -422,16 +359,7 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The resistance {0} is too small, increased to {1}..
-        /// </summary>
-        internal static string Resistors_ResistanceTooSmall {
-            get {
-                return ResourceManager.GetString("Resistors.ResistanceTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}: resistance is 0, set to 1000..
+        ///   Looks up a localized string similar to {0}: Model describes short-circuit, 1kOhm used..
         /// </summary>
         internal static string Resistors_ZeroResistance {
             get {
@@ -512,38 +440,11 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find the source &apos;{0}&apos;..
-        /// </summary>
-        internal static string Simulations_DC_CannotFindSource {
-            get {
-                return ResourceManager.GetString("Simulations.DC.CannotFindSource", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot find DC parameter entity &apos;{0}&apos;..
         /// </summary>
         internal static string Simulations_DC_InvalidEntity {
             get {
                 return ResourceManager.GetString("Simulations.DC.InvalidEntity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The sweep values cannot be used to reach the stop value..
-        /// </summary>
-        internal static string Simulations_DC_InvalidSweep {
-            get {
-                return ResourceManager.GetString("Simulations.DC.InvalidSweep", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not find a sweeping parameter &apos;{0}&apos;..
-        /// </summary>
-        internal static string Simulations_DC_NoSource {
-            get {
-                return ResourceManager.GetString("Simulations.DC.NoSource", resourceCulture);
             }
         }
         
@@ -593,15 +494,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: there are no unknown variables to solve..
-        /// </summary>
-        internal static string Simulations_NoVariables {
-            get {
-                return ResourceManager.GetString("Simulations.NoVariables", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A simulation state of type {0} was not defined..
         /// </summary>
         internal static string Simulations_StateNotDefined {
@@ -616,15 +508,6 @@ namespace SpiceSharp.Properties {
         internal static string Simulations_Time_MaximumExpansionTooSmall {
             get {
                 return ResourceManager.GetString("Simulations.Time.MaximumExpansionTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The integration order is too small..
-        /// </summary>
-        internal static string Simulations_Time_OrderTooSmall {
-            get {
-                return ResourceManager.GetString("Simulations.Time.OrderTooSmall", resourceCulture);
             }
         }
         
@@ -719,15 +602,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid characteristic impedance..
-        /// </summary>
-        internal static string TransmissionLines_ImpedanceTooSmall {
-            get {
-                return ResourceManager.GetString("TransmissionLines.ImpedanceTooSmall", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A value of type {0} already exists..
         /// </summary>
         internal static string TypeAlreadyExists {
@@ -773,15 +647,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not enough nodes have been specified..
-        /// </summary>
-        internal static string Validation_NoFixedVoltageNodes {
-            get {
-                return ResourceManager.GetString("Validation.NoFixedVoltageNodes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to There is no ground node in the circuit..
         /// </summary>
         internal static string Validation_NoGround {
@@ -800,15 +665,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No variables set has been specified for validation..
-        /// </summary>
-        internal static string Validation_NoVariableSet {
-            get {
-                return ResourceManager.GetString("Validation.NoVariableSet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0}: all pins are short-circuited..
         /// </summary>
         internal static string Validation_ShortCircuitComponent {
@@ -823,15 +679,6 @@ namespace SpiceSharp.Properties {
         internal static string Validation_ShortCircuitFixedVoltage {
             get {
                 return ResourceManager.GetString("Validation.ShortCircuitFixedVoltage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The source {0} closes a loop of voltage sources..
-        /// </summary>
-        internal static string Validation_VoltageLoopFound {
-            get {
-                return ResourceManager.GetString("Validation.VoltageLoopFound", resourceCulture);
             }
         }
         

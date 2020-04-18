@@ -161,7 +161,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (value > 0.9)
                 {
                     _gradingCoefficient = 0.9;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(GradingCoefficient), value, 0.9));
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(GradingCoefficient), value, 0.9));
                     return;
                 }
 
@@ -223,7 +223,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 if (value > 0.95)
                 {
                     _depletionCapCoefficient = 0.95;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
                     return;
                 }
 
@@ -245,7 +245,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             set
             {
                 if (value >= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BreakdownVoltage), value, 0));
+                    throw new ArgumentException(Properties.Resources.Parameters_TooLarge.FormatString(nameof(BreakdownVoltage), value, 0));
                 _breakdownVoltage = value;
             }
         }
