@@ -226,10 +226,15 @@ namespace SpiceSharp.Algebra
             for (; step <= order; step++)
             {
                 var pivot = Strategy.FindPivot(Matrix, step);
-                if (pivot == null)
+                if (pivot.Info == PivotInfo.None)
                     return step - 1;
-                MovePivot(pivot, step);
-                Eliminate(pivot);
+                else if (pivot.Info == PivotInfo.Bad)
+                {
+                    var loc = InternalToExternal(new MatrixLocation(step, step));
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Algebra_BadlyConditioned.FormatString(loc.Row, loc.Column));
+                }
+                MovePivot(pivot.Element, step);
+                Eliminate(pivot.Element);
             }
 
             IsFactored = true;

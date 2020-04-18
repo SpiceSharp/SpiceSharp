@@ -18,7 +18,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override ISparseMatrixElement<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
+        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -28,7 +28,7 @@ namespace SpiceSharp.Algebra.Solve
 
             // No singletons left, so don't bother
             if (markowitz.Singletons == 0)
-                return null;
+                return Pivot<T>.Empty;
 
             // Find the first valid singleton we can use
             int singletons = 0, index;
@@ -69,7 +69,7 @@ namespace SpiceSharp.Algebra.Solve
                         // Check if it is a valid pivot
                         var magnitude = markowitz.Magnitude(chosen.Value);
                         if (magnitude > markowitz.AbsolutePivotThreshold)
-                            return chosen;
+                            return new Pivot<T>(chosen, PivotInfo.Good);
                     }
                 }
 
@@ -109,7 +109,7 @@ namespace SpiceSharp.Algebra.Solve
                         var magnitude = markowitz.Magnitude(chosen.Value);
                         if (magnitude > markowitz.AbsolutePivotThreshold &&
                             magnitude > markowitz.RelativePivotThreshold * largest)
-                            return chosen;
+                            return new Pivot<T>(chosen, PivotInfo.Good);
                     }
                 }
 
@@ -119,7 +119,7 @@ namespace SpiceSharp.Algebra.Solve
             }
 
             // All singletons were unacceptable...
-            return null;
+            return Pivot<T>.Empty;
         }
     }
 }

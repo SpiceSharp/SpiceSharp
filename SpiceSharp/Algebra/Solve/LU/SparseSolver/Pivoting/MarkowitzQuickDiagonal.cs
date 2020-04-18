@@ -17,7 +17,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override ISparseMatrixElement<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
+        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -65,7 +65,7 @@ namespace SpiceSharp.Algebra.Solve
                                 markowitz.Magnitude(otherInRow.Value),
                                 markowitz.Magnitude(otherInColumn.Value));
                             if (magnitude >= largest)
-                                return diagonal;
+                                return new Pivot<T>(diagonal, PivotInfo.Good);
                         }
                     }
                 }
@@ -97,7 +97,7 @@ namespace SpiceSharp.Algebra.Solve
                     chosen = null;
             }
 
-            return chosen;
+            return chosen != null ? new Pivot<T>(chosen, PivotInfo.Suboptimal) : Pivot<T>.Empty;
         }
     }
 }

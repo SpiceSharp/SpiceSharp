@@ -62,6 +62,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The solver was forced to choose a pivot that did not meet tolerance levels at matrix element ({0}, {1})..
+        /// </summary>
+        internal static string Algebra_BadlyConditioned {
+            get {
+                return ResourceManager.GetString("Algebra.BadlyConditioned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The order reduction cannot be negative..
         /// </summary>
         internal static string Algebra_InvalidOrder {

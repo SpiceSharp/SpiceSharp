@@ -22,7 +22,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override ISparseMatrixElement<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
+        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -99,7 +99,7 @@ namespace SpiceSharp.Algebra.Solve
                                 acceptedRatio = ratio;
                             }
                             if (ties >= minMarkowitzProduct * TiesMultiplier)
-                                return chosen;
+                                return new Pivot<T>(chosen, PivotInfo.Suboptimal);
                         }
                     }
 
@@ -109,12 +109,12 @@ namespace SpiceSharp.Algebra.Solve
 
             // If a valid pivot was found, return it
             if (chosen != null)
-                return chosen;
+                return new Pivot<T>(chosen, PivotInfo.Suboptimal);
 
             // Else just return the largest element
-            if (largestElement != null && largestElement.Value.Equals(default))
-                return null;
-            return largestElement;
+            if (largestElement == null || largestElement.Value.Equals(default))
+                return Pivot<T>.Empty;
+            return new Pivot<T>(largestElement, PivotInfo.Bad);
         }
     }
 }

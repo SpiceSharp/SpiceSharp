@@ -8,7 +8,7 @@ namespace SpiceSharp.Algebra.Solve
     /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.Solve.SparsePivotStrategy{T}" />
+    /// <seealso cref="SparsePivotStrategy{T}" />
     public class Markowitz<T> : SparsePivotStrategy<T> where T : IFormattable, IEquatable<T>
     {
         /// <summary>
@@ -22,7 +22,12 @@ namespace SpiceSharp.Algebra.Solve
         /// The maximum Markowitz count that will not result in Int32 overflow when squared
         /// Markowitz counts are capped at this quantity.
         /// </summary>
-        private const int MaxMarkowitzCount = 46340;
+        /// <remarks>
+        /// To reach this quantity, a variable would have to be connected to this amount of
+        /// other varibles. We could say that this is highly unlikely. In the event that this
+        /// amount does get reached, we would probably need to do a sanity check.
+        /// </remarks>
+        private const int _maxMarkowitzCount = 46340;
 
         /// <summary>
         /// Gets the Markowitz row counts.
@@ -163,7 +168,7 @@ namespace SpiceSharp.Algebra.Solve
                 if (rhsElement != null && rhsElement.Index == i)
                     count++;
                 
-                _markowitzRow[i] = Math.Min(count, MaxMarkowitzCount);
+                _markowitzRow[i] = Math.Min(count, _maxMarkowitzCount);
             }
             
             // Generate Markowitz column count
@@ -179,7 +184,7 @@ namespace SpiceSharp.Algebra.Solve
                     count++;
                     element = element.Below;
                 }
-                _markowitzColumn[i] = Math.Min(count, MaxMarkowitzCount);
+                _markowitzColumn[i] = Math.Min(count, _maxMarkowitzCount);
             }
         }
 
@@ -372,7 +377,7 @@ namespace SpiceSharp.Algebra.Solve
             int index = fillin.Row;
             _markowitzRow[index]++;
             _markowitzProduct[index] =
-                Math.Min(_markowitzRow[index] * _markowitzColumn[index], MaxMarkowitzCount);
+                Math.Min(_markowitzRow[index] * _markowitzColumn[index], _maxMarkowitzCount);
             if (_markowitzRow[index] == 1 && _markowitzColumn[index] != 0)
                 Singletons--;
 
@@ -380,7 +385,7 @@ namespace SpiceSharp.Algebra.Solve
             index = fillin.Column;
             _markowitzColumn[index]++;
             _markowitzProduct[index] =
-                Math.Min(_markowitzRow[index] * _markowitzColumn[index], MaxMarkowitzCount);
+                Math.Min(_markowitzRow[index] * _markowitzColumn[index], _maxMarkowitzCount);
             if (_markowitzRow[index] != 0 && _markowitzColumn[index] == 1)
                 Singletons--;
         }
@@ -396,7 +401,7 @@ namespace SpiceSharp.Algebra.Solve
         /// current diagonal at row/column <paramref name="eliminationStep" />. This pivot element
         /// will be moved to the diagonal for this elimination step.
         /// </remarks>
-        public override ISparseMatrixElement<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep)
+        public override Pivot<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
 
@@ -404,10 +409,10 @@ namespace SpiceSharp.Algebra.Solve
             foreach (var strategy in Strategies)
             {
                 var chosen = strategy.FindPivot(this, matrix, eliminationStep);
-                if (chosen != null)
+                if (chosen.Info != PivotInfo.None)
                     return chosen;
             }
-            return null;
+            return Pivot<T>.Empty;
         }
 
         #if DEBUG
@@ -448,7 +453,7 @@ namespace SpiceSharp.Algebra.Solve
                 if (_markowitzColumn[i] != count)
                     throw new SpiceSharpException("Invalid column count");
 
-                if (_markowitzProduct[i] != Math.Min(_markowitzRow[i] * _markowitzColumn[i], MaxMarkowitzCount))
+                if (_markowitzProduct[i] != Math.Min(_markowitzRow[i] * _markowitzColumn[i], _maxMarkowitzCount))
                     throw new SpiceSharpException("Invalid product");
                 if (_markowitzProduct[i] == 0)
                     singletons++;

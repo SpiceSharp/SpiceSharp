@@ -44,10 +44,11 @@ namespace SpiceSharp.Algebra.Solve
 
         /// <summary>
         /// This method will check whether or not a pivot element is valid or not.
-        /// It checks for the submatrix right/below of the pivot.
         /// </summary>
         /// <param name="pivot">The pivot candidate.</param>
-        /// <returns>True if the pivot can be used.</returns>
+        /// <returns>
+        /// <c>true</c> if the pivot can be used; otherwise <c>false</c>.
+        /// </returns>
         public abstract bool IsValidPivot(ISparseMatrixElement<T> pivot);
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <returns>The chosen pivot.</returns>
-        public abstract ISparseMatrixElement<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep);
+        public abstract Pivot<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep);
 
         /// <summary>
         /// Clears the pivot strategy.
