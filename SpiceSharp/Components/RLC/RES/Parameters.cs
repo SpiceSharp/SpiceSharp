@@ -9,17 +9,17 @@ namespace SpiceSharp.Components.ResistorBehaviors
 	[GeneratedParameters]
     public class Parameters : ParameterSet
     {
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature);
+        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
         private double _seriesMultiplier = 1.0;
         private double _parallelMultiplier = 1.0;
         private GivenParameter<double> _length;
-        private GivenParameter<double> _width;
+        private GivenParameter<double> _width = new GivenParameter<double>(1.0, false);
         private GivenParameter<double> _resistance;
 
         /// <summary>
         /// The minimum resistance for any resistor.
         /// </summary>
-        public const double MinimumResistance = 1e-3;
+        public const double MinimumResistance = 1e-9;
 
         /// <summary>
         /// Gets the temperature parameter in degrees Kelvin.
@@ -41,13 +41,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// numerical instability issues. If a 0 Ohm resistance is wanted, consider using an ideal voltage source instead.
         /// </summary>
         [ParameterName("resistance"), ParameterName("r"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
-        [GreaterThan(0), GreaterThanOrEquals(MinimumResistance, RaisesException = false)]
+        [GreaterThanOrEquals(0), GreaterThanOrEquals(MinimumResistance, RaisesException = false)]
         public GivenParameter<double> Resistance
         {
             get => _resistance;
             set
             {
-                if (value <= 0)
+                if (value < 0)
                     throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Resistance), value, 0));
                 if (value < MinimumResistance)
                 {
@@ -91,13 +91,13 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Length
         /// </summary>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThanOrEquals(0)]
         public GivenParameter<double> Length
         {
             get => _length;
             set
             {
-                if (value <= 0)
+                if (value < 0)
                     throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Length), value, 0));
                 _length = value;
             }

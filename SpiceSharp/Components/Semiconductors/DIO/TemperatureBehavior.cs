@@ -145,7 +145,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             TempVCritical = vte * Math.Log(vte / (Constants.Root2 * TempSaturationCurrent));
 
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
-            if (!double.IsNaN(ModelParameters.BreakdownVoltage))
+            if (ModelParameters.BreakdownVoltage.Given)
             {
                 double cbv = ModelParameters.BreakdownCurrent;
                 double xbv;

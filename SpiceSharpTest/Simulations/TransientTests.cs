@@ -173,6 +173,7 @@ namespace SpiceSharpTest.Simulations
                 .SetParameter("pnp", true)
                 .SetParameter("is", 16e-15)
                 .SetParameter("bf", 1610.5);
+            SpiceSharpWarning.WarningGenerated += (sender, args) => Console.WriteLine(args.Message);
 
             var ckt = new Circuit(
                 new NodeMapper(new[]

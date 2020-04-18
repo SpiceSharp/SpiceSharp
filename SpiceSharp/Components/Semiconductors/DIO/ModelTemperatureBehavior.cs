@@ -87,30 +87,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
             VtNominal = Constants.KOverQ * Parameters.NominalTemperature;
 
-            // limit grading coeff to max of 0.9
-            if (Parameters.GradingCoefficient > 0.9)
-            {
-                Parameters.GradingCoefficient = 0.9;
-                SpiceSharpWarning.Warning(this, 
-                    Properties.Resources.Diodes_GradingCoefficientTooLarge.FormatString(Name, Parameters.GradingCoefficient));
-            }
-
-            // limit activation energy to min of 0.1
-            if (Parameters.ActivationEnergy < 0.1)
-            {
-                Parameters.ActivationEnergy = 0.1;
-                SpiceSharpWarning.Warning(this, 
-                    Properties.Resources.Diodes_ActivationEnergyTooSmall.FormatString(Name, Parameters.ActivationEnergy));
-            }
-
-            // limit depletion cap coeff to max of .95
-            if (Parameters.DepletionCapCoefficient > 0.95)
-            {
-                Parameters.DepletionCapCoefficient = 0.95;
-                SpiceSharpWarning.Warning(this, 
-                    Properties.Resources.Diodes_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient));
-            }
-
             if (!Parameters.Resistance.Equals(0.0))
                 Conductance = 1 / Parameters.Resistance;
             else

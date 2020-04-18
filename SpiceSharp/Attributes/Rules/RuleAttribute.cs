@@ -9,7 +9,7 @@ namespace SpiceSharp.Attributes
     /// Rule attributes can be converted to code automatically using SpiceSharp.CodeGeneration.
     /// </remarks>
     /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
     public abstract class RuleAttribute : Attribute
     {
         /// <summary>

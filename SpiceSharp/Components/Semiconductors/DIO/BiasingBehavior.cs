@@ -175,7 +175,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
 
                 // Limit new junction voltage.
-                if (!double.IsNaN(ModelParameters.BreakdownVoltage) && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
+                if (ModelParameters.BreakdownVoltage.Given && vd < Math.Min(0, -TempBreakdownVoltage + 10 * Vte))
                 {
                     var vdtemp = -(vd + TempBreakdownVoltage);
                     vdtemp = Semiconductor.LimitJunction(vdtemp, -(LocalVoltage + TempBreakdownVoltage), Vte, TempVCritical, ref check);

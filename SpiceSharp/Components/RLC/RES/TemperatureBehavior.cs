@@ -53,13 +53,14 @@ namespace SpiceSharp.Components.ResistorBehaviors
             // Default Value Processing for Resistor Instance
             if (!Parameters.Temperature.Given)
                 Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
-            if (!Parameters.Width.Given)
-                Parameters.Width = new GivenParameter<double>(_mbp?.DefaultWidth ?? 0.0, false);
 
             if (_mbp != null)
             {
                 if (!Parameters.Resistance.Given)
                 {
+                    if (!Parameters.Width.Given)
+                        Parameters.Width = new GivenParameter<double>(_mbp.DefaultWidth, false);
+
                     if (!_mbp.SheetResistance.Equals(0.0) && Parameters.Length > 0)
                         resistance = _mbp.SheetResistance * (Parameters.Length - _mbp.Narrow) / (Parameters.Width - _mbp.Narrow);
                     else
