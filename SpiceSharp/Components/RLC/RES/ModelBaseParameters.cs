@@ -1,17 +1,22 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Components.ResistorBehaviors
 {
     /// <summary>
     /// Parameters for a <see cref="ResistorModel"/>
     /// </summary>
+    [GeneratedParameters]
     public class ModelBaseParameters : ParameterSet
     {
+        private double _defaultWidth = 10e-6;
+        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
         [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
+        [GreaterThan(Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -21,7 +26,17 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the nominal temperature parameter in degrees Kelvin.
         /// </summary>
-        public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> NominalTemperature
+        {
+            get => _nominalTemperature;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                _nominalTemperature = value;
+            }
+        }
 
         /// <summary>
         /// Gets the first-order temperature coefficient parameter.
@@ -51,7 +66,17 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Gets the default width parameter.
         /// </summary>
         [ParameterName("defw"), ParameterInfo("Default device width", Units = "m")]
-        public double DefaultWidth { get; set; } = 10e-6;
+        [GreaterThan(0)]
+        public double DefaultWidth
+        {
+            get => _defaultWidth;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DefaultWidth), value, 0));
+                _defaultWidth = value;
+            }
+        }
 
         /// <summary>
         /// Gets the narrowing coefficient parameter.

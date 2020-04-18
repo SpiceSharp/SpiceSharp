@@ -140,7 +140,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             Factor1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
 
             if (!Parameters.LeakBeCurrent.Given)
-                    Parameters.LeakBeCurrent = new GivenParameter<double>(Parameters.C2 * Parameters.SatCur, false);
+                Parameters.LeakBeCurrent = new GivenParameter<double>(Parameters.C2 * Parameters.SatCur, false);
             if (!Parameters.LeakBcCurrent.Given)
                 Parameters.LeakBcCurrent = new GivenParameter<double>(Parameters.C4 * Parameters.SatCur, false);
             if (!Parameters.MinimumBaseResistance.Given)

@@ -1,17 +1,19 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.CapacitorBehaviors
 {
     /// <summary>
     /// Base parameters for a capacitor
     /// </summary>
+    [GeneratedParameters]
     public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Gets the capacitance parameter.
         /// </summary>
         [ParameterName("capacitance"), ParameterInfo("Device capacitance", Units = "F", IsPrincipal = true)]
+        [GreaterThanOrEquals(0)]
         public GivenParameter<double> Capacitance { get; set; } = new GivenParameter<double>();
 
         /// <summary>
@@ -24,24 +26,28 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// Gets the width parameter.
         /// </summary>
         [ParameterName("w"), ParameterInfo("Device width", Units = "m", Interesting = false)]
+        [GreaterThanOrEquals(0)]
         public GivenParameter<double> Width { get; set; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets the length parameter.
         /// </summary>
         [ParameterName("l"), ParameterInfo("Device length", Units = "m", Interesting = false)]
+        [GreaterThanOrEquals(0)]
         public GivenParameter<double> Length { get; set; } = new GivenParameter<double>();
 
         /// <summary>
         /// Gets or sets the parallel multiplier.
         /// </summary>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        [GreaterThanOrEquals(0)]
         public double ParallelMultiplier { get; set; } = 1.0;
 
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
+        [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
+        [DerivedProperty(), GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -51,6 +57,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
         /// <summary>
         /// Gets the temperature parameter (in degrees Kelvin).
         /// </summary>
+        [GreaterThan(0)]
         public GivenParameter<double> Temperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>

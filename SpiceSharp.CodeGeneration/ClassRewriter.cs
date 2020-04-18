@@ -13,6 +13,8 @@ namespace SpiceSharp.CodeGeneration
     /// <seealso cref="CSharpSyntaxRewriter" />
     public class ClassRewriter : CSharpSyntaxRewriter
     {
+        public const bool DefaultRaiseException = true;
+
         private readonly Dictionary<string, (TypeSyntax Type, ExpressionSyntax Default)> _requiredPrivateFields
             = new Dictionary<string, (TypeSyntax Type, ExpressionSyntax Default)>();
         private readonly Dictionary<string, MemberDeclarationSyntax> _definedMembers
@@ -95,10 +97,30 @@ namespace SpiceSharp.CodeGeneration
                 SyntaxKind boundKind = SyntaxKind.None;
                 switch (attr.Name.ToString())
                 {
-                    case "GreaterThan": boundKind = SyntaxKind.LessThanOrEqualExpression; break;
-                    case "GreaterThanOrEquals": boundKind = SyntaxKind.LessThanExpression; break;
-                    case "LessThan": boundKind = SyntaxKind.GreaterThanOrEqualExpression; break;
-                    case "LessThanOrEqual": boundKind = SyntaxKind.GreaterThanExpression; break;
+                    case "GreaterThan":
+                    case "GreaterThanAttribute":
+                        boundKind = SyntaxKind.LessThanOrEqualExpression;
+                        break;
+
+                    case "GreaterThanOrEquals":
+                    case "GreaterThanOrEqualsAttribute":
+                        boundKind = SyntaxKind.LessThanExpression;
+                        break;
+
+                    case "LessThan":
+                    case "LessThanAttribute":
+                        boundKind = SyntaxKind.GreaterThanOrEqualExpression; 
+                        break;
+
+                    case "LessThanOrEquals":
+                    case "LessThanOrEqualsAttribute":
+                        boundKind = SyntaxKind.GreaterThanExpression;
+                        break;
+
+                    case "DerivedProperty":
+                    case "DerivedPropertyAttribute":
+                        // Don't touch derived properties
+                        return node;
                 }
 
                 if (boundKind != SyntaxKind.None)
@@ -116,9 +138,10 @@ namespace SpiceSharp.CodeGeneration
                             consequenceCondition = arg.Expression;
                     }
 
+                    if (consequenceCondition == null)
+                        consequenceCondition = ParseExpression(DefaultRaiseException ? "true" : "false");
                     switch (consequenceCondition)
                     {
-                        case null:
                         case LiteralExpressionSyntax les when les.Token.Value.Equals(false):
                             consequence = Block(
                                 ParseStatement($"{privateVariable} = {limit};"),
@@ -174,9 +197,11 @@ namespace SpiceSharp.CodeGeneration
                 _requiredPrivateFields.Add(privateVariable, (node.Type, result.Initializer?.Value));
                 if (result.Initializer != null)
                 {
+                    var trailingTrivia = result.SemicolonToken.TrailingTrivia;
                     result = result
-                        .RemoveNode(result.Initializer, SyntaxRemoveOptions.AddElasticMarker)
-                        .WithSemicolonToken(Token(SyntaxKind.None));
+                        .RemoveNode(result.Initializer, SyntaxRemoveOptions.KeepExteriorTrivia | SyntaxRemoveOptions.KeepEndOfLine | SyntaxRemoveOptions.KeepDirectives)
+                        .WithSemicolonToken(Token(SyntaxKind.None))
+                        .WithTrailingTrivia(trailingTrivia);
                 }
 
                 return result;

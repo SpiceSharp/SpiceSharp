@@ -14,15 +14,19 @@ namespace SpiceSharp.CodeGeneration
                 return;
             }
 
+            // Use the executable directory as the backup path
+            var backupPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backup" + DateTime.Now.ToString("yyyymmdd_hhmms"));
+
+            // Recursively build all files
             foreach (var file in Directory.GetFiles(args[0], "*.cs", SearchOption.AllDirectories))
             {
                 // Overwrite the file
-                var doc = new Document(file);
-                if (doc.ShouldGenerate)
+                var doc = new Document(file)
                 {
-                    Console.WriteLine("Exporting " + file);
+                    BackupPath = backupPath
+                };
+                if (doc.ShouldGenerate)
                     doc.Export(file);
-                }
             }
         }
     }

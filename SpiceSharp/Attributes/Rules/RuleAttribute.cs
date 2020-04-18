@@ -18,6 +18,6 @@ namespace SpiceSharp.Attributes
         /// <value>
         ///   <c>true</c> if the rule may raise an exception; otherwise, <c>false</c>.
         /// </value>
-        public bool RaisesException { get; set; }
+        public bool RaisesException { get; set; } = true;
     }
 }

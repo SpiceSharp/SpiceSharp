@@ -1,18 +1,20 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.DelayBehaviors
 {
     /// <summary>
     /// Base parameters for a <see cref="Delay" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.ParameterSet" />
+    /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public class BaseParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the delay in seconds.
         /// </summary>
         [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.", Units = "s")]
+        [GreaterThanOrEquals(0)]
         public double Delay { get; set; }
 
         /// <summary>

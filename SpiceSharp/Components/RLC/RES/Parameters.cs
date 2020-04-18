@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the temperature parameter in degrees Kelvin.
         /// </summary>
-        [GreaterThanOrEquals(0, RaisesException = true)]
+        [GreaterThanOrEquals(0)]
         public GivenParameter<double> Temperature
         {
             get => _temperature;
@@ -44,12 +44,14 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Resistance
         /// </summary>
         [ParameterName("resistance"), ParameterName("r"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
-        [GreaterThanOrEquals(MinimumResistance)]
+        [GreaterThan(0), GreaterThanOrEquals(MinimumResistance, RaisesException = false)]
         public GivenParameter<double> Resistance
         {
             get => _resistance;
             set
             {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Resistance), value, 0));
                 if (value < MinimumResistance)
                 {
                     _resistance = MinimumResistance;
@@ -65,6 +67,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// Instance operating temperature
         /// </summary>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
+        [GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -82,12 +85,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             set
             {
                 if (value <= 0)
-                {
-                    _width = 0;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(Width), value, 0));
-                    return;
-                }
-
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Width), value, 0));
                 _width = value;
             }
         }
@@ -103,12 +101,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             set
             {
                 if (value <= 0)
-                {
-                    _length = 0;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(Length), value, 0));
-                    return;
-                }
-
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Length), value, 0));
                 _length = value;
             }
         }
@@ -124,12 +117,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             set
             {
                 if (value < 0)
-                {
-                    _parallelMultiplier = 0;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(ParallelMultiplier), value, 0));
-                    return;
-                }
-
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ParallelMultiplier), value, 0));
                 _parallelMultiplier = value;
             }
         }
@@ -144,12 +132,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             set
             {
                 if (value <= 0)
-                {
-                    _seriesMultiplier = 0;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(SeriesMultiplier), value, 0));
-                    return;
-                }
-
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SeriesMultiplier), value, 0));
                 _seriesMultiplier = value;
             }
         }
