@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Common
 {
@@ -7,12 +7,24 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     /// Common parameters for mosfet components.
     /// </summary>
     /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public abstract class BaseParameters : ParameterSet
     {
+        private double _drainSquares = 1;
+        private double _sourceSquares = 1;
+        private double _drainPerimeter;
+        private double _sourcePerimeter;
+        private double _drainArea;
+        private double _sourceArea;
+        private GivenParameter<double> _length = new GivenParameter<double>(1e-4, false);
+        private GivenParameter<double> _width = new GivenParameter<double>(1e-4, false);
+        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+
         /// <summary>
         /// Gets or sets the temperature in degrees celsius.
         /// </summary>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C")]
+        [GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -22,57 +34,147 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// <summary>
         /// Gets the temperature in Kelvin.
         /// </summary>
-        public GivenParameter<double> Temperature { get; set; } = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> Temperature
+        {
+            get => _temperature;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Temperature), value, 0));
+                _temperature = value;
+            }
+        }
 
         /// <summary>
         /// Gets the mosfet width.
         /// </summary>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
-        public GivenParameter<double> Width { get; set; } = new GivenParameter<double>(1e-4, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> Width
+        {
+            get => _width;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Width), value, 0));
+                _width = value;
+            }
+        }
 
         /// <summary>
         /// Gets the mosfet length.
         /// </summary>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
-        public GivenParameter<double> Length { get; set; } = new GivenParameter<double>(1e-4, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> Length
+        {
+            get => _length;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Length), value, 0));
+                _length = value;
+            }
+        }
 
         /// <summary>
         /// Gets the source layout area.
         /// </summary>
         [ParameterName("as"), ParameterInfo("Source area", Units = "m^2")]
-        public double SourceArea { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double SourceArea
+        {
+            get => _sourceArea;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceArea), value, 0));
+                _sourceArea = value;
+            }
+        }
 
         /// <summary>
         /// Gets the drain layout area.
         /// </summary>
         [ParameterName("ad"), ParameterInfo("Drain area", Units = "m^2")]
-        public double DrainArea { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double DrainArea
+        {
+            get => _drainArea;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainArea), value, 0));
+                _drainArea = value;
+            }
+        }
 
         /// <summary>
         /// Gets the source layout perimeter.
         /// </summary>
         [ParameterName("ps"), ParameterInfo("Source perimeter", Units = "m")]
-        public double SourcePerimeter { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double SourcePerimeter
+        {
+            get => _sourcePerimeter;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourcePerimeter), value, 0));
+                _sourcePerimeter = value;
+            }
+        }
 
         /// <summary>
         /// Gets the drain layout perimeter.
         /// </summary>
         [ParameterName("pd"), ParameterInfo("Drain perimeter", Units = "m")]
-        public double DrainPerimeter { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double DrainPerimeter
+        {
+            get => _drainPerimeter;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainPerimeter), value, 0));
+                _drainPerimeter = value;
+            }
+        }
 
         /// <summary>
         /// Gets the number of squares of the source.
         /// Used in conjunction with the sheet resistance.
         /// </summary>
         [ParameterName("nrs"), ParameterInfo("Source squares")]
-        public double SourceSquares { get; set; } = 1;
+        [GreaterThanOrEquals(0)]
+        public double SourceSquares
+        {
+            get => _sourceSquares;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceSquares), value, 0));
+                _sourceSquares = value;
+            }
+        }
 
         /// <summary>
         /// Gets the number of squares of the drain.
         /// Used in conjunction with the sheet resistance.
         /// </summary>
         [ParameterName("nrd"), ParameterInfo("Drain squares")]
-        public double DrainSquares { get; set; } = 1;
+        [GreaterThanOrEquals(0)]
+        public double DrainSquares
+        {
+            get => _drainSquares;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainSquares), value, 0));
+                _drainSquares = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the device is on or off.
@@ -111,9 +213,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
                 case 3:
                     InitialVoltageBs = value[2];
                     goto case 2;
-                case 2: InitialVoltageGs = value[1];
+                case 2:
+                    InitialVoltageGs = value[1];
                     goto case 1;
-                case 1: InitialVoltageDs = value[0];
+                case 1:
+                    InitialVoltageDs = value[0];
                     break;
                 default:
                     throw new BadParameterException(nameof(value));

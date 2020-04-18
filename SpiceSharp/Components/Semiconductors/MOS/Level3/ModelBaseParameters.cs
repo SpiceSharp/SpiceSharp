@@ -1,13 +1,18 @@
-﻿using System;
+using System;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level3
 {
     /// <summary>
-    /// Base parameters for a <see cref="Mosfet3Model"/>
+    /// Base parameters for a <see cref="Mosfet3Model" />
     /// </summary>
+    /// <seealso cref="Common.ModelBaseParameters" />
+    [GeneratedParameters]
     public class ModelBaseParameters : Common.ModelBaseParameters
     {
+        private GivenParameter<double> _junctionDepth;
+        private GivenParameter<double> _fastSurfaceStateDensity;
+
         /// <summary>
         /// The permittivity of silicon
         /// </summary>
@@ -35,7 +40,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Gets the fast surface state density.
         /// </summary>
         [ParameterName("nfs"), ParameterInfo("Fast surface state density")]
-        public GivenParameter<double> FastSurfaceStateDensity { get; set; }
+        [GreaterThanOrEquals(0)]
+        public GivenParameter<double> FastSurfaceStateDensity
+        {
+            get => _fastSurfaceStateDensity;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(FastSurfaceStateDensity), value, 0));
+                _fastSurfaceStateDensity = value;
+            }
+        }
 
         /// <summary>
         /// Gets the maximum drift velocity.
@@ -47,7 +62,17 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// Gets the junction depth.
         /// </summary>
         [ParameterName("xj"), ParameterInfo("Junction depth")]
-        public GivenParameter<double> JunctionDepth { get; set; }
+        [GreaterThanOrEquals(0)]
+        public GivenParameter<double> JunctionDepth
+        {
+            get => _junctionDepth;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionDepth), value, 0));
+                _junctionDepth = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the width effect on the threshold voltage.
@@ -99,10 +124,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// </summary>
         public override void CalculateDefaults()
         {
-            // Set the default oxide thickness
-            if (!OxideThickness.Given)
-                OxideThickness = new GivenParameter<double>(1e-7, false);
-
             // Calculate base defaults
             base.CalculateDefaults();
 
@@ -119,7 +140,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         protected override ICloneable Clone()
         {
             // We have some private/protected properties that need to be set manually.
-            var result = (ModelBaseParameters) base.Clone();
+            var result = (ModelBaseParameters)base.Clone();
 
             // Set properties
             result.Delta = Delta;

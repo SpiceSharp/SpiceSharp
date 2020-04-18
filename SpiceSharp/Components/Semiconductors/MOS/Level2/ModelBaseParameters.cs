@@ -1,12 +1,21 @@
-﻿using SpiceSharp.Attributes;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level2
 {
     /// <summary>
-    /// Base parameters for a <see cref="Mosfet2Model"/>
+    /// Base parameters for a <see cref="Mosfet2Model" />
     /// </summary>
+    /// <seealso cref="Common.ModelBaseParameters" />
+    [GeneratedParameters]
     public class ModelBaseParameters : Common.ModelBaseParameters
     {
+        private GivenParameter<double> _junctionDepth;
+        private GivenParameter<double> _fastSurfaceStateDensity;
+        private GivenParameter<double> _channelCharge = new GivenParameter<double>(1, false);
+        private GivenParameter<double> _criticalFieldExp;
+        private GivenParameter<double> _criticalField = new GivenParameter<double>(1e4, false);
+
         /// <summary>
         /// Gets the channel length modulation parameter.
         /// </summary>
@@ -23,25 +32,65 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Gets the critical field for mobility degradation.
         /// </summary>
         [ParameterName("ucrit"), ParameterInfo("Crit. field for mob. degradation")]
-        public GivenParameter<double> CriticalField { get; set; } = new GivenParameter<double>(1e4, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> CriticalField
+        {
+            get => _criticalField;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CriticalField), value, 0));
+                _criticalField = value;
+            }
+        }
 
         /// <summary>
         /// Gets the critical field exponent for mobility degradation.
         /// </summary>
         [ParameterName("uexp"), ParameterInfo("Crit. field exp for mob. deg.")]
-        public GivenParameter<double> CriticalFieldExp { get; set; }
+        [GreaterThanOrEquals(0)]
+        public GivenParameter<double> CriticalFieldExp
+        {
+            get => _criticalFieldExp;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CriticalFieldExp), value, 0));
+                _criticalFieldExp = value;
+            }
+        }
 
         /// <summary>
         /// Gets the total channel charge coefficient.
         /// </summary>
         [ParameterName("neff"), ParameterInfo("Total channel charge coeff.")]
-        public GivenParameter<double> ChannelCharge { get; set; } = new GivenParameter<double>(1, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> ChannelCharge
+        {
+            get => _channelCharge;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ChannelCharge), value, 0));
+                _channelCharge = value;
+            }
+        }
 
         /// <summary>
         /// Gets the fast surface state density.
         /// </summary>
         [ParameterName("nfs"), ParameterInfo("Fast surface state density")]
-        public GivenParameter<double> FastSurfaceStateDensity { get; set; }
+        [GreaterThanOrEquals(0)]
+        public GivenParameter<double> FastSurfaceStateDensity
+        {
+            get => _fastSurfaceStateDensity;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(FastSurfaceStateDensity), value, 0));
+                _fastSurfaceStateDensity = value;
+            }
+        }
 
         /// <summary>
         /// Gets the maximum drift velocity.
@@ -53,22 +102,16 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
         /// Gets the junction depth.
         /// </summary>
         [ParameterName("xj"), ParameterInfo("Junction depth")]
-        public GivenParameter<double> JunctionDepth { get; set; }
-
-        /// <summary>
-        /// Method for calculating the default values of derived parameters.
-        /// </summary>
-        /// <remarks>
-        /// These calculations should be run whenever a parameter has been changed.
-        /// </remarks>
-        public override void CalculateDefaults()
+        [GreaterThanOrEquals(0)]
+        public GivenParameter<double> JunctionDepth
         {
-            // Set default oxide thickness
-            if (!OxideThickness.Given)
-                OxideThickness = new GivenParameter<double>(1e-7, false);
-
-            // Calculate base defaults
-            base.CalculateDefaults();
+            get => _junctionDepth;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionDepth), value, 0));
+                _junctionDepth = value;
+            }
         }
     }
 }

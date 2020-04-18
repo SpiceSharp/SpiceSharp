@@ -99,13 +99,6 @@ namespace SpiceSharp.Components.JFETBehaviors
             var gmaold = (Parameters.GatePotential - Pbo) / Pbo;
             Cjfact = 1 / (1 + .5 * (4e-4 * (Parameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
 
-            if (Parameters.DepletionCapCoefficient > 0.95)
-            {
-                SpiceSharpWarning.Warning(this,
-                    Properties.Resources.JFETs_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient));
-                Parameters.DepletionCapCoefficient = .95;
-            }
-
             Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);
             F2 = Math.Exp((1 + 0.5) * Xfc);
             F3 = 1 - Parameters.DepletionCapCoefficient * (1 + 0.5);

@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Components.JFETBehaviors
 {
@@ -7,22 +7,52 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// Base parameters for a <see cref="JFETModel" />.
     /// </summary>
     /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public class ModelBaseParameters : ParameterSet
     {
+        private double _b = 1;
+        private double _depletionCapCoefficient = 0.5;
+        private double _gateSaturationCurrent = 1e-14;
+        private double _gatePotential = 1;
+        private double _capGd;
+        private double _capGs;
+        private double _sourceResistance;
+        private double _drainResistance;
+        private double _lModulation;
+        private double _beta = 1e-4;
+        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(300.15, false);
+        private double _nominalTemperatureCelsius;
+
         /// <summary>
         /// Gets or sets the measurement temperature in degrees celsius.
         /// </summary>
         [ParameterName("tnom"), ParameterInfo("Nominal temperature.", Units = "\u00b0C")]
+        [GreaterThan(Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
-            get => NominalTemperature - Constants.CelsiusKelvin;
-            set => NominalTemperature = value + Constants.CelsiusKelvin;
+            get => _nominalTemperatureCelsius;
+            set
+            {
+                if (value <= Constants.CelsiusKelvin)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperatureCelsius), value, Constants.CelsiusKelvin));
+                _nominalTemperatureCelsius = value;
+            }
         }
 
         /// <summary>
         /// Gets the measurement temperature in Kelvin.
         /// </summary>
-        public GivenParameter<double> NominalTemperature { get; set; } = new GivenParameter<double>(300.15, false);
+        [GreaterThan(0)]
+        public GivenParameter<double> NominalTemperature
+        {
+            get => _nominalTemperature;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                _nominalTemperature = value;
+            }
+        }
 
         /// <summary>
         /// Gets the threshold voltage.
@@ -34,61 +64,168 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Gets the transconductance.
         /// </summary>
         [ParameterName("beta"), ParameterInfo("Transconductance parameter", Units = "\u03a9^-1")]
-        public double Beta { get; set; } = 1e-4;
+        [GreaterThanOrEquals(0)]
+        public double Beta
+        {
+            get => _beta;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Beta), value, 0));
+                _beta = value;
+            }
+        }
 
         /// <summary>
         /// Gets the channel length modulation parameter.
         /// </summary>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation parameter", Units = "V^-1")]
-        public double LModulation { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double LModulation
+        {
+            get => _lModulation;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LModulation), value, 0));
+                _lModulation = value;
+            }
+        }
 
         /// <summary>
         /// Gets the drain resistance.
         /// </summary>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
-        public double DrainResistance { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double DrainResistance
+        {
+            get => _drainResistance;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainResistance), value, 0));
+                _drainResistance = value;
+            }
+        }
 
         /// <summary>
         /// Gets the source resistance.
         /// </summary>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
-        public double SourceResistance { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double SourceResistance
+        {
+            get => _sourceResistance;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceResistance), value, 0));
+                _sourceResistance = value;
+            }
+        }
 
         /// <summary>
         /// Gets the gate-source junction capacitance.
         /// </summary>
         [ParameterName("cgs"), ParameterInfo("G-S junction capacitance", Units = "F")]
-        public double CapGs { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double CapGs
+        {
+            get => _capGs;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapGs), value, 0));
+                _capGs = value;
+            }
+        }
 
         /// <summary>
         /// Gets the gate-drain junction capacitance.
         /// </summary>
         [ParameterName("cgd"), ParameterInfo("G-D junction capacitance", Units = "F")]
-        public double CapGd { get; set; }
+        [GreaterThanOrEquals(0)]
+        public double CapGd
+        {
+            get => _capGd;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapGd), value, 0));
+                _capGd = value;
+            }
+        }
 
         /// <summary>
         /// Gets the gate junction potential.
         /// </summary>
         [ParameterName("pb"), ParameterInfo("Gate junction potential", Units = "V")]
-        public double GatePotential { get; set; } = 1;
+        [GreaterThan(0)]
+        public double GatePotential
+        {
+            get => _gatePotential;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GatePotential), value, 0));
+                _gatePotential = value;
+            }
+        }
 
         /// <summary>
         /// Gets the gate saturation current.
         /// </summary>
         [ParameterName("is"), ParameterInfo("Gate junction saturation current", Units = "A")]
-        public double GateSaturationCurrent { get; set; } = 1e-14;
+        [GreaterThan(0)]
+        public double GateSaturationCurrent
+        {
+            get => _gateSaturationCurrent;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GateSaturationCurrent), value, 0));
+                _gateSaturationCurrent = value;
+            }
+        }
 
         /// <summary>
         /// Gets the forward bias junction fitting parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fitting parameter")]
-        public double DepletionCapCoefficient { get; set; } = 0.5;
+        [GreaterThan(0), LessThanOrEquals(0.95, RaisesException = false)]
+        public double DepletionCapCoefficient
+        {
+            get => _depletionCapCoefficient;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DepletionCapCoefficient), value, 0));
+                if (value > 0.95)
+                {
+                    _depletionCapCoefficient = 0.95;
+                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
+                    return;
+                }
+
+                _depletionCapCoefficient = value;
+            }
+        }
 
         /// <summary>
         /// Gets the doping tail parameter.
         /// </summary>
         [ParameterName("b"), ParameterInfo("Doping tail parameter")]
-        public double B { get; set; } = 1;
+        [GreaterThanOrEquals(0)]
+        public double B
+        {
+            get => _b;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(B), value, 0));
+                _b = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the type of the jfet.
@@ -149,15 +286,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// </remarks>
         public override void CalculateDefaults()
         {
-            if (DrainResistance > 0)
-                DrainConductance = 1 / DrainResistance;
-            else
-                DrainConductance = 0;
-
-            if (SourceResistance > 0)
-                SourceConductance = 1 / SourceResistance;
-            else
-                SourceConductance = 0;
+            DrainConductance = DrainResistance > 0 ? 1 / DrainResistance : 0;
+            SourceConductance = SourceResistance > 0 ? 1 / SourceResistance : 0;
         }
     }
 }

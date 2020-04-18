@@ -1,17 +1,31 @@
-﻿using SpiceSharp.Attributes;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Components.MosfetBehaviors.Level1
 {
     /// <summary>
     /// Base parameters for a <see cref="Model"/>
     /// </summary>
+    [GeneratedParameters]
     public class ModelBaseParameters : Common.ModelBaseParameters
     {
+        private GivenParameter<double> _lambda;
+
         /// <summary>
         /// Gets the channel length modulation parameter.
         /// </summary>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
-        public GivenParameter<double> Lambda { get; set; }
+        [GreaterThanOrEquals(0)]
+        public GivenParameter<double> Lambda
+        {
+            get => _lambda;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Lambda), value, 0));
+                _lambda = value;
+            }
+        }
 
         /// <summary>
         /// Method for calculating the default values of derived parameters.
@@ -21,7 +35,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         /// </remarks>
         public override void CalculateDefaults()
         {
-            if (!OxideThickness.Given || OxideThickness.Value <= 0.0)
+            if (!OxideThickness.Given)
                 OxideCapFactor = 0.0;
             else
             {
