@@ -6,12 +6,8 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving sparse sets of equations with real numbers.
     /// </summary>
-    /// <typeparam name="M">The matrix type.</typeparam>
-    /// <typeparam name="V">The vector type.</typeparam>
-    /// <seealso cref="SparseLUSolver{M, V, T}" />
-    public partial class SparseRealSolver<M, V> : SparseLUSolver<M, V, double>
-        where M : IPermutableMatrix<double>, ISparseMatrix<double>
-        where V : IPermutableVector<double>, ISparseVector<double>
+    /// <seealso cref="SparseLUSolver{T}" />
+    public partial class SparseRealSolver : SparseLUSolver<double>
     {
         /// <summary>
         /// Private variables
@@ -19,26 +15,13 @@ namespace SpiceSharp.Algebra
         private double[] _intermediate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SparseRealSolver{M, V}"/> class.
+        /// Initializes a new instance of the <see cref="SparseRealSolver"/> class.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        public SparseRealSolver(M matrix, V vector)
-            : base(matrix, vector, new Markowitz<double>(Math.Abs))
+        public SparseRealSolver()
+            : base(Math.Abs)
         {
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SparseRealSolver{M,V}"/> class.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        /// <param name="strategy">The pivot strategy.</param>
-        public SparseRealSolver(M matrix, V vector, SparsePivotStrategy<double> strategy)
-            : base(matrix, vector, strategy)
-        {
-        }
-
+        
         /// <summary>
         /// Solves the equations using the Y-matrix and Rhs-vector.
         /// </summary>

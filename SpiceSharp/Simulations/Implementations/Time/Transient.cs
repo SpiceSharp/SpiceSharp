@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
         private bool _shouldReorder = true;
         private IIntegrationMethod _method;
-        private SimulationState _time;
+        private readonly SimulationState _time;
 
         /// <summary>
         /// Gets the time parameters.

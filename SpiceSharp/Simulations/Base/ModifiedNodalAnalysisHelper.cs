@@ -21,11 +21,8 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="size">The submatrix size to be preordered.</param>
-        public static void PreorderModifiedNodalAnalysis(IPermutableMatrix<T> matrix, int size)
+        public static void PreorderModifiedNodalAnalysis(ISparseMatrix<T> matrix, int size)
         {
-            // We can't deal with non-sparse matrices
-            if (!(matrix is ISparseMatrix<T> sparse))
-                return;
             /*
              * MNA often has patterns that we can already use for pivoting
              * 
@@ -59,9 +56,9 @@ namespace SpiceSharp.Simulations
                 // Search for zero diagonals with lone twins. 
                 for (var j = start; j <= size; j++)
                 {
-                    if (sparse.FindDiagonalElement(j) == null)
+                    if (matrix.FindDiagonalElement(j) == null)
                     {
-                        var twins = CountTwins(sparse, j, ref twin1, ref twin2, size);
+                        var twins = CountTwins(matrix, j, ref twin1, ref twin2, size);
                         if (twins == 1)
                         {
                             // Lone twins found, swap columns
@@ -81,9 +78,9 @@ namespace SpiceSharp.Simulations
                 {
                     for (var j = start; !swapped && j <= size; j++)
                     {
-                        if (sparse.FindDiagonalElement(j) == null)
+                        if (matrix.FindDiagonalElement(j) == null)
                         {
-                            CountTwins(sparse, j, ref twin1, ref twin2, size);
+                            CountTwins(matrix, j, ref twin1, ref twin2, size);
                             matrix.SwapColumns(twin2.Column, j);
                             swapped = true;
                         }

@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         protected partial class Instance : IIntegrationMethod
         {
             private FixedEuler _parameters;
-            private readonly IStateful<IBiasingSimulationState> _simulation;
+            private readonly IStateful<IBiasingSimulationState> _simulation; // TODO: remove this
             private int _stateValues = 0;
             private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(2);
             private List<IIntegrationState> _registeredStates = new List<IIntegrationState>();

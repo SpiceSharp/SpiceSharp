@@ -1,41 +1,16 @@
 ﻿using System;
-using SpiceSharp.Algebra.Solve;
 
-namespace SpiceSharp.Algebra
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
     /// A base class for sparse linear systems that can be solved using LU decomposition.
     /// Pivoting is controlled by the <see cref="Strategy"/> property. The implementation
     /// is optimized for sparse matrices through the <see cref="ISparseMatrix{T}"/> interface.
     /// </summary>
-    /// <typeparam name="M">The matrix type.</typeparam>
-    /// <typeparam name="V">The right-hand side vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract partial class SparseLUSolver<M, V, T> : LinearSystem<M, V, T>, ISparseSolver<T>
-        where M : IPermutableMatrix<T>, ISparseMatrix<T>
-        where V : IPermutableVector<T>, ISparseVector<T>
-        where T : IFormattable, IEquatable<T>
+    public abstract partial class SparseLUSolver<T> : PivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>, ISparsePivotingSolver<T>
+        where T : IFormattable
     {
-        /// <summary>
-        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that the last equation is
-        /// expected to be linearly dependent on the others.
-        /// </summary>
-        /// <value>
-        /// The degeneracy.
-        /// </value>
-        /// <exception cref="ArgumentException">Thrown if the order reduction is negative.</exception>
-        public int Degeneracy
-        {
-            get => _order;
-            set
-            {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Algebra_InvalidOrder);
-                _order = value;
-            }
-        }
-        private int _order = 0;
-
         /// <summary>
         /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
         /// the last row or column.
@@ -67,23 +42,6 @@ namespace SpiceSharp.Algebra
         public int Fillins { get; private set; }
 
         /// <summary>
-        /// Gets or sets a flag that reordering is required.
-        /// </summary>
-        /// <remarks>
-        /// If true, the method <see cref="OrderAndFactor"/> will first try to factor a part of the matrix without
-        /// reordering. This can save some time if we don't expect significant changes by the solver.
-        /// </remarks>
-        public bool NeedsReordering { get; set; }
-
-        /// <summary>
-        /// Gets whether or not the solver is factored.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is factored; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsFactored { get; protected set; }
-
-        /// <summary>
         /// Gets the pivoting strategy being used.
         /// </summary>
         /// <value>
@@ -92,75 +50,26 @@ namespace SpiceSharp.Algebra
         public SparsePivotStrategy<T> Strategy { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SparseLUSolver{M, V, T}"/> class.
+        /// Initializes a new instance of the <see cref="SparseLUSolver{T}"/> class.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        /// <param name="strategy">The pivoting strategy that needs to be used.</param>
-        protected SparseLUSolver(M matrix, V vector, SparsePivotStrategy<T> strategy)
-            : base(matrix, vector)
+        /// <param name="magnitude">The magnitude function.</param>
+        protected SparseLUSolver(Func<T, double> magnitude)
+            : base(new SparseMatrix<T>(), new SparseVector<T>())
         {
-            IsFactored = false;
-            NeedsReordering = true;
-            Strategy = strategy.ThrowIfNull(nameof(strategy));
+            Strategy = new Markowitz<T>(magnitude);
             Fillins = 0;
         }
 
         /// <summary>
-        /// Preconditions the specified method.
+        /// Preconditions the solver matrix and right hand side vector.
         /// </summary>
         /// <param name="method">The method.</param>
-        public virtual void Precondition(PreconditionMethod<T> method)
+        public override void Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method)
         {
-            bool _isFirstSwap = true;
-            void OnMatrixRowsSwapped(object sender, PermutationEventArgs args)
-            {
-                // Reflect the swapped vector elements in the row translation
-                if (_isFirstSwap)
-                {
-                    _isFirstSwap = false;
-                    Row.Swap(args.Index1, args.Index2);
-                    Vector.SwapElements(args.Index1, args.Index2);
-                    _isFirstSwap = true;
-                }
-            }
-            void OnMatrixColumnsSwapped(object sender, PermutationEventArgs args)
-            {
-                // Reflect the swapped matrix column in the column translation
-                Column.Swap(args.Index1, args.Index2);
-            }
-            void OnVectorElementsSwapped(object sender, PermutationEventArgs args)
-            {
-                // Reflect the swapped vector elements in the row translation
-                if (_isFirstSwap)
-                {
-                    _isFirstSwap = false;
-                    Row.Swap(args.Index1, args.Index2);
-                    Matrix.SwapRows(args.Index1, args.Index2);
-                    _isFirstSwap = true;
-                }
-            }
-
-            Matrix.RowsSwapped += OnMatrixRowsSwapped;
-            Matrix.ColumnsSwapped += OnMatrixColumnsSwapped;
-            Vector.ElementsSwapped += OnVectorElementsSwapped;
-            method(Matrix, Vector);
-            Matrix.RowsSwapped -= OnMatrixRowsSwapped;
-            Matrix.ColumnsSwapped -= OnMatrixColumnsSwapped;
-            Vector.ElementsSwapped -= OnVectorElementsSwapped;
+            var reorderedMatrix = new ReorderedMatrix(this);
+            var reorderedVector = new ReorderedVector(this);
+            method(reorderedMatrix, reorderedVector);
         }
-
-        /// <summary>
-        /// Solves the equations using the Y-matrix and Rhs-vector.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        public abstract void Solve(IVector<T> solution);
-
-        /// <summary>
-        /// Solves the equations using the transposed Y-matrix.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        public abstract void SolveTransposed(IVector<T> solution);
 
         /// <summary>
         /// Factor the Y-matrix and Rhs-vector.
@@ -168,10 +77,10 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
         /// </returns>
-        public bool Factor()
+        public override bool Factor()
         {
             IsFactored = false;
-            var order = Size - _order;
+            var order = Size - Degeneracy;
             for (var step = 1; step <= order; step++)
             {
                 var pivot = Matrix.FindDiagonalElement(step);
@@ -192,7 +101,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The number of rows that were successfully eliminated.
         /// </returns>
-        public int OrderAndFactor()
+        public override int OrderAndFactor()
         {
             IsFactored = false;
             int step = 1;
@@ -220,7 +129,7 @@ namespace SpiceSharp.Algebra
                 }
             }
 
-            // Setup the pivot strategy
+            // Setup the strategy for some real kick-ass pivoting action
             Strategy.Setup(Matrix, Vector, step);
 
             for (; step <= order; step++)
@@ -386,23 +295,13 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Resets all elements in the matrix.
-        /// </summary>
-        public override void ResetMatrix()
-        {
-            base.ResetMatrix();
-            IsFactored = false;
-        }
-
-        /// <summary>
         /// Clears the system of any elements. The size of the system becomes 0.
         /// </summary>
         public override void Clear()
         {
             base.Clear();
-            IsFactored = false;
-            NeedsReordering = true;
             Fillins = 0;
+            PivotSearchReduction = 0;
             Strategy.Clear();
         }
     }

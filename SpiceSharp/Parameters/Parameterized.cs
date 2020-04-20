@@ -23,7 +23,7 @@ namespace SpiceSharp
         public P GetParameterSet<P>() where P : IParameterSet
         {
             if (this is IParameterized<P> parameterized && parameterized.Parameters != null)
-                    return parameterized.Parameters;
+                return parameterized.Parameters;
             throw new ArgumentException(Properties.Resources.Parameters_ParameterSetNotFound.FormatString(typeof(P)));
         }
 

@@ -19,7 +19,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The solver.
         /// </value>
-        ISparseSolver<T> Solver { get; }
+        ISparsePivotingSolver<T> Solver { get; }
 
         /// <summary>
         /// Gets the solution.

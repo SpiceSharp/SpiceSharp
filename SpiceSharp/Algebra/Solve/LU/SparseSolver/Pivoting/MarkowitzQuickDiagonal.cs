@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra.Solve
     /// Markowitz-based pivot search. Quickly search the diagonal for valid pivots.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
+    public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
         /// <summary>
         /// Find a pivot in a matrix.

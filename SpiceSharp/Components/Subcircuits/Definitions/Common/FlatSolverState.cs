@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public override ISparseSolver<T> Solver => Parent.Solver;
+        public override ISparsePivotingSolver<T> Solver => Parent.Solver;
 
         /// <summary>
         /// Gets the solution.

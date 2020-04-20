@@ -13,7 +13,7 @@ namespace SpiceSharpTest.Algebra
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="filename">The filename.</param>
-        protected static void ReadMatrix(SparseRealSolver<SparseMatrix<double>, SparseVector<double>> solver, string filename)
+        protected static void ReadMatrix(SparseRealSolver solver, string filename)
         {
             using var sr = new StreamReader(filename);
 
@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Algebra
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="filename">The filename.</param>
-        protected static void ReadRhs(SparseRealSolver<SparseMatrix<double>, SparseVector<double>> solver, string filename)
+        protected static void ReadRhs(SparseRealSolver solver, string filename)
         {
             using var sr = new StreamReader(filename);
 
@@ -125,9 +125,9 @@ namespace SpiceSharpTest.Algebra
         /// <param name="matFilename">The matrix filename.</param>
         /// <param name="vecFilename">The vector filename.</param>
         /// <returns></returns>
-        protected SparseRealSolver<SparseMatrix<double>, SparseVector<double>> ReadSpice3f5File(string matFilename, string vecFilename)
+        protected SparseRealSolver ReadSpice3f5File(string matFilename, string vecFilename)
         {
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
 
             // Read the spice file
             string line;

@@ -3,7 +3,7 @@
 namespace SpiceSharp.Algebra
 {
     /// <summary>
-    /// A pivot strategy used by a <see cref="DenseLUSolver{M, V, T}"/>
+    /// A pivot strategy used by a <see cref="DenseLUSolver{T}"/>
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     public abstract class DensePivotStrategy<T> where T : IFormattable
@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The magnitude.
         /// </value>
-        protected Func<T, double> Magnitude { get; private set; }
+        protected Func<T, double> Magnitude { get; }
 
         /// <summary>
         /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from

@@ -26,10 +26,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// </summary>
             /// <param name="name">The name of the subcircuit instance.</param>
             /// <param name="parent">The parent simulation state.</param>
-            /// <param name="nodes">The nodes.</param>
             /// <param name="solver">The solver.</param>
-            public LocalSimulationState(string name, IBiasingSimulationState parent, IEnumerable<Bridge<string>> nodes, ISparseSolver<double> solver)
-                : base(name, parent, nodes, solver)
+            public LocalSimulationState(string name, IBiasingSimulationState parent, ISparsePivotingSolver<double> solver)
+                : base(name, parent, solver)
             {
             }
 

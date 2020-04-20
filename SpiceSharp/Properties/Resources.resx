@@ -201,6 +201,9 @@
   <data name="NotEnoughElements" xml:space="preserve">
     <value>No enough elements.</value>
   </data>
+  <data name="Parallel.AccessNotSupported" xml:space="preserve">
+    <value>Parallel access to {0} is not supported.</value>
+  </data>
   <data name="ParameterNotFound" xml:space="preserve">
     <value>Could not find parameter '{0}' for {1}.</value>
   </data>

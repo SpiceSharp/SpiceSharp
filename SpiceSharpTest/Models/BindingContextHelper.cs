@@ -186,7 +186,7 @@ namespace SpiceSharpTest.Models
                 context.Bias();
 
             var state = Substitute.For<IComplexSimulationState>();
-            state.Solver.Returns(LUHelper.CreateSparseComplexSolver());
+            state.Solver.Returns(new SparseComplexSolver());
             var solution = new DenseVector<Complex>(context.Variables.Count);
             state.Solution.Returns(solution);
             state.Laplace.Returns(0.0);

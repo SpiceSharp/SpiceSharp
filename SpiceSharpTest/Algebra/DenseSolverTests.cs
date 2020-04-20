@@ -18,10 +18,7 @@ namespace SpiceSharpTest.Algebra
                 new[] { 0.0, 0.0, 0.0, 8.0 }
             };
 
-            var solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
-                new DenseMatrix<double>(),
-                new DenseVector<double>()
-                );
+            var solver = new DenseRealSolver();
             for (var r = 0; r < 4; r++)
                 for (var c = 0; c < 4; c++)
                     solver[r + 1, c + 1] = matrix[r][c];
@@ -43,9 +40,7 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_GearExample_Expect_Reference()
         {
-            var solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
-                new DenseMatrix<double>(),
-                new DenseVector<double>());
+            var solver = new DenseRealSolver();
             for (var i = 1; i <= 4; i++)
                 solver[1, i] = 1;
             for (var i = 2; i <= 4; i++)

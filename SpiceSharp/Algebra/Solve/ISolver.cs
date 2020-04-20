@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// the equations and the variables.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface ISolver<T> where T : IFormattable
+    public interface ISolver<T> : IParameterized where T : IFormattable
     {
         /// <summary>
         /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
@@ -19,27 +19,47 @@ namespace SpiceSharp.Algebra
         int Degeneracy { get; set; }
 
         /// <summary>
-        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
-        /// the last row or column.
-        /// </summary>
-        /// <value>
-        /// The pivot search reduction.
-        /// </value>
-        int PivotSearchReduction { get; set; }
-
-        /// <summary>
         /// Gets the size of the matrix and right-hand side vector.
         /// </summary>
         /// <value>
         /// The size.
         /// </value>
+        /// <remarks>
+        /// This property is only redefined here to avoid ambiguity 
+        /// issues between <see cref="IMatrix{T}"/> and <see cref="IVector{T}"/>.
+        /// </remarks>
         int Size { get; }
 
         /// <summary>
-        /// Preconditions the specified method.
+        /// Gets a value indicating whether this solver has been factored.
+        /// A solver needs to be factored becore it can solve for a solution.
         /// </summary>
-        /// <param name="method">The method.</param>
-        void Precondition(PreconditionMethod<T> method);
+        /// <value>
+        ///   <c>true</c> if this solver is factored; otherwise, <c>false</c>.
+        /// </value>
+        bool IsFactored { get; }
+
+        /// <summary>
+        /// Gets or sets the value of the matrix at the specified row and column.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>The value.</returns>
+        T this[int row, int column] { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of the matrix at the specified location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <returns>The value.</returns>
+        T this[MatrixLocation location] { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value of the vector at the specified row.
+        /// </summary>
+        /// <param name="row">The row.</param>
+        /// <returns>The value.</returns>
+        T this[int row] { get; set; }
 
         /// <summary>
         /// Solves the equations using the Y-matrix and Rhs-vector.
@@ -63,54 +83,21 @@ namespace SpiceSharp.Algebra
         bool Factor();
 
         /// <summary>
-        /// Order and factor the Y-matrix and Rhs-vector.
-        /// This method will reorder the matrix as it sees fit.
-        /// </summary>
-        /// <returns>
-        /// The number of rows that were successfully eliminated.
-        /// </returns>
-        int OrderAndFactor();
-
-        /// <summary>
         /// Clears all matrix and vector elements.
         /// </summary>
+        /// <remarks>
+        /// This method is only redefined here to avoid ambiguity
+        /// issues between <see cref="IMatrix{T}"/> and <see cref="IVector{T}"/>.
+        /// </remarks>
         void Reset();
-
-        /// <summary>
-        /// Resets the right-hand side vector.
-        /// </summary>
-        void ResetVector();
-
-        /// <summary>
-        /// Resets the matrix.
-        /// </summary>
-        void ResetMatrix();
-
-        /// <summary>
-        /// Maps an internal row/column tuple to an external one.
-        /// </summary>
-        /// <param name="indices">The internal row/column indices.</param>
-        /// <returns>The external row/column indices.</returns>
-        MatrixLocation InternalToExternal(MatrixLocation indices);
-
-        /// <summary>
-        /// Maps an external row/column tuple to an internal one.
-        /// </summary>
-        /// <param name="indices">The external row/column indices.</param>
-        /// <returns>The internal row/column indices.</returns>
-        MatrixLocation ExternalToInternal(MatrixLocation indices);
 
         /// <summary>
         /// Clears the solver of any elements. The size of the solver becomes 0.
         /// </summary>
+        /// <remarks>
+        /// The method is only redefined here to avoid ambiguity issues between
+        /// <see cref="IMatrix{T}"/> and <see cref="IVector{T}"/>.
+        /// </remarks>
         void Clear();
     }
-
-    /// <summary>
-    /// A method that can be used to precondition a solver.
-    /// </summary>
-    /// <typeparam name="T">The base type.</typeparam>
-    /// <param name="matrix">The (permutated) matrix.</param>
-    /// <param name="vector">The (permutated) vector.</param>
-    public delegate void PreconditionMethod<T>(IPermutableMatrix<T> matrix, IPermutableVector<T> vector) where T : IFormattable;
 }

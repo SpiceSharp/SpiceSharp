@@ -22,10 +22,7 @@ namespace SpiceSharpTest.Algebra
                 new[] { 4.0, 2.0, -0.5 }
             };
 
-            var solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
-                new DenseMatrix<double>(),
-                new DenseVector<double>()
-                );
+            var solver = new DenseRealSolver();
             for (var r = 0; r < matrixElements.Length; r++)
                 for (var c = 0; c < matrixElements[r].Length; c++)
                     solver[r + 1, c + 1] = matrixElements[r][c];
@@ -42,10 +39,7 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_OrderAndFactoring_Expect_Reference()
         {
-            var solver = new DenseRealSolver<DenseMatrix<double>, DenseVector<double>>(
-                new DenseMatrix<double>(),
-                new DenseVector<double>()
-                );
+            var solver = new DenseRealSolver();
             solver[1, 1] = 1;
             solver[1, 4] = -1;
             solver[2, 1] = -1;

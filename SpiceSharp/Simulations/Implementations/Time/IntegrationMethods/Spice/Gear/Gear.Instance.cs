@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <summary>
             /// The solver used to calculate the coefficients.
             /// </summary>
-            protected readonly DenseRealSolver<DenseMatrix<double>, DenseVector<double>> Solver = LUHelper.CreateDenseRealSolver(_gearOrder + 1);
+            protected readonly DenseRealSolver Solver = new DenseRealSolver(_gearOrder + 1);
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance"/> class.

@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra.Solve
     /// singletons (rows or columns with only one element), these can be found rather cheaply.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
+    public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
         /// <summary>
         /// Find a pivot in a matrix.

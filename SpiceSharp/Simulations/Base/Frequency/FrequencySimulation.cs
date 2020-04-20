@@ -132,7 +132,7 @@ namespace SpiceSharp.Simulations
         protected override void CreateBehaviors(IEntityCollection entities)
         {
             _state = new ComplexSimulationState(
-                FrequencyParameters.Solver ?? LUHelper.CreateSparseComplexSolver(),
+                FrequencyParameters.Solver ?? new SparseComplexSolver(),
                 BiasingParameters.NodeComparer
                 );
             /* var strategy = ComplexState.Solver.Strategy;

@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// The solver.
         /// </value>
         [ParameterName("complex.solver"), ParameterInfo("The solver used to solve equations.")]
-        public ISparseSolver<Complex> Solver { get; set; }
+        public ISparsePivotingSolver<Complex> Solver { get; set; }
 
         /// <summary>
         /// Gets or sets the mapper used to map <see cref="Variable"/> to equation indices. If <c>null</c>,

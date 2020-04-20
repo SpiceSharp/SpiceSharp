@@ -13,7 +13,9 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <typeparam name="T">The base value type.</typeparam>
     /// <typeparam name="S">The parent simulation state type.</typeparam>
     /// <seealso cref="ISolverSimulationState{T}" />
-    public abstract class SubcircuitSolverState<T, S> : ISolverSimulationState<T> where S : ISolverSimulationState<T> where T : IFormattable
+    public abstract class SubcircuitSolverState<T, S> : ISolverSimulationState<T> 
+        where S : ISolverSimulationState<T>
+        where T : IFormattable
     {
         /// <summary>
         /// The name of the subcircuit.
@@ -31,7 +33,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public abstract ISparseSolver<T> Solver { get; }
+        public abstract ISparsePivotingSolver<T> Solver { get; }
 
         /// <summary>
         /// Gets the solution.

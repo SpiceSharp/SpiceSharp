@@ -13,15 +13,10 @@ namespace SpiceSharp.Algebra
     /// the vector.</para>
     /// <para>This vector does not automatically expand size if necessary. Under the hood it is basically just an array.</para>
     /// </remarks>
-    public partial class DenseVector<T> : IPermutableVector<T>, IFormattable where T : IFormattable
+    public partial class DenseVector<T> : IVector<T>, IFormattable where T : IFormattable
     {
-        private const float ExpansionFactor = 1.5f;
-        private const int InitialSize = 4;
-
-        /// <summary>
-        /// Occurs when two elements have swapped.
-        /// </summary>
-        public event EventHandler<PermutationEventArgs> ElementsSwapped;
+        private const float _expansionFactor = 1.5f;
+        private const int _initialSize = 4;
 
         /// <summary>
         /// Gets the length of the vector.
@@ -56,7 +51,7 @@ namespace SpiceSharp.Algebra
         public DenseVector()
         {
             Length = 0;
-            _values = new T[InitialSize];
+            _values = new T[_initialSize];
         }
 
         /// <summary>
@@ -120,8 +115,6 @@ namespace SpiceSharp.Algebra
             var tmp = _values[index1];
             _values[index1] = _values[index2];
             _values[index2] = tmp;
-
-            OnElementsSwapped(new PermutationEventArgs(index1, index2));
         }
 
         /// <summary>
@@ -138,7 +131,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public void Clear()
         {
-            _values = new T[InitialSize + 1];
+            _values = new T[_initialSize + 1];
             Length = 0;
         }
 
@@ -192,12 +185,6 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Raises the <see cref="ElementsSwapped" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnElementsSwapped(PermutationEventArgs args) => ElementsSwapped?.Invoke(this, args);
-
-        /// <summary>
         /// Expands the vector to the specified new size.
         /// </summary>
         /// <param name="newSize">The new size.</param>
@@ -206,7 +193,7 @@ namespace SpiceSharp.Algebra
             Length = newSize;
             if (newSize + 1 <= _values.Length)
                 return;
-            newSize = Math.Max(newSize, (int)(_values.Length * ExpansionFactor));
+            newSize = Math.Max(newSize, (int)(_values.Length * _expansionFactor));
             Array.Resize(ref _values, newSize + 1);
         }
     }

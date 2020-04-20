@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <value>
         /// The solver.
         /// </value>
-        public ISparseSolver<T> Solver => _solver;
+        public ISparsePivotingSolver<T> Solver => _solver;
 
         /// <summary>
         /// Gets the solution.

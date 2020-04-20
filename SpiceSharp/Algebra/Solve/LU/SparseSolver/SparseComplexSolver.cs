@@ -7,9 +7,7 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving real matrices
     /// </summary>
-    public partial class SparseComplexSolver<M, V> : SparseLUSolver<M, V, Complex>
-        where M : IPermutableMatrix<Complex>, ISparseMatrix<Complex>
-        where V : IPermutableVector<Complex>, ISparseVector<Complex>
+    public partial class SparseComplexSolver : SparseLUSolver<Complex>
     {
         /// <summary>
         /// Private variables
@@ -17,23 +15,10 @@ namespace SpiceSharp.Algebra
         private Complex[] _intermediate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SparseComplexSolver{M,V}"/> class.
+        /// Initializes a new instance of the <see cref="SparseComplexSolver"/> class.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        public SparseComplexSolver(M matrix, V vector)
-            : base(matrix, vector, new Markowitz<Complex>(Magnitude))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SparseComplexSolver{M,V}"/> class.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        /// <param name="strategy">The pivoting strategy.</param>
-        public SparseComplexSolver(M matrix, V vector, SparsePivotStrategy<Complex> strategy)
-            : base(matrix, vector, strategy)
+        public SparseComplexSolver()
+            : base(Magnitude)
         {
         }
 

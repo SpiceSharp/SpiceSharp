@@ -28,6 +28,9 @@ namespace SpiceSharp.CodeGeneration
                 if (doc.ShouldGenerate)
                     doc.Export(file);
             }
+
+            // Let the user know that we finished
+            Console.WriteLine("Finished generating files");
         }
     }
 }

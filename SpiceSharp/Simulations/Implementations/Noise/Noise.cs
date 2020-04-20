@@ -160,7 +160,9 @@ namespace SpiceSharp.Simulations
             var solver = cstate.Solver;
 
             // Clear out the right hand side vector
-            solver.ResetVector();
+            solver.Precondition((matrix, rhs) => {
+                rhs.Reset();
+            });
 
             // Apply unit current excitation
             solver.GetElement(posDrive).Add(1.0);

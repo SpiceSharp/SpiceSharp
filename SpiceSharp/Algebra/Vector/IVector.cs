@@ -27,6 +27,13 @@ namespace SpiceSharp.Algebra
         T this[int index] { get; set; }
 
         /// <summary>
+        /// Swaps two elements in the vector.
+        /// </summary>
+        /// <param name="index1">The first index.</param>
+        /// <param name="index2">The second index.</param>
+        void SwapElements(int index1, int index2);
+
+        /// <summary>
         /// Copies the contents of the vector to another one.
         /// </summary>
         /// <param name="target">The target vector.</param>

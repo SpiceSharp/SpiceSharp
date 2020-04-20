@@ -9,7 +9,7 @@ namespace SpiceSharp.Algebra.Solve
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="SparsePivotStrategy{T}" />
-    public class Markowitz<T> : SparsePivotStrategy<T> where T : IFormattable, IEquatable<T>
+    public class Markowitz<T> : SparsePivotStrategy<T> where T : IFormattable
     {
         /// <summary>
         /// Markowitz numbers

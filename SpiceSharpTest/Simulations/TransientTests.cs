@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Solve;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
@@ -160,6 +163,8 @@ namespace SpiceSharpTest.Simulations
         [Test]
         public void When_LargeExample_Expect_Reference()
         {
+            // This is badly conditioned problem. We test the limit of the solver here.
+
             // First create the models
             var diodeModelA = new DiodeModel("DA")
                 .SetParameter("n", 0.1e-3);
@@ -176,18 +181,6 @@ namespace SpiceSharpTest.Simulations
             SpiceSharpWarning.WarningGenerated += (sender, args) => Console.WriteLine(args.Message);
 
             var ckt = new Circuit(
-                new NodeMapper(new[]
-                {
-                    "VDD", "test:11", "test:12", "VEE", "test:91", "test:92", "test:13",
-                    "test:15", "test:14", "test:16", "test:20", "test:32", "test:111",
-                    "test:17", "test:112", "test:113", "test:114", "test:115", "INP",
-                    "INN", "test:21", "test:22", "test:23", "test:110", "test:33",
-                    "test:59", "test:34", "test:60", "test:61", "test:63", "test:62",
-                    "test:65", "test:66", "test:64", "test:67", "test:68", "test:69",
-                    "test:70", "OUT", "test:77", "test:78", "test:79", "test:80",
-                    "test:81", "test:83", "test:84", "test:85", "test:86", "test:87",
-                    "test:88", "test:89", "test:90"
-                }),
                 diodeModelA,
                 diodeModelB,
                 bjtModelQp1,

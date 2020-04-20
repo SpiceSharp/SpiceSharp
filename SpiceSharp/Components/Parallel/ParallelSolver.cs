@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Algebra.Solve;
 using System;
 using System.Collections.Generic;
 
@@ -10,11 +11,16 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <seealso cref="ISparseSolver{T}" />
-    public partial class ParallelSolver<T> : ISparseSolver<T> where T : IFormattable
+    public partial class ParallelSolver<T> : ISparsePivotingSolver<T> where T : IFormattable
     {
-        private readonly ISparseSolver<T> _parent;
+        // TODO: More verbosity for exceptions in the whole class.
+        private readonly ISparsePivotingSolver<T> _parent;
         private readonly HashSet<int> _shared = new HashSet<int>();
         private readonly List<BridgeElement> _bridgeElements = new List<BridgeElement>();
+
+        P IParameterized.GetParameterSet<P>() => _parent.GetParameterSet<P>();
+        bool IParameterized.TryGetParameterSet<P>(out P value) => _parent.TryGetParameterSet(out value);
+        IEnumerable<IParameterSet> IParameterized.ParameterSets => _parent.ParameterSets;
 
         /// <summary>
         /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
@@ -23,18 +29,50 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <value>
         /// The degeneracy.
         /// </value>
-        /// <exception cref="ArgumentException">Thrown when trying to write.</exception>
+        /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
         public int Degeneracy { get => _parent.Degeneracy; set => throw new ArgumentException(); }
 
         /// <summary>
-        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
-        /// the last row or column.
+        /// Gets or sets the pivot search reduction.
         /// </summary>
         /// <value>
         /// The pivot search reduction.
         /// </value>
-        /// <exception cref="ArgumentException">Thrown when trying to write.</exception>
+        /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
         public int PivotSearchReduction { get => _parent.PivotSearchReduction; set => throw new ArgumentException(); }
+
+        /// <summary>
+        /// Gets a value indicating whether the solver needs to be reordered.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
+        /// </value>
+        public bool NeedsReordering { get => _parent.NeedsReordering; set => throw new ArgumentException(); }
+
+        /// <summary>
+        /// Gets a value indicating whether this solver has been factored.
+        /// A solver needs to be factored becore it can solve for a solution.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this solver is factored; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFactored => _parent.IsFactored;
+
+        T ISolver<T>.this[int row, int column]
+        {
+            get => _parent[row, column];
+            set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString("this[row, column]"));
+        }
+        T ISolver<T>.this[MatrixLocation location]
+        {
+            get => _parent[location];
+            set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString("this[location]"));
+        }
+        T ISolver<T>.this[int row]
+        {
+            get => _parent[row];
+            set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString("this[row]"));
+        }
 
         /// <summary>
         /// Gets the size of the matrix and right-hand side vector.
@@ -48,43 +86,19 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// Initializes a new instance of the <see cref="ParallelSolver{T}"/> class.
         /// </summary>
         /// <param name="parent">The parent.</param>
-        public ParallelSolver(ISparseSolver<T> parent)
+        public ParallelSolver(ISparsePivotingSolver<T> parent)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
         }
 
-        /// <summary>
-        /// Clears the solver of any elements. The size of the solver becomes 0.
-        /// </summary>
-        /// <exception cref="ArgumentException">Thrown when executed.</exception>
-        public void Clear()
+        void IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method) => throw new ArgumentException();
+        void ISolver<T>.Clear()
         {
             _shared.Clear();
             _bridgeElements.Clear();
         }
-
-        /// <summary>
-        /// Maps an external row/column tuple to an internal one.
-        /// </summary>
-        /// <param name="indices">The external row/column indices.</param>
-        /// <returns>
-        /// The internal row/column indices.
-        /// </returns>
-        public MatrixLocation ExternalToInternal(MatrixLocation indices)
-            => _parent.ExternalToInternal(indices);
-
-        /// <summary>
-        /// Factor the Y-matrix and Rhs-vector.
-        /// This method can save time when factoring similar matrices in succession.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the factoring was successful; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public bool Factor()
-        {
-            throw new SpiceSharpException();
-        }
+        bool ISolver<T>.Factor() => throw new SpiceSharpException();
+        int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor() => throw new SpiceSharpException();
 
         /// <summary>
         /// Finds the element at the specified position in the matrix.
@@ -182,39 +196,6 @@ namespace SpiceSharp.Components.ParallelBehaviors
         }
 
         /// <summary>
-        /// Maps an internal row/column tuple to an external one.
-        /// </summary>
-        /// <param name="indices">The internal row/column indices.</param>
-        /// <returns>
-        /// The external row/column indices.
-        /// </returns>
-        public MatrixLocation InternalToExternal(MatrixLocation indices)
-            => _parent.InternalToExternal(indices);
-
-        /// <summary>
-        /// Order and factor the Y-matrix and Rhs-vector.
-        /// This method will reorder the matrix as it sees fit.
-        /// </summary>
-        /// <returns>
-        /// The number of rows that were successfully eliminated.
-        /// </returns>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public int OrderAndFactor()
-        {
-            throw new SpiceSharpException();
-        }
-
-        /// <summary>
-        /// Preconditions the specified method.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public void Precondition(PreconditionMethod<T> method)
-        {
-            throw new SpiceSharpException();
-        }
-
-        /// <summary>
         /// Clears all matrix and vector elements.
         /// </summary>
         public void Reset()
@@ -223,43 +204,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
                 bridge.Value = default;
         }
 
-        /// <summary>
-        /// Resets the matrix.
-        /// </summary>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public void ResetMatrix()
-        {
-            throw new SpiceSharpException();
-        }
-
-        /// <summary>
-        /// Resets the right-hand side vector.
-        /// </summary>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public void ResetVector()
-        {
-            throw new SpiceSharpException();
-        }
-
-        /// <summary>
-        /// Solves the equations using the Y-matrix and Rhs-vector.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public void Solve(IVector<T> solution)
-        {
-            throw new SpiceSharpException();
-        }
-
-        /// <summary>
-        /// Solves the equations using the transposed Y-matrix.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <exception cref="SpiceSharpException">Thrown when executed.</exception>
-        public void SolveTransposed(IVector<T> solution)
-        {
-            throw new SpiceSharpException();
-        }
+        void ISolver<T>.Solve(IVector<T> solution) => throw new SpiceSharpException();
+        void ISolver<T>.SolveTransposed(IVector<T> solution) => throw new SpiceSharpException();
+        MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.InternalToExternal(MatrixLocation location) => _parent.InternalToExternal(location);
+        MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.ExternalToInternal(MatrixLocation location) => _parent.ExternalToInternal(location);
 
         /// <summary>
         /// Applies all bridge elements.

@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
@@ -28,11 +27,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// Initializes a new instance of the <see cref="LocalSimulationState"/> class.
             /// </summary>
             /// <param name="name">The name.</param>
-            /// <param name="nodes">The nodes.</param>
             /// <param name="parent">The parent.</param>
             /// <param name="solver">The solver.</param>
-            public LocalSimulationState(string name, IEnumerable<Bridge<string>> nodes, IComplexSimulationState parent, ISparseSolver<Complex> solver)
-                : base(name, parent, nodes, solver)
+            public LocalSimulationState(string name, IComplexSimulationState parent, ISparsePivotingSolver<Complex> solver)
+                : base(name, parent, solver)
             {
             }
 

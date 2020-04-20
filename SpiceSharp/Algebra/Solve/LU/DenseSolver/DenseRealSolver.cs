@@ -1,37 +1,30 @@
 ﻿using System;
+using SpiceSharp.Algebra.Solve;
 
 namespace SpiceSharp.Algebra
 {
     /// <summary>
     /// Class for solving dense sets of equations with real numbers.
     /// </summary>
-    /// <typeparam name="M">The matrix type.</typeparam>
-    /// <typeparam name="V">The vector type.</typeparam>
-    /// <seealso cref="DenseLUSolver{M, V, T}" />
-    public partial class DenseRealSolver<M, V> : DenseLUSolver<M, V, double>
-        where M : IPermutableMatrix<double>
-        where V : IPermutableVector<double>
+    /// <seealso cref="DenseLUSolver{T}" />
+    public partial class DenseRealSolver : DenseLUSolver<double>
     {
         private double[] _intermediate;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DenseRealSolver{M, V}"/> class.
+        /// Initializes a new instance of the <see cref="DenseRealSolver"/> class.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        public DenseRealSolver(M matrix, V vector)
-            : base(matrix, vector, new RookPivoting<double>(Math.Abs))
+        public DenseRealSolver()
+            : base(Math.Abs)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DenseRealSolver{M, V}"/> class.
+        /// Initializes a new instance of the <see cref="DenseRealSolver"/> class.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="vector">The vector.</param>
-        /// <param name="strategy">The strategy.</param>
-        public DenseRealSolver(M matrix, V vector, DensePivotStrategy<double> strategy)
-            : base(matrix, vector, strategy)
+        /// <param name="size">The size.</param>
+        public DenseRealSolver(int size)
+            : base(size, Math.Abs)
         {
         }
 

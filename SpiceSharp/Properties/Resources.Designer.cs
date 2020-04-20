@@ -314,6 +314,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parallel access to {0} is not supported..
+        /// </summary>
+        internal static string Parallel_AccessNotSupported {
+            get {
+                return ResourceManager.GetString("Parallel.AccessNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not find parameter &apos;{0}&apos; for {1}..
         /// </summary>
         internal static string ParameterNotFound {

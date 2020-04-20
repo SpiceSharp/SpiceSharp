@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra.Solve
     /// Markowitz-count based strategy for finding a pivot. Searches the whole diagonal of the submatrix.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public class MarkowitzDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
+    public class MarkowitzDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
         /// <summary>
         /// Constants

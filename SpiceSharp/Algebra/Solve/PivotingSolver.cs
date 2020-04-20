@@ -1,22 +1,80 @@
 ﻿using System;
 using System.Globalization;
 using System.Text;
-using SpiceSharp.Algebra.Solve;
 
-namespace SpiceSharp.Algebra
+namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// A class that represents a system of linear equations.
+    /// A standard implementation for pivoting solvers.
     /// </summary>
     /// <typeparam name="M">The matrix type.</typeparam>
     /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="IFormattable" />
-    public abstract partial class LinearSystem<M, V, T> : IFormattable 
-        where M : IPermutableMatrix<T>
-        where V : IPermutableVector<T>
+    /// <seealso cref="IPivotingSolver{M, V, T}" />
+    public abstract class PivotingSolver<M, V, T> : Parameterized, IPivotingSolver<M, V, T>
+        where M : IMatrix<T>
+        where V : IVector<T>
         where T : IFormattable
     {
+        private int _degeneracy = 0;
+        private int _pivotLimit = 0;
+
+        /// <summary>
+        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
+        /// expected to be linearly dependent on the others.
+        /// </summary>
+        /// <value>
+        /// The degeneracy.
+        /// </value>
+        /// <exception cref="ArgumentException">Thrown if the degeneracy is negative.</exception>
+        public int Degeneracy
+        {
+            get => _degeneracy;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Degeneracy), value, 0));
+                _degeneracy = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the pivot search reduction. This makes sure that pivots cannot
+        /// be chosen from the last N rows. The default, 0, lets the pivot strategy to
+        /// choose from the whole matrix.
+        /// </summary>
+        /// <value>
+        /// The pivot search reduction.
+        /// </value>
+        /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
+        public int PivotSearchReduction
+        {
+            get => _pivotLimit;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(PivotSearchReduction), value, 0));
+                _pivotLimit = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this solver has been factored.
+        /// A solver needs to be factored becore it can solve for a solution.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this solver is factored; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFactored { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the solver needs to be reordered all the way from the start.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
+        /// </value>
+        public bool NeedsReordering { get; set; }
+
         /// <summary>
         /// Gets the order of the matrix (matrix size).
         /// </summary>
@@ -36,18 +94,22 @@ namespace SpiceSharp.Algebra
         /// <returns>The value.</returns>
         public T this[int row, int column]
         {
-            get
-            {
-                row = Row[row];
-                column = Column[column];
-                return Matrix[row, column];
-            }
-            set
-            {
-                row = Row[row];
-                column = Column[column];
-                Matrix[row, column] = value;
-            }
+            get => this[new MatrixLocation(row, column)];
+            set => this[new MatrixLocation(row, column)] = value;
+        }
+
+        /// <summary>
+        /// Gets or sets the value of the matrix at the specified location.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="location">The location.</param>
+        /// <returns>The value.</returns>
+        public T this[MatrixLocation location]
+        {
+            get => Matrix[ExternalToInternal(location)];
+            set => Matrix[ExternalToInternal(location)] = value;
         }
 
         /// <summary>
@@ -93,13 +155,21 @@ namespace SpiceSharp.Algebra
         protected V Vector { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LinearSystem{M,V,T}"/> class.
+        /// Initializes a new instance of the <see cref="PivotingSolver{M, V, T}"/> class.
         /// </summary>
-        protected LinearSystem(M matrix, V vector)
+        protected PivotingSolver(M matrix, V vector)
         {
             Matrix = matrix;
             Vector = vector;
+            NeedsReordering = true;
+            IsFactored = false;
         }
+
+        /// <summary>
+        /// Preconditions the solver matrix and right hand side vector.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        public abstract void Precondition(PreconditioningMethod<M, V, T> method);
 
         /// <summary>
         /// Swap two (internal) rows in the linear system. This method keeps
@@ -107,7 +177,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="row1">The first row index.</param>
         /// <param name="row2">The second row index.</param>
-        protected void SwapRows(int row1, int row2)
+        public void SwapRows(int row1, int row2)
         {
             Matrix.SwapRows(row1, row2);
             Vector.SwapElements(row1, row2);
@@ -119,7 +189,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="column1">The first column index.</param>
         /// <param name="column2">The second column index.</param>
-        protected void SwapColumns(int column1, int column2)
+        public void SwapColumns(int column1, int column2)
         {
             Matrix.SwapColumns(column1, column2);
             Column.Swap(column1, column2);
@@ -128,21 +198,12 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Resets all elements in the matrix and vector.
         /// </summary>
-        public void Reset()
+        public virtual void Reset()
         {
-            ResetMatrix();
-            ResetVector();
+            Matrix.Reset();
+            Vector.Reset();
+            IsFactored = false;
         }
-
-        /// <summary>
-        /// Resets all elements in the matrix.
-        /// </summary>
-        public virtual void ResetMatrix() => Matrix.Reset();
-
-        /// <summary>
-        /// Resets all elements in the vector.
-        /// </summary>
-        public virtual void ResetVector() => Vector.Reset();
 
         /// <summary>
         /// Clears the system of any elements. The size of the system becomes 0.
@@ -153,6 +214,9 @@ namespace SpiceSharp.Algebra
             Vector.Clear();
             Row.Clear();
             Column.Clear();
+            IsFactored = false;
+            NeedsReordering = true;
+            Degeneracy = 0;
         }
 
         /// <summary>
@@ -215,5 +279,35 @@ namespace SpiceSharp.Algebra
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Solves the equations using the Y-matrix and Rhs-vector.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        public abstract void Solve(IVector<T> solution);
+
+        /// <summary>
+        /// Solves the equations using the transposed Y-matrix.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        public abstract void SolveTransposed(IVector<T> solution);
+
+        /// <summary>
+        /// Factor the Y-matrix and Rhs-vector.
+        /// This method can save time when factoring similar matrices in succession.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if the factoring was successful; otherwise, <c>false</c>.
+        /// </returns>
+        public abstract bool Factor();
+
+        /// <summary>
+        /// Order and factor the Y-matrix and Rhs-vector.
+        /// This method will reorder the matrix as it sees fit.
+        /// </summary>
+        /// <returns>
+        /// The number of rows that were successfully eliminated.
+        /// </returns>
+        public abstract int OrderAndFactor();
     }
 }

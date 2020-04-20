@@ -14,23 +14,13 @@ namespace SpiceSharp.Algebra
     /// <para>The matrix automatically expands size if necessary.</para>
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public partial class SparseMatrix<T> : IPermutableMatrix<T>, ISparseMatrix<T> where T : IFormattable
+    public partial class SparseMatrix<T> : IMatrix<T>, ISparseMatrix<T> where T : IFormattable
     {
         /// <summary>
         /// Constants
         /// </summary>
-        private const int InitialSize = 4;
-        private const float ExpansionFactor = 1.5f;
-
-        /// <summary>
-        /// Occurs when two rows are swapped.
-        /// </summary>
-        public event EventHandler<PermutationEventArgs> RowsSwapped;
-
-        /// <summary>
-        /// Occurs when two columns are swapped.
-        /// </summary>
-        public event EventHandler<PermutationEventArgs> ColumnsSwapped;
+        private const int _initialSize = 4;
+        private const float _expansionFactor = 1.5f;
 
         /// <summary>
         /// Gets the number of elements in the matrix.
@@ -64,6 +54,20 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Gets or sets the value at the specified location.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="location">The location.</param>
+        /// <returns>The value.</returns>
+        public T this[MatrixLocation location]
+        {
+            get => GetMatrixValue(location.Row, location.Column);
+            set => SetMatrixValue(location.Row, location.Column, value);
+        }
+
+        /// <summary>
         /// Private variables
         /// </summary>
         private Row[] _rows;
@@ -78,20 +82,20 @@ namespace SpiceSharp.Algebra
         public SparseMatrix()
         {
             Size = 0;
-            _allocatedSize = InitialSize;
+            _allocatedSize = _initialSize;
 
             // Allocate rows
-            _rows = new Row[InitialSize + 1];
-            for (var i = 1; i <= InitialSize; i++)
+            _rows = new Row[_initialSize + 1];
+            for (var i = 1; i <= _initialSize; i++)
                 _rows[i] = new Row();
 
             // Allocate columns
-            _columns = new Column[InitialSize + 1];
-            for (var i = 1; i <= InitialSize; i++)
+            _columns = new Column[_initialSize + 1];
+            for (var i = 1; i <= _initialSize; i++)
                 _columns[i] = new Column();
 
             // Other
-            _diagonal = new Element[InitialSize + 1];
+            _diagonal = new Element[_initialSize + 1];
             _trashCan = new Element(0, 0);
             ElementCount = 1;
         }
@@ -103,7 +107,7 @@ namespace SpiceSharp.Algebra
         public SparseMatrix(int size)
         {
             Size = size;
-            _allocatedSize = Math.Max(InitialSize, size);
+            _allocatedSize = Math.Max(_initialSize, size);
 
             // Allocate rows
             _rows = new Row[_allocatedSize + 1];
@@ -349,8 +353,6 @@ namespace SpiceSharp.Algebra
                     row2Element = row2Element.Right;
                 }
             }
-
-            OnRowsSwapped(new PermutationEventArgs(row1, row2));
         }
 
         /// <summary>
@@ -431,8 +433,6 @@ namespace SpiceSharp.Algebra
                     column2Element = column2Element.Below;
                 }
             }
-
-            OnColumnsSwapped(new PermutationEventArgs(column1, column2));
         }
 
         /// <summary>
@@ -464,10 +464,10 @@ namespace SpiceSharp.Algebra
                 _rows[i].Clear();
             for (var i = 0; i < _diagonal.Length; i++)
                 _diagonal[i] = null;
-            Array.Resize(ref _columns, InitialSize + 1);
-            Array.Resize(ref _rows, InitialSize + 1);
-            Array.Resize(ref _diagonal, InitialSize + 1);
-            _allocatedSize = InitialSize;
+            Array.Resize(ref _columns, _initialSize + 1);
+            Array.Resize(ref _rows, _initialSize + 1);
+            Array.Resize(ref _diagonal, _initialSize + 1);
+            _allocatedSize = _initialSize;
             Size = 0;
             ElementCount = 1;
         }
@@ -491,7 +491,7 @@ namespace SpiceSharp.Algebra
             var oldAllocatedSize = _allocatedSize;
 
             // Allocate some extra space if necessary
-            newSize = Math.Max(newSize, (int)(_allocatedSize * ExpansionFactor));
+            newSize = Math.Max(newSize, (int)(_allocatedSize * _expansionFactor));
 
             // Resize rows
             Array.Resize(ref _rows, newSize + 1);
@@ -567,17 +567,29 @@ namespace SpiceSharp.Algebra
             }
             return sb.ToString();
         }
-
+#if DEBUG        
         /// <summary>
-        /// Raises the <see cref="RowsSwapped" /> event.
+        /// Writes the matrix to a file.
         /// </summary>
-        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnRowsSwapped(PermutationEventArgs args) => RowsSwapped?.Invoke(this, args);
+        /// <param name="filename">The filename.</param>
+        /// <param name="label">The name of the matrix.</param>
+        public void ToFile(string filename, string label = "matrix")
+        {
+            using var file = System.IO.File.OpenWrite(filename);
+            using var sw = new System.IO.StreamWriter(file);
 
-        /// <summary>
-        /// Raises the <see cref="ColumnsSwapped" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnColumnsSwapped(PermutationEventArgs args) => ColumnsSwapped?.Invoke(this, args);
+            sw.WriteLine(label);
+            sw.WriteLine("{0} {1}", Size, typeof(T));
+            for (var i = 1; i <= Size; i++)
+            {
+                var elt = GetFirstInRow(i);
+                while (elt != null)
+                {
+                    sw.WriteLine("{0} {1} {2}", elt.Row, elt.Column, elt.Value.ToString("g", CultureInfo.InvariantCulture));
+                    elt = elt.Right;
+                }
+            }
+        }
+#endif
     }
 }

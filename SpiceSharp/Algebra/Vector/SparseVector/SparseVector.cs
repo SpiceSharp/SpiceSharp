@@ -14,13 +14,8 @@ namespace SpiceSharp.Algebra
     /// </para>
     /// <para>This vector automatically expands size if necessary.</para>
     /// </remarks>
-    public partial class SparseVector<T> : IPermutableVector<T>, ISparseVector<T> where T : IFormattable
+    public partial class SparseVector<T> : ISparseVector<T> where T : IFormattable
     {
-        /// <summary>
-        /// Occurs when two elements have swapped.
-        /// </summary>
-        public event EventHandler<PermutationEventArgs> ElementsSwapped;
-
         /// <summary>
         /// Gets the length of the vector.
         /// </summary>
@@ -285,8 +280,6 @@ namespace SpiceSharp.Algebra
 
             // Swap these elements
             Swap(first, second, index1, index2);
-
-            OnElementsSwapped(new PermutationEventArgs(index1, index2));
         }
 
         /// <summary>
@@ -474,11 +467,5 @@ namespace SpiceSharp.Algebra
             sb.Append("]");
             return sb.ToString();
         }
-
-        /// <summary>
-        /// Raises the <see cref="ElementsSwapped" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnElementsSwapped(PermutationEventArgs args) => ElementsSwapped?.Invoke(this, args);
     }
 }

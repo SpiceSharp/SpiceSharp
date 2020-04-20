@@ -96,7 +96,7 @@ namespace SpiceSharp.Simulations
         /// The solver.
         /// </value>
         [ParameterName("biasing.solver"), ParameterInfo("The solver used to solve equations.")]
-        public ISparseSolver<double> Solver { get; set; }
+        public ISparsePivotingSolver<double> Solver { get; set; }
 
         /// <summary>
         /// Gets or sets the (initial) temperature in Kelvin of the simulation.

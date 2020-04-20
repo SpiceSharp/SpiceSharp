@@ -41,14 +41,14 @@ namespace SpiceSharp.Simulations
             /// <value>
             /// The solver.
             /// </value>
-            public ISparseSolver<double> Solver { get; }
+            public ISparsePivotingSolver<double> Solver { get; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="SimulationState"/> class.
             /// </summary>
             /// <param name="solver">The solver.</param>
             /// <param name="comparer">The comparer.</param>
-            public SimulationState(ISparseSolver<double> solver, IEqualityComparer<string> comparer)
+            public SimulationState(ISparsePivotingSolver<double> solver, IEqualityComparer<string> comparer)
                 : base(comparer)
             {
                 Solver = solver.ThrowIfNull(nameof(solver));

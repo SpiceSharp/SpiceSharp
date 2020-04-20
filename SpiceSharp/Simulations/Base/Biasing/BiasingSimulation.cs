@@ -170,7 +170,7 @@ namespace SpiceSharp.Simulations
             // Create the state for this simulation
             // TODO: This may not be a terribly good idea (sharing solvers).
             _state = new SimulationState(
-                BiasingParameters.Solver ?? LUHelper.CreateSparseRealSolver(),
+                BiasingParameters.Solver ?? new SparseRealSolver(),
                 BiasingParameters.NodeComparer);
             Iteration.Gmin = BiasingParameters.Gmin;
             _isPreordered = false;

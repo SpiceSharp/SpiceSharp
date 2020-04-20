@@ -9,23 +9,13 @@ namespace SpiceSharp.Algebra
     /// A square matrix using a dense representation.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public partial class DenseMatrix<T> : IPermutableMatrix<T> where T : IFormattable
+    public partial class DenseMatrix<T> : IMatrix<T> where T : IFormattable
     {
         /// <summary>
         /// Constants
         /// </summary>
-        private const int InitialSize = 4;
-        private const float ExpansionFactor = 1.25f; // 1.25^2 approx. 1.55
-
-        /// <summary>
-        /// Occurs when two rows are swapped.
-        /// </summary>
-        public event EventHandler<PermutationEventArgs> RowsSwapped;
-
-        /// <summary>
-        /// Occurs when two columns are swapped.
-        /// </summary>
-        public event EventHandler<PermutationEventArgs> ColumnsSwapped;
+        private const int _initialSize = 4;
+        private const float _expansionFactor = 1.25f; // expansion for dense matrices allocates ~1.25^2 (1.55X) more memory.
 
         /// <summary>
         /// Gets the size of the matrix.
@@ -58,12 +48,26 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
+        /// Gets or sets the value at the specified location.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="location">The location.</param>
+        /// <returns>The value.</returns>
+        public T this[MatrixLocation location]
+        {
+            get => GetMatrixValue(location.Row, location.Column);
+            set => SetMatrixValue(location.Row, location.Column, value);
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DenseMatrix{T}"/> class.
         /// </summary>
         public DenseMatrix()
         {
             Size = 0;
-            _allocatedSize = InitialSize;
+            _allocatedSize = _initialSize;
             _array = new T[_allocatedSize * _allocatedSize];
             _trashCan = default;
         }
@@ -75,7 +79,7 @@ namespace SpiceSharp.Algebra
         public DenseMatrix(int size)
         {
             Size = size;
-            _allocatedSize = Math.Max(InitialSize, size);
+            _allocatedSize = Math.Max(_initialSize, size);
             _array = new T[_allocatedSize * _allocatedSize];
             _trashCan = default;
         }
@@ -198,8 +202,6 @@ namespace SpiceSharp.Algebra
                 _array[offset1 + i] = _array[offset2 + i];
                 _array[offset2 + i] = tmp;
             }
-
-            OnRowsSwapped(new PermutationEventArgs(row1, row2));
         }
 
         /// <summary>
@@ -224,8 +226,6 @@ namespace SpiceSharp.Algebra
                 _array[column1 + i] = _array[column2 + i];
                 _array[column2 + i] = tmp;
             }
-
-            OnColumnsSwapped(new PermutationEventArgs(column1, column2));
         }
 
         /// <summary>
@@ -243,8 +243,8 @@ namespace SpiceSharp.Algebra
         public void Clear()
         {
             _trashCan = default;
-            _array = new T[InitialSize * InitialSize];
-            _allocatedSize = InitialSize;
+            _array = new T[_initialSize * _initialSize];
+            _allocatedSize = _initialSize;
             Size = 0;
         }
 
@@ -258,7 +258,7 @@ namespace SpiceSharp.Algebra
             Size = newSize;
             if (newSize <= _allocatedSize)
                 return;
-            newSize = Math.Max(newSize, (int)(_allocatedSize * ExpansionFactor));
+            newSize = Math.Max(newSize, (int)(_allocatedSize * _expansionFactor));
 
             // Create a new array and copy its contents
             var nArray = new T[newSize * newSize];
@@ -268,17 +268,5 @@ namespace SpiceSharp.Algebra
             _array = nArray;
             _allocatedSize = newSize;
         }
-
-        /// <summary>
-        /// Raises the <see cref="RowsSwapped" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnRowsSwapped(PermutationEventArgs args) => RowsSwapped?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="ColumnsSwapped" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="PermutationEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnColumnsSwapped(PermutationEventArgs args) => ColumnsSwapped?.Invoke(this, args);
     }
 }

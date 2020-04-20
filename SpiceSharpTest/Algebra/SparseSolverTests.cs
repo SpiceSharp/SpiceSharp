@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using NUnit.Framework;
@@ -16,7 +15,7 @@ namespace SpiceSharpTest.Algebra
         public void When_BigMatrix_Expect_NoException()
         {
             // Test factoring a big matrix
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
             ReadMatrix(solver, Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine("Algebra", "Matrices", "fidapm05")));
 
             // Order and factor this larger matrix
@@ -44,7 +43,7 @@ namespace SpiceSharpTest.Algebra
         public void When_SingletonPivoting_Expect_NoException()
         {
             // Build the solver with only the singleton pivoting
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzSingleton<double>());
@@ -77,7 +76,7 @@ namespace SpiceSharpTest.Algebra
         public void When_QuickDiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzQuickDiagonal<double>());
@@ -110,7 +109,7 @@ namespace SpiceSharpTest.Algebra
         public void When_DiagonalPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzDiagonal<double>());
@@ -143,7 +142,7 @@ namespace SpiceSharpTest.Algebra
         public void When_EntireMatrixPivoting_Expect_NoException()
         {
             // Build the solver with only the quick diagonal pivoting
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
             var strategy = (Markowitz<double>)solver.Strategy;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzEntireMatrix<double>());
@@ -201,7 +200,7 @@ namespace SpiceSharpTest.Algebra
             };
 
             // build the matrix
-            var solver = LUHelper.CreateSparseComplexSolver();
+            var solver = new SparseComplexSolver();
             for (var r = 0; r < matrix.Length; r++)
             {
                 for (var c = 0; c < matrix[r].Length; c++)
@@ -238,8 +237,8 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_PartialDecomposition_Expect_Reference()
         {
-            var solver = LUHelper.CreateSparseRealSolver();
-            solver.Strategy.PivotSearchReduction = 2; // Limit to only the 2 first elements
+            var solver = new SparseRealSolver();
+            solver.PivotSearchReduction = 2; // Limit to only the 2 first elements
             solver.Degeneracy = 2; // Only perform elimination on the first two rows
 
             solver[1, 2] = 2;
@@ -265,7 +264,7 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_PartialSolve_Expect_Reference()
         {
-            var solver = LUHelper.CreateSparseRealSolver();
+            var solver = new SparseRealSolver();
             solver.Strategy.PivotSearchReduction = 2; // Limit to only the 2 first elements
             solver.Degeneracy = 2; // Only perform elimination on the first two rows
 

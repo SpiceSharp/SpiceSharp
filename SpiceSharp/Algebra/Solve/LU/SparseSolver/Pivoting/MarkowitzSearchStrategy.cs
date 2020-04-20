@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra.Solve
     /// used for implementing the strategy outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract class MarkowitzSearchStrategy<T> where T : IFormattable, IEquatable<T>
+    public abstract class MarkowitzSearchStrategy<T> where T : IFormattable
     {
         /// <summary>
         /// Find a pivot in a matrix.
