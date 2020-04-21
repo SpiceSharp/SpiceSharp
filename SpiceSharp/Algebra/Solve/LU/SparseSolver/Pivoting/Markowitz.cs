@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using SpiceSharp.Attributes;
 
@@ -8,8 +8,12 @@ namespace SpiceSharp.Algebra.Solve
     /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
+    [GeneratedParameters]
     public class Markowitz<T> : ParameterSet where T : IFormattable
     {
+        private double _absolutePivotThreshold = 1e-13;
+        private double _relativePivotThreshold = 1e-3;
+
         /// <summary>
         /// Markowitz numbers
         /// </summary>
@@ -60,13 +64,33 @@ namespace SpiceSharp.Algebra.Solve
         /// Gets or sets the relative threshold for choosing a pivot.
         /// </summary>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
-        public double RelativePivotThreshold { get; set; } = 1e-3;
+        [GreaterThan(0)]
+        public double RelativePivotThreshold
+        {
+            get => _relativePivotThreshold;
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(RelativePivotThreshold), value, 0));
+                _relativePivotThreshold = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
         /// </summary>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
-        public double AbsolutePivotThreshold { get; set; } = 1e-13;
+        [GreaterThanOrEquals(0)]
+        public double AbsolutePivotThreshold
+        {
+            get => _absolutePivotThreshold;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(AbsolutePivotThreshold), value, 0));
+                _absolutePivotThreshold = value;
+            }
+        }
 
         /// <summary>
         /// Gets the strategies used for finding a pivot.
@@ -177,10 +201,10 @@ namespace SpiceSharp.Algebra.Solve
                     rhsElement = rhsElement.Below;
                 if (rhsElement != null && rhsElement.Index == i)
                     count++;
-                
+
                 _markowitzRow[i] = Math.Min(count, _maxMarkowitzCount);
             }
-            
+
             // Generate Markowitz column count
             for (var i = step; i <= max; i++)
             {
@@ -342,7 +366,7 @@ namespace SpiceSharp.Algebra.Solve
             for (var column = pivot.Below; column != null && column.Row <= limit; column = column.Below)
             {
                 var row = column.Row;
-                
+
                 // Update the Markowitz product
                 _markowitzProduct[row] -= _markowitzColumn[row];
                 --_markowitzRow[row];
@@ -356,7 +380,7 @@ namespace SpiceSharp.Algebra.Solve
             for (var row = pivot.Right; row != null && row.Column <= limit; row = row.Right)
             {
                 var column = row.Column;
-                
+
                 // Update the Markowitz product
                 _markowitzProduct[column] -= _markowitzRow[column];
                 --_markowitzColumn[column];
@@ -410,7 +434,7 @@ namespace SpiceSharp.Algebra.Solve
         /// current diagonal at row/column <paramref name="eliminationStep" />. This pivot element
         /// will be moved to the diagonal for this elimination step.
         /// </remarks>
-        public Pivot<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep, int max)
+        public Pivot<ISparseMatrixElement<T>> FindPivot(ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             matrix.ThrowIfNull(nameof(matrix));
 
@@ -421,10 +445,10 @@ namespace SpiceSharp.Algebra.Solve
                 if (chosen.Info != PivotInfo.None)
                     return chosen;
             }
-            return Pivot<T>.Empty;
+            return Pivot<ISparseMatrixElement<T>>.Empty;
         }
 
-        #if DEBUG
+#if DEBUG
         /// <summary>
         /// Checks whether or not the Markowitz products are still correct. Can be used when debugging matrix decomposition.
         /// </summary>
@@ -471,6 +495,6 @@ namespace SpiceSharp.Algebra.Solve
             if (singletons != Singletons)
                 throw new SpiceSharpException("Invalid singleton count");
         }
-        #endif
+#endif
     }
 }

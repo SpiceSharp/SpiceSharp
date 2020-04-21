@@ -18,8 +18,8 @@ namespace SpiceSharp.CodeGeneration
         /// </summary>
         public const bool DefaultRaiseException = true;
 
-        private readonly Dictionary<string, (TypeSyntax Type, ExpressionSyntax Default)> _requiredPrivateFields
-            = new Dictionary<string, (TypeSyntax Type, ExpressionSyntax Default)>();
+        private readonly Dictionary<string, (SyntaxTokenList Modifiers, TypeSyntax Type, ExpressionSyntax Default)> _requiredPrivateFields
+            = new Dictionary<string, (SyntaxTokenList Modifiers, TypeSyntax Type, ExpressionSyntax Default)>();
         private readonly Dictionary<string, MemberDeclarationSyntax> _definedMembers
             = new Dictionary<string, MemberDeclarationSyntax>();
 
@@ -49,7 +49,7 @@ namespace SpiceSharp.CodeGeneration
                             nvardecl = nvardecl.WithInitializer(EqualsValueClause(req.Value.Default));
 
                         var nfield = FieldDeclaration(VariableDeclaration(req.Value.Type)
-                            .AddVariables(nvardecl)).WithModifiers(TokenList(Token(SyntaxKind.PrivateKeyword)));
+                            .AddVariables(nvardecl)).WithModifiers(req.Value.Modifiers);
                         if (_definedMembers.TryGetValue(req.Key, out var original))
                             cl = cl.ReplaceNode(original, nfield);
                         else
@@ -73,7 +73,7 @@ namespace SpiceSharp.CodeGeneration
         /// <returns></returns>
         public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node)
         {
-            if (node.Modifiers.Count == 1 && node.Modifiers[0].ValueText.Equals("private"))
+            if (node.Modifiers != null && node.Modifiers.Any(m => m.ValueText.Equals("private")))
             {
                 foreach (var name in node.Declaration.Variables.Select(v => v.Identifier.ValueText))
                     _definedMembers.Add(name, node);
@@ -202,7 +202,11 @@ namespace SpiceSharp.CodeGeneration
                 result = result.ReplaceNode(Getter(result), getter);
 
                 // Deal with the initializer and the private variable
-                _requiredPrivateFields.Add(privateVariable, (node.Type, result.Initializer?.Value));
+                // We need the same modifiers as the original property, but with public changed to private
+                var modifiers = result.Modifiers;
+                modifiers = modifiers.Replace(modifiers.First(t => t.ValueText.Equals("public")), Token(SyntaxKind.PrivateKeyword));
+
+                _requiredPrivateFields.Add(privateVariable, (modifiers, node.Type, result.Initializer?.Value));
                 if (result.Initializer != null)
                 {
                     var trailingTrivia = result.SemicolonToken.TrailingTrivia;

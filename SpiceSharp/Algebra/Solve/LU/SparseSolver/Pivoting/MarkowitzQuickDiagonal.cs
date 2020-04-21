@@ -1,4 +1,5 @@
-﻿using System;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -6,6 +7,7 @@ namespace SpiceSharp.Algebra.Solve
     /// Markowitz-based pivot search. Quickly search the diagonal for valid pivots.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
+    [GeneratedParameters]
     public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
         private static int _maxMarkowitzTies = 100, _tiesMultiplier = 5;
@@ -23,10 +25,16 @@ namespace SpiceSharp.Algebra.Solve
         /// the solver. When this score is tied, this search strategy will keep a list of them with a 
         /// maximum of this amount of elements.
         /// </remarks>
+        [GreaterThan(1)]
         public static int MaxMarkowitzTies
         {
             get => _maxMarkowitzTies;
-            set => _maxMarkowitzTies = value < 1 ? 0 : value;
+            set
+            {
+                if (value <= 1)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(MaxMarkowitzTies), value, 1));
+                _maxMarkowitzTies = value;
+            }
         }
 
         /// <summary>
@@ -61,7 +69,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
+        public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -70,7 +78,7 @@ namespace SpiceSharp.Algebra.Solve
 
             var minMarkowitzProduct = int.MaxValue;
             var numberOfTies = -1;
-            
+
             /* Used for debugging along Spice 3f5
             for (var index = matrix.Size + 1; index > eliminationStep; index--)
             {
@@ -110,7 +118,7 @@ namespace SpiceSharp.Algebra.Solve
                                 markowitz.Magnitude(otherInRow.Value),
                                 markowitz.Magnitude(otherInColumn.Value));
                             if (magnitude >= largest)
-                                return new Pivot<T>(diagonal, PivotInfo.Good);
+                                return new Pivot<ISparseMatrixElement<T>>(diagonal, PivotInfo.Good);
                         }
                     }
                 }
@@ -138,7 +146,7 @@ namespace SpiceSharp.Algebra.Solve
 
             // Not even one eligible pivot on the diagonal...
             if (numberOfTies < 0)
-                return Pivot<T>.Empty;
+                return Pivot<ISparseMatrixElement<T>>.Empty;
 
             // Determine which of the tied elements is the best numerical choise
             ISparseMatrixElement<T> chosen = null;
@@ -157,7 +165,7 @@ namespace SpiceSharp.Algebra.Solve
             }
 
             // We don't actually know if the pivot is sub-optimal, but we take the worst case scenario.
-            return chosen != null ? new Pivot<T>(chosen, PivotInfo.Suboptimal) : Pivot<T>.Empty;
+            return chosen != null ? new Pivot<ISparseMatrixElement<T>>(chosen, PivotInfo.Suboptimal) : Pivot<ISparseMatrixElement<T>>.Empty;
         }
 
         private double LargestOtherElementInColumn(Markowitz<T> markowitz, ISparseMatrixElement<T> chosen, int eliminationStep, int max)

@@ -18,15 +18,18 @@ namespace SpiceSharp.CodeGeneration
             var backupPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backup" + DateTime.Now.ToString("yyyymmdd_hhmms"));
 
             // Recursively build all files
-            foreach (var file in Directory.GetFiles(args[0], "*.cs", SearchOption.AllDirectories))
+            foreach (var path in args)
             {
-                // Overwrite the file
-                var doc = new Document(file)
+                foreach (var file in Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories))
                 {
-                    BackupPath = backupPath
-                };
-                if (doc.ShouldGenerate)
-                    doc.Export(file);
+                    // Overwrite the file
+                    var doc = new Document(file)
+                    {
+                        BackupPath = backupPath
+                    };
+                    if (doc.ShouldGenerate)
+                        doc.Export(file);
+                }
             }
 
             // Let the user know that we finished

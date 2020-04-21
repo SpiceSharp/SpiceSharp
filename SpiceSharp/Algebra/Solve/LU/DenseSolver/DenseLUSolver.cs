@@ -95,11 +95,13 @@ namespace SpiceSharp.Algebra.Solve
             var size = Size;
             var step = 1;
             var order = Size - Degeneracy;
+            int max = Size - PivotSearchReduction;
+
             if (!NeedsReordering)
             {
                 for (step = 1; step <= order; step++)
                 {
-                    if (Parameters.IsValidPivot(Matrix, step))
+                    if (Parameters.IsValidPivot(Matrix, step, max))
                         Eliminate(step, size);
                     else
                     {
@@ -117,10 +119,11 @@ namespace SpiceSharp.Algebra.Solve
 
             for (; step <= order; step++)
             {
-                if (!Parameters.FindPivot(Matrix, step, out int row, out int column))
+                var pivot = Parameters.FindPivot(Matrix, step, max);
+                if (pivot.Info == PivotInfo.None)
                     return step - 1;
-                SwapRows(row, step);
-                SwapColumns(column, step);
+                SwapRows(pivot.Element.Row, step);
+                SwapColumns(pivot.Element.Column, step);
                 Eliminate(step, size);
             }
             IsFactored = true;

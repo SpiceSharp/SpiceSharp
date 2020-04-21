@@ -5,18 +5,18 @@ namespace SpiceSharp.Algebra.Solve
     /// <summary>
     /// Describes a pivot.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public struct Pivot<T> : IEquatable<Pivot<T>> where T : IFormattable
+    /// <typeparam name="P">The pivot output.</typeparam>
+    public struct Pivot<P> : IEquatable<Pivot<P>>
     {
         /// <summary>
         /// No pivot.
         /// </summary>
-        public static Pivot<T> Empty = new Pivot<T>(default, PivotInfo.None);
+        public static Pivot<P> Empty = new Pivot<P>(default, PivotInfo.None);
 
         /// <summary>
         /// The pivot.
         /// </summary>
-        public readonly ISparseMatrixElement<T> Element;
+        public readonly P Element;
 
         /// <summary>
         /// The information about the pivot.
@@ -28,7 +28,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="element">The pivot.</param>
         /// <param name="info">The information.</param>
-        public Pivot(ISparseMatrixElement<T> element, PivotInfo info)
+        public Pivot(P element, PivotInfo info)
         {
             Element = element;
             Info = info;
@@ -43,7 +43,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is Pivot<T> pivot)
+            if (obj is Pivot<P> pivot)
                 return Equals(pivot);
             return false;
         }
@@ -55,7 +55,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// <c>true</c> if the pivots are the equal; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(Pivot<T> pivot)
+        public bool Equals(Pivot<P> pivot)
         {
             if (!Element.Equals(pivot.Element))
                 return false;
@@ -80,7 +80,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(Pivot<T> left, Pivot<T> right) => left.Equals(right);
+        public static bool operator ==(Pivot<P> left, Pivot<P> right) => left.Equals(right);
 
         /// <summary>
         /// Implements the operator !=.
@@ -90,7 +90,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(Pivot<T> left, Pivot<T> right) => !left.Equals(right);
+        public static bool operator !=(Pivot<P> left, Pivot<P> right) => !left.Equals(right);
     }
 
     /// <summary>

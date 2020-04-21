@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using SpiceSharp.Algebra.Solve;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra
@@ -8,9 +9,11 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public class RookPivoting<T> : ParameterSet where T : IFormattable
     {
-        private int _searchReduction;
+        private double _absolutePivotThreshold = 1e-13;
+        private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
         /// Gets the magnitude.
@@ -21,32 +24,42 @@ namespace SpiceSharp.Algebra
         public Func<T, double> Magnitude { get; }
 
         /// <summary>
-        /// Gets or sets the relative threshold for choosing a pivot.
-        /// </summary>
-        [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
-        public double RelativePivotThreshold { get; set; } = 1e-3;
-
-        /// <summary>
-        /// Gets or sets the absolute threshold for choosing a pivot.
-        /// </summary>
-        [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
-        public double AbsolutePivotThreshold { get; set; } = 1e-13;
-
-        /// <summary>
-        /// Gets or sets the search reduction.
+        /// Gets or sets the relative pivot threshold.
         /// </summary>
         /// <value>
-        /// The search reduction.
+        /// The relative pivot threshold.
         /// </value>
-        /// <exception cref="ArgumentException">Thrown if the reduction is negative.</exception>
-        public int SearchReduction
+        /// <exception cref="ArgumentException"></exception>
+        [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
+        [GreaterThan(0)]
+        public double RelativePivotThreshold
         {
-            get => _searchReduction;
+            get => _relativePivotThreshold;
             set
             {
-                if (_searchReduction < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SearchReduction), value, 0));
-                _searchReduction = value;
+                if (value <= 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(RelativePivotThreshold), value, 0));
+                _relativePivotThreshold = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the absolute pivot threshold.
+        /// </summary>
+        /// <value>
+        /// The absolute pivot threshold.
+        /// </value>
+        /// <exception cref="ArgumentException"></exception>
+        [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
+        [GreaterThanOrEquals(0)]
+        public double AbsolutePivotThreshold
+        {
+            get => _absolutePivotThreshold;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(AbsolutePivotThreshold), value, 0));
+                _absolutePivotThreshold = value;
             }
         }
 
@@ -64,36 +77,32 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="eliminationStep">The elimination step.</param>
-        /// <param name="row">The row of the found pivot.</param>
-        /// <param name="column">The column of the found pivot.</param>
-        /// <returns></returns>
-        public bool FindPivot(IMatrix<T> matrix, int eliminationStep, out int row, out int column)
+        /// <param name="max">The maximum row/column index.</param>
+        /// <returns>The pivot.</returns>
+        public Pivot<MatrixLocation> FindPivot(IMatrix<T> matrix, int eliminationStep, int max)
         {
-            var limit = matrix.Size - SearchReduction;
-
             // Find the largest element below and right of the pivot
             var largest = Magnitude(matrix[eliminationStep, eliminationStep]);
-            row = eliminationStep;
-            column = eliminationStep;
-            for (var i = eliminationStep + 1; i <= limit; i++)
+            var loc = new MatrixLocation(eliminationStep, eliminationStep);
+
+            // We just select the biggest off-diagonal element that we can find!
+            for (var i = eliminationStep + 1; i <= max; i++)
             {
-                var current = Magnitude(matrix[eliminationStep, i]);
-                if (current > largest)
+                var c = Magnitude(matrix[eliminationStep, i]);
+                if (c > largest)
                 {
-                    largest = current;
-                    row = eliminationStep;
-                    column = i;
+                    largest = c;
+                    loc = new MatrixLocation(eliminationStep, i);
                 }
 
-                current = Magnitude(matrix[i, eliminationStep]);
-                if (current > largest)
+                c = Magnitude(matrix[i, eliminationStep]);
+                if (c > largest)
                 {
-                    largest = current;
-                    row = i;
-                    column = eliminationStep;
+                    largest = c;
+                    loc = new MatrixLocation(i, eliminationStep);
                 }
             }
-            return largest > 0.0;
+            return largest > 0.0 ? new Pivot<MatrixLocation>(loc, PivotInfo.Good) : Pivot<MatrixLocation>.Empty;
         }
 
         /// <summary>
@@ -101,26 +110,27 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="eliminationStep">The elimination step.</param>
+        /// <param name="max">The maximum row/column index.</param>
         /// <returns>
         /// <c>true</c> if the pivot is valid; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsValidPivot(IMatrix<T> matrix, int eliminationStep)
+        public bool IsValidPivot(IMatrix<T> matrix, int eliminationStep, int max)
         {
-            var limit = matrix.Size - SearchReduction;
-
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);
+            if (magnitude <= AbsolutePivotThreshold)
+                return false;
 
             // Search for the largest element below the pivot
             var largest = 0.0;
-            for (var i = eliminationStep + 1; i <= limit; i++)
+            for (var i = eliminationStep + 1; i <= max; i++)
             {
                 largest = Math.Max(largest, Magnitude(matrix[eliminationStep, i]));
                 largest = Math.Max(largest, Magnitude(matrix[i, eliminationStep]));
             }
 
             // Check the validity
-            if (largest * RelativePivotThreshold < magnitude)
+            if (magnitude > largest * RelativePivotThreshold)
                 return true;
             return false;
         }

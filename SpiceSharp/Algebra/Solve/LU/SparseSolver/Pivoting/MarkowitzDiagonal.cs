@@ -1,4 +1,5 @@
-﻿using System;
+using SpiceSharp.Attributes;
+using System;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -6,11 +7,9 @@ namespace SpiceSharp.Algebra.Solve
     /// Markowitz-count based strategy for finding a pivot. Searches the whole diagonal of the submatrix.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
+    [GeneratedParameters]
     public class MarkowitzDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
         private static int _tiesMultiplier = 5;
 
         /// <summary>
@@ -28,10 +27,16 @@ namespace SpiceSharp.Algebra.Solve
         /// Markowitz product will ask the search strategy for more entries to make sure that we can't do 
         /// better.
         /// </remarks>
+        [GreaterThanOrEquals(0)]
         public static int TiesMultiplier
         {
             get => _tiesMultiplier;
-            set => _tiesMultiplier = value < 0 ? 0 : value;
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TiesMultiplier), value, 0));
+                _tiesMultiplier = value;
+            }
         }
 
         /// <summary>
@@ -44,7 +49,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
+        public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -113,12 +118,12 @@ namespace SpiceSharp.Algebra.Solve
                         ratioOfAccepted = ratio;
                     }
                     if (ties >= minMarkowitzProduct * _tiesMultiplier)
-                        return new Pivot<T>(chosen, PivotInfo.Suboptimal);
+                        return new Pivot<ISparseMatrixElement<T>>(chosen, PivotInfo.Suboptimal);
                 }
             }
 
             // The chosen pivot has already been checked for validity
-            return chosen != null ? new Pivot<T>(chosen, PivotInfo.Suboptimal) : Pivot<T>.Empty;
+            return chosen != null ? new Pivot<ISparseMatrixElement<T>>(chosen, PivotInfo.Suboptimal) : Pivot<ISparseMatrixElement<T>>.Empty;
         }
     }
 }
