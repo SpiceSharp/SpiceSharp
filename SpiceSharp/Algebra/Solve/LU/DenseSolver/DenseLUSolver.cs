@@ -6,42 +6,20 @@ namespace SpiceSharp.Algebra.Solve
     /// An base class for dense linear systems that can be solved using LU decomposition.
     /// Pivoting is controlled by the 
     /// </summary>
-    /// <typeparam name="M">The matrix type.</typeparam>
-    /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IMatrix{T}" />
     /// <seealso cref="IVector{T}" />
     /// <seealso cref="IFormattable" />
-    public abstract partial class DenseLUSolver<T> : PivotingSolver<IMatrix<T>, IVector<T>, T>, ISolver<T>
+    public abstract partial class DenseLUSolver<T> : PivotingSolver<IMatrix<T>, IVector<T>, T>, ISolver<T>, IParameterized<RookPivoting<T>>
         where T : IFormattable
     {
-        /// <summary>
-        /// Gets or sets the region for reordering the matrix. For example, specifying 1 will avoid a pivot from being chosen from
-        /// the last row or column.
-        /// </summary>
-        /// <value>
-        /// The pivot search reduction.
-        /// </value>
-        /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
-        public int PivotSearchReduction
-        {
-            get => _search;
-            set
-            {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Algebra_InvalidPivotSearchReduction);
-                _search = value;
-            }
-        }
-        private int _search = 0;
-
         /// <summary>
         /// Gets the pivoting strategy.
         /// </summary>
         /// <value>
         /// The pivoting strategy.
         /// </value>
-        public DensePivotStrategy<T> Strategy { get; }
+        public RookPivoting<T> Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DenseLUSolver{T}"/> class.
@@ -51,7 +29,7 @@ namespace SpiceSharp.Algebra.Solve
             : base(new DenseMatrix<T>(), new DenseVector<T>())
         {
             NeedsReordering = true;
-            Strategy = new RookPivoting<T>(magnitude);
+            Parameters = new RookPivoting<T>(magnitude);
         }
 
         /// <summary>
@@ -63,7 +41,7 @@ namespace SpiceSharp.Algebra.Solve
             : base(new DenseMatrix<T>(size), new DenseVector<T>(size))
         {
             NeedsReordering = true;
-            Strategy = new RookPivoting<T>(magnitude);
+            Parameters = new RookPivoting<T>(magnitude);
         }
 
         /// <summary>
@@ -117,12 +95,11 @@ namespace SpiceSharp.Algebra.Solve
             var size = Size;
             var step = 1;
             var order = Size - Degeneracy;
-            Strategy.PivotSearchReduction = PivotSearchReduction;
             if (!NeedsReordering)
             {
                 for (step = 1; step <= order; step++)
                 {
-                    if (Strategy.IsValidPivot(Matrix, step))
+                    if (Parameters.IsValidPivot(Matrix, step))
                         Eliminate(step, size);
                     else
                     {
@@ -138,12 +115,9 @@ namespace SpiceSharp.Algebra.Solve
                 }
             }
 
-            // Setup pivoting strategy
-            Strategy.Setup(Matrix, Vector, step);
-
             for (; step <= order; step++)
             {
-                if (!Strategy.FindPivot(Matrix, step, out int row, out int column))
+                if (!Parameters.FindPivot(Matrix, step, out int row, out int column))
                     return step - 1;
                 SwapRows(row, step);
                 SwapColumns(column, step);
@@ -170,7 +144,6 @@ namespace SpiceSharp.Algebra.Solve
         public override void Clear()
         {
             base.Clear();
-            Strategy.Clear();
             PivotSearchReduction = 0;
         }
     }

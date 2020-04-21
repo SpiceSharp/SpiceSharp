@@ -280,6 +280,8 @@ namespace SpiceSharpTest.Simulations
 
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
+            tran.BiasingParameters.Solver = new SparseRealSolver();
+            tran.BiasingParameters.Solver.SetParameter("pivrel", 1.0);
             tran.Run(ckt);
         }
 

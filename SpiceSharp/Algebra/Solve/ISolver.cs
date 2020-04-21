@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// the equations and the variables.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface ISolver<T> : IParameterized where T : IFormattable
+    public interface ISolver<T> : IParameterized, IImportParameterSet<ISolver<T>> where T : IFormattable
     {
         /// <summary>
         /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is

@@ -7,9 +7,19 @@ namespace SpiceSharp.Algebra
     /// Rook pivoting strategy.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="SpiceSharp.Algebra.DensePivotStrategy{T}" />
-    public class RookPivoting<T> : DensePivotStrategy<T> where T : IFormattable
+    /// <seealso cref="ParameterSet" />
+    public class RookPivoting<T> : ParameterSet where T : IFormattable
     {
+        private int _searchReduction;
+
+        /// <summary>
+        /// Gets the magnitude.
+        /// </summary>
+        /// <value>
+        /// The magnitude.
+        /// </value>
+        public Func<T, double> Magnitude { get; }
+
         /// <summary>
         /// Gets or sets the relative threshold for choosing a pivot.
         /// </summary>
@@ -23,12 +33,30 @@ namespace SpiceSharp.Algebra
         public double AbsolutePivotThreshold { get; set; } = 1e-13;
 
         /// <summary>
+        /// Gets or sets the search reduction.
+        /// </summary>
+        /// <value>
+        /// The search reduction.
+        /// </value>
+        /// <exception cref="ArgumentException">Thrown if the reduction is negative.</exception>
+        public int SearchReduction
+        {
+            get => _searchReduction;
+            set
+            {
+                if (_searchReduction < 0)
+                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SearchReduction), value, 0));
+                _searchReduction = value;
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RookPivoting{T}"/> class.
         /// </summary>
         /// <param name="magnitude">The magnitude.</param>
         public RookPivoting(Func<T, double> magnitude)
-            : base(magnitude)
         {
+            Magnitude = magnitude.ThrowIfNull(nameof(magnitude));
         }
 
         /// <summary>
@@ -39,9 +67,9 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row of the found pivot.</param>
         /// <param name="column">The column of the found pivot.</param>
         /// <returns></returns>
-        public override bool FindPivot(IMatrix<T> matrix, int eliminationStep, out int row, out int column)
+        public bool FindPivot(IMatrix<T> matrix, int eliminationStep, out int row, out int column)
         {
-            var limit = matrix.Size - PivotSearchReduction;
+            var limit = matrix.Size - SearchReduction;
 
             // Find the largest element below and right of the pivot
             var largest = Magnitude(matrix[eliminationStep, eliminationStep]);
@@ -76,9 +104,9 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// <c>true</c> if the pivot is valid; otherwise, <c>false</c>.
         /// </returns>
-        public override bool IsValidPivot(IMatrix<T> matrix, int eliminationStep)
+        public bool IsValidPivot(IMatrix<T> matrix, int eliminationStep)
         {
-            var limit = matrix.Size - PivotSearchReduction;
+            var limit = matrix.Size - SearchReduction;
 
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);
@@ -95,39 +123,6 @@ namespace SpiceSharp.Algebra
             if (largest * RelativePivotThreshold < magnitude)
                 return true;
             return false;
-        }
-
-        /// <summary>
-        /// Indicates that a pivot has been chosen and that it will be move to the diagonal.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="rhs">The right-hand side vector.</param>
-        /// <param name="row">The row of the pivot.</param>
-        /// <param name="column">The column of the pivot.</param>
-        /// <param name="eliminationStep">The elimination step.</param>
-        public override void MovePivot(IMatrix<T> matrix, IVector<T> rhs, int row, int column, int eliminationStep)
-        {
-        }
-
-        /// <summary>
-        /// Sets up the pivot strategy.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="rhs">The right-hand side vector.</param>
-        /// <param name="eliminationStep">The current elimination step.</param>
-        public override void Setup(IMatrix<T> matrix, IVector<T> rhs, int eliminationStep)
-        {
-        }
-
-        /// <summary>
-        /// Updates the strategy after the pivot was moved to the diagonal.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <param name="eliminationStep">The elimination step.</param>
-        public override void Update(IMatrix<T> matrix, int row, int column, int eliminationStep)
-        {
         }
     }
 }

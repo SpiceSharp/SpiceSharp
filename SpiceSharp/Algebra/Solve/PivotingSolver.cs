@@ -309,5 +309,33 @@ namespace SpiceSharp.Algebra.Solve
         /// The number of rows that were successfully eliminated.
         /// </returns>
         public abstract int OrderAndFactor();
+
+        /// <summary>
+        /// Sets the value of the parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// The current instance for chaining.
+        /// </returns>
+        public new ISolver<T> SetParameter<P>(string name, P value)
+        {
+            base.SetParameter(name, value);
+            return this;
+        }
+
+        /// <summary>
+        /// Call a parameter method with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the method.</param>
+        /// <returns>
+        /// The current instance for chaining.
+        /// </returns>
+        public new ISolver<T> SetParameter(string name)
+        {
+            base.SetParameter(name);
+            return this;
+        }
     }
 }

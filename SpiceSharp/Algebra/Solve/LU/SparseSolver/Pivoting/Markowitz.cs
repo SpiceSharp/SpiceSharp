@@ -8,8 +8,7 @@ namespace SpiceSharp.Algebra.Solve
     /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="SparsePivotStrategy{T}" />
-    public class Markowitz<T> : SparsePivotStrategy<T> where T : IFormattable
+    public class Markowitz<T> : ParameterSet where T : IFormattable
     {
         /// <summary>
         /// Markowitz numbers
@@ -45,6 +44,14 @@ namespace SpiceSharp.Algebra.Solve
         public int Product(int index) => _markowitzProduct[index];
 
         /// <summary>
+        /// Gets the magnitude.
+        /// </summary>
+        /// <value>
+        /// The magnitude.
+        /// </value>
+        public Func<T, double> Magnitude { get; }
+
+        /// <summary>
         /// Gets the number of singletons.
         /// </summary>
         public int Singletons { get; private set; }
@@ -70,8 +77,9 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes a new instance of the <see cref="Markowitz{T}"/> class.
         /// </summary>
         public Markowitz(Func<T, double> magnitude)
-            : base(magnitude)
         {
+            Magnitude = magnitude.ThrowIfNull(nameof(magnitude));
+
             // Register default strategies
             Strategies.Add(new MarkowitzSingleton<T>());
             Strategies.Add(new MarkowitzQuickDiagonal<T>());
@@ -84,12 +92,15 @@ namespace SpiceSharp.Algebra.Solve
         /// It checks for the submatrix right/below of the pivot.
         /// </summary>
         /// <param name="pivot">The pivot candidate.</param>
+        /// <param name="max">The maximum index that a pivot can have.</param>
         /// <returns>
         /// True if the pivot can be used.
         /// </returns>
-        public override bool IsValidPivot(ISparseMatrixElement<T> pivot)
+        public bool IsValidPivot(ISparseMatrixElement<T> pivot, int max)
         {
             pivot.ThrowIfNull(nameof(pivot));
+            if (pivot.Row > max || pivot.Column > max)
+                return false;
 
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(pivot.Value);
@@ -97,7 +108,7 @@ namespace SpiceSharp.Algebra.Solve
             // Search for the largest element below the pivot
             var element = pivot.Below;
             var largest = 0.0;
-            while (element != null && element.Row <= _markowitzRow.Length - 1 - PivotSearchReduction)
+            while (element != null && element.Row <= max)
             {
                 largest = Math.Max(largest, Magnitude(element.Value));
                 element = element.Below;
@@ -126,9 +137,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Clears the pivot strategy.
         /// </summary>
-        public override void Clear()
+        public void Clear()
         {
-            base.Clear();
             _markowitzRow = null;
             _markowitzColumn = null;
             _markowitzProduct = null;
@@ -140,16 +150,16 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="step">The elimination step.</param>
-        private void Count(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int step)
+        /// <param name="max">The maximum row/column index to search.</param>
+        private void Count(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int step, int max)
         {
             ISparseMatrixElement<T> element;
-            var limit = matrix.Size - PivotSearchReduction;
 
             // Get the first element in the vector
             var rhsElement = rhs.GetFirstInVector();
 
             // Generate Markowitz row count
-            for (var i = limit; i >= step; i--)
+            for (var i = max; i >= step; i--)
             {
                 // Set count to -1 initially to remove count due to pivot element
                 var count = -1;
@@ -172,7 +182,7 @@ namespace SpiceSharp.Algebra.Solve
             }
             
             // Generate Markowitz column count
-            for (var i = step; i <= limit; i++)
+            for (var i = step; i <= max; i++)
             {
                 // Set count to -1 initially to remove count due to pivot element
                 var count = -1;
@@ -191,14 +201,12 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Calculate the Markowitz products.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
         /// <param name="step">The elimination step.</param>
-        private void Products(ISparseMatrix<T> matrix, int step)
+        /// <param name="max">The maximum row/column index to search.</param>
+        private void Products(int step, int max)
         {
-            var limit = matrix.Size - PivotSearchReduction;
-
             Singletons = 0;
-            for (var i = step; i <= limit; i++)
+            for (var i = step; i <= max; i++)
             {
                 // UpdateMarkowitzProduct(i);
                 _markowitzProduct[i] = _markowitzRow[i] * _markowitzColumn[i];
@@ -213,7 +221,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
-        public override void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep)
+        /// <param name="max">The maximum row/column index.</param>
+        public void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep, int max)
         {
             matrix.ThrowIfNull(nameof(matrix));
             rhs.ThrowIfNull(nameof(rhs));
@@ -221,8 +230,8 @@ namespace SpiceSharp.Algebra.Solve
             // Initialize Markowitz row, column and product vectors if necessary
             if (_markowitzRow == null || _markowitzRow.Length != matrix.Size + 1)
                 Initialize(matrix);
-            Count(matrix, rhs, eliminationStep);
-            Products(matrix, eliminationStep);
+            Count(matrix, rhs, eliminationStep, max);
+            Products(eliminationStep, max);
         }
 
         /// <summary>
@@ -235,7 +244,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <remarks>
         /// This is done by swapping the rows and columns of the diagonal and that of the pivot.
         /// </remarks>
-        public override void MovePivot(ISparseMatrix<T> matrix, ISparseVector<T> rhs, ISparseMatrixElement<T> pivot, int eliminationStep)
+        public void MovePivot(ISparseMatrix<T> matrix, ISparseVector<T> rhs, ISparseMatrixElement<T> pivot, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
             rhs.ThrowIfNull(nameof(rhs));
@@ -319,12 +328,11 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="pivot">The pivot element.</param>
-        /// <param name="eliminationStep">The elimination step.</param>
-        public override void Update(ISparseMatrix<T> matrix, ISparseMatrixElement<T> pivot, int eliminationStep)
+        /// <param name="limit">The maximum row/column for pivots.</param>
+        public void Update(ISparseMatrix<T> matrix, ISparseMatrixElement<T> pivot, int limit)
         {
             matrix.ThrowIfNull(nameof(matrix));
             pivot.ThrowIfNull(nameof(pivot));
-            var limit = matrix.Size - PivotSearchReduction;
 
             // If we haven't setup, just skip
             if (_markowitzProduct == null)
@@ -365,7 +373,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="fillin">The fill-in.</param>
-        public override void CreateFillin(ISparseMatrix<T> matrix, ISparseMatrixElement<T> fillin)
+        public void CreateFillin(ISparseMatrix<T> matrix, ISparseMatrixElement<T> fillin)
         {
             matrix.ThrowIfNull(nameof(matrix));
             fillin.ThrowIfNull(nameof(fillin));
@@ -395,20 +403,21 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
-        /// <returns></returns>
+        /// <param name="max">The maximum row/column index of any pivot.</param>
+        /// <returns>The pivot information.</returns>
         /// <remarks>
         /// The pivot should be searched for in the submatrix towards the right and down of the
         /// current diagonal at row/column <paramref name="eliminationStep" />. This pivot element
         /// will be moved to the diagonal for this elimination step.
         /// </remarks>
-        public override Pivot<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep)
+        public Pivot<T> FindPivot(ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             matrix.ThrowIfNull(nameof(matrix));
 
             // Fix the search limit to allow our strategies to work
             foreach (var strategy in Strategies)
             {
-                var chosen = strategy.FindPivot(this, matrix, eliminationStep);
+                var chosen = strategy.FindPivot(this, matrix, eliminationStep, max);
                 if (chosen.Info != PivotInfo.None)
                     return chosen;
             }
@@ -421,15 +430,15 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="step">The current step.</param>
-        public void CheckMarkowitzCounts(ISparseMatrix<T> matrix, int step)
+        /// <param name="max">The maximum row/column index.</param>
+        public void CheckMarkowitzCounts(ISparseMatrix<T> matrix, int step, int max)
         {
             if (_markowitzProduct == null)
                 return;
-            var limit = matrix.Size - PivotSearchReduction;
 
             // Recalculate the rows and columns completely and check with the current ones
             int singletons = 0;
-            for (var i = step; i <= limit; i++)
+            for (var i = step; i <= max; i++)
             {
                 // Count the elements in the row
                 int count = -1;

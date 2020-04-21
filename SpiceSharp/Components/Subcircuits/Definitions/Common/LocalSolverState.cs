@@ -62,7 +62,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes a new instance of the <see cref="LocalSolverState{T,S}"/> class.
         /// </summary>
         /// <param name="name">The name of the subcircuit instance.</param>
-        /// <param name="nodes">The nodes.</param>
         /// <param name="parent">The parent simulation state.</param>
         /// <param name="solver">The local solver.</param>
         protected LocalSolverState(string name, S parent, ISparsePivotingSolver<T> solver)

@@ -11,7 +11,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Constants
         /// </summary>
-        private const int TiesMultiplier = 5;
+        private const int _tiesMultiplier = 5;
 
         /// <summary>
         /// Find a pivot in a matrix.
@@ -19,10 +19,11 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="markowitz">The Markowitz pivot strategy.</param>
         /// <param name="matrix">The matrix</param>
         /// <param name="eliminationStep">The current elimination step.</param>
+        /// <param name="max">The maximum row/column index.</param>
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
+        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
@@ -34,10 +35,9 @@ namespace SpiceSharp.Algebra.Solve
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
             ISparseMatrixElement<T> largestElement = null;
             var ties = 0;
-            var limit = matrix.Size - markowitz.PivotSearchReduction;
 
             // Start search of matrix on column by column basis
-            for (var i = eliminationStep; i <= limit; i++)
+            for (var i = eliminationStep; i <= max; i++)
             {
                 // Find the biggest magnitude in the column for checking valid pivots later
                 var largest = 0.0;
@@ -49,7 +49,7 @@ namespace SpiceSharp.Algebra.Solve
                     element = element.Above;
                 }
                 element = diagonal?.Below;
-                while (element != null && element.Row <= limit)
+                while (element != null && element.Row <= max)
                 {
                     largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                     element = element.Below;
@@ -98,7 +98,7 @@ namespace SpiceSharp.Algebra.Solve
                                 chosen = element;
                                 acceptedRatio = ratio;
                             }
-                            if (ties >= minMarkowitzProduct * TiesMultiplier)
+                            if (ties >= minMarkowitzProduct * _tiesMultiplier)
                                 return new Pivot<T>(chosen, PivotInfo.Suboptimal);
                         }
                     }

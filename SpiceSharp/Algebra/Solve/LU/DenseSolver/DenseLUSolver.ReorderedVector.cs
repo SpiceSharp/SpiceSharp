@@ -33,10 +33,10 @@ namespace SpiceSharp.Algebra.Solve
             public int Length => _parent.Vector.Length;
 
             /// <summary>
-            /// Gets or sets the <see cref="T"/> at the specified index.
+            /// Gets or sets the value at the specified index.
             /// </summary>
             /// <value>
-            /// The <see cref="T"/>.
+            /// The value.
             /// </value>
             /// <param name="index">The index.</param>
             /// <returns></returns>

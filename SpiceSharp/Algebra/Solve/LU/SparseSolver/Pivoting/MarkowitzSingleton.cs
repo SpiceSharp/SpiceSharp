@@ -15,16 +15,16 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="markowitz">The Markowitz pivot strategy.</param>
         /// <param name="matrix">The matrix</param>
         /// <param name="eliminationStep">The current elimination step.</param>
+        /// <param name="max">The maximum row/column index.</param>
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
-        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep)
+        public override Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
             if (eliminationStep < 1)
                 throw new ArgumentOutOfRangeException(nameof(eliminationStep));
-            var limit = matrix.Size - markowitz.PivotSearchReduction;
 
             // No singletons left, so don't bother
             if (markowitz.Singletons == 0)
@@ -32,12 +32,12 @@ namespace SpiceSharp.Algebra.Solve
 
             // Find the first valid singleton we can use
             int singletons = 0, index;
-            for (var i = limit + 1; i >= eliminationStep; i--)
+            for (var i = max + 1; i >= eliminationStep; i--)
             {
                 // First check the current pivot, else
                 // search from last to first as it tends to push the higher markowitz
                 // products downwards.
-                index = i > limit ? eliminationStep : i;
+                index = i > max ? eliminationStep : i;
 
                 // Not a singleton, let's skip this one...
                 if (markowitz.Product(index) != 0)
@@ -64,7 +64,7 @@ namespace SpiceSharp.Algebra.Solve
                 {
                     // The last element in the column is the singleton element!
                     chosen = matrix.GetLastInColumn(index);
-                    if (chosen.Row <= limit && chosen.Column <= limit)
+                    if (chosen.Row <= max && chosen.Column <= max)
                     {
                         // Check if it is a valid pivot
                         var magnitude = markowitz.Magnitude(chosen.Value);
@@ -97,14 +97,14 @@ namespace SpiceSharp.Algebra.Solve
                         element = element.Above;
                     }
                     element = chosen.Below;
-                    while (element != null && element.Row <= limit)
+                    while (element != null && element.Row <= max)
                     {
                         largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                         element = element.Below;
                     }
 
                     // Check if the pivot is valid
-                    if (chosen.Row <= limit && chosen.Column <= limit)
+                    if (chosen.Row <= max && chosen.Column <= max)
                     {
                         var magnitude = markowitz.Magnitude(chosen.Value);
                         if (magnitude > markowitz.AbsolutePivotThreshold &&

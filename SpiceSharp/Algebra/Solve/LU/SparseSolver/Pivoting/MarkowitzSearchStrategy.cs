@@ -15,7 +15,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="markowitz">The Markowitz pivot strategy.</param>
         /// <param name="matrix">The matrix</param>
         /// <param name="eliminationStep">The current elimination step.</param>
+        /// <param name="max">The maximum row/column index.</param>
         /// <returns>The pivot element, or null if no pivot was found.</returns>
-        public abstract Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep);
+        public abstract Pivot<T> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max);
     }
 }

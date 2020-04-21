@@ -44,9 +44,8 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the singleton pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Strategy;
-            strategy.Strategies.Clear();
-            strategy.Strategies.Add(new MarkowitzSingleton<double>());
+            solver.Parameters.Strategies.Clear();
+            solver.Parameters.Strategies.Add(new MarkowitzSingleton<double>());
 
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
@@ -77,7 +76,7 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Strategy;
+            var strategy = (Markowitz<double>)solver.Parameters;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzQuickDiagonal<double>());
 
@@ -110,7 +109,7 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Strategy;
+            var strategy = (Markowitz<double>)solver.Parameters;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzDiagonal<double>());
 
@@ -143,7 +142,7 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Strategy;
+            var strategy = (Markowitz<double>)solver.Parameters;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzEntireMatrix<double>());
 
@@ -265,7 +264,7 @@ namespace SpiceSharpTest.Algebra
         public void When_PartialSolve_Expect_Reference()
         {
             var solver = new SparseRealSolver();
-            solver.Strategy.PivotSearchReduction = 2; // Limit to only the 2 first elements
+            solver.PivotSearchReduction = 2; // Limit to only the 2 first elements
             solver.Degeneracy = 2; // Only perform elimination on the first two rows
 
             solver[1, 1] = 1;
