@@ -11,7 +11,28 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Constants
         /// </summary>
-        private const int _tiesMultiplier = 5;
+        private static int _tiesMultiplier = 5;
+
+        /// <summary>
+        /// Gets or sets a heuristic for speeding up pivot searching.
+        /// </summary>
+        /// <value>
+        /// The multiplier for searching pivots with the same markowitz products.
+        /// </value>
+        /// <remarks>
+        /// Instead of searching the whole matrix for a pivot on the diagonal, the search strategy can
+        /// choose to stop searching for more pivot elements with the lowest "Markowitz product", which
+        /// scores how many extra unwanted elements a row/column could create as a by-product of factoring
+        /// the solver. When this score is tied, this search strategy will keep searching until we have
+        /// (MarkowitzProduct * TiesMultiplier) eligible pivots. In other words, pivots with a high
+        /// Markowitz product will ask the search strategy for more entries to make sure that we can't do 
+        /// better.
+        /// </remarks>
+        public static int TiesMultiplier
+        {
+            get => _tiesMultiplier;
+            set => _tiesMultiplier = value < 0 ? 0 : value;
+        }
 
         /// <summary>
         /// Find a pivot in a matrix.

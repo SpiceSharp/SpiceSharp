@@ -8,10 +8,28 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="T">The base value type.</typeparam>
     public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
+        private static int _tiesMultiplier = 5;
+
         /// <summary>
-        /// Constants
+        /// Gets or sets a heuristic for speeding up pivot searching.
         /// </summary>
-        private const int _tiesMultiplier = 5;
+        /// <value>
+        /// The multiplier for searching pivots with the same markowitz products.
+        /// </value>
+        /// <remarks>
+        /// Instead of searching the whole matrix for a pivot on the diagonal, the search strategy can
+        /// choose to stop searching for more pivot elements with the lowest "Markowitz product", which
+        /// scores how many extra unwanted elements a row/column could create as a by-product of factoring
+        /// the solver. When this score is tied, this search strategy will keep a list of them with a
+        /// maximum of (MarkowitzProduct * TiesMultiplier) elements. In other words, pivots with a high
+        /// Markowitz product will ask the search strategy for more entries to make sure that we can do 
+        /// better.
+        /// </remarks>
+        public static int TiesMultiplier
+        {
+            get => _tiesMultiplier;
+            set => _tiesMultiplier = value < 0 ? 0 : value;
+        }
 
         /// <summary>
         /// Find a pivot in a matrix.

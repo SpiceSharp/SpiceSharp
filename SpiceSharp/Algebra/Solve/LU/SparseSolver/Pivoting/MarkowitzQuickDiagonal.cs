@@ -8,6 +8,49 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="T">The base value type.</typeparam>
     public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
     {
+        private static int _maxMarkowitzTies = 100, _tiesMultiplier = 5;
+        private readonly ISparseMatrixElement<T>[] _tiedElements = new ISparseMatrixElement<T>[MaxMarkowitzTies];
+
+        /// <summary>
+        /// Gets or sets the maximum number of diagonals that are considered for choosing the pivot.
+        /// </summary>
+        /// <value>
+        /// The maximum number of searched pivots with the same markowitz product.
+        /// </value>
+        /// <remarks>
+        /// The pivot search strategy will try to find pivots with the lowest "Markowitz product", which
+        /// scores how many extra unwanted elements a row/column could create as a by-product of factoring
+        /// the solver. When this score is tied, this search strategy will keep a list of them with a 
+        /// maximum of this amount of elements.
+        /// </remarks>
+        public static int MaxMarkowitzTies
+        {
+            get => _maxMarkowitzTies;
+            set => _maxMarkowitzTies = value < 1 ? 0 : value;
+        }
+
+        /// <summary>
+        /// Gets or sets a heuristic for speeding up pivot searching.
+        /// </summary>
+        /// <value>
+        /// The multiplier for searching pivots with the same markowitz products.
+        /// </value>
+        /// <remarks>
+        /// Instead of searching the whole matrix for a pivot on the diagonal, the search strategy can
+        /// choose to stop searching for more pivot elements with the lowest "Markowitz product", which
+        /// scores how many extra unwanted elements a row/column could create as a by-product of factoring
+        /// the solver. When this score is tied, this search strategy will keep a list of them with a
+        /// maximum of (MarkowitzProduct * TiesMultiplier) elements. In other words, pivots with a high
+        /// Markowitz product will ask the search strategy for more entries to make sure that we can do 
+        /// better. Set this value to <see cref="MaxMarkowitzTies"/> to always search for the maximum
+        /// number of eligible pivots.
+        /// </remarks>
+        public static int TiesMultiplier
+        {
+            get => _tiesMultiplier;
+            set => _tiesMultiplier = value < 0 ? 0 : value;
+        }
+
         /// <summary>
         /// Find a pivot in a matrix.
         /// </summary>
@@ -26,8 +69,8 @@ namespace SpiceSharp.Algebra.Solve
                 throw new ArgumentOutOfRangeException(nameof(eliminationStep));
 
             var minMarkowitzProduct = int.MaxValue;
-            ISparseMatrixElement<T> chosen = null;
-
+            var numberOfTies = -1;
+            
             /* Used for debugging along Spice 3f5
             for (var index = matrix.Size + 1; index > eliminationStep; index--)
             {
@@ -49,6 +92,8 @@ namespace SpiceSharp.Algebra.Solve
                 if (magnitude <= markowitz.AbsolutePivotThreshold)
                     continue;
 
+                // Well, can't do much better than this can we? (Assuming all the singletons are taken)
+                // Note that a singleton can still appear depending on the allowed tolerances!
                 if (product == 1)
                 {
                     // Find the off-diagonal elements
@@ -70,34 +115,68 @@ namespace SpiceSharp.Algebra.Solve
                     }
                 }
 
-                minMarkowitzProduct = markowitz.Product(i);
-                chosen = diagonal;
+                if (product < minMarkowitzProduct)
+                {
+                    // We found a diagonal that beats all the previous ones!
+                    numberOfTies = 0;
+                    _tiedElements[0] = diagonal;
+                    minMarkowitzProduct = product;
+                }
+                else
+                {
+                    if (numberOfTies < _tiedElements.Length - 1)
+                    {
+                        // Keep track of this diagonal too
+                        _tiedElements[++numberOfTies] = diagonal;
+
+                        // This is our heuristic for speeding up pivot searching
+                        if (numberOfTies >= minMarkowitzProduct * TiesMultiplier)
+                            break;
+                    }
+                }
             }
 
-            // No decision was made yet, so check again here
-            if (chosen != null)
+            // Not even one eligible pivot on the diagonal...
+            if (numberOfTies < 0)
+                return Pivot<T>.Empty;
+
+            // Determine which of the tied elements is the best numerical choise
+            ISparseMatrixElement<T> chosen = null;
+            var maxRatio = 1.0 / markowitz.RelativePivotThreshold;
+            for (var i = 0; i <= numberOfTies; i++)
             {
-                // Find the biggest element above and below the pivot
-                var element = chosen.Below;
-                var largest = 0.0;
-                while (element != null && element.Row <= max)
+                var diag = _tiedElements[i];
+                var mag = markowitz.Magnitude(diag.Value);
+                var largest = LargestOtherElementInColumn(markowitz, diag, eliminationStep, max);
+                var ratio = largest / mag;
+                if (ratio < maxRatio)
                 {
-                    largest = Math.Max(largest, markowitz.Magnitude(element.Value));
-                    element = element.Below;
+                    maxRatio = ratio;
+                    chosen = diag;
                 }
-                element = chosen.Above;
-                while (element != null && element.Row >= eliminationStep)
-                {
-                    largest = Math.Max(largest, markowitz.Magnitude(element.Value));
-                    element = element.Above;
-                }
-
-                // If we can't have stability, then drop the pivot
-                if (markowitz.Magnitude(chosen.Value) <= markowitz.RelativePivotThreshold * largest)
-                    chosen = null;
             }
 
+            // We don't actually know if the pivot is sub-optimal, but we take the worst case scenario.
             return chosen != null ? new Pivot<T>(chosen, PivotInfo.Suboptimal) : Pivot<T>.Empty;
+        }
+
+        private double LargestOtherElementInColumn(Markowitz<T> markowitz, ISparseMatrixElement<T> chosen, int eliminationStep, int max)
+        {
+            // Find the biggest element above and below the pivot
+            var element = chosen.Below;
+            var largest = 0.0;
+            while (element != null && element.Row <= max)
+            {
+                largest = Math.Max(largest, markowitz.Magnitude(element.Value));
+                element = element.Below;
+            }
+            element = chosen.Above;
+            while (element != null && element.Row >= eliminationStep)
+            {
+                largest = Math.Max(largest, markowitz.Magnitude(element.Value));
+                element = element.Above;
+            }
+            return largest;
         }
     }
 }
