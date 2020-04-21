@@ -236,9 +236,11 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_PartialDecomposition_Expect_Reference()
         {
-            var solver = new SparseRealSolver();
-            solver.PivotSearchReduction = 2; // Limit to only the 2 first elements
-            solver.Degeneracy = 2; // Only perform elimination on the first two rows
+            var solver = new SparseRealSolver
+            {
+                PivotSearchReduction = 2, // Limit to only the 2 first elements
+                Degeneracy = 2 // Only perform elimination on the first two rows
+            };
 
             solver[1, 2] = 2;
             solver[2, 1] = 1;
@@ -263,9 +265,11 @@ namespace SpiceSharpTest.Algebra
         [Test]
         public void When_PartialSolve_Expect_Reference()
         {
-            var solver = new SparseRealSolver();
-            solver.PivotSearchReduction = 2; // Limit to only the 2 first elements
-            solver.Degeneracy = 2; // Only perform elimination on the first two rows
+            var solver = new SparseRealSolver
+            {
+                PivotSearchReduction = 2, // Limit to only the 2 first elements
+                Degeneracy = 2 // Only perform elimination on the first two rows
+            };
 
             solver[1, 1] = 1;
             solver[1, 3] = 2;

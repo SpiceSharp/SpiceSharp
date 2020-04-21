@@ -18,8 +18,8 @@ namespace SpiceSharp.Components
             /// <summary>
             /// Private variables
             /// </summary>
-            private double _v1, _v2, _td, _tr, _tf, _pw, _per;
-            private IIntegrationMethod _method;
+            private readonly double _v1, _v2, _td, _tr, _tf, _pw, _per;
+            private readonly IIntegrationMethod _method;
 
             /// <summary>
             /// Gets the value that is currently being probed.

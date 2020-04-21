@@ -135,9 +135,6 @@ namespace SpiceSharp.CodeGeneration
                 {
                     // Get the limit
                     var limit = attr.ArgumentList.Arguments[0].ToFullString();
-
-                    // Find out what the consquence should be
-                    StatementSyntax consequence;
                     ExpressionSyntax consequenceCondition = null;
                     for (var i = 1; i < attr.ArgumentList.Arguments.Count; i++)
                     {
@@ -148,28 +145,32 @@ namespace SpiceSharp.CodeGeneration
 
                     if (consequenceCondition == null)
                         consequenceCondition = ParseExpression(DefaultRaiseException ? "true" : "false");
-                    switch (consequenceCondition)
+                    StatementSyntax consequence = consequenceCondition switch
                     {
-                        case LiteralExpressionSyntax les when les.Token.Value.Equals(false):
-                            consequence = Block(
+                        LiteralExpressionSyntax les when les.Token.Value.Equals(false) => 
+                            Block(
                                 ParseStatement($"{privateVariable} = {limit};"),
                                 ParseStatement($"SpiceSharpWarning.Warning(this, {warningPrefix}Set.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
-                                ReturnStatement());
-                            break;
-                        case LiteralExpressionSyntax les when les.Token.Value.Equals(true):
-                            consequence = ParseStatement($"throw new ArgumentException({warningPrefix}.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));");
-                            break;
-                        default:
-                            consequence = Block(
+                                ReturnStatement()
+                            ),
+
+                        LiteralExpressionSyntax les when les.Token.Value.Equals(true) => 
+                            ParseStatement($"throw new ArgumentException({warningPrefix}.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
+
+                        _ =>
+                            Block(
                                 IfStatement(consequenceCondition,
                                     ParseStatement($"throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
                                     ElseClause(
                                         Block(
                                             ParseStatement($"{privateVariable} = {limit};"),
                                             ParseStatement($"SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
-                                            ReturnStatement()))));
-                            break;
-                    }
+                                            ReturnStatement()
+                                        )
+                                    )
+                                )
+                            ),
+                    };
 
                     // Add our check to the setter
                     var cond = IfStatement(
