@@ -112,7 +112,7 @@ namespace SpiceSharp.Algebra.Solve
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length)
-                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Scramble), target.Length, source.Length));
+                throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(target.Length, source.Length), nameof(target));
 
             // Expand translation vectors if necessary
             if (_allocated < source.Length || _allocated < target.Length)
@@ -133,7 +133,7 @@ namespace SpiceSharp.Algebra.Solve
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length + 1)
-                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Scramble), target.Length + 1, source.Length));
+                throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(target.Length, source.Length - 1), nameof(target));
 
             // Expand translation vectors if necessary
             if (_allocated < source.Length || _allocated < target.Length)

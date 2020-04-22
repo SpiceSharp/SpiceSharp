@@ -593,7 +593,7 @@ namespace SpiceSharp.Simulations
             {
                 if (!behavior.IsConvergent())
                 {
-                    // I believe this should be false, but Spice 3f5 doesn't...
+                    // I believe this should return false, but Spice 3f5 and ngSpice don't...
 
                     /*
                      * Each device that checks convergence returns (OK) = 0 regardless

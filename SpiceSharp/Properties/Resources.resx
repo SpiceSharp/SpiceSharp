@@ -129,14 +129,11 @@
   <data name="Algebra.SingularMatrixIndexed" xml:space="preserve">
     <value>The matrix was found to be singular when eliminating row {0}.</value>
   </data>
-  <data name="Algebra.SolutionLengthMismatch" xml:space="preserve">
-    <value>The solution vector for {0} has {1} elements, but {2} are needed.</value>
-  </data>
   <data name="Algebra.SolverNotFactored" xml:space="preserve">
-    <value>The solver cannot execute {0} because it has not been factored yet.</value>
+    <value>The solver is not factored yet.</value>
   </data>
-  <data name="AmbiguousType" xml:space="preserve">
-    <value>An ambiguous type reference for type '{0}' has been encountered.</value>
+  <data name="Algebra.VectorLengthMismatch" xml:space="preserve">
+    <value>The vector has {0} elements, but {1} were expected.</value>
   </data>
   <data name="Behaviors.BehaviorsAlreadyExist" xml:space="preserve">
     <value>There are already behaviors for '{0}'.</value>
@@ -287,6 +284,9 @@
   </data>
   <data name="TypeAlreadyExists" xml:space="preserve">
     <value>A value of type {0} already exists.</value>
+  </data>
+  <data name="TypeDictionary.AmbiguousType" xml:space="preserve">
+    <value>The type '{0}' resolved to multiple instances.</value>
   </data>
   <data name="Units.InvalidExponent" xml:space="preserve">
     <value>Invalid exponent. Cannot represent the exponent {0}/{1}.</value>

@@ -54,7 +54,7 @@ namespace SpiceSharp.General
         /// </summary>
         /// <param name="type">The type.</param>
         public AmbiguousTypeException(Type type)
-            : base(Properties.Resources.AmbiguousType.FormatString(type.FullName))
+            : base(Properties.Resources.TypeDictionary_AmbiguousType.FormatString(type.FullName))
         {
             AmbiguousType = type ?? typeof(void);
         }

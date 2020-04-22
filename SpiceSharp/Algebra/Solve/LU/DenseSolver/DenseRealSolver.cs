@@ -46,7 +46,7 @@ namespace SpiceSharp.Algebra
             if (!IsFactored)
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
             if (solution.Length != Size)
-                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Solve), solution.Length, Size));
+                throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             size = Math.Min(size, Size);
@@ -87,9 +87,9 @@ namespace SpiceSharp.Algebra
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
-                throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
+                throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored);
             if (solution.Length != Size)
-                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Solve), solution.Length, Size));
+                throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             steps = Math.Max(steps, Size);

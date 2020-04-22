@@ -98,16 +98,7 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The solution vector for {0} has {1} elements, but {2} are needed..
-        /// </summary>
-        public static string Algebra_SolutionLengthMismatch {
-            get {
-                return ResourceManager.GetString("Algebra.SolutionLengthMismatch", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The solver cannot execute {0} because it has not been factored yet..
+        ///   Looks up a localized string similar to The solver is not factored yet..
         /// </summary>
         public static string Algebra_SolverNotFactored {
             get {
@@ -116,11 +107,11 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An ambiguous type reference for type &apos;{0}&apos; has been encountered..
+        ///   Looks up a localized string similar to The vector has {0} elements, but {1} were expected..
         /// </summary>
-        public static string AmbiguousType {
+        public static string Algebra_VectorLengthMismatch {
             get {
-                return ResourceManager.GetString("AmbiguousType", resourceCulture);
+                return ResourceManager.GetString("Algebra.VectorLengthMismatch", resourceCulture);
             }
         }
         
@@ -571,6 +562,15 @@ namespace SpiceSharp.Properties {
         public static string TypeAlreadyExists {
             get {
                 return ResourceManager.GetString("TypeAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The type &apos;{0}&apos; resolved to multiple instances..
+        /// </summary>
+        public static string TypeDictionary_AmbiguousType {
+            get {
+                return ResourceManager.GetString("TypeDictionary.AmbiguousType", resourceCulture);
             }
         }
         

@@ -227,7 +227,7 @@ namespace SpiceSharp.Algebra
         {
             target.ThrowIfNull(nameof(target));
             if (Length != target.Length)
-                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(CopyTo), target.Length, Length));
+                throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(target.Length, Length), nameof(target));
             if (target == this)
                 return;
             for (var i = 1; i <= Length; i++)
