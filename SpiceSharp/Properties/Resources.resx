@@ -180,9 +180,6 @@
   <data name="Mosfets.EffectiveChannelTooSmall" xml:space="preserve">
     <value>{0}: effective channel length less than zero.</value>
   </data>
-  <data name="Mosfets.NsubTooSmall" xml:space="preserve">
-    <value>Nsub &lt; Ni.</value>
-  </data>
   <data name="NotEnoughElements" xml:space="preserve">
     <value>No enough elements.</value>
   </data>
@@ -191,9 +188,6 @@
   </data>
   <data name="Parameters.ArgumentCountMismatch" xml:space="preserve">
     <value>Expected {2} arguments for {0}, but {1} were passed.</value>
-  </data>
-  <data name="Parameters.InvalidArguments" xml:space="preserve">
-    <value>The arguments for {0} were invalid.</value>
   </data>
   <data name="Parameters.IsZero" xml:space="preserve">
     <value>The parameter cannot be zero.</value>
@@ -221,18 +215,6 @@
   </data>
   <data name="Parameters.ParameterSetNotFound" xml:space="preserve">
     <value>A parameter set of type '{0}' could not be found.</value>
-  </data>
-  <data name="Parameters.TooLarge" xml:space="preserve">
-    <value>The parameter {0} should be at most {2}, but was {1}.</value>
-  </data>
-  <data name="Parameters.TooLargeSet" xml:space="preserve">
-    <value>The parameter {0} was {1} and was set the maximum {2}.</value>
-  </data>
-  <data name="Parameters.TooSmall" xml:space="preserve">
-    <value>The parameter {0} should be at least {2}, but was {1}.</value>
-  </data>
-  <data name="Parameters.TooSmallSet" xml:space="preserve">
-    <value>The parameter {0} was {1} and was set to the minimum {2}.</value>
   </data>
   <data name="Parameters.UpperLimitReached" xml:space="preserve">
     <value>The parameter value of {0} was too large, and was reduced from {1} to {2}.</value>
@@ -267,9 +249,6 @@
   <data name="Simulations.ConvergenceAidVariableNotFound" xml:space="preserve">
     <value>Could not set convergence aid: variable '{0}' could not be found.</value>
   </data>
-  <data name="Simulations.DC.InvalidEntity" xml:space="preserve">
-    <value>Cannot find DC parameter entity '{0}'.</value>
-  </data>
   <data name="Simulations.DC.NoSweepPoints" xml:space="preserve">
     <value>The sweep '{0}' does not contain any points to simulate.</value>
   </data>
@@ -278,9 +257,6 @@
   </data>
   <data name="Simulations.InvalidInitializationMode" xml:space="preserve">
     <value>Invalid initialization mode.</value>
-  </data>
-  <data name="Simulations.IterationsTooSmall" xml:space="preserve">
-    <value>The number of iterations cannot be lower than 1.</value>
   </data>
   <data name="Simulations.NoEntities" xml:space="preserve">
     <value>{0}: there are no entities.</value>
@@ -300,23 +276,11 @@
   <data name="Simulations.Time.TimestepTooSmall" xml:space="preserve">
     <value>The timestep {0:e5}s is too small at t={1:e5}s.</value>
   </data>
-  <data name="Simulations.Time.TimeTooSmall" xml:space="preserve">
-    <value>A timepoint cannot be negative.</value>
-  </data>
   <data name="Simulations.ValidationFailed" xml:space="preserve">
     <value>The simulation '{0}' has {1} rule violations.</value>
   </data>
-  <data name="SizeMismatch1" xml:space="preserve">
-    <value>Size mismatch of {0} and {1}.</value>
-  </data>
-  <data name="SizeMismatch2" xml:space="preserve">
-    <value>Size mismatch of {0}: expected {1}.</value>
-  </data>
   <data name="Subcircuits.NoEquivalent" xml:space="preserve">
     <value>Cannot compute an equivalent solution for subcircuit '{0}'.</value>
-  </data>
-  <data name="Sweeps.InvalidInput" xml:space="preserve">
-    <value>The sweep input is invalid.</value>
   </data>
   <data name="Sweeps.PointsTooSmall" xml:space="preserve">
     <value>The number of points should be greater than 0.</value>
@@ -327,27 +291,6 @@
   <data name="Units.InvalidExponent" xml:space="preserve">
     <value>Invalid exponent. Cannot represent the exponent {0}/{1}.</value>
   </data>
-  <data name="Units.UnitsNotMatched" xml:space="preserve">
-    <value>The units are not matched.</value>
-  </data>
-  <data name="Validation.FloatingNodeFound" xml:space="preserve">
-    <value>Floating node detected: {0}.</value>
-  </data>
-  <data name="Validation.NoGround" xml:space="preserve">
-    <value>There is no ground node in the circuit.</value>
-  </data>
-  <data name="Validation.NoIndependentSource" xml:space="preserve">
-    <value>There is no independent source driving the circuit.</value>
-  </data>
-  <data name="Validation.ShortCircuitComponent" xml:space="preserve">
-    <value>{0}: all pins are short-circuited.</value>
-  </data>
-  <data name="Validation.ShortCircuitFixedVoltage" xml:space="preserve">
-    <value>A fixed voltage was applied to a short-circuit by '{0}'.</value>
-  </data>
-  <data name="ValueNotFound" xml:space="preserve">
-    <value>Could not find a value of type {0}.</value>
-  </data>
   <data name="VariableDictionary.KeyExists" xml:space="preserve">
     <value>A variable with id '{0}' already exists.</value>
   </data>
@@ -357,18 +300,6 @@
   <data name="VariableNotFound" xml:space="preserve">
     <value>A variable by the name of '{0}' could not be found.</value>
   </data>
-  <data name="Waveforms.Pulse.FallTimeTooSmall" xml:space="preserve">
-    <value>Fall time should be greater or equal than 0.</value>
-  </data>
-  <data name="Waveforms.Pulse.PeriodTooSmall" xml:space="preserve">
-    <value>The period should be greater than 0.</value>
-  </data>
-  <data name="Waveforms.Pulse.PulseWidthTooSmall" xml:space="preserve">
-    <value>Pulse width should be greater or equal than 0.</value>
-  </data>
-  <data name="Waveforms.Pulse.RiseTimeTooSmall" xml:space="preserve">
-    <value>Rise time should be greater or equal than 0.</value>
-  </data>
   <data name="Waveforms.Pwl.Empty" xml:space="preserve">
     <value>No points are specified.</value>
   </data>
@@ -377,8 +308,5 @@
   </data>
   <data name="Waveforms.Pwl.TimeValueLength" xml:space="preserve">
     <value>The piece-wise linear function requires the same amount of time and value points.</value>
-  </data>
-  <data name="Waveforms.Sine.FrequencyTooSmall" xml:space="preserve">
-    <value>The frequency should be greater than or equal to 0.</value>
   </data>
 </root>

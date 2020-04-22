@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
 
             if (resistance < Parameters.MinimumResistance)
             {
-                SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString("resistance", resistance, Parameters.MinimumResistance));
+                SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_NotGreaterOrEqual.FormatString("resistance", resistance, Parameters.MinimumResistance));
                 resistance = Parameters.MinimumResistance;
             }
 

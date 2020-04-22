@@ -5,6 +5,7 @@ using SpiceSharp.Components.SubcircuitBehaviors.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -61,7 +62,7 @@ namespace SpiceSharp.Components
                     _pins[i] = pins[i].ThrowIfNull("node {0}".FormatString(i + 1));
             }
             else
-                _pins = new string[0];
+                _pins = Array<string>.Empty();
         }
 
         /// <summary>

@@ -177,7 +177,7 @@ namespace SpiceSharp
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length != 0)
                 return false;
-            mi.Invoke(source, new object[] { });
+            mi.Invoke(source, Array<object>.Empty());
             return true;
         }
 
@@ -332,7 +332,7 @@ namespace SpiceSharp
                     var paraminfo = mi.GetParameters();
                     if (paraminfo.Length == 0)
                     {
-                        value = (T)mi.Invoke(source, new object[] { });
+                        value = (T)mi.Invoke(source, Array<object>.Empty());
                         return true;
                     }
                 }

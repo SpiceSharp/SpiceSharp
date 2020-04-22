@@ -13,13 +13,13 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PwlHasEmptyArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentException>(() => new Pwl(new double[] { }, new double[] { }).Create(null));
+            Assert.Throws<ArgumentException>(() => new Pwl(Array.Empty<double>(), Array.Empty<double>()).Create(null));
         }
 
         [Test]
         public void When_PwlHasNullArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentNullException>(() => new Pwl(null, new double[] { }).Create(null));
+            Assert.Throws<ArgumentNullException>(() => new Pwl(null, Array.Empty<double>()).Create(null));
             Assert.Throws<ArgumentNullException>(() => new Pwl(new double[] { 1.0 }, null).Create(null));
         }
 

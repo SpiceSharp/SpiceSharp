@@ -1,4 +1,5 @@
-﻿using System;
+using SpiceSharp.Attributes;
+using System;
 using System.Globalization;
 using System.Text;
 
@@ -11,13 +12,14 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IPivotingSolver{M, V, T}" />
+    [GeneratedParameters]
     public abstract class PivotingSolver<M, V, T> : Parameterized, IPivotingSolver<M, V, T>
         where M : IMatrix<T>
         where V : IVector<T>
         where T : IFormattable
     {
+        private int _pivotSearchReduction = 0;
         private int _degeneracy = 0;
-        private int _pivotLimit = 0;
 
         /// <summary>
         /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
@@ -27,13 +29,13 @@ namespace SpiceSharp.Algebra.Solve
         /// The degeneracy.
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the degeneracy is negative.</exception>
+        [GreaterThanOrEquals(0)]
         public int Degeneracy
         {
             get => _degeneracy;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Degeneracy), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Degeneracy), 0);
                 _degeneracy = value;
             }
         }
@@ -47,14 +49,14 @@ namespace SpiceSharp.Algebra.Solve
         /// The pivot search reduction.
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
+        [GreaterThanOrEquals(0)]
         public int PivotSearchReduction
         {
-            get => _pivotLimit;
+            get => _pivotSearchReduction;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(PivotSearchReduction), value, 0));
-                _pivotLimit = value;
+                Utility.GreaterThanOrEquals(value, nameof(PivotSearchReduction), 0);
+                _pivotSearchReduction = value;
             }
         }
 

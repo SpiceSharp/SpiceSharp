@@ -228,7 +228,7 @@ namespace SpiceSharp.General
                         var getter = pi.GetGetMethod();
                         if (getter != null)
                         {
-                            value = (P)getter.Invoke(source, new object[] { });
+                            value = (P)getter.Invoke(source, Array<object>.Empty());
                             return true;
                         }
                         break;
@@ -238,7 +238,7 @@ namespace SpiceSharp.General
                     case MethodInfo mi:
                         if (mi.GetParameters().Length == 0)
                         {
-                            value = (P)mi.Invoke(source, new object[] { });
+                            value = (P)mi.Invoke(source, Array<object>.Empty());
                             return true;
                         }
                         break;
