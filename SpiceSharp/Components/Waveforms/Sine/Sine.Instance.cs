@@ -14,8 +14,8 @@ namespace SpiceSharp.Components
             /// <summary>
             /// Private variables
             /// </summary>
-            private double _vo, _va, _freq, _td, _theta, _phase;
-            private IIntegrationMethod _method;
+            private readonly double _vo, _va, _freq, _td, _theta, _phase;
+            private readonly IIntegrationMethod _method;
 
             /// <summary>
             /// Gets the value that is currently being probed.
@@ -40,15 +40,12 @@ namespace SpiceSharp.Components
                 _method = method;
                 _vo = vo;
                 _va = va;
-                _freq = frequency * 2.0 * Math.PI;
+                _freq = frequency.GreaterThanOrEquals(nameof(frequency), 0) * 2.0 * Math.PI;
                 _td = td;
                 _theta = theta;
                 _phase = phase * Math.PI / 180;
 
                 Value = _vo;
-                if (_freq < 0)
-                    throw new BadParameterException(nameof(frequency), frequency,
-                        Properties.Resources.Waveforms_Sine_FrequencyTooSmall);
             }
 
             /// <summary>

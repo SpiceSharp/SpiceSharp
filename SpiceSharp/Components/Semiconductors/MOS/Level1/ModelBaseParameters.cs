@@ -21,8 +21,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _lambda;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Lambda), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Lambda), 0);
                 _lambda = value;
             }
         }

@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+using SpiceSharp.Attributes;
 using System;
 using System.Collections.Generic;
 
@@ -8,8 +8,13 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="ITimeSimulation"/> with all the necessary parameters to do a transient analysis.
     /// </summary>
     /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public abstract class TimeParameters : ParameterSet
     {
+        private int _transientMaxIterations = 10;
+        private double _stopTime;
+        private double _startTime;
+
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
@@ -18,17 +23,16 @@ namespace SpiceSharp.Simulations
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the timepoint is negative.</exception>
         [ParameterName("tstart"), ParameterName("t0"), ParameterInfo("The initial timepoint to start exporting data.")]
+        [GreaterThanOrEquals(0)]
         public double StartTime
         {
-            get => _start;
+            get => _startTime;
             set
             {
-                if (value < 0.0)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimeTooSmall);
-                _start = value;
+                Utility.GreaterThanOrEquals(value, nameof(StartTime), 0);
+                _startTime = value;
             }
         }
-        private double _start;
 
         /// <summary>
         /// Gets or sets the stop time.
@@ -38,17 +42,16 @@ namespace SpiceSharp.Simulations
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the timepoint is negative.</exception>
         [ParameterName("tstop"), ParameterInfo("The final timepoint.")]
+        [GreaterThanOrEquals(0)]
         public double StopTime
         {
-            get => _stop;
+            get => _stopTime;
             set
             {
-                if (value < 0.0)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimeTooSmall);
-                _stop = value;
+                Utility.GreaterThanOrEquals(value, nameof(StopTime), 0);
+                _stopTime = value;
             }
         }
-        private double _stop;
 
         /// <summary>
         /// Gets or sets a value indicating whether initial conditions should be set by the entities.
@@ -66,17 +69,16 @@ namespace SpiceSharp.Simulations
         /// The transient maximum iterations.
         /// </value>
         [ParameterName("itl4"), ParameterInfo("The maximum number of transient timepoint iterations.")]
+        [GreaterThan(0)]
         public int TransientMaxIterations
         {
-            get => _maxIterations;
+            get => _transientMaxIterations;
             set
             {
-                if (value < 1)
-                    throw new ArgumentException(Properties.Resources.Simulations_IterationsTooSmall);
-                _maxIterations = value;
+                Utility.GreaterThan(value, nameof(TransientMaxIterations), 0);
+                _transientMaxIterations = value;
             }
         }
-        private int _maxIterations = 10;
 
         /// <summary>
         /// Gets the initial conditions.
@@ -98,7 +100,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeParameters"/> class.
         /// </summary>
-        public TimeParameters()
+        protected TimeParameters()
         {
             InitialConditions = new Dictionary<string, double>();
         }
@@ -107,7 +109,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="TimeParameters"/> class.
         /// </summary>
         /// <param name="ic">The initial conditions.</param>
-        public TimeParameters(Dictionary<string, double> ic)
+        protected TimeParameters(Dictionary<string, double> ic)
         {
             InitialConditions = ic.ThrowIfNull(nameof(ic));
         }
@@ -115,10 +117,10 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Creates an instance of the integration method.
         /// </summary>
-        /// <param name="simulation">The simulation that provides the biasing state.</param>
+        /// <param name="state">The biasing simulation state that will be used as a base.</param>
         /// <returns>
         /// The integration method.
         /// </returns>
-        public abstract IIntegrationMethod Create(IStateful<IBiasingSimulationState> simulation);
+        public abstract IIntegrationMethod Create(IBiasingSimulationState state);
     }
 }

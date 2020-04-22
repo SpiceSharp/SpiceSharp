@@ -25,8 +25,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _area;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Area), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Area), 0);
                 _area = value;
             }
         }
@@ -63,8 +62,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _temperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Temperature), value, 0));
+                Utility.GreaterThan(value, nameof(Temperature), 0);
                 _temperature = value;
             }
         }
@@ -82,8 +80,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _parallelMultiplier;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ParallelMultiplier), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(ParallelMultiplier), 0);
                 _parallelMultiplier = value;
             }
         }
@@ -101,8 +98,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _seriesMultiplier;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SeriesMultiplier), value, 0));
+                Utility.GreaterThan(value, nameof(SeriesMultiplier), 0);
                 _seriesMultiplier = value;
             }
         }

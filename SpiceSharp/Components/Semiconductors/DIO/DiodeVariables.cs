@@ -2,7 +2,6 @@
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpiceSharp.Components.DiodeBehaviors
 {
@@ -33,7 +32,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <value>
         /// The variables.
         /// </value>
-        public IVariable<T>[] Variables => new[] { Positive, PosPrime, Negative };
+        public IReadOnlyList<IVariable<T>> Variables => new[] { Positive, PosPrime, Negative };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DiodeVariables{T}"/> struct.
@@ -84,5 +83,61 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <param name="map">The map.</param>
         /// <returns></returns>
         public int[] GetRhsIndicies(IVariableMap map) => new[] { map[Negative], map[PosPrime] };
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is DiodeVariables<T> dv)
+            {
+                if (!Positive.Equals(dv.Positive))
+                    return false;
+                if (!Negative.Equals(dv.Negative))
+                    return false;
+                if (!PosPrime.Equals(dv.PosPrime))
+                    return false;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            var hash = Positive.GetHashCode();
+            hash = (hash * 13) ^ Negative.GetHashCode();
+            hash = (hash * 13) ^ PosPrime.GetHashCode();
+            return hash;
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator ==(DiodeVariables<T> left, DiodeVariables<T> right) => left.Equals(right);
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator !=(DiodeVariables<T> left, DiodeVariables<T> right) => !left.Equals(right);
     }
 }

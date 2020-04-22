@@ -11,11 +11,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <seealso cref="IIntegrationMethod" />
         protected partial class Instance : IIntegrationMethod
         {
-            private FixedEuler _parameters;
-            private readonly IStateful<IBiasingSimulationState> _simulation; // TODO: remove this
+            private readonly FixedEuler _parameters;
             private int _stateValues = 0;
             private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(2);
-            private List<IIntegrationState> _registeredStates = new List<IIntegrationState>();
+            private readonly List<IIntegrationState> _registeredStates = new List<IIntegrationState>();
 
             /// <summary>
             /// Gets the maximum order of the integration method.
@@ -62,11 +61,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>
             /// <param name="parameters">The parameters.</param>
-            /// <param name="simulation">The simulation.</param>
-            public Instance(FixedEuler parameters, IStateful<IBiasingSimulationState> simulation)
+            public Instance(FixedEuler parameters)
             {
                 _parameters = parameters.ThrowIfNull(nameof(parameters));
-                _simulation = simulation.ThrowIfNull(nameof(simulation));
                 Slope = 1.0 / _parameters.Step;
                 Order = 1;
             }

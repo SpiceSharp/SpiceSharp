@@ -126,8 +126,14 @@ namespace SpiceSharp.Simulations
         {
             entities.ThrowIfNull(nameof(entities));
 
-            // Get behaviors and configuration data
+            // Create simulation states
             _temperature = new TemperatureSimulationState(BiasingParameters.Temperature, BiasingParameters.NominalTemperature);
+            _state = new SimulationState(
+                BiasingParameters.Solver ?? new SparseRealSolver(),
+                BiasingParameters.NodeComparer);
+            Iteration.Gmin = BiasingParameters.Gmin;
+            _isPreordered = false;
+            _shouldReorder = true;
 
             // Setup the rest of the circuit.
             base.Setup(entities);
@@ -154,32 +160,11 @@ namespace SpiceSharp.Simulations
         /// Validates the circuit.
         /// </summary>
         /// <param name="entities">The entities to be validated.</param>
-        /// <exception cref="SimulationValidationFailed">Thrown if the simulation failed its validation.</exception>
+        /// <exception cref="ValidationFailedException">Thrown if the simulation failed its validation.</exception>
         protected override void Validate(IEntityCollection entities)
         {
             if (BiasingParameters.Validate)
                 Validate(new Rules(_state, BiasingParameters.NodeComparer), entities);
-        }
-
-        /// <summary>
-        /// Creates all behaviors for the simulation.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        protected override void CreateBehaviors(IEntityCollection entities)
-        {
-            // Create the state for this simulation
-            // TODO: This may not be a terribly good idea (sharing solvers).
-            _state = new SimulationState(
-                BiasingParameters.Solver ?? new SparseRealSolver(),
-                BiasingParameters.NodeComparer);
-            Iteration.Gmin = BiasingParameters.Gmin;
-            _isPreordered = false;
-            _shouldReorder = true;
-            /* var strategy = _state.Solver.Strategy;
-            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
-
-            base.CreateBehaviors(entities);
         }
 
         /// <summary>

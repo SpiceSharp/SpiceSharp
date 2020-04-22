@@ -26,8 +26,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             _name = name.ThrowIfNull(nameof(name));
             _parent = parent.ThrowIfNull(nameof(parent));
 
-            _nodeMap = new Dictionary<string, string>(comparer);
-            _nodeMap.Add(Constants.Ground, Constants.Ground);
+            _nodeMap = new Dictionary<string, string>(comparer)
+            {
+                { Constants.Ground, Constants.Ground }
+            };
             foreach (var bridge in nodes)
                 _nodeMap.Add(bridge.Local, bridge.Global);
         }

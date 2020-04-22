@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components.Distributed
 {
@@ -25,6 +26,7 @@ namespace SpiceSharp.Components.Distributed
 
         // Private variables
         private Node _oldest, _probed, _reference;
+        private readonly double[] _values;
 
         /// <summary>
         /// Gets the delay.
@@ -37,9 +39,19 @@ namespace SpiceSharp.Components.Distributed
         public int Size { get; }
 
         /// <summary>
+        /// Gets or sets the value with the specified index.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
+        /// <param name="index">The index.</param>
+        /// <returns>The value.</returns>
+        public double this[int index] => _values[index];
+
+        /// <summary>
         /// Gets the values at the probed point.
         /// </summary>
-        public double[] Values { get; }
+        public IReadOnlyList<double> Values => _values;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelayedSignal"/> class.
@@ -50,10 +62,9 @@ namespace SpiceSharp.Components.Distributed
         {
             Delay = delay;
             Size = size;
-            Values = new double[size];
+            _values = new double[size];
             if (delay <= 0)
-                throw new BadParameterException(nameof(delay), delay, 
-                    Properties.Resources.Delays_NonCausalDelay);
+                throw new ArgumentException(Properties.Resources.Delays_NonCausalDelay);
 
             // Setup our linked list
             _reference = _oldest = _probed = new Node(size)
@@ -88,14 +99,14 @@ namespace SpiceSharp.Components.Distributed
                 if (_reference.Older == null)
                 {
                     for (var i = 0; i < Size; i++)
-                        Values[i] = _reference.Values[i];
+                        _values[i] = _reference.Values[i];
                 }
                 else
                 {
                     var f1 = (refTime - _reference.Time) / (_reference.Older.Time - _reference.Time);
                     var f2 = (refTime - _reference.Older.Time) / (_reference.Time - _reference.Older.Time);
                     for (var i = 0; i < Size; i++)
-                        Values[i] = f1 * _reference.Older.Values[i] + f2 * _reference.Values[i];
+                        _values[i] = f1 * _reference.Older.Values[i] + f2 * _reference.Values[i];
                 }
             }
             else
@@ -106,7 +117,7 @@ namespace SpiceSharp.Components.Distributed
                     var f1 = (refTime - _reference.Newer.Time) / (_reference.Time - _reference.Newer.Time);
                     var f2 = (refTime - _reference.Time) / (_reference.Newer.Time - _reference.Time);
                     for (var i = 0; i < Size; i++)
-                        Values[i] = f1 * _reference.Values[i] + f2 * _reference.Newer.Values[i];
+                        _values[i] = f1 * _reference.Values[i] + f2 * _reference.Newer.Values[i];
                 }
                 else
                 {
@@ -120,7 +131,7 @@ namespace SpiceSharp.Components.Distributed
                              (_reference.Newer.Time - _reference.Time);
                     for (var i = 0; i < Size; i++)
                     {
-                        Values[i] = f1 * _reference.Older.Values[i] +
+                        _values[i] = f1 * _reference.Older.Values[i] +
                                     f2 * _reference.Values[i] +
                                     f3 * _reference.Newer.Values[i];
                     }
@@ -134,9 +145,7 @@ namespace SpiceSharp.Components.Distributed
         /// <param name="values">The values.</param>
         public void SetProbedValues(params double[] values)
         {
-            // Copy the values
-            if (values.Length != Size)
-                throw new SizeMismatchException(nameof(values), Size);
+            values.ThrowIfNotLength(nameof(values), Size);
             for (var i = 0; i < Size; i++)
                 _probed.Values[i] = values[i];
         }
@@ -266,7 +275,7 @@ namespace SpiceSharp.Components.Distributed
 
             // Clear values
             for (var i = 0; i < Size; i++)
-                Values[i] = 0.0;
+                _values[i] = 0.0;
         }
     }
 }

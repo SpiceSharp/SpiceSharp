@@ -588,7 +588,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
 				 * .....drain current without velocity saturation effect
 				 */
                 var cd1 = beta * cdnorm;
-                beta = beta * fgate;
+                beta *= fgate;
                 cdrain = beta * cdnorm;
                 Transconductance = beta * Transconductance + dfgdvg * cd1;
                 CondDs = beta * CondDs + dfgdvd * cd1;
@@ -660,23 +660,23 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 {
                     delxl = effectiveLength - effectiveLength * effectiveLength / (4.0 * delxl);
                     arga = 4.0 * (effectiveLength - delxl) * (effectiveLength - delxl) / (effectiveLength * effectiveLength);
-                    ddldvg = ddldvg * arga;
-                    ddldvd = ddldvd * arga;
-                    ddldvb = ddldvb * arga;
-                    dldvd = dldvd * arga;
+                    ddldvg *= arga;
+                    ddldvd *= arga;
+                    ddldvb *= arga;
+                    dldvd *= arga;
                 }
                 /*
 				 * .....saturation region
 				 */
                 var dlonxl = delxl * oneoverxl;
                 var xlfact = 1.0 / (1.0 - dlonxl);
-                cdrain = cdrain * xlfact;
+                cdrain *= xlfact;
                 var diddl = cdrain / (effectiveLength - delxl);
                 Transconductance = Transconductance * xlfact + diddl * ddldvg;
                 gds0 = CondDs * xlfact + diddl * ddldvd;
                 TransconductanceBs = TransconductanceBs * xlfact + diddl * ddldvb;
-                Transconductance = Transconductance + gds0 * dvsdvg;
-                TransconductanceBs = TransconductanceBs + gds0 * dvsdvb;
+                Transconductance += gds0 * dvsdvg;
+                TransconductanceBs += gds0 * dvsdvb;
                 CondDs = gds0 * dvsdvd + diddl * dldvd;
                 /*
 				 * .....finish strong inversion case
@@ -690,13 +690,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                     var onxn = 1.0 / xn;
                     var ondvt = onxn / Vt;
                     var wfact = Math.Exp((vgs - von) * ondvt);
-                    cdrain = cdrain * wfact;
+                    cdrain *= wfact;
                     var gms = Transconductance * wfact;
                     var gmw = cdrain * ondvt;
                     Transconductance = gmw;
                     if (vds > vdsat)
                     {
-                        Transconductance = Transconductance + gds0 * dvsdvg * wfact;
+                        Transconductance += gds0 * dvsdvg * wfact;
                     }
                     CondDs = CondDs * wfact + (gms - gmw) * dvodvd;
                     TransconductanceBs = TransconductanceBs * wfact + (gms - gmw) * dvodvb - gmw * (vgs - von) * onxn * dxndvb;
@@ -708,7 +708,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
                 /*
 				 * .....special case of vds = 0.0d0 */
                 line900:
-                beta = beta * fgate;
+                beta *= fgate;
                 cdrain = 0.0;
                 Transconductance = 0.0;
                 CondDs = beta * (vgsx - vth);

@@ -125,9 +125,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
             {
                 var arg = td * cstate.Laplace;
 
-                gm = gm + go;
-                gm = gm * Complex.Exp(-arg);
-                gm = gm - go;
+                gm += go;
+                gm *= Complex.Exp(-arg);
+                gm -= go;
             }
             var gx = ConductanceX;
             var xcpi = CapBe * cstate.Laplace;

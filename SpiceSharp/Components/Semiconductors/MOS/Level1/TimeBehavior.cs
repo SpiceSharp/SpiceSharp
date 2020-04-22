@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
         private readonly ITimeSimulationState _time;
         private readonly ElementSet<double> _elements;
         private readonly IDerivative _chargeBs, _chargeBd, _chargeGs, _chargeGd, _chargeGb;
-        private readonly StateValue<double> _capGs, _capGd, _capGb, _voltageGs, _voltageBs;
+        private readonly StateValue<double> _capGs, _capGd, _capGb, _voltageGs, _voltageBs, _voltageDs;
 
         /// <summary>
         /// Gets or sets the stored bulk-source charge.
@@ -88,7 +88,6 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
             get => _voltageDs.Value;
             protected set => _voltageDs.Value = value;
         }
-        private StateValue<double> _voltageDs;
 
         /// <summary>
         /// Gets the gate-source voltage.

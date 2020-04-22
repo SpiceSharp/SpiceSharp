@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.JFETBehaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
@@ -60,7 +61,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
             if (context.ModelBehaviors == null)
-                throw new NoModelException(Name);
+                throw new NoModelException(Name, typeof(JFETModel));
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))

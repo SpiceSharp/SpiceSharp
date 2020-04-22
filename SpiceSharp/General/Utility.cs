@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Simulations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -16,7 +15,7 @@ namespace SpiceSharp
         public static string Separator { get; set; } = "/";
 
         /// <summary>
-        /// Format a string with the current culture.
+        /// Format a string using the current culture.
         /// </summary>
         /// <param name="format">The formatting.</param>
         /// <param name="args">The arguments.</param>
@@ -51,6 +50,145 @@ namespace SpiceSharp
             if (source == null)
                 throw new ArgumentNullException(name);
             return source;
+        }
+
+        /// <summary>
+        /// Throws an exception if the array does not have the specified length.
+        /// </summary>
+        /// <typeparam name="T">The base type.</typeparam>
+        /// <param name="arguments">The array.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="expected">The number of expected elements.</param>
+        /// <returns>The array.</returns>
+        public static T[] ThrowIfNotLength<T>(this T[] arguments, string name, int expected)
+        {
+            if (arguments == null)
+                throw new ArgumentException(Properties.Resources.Parameters_ArgumentCountMismatch.FormatString(name, 0, expected));
+            if (arguments.Length != expected)
+                throw new ArgumentException(Properties.Resources.Parameters_ArgumentCountMismatch.FormatString(name, arguments.Length, expected));
+            return arguments;
+        }
+
+        /// <summary>
+        /// Throws an exception if the array does not have a length within range.
+        /// </summary>
+        /// <typeparam name="T">The base type.</typeparam>
+        /// <param name="arguments">The array.</param>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="minimum">The minimum amount of arguments.</param>
+        /// <param name="maximum">The maximum amount of arguments.</param>
+        /// <returns>The array.</returns>
+        public static T[] ThrowIfNotLength<T>(this T[] arguments, string name, int minimum, int maximum)
+        {
+            if (arguments == null && minimum > 0)
+            {
+                var allowed = "{0}-{1}".FormatString(minimum, maximum);
+                throw new ArgumentException(Properties.Resources.Parameters_ArgumentCountMismatch.FormatString(name, 0, allowed));
+            }
+            if (arguments.Length < minimum || arguments.Length > maximum)
+            {
+                var allowed = "{0}-{1}".FormatString(minimum, maximum);
+                throw new ArgumentException(Properties.Resources.Parameters_ArgumentCountMismatch.FormatString(name, allowed));
+            }
+            return arguments;
+        }
+
+        /// <summary>
+        /// Throws an exception if the value is not greater than the specified limit.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns>The original value.</returns>
+        /// <exception cref="ArgumentException">Thrown if the value is not greater than the specified limit.</exception>
+        public static double GreaterThan(this double value, string name, double limit)
+        {
+            if (value < limit)
+                throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotGreater.FormatString(limit));
+            return value;
+        }
+
+        /// <summary>
+        /// Throws an exception if the value is not less than the specified limit.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns>The original value.</returns>
+        /// <exception cref="ArgumentException">Thrown if the value is not less than the specified limit.</exception>
+        public static double LessThan(this double value, string name, double limit)
+        {
+            if (value < limit)
+                throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotLess.FormatString(limit));
+            return value;
+        }
+
+        /// <summary>
+        /// Throws an exception if the value is not greater than or equal to the specified limit.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns>The original value.</returns>
+        /// <exception cref="ArgumentException">Thrown if the value is not greater than or equal to the specified limit.</exception>
+        public static double GreaterThanOrEquals(this double value, string name, double limit)
+        {
+            if (value < limit)
+                throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotGreaterOrEqual.FormatString(limit));
+            return value;
+        }
+
+        /// <summary>
+        /// Throws an exception if the value is not less than or equal to the specified limit.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns>The original value.</returns>
+        /// <exception cref="ArgumentException">Thrown if the value is not less than or equal to the specified limit.</exception>
+        public static double LessThanOrEquals(this double value, string name, double limit)
+        {
+            if (value < limit)
+                throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotLessOrEqual.FormatString(limit));
+            return value;
+        }
+
+        /// <summary>
+        /// Specifies a lower limit for the value. If it is smaller, it is set to the limit value
+        /// while raising a warning.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns>The limited value.</returns>
+        public static double LowerLimit(this double value, object source, string name, double limit)
+        {
+            if (value < limit)
+            {
+                SpiceSharpWarning.Warning(source, Properties.Resources.Parameters_LowerLimitReached.FormatString(name, value, limit));
+                value = limit;
+            }
+            return value;
+        }
+
+        /// <summary>
+        /// Specifies an upper limit for the value. If it is larger, it is set to the limit value
+        /// while raising a warning.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="limit">The limit.</param>
+        /// <returns>The limited value.</returns>
+        public static double UpperLimit(this double value, object source, string name, double limit)
+        {
+            if (value > limit)
+            {
+                SpiceSharpWarning.Warning(source, Properties.Resources.Parameters_UpperLimitReached.FormatString(name, value, limit));
+                value = limit;
+            }
+            return value;
         }
 
         /// <summary>

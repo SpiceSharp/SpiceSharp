@@ -24,8 +24,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _temperatureCelsius;
             set
             {
-                if (value <= Constants.CelsiusKelvin)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TemperatureCelsius), value, Constants.CelsiusKelvin));
+                Utility.GreaterThan(value, nameof(TemperatureCelsius), Constants.CelsiusKelvin);
                 _temperatureCelsius = value;
             }
         }
@@ -39,8 +38,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _temperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Temperature), value, 0));
+                Utility.GreaterThan(value, nameof(Temperature), 0);
                 _temperature = value;
             }
         }
@@ -55,8 +53,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _area;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Area), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Area), 0);
                 _area = value;
             }
         }
@@ -82,21 +79,19 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// <summary>
         /// Sets the initial conditions of the JFET.
         /// </summary>
-        /// <param name="values">The values.</param>
+        /// <param name="ic">The values.</param>
         [ParameterName("ic"), ParameterInfo("Initial VDS,VGS vector")]
-        public void SetIc(double[] values)
+        public void SetIc(double[] ic)
         {
-            values.ThrowIfNull(nameof(values));
-            switch (values.Length)
+            ic.ThrowIfNotLength(nameof(ic), 1, 2);
+            switch (ic.Length)
             {
                 case 2:
-                    InitialVgs = values[1];
+                    InitialVgs = ic[1];
                     goto case 1;
                 case 1:
-                    InitialVds = values[0];
+                    InitialVds = ic[0];
                     break;
-                default:
-                    throw new BadParameterException(nameof(values));
             }
         }
     }

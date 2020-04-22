@@ -33,8 +33,7 @@ namespace SpiceSharp.Algebra.Solve
             get => _tiesMultiplier;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TiesMultiplier), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TiesMultiplier), 0);
                 _tiesMultiplier = value;
             }
         }

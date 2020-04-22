@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SwitchBehaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
             if (context.ModelBehaviors == null)
-                throw new NoModelException(Name);
+                throw new NoModelException(Name, typeof(VoltageSwitchModel));
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new VoltageControlled(context)))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new VoltageControlled(context)))

@@ -31,8 +31,7 @@ namespace SpiceSharp.Algebra.Solve
             get => _maxMarkowitzTies;
             set
             {
-                if (value <= 1)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(MaxMarkowitzTies), value, 1));
+                Utility.GreaterThan(value, nameof(MaxMarkowitzTies), 1);
                 _maxMarkowitzTies = value;
             }
         }

@@ -97,91 +97,48 @@ namespace SpiceSharp.CodeGeneration
 
             foreach (var attr in node.AttributeLists.SelectMany(list => list.Attributes))
             {
-                SyntaxKind boundKind = SyntaxKind.None;
-                string warningPrefix = null;
                 switch (attr.Name.ToString())
                 {
                     case "GreaterThan":
                     case "GreaterThanAttribute":
-                        boundKind = SyntaxKind.LessThanOrEqualExpression;
-                        warningPrefix = "Properties.Resources.Parameters_TooSmall";
+                        var limit = attr.ArgumentList.Arguments[0].ToFullString();
+                        setter = setter.AddBodyStatements(ParseStatement($"Utility.GreaterThan(value, nameof({result.Identifier.ValueText}), {limit});"));
                         break;
 
                     case "GreaterThanOrEquals":
                     case "GreaterThanOrEqualsAttribute":
-                        boundKind = SyntaxKind.LessThanExpression;
-                        warningPrefix = "Properties.Resources.Parameters_TooSmall";
+                        limit = attr.ArgumentList.Arguments[0].ToFullString();
+                        setter = setter.AddBodyStatements(ParseStatement($"Utility.GreaterThanOrEquals(value, nameof({result.Identifier.ValueText}), {limit});"));
                         break;
 
                     case "LessThan":
                     case "LessThanAttribute":
-                        boundKind = SyntaxKind.GreaterThanOrEqualExpression;
-                        warningPrefix = "Properties.Resources.Parameters_TooLarge";
+                        limit = attr.ArgumentList.Arguments[0].ToFullString();
+                        setter = setter.AddBodyStatements(ParseStatement($"Utility.LessThan(value, nameof({result.Identifier.ValueText}), {limit});"));
                         break;
 
                     case "LessThanOrEquals":
                     case "LessThanOrEqualsAttribute":
-                        boundKind = SyntaxKind.GreaterThanExpression;
-                        warningPrefix = "Properties.Resources.Parameters_TooLarge";
+                        limit = attr.ArgumentList.Arguments[0].ToFullString();
+                        setter = setter.AddBodyStatements(ParseStatement($"Utility.LessThanOrEquals(value, nameof({result.Identifier.ValueText}), {limit});"));
+                        break;
+
+                    case "LowerLimit":
+                    case "LowerLimitAttribute":
+                        limit = attr.ArgumentList.Arguments[0].ToFullString();
+                        setter = setter.AddBodyStatements(ParseStatement($"value = Utility.LowerLimit(value, this, nameof({result.Identifier.ValueText}), {limit});"));
+                        break;
+
+                    case "UpperLimit":
+                    case "UpperLimitAttribute":
+                        limit = attr.ArgumentList.Arguments[0].ToFullString();
+                        setter = setter.AddBodyStatements(ParseStatement($"value = Utility.UpperLimit(value, this, nameof({result.Identifier.ValueText}), {limit});"));
                         break;
 
                     case "DerivedProperty":
                     case "DerivedPropertyAttribute":
                         // Don't touch derived properties
                         return node;
-                }
-
-                if (boundKind != SyntaxKind.None)
-                {
-                    // Get the limit
-                    var limit = attr.ArgumentList.Arguments[0].ToFullString();
-                    ExpressionSyntax consequenceCondition = null;
-                    for (var i = 1; i < attr.ArgumentList.Arguments.Count; i++)
-                    {
-                        var arg = attr.ArgumentList.Arguments[i];
-                        if (arg.NameEquals.Name.Identifier.ValueText.Equals("RaisesException"))
-                            consequenceCondition = arg.Expression;
-                    }
-
-                    if (consequenceCondition == null)
-                        consequenceCondition = ParseExpression(DefaultRaiseException ? "true" : "false");
-                    StatementSyntax consequence = consequenceCondition switch
-                    {
-                        LiteralExpressionSyntax les when les.Token.Value.Equals(false) => 
-                            Block(
-                                ParseStatement($"{privateVariable} = {limit};"),
-                                ParseStatement($"SpiceSharpWarning.Warning(this, {warningPrefix}Set.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
-                                ReturnStatement()
-                            ),
-
-                        LiteralExpressionSyntax les when les.Token.Value.Equals(true) => 
-                            ParseStatement($"throw new ArgumentException({warningPrefix}.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
-
-                        _ =>
-                            Block(
-                                IfStatement(consequenceCondition,
-                                    ParseStatement($"throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
-                                    ElseClause(
-                                        Block(
-                                            ParseStatement($"{privateVariable} = {limit};"),
-                                            ParseStatement($"SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof({node.Identifier.ValueText}), value, {limit}));"),
-                                            ReturnStatement()
-                                        )
-                                    )
-                                )
-                            ),
-                    };
-
-                    // Add our check to the setter
-                    var cond = IfStatement(
-                        BinaryExpression(
-                            boundKind,
-                            ParseExpression("value"),
-                            ParseExpression(limit)
-                        ), consequence);
-
-                    // Replace
-                    setter = setter.AddBodyStatements(cond);
                 }
             }
 

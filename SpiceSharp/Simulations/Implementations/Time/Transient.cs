@@ -109,9 +109,6 @@ namespace SpiceSharp.Simulations
         {
             entities.ThrowIfNull(nameof(entities));
 
-            // Get behaviors and configurations
-            _method = TimeParameters.Create(this);
-
             // Setup
             base.Setup(entities);
 
@@ -131,6 +128,18 @@ namespace SpiceSharp.Simulations
 
             // Initialize the integration method (all components have been able to allocate integration states).
             _method.Initialize();
+        }
+
+        /// <summary>
+        /// Creates all behaviors for the simulation.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        protected override void CreateBehaviors(IEntityCollection entities)
+        {
+            // TODO: There must be a more elegant way for this...
+            // We need the biasing state, so this allows us to do it after
+            _method = TimeParameters.Create(GetState<IBiasingSimulationState>());
+            base.CreateBehaviors(entities);
         }
 
         /// <summary>

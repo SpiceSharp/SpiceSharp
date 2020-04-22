@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _temperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Temperature), value, 0));
+                Utility.GreaterThan(value, nameof(Temperature), 0);
                 _temperature = value;
             }
         }
@@ -48,8 +47,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _area;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Area), value, 0));
+                Utility.GreaterThan(value, nameof(Area), 0);
                 _area = value;
             }
         }
@@ -79,8 +77,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         [ParameterName("ic"), ParameterInfo("Initial condition vector", Units = "V")]
         public void SetIc(double[] value)
         {
-            value.ThrowIfNull(nameof(value));
-
+            value.ThrowIfNotLength(nameof(value), 1, 2);
             switch (value.Length)
             {
                 case 2:
@@ -89,8 +86,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 case 1:
                     InitialVoltageBe = value[0];
                     break;
-                default:
-                    throw new BadParameterException(nameof(value));
             }
         }
     }

@@ -1,9 +1,18 @@
-﻿namespace SpiceSharp
+﻿using System;
+#if !NETSTANDARD1_5
+using System.Runtime.Serialization;
+using System.Security.Permissions;
+#endif
+
+namespace SpiceSharp
 {
     /// <summary>
     /// Exception thrown when nodes aren't matched.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
+#if !NETSTANDARD1_5
+    [Serializable]
+#endif
     public class NodeMismatchException : SpiceSharpException
     {
         /// <summary>
@@ -12,7 +21,7 @@
         /// <value>
         /// The expected number of nodes.
         /// </value>
-        public int Expected { get; }
+        public virtual int Expected { get; } = -1;
 
         /// <summary>
         /// Gets the actual number of nodes.
@@ -20,7 +29,35 @@
         /// <value>
         /// The actual number of nodes.
         /// </value>
-        public int Actual { get; }
+        public virtual int Actual { get; } = -1;
+
+#if !NETSTANDARD1_5
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
+        /// </summary>
+        /// <param name="info">The serialization info.</param>
+        /// <param name="context">The streaming context.</param>
+        protected NodeMismatchException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            Actual = info.GetInt32(nameof(Actual));
+            Expected = info.GetInt32(nameof(Expected));
+        }
+
+        /// <summary>
+        /// Populates a SerializationInfo with the data needed to serialize the target object.
+        /// </summary>
+        /// <param name="info">The serialization info</param>
+        /// <param name="context">The streaming context</param>
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.ThrowIfNull(nameof(info));
+            info.AddValue(nameof(Actual), Actual);
+            info.AddValue(nameof(Expected), Expected);
+            base.GetObjectData(info, context);
+        }
+#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeMismatchException"/> class.
@@ -45,6 +82,30 @@
         {
             Expected = expected;
             Actual = actual;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NodeMismatchException"/> class.
+        /// </summary>
+        public NodeMismatchException()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NodeMismatchException"/> class.
+        /// </summary>
+        /// <param name="message">The message that describes the error.</param>
+        public NodeMismatchException(string message) : base(message)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NodeMismatchException"/> class.
+        /// </summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        public NodeMismatchException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

@@ -11,6 +11,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
     /// </summary>
     public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
     {
+        private readonly IDerivative _biasingStateChargeBe, _biasingStateChargeBc, _biasingStateChargeCs, _biasingStateChargeBx;
+        private readonly StateValue<double> _biasingStateExcessPhaseCurrentBc;
+        private readonly IIntegrationMethod _method;
+        private readonly int _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
+        private readonly ITimeSimulationState _time;
         private readonly ElementSet<double> _elements;
 
         /// <summary>
@@ -78,15 +83,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _biasingStateChargeBx.Value;
             protected set => _biasingStateChargeBx.Value = value;
         }
-
-        private IDerivative _biasingStateChargeBe;
-        private IDerivative _biasingStateChargeBc;
-        private IDerivative _biasingStateChargeCs;
-        private IDerivative _biasingStateChargeBx;
-        private StateValue<double> _biasingStateExcessPhaseCurrentBc;
-        private IIntegrationMethod _method;
-        private int _baseNode, _substrateNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
-        private readonly ITimeSimulationState _time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeBehavior"/> class.

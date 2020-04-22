@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     double tol, diff, tmp;
                     var timetemp = double.PositiveInfinity;
                     int index;
-                    var state = _method.Simulation.State;
+                    var state = _method.State;
                     var prediction = _method.Prediction;
 
                     // In my opinion, the original Spice method is kind of bugged and can be much better...

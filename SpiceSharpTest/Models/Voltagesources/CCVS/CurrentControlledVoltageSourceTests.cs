@@ -67,7 +67,7 @@ namespace SpiceSharpTest.Models
                 new CurrentControlledVoltageSource("F1", "out", "0", "V1", 1.0),
                 new CurrentControlledVoltageSource("F2", "0", "out", "V1", 2.0));
             var op = new OP("op");
-            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
             Assert.AreEqual(1, ex.Rules.ViolationCount);
             var violation = ex.Rules.Violations.First();
             Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
@@ -82,7 +82,7 @@ namespace SpiceSharpTest.Models
                 new CurrentControlledVoltageSource("F2", "out2", "out", "V1", 2.0),
                 new CurrentControlledVoltageSource("F3", "out2", "0", "V1", 3.0));
             var op = new OP("op");
-            var ex = Assert.Throws<SimulationValidationFailed>(() => op.Run(ckt));
+            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
             Assert.AreEqual(1, ex.Rules.ViolationCount);
             var violation = ex.Rules.Violations.First();
             Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);

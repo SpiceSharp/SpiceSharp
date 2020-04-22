@@ -32,8 +32,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             get => _nominalTemperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
                 _nominalTemperature = value;
             }
         }
@@ -72,8 +71,7 @@ namespace SpiceSharp.Components.ResistorBehaviors
             get => _defaultWidth;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DefaultWidth), value, 0));
+                Utility.GreaterThan(value, nameof(DefaultWidth), 0);
                 _defaultWidth = value;
             }
         }

@@ -142,8 +142,8 @@ namespace SpiceSharp.Algebra
         public void CopyTo(IVector<T> target)
         {
             target.ThrowIfNull(nameof(target));
-            if (target.Length != Length)
-                throw new SizeMismatchException(nameof(target), Length);
+            if (Length != target.Length)
+                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(CopyTo), target.Length, Length));
             if (target == this)
                 return;
             for (var i = 1; i <= Length; i++)

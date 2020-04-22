@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 {
                     var parameters = _method.Parameters;
                     var timetmp = double.PositiveInfinity;
-                    var state = _method.Simulation.State;
+                    var state = _method.State;
                     var prediction = _method.Prediction;
                     var states = _method.States;
 

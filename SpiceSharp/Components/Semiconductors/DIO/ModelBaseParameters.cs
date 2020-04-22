@@ -34,8 +34,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _saturationCurrent;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SaturationCurrent), value, 0));
+                Utility.GreaterThan(value, nameof(SaturationCurrent), 0);
                 _saturationCurrent = value;
             }
         }
@@ -60,8 +59,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _nominalTemperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
                 _nominalTemperature = value;
             }
         }
@@ -76,8 +74,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _resistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Resistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Resistance), 0);
                 _resistance = value;
             }
         }
@@ -92,8 +89,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _emissionCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EmissionCoefficient), value, 0));
+                Utility.GreaterThan(value, nameof(EmissionCoefficient), 0);
                 _emissionCoefficient = value;
             }
         }
@@ -108,8 +104,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _transitTime;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TransitTime), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TransitTime), 0);
                 _transitTime = value;
             }
         }
@@ -124,8 +119,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _junctionCap;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionCap), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(JunctionCap), 0);
                 _junctionCap = value;
             }
         }
@@ -140,8 +134,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _junctionPotential;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionPotential), value, 0));
+                Utility.GreaterThan(value, nameof(JunctionPotential), 0);
                 _junctionPotential = value;
             }
         }
@@ -150,21 +143,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the grading coefficient parameter.
         /// </summary>
         [ParameterName("m"), ParameterInfo("Grading coefficient")]
-        [GreaterThan(0), LessThanOrEquals(0.9, RaisesException = false)]
+        [GreaterThan(0), UpperLimit(0.9)]
         public double GradingCoefficient
         {
             get => _gradingCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GradingCoefficient), value, 0));
-                if (value > 0.9)
-                {
-                    _gradingCoefficient = 0.9;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(GradingCoefficient), value, 0.9));
-                    return;
-                }
-
+                Utility.GreaterThan(value, nameof(GradingCoefficient), 0);
+                value = Utility.UpperLimit(value, this, nameof(GradingCoefficient), 0.9);
                 _gradingCoefficient = value;
             }
         }
@@ -173,21 +159,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the activation energy parameter.
         /// </summary>
         [ParameterName("eg"), ParameterInfo("Activation energy", Units = "eV")]
-        [GreaterThan(0), GreaterThanOrEquals(0.1, RaisesException = false)]
+        [GreaterThan(0), LowerLimit(0.1)]
         public double ActivationEnergy
         {
             get => _activationEnergy;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ActivationEnergy), value, 0));
-                if (value < 0.1)
-                {
-                    _activationEnergy = 0.1;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooSmallSet.FormatString(nameof(ActivationEnergy), value, 0.1));
-                    return;
-                }
-
+                Utility.GreaterThan(value, nameof(ActivationEnergy), 0);
+                value = Utility.LowerLimit(value, this, nameof(ActivationEnergy), 0.1);
                 _activationEnergy = value;
             }
         }
@@ -202,8 +181,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _saturationCurrentExp;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SaturationCurrentExp), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SaturationCurrentExp), 0);
                 _saturationCurrentExp = value;
             }
         }
@@ -212,21 +190,14 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// Gets the forward bias junction fit parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        [GreaterThan(0), LessThanOrEquals(0.95, RaisesException = false)]
+        [GreaterThan(0), UpperLimit(0.95)]
         public double DepletionCapCoefficient
         {
             get => _depletionCapCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DepletionCapCoefficient), value, 0));
-                if (value > 0.95)
-                {
-                    _depletionCapCoefficient = 0.95;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
-                    return;
-                }
-
+                Utility.GreaterThan(value, nameof(DepletionCapCoefficient), 0);
+                value = Utility.UpperLimit(value, this, nameof(DepletionCapCoefficient), 0.95);
                 _depletionCapCoefficient = value;
             }
         }
@@ -244,8 +215,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _breakdownVoltage;
             set
             {
-                if (value >= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooLarge.FormatString(nameof(BreakdownVoltage), value, 0));
+                Utility.LessThan(value, nameof(BreakdownVoltage), 0);
                 _breakdownVoltage = value;
             }
         }
@@ -263,8 +233,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             get => _breakdownCurrent;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BreakdownCurrent), value, 0));
+                Utility.GreaterThan(value, nameof(BreakdownCurrent), 0);
                 _breakdownCurrent = value;
             }
         }

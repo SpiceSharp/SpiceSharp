@@ -12,6 +12,8 @@ namespace SpiceSharp.Components.JFETBehaviors
     /// </summary>
     public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
     {
+        private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
+
         /// <summary>
         /// Gets the gate-source capacitance.
         /// </summary>
@@ -39,8 +41,6 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// The complex state.
         /// </value>
         protected IComplexSimulationState ComplexState { get; private set; }
-
-        private int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
 
         /// <summary>
         /// Gets the internal drain node.

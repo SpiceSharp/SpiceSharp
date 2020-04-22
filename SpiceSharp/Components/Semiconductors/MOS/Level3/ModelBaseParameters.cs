@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
         /// <summary>
         /// The permittivity of silicon
         /// </summary>
-        private const double EpsilonSilicon = 11.7 * 8.854214871e-12;
+        private const double _epsilonSilicon = 11.7 * 8.854214871e-12;
 
         /// <summary>
         /// Parameters
@@ -46,8 +46,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             get => _fastSurfaceStateDensity;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(FastSurfaceStateDensity), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(FastSurfaceStateDensity), 0);
                 _fastSurfaceStateDensity = value;
             }
         }
@@ -68,8 +67,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             get => _junctionDepth;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionDepth), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(JunctionDepth), 0);
                 _junctionDepth = value;
             }
         }
@@ -128,7 +126,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level3
             base.CalculateDefaults();
 
             // Calculate the narrowing factor
-            NarrowFactor = Delta * 0.5 * Math.PI * EpsilonSilicon / OxideCapFactor;
+            NarrowFactor = Delta * 0.5 * Math.PI * _epsilonSilicon / OxideCapFactor;
         }
 
         /// <summary>

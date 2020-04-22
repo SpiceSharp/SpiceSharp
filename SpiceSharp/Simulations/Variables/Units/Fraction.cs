@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Diagnostics;
-using System;
+﻿using System;
 
 namespace SpiceSharp.Simulations.Variables
 {
@@ -38,7 +37,7 @@ namespace SpiceSharp.Simulations.Variables
         /// <param name="numerator">The numerator.</param>
         /// <param name="denominator">The denominator.</param>
         /// <exception cref="DivideByZeroException">Thrown if the denominator is zero.</exception>
-        /// <exception cref="InvalidExponentException">Thrown if the fraction cannot be represented.</exception>
+        /// <exception cref="ArgumentException">Thrown if the fraction cannot be represented.</exception>
         public Fraction(int numerator, int denominator)
         {
             if (denominator == 0)
@@ -50,8 +49,10 @@ namespace SpiceSharp.Simulations.Variables
                 denominator /= gcd;
             }
             _fraction = (sbyte)((numerator << 3) | ((denominator - 1) & 0x07));
+
+            // Double-check that the numerator and denominator are represented correctly
             if (Numerator != numerator || Denominator != denominator)
-                throw new InvalidExponentException(numerator, denominator);
+                throw new ArgumentException(Properties.Resources.Units_InvalidExponent.FormatString(numerator, denominator));
         }
 
         /// <summary>

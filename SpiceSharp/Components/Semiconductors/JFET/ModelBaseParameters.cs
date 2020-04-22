@@ -33,8 +33,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _nominalTemperatureCelsius;
             set
             {
-                if (value <= Constants.CelsiusKelvin)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperatureCelsius), value, Constants.CelsiusKelvin));
+                Utility.GreaterThan(value, nameof(NominalTemperatureCelsius), Constants.CelsiusKelvin);
                 _nominalTemperatureCelsius = value;
             }
         }
@@ -48,8 +47,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _nominalTemperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
                 _nominalTemperature = value;
             }
         }
@@ -70,8 +68,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _beta;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Beta), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Beta), 0);
                 _beta = value;
             }
         }
@@ -86,8 +83,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _lModulation;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LModulation), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(LModulation), 0);
                 _lModulation = value;
             }
         }
@@ -102,8 +98,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _drainResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DrainResistance), 0);
                 _drainResistance = value;
             }
         }
@@ -118,8 +113,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _sourceResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SourceResistance), 0);
                 _sourceResistance = value;
             }
         }
@@ -134,8 +128,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _capGs;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapGs), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CapGs), 0);
                 _capGs = value;
             }
         }
@@ -150,8 +143,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _capGd;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapGd), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CapGd), 0);
                 _capGd = value;
             }
         }
@@ -166,8 +158,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _gatePotential;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GatePotential), value, 0));
+                Utility.GreaterThan(value, nameof(GatePotential), 0);
                 _gatePotential = value;
             }
         }
@@ -182,8 +173,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _gateSaturationCurrent;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GateSaturationCurrent), value, 0));
+                Utility.GreaterThan(value, nameof(GateSaturationCurrent), 0);
                 _gateSaturationCurrent = value;
             }
         }
@@ -192,21 +182,14 @@ namespace SpiceSharp.Components.JFETBehaviors
         /// Gets the forward bias junction fitting parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fitting parameter")]
-        [GreaterThan(0), LessThanOrEquals(0.95, RaisesException = false)]
+        [GreaterThan(0), UpperLimit(0.95)]
         public double DepletionCapCoefficient
         {
             get => _depletionCapCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DepletionCapCoefficient), value, 0));
-                if (value > 0.95)
-                {
-                    _depletionCapCoefficient = 0.95;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(DepletionCapCoefficient), value, 0.95));
-                    return;
-                }
-
+                Utility.GreaterThan(value, nameof(DepletionCapCoefficient), 0);
+                value = Utility.UpperLimit(value, this, nameof(DepletionCapCoefficient), 0.95);
                 _depletionCapCoefficient = value;
             }
         }
@@ -221,8 +204,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             get => _b;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(B), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(B), 0);
                 _b = value;
             }
         }

@@ -582,7 +582,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                 var cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
                 xn = 1.0 + cfs / oxideCap * Parameters.Width * effectiveLength + cdonco;
                 tmp = Vt * xn;
-                von = von + tmp;
+                von += tmp;
                 argg = 1.0 / tmp;
                 vgst = lvgs - von;
             }
@@ -612,7 +612,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             if (oxideCap.Equals(0.0))
                 goto line410;
             dxndvb = 2.0 * dgdvbs * dsrgdb + gammad * d2Sdb2 + dgddb2 * sarg;
-            dodvbs = dodvbs + Vt * dxndvb;
+            dodvbs += Vt * dxndvb;
             dxndvd = dgdvds * dsrgdb;
             dodvds = dgdvds * sarg + Vt * dxndvd;
 
@@ -727,10 +727,10 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     var delta4 = a4[i - 1] * a4[i - 1] / 4.0 - b4[i - 1];
                     if (delta4 < 0)
                         continue;
-                    iknt = iknt + 1;
+                    iknt += 1;
                     tmp = Math.Sqrt(delta4);
                     x4[iknt - 1] = -a4[i - 1] / 2.0 + tmp;
-                    iknt = iknt + 1;
+                    iknt += 1;
                     x4[iknt - 1] = -a4[i - 1] / 2.0 - tmp;
                 }
 
@@ -744,7 +744,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     poly4[j - 1] = poly4[j - 1] + b1 * x4[j - 1] * x4[j - 1] + c1 * x4[j - 1] + d1;
                     if (Math.Abs(poly4[j - 1]) > 1.0e-6)
                         continue;
-                    jknt = jknt + 1;
+                    jknt += 1;
                     if (jknt <= 1)
                     {
                         xvalid = x4[j - 1];
@@ -817,7 +817,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
                     dldsat = xdv / (2.0 * xls);
                     xlfact = xdv / (effectiveLength * lvds);
                     xlamda = xlfact * (xls - xlv);
-                    dldsat = dldsat / effectiveLength;
+                    dldsat /= effectiveLength;
                 }
 
                 dldvgs = dldsat * dsdvgs;
@@ -903,11 +903,11 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             var didvds = beta1 * (von - vbin - eta * vdson - gammad * barg);
             var gdson = -cdson * dldvds / clfact - beta1 * dgdvds * body / 1.5;
             if (lvds < vdsat)
-                gdson = gdson + didvds;
+                gdson += didvds;
             var gbson = -cdson * dldvbs / clfact +
                         beta1 * (dodvbs * vdson + factor * vdson - dgdvbs * body / 1.5 - gdbdv);
             if (lvds > vdsat)
-                gbson = gbson + didvds * dsdvbs;
+                gbson += didvds * dsdvbs;
             var expg = Math.Exp(argg * (lvgs - von));
             cdrain = cdson * expg;
             var gmw = cdrain * argg;

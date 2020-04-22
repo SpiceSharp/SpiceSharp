@@ -23,9 +23,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>
             /// <param name="parameters">The parameters.</param>
-            /// <param name="simulation">The simulation that provides the biasing state.</param>
-            public Instance(Trapezoidal parameters, IStateful<IBiasingSimulationState> simulation)
-                : base(parameters, simulation, _trapezoidalOrder)
+            /// <param name="state">The biasing simulation state.</param>
+            public Instance(Trapezoidal parameters, IBiasingSimulationState state)
+                : base(parameters, state, _trapezoidalOrder)
             {
                 _xmu = parameters.Xmu;
             }
@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             {
                 // Create all the states
                 States.Set(i => new SpiceIntegrationState(0.0,
-                    new DenseVector<double>(Simulation.State.Solver.Size),
+                    new DenseVector<double>(State.Solver.Size),
                     _stateValues));
 
                 // Reset all integration coefficients

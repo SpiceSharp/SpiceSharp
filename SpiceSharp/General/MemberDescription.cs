@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -33,7 +35,7 @@ namespace SpiceSharp.General
         /// <value>
         /// The names.
         /// </value>
-        public string[] Names { get; }
+        public IReadOnlyList<string> Names { get; }
 
         /// <summary>
         /// Gets the description of the parameter.

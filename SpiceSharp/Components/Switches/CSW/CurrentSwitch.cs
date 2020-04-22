@@ -3,6 +3,7 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.SwitchBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Components
 {
@@ -66,7 +67,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new CurrentControlledBindingContext(this, simulation, ControllingName);
             if (context.ModelBehaviors == null)
-                throw new NoModelException(Name);
+                throw new NoModelException(Name, typeof(CurrentSwitchModel));
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new CurrentControlled(context)))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new CurrentControlled(context)))

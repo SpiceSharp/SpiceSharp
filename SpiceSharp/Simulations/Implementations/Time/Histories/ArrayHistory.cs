@@ -11,6 +11,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
     /// <seealso cref="IHistory{T}" />
     public class ArrayHistory<T> : IHistory<T>
     {
+        private readonly T[] _history;
+
         /// <summary>
         /// Gets or sets the current value.
         /// </summary>
@@ -29,16 +31,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public int Length => _history.Length;
 
         /// <summary>
-        /// Timesteps in history
-        /// </summary>
-        private T[] _history;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ArrayHistory{T}"/> class.
         /// </summary>
         /// <param name="length">The number of points to store.</param>
         public ArrayHistory(int length)
         {
+            length = Math.Max(length, 1);
             _history = new T[length];
         }
 
@@ -49,6 +47,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <param name="defaultValue">The default value.</param>
         public ArrayHistory(int length, T defaultValue)
         {
+            length = Math.Max(length, 1);
             _history = new T[length];
             for (var i = 0; i < length; i++)
                 _history[i] = defaultValue;
@@ -62,6 +61,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public ArrayHistory(int length, Func<int, T> generator)
         {
             generator.ThrowIfNull(nameof(generator));
+            length = Math.Max(length, 1);
             for (var i = 0; i < length; i++)
                 _history[i] = generator(i);
         }

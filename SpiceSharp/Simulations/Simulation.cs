@@ -230,7 +230,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="rules">The rules.</param>
         /// <param name="entities">The entities.</param>
-        /// <exception cref="SimulationValidationFailed">Thrown if the validation failed.</exception>
+        /// <exception cref="ValidationFailedException">Thrown if the validation failed.</exception>
         protected void Validate(IRules rules, IEntityCollection entities)
         {
             if (rules == null)
@@ -251,7 +251,7 @@ namespace SpiceSharp.Simulations
 
             // Are there still violated rules?
             if (rules.ViolationCount > 0)
-                throw new SimulationValidationFailed(this, rules);
+                throw new ValidationFailedException(this, rules);
         }
 
         /// <summary>

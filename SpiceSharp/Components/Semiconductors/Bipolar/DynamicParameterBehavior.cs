@@ -112,7 +112,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                     argtf = xtf;
                     if (!ovtf.Equals(0)) // Avoid expensive Exp()
                     {
-                        argtf = argtf * Math.Exp(vbc * ovtf);
+                        argtf *= Math.Exp(vbc * ovtf);
                     }
                     arg2 = argtf;
                     if (!xjtf.Equals(0)) // Avoid computations

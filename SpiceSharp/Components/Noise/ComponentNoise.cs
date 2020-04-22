@@ -11,6 +11,8 @@ namespace SpiceSharp.Components
     /// </summary>
     public class ComponentNoise
     {
+        private INoiseSimulationState _nstate;
+
         /// <summary>
         /// Gets the total output-referred noise density
         /// </summary>
@@ -35,10 +37,6 @@ namespace SpiceSharp.Components
         /// Gets all generators
         /// </summary>
         public NoiseGeneratorCollection Generators { get; }
-
-        // States
-        private IComplexSimulationState _cstate;
-        private INoiseSimulationState _nstate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
@@ -68,7 +66,6 @@ namespace SpiceSharp.Components
         public void Bind(IComponentBindingContext context, params IVariable<Complex>[] nodes)
         {
             context.ThrowIfNull(nameof(context));
-            _cstate = context.GetState<IComplexSimulationState>();
             _nstate = context.GetState<INoiseSimulationState>();
             
             foreach (var generator in Generators)

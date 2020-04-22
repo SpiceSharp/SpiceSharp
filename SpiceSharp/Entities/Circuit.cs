@@ -10,7 +10,7 @@ namespace SpiceSharp
     /// <seealso cref="IEntityCollection" />
     public partial class Circuit : IEntityCollection
     {
-        private IEntityCollection _entities;
+        private readonly IEntityCollection _entities;
 
         /// <summary>
         /// Gets the comparer used to compare <see cref="Entity" /> names.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
@@ -37,7 +38,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             _mnp = context.ModelBehaviors.GetParameterSet<ModelNoiseParameters>();
             _state = context.GetState<INoiseSimulationState>();
-            DiodeNoise.Bind(context, ComplexVariables.Variables);
+            DiodeNoise.Bind(context, ComplexVariables.Variables.ToArray());
         }
 
         /// <summary>

@@ -87,7 +87,7 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation and run it
             var dc = new OP("op");
-            var ex = Assert.Throws<SimulationValidationFailed>(() => dc.Run(ckt));
+            var ex = Assert.Throws<ValidationFailedException>(() => dc.Run(ckt));
             Assert.AreEqual(2, ex.Rules.ViolationCount);
             var violations = ex.Rules.Violations.ToArray();
             Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[0]);

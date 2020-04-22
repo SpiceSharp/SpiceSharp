@@ -13,7 +13,7 @@ namespace SpiceSharpTest.Parameters
         /// <summary>
         /// Example parameter class that contains parameters of every type
         /// </summary>
-        public class ParameterExample : ParameterSet
+        private class ParameterExample : ParameterSet
         {
             [ParameterName("field1")]
             public double Field1;
@@ -46,9 +46,11 @@ namespace SpiceSharpTest.Parameters
         [Test]
         public void When_CopyPropertiesAndFields_CopiesField()
         {
-            var source = new ParameterExample();
-            source.Field1 = 1.0;
-            source.Field2 = 2;
+            var source = new ParameterExample
+            {
+                Field1 = 1.0,
+                Field2 = 2
+            };
             var destination = new ParameterExample();
             Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1.0, destination.Field1, 1e-12);
@@ -86,8 +88,10 @@ namespace SpiceSharpTest.Parameters
         [Test]
         public void When_CopyPropertiesAndFields_CopiesProperty()
         {
-            var source = new ParameterExample();
-            source.Property2 = 1;
+            var source = new ParameterExample
+            {
+                Property2 = 1
+            };
             var destination = new ParameterExample();
             Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Property2);
@@ -105,8 +109,10 @@ namespace SpiceSharpTest.Parameters
         [Test]
         public void When_CopyPropertiesAndFields_CopiesReadonlyParameter()
         {
-            var source = new ParameterExample();
-            source.Parameter1 = 1;
+            var source = new ParameterExample
+            {
+                Parameter1 = 1
+            };
             var destination = new ParameterExample();
             Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter1.Value);
@@ -124,8 +130,10 @@ namespace SpiceSharpTest.Parameters
         [Test]
         public void When_CopyPropertiesAndFields_CopiesWritableParameter()
         {
-            var source = new ParameterExample();
-            source.Parameter2 = 1;
+            var source = new ParameterExample
+            {
+                Parameter2 = 1
+            };
             var destination = new ParameterExample();
             Reflection.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter2.Value);

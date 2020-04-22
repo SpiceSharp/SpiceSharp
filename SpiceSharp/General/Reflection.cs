@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Attributes;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
@@ -117,7 +118,7 @@ namespace SpiceSharp
         {
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !desc.TrySet(source, value))
-                throw new ParameterNotFoundException(name, source);
+                throw new ParameterNotFoundException(source, name, typeof(P));
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace SpiceSharp
         {
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length > 0)
-                throw new ParameterNotFoundException(name, source);
+                throw new ParameterNotFoundException(source, name, typeof(void));
             mi.Invoke(source, null);
         }
 
@@ -146,7 +147,7 @@ namespace SpiceSharp
             var desc = GetMember(source.GetType(), name);
             if (desc != null && desc.TryGet(source, out P value))
                 return value;
-            throw new ParameterNotFoundException(name, source);
+            throw new ParameterNotFoundException(source, name, typeof(P));
         }
 
         /// <summary>
@@ -356,7 +357,7 @@ namespace SpiceSharp
             source.ThrowIfNull(nameof(source));
             destination.ThrowIfNull(nameof(destination));
             if (source.GetType() != destination.GetType())
-                throw new UnexpectedTypeMismatch(destination.GetType(), source.GetType());
+                throw new ArgumentException(Properties.Resources.Reflection_NotMatchingType, nameof(destination));
 
             var members = source.GetType().GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public);
             foreach (var member in members)
@@ -409,19 +410,13 @@ namespace SpiceSharp
         /// <returns>An action that sets the member of this object.</returns>
         public static Action<T> CreateSetterForMember<T>(object source, MemberInfo member)
         {
-            member.ThrowIfNull(nameof(member));
-
-            switch (member)
+            return member.ThrowIfNull(nameof(member)) switch
             {
-                case MethodInfo mi:
-                    return CreateSetterForMethod<T>(source, mi);
-                case PropertyInfo pi:
-                    return CreateSetterForProperty<T>(source, pi);
-                case FieldInfo fi:
-                    return CreateSetterForField<T>(source, fi);
-                default:
-                    return null;
-            }
+                MethodInfo mi => CreateSetterForMethod<T>(source, mi),
+                PropertyInfo pi => CreateSetterForProperty<T>(source, pi),
+                FieldInfo fi => CreateSetterForField<T>(source, fi),
+                _ => null,
+            };
         }
 
         /// <summary>
@@ -433,19 +428,13 @@ namespace SpiceSharp
         /// <returns>A function that gets the member of this object.</returns>
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
-            member.ThrowIfNull(nameof(member));
-
-            switch (member)
+            return member.ThrowIfNull(nameof(member)) switch
             {
-                case MethodInfo mi:
-                    return CreateGetterForMethod<T>(source, mi);
-                case PropertyInfo pi:
-                    return CreateGetterForProperty<T>(source, pi);
-                case FieldInfo fi:
-                    return CreateGetterForField<T>(source, fi);
-                default:
-                    return null;
-            }
+                MethodInfo mi => CreateGetterForMethod<T>(source, mi),
+                PropertyInfo pi => CreateGetterForProperty<T>(source, pi),
+                FieldInfo fi => CreateGetterForField<T>(source, fi),
+                _ => null,
+            };
         }
 
         /// <summary>

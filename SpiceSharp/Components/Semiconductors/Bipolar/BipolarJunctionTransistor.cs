@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.BipolarBehaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
@@ -61,7 +62,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
             if (context.ModelBehaviors == null)
-                throw new NoModelException(Name);
+                throw new NoModelException(Name, typeof(BipolarJunctionTransistorModel));
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

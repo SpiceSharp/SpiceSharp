@@ -66,7 +66,6 @@ namespace SpiceSharp.Components
             /// <param name="values">The values.</param>
             /// <param name="method">The integration method.</param>
             /// <exception cref="ArgumentException">Thrown if no points are specified. </exception>
-            /// <exception cref="SizeMismatchException">Thrown if the size of the time points does not match the size of the values.</exception>
             public Instance(IEnumerable<double> times, IEnumerable<double> values, IIntegrationMethod method)
             {
                 _method = method;
@@ -75,7 +74,7 @@ namespace SpiceSharp.Components
                 if (_times.Length == 0 || _values.Length == 0)
                     throw new ArgumentException(Properties.Resources.Waveforms_Pwl_Empty);
                 if (_times.Length != _values.Length)
-                    throw new SizeMismatchException(nameof(values), _times.Length);
+                    throw new ArgumentException(Properties.Resources.Waveforms_Pwl_TimeValueLength);
 
                 // Check monotonically increasing timepoints
                 for (var i = 1; i < _times.Length; i++)

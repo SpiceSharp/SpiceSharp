@@ -125,7 +125,7 @@ namespace SpiceSharpTest.Algebra
         /// <param name="matFilename">The matrix filename.</param>
         /// <param name="vecFilename">The vector filename.</param>
         /// <returns></returns>
-        protected SparseRealSolver ReadSpice3f5File(string matFilename, string vecFilename)
+        protected static SparseRealSolver ReadSpice3f5File(string matFilename, string vecFilename)
         {
             var solver = new SparseRealSolver();
 
@@ -138,10 +138,9 @@ namespace SpiceSharpTest.Algebra
                 {
                     if (line == "first")
                         continue;
-                    var match = Regex.Match(line, @"^(?<size>\d+)\s+(complex|real)$");
-                    
+
                     // Try to read an element
-                    match = Regex.Match(line, @"^(?<row>\d+)\s+(?<col>\d+)\s+(?<value>[^\s]+)(\s+[^\s]+)?$");
+                    var match = Regex.Match(line, @"^(?<row>\d+)\s+(?<col>\d+)\s+(?<value>[^\s]+)(\s+[^\s]+)?$");
                     if (match.Success)
                     {
                         int row = int.Parse(match.Groups["row"].Value);

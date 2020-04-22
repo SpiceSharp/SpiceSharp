@@ -120,38 +120,23 @@
   <data name="Algebra.BadlyConditioned" xml:space="preserve">
     <value>The solver was forced to choose a pivot that did not meet tolerance levels at matrix element ({0}, {1}).</value>
   </data>
-  <data name="Algebra.InvalidOrder" xml:space="preserve">
-    <value>The order reduction cannot be negative.</value>
-  </data>
   <data name="Algebra.InvalidPivot" xml:space="preserve">
-    <value>The pivot is invalid.</value>
-  </data>
-  <data name="Algebra.InvalidPivotSearchReduction" xml:space="preserve">
-    <value>The pivot search region cannot be negative.</value>
+    <value>The pivot for elimination step {0} is zero.</value>
   </data>
   <data name="Algebra.SingularMatrix" xml:space="preserve">
-    <value>Singular matrix encountered.</value>
+    <value>The matrix is singular.</value>
   </data>
   <data name="Algebra.SingularMatrixIndexed" xml:space="preserve">
-    <value>Singular matrix encountered at elimination step {0}.</value>
+    <value>The matrix was found to be singular when eliminating row {0}.</value>
+  </data>
+  <data name="Algebra.SolutionLengthMismatch" xml:space="preserve">
+    <value>The solution vector for {0} has {1} elements, but {2} are needed.</value>
   </data>
   <data name="Algebra.SolverNotFactored" xml:space="preserve">
-    <value>The solver has not been factored yet.</value>
+    <value>The solver cannot execute {0} because it has not been factored yet.</value>
   </data>
   <data name="AmbiguousType" xml:space="preserve">
     <value>An ambiguous type reference for type '{0}' has been encountered.</value>
-  </data>
-  <data name="BadParameterNamed" xml:space="preserve">
-    <value>Invalid parameter value for '{0}'.</value>
-  </data>
-  <data name="BadParameterReason" xml:space="preserve">
-    <value>Invalid parameter value '{0}': {1}</value>
-  </data>
-  <data name="BadParameterValue" xml:space="preserve">
-    <value>Invalid parameter value for '{0}' ({1}).</value>
-  </data>
-  <data name="BadParameterValueReason" xml:space="preserve">
-    <value>Invalid parameter value '{0}' ({1}): {2}</value>
   </data>
   <data name="Behaviors.BehaviorsAlreadyExist" xml:space="preserve">
     <value>There are already behaviors for '{0}'.</value>
@@ -169,7 +154,7 @@
     <value>Node mismatch for '{0}': {1} nodes expected, but {1} were given.</value>
   </data>
   <data name="Components.NoModel" xml:space="preserve">
-    <value>No model was specified for component '{0}'.</value>
+    <value>No model was specified for component '{0}' of type {1}.</value>
   </data>
   <data name="Delays.NonCausalDelay" xml:space="preserve">
     <value>Non-causal delay detected. Delays should be greater than 0.</value>
@@ -204,8 +189,35 @@
   <data name="Parallel.AccessNotSupported" xml:space="preserve">
     <value>Parallel access to {0} is not supported.</value>
   </data>
-  <data name="ParameterNotFound" xml:space="preserve">
-    <value>Could not find parameter '{0}' for {1}.</value>
+  <data name="Parameters.ArgumentCountMismatch" xml:space="preserve">
+    <value>Expected {2} arguments for {0}, but {1} were passed.</value>
+  </data>
+  <data name="Parameters.InvalidArguments" xml:space="preserve">
+    <value>The arguments for {0} were invalid.</value>
+  </data>
+  <data name="Parameters.IsZero" xml:space="preserve">
+    <value>The parameter cannot be zero.</value>
+  </data>
+  <data name="Parameters.LowerLimitReached" xml:space="preserve">
+    <value>The parameter value of {0} was too small, and was raised from {1} to {2}.</value>
+  </data>
+  <data name="Parameters.NotFoundNamed" xml:space="preserve">
+    <value>Could not find parameter '{0}' of type '{1}' on {2}.</value>
+  </data>
+  <data name="Parameters.NotFoundTyped" xml:space="preserve">
+    <value>Could not find a parameter with type '{0}'.</value>
+  </data>
+  <data name="Parameters.NotGreater" xml:space="preserve">
+    <value>The parameter value should be greater than {0}.</value>
+  </data>
+  <data name="Parameters.NotGreaterOrEqual" xml:space="preserve">
+    <value>The parameter value should be at least {0}.</value>
+  </data>
+  <data name="Parameters.NotLess" xml:space="preserve">
+    <value>The parameter value should be less than {0}.</value>
+  </data>
+  <data name="Parameters.NotLessOrEqual" xml:space="preserve">
+    <value>The parameter value should be at most {0}.</value>
   </data>
   <data name="Parameters.ParameterSetNotFound" xml:space="preserve">
     <value>A parameter set of type '{0}' could not be found.</value>
@@ -221,6 +233,12 @@
   </data>
   <data name="Parameters.TooSmallSet" xml:space="preserve">
     <value>The parameter {0} was {1} and was set to the minimum {2}.</value>
+  </data>
+  <data name="Parameters.UpperLimitReached" xml:space="preserve">
+    <value>The parameter value of {0} was too large, and was reduced from {1} to {2}.</value>
+  </data>
+  <data name="Reflection.NotMatchingType" xml:space="preserve">
+    <value>The destination type does not match the source.</value>
   </data>
   <data name="Resistors.ZeroResistance" xml:space="preserve">
     <value>{0}: Model describes short-circuit, 1kOhm used.</value>
@@ -297,17 +315,14 @@
   <data name="Subcircuits.NoEquivalent" xml:space="preserve">
     <value>Cannot compute an equivalent solution for subcircuit '{0}'.</value>
   </data>
-  <data name="Sweeps.CannotReachFinalPoint" xml:space="preserve">
-    <value>Cannot reach the final sweep point.</value>
+  <data name="Sweeps.InvalidInput" xml:space="preserve">
+    <value>The sweep input is invalid.</value>
   </data>
   <data name="Sweeps.PointsTooSmall" xml:space="preserve">
     <value>The number of points should be greater than 0.</value>
   </data>
   <data name="TypeAlreadyExists" xml:space="preserve">
     <value>A value of type {0} already exists.</value>
-  </data>
-  <data name="UnexpectedType" xml:space="preserve">
-    <value>Unexpected type encountered: expected {0}, but got {1}.</value>
   </data>
   <data name="Units.InvalidExponent" xml:space="preserve">
     <value>Invalid exponent. Cannot represent the exponent {0}/{1}.</value>
@@ -359,6 +374,9 @@
   </data>
   <data name="Waveforms.Pwl.NoIncreasingTimeValues" xml:space="preserve">
     <value>The time values are not monotonically increasing.</value>
+  </data>
+  <data name="Waveforms.Pwl.TimeValueLength" xml:space="preserve">
+    <value>The piece-wise linear function requires the same amount of time and value points.</value>
   </data>
   <data name="Waveforms.Sine.FrequencyTooSmall" xml:space="preserve">
     <value>The frequency should be greater than or equal to 0.</value>

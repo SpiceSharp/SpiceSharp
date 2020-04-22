@@ -1,10 +1,13 @@
-﻿namespace SpiceSharp.Attributes
+﻿using System;
+
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// An attribute that indicates a maximum value for a parameter.
     /// </summary>
-    /// <seealso cref="RuleAttribute" />
-    public sealed class LessThanAttribute : RuleAttribute
+    /// <seealso cref="Attribute" />
+    [AttributeUsage(AttributeTargets.Property)]
+    public sealed class LessThanAttribute : Attribute
     {
         /// <summary>
         /// Gets the minimum value.

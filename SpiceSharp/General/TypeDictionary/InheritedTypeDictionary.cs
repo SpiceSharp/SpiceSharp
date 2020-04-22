@@ -210,7 +210,7 @@ namespace SpiceSharp.General
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
-            throw new ValueNotFoundException(typeof(TResult));
+            throw new ArgumentException(Properties.Resources.Parameters_NotFoundTyped.FormatString(typeof(TResult).Name));
         }
 
         /// <summary>

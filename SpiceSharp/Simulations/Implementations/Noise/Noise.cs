@@ -73,7 +73,7 @@ namespace SpiceSharp.Simulations
 
             // Get behaviors, parameters and states
             _state = new NoiseSimulationState();
-            _state.Setup(this);
+            _state.Setup();
             base.Setup(entities);
 
             // Cache local variables
@@ -86,9 +86,7 @@ namespace SpiceSharp.Simulations
         protected override void Unsetup()
         {
             // Remove references
-            _state.Unsetup();
             _noiseBehaviors = null;
-
             base.Unsetup();
         }
 

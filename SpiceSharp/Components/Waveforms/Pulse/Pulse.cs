@@ -55,36 +55,34 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets all the pulse parameters.
         /// </summary>
-        /// <param name="parameters">The pulse parameters</param>
+        /// <param name="pulse">The pulse parameters</param>
         [ParameterName("pulse"), ParameterInfo("A vector of all pulse waveform parameters")]
-        public void SetPulse(double[] parameters)
+        public void SetPulse(double[] pulse)
         {
-            parameters.ThrowIfNull(nameof(parameters));
-            switch (parameters.Length)
+            pulse.ThrowIfNotLength(nameof(pulse), 1, 7);
+            switch (pulse.Length)
             {
                 case 7:
-                    Period = parameters[6];
+                    Period = pulse[6];
                     goto case 6;
                 case 6:
-                    PulseWidth = parameters[5];
+                    PulseWidth = pulse[5];
                     goto case 5;
                 case 5:
-                    FallTime = parameters[4];
+                    FallTime = pulse[4];
                     goto case 4;
                 case 4:
-                    RiseTime = parameters[3];
+                    RiseTime = pulse[3];
                     goto case 3;
                 case 3:
-                    Delay = parameters[2];
+                    Delay = pulse[2];
                     goto case 2;
                 case 2:
-                    PulsedValue = parameters[1];
+                    PulsedValue = pulse[1];
                     goto case 1;
                 case 1:
-                    InitialValue = parameters[0];
+                    InitialValue = pulse[0];
                     break;
-                default:
-                    throw new BadParameterException(nameof(parameters));
             }
         }
 

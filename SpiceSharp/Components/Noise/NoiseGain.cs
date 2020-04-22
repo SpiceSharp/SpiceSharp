@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Components.NoiseSources
+﻿using System;
+
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
     /// Noise generator with fixed gain
@@ -21,11 +23,10 @@
         /// <summary>
         /// Set the values for the noise source
         /// </summary>
-        /// <param name="coefficients">Values</param>
+        /// <param name="coefficients">The coefficients.</param>
         public override void SetCoefficients(params double[] coefficients)
         {
-            if (coefficients == null || coefficients.Length != 1)
-                throw new BadParameterException(nameof(coefficients));
+            coefficients.ThrowIfNotLength(nameof(coefficients), 1);
             Gain = coefficients[0];
         }
 

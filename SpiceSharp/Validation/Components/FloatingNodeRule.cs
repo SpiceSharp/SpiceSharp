@@ -225,7 +225,7 @@ namespace SpiceSharp.Validation
         /// <param name="a">The variable.</param>
         /// <param name="groups">The group.</param>
         /// <param name="counter">The counter to keep track of the number of distinct groups.</param>
-        private void Add(IVariable a, Dictionary<IVariable, Group> groups, ref int counter)
+        private static void Add(IVariable a, Dictionary<IVariable, Group> groups, ref int counter)
         {
             if (groups.ContainsKey(a))
                 return;

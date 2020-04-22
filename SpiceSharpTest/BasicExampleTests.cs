@@ -48,6 +48,7 @@ namespace SpiceSharpTest
         }
 
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "This is example code")]
         public void When_BasicParameters_Expect_NoException()
         {
             // Create the mosfet
@@ -270,6 +271,7 @@ namespace SpiceSharpTest
         }
 
         [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Example code")]
         public void When_SimpleValidation_Expect_Reference()
         {
             // <example_Validation>

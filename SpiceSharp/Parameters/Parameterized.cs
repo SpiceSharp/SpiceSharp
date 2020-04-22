@@ -1,4 +1,5 @@
-﻿using SpiceSharp.General;
+﻿using SpiceSharp.Diagnostics;
+using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,7 +92,7 @@ namespace SpiceSharp
                 if (ps.TrySetParameter(name))
                     return;
             }
-            throw new ParameterNotFoundException(name, this);
+            throw new ParameterNotFoundException(this, name, typeof(void));
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace SpiceSharp
                 if (ps.TrySetParameter(name, value))
                     return;
             }
-            throw new ParameterNotFoundException(name, this);
+            throw new ParameterNotFoundException(this, name, typeof(P));
         }
 
         /// <summary>
@@ -161,7 +162,7 @@ namespace SpiceSharp
                 if (ps.TryGetProperty(name, out P value))
                     return value;
             }
-            throw new ParameterNotFoundException(name, this);
+            throw new ParameterNotFoundException(this, name, typeof(P));
         }
 
         /// <summary>

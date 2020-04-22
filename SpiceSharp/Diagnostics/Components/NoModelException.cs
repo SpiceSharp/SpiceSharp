@@ -4,35 +4,44 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 #endif
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Diagnostics
 {
     /// <summary>
-    /// Exception for ambiguous types.
+    /// An exception thrown if a component does not have a model but expects it.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
 #if !NETSTANDARD1_5
     [Serializable]
 #endif
-    public class AmbiguousTypeException : SpiceSharpException
+    public class NoModelException : SpiceSharpException
     {
         /// <summary>
-        /// Gets the type of the ambiguous.
+        /// Gets the name.
         /// </summary>
         /// <value>
-        /// The type of the ambiguous.
+        /// The name.
         /// </value>
-        public virtual Type AmbiguousType { get; } = typeof(void);
+        public virtual string Name { get; } = "";
+
+        /// <summary>
+        /// Gets the type of the model.
+        /// </summary>
+        /// <value>
+        /// The type of the model.
+        /// </value>
+        public virtual Type ModelType { get; } = typeof(void);
 
 #if !NETSTANDARD1_5
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.
+        /// Initializes a new instance of the <see cref="NoModelException"/> class.
         /// </summary>
         /// <param name="info">The serialization info.</param>
         /// <param name="context">The streaming context.</param>
-        protected AmbiguousTypeException(SerializationInfo info, StreamingContext context)
+        protected NoModelException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            AmbiguousType = Type.GetType(info.GetString("AmbiguousType"));
+            Name = info.GetString(nameof(Name));
+            ModelType = Type.GetType(info.GetString(nameof(ModelType)));
         }
 
         /// <summary>
@@ -44,42 +53,45 @@ namespace SpiceSharp.General
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.ThrowIfNull(nameof(info));
-            info.AddValue(nameof(AmbiguousType), AmbiguousType.FullName);
+            info.AddValue(nameof(Name), Name);
+            info.AddValue(nameof(ModelType), ModelType.FullName);
             base.GetObjectData(info, context);
         }
 #endif
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.
+        /// Initializes a new instance of the <see cref="NoModelException"/> class.
         /// </summary>
-        /// <param name="type">The type.</param>
-        public AmbiguousTypeException(Type type)
-            : base(Properties.Resources.AmbiguousType.FormatString(type.FullName))
+        /// <param name="name">The name.</param>
+        /// <param name="modelType">The expected model type.</param>
+        public NoModelException(string name, Type modelType)
+            : base(Properties.Resources.Components_NoModel.FormatString(name, modelType.Name))
         {
-            AmbiguousType = type ?? typeof(void);
+            Name = name;
+            ModelType = modelType;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.
+        /// Initializes a new instance of the <see cref="NoModelException"/> class.
         /// </summary>
-        public AmbiguousTypeException()
+        public NoModelException()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.
+        /// Initializes a new instance of the <see cref="NoModelException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public AmbiguousTypeException(string message) : base(message)
+        public NoModelException(string message) : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.
+        /// Initializes a new instance of the <see cref="NoModelException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public AmbiguousTypeException(string message, Exception innerException) : base(message, innerException)
+        public NoModelException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }

@@ -30,11 +30,10 @@
         /// <summary>
         /// Set the parameters for the thermal noise
         /// </summary>
-        /// <param name="coefficients">Values</param>
+        /// <param name="coefficients">The coefficients.</param>
         public override void SetCoefficients(params double[] coefficients)
         {
-            if (coefficients == null || coefficients.Length != 1)
-                throw new BadParameterException(nameof(coefficients));
+            coefficients.ThrowIfNotLength(nameof(coefficients), 1);
             Conductance = coefficients[0];
         }
 

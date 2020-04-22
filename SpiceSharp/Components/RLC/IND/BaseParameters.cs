@@ -24,8 +24,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             get => _inductance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Inductance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Inductance), 0);
                 _inductance = value;
             }
         }
@@ -46,8 +45,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             get => _parallelMultiplier;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ParallelMultiplier), value, 0));
+                Utility.GreaterThan(value, nameof(ParallelMultiplier), 0);
                 _parallelMultiplier = value;
             }
         }
@@ -65,8 +63,7 @@ namespace SpiceSharp.Components.InductorBehaviors
             get => _seriesMultiplier;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SeriesMultiplier), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SeriesMultiplier), 0);
                 _seriesMultiplier = value;
             }
         }

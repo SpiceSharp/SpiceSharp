@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
         /// Validates the circuit.
         /// </summary>
         /// <param name="entities">The entities to be validated.</param>
-        /// <exception cref="SimulationValidationFailed">Thrown if the simulation failed its validation.</exception>
+        /// <exception cref="ValidationFailedException">Thrown if the simulation failed its validation.</exception>
         protected override void Validate(IEntityCollection entities)
         {
             if (FrequencyParameters.Validate)

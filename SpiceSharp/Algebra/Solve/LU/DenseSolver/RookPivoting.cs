@@ -37,8 +37,7 @@ namespace SpiceSharp.Algebra
             get => _relativePivotThreshold;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(RelativePivotThreshold), value, 0));
+                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
                 _relativePivotThreshold = value;
             }
         }
@@ -57,8 +56,7 @@ namespace SpiceSharp.Algebra
             get => _absolutePivotThreshold;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(AbsolutePivotThreshold), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
                 _absolutePivotThreshold = value;
             }
         }

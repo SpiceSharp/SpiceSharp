@@ -16,9 +16,11 @@ namespace SpiceSharpTest.General
         {
             var a = new A();
             var b = new B();
-            var d = new InheritedTypeDictionary<IA>();
-            d.Add(a);
-            d.Add(b);
+            var d = new InheritedTypeDictionary<IA>
+            {
+                a,
+                b
+            };
 
             Assert.AreEqual(a, d.GetValue<A>());
             Assert.AreEqual(b, d.GetValue<B>());

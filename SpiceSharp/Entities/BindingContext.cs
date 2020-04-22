@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Entities
 {
@@ -46,7 +47,7 @@ namespace SpiceSharp.Entities
         {
             var state = Simulation.GetState<S>();
             if (state == null)
-                throw new StateNotDefinedException(typeof(S));
+                throw new ArgumentException(Properties.Resources.Simulations_StateNotDefined.FormatString(typeof(S).Name));
             return state;
         }
 

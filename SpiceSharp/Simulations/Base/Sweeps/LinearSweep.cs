@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+using SpiceSharp.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ namespace SpiceSharp.Simulations
     /// A class that implements a linear sweep.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
+    [GeneratedParameters]
     public class LinearSweep : IEnumerable<double>
     {
         /// <summary>
@@ -35,13 +36,13 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The number of points.
         /// </value>
+        [GreaterThan(0)]
         public int Points
         {
             get => _points;
             set
             {
-                if (value < 1)
-                    throw new BadParameterException(nameof(Points), value, Properties.Resources.Sweeps_PointsTooSmall);
+                Utility.GreaterThan(value, nameof(Points), 0);
                 _points = value;
             }
         }
@@ -72,8 +73,6 @@ namespace SpiceSharp.Simulations
 
             // Calculate the number of points to be used
             var pts = (int)Math.Floor((final - Initial) / delta);
-            if (Points < 0)
-                throw new BadParameterException(nameof(delta), delta, Properties.Resources.Sweeps_CannotReachFinalPoint);
             Final = Initial + pts * delta;
             Points = pts + 1;
         }

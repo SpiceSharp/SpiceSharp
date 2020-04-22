@@ -25,8 +25,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             get => _capacitance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Capacitance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Capacitance), 0);
                 _capacitance = value;
             }
         }
@@ -47,8 +46,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             get => _width;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Width), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Width), 0);
                 _width = value;
             }
         }
@@ -63,8 +61,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             get => _length;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Length), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Length), 0);
                 _length = value;
             }
         }
@@ -79,8 +76,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             get => _parallelMultiplier;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ParallelMultiplier), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(ParallelMultiplier), 0);
                 _parallelMultiplier = value;
             }
         }
@@ -105,8 +101,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             get => _temperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Temperature), value, 0));
+                Utility.GreaterThan(value, nameof(Temperature), 0);
                 _temperature = value;
             }
         }

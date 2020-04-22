@@ -108,7 +108,7 @@ namespace SpiceSharp.Components.JFETBehaviors
             Vcrit = vt * Math.Log(vt / (Constants.Root2 * TempSaturationCurrent));
 
             if (TempGatePotential.Equals(0.0))
-                throw new BadParameterException(nameof(TempGatePotential));
+                throw new SpiceSharpException("{0}: {1}".FormatString(nameof(TempGatePotential), Properties.Resources.Parameters_IsZero));
         }
     }
 }

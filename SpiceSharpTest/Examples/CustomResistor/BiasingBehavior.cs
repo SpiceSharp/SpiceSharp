@@ -10,11 +10,10 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
     /// </summary>
     public class BiasingBehavior : Behavior, IBiasingBehavior
     {
-        private int _nodeA, _nodeB;
-        private ElementSet<double> _elements;
-        private BaseParameters _bp;
-        private IBiasingSimulationState _state;
-        private BiasingParameters _baseConfig;
+        private readonly IVariable<double> _nodeA, _nodeB;
+        private readonly ElementSet<double> _elements;
+        private readonly BaseParameters _bp;
+        private readonly BiasingParameters _baseConfig;
 
         /// <summary>
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
@@ -24,24 +23,27 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
+
+            // Get our resistor parameters (we want our A and B parameter values)
             _bp = context.GetParameterSet<BaseParameters>();
-            _state = context.GetState<IBiasingSimulationState>();
+
+            // Get the simulation parameters (we want to use Gmin)
             _baseConfig = context.GetSimulationParameterSet<BiasingParameters>();
 
-            // Find the nodes that the resistor is connected to
-            _nodeA = _state.Map[_state.GetSharedVariable(context.Nodes[0])];
-            _nodeB = _state.Map[_state.GetSharedVariable(context.Nodes[1])];
+            // Request the node variables
+            var state = context.GetState<IBiasingSimulationState>();
+            _nodeA = state.GetSharedVariable(context.Nodes[0]);
+            _nodeB = state.GetSharedVariable(context.Nodes[1]);
 
             // We need 4 matrix elements and 2 RHS vector elements
-            _elements = new ElementSet<double>(_state.Solver, new[] {
-                    new MatrixLocation(_nodeA, _nodeA),
-                    new MatrixLocation(_nodeA, _nodeB),
-                    new MatrixLocation(_nodeB, _nodeA),
-                    new MatrixLocation(_nodeB, _nodeB)
-                }, new[] {
-                    _nodeA,
-                    _nodeB
-                });
+            var indexA = state.Map[_nodeA];
+            var indexB = state.Map[_nodeB];
+            _elements = new ElementSet<double>(state.Solver, new[] {
+                    new MatrixLocation(indexA, indexA),
+                    new MatrixLocation(indexA, indexB),
+                    new MatrixLocation(indexB, indexA),
+                    new MatrixLocation(indexB, indexB)
+                }, new[] { indexA, indexB });
         }
 
         /// <summary>
@@ -50,7 +52,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         void IBiasingBehavior.Load()
         {
             // First get the current iteration voltage
-            var v = _state.Solution[_nodeA] - _state.Solution[_nodeB];
+            var v = _nodeA.Value - _nodeB.Value;
 
             // Calculate the derivative w.r.t. one of the voltages
             var isNegative = v < 0;

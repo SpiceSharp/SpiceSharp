@@ -27,8 +27,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             get => _impedance;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Impedance), value, 0));
+                Utility.GreaterThan(value, nameof(Impedance), 0);
                 _impedance = value;
             }
         }
@@ -43,8 +42,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             get => _frequency;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Frequency), value, 0));
+                Utility.GreaterThan(value, nameof(Frequency), 0);
                 _frequency = value;
             }
         }
@@ -59,8 +57,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             get => _delay;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Delay), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Delay), 0);
                 _delay = value;
             }
         }
@@ -75,8 +72,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             get => _normalizedLength;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NormalizedLength), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(NormalizedLength), 0);
                 _normalizedLength = value;
             }
         }
@@ -91,8 +87,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             get => _relativeTolerance;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(RelativeTolerance), value, 0));
+                Utility.GreaterThan(value, nameof(RelativeTolerance), 0);
                 _relativeTolerance = value;
             }
         }
@@ -107,8 +102,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
             get => _absoluteTolerance;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(AbsoluteTolerance), value, 0));
+                Utility.GreaterThan(value, nameof(AbsoluteTolerance), 0);
                 _absoluteTolerance = value;
             }
         }

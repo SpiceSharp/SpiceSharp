@@ -11,7 +11,7 @@ namespace SpiceSharp.General
     public class ParameterMap
     {
         private Dictionary<string, MemberDescription> _members;
-        private HashSet<MemberDescription> _values;
+        private readonly HashSet<MemberDescription> _values;
 
         /// <summary>
         /// Enumerate all members in the map.
@@ -50,7 +50,7 @@ namespace SpiceSharp.General
                 _values.Add(desc);
 
                 // Add named parameters
-                if (desc.Names.Length > 0)
+                if (desc.Names.Count > 0)
                 {
                     foreach (var name in desc.Names)
                     {

@@ -63,12 +63,12 @@ namespace SpiceSharpTest.Simulations
              * in order to make sure we're use states, extra equations, etc.
              */
 
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 CreateDiode("D1", "OUT", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 0.0)
-            );
+            };
 
             // Create simulations
             var dc = new DC("DC 1", "V1", -1, 1, 10e-3);

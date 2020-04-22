@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private Simulation _simulation;
+        private readonly Simulation _simulation;
 
         /// <summary>
         /// Gets the time if the simulation supports it.

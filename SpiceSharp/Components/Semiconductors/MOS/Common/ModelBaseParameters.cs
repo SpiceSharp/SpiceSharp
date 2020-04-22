@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
     {
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
         private GivenParameter<double> _surfaceStateDensity;
-        private GivenParameter<double> _substrateDoping = new GivenParameter<double>(1.45e10, false);
+        private GivenParameter<double> _substrateDoping = new GivenParameter<double>(2e10, false); // Value isn't used...
         private double _forwardCapDepletionCoefficient = 0.5;
         private double _surfaceMobility = 600;
         private double _sheetResistance;
@@ -48,8 +48,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _width;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Width), value, 0));
+                Utility.GreaterThan(value, nameof(Width), 0);
                 _width = value;
             }
         }
@@ -64,8 +63,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _length;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Length), value, 0));
+                Utility.GreaterThan(value, nameof(Length), 0);
                 _length = value;
             }
         }
@@ -97,8 +95,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _transconductance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Transconductance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Transconductance), 0);
                 _transconductance = value;
             }
         }
@@ -113,8 +110,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _gamma;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Gamma), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(Gamma), 0);
                 _gamma = value;
             }
         }
@@ -129,8 +125,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _phi;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Phi), value, 0));
+                Utility.GreaterThan(value, nameof(Phi), 0);
                 _phi = value;
             }
         }
@@ -145,8 +140,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _drainResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DrainResistance), 0);
                 _drainResistance = value;
             }
         }
@@ -161,8 +155,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _sourceResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SourceResistance), 0);
                 _sourceResistance = value;
             }
         }
@@ -177,8 +170,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _capBd;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapBd), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CapBd), 0);
                 _capBd = value;
             }
         }
@@ -193,8 +185,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _capBs;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapBs), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CapBs), 0);
                 _capBs = value;
             }
         }
@@ -209,8 +200,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _junctionSatCur;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionSatCur), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(JunctionSatCur), 0);
                 _junctionSatCur = value;
             }
         }
@@ -225,8 +215,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _bulkJunctionPotential;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BulkJunctionPotential), value, 0));
+                Utility.GreaterThan(value, nameof(BulkJunctionPotential), 0);
                 _bulkJunctionPotential = value;
             }
         }
@@ -241,8 +230,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _gateSourceOverlapCapFactor;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GateSourceOverlapCapFactor), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(GateSourceOverlapCapFactor), 0);
                 _gateSourceOverlapCapFactor = value;
             }
         }
@@ -257,8 +245,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _gateDrainOverlapCapFactor;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GateDrainOverlapCapFactor), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(GateDrainOverlapCapFactor), 0);
                 _gateDrainOverlapCapFactor = value;
             }
         }
@@ -273,8 +260,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _gateBulkOverlapCapFactor;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(GateBulkOverlapCapFactor), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(GateBulkOverlapCapFactor), 0);
                 _gateBulkOverlapCapFactor = value;
             }
         }
@@ -289,8 +275,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _bulkCapFactor;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BulkCapFactor), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(BulkCapFactor), 0);
                 _bulkCapFactor = value;
             }
         }
@@ -305,8 +290,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _bulkJunctionBotGradingCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BulkJunctionBotGradingCoefficient), value, 0));
+                Utility.GreaterThan(value, nameof(BulkJunctionBotGradingCoefficient), 0);
                 _bulkJunctionBotGradingCoefficient = value;
             }
         }
@@ -321,8 +305,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _sidewallCapFactor;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SidewallCapFactor), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SidewallCapFactor), 0);
                 _sidewallCapFactor = value;
             }
         }
@@ -337,8 +320,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _bulkJunctionSideGradingCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BulkJunctionSideGradingCoefficient), value, 0));
+                Utility.GreaterThan(value, nameof(BulkJunctionSideGradingCoefficient), 0);
                 _bulkJunctionSideGradingCoefficient = value;
             }
         }
@@ -353,8 +335,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _junctionSatCurDensity;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionSatCurDensity), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(JunctionSatCurDensity), 0);
                 _junctionSatCurDensity = value;
             }
         }
@@ -369,8 +350,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _oxideThickness;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(OxideThickness), value, 0));
+                Utility.GreaterThan(value, nameof(OxideThickness), 0);
                 _oxideThickness = value;
             }
         }
@@ -385,8 +365,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _lateralDiffusion;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LateralDiffusion), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(LateralDiffusion), 0);
                 _lateralDiffusion = value;
             }
         }
@@ -401,8 +380,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _sheetResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SheetResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SheetResistance), 0);
                 _sheetResistance = value;
             }
         }
@@ -417,8 +395,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _surfaceMobility;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SurfaceMobility), value, 0));
+                Utility.GreaterThan(value, nameof(SurfaceMobility), 0);
                 _surfaceMobility = value;
             }
         }
@@ -433,8 +410,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _forwardCapDepletionCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ForwardCapDepletionCoefficient), value, 0));
+                Utility.GreaterThan(value, nameof(ForwardCapDepletionCoefficient), 0);
                 _forwardCapDepletionCoefficient = value;
             }
         }
@@ -449,14 +425,13 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Gets the substrate doping level.
         /// </summary>
         [ParameterName("nsub"), ParameterInfo("Substrate doping")]
-        [GreaterThanOrEquals(1.45e10)]
+        [GreaterThan(1.45e10)]
         public GivenParameter<double> SubstrateDoping
         {
             get => _substrateDoping;
             set
             {
-                if (value < 1.45e10)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SubstrateDoping), value, 1.45e10));
+                Utility.GreaterThan(value, nameof(SubstrateDoping), 1.45e10);
                 _substrateDoping = value;
             }
         }
@@ -471,8 +446,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _surfaceStateDensity;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SurfaceStateDensity), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SurfaceStateDensity), 0);
                 _surfaceStateDensity = value;
             }
         }
@@ -486,8 +460,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _nominalTemperature;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(NominalTemperature), 0);
                 _nominalTemperature = value;
             }
         }

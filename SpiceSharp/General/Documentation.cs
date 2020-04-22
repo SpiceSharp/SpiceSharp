@@ -29,7 +29,7 @@ namespace SpiceSharp
                     mt != MemberTypes.Method)
                     continue;
                 var md = new MemberDescription(member);
-                if (md.Names != null && md.Names.Length > 0)
+                if (md.Names != null && md.Names.Count > 0)
                     yield return md;
             }
         }
@@ -81,14 +81,6 @@ namespace SpiceSharp
         /// The named parameters.
         /// </returns>
         public static IEnumerable<MemberDescription> Parameters(IParameterSet parameters)
-        {
-            // Show the parameters in the parameter set
-            foreach (var parameter in Reflection.GetMembers(parameters.GetType()))
-            {
-                if (parameter.Names.Length == 0)
-                    continue;
-                yield return parameter;
-            }
-        }
+            => Reflection.GetMembers(parameters.GetType()).Where(p => p.Names.Count > 0);
     }
 }

@@ -25,14 +25,14 @@ namespace SpiceSharp.Components
         /// The voltage delay pin count
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-        private const int VoltageDelayPinCount = 4;
+        private const int _voltageDelayPinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageDelay"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         public VoltageDelay(string name)
-            : base(name, VoltageDelayPinCount)
+            : base(name, _voltageDelayPinCount)
         {
         }
 

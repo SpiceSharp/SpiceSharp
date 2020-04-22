@@ -2,6 +2,7 @@
 using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Behaviors
 {
@@ -96,7 +97,7 @@ namespace SpiceSharp.Behaviors
                 if (behavior.TryGetProperty(name, out P value))
                     return value;
             }
-            throw new ParameterNotFoundException(name, this);
+            throw new ParameterNotFoundException(this, name, typeof(P));
         }
 
         /// <summary>

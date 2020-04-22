@@ -40,25 +40,11 @@ namespace SpiceSharp.Components
                 // Cache parameter values
                 _v1 = v1;
                 _v2 = v2;
-                _td = td;
-                _tr = tr;
-                _tf = tf;
-                _pw = pw;
-                _per = per;
-
-                // Some checks
-                if (_tr < 0.0)
-                    throw new BadParameterException(nameof(tr), tr,
-                        Properties.Resources.Waveforms_Pulse_RiseTimeTooSmall);
-                if (_tf < 0.0)
-                    throw new BadParameterException(nameof(tf), tf,
-                        Properties.Resources.Waveforms_Pulse_FallTimeTooSmall);
-                if (_pw < 0.0)
-                    throw new BadParameterException(nameof(pw), pw,
-                        Properties.Resources.Waveforms_Pulse_PulseWidthTooSmall);
-                if (_per < _tr + _pw + _tf)
-                    throw new BadParameterException(nameof(per), per,
-                        Properties.Resources.Waveforms_Pulse_PeriodTooSmall);
+                _td = td.GreaterThanOrEquals(nameof(td), 0);
+                _tr = tr.GreaterThanOrEquals(nameof(tr), 0);
+                _tf = tf.GreaterThanOrEquals(nameof(tf), 0);
+                _pw = pw.GreaterThanOrEquals(nameof(pw), 0);
+                _per = per.GreaterThanOrEquals(nameof(per), _tr + _pw + _tf);
 
                 // Initialize the value
                 At(0.0);

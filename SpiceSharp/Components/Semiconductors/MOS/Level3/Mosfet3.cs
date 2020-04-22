@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MosfetBehaviors.Level3;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
             if (context.ModelBehaviors == null)
-                throw new NoModelException(Name);
+                throw new NoModelException(Name, typeof(Mosfet3Model));
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

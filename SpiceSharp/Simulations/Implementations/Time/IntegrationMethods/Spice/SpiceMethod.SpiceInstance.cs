@@ -12,6 +12,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <seealso cref="IBreakpointMethod"/>
         protected abstract class SpiceInstance : IBreakpointMethod
         {
+            private double _saveDelta;
+
             /// <summary>
             /// Gets the timestep.
             /// </summary>
@@ -21,12 +23,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             public double Delta { get; protected set; }
 
             /// <summary>
-            /// Gets the simulation that the integration method will work with.
+            /// Gets the simulation state that keeps track of the simulation.
             /// </summary>
             /// <value>
             /// The simulation.
             /// </value>
-            protected IStateful<IBiasingSimulationState> Simulation { get; }
+            protected IBiasingSimulationState State { get; }
 
             /// <summary>
             /// Gets the history of integration states.
@@ -121,18 +123,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// </value>
             protected SpiceMethod Parameters { get; }
 
-            private double _saveDelta, _oldDelta;
-
             /// <summary>
             /// Initializes a new instance of the <see cref="SpiceInstance"/> class.
             /// </summary>
             /// <param name="parameters">The method description.</param>
-            /// <param name="simulation">The simulation that provides the biasing state.</param>
+            /// <param name="state">The biasing simulation state.</param>
             /// <param name="maxOrder">The maximum order.</param>
-            protected SpiceInstance(SpiceMethod parameters, IStateful<IBiasingSimulationState> simulation, int maxOrder)
+            protected SpiceInstance(SpiceMethod parameters, IBiasingSimulationState state, int maxOrder)
             {
                 Parameters = parameters.ThrowIfNull(nameof(parameters));
-                Simulation = simulation.ThrowIfNull(nameof(simulation));
+                State = state.ThrowIfNull(nameof(state));
                 MaxOrder = maxOrder;
                 States = new NodeHistory<SpiceIntegrationState>(maxOrder + 2);
             }
@@ -196,8 +196,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Breakpoints.SetBreakpoint(Parameters.StopTime);
 
                 // Create the prediction vector
-                Simulation.State.Solution.CopyTo(States.Value.Solution);
-                Prediction = new DenseVector<double>(Simulation.State.Solver.Size);
+                State.Solution.CopyTo(States.Value.Solution);
+                Prediction = new DenseVector<double>(State.Solver.Size);
 
                 // Calculate an initial timestep
                 Delta = Math.Min(Parameters.StopTime / 50.0, Parameters.InitialStep) / 10.0;
@@ -252,9 +252,6 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 // Compute the integration coefficients
                 ComputeCoefficients();
                 Predict();
-
-                // Save the current timestep
-                _oldDelta = States.Value.Delta;
             }
 
             /// <summary>
@@ -273,7 +270,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             public virtual void Accept()
             {
                 // Store the accepted solution
-                Simulation.State.Solution.CopyTo(States.Value.Solution);
+                State.Solution.CopyTo(States.Value.Solution);
 
                 // When just starting out, we want to copy all the states to the previous states.
                 if (BaseTime.Equals(0.0))
@@ -302,7 +299,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             public virtual void Reject()
             {
                 // Start once more from the last solution
-                States.GetPreviousValue(1).Solution.CopyTo(Simulation.State.Solution);
+                States.GetPreviousValue(1).Solution.CopyTo(State.Solution);
 
                 // Is the previously tried timestep already at the minimum?
                 if (States.Value.Delta <= Parameters.MinStep)

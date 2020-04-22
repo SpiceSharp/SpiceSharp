@@ -38,8 +38,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             get => _criticalField;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CriticalField), value, 0));
+                Utility.GreaterThan(value, nameof(CriticalField), 0);
                 _criticalField = value;
             }
         }
@@ -54,8 +53,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             get => _criticalFieldExp;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CriticalFieldExp), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CriticalFieldExp), 0);
                 _criticalFieldExp = value;
             }
         }
@@ -70,8 +68,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             get => _channelCharge;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ChannelCharge), value, 0));
+                Utility.GreaterThan(value, nameof(ChannelCharge), 0);
                 _channelCharge = value;
             }
         }
@@ -86,8 +83,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             get => _fastSurfaceStateDensity;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(FastSurfaceStateDensity), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(FastSurfaceStateDensity), 0);
                 _fastSurfaceStateDensity = value;
             }
         }
@@ -108,8 +104,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level2
             get => _junctionDepth;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionDepth), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(JunctionDepth), 0);
                 _junctionDepth = value;
             }
         }

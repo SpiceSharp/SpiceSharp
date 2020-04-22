@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.DiodeBehaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
@@ -58,8 +59,8 @@ namespace SpiceSharp.Components
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name);
+            if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsKey(typeof(ModelTemperatureBehavior)))
+                throw new NoModelException(Name, typeof(DiodeModel));
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))

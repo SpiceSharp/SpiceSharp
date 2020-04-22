@@ -41,12 +41,12 @@ namespace SpiceSharpTest.Models
              */
 
             // Build circuit
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 CreateDiode("D1", "OUT", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 0.0)
-                );
+            };
 
             // Create simulation
             var dc = new DC("DC", "V1", -1.0, 1.0, 10e-3);
@@ -73,13 +73,13 @@ namespace SpiceSharpTest.Models
              * Current is expected to behave like the reference
              */
             // Build circuit
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 CreateDiode("D1", "0", "OUT", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 1.0)
                     .SetParameter("acmag", 1.0)
-                );
+            };
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(1e3, 10e6, 5));
@@ -109,15 +109,15 @@ namespace SpiceSharpTest.Models
              * Output voltage is expected to behavior like the reference
              */
             // Build circuit
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
                 new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "0", 10.0e3),
                 CreateDiode("D1", "in", "out", "1N914"),
                 CreateDiodeModel("1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9")
-            );
+            };
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 10e-6);

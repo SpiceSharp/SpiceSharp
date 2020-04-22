@@ -430,7 +430,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Level1
                 else
                 {
                     sarg = Math.Sqrt(TempPhi);
-                    sarg = sarg - vbs / (sarg + sarg);
+                    sarg -= vbs / (sarg + sarg);
                     sarg = Math.Max(0, sarg);
                 }
                 von = TempVoltageBi * ModelParameters.MosfetType + ModelParameters.Gamma * sarg;

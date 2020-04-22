@@ -48,33 +48,31 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Sets all the sine parameters.
         /// </summary>
-        /// <param name="parameters"></param>
+        /// <param name="sine"></param>
         [ParameterName("sine"), ParameterInfo("A vector of all sine waveform parameters")]
-        public void SetSine(double[] parameters)
+        public void SetSine(double[] sine)
         {
-            parameters.ThrowIfNull(nameof(parameters));
-            switch (parameters.Length)
+            sine.ThrowIfNotLength(nameof(sine), 1, 6);
+            switch (sine.Length)
             {
                 case 6:
-                    Phase = parameters[5];
+                    Phase = sine[5];
                     goto case 5;
                 case 5:
-                    Theta = parameters[4];
+                    Theta = sine[4];
                     goto case 4;
                 case 4:
-                    Delay = parameters[3];
+                    Delay = sine[3];
                     goto case 3;
                 case 3:
-                    Frequency = parameters[2];
+                    Frequency = sine[2];
                     goto case 2;
                 case 2:
-                    Amplitude = parameters[1];
+                    Amplitude = sine[1];
                     goto case 1;
                 case 1:
-                    Offset = parameters[0];
+                    Offset = sine[0];
                     break;
-                default:
-                    throw new BadParameterException(nameof(parameters));
             }
         }
 

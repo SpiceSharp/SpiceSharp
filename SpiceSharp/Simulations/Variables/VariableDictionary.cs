@@ -41,14 +41,14 @@ namespace SpiceSharp.Simulations
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns>The variable with the specified name.</returns>
-        /// <exception cref="VariableNotFoundException">Thrown if the variable wasn't found.</exception>
+        /// <exception cref="ArgumentException">Thrown if the variable wasn't found.</exception>
         public V this[string name]
         {
             get
             {
                 if (_map.TryGetValue(name, out var node))
                     return node;
-                throw new VariableNotFoundException(name);
+                throw new ArgumentException(Properties.Resources.VariableNotFound.FormatString(name));
             }
         }
 

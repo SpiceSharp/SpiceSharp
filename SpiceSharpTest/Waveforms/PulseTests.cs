@@ -13,15 +13,15 @@ namespace SpiceSharpTest.Waveforms
         public void When_PulseHasInvalidParameters_Expect_Exception()
         {
             // Negative rise time
-            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Create(null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Create(null));
             // Negative fall time
-            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Create(null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Create(null));
             // Negative pulse width
-            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Create(null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Create(null));
             // Negative period
-            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Create(null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Create(null));
             // Sum of times is higher than a period
-            Assert.Throws<BadParameterException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Create(null));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Create(null));
         }
 
         [Test]

@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
 
             _state = state.ThrowIfNull(nameof(state));
             if (!state.Map.Contains(variable))
-                throw new VariableNotFoundException(variable.Name);
+                throw new SpiceSharpException(Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(variable.Name));
             _index = state.Map[variable];
             _diagonal = _state.Solver.GetElement(_index, _index);
             _rhs = !Value.Equals(0.0) ? _state.Solver.GetElement(_index) : _state.Solver.FindElement(_index);

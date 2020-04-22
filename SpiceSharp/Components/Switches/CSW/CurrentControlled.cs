@@ -25,7 +25,6 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <param name="context">The context.</param>
         public CurrentControlled(CurrentControlledBindingContext context)
         {
-            var state = context.GetState<IBiasingSimulationState>();
             var behavior = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>();
             _branch = behavior.Branch;
         }

@@ -30,12 +30,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             protected readonly DenseRealSolver Solver = new DenseRealSolver(_gearOrder + 1);
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="Instance"/> class.
+            /// Initializes a new instance of the <see cref="Instance" /> class.
             /// </summary>
             /// <param name="parameters">The parameters.</param>
-            /// <param name="simulation">The simulation that provides the biasing state.</param>
-            public Instance(Gear parameters, IStateful<IBiasingSimulationState> simulation)
-                : base(parameters, simulation, _gearOrder)
+            /// <param name="state">The biasing simulation state.</param>
+            public Instance(Gear parameters, IBiasingSimulationState state)
+                : base(parameters, state, _gearOrder)
             {
             }
 
@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             {
                 // Create all the states
                 States.Set(i => new SpiceIntegrationState(0.0,
-                    new DenseVector<double>(Simulation.State.Solver.Size),
+                    new DenseVector<double>(State.Solver.Size),
                     _stateValues));
 
                 // Reset all integration coefficients

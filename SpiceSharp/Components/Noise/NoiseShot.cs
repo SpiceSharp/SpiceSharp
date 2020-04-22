@@ -27,8 +27,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="coefficients">Values</param>
         public override void SetCoefficients(params double[] coefficients)
         {
-            if (coefficients == null || coefficients.Length != 1)
-                throw new BadParameterException(nameof(coefficients));
+            coefficients.ThrowIfNotLength(nameof(coefficients), 1);
             Current = coefficients[0];
         }
 

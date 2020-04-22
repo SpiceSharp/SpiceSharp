@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.CapacitorBehaviors
             {
                 // We need a model!
                 if (_mbp == null)
-                    throw new NoModelException(Name);
+                    throw new SpiceSharpException(Properties.Resources.Components_NoModel.FormatString(Name));
 
                 var width = Parameters.Width.Given
                     ? Parameters.Width.Value

@@ -120,8 +120,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _nominalTemperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(NominalTemperature), value, 0));
+                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
                 _nominalTemperature = value;
             }
         }
@@ -136,8 +135,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _satCur;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SatCur), value, 0));
+                Utility.GreaterThan(value, nameof(SatCur), 0);
                 _satCur = value;
             }
         }
@@ -152,8 +150,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _betaF;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BetaF), value, 0));
+                Utility.GreaterThan(value, nameof(BetaF), 0);
                 _betaF = value;
             }
         }
@@ -168,8 +165,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _emissionCoefficientForward;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EmissionCoefficientForward), value, 0));
+                Utility.GreaterThan(value, nameof(EmissionCoefficientForward), 0);
                 _emissionCoefficientForward = value;
             }
         }
@@ -184,8 +180,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _earlyVoltageForward;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EarlyVoltageForward), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(EarlyVoltageForward), 0);
                 _earlyVoltageForward = value;
             }
         }
@@ -200,8 +195,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _rollOffForward;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(RollOffForward), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(RollOffForward), 0);
                 _rollOffForward = value;
             }
         }
@@ -216,8 +210,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _leakBeCurrent;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LeakBeCurrent), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(LeakBeCurrent), 0);
                 _leakBeCurrent = value;
             }
         }
@@ -232,8 +225,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _leakBeEmissionCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LeakBeEmissionCoefficient), value, 0));
+                Utility.GreaterThan(value, nameof(LeakBeEmissionCoefficient), 0);
                 _leakBeEmissionCoefficient = value;
             }
         }
@@ -248,8 +240,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _betaR;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BetaR), value, 0));
+                Utility.GreaterThan(value, nameof(BetaR), 0);
                 _betaR = value;
             }
         }
@@ -264,8 +255,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _emissionCoefficientReverse;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EmissionCoefficientReverse), value, 0));
+                Utility.GreaterThan(value, nameof(EmissionCoefficientReverse), 0);
                 _emissionCoefficientReverse = value;
             }
         }
@@ -280,8 +270,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _earlyVoltageReverse;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EarlyVoltageReverse), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(EarlyVoltageReverse), 0);
                 _earlyVoltageReverse = value;
             }
         }
@@ -296,8 +285,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _rollOffReverse;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(RollOffReverse), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(RollOffReverse), 0);
                 _rollOffReverse = value;
             }
         }
@@ -312,8 +300,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _leakBcCurrent;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LeakBcCurrent), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(LeakBcCurrent), 0);
                 _leakBcCurrent = value;
             }
         }
@@ -328,8 +315,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _leakBcEmissionCoefficient;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(LeakBcEmissionCoefficient), value, 0));
+                Utility.GreaterThan(value, nameof(LeakBcEmissionCoefficient), 0);
                 _leakBcEmissionCoefficient = value;
             }
         }
@@ -344,8 +330,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _baseResist;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BaseResist), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(BaseResist), 0);
                 _baseResist = value;
             }
         }
@@ -360,8 +345,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _baseCurrentHalfResist;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BaseCurrentHalfResist), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(BaseCurrentHalfResist), 0);
                 _baseCurrentHalfResist = value;
             }
         }
@@ -376,8 +360,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _minimumBaseResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(MinimumBaseResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(MinimumBaseResistance), 0);
                 _minimumBaseResistance = value;
             }
         }
@@ -392,8 +375,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _emitterResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EmitterResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(EmitterResistance), 0);
                 _emitterResistance = value;
             }
         }
@@ -408,8 +390,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _collectorResistance;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CollectorResistance), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CollectorResistance), 0);
                 _collectorResistance = value;
             }
         }
@@ -424,8 +405,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _depletionCapBe;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DepletionCapBe), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DepletionCapBe), 0);
                 _depletionCapBe = value;
             }
         }
@@ -440,8 +420,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _potentialBe;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(PotentialBe), value, 0));
+                Utility.GreaterThan(value, nameof(PotentialBe), 0);
                 _potentialBe = value;
             }
         }
@@ -456,8 +435,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _junctionExpBe;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionExpBe), value, 0));
+                Utility.GreaterThan(value, nameof(JunctionExpBe), 0);
                 _junctionExpBe = value;
             }
         }
@@ -472,8 +450,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _transitTimeForward;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TransitTimeForward), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TransitTimeForward), 0);
                 _transitTimeForward = value;
             }
         }
@@ -488,8 +465,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _transitTimeBiasCoefficientForward;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TransitTimeBiasCoefficientForward), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TransitTimeBiasCoefficientForward), 0);
                 _transitTimeBiasCoefficientForward = value;
             }
         }
@@ -504,8 +480,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _transitTimeForwardVoltageBc;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TransitTimeForwardVoltageBc), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TransitTimeForwardVoltageBc), 0);
                 _transitTimeForwardVoltageBc = value;
             }
         }
@@ -520,8 +495,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _transitTimeHighCurrentForward;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TransitTimeHighCurrentForward), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TransitTimeHighCurrentForward), 0);
                 _transitTimeHighCurrentForward = value;
             }
         }
@@ -536,8 +510,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _excessPhase;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ExcessPhase), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(ExcessPhase), 0);
                 _excessPhase = value;
             }
         }
@@ -552,8 +525,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _depletionCapBc;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DepletionCapBc), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DepletionCapBc), 0);
                 _depletionCapBc = value;
             }
         }
@@ -568,8 +540,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _potentialBc;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(PotentialBc), value, 0));
+                Utility.GreaterThan(value, nameof(PotentialBc), 0);
                 _potentialBc = value;
             }
         }
@@ -584,8 +555,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _junctionExpBc;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(JunctionExpBc), value, 0));
+                Utility.GreaterThan(value, nameof(JunctionExpBc), 0);
                 _junctionExpBc = value;
             }
         }
@@ -600,8 +570,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _baseFractionBcCap;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BaseFractionBcCap), value, 0));
+                Utility.GreaterThan(value, nameof(BaseFractionBcCap), 0);
                 _baseFractionBcCap = value;
             }
         }
@@ -616,8 +585,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _transitTimeReverse;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(TransitTimeReverse), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(TransitTimeReverse), 0);
                 _transitTimeReverse = value;
             }
         }
@@ -632,8 +600,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _capCs;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(CapCs), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(CapCs), 0);
                 _capCs = value;
             }
         }
@@ -648,8 +615,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _potentialSubstrate;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(PotentialSubstrate), value, 0));
+                Utility.GreaterThan(value, nameof(PotentialSubstrate), 0);
                 _potentialSubstrate = value;
             }
         }
@@ -664,8 +630,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _exponentialSubstrate;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(ExponentialSubstrate), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(ExponentialSubstrate), 0);
                 _exponentialSubstrate = value;
             }
         }
@@ -680,8 +645,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _betaExponent;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(BetaExponent), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(BetaExponent), 0);
                 _betaExponent = value;
             }
         }
@@ -696,8 +660,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _energyGap;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(EnergyGap), value, 0));
+                Utility.GreaterThan(value, nameof(EnergyGap), 0);
                 _energyGap = value;
             }
         }
@@ -712,21 +675,14 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// Gets the forward bias junction fit parameter.
         /// </summary>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        [GreaterThanOrEquals(0), LessThan(0.9999, RaisesException = false)]
+        [GreaterThanOrEquals(0), UpperLimit(0.9999)]
         public GivenParameter<double> DepletionCapCoefficient
         {
             get => _depletionCapCoefficient;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DepletionCapCoefficient), value, 0));
-                if (value >= 0.9999)
-                {
-                    _depletionCapCoefficient = 0.9999;
-                    SpiceSharpWarning.Warning(this, Properties.Resources.Parameters_TooLargeSet.FormatString(nameof(DepletionCapCoefficient), value, 0.9999));
-                    return;
-                }
-
+                Utility.GreaterThanOrEquals(value, nameof(DepletionCapCoefficient), 0);
+                value = Utility.UpperLimit(value, this, nameof(DepletionCapCoefficient), 0.9999);
                 _depletionCapCoefficient = value;
             }
         }
@@ -740,8 +696,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _c2;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(C2), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(C2), 0);
                 _c2 = value;
             }
         }
@@ -755,8 +710,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             get => _c4;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(C4), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(C4), 0);
                 _c4 = value;
             }
         }

@@ -96,19 +96,11 @@ namespace SpiceSharp.Simulations
             /// <summary>
             /// Set up the simulation state for the simulation.
             /// </summary>
-            /// <param name="simulation">The simulation.</param>
-            public void Setup(ISimulation simulation)
+            public void Setup()
             {
                 OutputNoise = 0;
                 InputNoise = 0;
                 OutputNoiseDensity = 0;
-            }
-
-            /// <summary>
-            /// Destroys the simulation state.
-            /// </summary>
-            public void Unsetup()
-            {
             }
 
             /// <summary>

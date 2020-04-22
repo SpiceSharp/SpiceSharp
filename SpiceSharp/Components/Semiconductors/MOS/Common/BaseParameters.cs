@@ -40,8 +40,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _temperature;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Temperature), value, 0));
+                Utility.GreaterThan(value, nameof(Temperature), 0);
                 _temperature = value;
             }
         }
@@ -56,8 +55,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _width;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Width), value, 0));
+                Utility.GreaterThan(value, nameof(Width), 0);
                 _width = value;
             }
         }
@@ -72,8 +70,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _length;
             set
             {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(Length), value, 0));
+                Utility.GreaterThan(value, nameof(Length), 0);
                 _length = value;
             }
         }
@@ -88,8 +85,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _sourceArea;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceArea), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SourceArea), 0);
                 _sourceArea = value;
             }
         }
@@ -104,8 +100,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _drainArea;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainArea), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DrainArea), 0);
                 _drainArea = value;
             }
         }
@@ -120,8 +115,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _sourcePerimeter;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourcePerimeter), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SourcePerimeter), 0);
                 _sourcePerimeter = value;
             }
         }
@@ -136,8 +130,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _drainPerimeter;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainPerimeter), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DrainPerimeter), 0);
                 _drainPerimeter = value;
             }
         }
@@ -153,8 +146,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _sourceSquares;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(SourceSquares), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(SourceSquares), 0);
                 _sourceSquares = value;
             }
         }
@@ -170,8 +162,7 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
             get => _drainSquares;
             set
             {
-                if (value < 0)
-                    throw new ArgumentException(Properties.Resources.Parameters_TooSmall.FormatString(nameof(DrainSquares), value, 0));
+                Utility.GreaterThanOrEquals(value, nameof(DrainSquares), 0);
                 _drainSquares = value;
             }
         }
@@ -204,23 +195,20 @@ namespace SpiceSharp.Components.MosfetBehaviors.Common
         /// Set the initial conditions of the device.
         /// </summary>
         [ParameterName("ic"), ParameterInfo("Vector of D-S, G-S, B-S voltages")]
-        public void SetIc(double[] value)
+        public void SetIc(double[] ic)
         {
-            value.ThrowIfNull(nameof(value));
-
-            switch (value.Length)
+            ic.ThrowIfNotLength(nameof(ic), 1, 3);
+            switch (ic.Length)
             {
                 case 3:
-                    InitialVoltageBs = value[2];
+                    InitialVoltageBs = ic[2];
                     goto case 2;
                 case 2:
-                    InitialVoltageGs = value[1];
+                    InitialVoltageGs = ic[1];
                     goto case 1;
                 case 1:
-                    InitialVoltageDs = value[0];
+                    InitialVoltageDs = ic[0];
                     break;
-                default:
-                    throw new BadParameterException(nameof(value));
             }
         }
     }

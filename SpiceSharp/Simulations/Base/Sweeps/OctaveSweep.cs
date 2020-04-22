@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+using SpiceSharp.Attributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,8 +9,11 @@ namespace SpiceSharp.Simulations
     /// Class that describes a sweep with a number of points per octave.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
+    [GeneratedParameters]
     public class OctaveSweep : IEnumerable<double>
     {
+        private int _pointsPerOctave;
+
         /// <summary>
         /// Gets or sets the initial.
         /// </summary>
@@ -35,17 +38,16 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The points per decade.
         /// </value>
+        [GreaterThan(0)]
         public int PointsPerOctave
         {
-            get => _ppo;
+            get => _pointsPerOctave;
             set
             {
-                if (value < 1)
-                    throw new BadParameterException(nameof(PointsPerOctave), value, Properties.Resources.Sweeps_PointsTooSmall);
-                _ppo = value;
+                Utility.GreaterThan(value, nameof(PointsPerOctave), 0);
+                _pointsPerOctave = value;
             }
         }
-        private int _ppo = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OctaveSweep"/> class.
@@ -74,13 +76,17 @@ namespace SpiceSharp.Simulations
                 yield break;
             }
 
-            var delta = Math.Exp(Math.Log(10.0) / _ppo);
+            var delta = Math.Exp(Math.Log(10.0) / _pointsPerOctave);
             double current = Initial;
             double stop = Final * Math.Sqrt(delta);
             if (Final < Initial)
             {
                 if (Initial > 0)
-                    throw new BadParameterException(nameof(Final), Final, Properties.Resources.Sweeps_CannotReachFinalPoint);
+                {
+                    throw new SpiceSharpException("{0} ({1}): {2}".FormatString(
+                        nameof(Initial), Initial,
+                        Properties.Resources.Parameters_NotGreater.FormatString(0)));
+                }
                 while (current <= stop)
                 {
                     yield return current;
@@ -90,7 +96,11 @@ namespace SpiceSharp.Simulations
             else
             {
                 if (Initial < 0)
-                    throw new BadParameterException(nameof(Final), Final, Properties.Resources.Sweeps_CannotReachFinalPoint);
+                {
+                    throw new SpiceSharpException("{0} ({1}): {2}".FormatString(
+                        nameof(Initial), Initial,
+                        Properties.Resources.Parameters_NotLess.FormatString(0)));
+                }
                 while (current >= stop)
                 {
                     yield return current;

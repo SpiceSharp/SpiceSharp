@@ -103,7 +103,7 @@ namespace SpiceSharp.Components.NoiseSources
                     var m = 0;
                     foreach (var pin in _pins)
                         m = Math.Max(m, pin);
-                    throw new SizeMismatchException(nameof(nodes), m);
+                    nodes.ThrowIfNotLength(nameof(nodes), m + 1);
                 }
                 mapped[i] = ComplexState.Map[nodes[_pins[i]]];
             }

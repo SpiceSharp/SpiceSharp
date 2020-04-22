@@ -10,8 +10,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Constants
         /// </summary>
-        private const float ExpansionFactor = 1.5f;
-        private const int InitialSize = 4;
+        private const float _expansionFactor = 1.5f;
+        private const int _initialSize = 4;
 
         /// <summary>
         /// Private variable
@@ -45,7 +45,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes a new instance of the <see cref="Translation"/> class.
         /// </summary>
         public Translation()
-            : this(InitialSize)
+            : this(_initialSize)
         {
         }
 
@@ -112,7 +112,7 @@ namespace SpiceSharp.Algebra.Solve
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length)
-                throw new SizeMismatchException(nameof(source), nameof(target));
+                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Scramble), target.Length, source.Length));
 
             // Expand translation vectors if necessary
             if (_allocated < source.Length || _allocated < target.Length)
@@ -133,7 +133,7 @@ namespace SpiceSharp.Algebra.Solve
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
             if (source.Length != target.Length + 1)
-                throw new SizeMismatchException(nameof(source), nameof(target));
+                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Scramble), target.Length + 1, source.Length));
 
             // Expand translation vectors if necessary
             if (_allocated < source.Length || _allocated < target.Length)
@@ -158,7 +158,7 @@ namespace SpiceSharp.Algebra.Solve
 
             // Reallocate
             var oldAllocated = _allocated;
-            _allocated = Math.Max(newLength, (int)(_allocated * ExpansionFactor));
+            _allocated = Math.Max(newLength, (int)(_allocated * _expansionFactor));
 
             Array.Resize(ref _extToInt, _allocated + 1);
             Array.Resize(ref _intToExt, _allocated + 1);
@@ -175,7 +175,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         public void Clear()
         {
-            var size = InitialSize;
+            var size = _initialSize;
             _extToInt = new int[size + 1];
             _intToExt = new int[size + 1];
             for (var i = 1; i <= size; i++)

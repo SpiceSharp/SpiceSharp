@@ -30,7 +30,9 @@ namespace SpiceSharp.Algebra
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
-                throw new SolverNotFactoredException();
+                throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
+            if (solution.Length != Size)
+                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Solve), solution.Length, Size));
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
             var order = Size - Degeneracy;
@@ -92,7 +94,9 @@ namespace SpiceSharp.Algebra
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
-                throw new SolverNotFactoredException();
+                throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
+            if (solution.Length != Size)
+                throw new ArgumentException(Properties.Resources.Algebra_SolutionLengthMismatch.FormatString(nameof(Solve), solution.Length, Size));
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
             var order = Size - Degeneracy;
@@ -152,7 +156,7 @@ namespace SpiceSharp.Algebra
         {
             // Test for zero pivot
             if (pivot == null || pivot.Value.Equals(0.0))
-                throw new ArgumentException(Properties.Resources.Algebra_InvalidPivot);
+                throw new AlgebraException(Properties.Resources.Algebra_InvalidPivot.FormatString(pivot.Row));
             pivot.Value = Inverse(pivot.Value);
 
             var upper = pivot.Right;
