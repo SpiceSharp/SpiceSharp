@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
     /// Variables for a diode.
     /// </summary>
     /// <typeparam name="T">The base value type</typeparam>
-    public struct DiodeVariables<T> where T : IFormattable
+    public struct DiodeVariables<T>
     {
         /// <summary>
         /// The positive node.

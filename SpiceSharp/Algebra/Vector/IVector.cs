@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra
     /// A description of a vector.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface IVector<T> : IFormattable where T : IFormattable
+    public interface IVector<T>
     {
         /// <summary>
         /// Gets the length of the vector.

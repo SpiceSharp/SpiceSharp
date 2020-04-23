@@ -11,7 +11,6 @@ namespace SpiceSharp.Simulations
         ISimulationState,
         IVariableFactory<IVariable<T>>,
         IVariableDictionary<IVariable<T>>
-        where T : IFormattable
     {
         /// <summary>
         /// Gets the solver used to solve the system of equations.

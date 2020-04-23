@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 
 namespace SpiceSharp.Algebra
 {
@@ -9,7 +7,8 @@ namespace SpiceSharp.Algebra
     /// A square matrix using a dense representation.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public partial class DenseMatrix<T> : IMatrix<T> where T : IFormattable
+    /// <seealso cref="IMatrix{T}"/>
+    public class DenseMatrix<T> : IMatrix<T>
     {
         /// <summary>
         /// Constants
@@ -41,10 +40,13 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The value</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row"/> or <paramref name="column"/> is not positive.
+        /// </exception>
         public T this[int row, int column]
         {
-            get => GetMatrixValue(row, column);
-            set => SetMatrixValue(row, column, value);
+            get => GetMatrixValue(new MatrixLocation(row, column));
+            set => SetMatrixValue(new MatrixLocation(row, column), value);
         }
 
         /// <summary>
@@ -57,8 +59,8 @@ namespace SpiceSharp.Algebra
         /// <returns>The value.</returns>
         public T this[MatrixLocation location]
         {
-            get => GetMatrixValue(location.Row, location.Column);
-            set => SetMatrixValue(location.Row, location.Column, value);
+            get => GetMatrixValue(location);
+            set => SetMatrixValue(location, value);
         }
 
         /// <summary>
@@ -85,114 +87,32 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Gets the value in the matrix at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The value at the specified row and column.
-        /// </returns>
-        public T GetMatrixValue(int row, int column)
-        {
-            if (row < 0)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0)
-                throw new ArgumentOutOfRangeException(nameof(column));
-            if (row == 0 || column == 0)
-                return _trashCan;
-            if (row > Size || column > Size)
-                return default;
-            row--;
-            column--;
-            return _array[row * _allocatedSize + column];
-        }
-
-        /// <summary>
-        /// Sets the value in the matrix at the specified row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <param name="value">The value.</param>
-        public void SetMatrixValue(int row, int column, T value)
-        {
-            if (row < 0)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0)
-                throw new ArgumentOutOfRangeException(nameof(column));
-            if (row == 0 || column == 0)
-                _trashCan = value;
-            else
-            {
-                if (!EqualityComparer<T>.Default.Equals(value, default) && (row > Size || column > Size))
-                    Expand(Math.Max(row, column));
-                row--;
-                column--;
-                _array[row * _allocatedSize + column] = value;
-            }
-        }
-
-        /// <summary>
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return ToString(null, CultureInfo.CurrentCulture.NumberFormat);
-        }
-
-        /// <summary>
-        /// Convert to a string
-        /// </summary>
-        /// <param name="format">Format</param>
-        /// <param name="formatProvider">Format provider</param>
-        /// <returns></returns>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            var displayData = new string[Size][];
-            var columnWidths = new int[Size];
-            for (var r = 1; r <= Size; r++)
-            {
-                // Initialize
-                displayData[r - 1] = new string[Size];
-                for (var c = 1; c <= Size; c++)
-                {
-                    displayData[r - 1][c - 1] = _array[(r - 1) * _allocatedSize + c - 1].ToString(format, formatProvider);
-                    columnWidths[c - 1] = Math.Max(columnWidths[c - 1], displayData[r - 1][c - 1].Length);
-                }
-            }
-
-            // Build the string
-            var sb = new StringBuilder();
-            for (var r = 0; r < Size; r++)
-            {
-                for (var c = 0; c < Size; c++)
-                {
-                    var displayElt = displayData[r][c];
-                    sb.Append(new string(' ', columnWidths[c] - displayElt.Length + 2));
-                    sb.Append(displayElt);
-                }
-
-                sb.Append(Environment.NewLine);
-            }
-
-            return sb.ToString();
-        }
+        public override string ToString() => "DenseMatrix ({0}x{0})".FormatString(Size);
 
         /// <summary>
         /// Swaps two rows in the matrix.
         /// </summary>
         /// <param name="row1">The first row index.</param>
         /// <param name="row2">The second row index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
+        /// </exception>
         public void SwapRows(int row1, int row2)
         {
-            if (row1 <= 0 || row1 > Size)
-                throw new ArgumentOutOfRangeException(nameof(row1));
-            if (row2 <= 0 || row2 > Size)
-                throw new ArgumentOutOfRangeException(nameof(row2));
-            if (row1 == row2)
+            row1.GreaterThan(nameof(row1), 0);
+            row2.GreaterThan(nameof(row2), 0);
+            if (row1 == row2 || (row1 > Size && row2 > Size))
                 return;
+
+            // Expand the matrix if necessary
+            var needed = Math.Max(row1, row2);
+            if (needed > Size)
+                Expand(needed);
 
             var offset1 = (row1 - 1) * _allocatedSize;
             var offset2 = (row2 - 1) * _allocatedSize;
@@ -209,14 +129,20 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="column1">The first column index.</param>
         /// <param name="column2">The second column index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
+        /// </exception>
         public void SwapColumns(int column1, int column2)
         {
-            if (column1 < 1 || column1 > Size)
-                throw new ArgumentOutOfRangeException(nameof(column1));
-            if (column2 < 1 || column2 > Size)
-                throw new ArgumentOutOfRangeException(nameof(column2));
-            if (column1 == column2)
+            column1.GreaterThan(nameof(column1), 0);
+            column2.GreaterThan(nameof(column2), 0);
+            if (column1 == column2 || (column1 > Size && column2 > Size))
                 return;
+
+            // Expand the matrix if necessary
+            var needed = Math.Max(column1, column2);
+            if (needed > Size)
+                Expand(needed);
 
             column1--;
             column2--;
@@ -248,10 +174,25 @@ namespace SpiceSharp.Algebra
             Size = 0;
         }
 
-        /// <summary>
-        /// Expands the matrix.
-        /// </summary>
-        /// <param name="newSize">The new matrix size.</param>
+        private T GetMatrixValue(MatrixLocation location)
+        {
+            if (location.Row == 0 || location.Column == 0)
+                return _trashCan;
+            if (location.Row > Size || location.Column > Size)
+                return default;
+            return _array[(location.Row - 1) * _allocatedSize + location.Column - 1];
+        }
+        private void SetMatrixValue(MatrixLocation location, T value)
+        {
+            if (location.Row == 0 || location.Column == 0)
+                _trashCan = value;
+            else
+            {
+                if (!EqualityComparer<T>.Default.Equals(value, default) && (location.Row > Size || location.Column > Size))
+                    Expand(Math.Max(location.Row, location.Column));
+                _array[(location.Row - 1) * _allocatedSize + location.Column - 1] = value;
+            }
+        }
         private void Expand(int newSize)
         {
             var oldSize = Size;

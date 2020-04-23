@@ -5,7 +5,7 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Describes a vector that can be stepped through.
     /// </summary>
-    public interface ISparseVector<T> : IVector<T> where T : IFormattable
+    public interface ISparseVector<T> : IVector<T>
     {
         /// <summary>
         /// Gets the number of elements in the vector.

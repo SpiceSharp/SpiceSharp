@@ -8,7 +8,7 @@ namespace SpiceSharp.Algebra.Solve
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     [GeneratedParameters]
-    public class MarkowitzDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
+    public class MarkowitzDiagonal<T> : MarkowitzSearchStrategy<T>
     {
         private static int _tiesMultiplier = 5;
 
@@ -27,6 +27,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Markowitz product will ask the search strategy for more entries to make sure that we can't do 
         /// better.
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [GreaterThanOrEquals(0)]
         public static int TiesMultiplier
         {
@@ -48,12 +49,13 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="markowitz" /> or <paramref name="matrix" /> is <c>null</c>.</exception>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
-            if (eliminationStep < 1)
-                throw new ArgumentOutOfRangeException(nameof(eliminationStep));
+            if (eliminationStep < 1 || eliminationStep > max)
+                return Pivot<ISparseMatrixElement<T>>.Empty;
 
             var minMarkowitzProduct = int.MaxValue;
             ISparseMatrixElement<T> chosen = null;

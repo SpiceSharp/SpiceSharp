@@ -7,17 +7,16 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ISolver{T}" />
-    public interface ISparseSolver<T> : ISolver<T> where T : IFormattable
+    public interface ISparseSolver<T> : ISolver<T>
     {
         /// <summary>
-        /// Finds the element at the specified position in the matrix.
+        /// Finds the element at the specified location in the matrix.
         /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
+        /// <param name="location">The location.</param>
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
-        Element<T> FindElement(int row, int column);
+        Element<T> FindElement(MatrixLocation location);
 
         /// <summary>
         /// Finds the element at the specified position in the right-hand side vector.
@@ -26,18 +25,18 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
         Element<T> FindElement(int row);
 
         /// <summary>
-        /// Gets the element at the specified position in the matrix. A new element is
+        /// Gets the element at the specified location in the matrix. A new element is
         /// created if it doesn't exist yet.
         /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
+        /// <param name="location">The location.</param>
         /// <returns>
         /// The matrix element.
         /// </returns>
-        Element<T> GetElement(int row, int column);
+        Element<T> GetElement(MatrixLocation location);
 
         /// <summary>
         /// Gets the element at the specified position in the right-hand side vector.
@@ -47,6 +46,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element.
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
         Element<T> GetElement(int row);
     }
 }

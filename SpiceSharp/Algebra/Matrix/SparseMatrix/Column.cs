@@ -12,20 +12,28 @@ namespace SpiceSharp.Algebra
             /// <summary>
             /// Gets the first element in the column.
             /// </summary>
+            /// <value>
+            /// The first element in the column.
+            /// </value>
             public Element FirstInColumn { get; private set; }
 
             /// <summary>
             /// Gets the last element in the column.
             /// </summary>
+            /// <value>
+            /// The last element in the column.
+            /// </value>
             public Element LastInColumn { get; private set; }
 
             /// <summary>
             /// Insert an element in the column. This method assumes an element does not exist at its indices!
             /// </summary>
             /// <param name="newElement">The new element to insert.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="newElement"/> is <c>null</c>.</exception>
             public void Insert(Element newElement)
             {
                 newElement.ThrowIfNull(nameof(newElement));
+
                 var row = newElement.Row;
                 Element element = FirstInColumn, lastElement = null;
                 while (element != null)
@@ -51,71 +59,6 @@ namespace SpiceSharp.Algebra
                 newElement.Below = element;
             }
 
-            /// <summary>
-            /// Creates or get an element in the column.
-            /// </summary>
-            /// <param name="row">The row index used for creating a new element</param>
-            /// <param name="column">The column index.</param>
-            /// <param name="result">The found or created element.</param>
-            /// <returns>True if the element was found, false if it was created.</returns>
-            public bool CreateGetElement(int row, int column, out Element result)
-            {
-                Element element = FirstInColumn, lastElement = null;
-                while (element != null)
-                {
-                    if (element.Row > row)
-                        break;
-                    if (element.Row == row)
-                    {
-                        result = element;
-                        return true;
-                    }
-
-                    lastElement = element;
-                    element = element.Below;
-                }
-
-                // Create a new element
-                result = new Element(row, column);
-
-                // Update links for last element
-                if (lastElement == null)
-                    FirstInColumn = result;
-                else
-                    lastElement.Below = result;
-                result.Above = lastElement;
-
-                // Update links for next element
-                if (element == null)
-                    LastInColumn = result;
-                else
-                    element.Above = result;
-                result.Below = element;
-
-                // Did not find element
-                return false;
-            }
-
-            /// <summary>
-            /// Find an element in the row without creating it.
-            /// </summary>
-            /// <param name="row">The row index.</param>
-            /// <returns>The element at the specified row, or null if it doesn't exist.</returns>
-            public Element Find(int row)
-            {
-                var element = FirstInColumn;
-                while (element != null)
-                {
-                    if (element.Row == row)
-                        return element;
-                    if (element.Row > row)
-                        return null;
-                    element = element.Below;
-                }
-
-                return null;
-            }
-            
             /// <summary>
             /// Remove an element from the column.
             /// </summary>
@@ -149,6 +92,7 @@ namespace SpiceSharp.Algebra
             /// <param name="second">The second matrix element.</param>
             /// <param name="rowFirst">The first row.</param>
             /// <param name="rowSecond">The second row.</param>
+            /// <exception cref="ArgumentNullException">Thrown if both <paramref name="first"/> and <paramref name="second"/> are <c>null</c>.</exception>
             public void Swap(Element first, Element second, int rowFirst, int rowSecond)
             {
                 if (first == null && second == null)

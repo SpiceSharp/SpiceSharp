@@ -14,7 +14,7 @@ namespace SpiceSharp.Algebra
     /// </para>
     /// <para>This vector automatically expands size if necessary.</para>
     /// </remarks>
-    public partial class SparseVector<T> : ISparseVector<T> where T : IFormattable
+    public partial class SparseVector<T> : ISparseVector<T>
     {
         /// <summary>
         /// Gets the length of the vector.
@@ -430,42 +430,6 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.Append("[");
-            var element = _firstInVector;
-            for (var i = 1; i <= Length; i++)
-            {
-                if (element.Index < i)
-                    element = element.NextInVector;
-                sb.AppendLine(element.Index == i ? element.Value.ToString() : "...");
-            }
-            sb.Append("]");
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="formatProvider">The format provider.</param>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("[");
-            var element = _firstInVector;
-            for (var i = 1; i <= Length; i++)
-            {
-                if (element.Index < i)
-                    element = element.NextInVector;
-                sb.AppendLine(element.Index == i ? element.Value.ToString(format, formatProvider) : "...");
-            }
-            sb.Append("]");
-            return sb.ToString();
-        }
+        public override string ToString() => "Sparse vector ({0})".FormatString(Length);
     }
 }

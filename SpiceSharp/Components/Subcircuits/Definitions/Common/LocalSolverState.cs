@@ -14,7 +14,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <seealso cref="ISolverSimulationState{T}" />
     public abstract partial class LocalSolverState<T, S> : SubcircuitSolverState<T, S>
         where S : ISolverSimulationState<T>
-        where T : IFormattable
     {
         private bool _shouldPreorder, _shouldReorder;
         private readonly List<Bridge<Element<T>>> _elements = new List<Bridge<Element<T>>>();
@@ -167,7 +166,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             var loc = Solver.ExternalToInternal(new MatrixLocation(row.Local, column.Local));
 
             // Do we need to create an element?
-            var local_elt = matrix.FindElement(loc.Row, loc.Column);
+            var local_elt = matrix.FindElement(loc);
             if (local_elt == null)
             {
                 // Check if solving will result in an element
@@ -180,11 +179,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
                     return;
 
                 // Create the element because decomposition will cause these elements to be created
-                local_elt = matrix.GetElement(loc.Row, loc.Column);
+                local_elt = matrix.GetElement(loc);
             }
             if (local_elt == null)
                 return;
-            var parent_elt = Parent.Solver.GetElement(row.Global, column.Global);
+            var parent_elt = Parent.Solver.GetElement(new MatrixLocation(row.Global, column.Global));
             _elements.Add(new Bridge<Element<T>>(local_elt, parent_elt));
         }
 

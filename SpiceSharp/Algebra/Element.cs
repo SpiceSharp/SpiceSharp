@@ -7,27 +7,30 @@ namespace SpiceSharp.Algebra
     /// A description of a matrix element.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public class Element<T> : IFormattable where T : IFormattable
+    public class Element<T>
     {
         /// <summary>
         /// Generic addition.
         /// </summary>
-        protected readonly static Func<T, T, T> Addition;
+        protected readonly static Func<T, T, T> Addition = CompileDefaultAddition();
 
         /// <summary>
         /// Generic subtraction.
         /// </summary>
-        protected readonly static Func<T, T, T> Subtraction;
+        protected readonly static Func<T, T, T> Subtraction = CompileDefaultSubtraction();
 
-        /// <summary>
-        /// Initializes the <see cref="Element{T}"/> class.
-        /// </summary>
-        static Element()
+        private static Func<T, T, T> CompileDefaultAddition()
         {
-            var a = Expression.Parameter(typeof(T), "a");
-            var b = Expression.Parameter(typeof(T), "b");
-            Addition = Expression.Lambda<Func<T, T, T>>(Expression.Add(a, b), a, b).Compile();
-            Subtraction = Expression.Lambda<Func<T, T, T>>(Expression.Subtract(a, b), a, b).Compile();
+            var a = Expression.Parameter(typeof(T));
+            var b = Expression.Parameter(typeof(T));
+            return Expression.Lambda<Func<T, T, T>>(Expression.Add(a, b), a, b).Compile();
+        }
+
+        private static Func<T, T, T> CompileDefaultSubtraction()
+        {
+            var a = Expression.Parameter(typeof(T));
+            var b = Expression.Parameter(typeof(T));
+            return Expression.Lambda<Func<T, T, T>>(Expression.Subtract(a, b), a, b).Compile();
         }
 
         /// <summary>
@@ -41,27 +44,18 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Converts to string.
         /// </summary>
-        public override string ToString()
-            => Value.ToString();
-
-        /// <summary>
-        /// Converts to string.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="provider">The provider.</param>
-        public string ToString(string format, IFormatProvider provider)
-            => Value.ToString(format, provider);
+        public override string ToString() => Value.ToString();
 
         /// <summary>
         /// Adds the specified value to the element.
         /// </summary>
         /// <param name="value">The value.</param>
-        public virtual void Add(T value) => Value = Addition(Value, value);
+        public void Add(T value) => Value = Addition(Value, value);
 
         /// <summary>
         /// Subtracts the specified value from the element.
         /// </summary>
         /// <param name="value">The value.</param>
-        public virtual void Subtract(T value) => Value = Subtraction(Value, value);
+        public void Subtract(T value) => Value = Subtraction(Value, value);
     }
 }

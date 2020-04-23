@@ -61,7 +61,7 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
                     solver.GetElement(r + 1).Value = rhs[r];
@@ -94,7 +94,7 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
                     solver.GetElement(r + 1).Value = rhs[r];
@@ -127,7 +127,7 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
                     solver.GetElement(r + 1).Value = rhs[r];
@@ -160,7 +160,7 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
-                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
                 }
                 if (!rhs[r].Equals(0.0))
                     solver.GetElement(r + 1).Value = rhs[r];
@@ -205,12 +205,12 @@ namespace SpiceSharpTest.Algebra
                 for (var c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(Complex.Zero))
-                        solver.GetElement(r + 1, c + 1).Value = matrix[r][c];
+                        solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
                 }
             }
 
             // Add some zero elements
-            solver.GetElement(7, 7);
+            solver.GetElement(new MatrixLocation(7, 7));
             solver.GetElement(5);
 
             // Build the Rhs vector

@@ -7,7 +7,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// An interface describing a behavior with a branch equation.
     /// </summary>
-    public interface IBranchedBehavior<T> : IBehavior where T : IFormattable
+    public interface IBranchedBehavior<T> : IBehavior
     {
         /// <summary>
         /// Gets the branch equation variable.

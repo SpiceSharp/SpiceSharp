@@ -29,8 +29,11 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes a new instance of the <see cref="Translation"/> class.
         /// </summary>
         /// <param name="size">The number of translations to be allocated.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is negative.</exception>
         public Translation(int size)
         {
+            size.GreaterThanOrEquals(nameof(size), 0);
+
             _extToInt = new int[size + 1];
             _intToExt = new int[size + 1];
             for (var i = 1; i <= size; i++)
@@ -50,14 +53,22 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Gets the internal index.
+        /// Gets the internal index from an external index.
         /// </summary>
+        /// <value>
+        /// The internal index.
+        /// </value>
         /// <param name="index">The external index.</param>
-        /// <returns>The internal index.</returns>
+        /// <returns>
+        /// The internal index.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
         public int this[int index]
         {
             get
             {
+                index.GreaterThanOrEquals(nameof(index), 0);
+
                 // Zero is mapped to zero
                 if (index == 0)
                     return 0;
@@ -68,12 +79,17 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Gets the external index.
+        /// Gets the external index from an internal index.
         /// </summary>
         /// <param name="index">The internal index</param>
-        /// <returns>The external index.</returns>
+        /// <returns>
+        /// The external index.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
         public int Reverse(int index)
         {
+            index.GreaterThanOrEquals(nameof(index), 0);
+
             if (index == 0)
                 return 0;
             if (index > _allocated)
@@ -82,12 +98,19 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Swap two (internal) indices.
+        /// Swaps two (internal) indices, such that the external indices
+        /// still point to the right ones.
         /// </summary>
         /// <param name="index1">First index.</param>
         /// <param name="index2">Second index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="index1"/> or <paramref name="index2"/> is negative.
+        /// </exception>
         public void Swap(int index1, int index2)
         {
+            index1.GreaterThanOrEquals(nameof(index1), 0);
+            index2.GreaterThanOrEquals(nameof(index2), 0);
+
             if (index1 > Length || index2 > Length)
                 ExpandTranslation(Math.Max(index1, index2));
 
@@ -107,7 +130,11 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        public void Scramble<T>(IVector<T> source, IVector<T> target) where T : IFormattable
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="source"/> or <paramref name="target"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="target"/> does not have the same length as <paramref name="source"/>.</exception>
+        public void Scramble<T>(IVector<T> source, IVector<T> target)
         {
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
@@ -128,7 +155,14 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        public void Unscramble<T>(T[] source, IVector<T> target) where T : IFormattable
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="source"/> or <paramref name="target"/> is <c>null</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown if <paramref name="target"/> (including the trashcan element)
+        /// does not have the same number of elements as <paramref name="source"/>.
+        /// </exception>
+        public void Unscramble<T>(T[] source, IVector<T> target)
         {
             source.ThrowIfNull(nameof(source));
             target.ThrowIfNull(nameof(target));
@@ -144,9 +178,21 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Expand the translation map.
+        /// Clears all translations.
         /// </summary>
-        /// <param name="newLength">The new length.</param>
+        public void Clear()
+        {
+            var size = _initialSize;
+            _extToInt = new int[size + 1];
+            _intToExt = new int[size + 1];
+            for (var i = 1; i <= size; i++)
+            {
+                _extToInt[i] = i;
+                _intToExt[i] = i;
+            }
+            _allocated = size;
+        }
+
         private void ExpandTranslation(int newLength)
         {
             // No need to reallocate vector
@@ -168,22 +214,6 @@ namespace SpiceSharp.Algebra.Solve
                 _intToExt[i] = i;
             }
             Length = newLength;
-        }
-
-        /// <summary>
-        /// Clears all translations.
-        /// </summary>
-        public void Clear()
-        {
-            var size = _initialSize;
-            _extToInt = new int[size + 1];
-            _intToExt = new int[size + 1];
-            for (var i = 1; i <= size; i++)
-            {
-                _extToInt[i] = i;
-                _intToExt[i] = i;
-            }
-            _allocated = size;
         }
     }
 }

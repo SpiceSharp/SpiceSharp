@@ -7,6 +7,7 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// Class for solving real matrices
     /// </summary>
+    /// <seealso cref="SparseLUSolver{T}"/>
     public partial class SparseComplexSolver : SparseLUSolver<Complex>
     {
         /// <summary>
@@ -23,9 +24,12 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Solves the equations using the Y-matrix and Rhs-vector.
+        /// Solves the equations using the factored matrix and right hand side vector.
         /// </summary>
         /// <param name="solution">The solution.</param>
+        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         public override void Solve(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -33,6 +37,7 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
             var order = Size - Degeneracy;
@@ -87,9 +92,12 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Solves the equations using the transposed Y-matrix.
+        /// Solves the equations using the transposed factored matrix and right hand side vector.
         /// </summary>
         /// <param name="solution">The solution.</param>
+        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         public override void SolveTransposed(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -149,9 +157,7 @@ namespace SpiceSharp.Algebra
         /// Eliminates the matrix right and below the pivot.
         /// </summary>
         /// <param name="pivot">The pivot element.</param>
-        /// <returns>
-        /// <c>true</c> if the elimination was successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <exception cref="AlgebraException">Thrown if the pivot is <c>null</c> or has a magnitude of zero.</exception>
         protected override void Eliminate(ISparseMatrixElement<Complex> pivot)
         {
             // Test for zero pivot
@@ -177,7 +183,7 @@ namespace SpiceSharp.Algebra
 
                     // Test to see if the desired element was not found, if not, create fill-in
                     if (sub == null || sub.Row > row)
-                        sub = CreateFillin(row, upper.Column);
+                        sub = CreateFillin(new MatrixLocation(row, upper.Column));
 
                     // element -= upper * lower
                     sub.Value -= upper.Value * lower.Value;
@@ -192,14 +198,18 @@ namespace SpiceSharp.Algebra
         /// Method for finding the magnitude of a complex value.
         /// </summary>
         /// <param name="value">The complex value.</param>
-        /// <returns>A scalar indicating the magnitude of the complex value.</returns>
+        /// <returns>
+        /// A scalar indicating the magnitude of the complex value.
+        /// </returns>
         private static double Magnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
         /// <summary>
         /// Calculates the inverse of a complex number.
         /// </summary>
         /// <param name="value">The complex value.</param>
-        /// <returns>The inverse value.</returns>
+        /// <returns>
+        /// The inverse value.
+        /// </returns>
         private static Complex Inverse(Complex value)
         {
             double real, imaginary;

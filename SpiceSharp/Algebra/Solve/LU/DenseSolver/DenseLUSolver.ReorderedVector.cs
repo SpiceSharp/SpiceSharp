@@ -19,6 +19,7 @@ namespace SpiceSharp.Algebra.Solve
             /// Initializes a new instance of the <see cref="ReorderedVector"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> is <c>null</c>.</exception>
             public ReorderedVector(DenseLUSolver<T> parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
@@ -80,16 +81,6 @@ namespace SpiceSharp.Algebra.Solve
             /// A <see cref="System.String" /> that represents this instance.
             /// </returns>
             public override string ToString() => _parent.Vector.ToString();
-
-            /// <summary>
-            /// Converts to string.
-            /// </summary>
-            /// <param name="format">The format.</param>
-            /// <param name="formatProvider">The format provider.</param>
-            /// <returns>
-            /// A <see cref="System.String" /> that represents this instance.
-            /// </returns>
-            public string ToString(string format, IFormatProvider formatProvider) => _parent.Vector.ToString(format, formatProvider);
         }
     }
 }

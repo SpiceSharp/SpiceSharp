@@ -183,7 +183,7 @@ namespace SpiceSharp.Algebra
 
                     // Test to see if the desired element was not found, if not, create fill-in
                     if (sub == null || sub.Row > row)
-                        sub = CreateFillin(row, upper.Column);
+                        sub = CreateFillin(new MatrixLocation(row, upper.Column));
 
                     // element -= upper * lower
                     sub.Value -= upper.Value * lower.Value;

@@ -10,7 +10,7 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class RookPivoting<T> : ParameterSet where T : IFormattable
+    public class RookPivoting<T> : ParameterSet
     {
         private double _absolutePivotThreshold = 1e-13;
         private double _relativePivotThreshold = 1e-3;
@@ -29,7 +29,7 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The relative pivot threshold.
         /// </value>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not greater than 0.</exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
         public double RelativePivotThreshold
@@ -48,7 +48,7 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The absolute pivot threshold.
         /// </value>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
         public double AbsolutePivotThreshold
@@ -64,7 +64,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Initializes a new instance of the <see cref="RookPivoting{T}"/> class.
         /// </summary>
-        /// <param name="magnitude">The magnitude.</param>
+        /// <param name="magnitude">The function for turning elements into a scalar.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="magnitude"/> is <c>null</c>.</exception>
         public RookPivoting(Func<T, double> magnitude)
         {
             Magnitude = magnitude.ThrowIfNull(nameof(magnitude));
@@ -77,8 +78,13 @@ namespace SpiceSharp.Algebra
         /// <param name="eliminationStep">The elimination step.</param>
         /// <param name="max">The maximum row/column index.</param>
         /// <returns>The pivot.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="matrix"/> is <c>null</c>.</exception>
         public Pivot<MatrixLocation> FindPivot(IMatrix<T> matrix, int eliminationStep, int max)
         {
+            matrix.ThrowIfNull(nameof(matrix));
+            if (eliminationStep < 1 || eliminationStep > max)
+                return Pivot<MatrixLocation>.Empty;
+
             // Find the largest element below and right of the pivot
             var largest = Magnitude(matrix[eliminationStep, eliminationStep]);
             var loc = new MatrixLocation(eliminationStep, eliminationStep);
@@ -110,10 +116,13 @@ namespace SpiceSharp.Algebra
         /// <param name="eliminationStep">The elimination step.</param>
         /// <param name="max">The maximum row/column index.</param>
         /// <returns>
-        /// <c>true</c> if the pivot is valid; otherwise, <c>false</c>.
+        ///   <c>true</c> if the pivot is valid; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="matrix" /> is <c>null</c>.</exception>
         public bool IsValidPivot(IMatrix<T> matrix, int eliminationStep, int max)
         {
+            matrix.ThrowIfNull(nameof(matrix));
+
             // Get the magnitude of the current pivot
             var magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);
             if (magnitude <= AbsolutePivotThreshold)

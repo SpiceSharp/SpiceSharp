@@ -22,8 +22,13 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row"/> or <paramref name="column"/> is not positive.
+        /// </exception>
         public MatrixLocation(int row, int column)
         {
+            row.GreaterThanOrEquals(nameof(row), 0);
+            column.GreaterThanOrEquals(nameof(column), 0);
             Row = row;
             Column = column;
         }

@@ -16,18 +16,18 @@
         T Value { get; set; }
 
         /// <summary>
-        /// Gets the row.
+        /// Gets the row of the matrix element.
         /// </summary>
         /// <value>
-        /// The row.
+        /// The row index.
         /// </value>
         int Row { get; }
 
         /// <summary>
-        /// Gets the column.
+        /// Gets the column of the matrix element.
         /// </summary>
         /// <value>
-        /// The column.
+        /// The column index.
         /// </value>
         int Column { get; }
 

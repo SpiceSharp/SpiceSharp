@@ -9,7 +9,7 @@ namespace SpiceSharp.Algebra.Solve
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     [GeneratedParameters]
-    public class Markowitz<T> : ParameterSet where T : IFormattable
+    public class Markowitz<T> : ParameterSet
     {
         private double _absolutePivotThreshold = 1e-13;
         private double _relativePivotThreshold = 1e-3;
@@ -35,16 +35,25 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Gets the Markowitz row counts.
         /// </summary>
+        /// <exception cref="IndexOutOfRangeException">
+        /// Thrown if <paramref name="row"/> is negative or greater than the number of Markowitz rows.
+        /// </exception>
         public int RowCount(int row) => _markowitzRow[row];
 
         /// <summary>
         /// Gets the Markowitz column counts.
         /// </summary>
+        /// <exception cref="IndexOutOfRangeException">
+        /// Thrown if <paramref name="column"/> is negative or greater than the number of Markowitz columns.
+        /// </exception>
         public int ColumnCount(int column) => _markowitzColumn[column];
 
         /// <summary>
         /// Gets the Markowitz products.
         /// </summary>
+        /// <exception cref="IndexOutOfRangeException">
+        /// Thrown if <paramref name="index"/> is negative or greater than the number of Markowitz size.
+        /// </exception>
         public int Product(int index) => _markowitzProduct[index];
 
         /// <summary>
@@ -63,6 +72,12 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Gets or sets the relative threshold for choosing a pivot.
         /// </summary>
+        /// <value>
+        /// The relative pivot threshold.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the value is not greater than 0.
+        /// </exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
         public double RelativePivotThreshold
@@ -78,6 +93,12 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
         /// </summary>
+        /// <value>
+        /// The absolute pivot threshold.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the value is negative.
+        /// </exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
         public double AbsolutePivotThreshold
@@ -93,11 +114,16 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Gets the strategies used for finding a pivot.
         /// </summary>
+        /// <value>
+        /// The strategies.
+        /// </value>
         public Collection<MarkowitzSearchStrategy<T>> Strategies { get; } = new Collection<MarkowitzSearchStrategy<T>>();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Markowitz{T}"/> class.
+        /// Initializes a new instance of the <see cref="Markowitz{T}" /> class.
         /// </summary>
+        /// <param name="magnitude">The function for turning elements into a scalar.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="magnitude"/> is <c>null</c>.</exception>
         public Markowitz(Func<T, double> magnitude)
         {
             Magnitude = magnitude.ThrowIfNull(nameof(magnitude));
@@ -118,6 +144,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// True if the pivot can be used.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="pivot"/> is <c>null</c>.</exception>
         public bool IsValidPivot(ISparseMatrixElement<T> pivot, int max)
         {
             pivot.ThrowIfNull(nameof(pivot));
@@ -145,7 +172,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Initializes the pivot searching algorithm.
         /// </summary>
-        /// <param name="matrix">The matrix.</param>
+        /// <param name="matrix">The matrix to use for initialization.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="matrix"/> is <c>null</c>.</exception>
         public void Initialize(IMatrix<T> matrix)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -166,13 +194,6 @@ namespace SpiceSharp.Algebra.Solve
             _markowitzProduct = null;
         }
 
-        /// <summary>
-        /// Count the Markowitz numbers.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="rhs">The right-hand side vector.</param>
-        /// <param name="step">The elimination step.</param>
-        /// <param name="max">The maximum row/column index to search.</param>
         private void Count(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int step, int max)
         {
             ISparseMatrixElement<T> element;
@@ -220,11 +241,6 @@ namespace SpiceSharp.Algebra.Solve
             }
         }
 
-        /// <summary>
-        /// Calculate the Markowitz products.
-        /// </summary>
-        /// <param name="step">The elimination step.</param>
-        /// <param name="max">The maximum row/column index to search.</param>
         private void Products(int step, int max)
         {
             Singletons = 0;
@@ -244,6 +260,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="rhs">The right-hand side vector.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <param name="max">The maximum row/column index.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="matrix"/> or <paramref name="rhs"/> is <c>null</c>.
+        /// </exception>
         public void Setup(ISparseMatrix<T> matrix, ISparseVector<T> rhs, int eliminationStep, int max)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -266,6 +285,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <remarks>
         /// This is done by swapping the rows and columns of the diagonal and that of the pivot.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="matrix"/>, <paramref name="rhs"/> or <paramref name="pivot"/> is <c>null</c>.
+        /// </exception>
         public void MovePivot(ISparseMatrix<T> matrix, ISparseVector<T> rhs, ISparseMatrixElement<T> pivot, int eliminationStep)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -278,14 +300,14 @@ namespace SpiceSharp.Algebra.Solve
             int oldProduct;
 
             var row = pivot.Row;
-            var column = pivot.Column;
+            var col = pivot.Column;
 
             // If the pivot is a singleton, then we just consumed it
-            if (_markowitzProduct[pivot.Row] == 0 || _markowitzProduct[pivot.Column] == 0)
+            if (_markowitzProduct[row] == 0 || _markowitzProduct[col] == 0)
                 Singletons--;
 
             // Exchange rows
-            if (pivot.Row != eliminationStep)
+            if (row != eliminationStep)
             {
                 // Swap row Markowitz numbers
                 var tmp = _markowitzRow[row];
@@ -308,24 +330,24 @@ namespace SpiceSharp.Algebra.Solve
             }
 
             // Exchange columns
-            if (column != eliminationStep)
+            if (col != eliminationStep)
             {
                 // Swap column Markowitz numbers
-                var tmp = _markowitzColumn[column];
-                _markowitzColumn[column] = _markowitzColumn[eliminationStep];
+                var tmp = _markowitzColumn[col];
+                _markowitzColumn[col] = _markowitzColumn[eliminationStep];
                 _markowitzColumn[eliminationStep] = tmp;
 
                 // Update the Markowitz product
-                oldProduct = _markowitzProduct[column];
-                _markowitzProduct[column] = _markowitzRow[column] * _markowitzColumn[column];
+                oldProduct = _markowitzProduct[col];
+                _markowitzProduct[col] = _markowitzRow[col] * _markowitzColumn[col];
                 if (oldProduct == 0)
                 {
-                    if (_markowitzProduct[column] != 0)
+                    if (_markowitzProduct[col] != 0)
                         Singletons--;
                 }
                 else
                 {
-                    if (_markowitzProduct[column] == 0)
+                    if (_markowitzProduct[col] == 0)
                         Singletons++;
                 }
             }
@@ -351,6 +373,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix.</param>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="limit">The maximum row/column for pivots.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="matrix"/> or <paramref name="pivot"/> is <c>null</c>.
+        /// </exception>
         public void Update(ISparseMatrix<T> matrix, ISparseMatrixElement<T> pivot, int limit)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -395,6 +420,9 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <param name="fillin">The fill-in.</param>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="matrix"/> or <paramref name="fillin"/> is <c>null</c>.
+        /// </exception>
         public void CreateFillin(ISparseMatrix<T> matrix, ISparseMatrixElement<T> fillin)
         {
             matrix.ThrowIfNull(nameof(matrix));
@@ -432,9 +460,20 @@ namespace SpiceSharp.Algebra.Solve
         /// current diagonal at row/column <paramref name="eliminationStep" />. This pivot element
         /// will be moved to the diagonal for this elimination step.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="matrix"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="eliminationStep"/> or <paramref name="max"/> not 1 or higher, 
+        /// or <paramref name="eliminationStep"/> is higher than <paramref name="max"/>.
+        /// </exception>
         public Pivot<ISparseMatrixElement<T>> FindPivot(ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             matrix.ThrowIfNull(nameof(matrix));
+            eliminationStep.GreaterThan(nameof(eliminationStep), 0);
+            max.GreaterThan(nameof(max), 0);
+
+            // No pivot possible if we're already eliminating outside of our bounds
+            if (eliminationStep > max)
+                return Pivot<ISparseMatrixElement<T>>.Empty;
 
             // Fix the search limit to allow our strategies to work
             foreach (var strategy in Strategies)
@@ -445,54 +484,5 @@ namespace SpiceSharp.Algebra.Solve
             }
             return Pivot<ISparseMatrixElement<T>>.Empty;
         }
-
-#if DEBUG
-        /// <summary>
-        /// Checks whether or not the Markowitz products are still correct. Can be used when debugging matrix decomposition.
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="step">The current step.</param>
-        /// <param name="max">The maximum row/column index.</param>
-        public void CheckMarkowitzCounts(ISparseMatrix<T> matrix, int step, int max)
-        {
-            if (_markowitzProduct == null)
-                return;
-
-            // Recalculate the rows and columns completely and check with the current ones
-            int singletons = 0;
-            for (var i = step; i <= max; i++)
-            {
-                // Count the elements in the row
-                int count = -1;
-                var e = matrix.GetLastInRow(i);
-                while (e != null && e.Column >= step)
-                {
-                    count++;
-                    e = e.Left;
-                }
-                if (_markowitzRow[i] != count && _markowitzRow[i] != count + 1)
-                    throw new SpiceSharpException("Invalid row count");
-
-                // Count the elements in the column
-                count = -1;
-                e = matrix.GetLastInColumn(i);
-                while (e != null && e.Row >= step)
-                {
-                    count++;
-                    e = e.Above;
-                }
-                if (_markowitzColumn[i] != count)
-                    throw new SpiceSharpException("Invalid column count");
-
-                if (_markowitzProduct[i] != Math.Min(_markowitzRow[i] * _markowitzColumn[i], _maxMarkowitzCount))
-                    throw new SpiceSharpException("Invalid product");
-                if (_markowitzProduct[i] == 0)
-                    singletons++;
-            }
-
-            if (singletons != Singletons)
-                throw new SpiceSharpException("Invalid singleton count");
-        }
-#endif
     }
 }

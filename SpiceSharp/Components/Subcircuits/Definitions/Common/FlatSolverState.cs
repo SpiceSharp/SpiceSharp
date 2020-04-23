@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <typeparam name="T">The base value type.</typeparam>
     /// <typeparam name="S">The parent simulation state type.</typeparam>
     /// <seealso cref="ISolverSimulationState{T}" />
-    public class FlatSolverState<T, S> : SubcircuitSolverState<T, S> where S : ISolverSimulationState<T> where T : IFormattable
+    public class FlatSolverState<T, S> : SubcircuitSolverState<T, S> where S : ISolverSimulationState<T>
     {
         /// <summary>
         /// Gets the solver used to solve the system of equations.

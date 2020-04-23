@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Models
             op.AfterLoad += (sender, args) =>
             {
                 var solver = op.GetState<IBiasingSimulationState>().Solver;
-                var elt = solver.FindElement(1, 1);
+                var elt = solver.FindElement(new SpiceSharp.Algebra.MatrixLocation(1, 1));
                 Assert.AreEqual(1.0 / SpiceSharp.Components.ResistorBehaviors.Parameters.MinimumResistance, elt.Value, 1e-20);
             };
             op.Run(ckt);

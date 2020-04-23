@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// is equal to the current out of the other.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct OnePort<T> where T : IFormattable
+    public struct OnePort<T>
     {
         /// <summary>
         /// The positive node.

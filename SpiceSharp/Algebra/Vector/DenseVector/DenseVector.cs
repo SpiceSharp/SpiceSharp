@@ -13,7 +13,7 @@ namespace SpiceSharp.Algebra
     /// the vector.</para>
     /// <para>This vector does not automatically expand size if necessary. Under the hood it is basically just an array.</para>
     /// </remarks>
-    public partial class DenseVector<T> : IVector<T>, IFormattable where T : IFormattable
+    public partial class DenseVector<T> : IVector<T>
     {
         private const float _expansionFactor = 1.5f;
         private const int _initialSize = 4;
@@ -156,38 +156,8 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("[");
-            for (var i = 1; i <= Length; i++)
-                sb.AppendLine(_values[i].ToString());
-            sb.AppendLine("]");
-            return sb.ToString();
-        }
+        public override string ToString() => "Dense vector ({0})".FormatString(Length);
 
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <param name="format">The format for each element of the vector.</param>
-        /// <param name="formatProvider">The format provider for each element of the vector.</param>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("[");
-            for (var i = 1; i <= Length; i++)
-                sb.AppendLine(_values[i].ToString(format, formatProvider));
-            sb.AppendLine("]");
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Expands the vector to the specified new size.
-        /// </summary>
-        /// <param name="newSize">The new size.</param>
         private void Expand(int newSize)
         {
             Length = newSize;

@@ -83,7 +83,7 @@ namespace SpiceSharp.Algebra.Solve
             /// <returns>
             /// The matrix element.
             /// </returns>
-            public Element<T> GetElement(int row, int column) => _parent.Matrix.GetElement(row, column);
+            public Element<T> GetElement(MatrixLocation location) => _parent.Matrix.GetElement(location);
 
             /// <summary>
             /// Finds a pointer to the matrix element at the specified row and column. If
@@ -94,7 +94,7 @@ namespace SpiceSharp.Algebra.Solve
             /// <returns>
             /// The matrix element if it exists; otherwise <c>null</c>.
             /// </returns>
-            public Element<T> FindElement(int row, int column) => _parent.Matrix.FindElement(row, column);
+            public Element<T> FindElement(MatrixLocation location) => _parent.Matrix.FindElement(location);
 
             /// <summary>
             /// Gets the size of the matrix.
@@ -164,16 +164,6 @@ namespace SpiceSharp.Algebra.Solve
             /// A <see cref="System.String" /> that represents this instance.
             /// </returns>
             public override string ToString() => _parent.Matrix.ToString();
-
-            /// <summary>
-            /// Converts to string.
-            /// </summary>
-            /// <param name="format">The format.</param>
-            /// <param name="formatProvider">The format provider.</param>
-            /// <returns>
-            /// A <see cref="System.String" /> that represents this instance.
-            /// </returns>
-            public string ToString(string format, IFormatProvider formatProvider) => _parent.Matrix.ToString(format, formatProvider);
         }
     }
 }

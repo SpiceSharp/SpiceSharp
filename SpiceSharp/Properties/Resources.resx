@@ -210,6 +210,9 @@
   <data name="Parameters.NotLessOrEqual" xml:space="preserve">
     <value>The parameter value should be at most {0}.</value>
   </data>
+  <data name="Parameters.NotWithinRange" xml:space="preserve">
+    <value>The parameter value is outside the allowed range {0}-{1}.</value>
+  </data>
   <data name="Parameters.ParameterSetNotFound" xml:space="preserve">
     <value>A parameter set of type '{0}' could not be found.</value>
   </data>

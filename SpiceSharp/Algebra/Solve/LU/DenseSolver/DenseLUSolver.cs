@@ -11,7 +11,6 @@ namespace SpiceSharp.Algebra.Solve
     /// <seealso cref="IVector{T}" />
     /// <seealso cref="IFormattable" />
     public abstract partial class DenseLUSolver<T> : PivotingSolver<IMatrix<T>, IVector<T>, T>, ISolver<T>, IParameterized<RookPivoting<T>>
-        where T : IFormattable
     {
         /// <summary>
         /// Gets the pivoting strategy.

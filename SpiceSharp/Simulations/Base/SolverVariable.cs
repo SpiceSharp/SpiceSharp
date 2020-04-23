@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IVariable{T}" />
-    public class SolverVariable<T> : IVariable<T> where T : IFormattable
+    public class SolverVariable<T> : IVariable<T>
     {
         private readonly ISolverSimulationState<T> _state;
         private readonly int _index;

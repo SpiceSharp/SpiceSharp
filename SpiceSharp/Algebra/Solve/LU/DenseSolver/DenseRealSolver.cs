@@ -32,6 +32,11 @@ namespace SpiceSharp.Algebra
         /// Solves the system of equations.
         /// </summary>
         /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
+        /// </exception>
         public override void Solve(IVector<double> solution)
             => Solve(solution, Size);
 
@@ -40,6 +45,11 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <param name="size">The size of the submatrix to be solved.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
+        /// </exception>
         public void Solve(IVector<double> solution, int size)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -47,6 +57,7 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             size = Math.Min(size, Size);
@@ -75,6 +86,11 @@ namespace SpiceSharp.Algebra
         /// Solves the transposed.
         /// </summary>
         /// <param name="solution">The solution.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
+        /// </exception>
         public override void SolveTransposed(IVector<double> solution)
             => SolveTransposed(solution, Size);
 
@@ -83,6 +99,9 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solution">The solution.</param>
         /// <param name="steps">The steps.</param>
+        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         public void SolveTransposed(IVector<double> solution, int steps)
         {
             solution.ThrowIfNull(nameof(solution));

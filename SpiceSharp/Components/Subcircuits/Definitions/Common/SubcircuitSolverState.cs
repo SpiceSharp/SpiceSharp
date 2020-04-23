@@ -15,7 +15,6 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     /// <seealso cref="ISolverSimulationState{T}" />
     public abstract class SubcircuitSolverState<T, S> : ISolverSimulationState<T> 
         where S : ISolverSimulationState<T>
-        where T : IFormattable
     {
         /// <summary>
         /// The name of the subcircuit.

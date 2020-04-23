@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
             if (!state.Map.Contains(variable))
                 throw new SpiceSharpException(Properties.Resources.Simulations_ConvergenceAidVariableNotFound.FormatString(variable.Name));
             _index = state.Map[variable];
-            _diagonal = _state.Solver.GetElement(_index, _index);
+            _diagonal = _state.Solver.GetElement(new MatrixLocation(_index, _index));
             _rhs = !Value.Equals(0.0) ? _state.Solver.GetElement(_index) : _state.Solver.FindElement(_index);
             _state.Solution[_index] = Value;
         }
@@ -68,7 +68,7 @@ namespace SpiceSharp.Simulations
                     hasOtherTypes = true;
                 else
                 {
-                    var elt = _state.Solver.FindElement(_index, v.Value);
+                    var elt = _state.Solver.FindElement(new MatrixLocation(_index, v.Value));
                     if (elt != null)
                         elt.Value = 0.0;
                 }

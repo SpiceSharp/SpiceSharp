@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra.Solve
     /// singletons (rows or columns with only one element), these can be found rather cheaply.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T> where T : IFormattable
+    public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T>
     {
         /// <summary>
         /// Find a pivot in a matrix.
@@ -19,12 +19,13 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="markowitz" /> or <paramref name="matrix" /> is <c>null</c>.</exception>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
-            if (eliminationStep < 1)
-                throw new ArgumentOutOfRangeException(nameof(eliminationStep));
+            if (eliminationStep < 1 || eliminationStep > max)
+                return Pivot<ISparseMatrixElement<T>>.Empty;
 
             // No singletons left, so don't bother
             if (markowitz.Singletons == 0)
@@ -35,7 +36,7 @@ namespace SpiceSharp.Algebra.Solve
             for (var i = max + 1; i >= eliminationStep; i--)
             {
                 // First check the current pivot, else
-                // search from last to first as it tends to push the higher markowitz
+                // search from last to first as this tends to push the higher markowitz
                 // products downwards.
                 index = i > max ? eliminationStep : i;
 

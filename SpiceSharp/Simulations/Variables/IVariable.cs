@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IVariable" />
-    public interface IVariable<T> : IVariable where T : IFormattable
+    public interface IVariable<T> : IVariable
     {
         /// <summary>
         /// Gets the value of the variable.

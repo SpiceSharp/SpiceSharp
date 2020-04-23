@@ -14,11 +14,14 @@ namespace SpiceSharp.Algebra
     /// <para>The matrix automatically expands size if necessary.</para>
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public partial class SparseMatrix<T> : IMatrix<T>, ISparseMatrix<T> where T : IFormattable
+    public partial class SparseMatrix<T> : IMatrix<T>, ISparseMatrix<T>
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
+        private Row[] _rows;
+        private Column[] _columns;
+        private Element[] _diagonal;
+        private readonly Element _trashCan;
+        private int _allocatedSize;
+
         private const int _initialSize = 4;
         private const float _expansionFactor = 1.5f;
 
@@ -39,18 +42,21 @@ namespace SpiceSharp.Algebra
         public int Size { get; private set; }
 
         /// <summary>
-        /// Gets or sets the value with the specified row.
+        /// Gets or sets the value at the specified row and column.
         /// </summary>
         /// <value>
         /// The value.
         /// </value>
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
-        /// <returns>The value</returns>
+        /// <returns>The value.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row"/> or <paramref name="column"/> is not positive.
+        /// </exception>
         public T this[int row, int column]
         {
-            get => GetMatrixValue(row, column);
-            set => SetMatrixValue(row, column, value);
+            get => GetMatrixValue(new MatrixLocation(row, column));
+            set => SetMatrixValue(new MatrixLocation(row, column), value);
         }
 
         /// <summary>
@@ -63,18 +69,9 @@ namespace SpiceSharp.Algebra
         /// <returns>The value.</returns>
         public T this[MatrixLocation location]
         {
-            get => GetMatrixValue(location.Row, location.Column);
-            set => SetMatrixValue(location.Row, location.Column, value);
+            get => GetMatrixValue(location);
+            set => SetMatrixValue(location, value);
         }
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private Row[] _rows;
-        private Column[] _columns;
-        private Element[] _diagonal;
-        private readonly Element _trashCan;
-        private int _allocatedSize;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SparseMatrix{T}"/> class.
@@ -96,7 +93,7 @@ namespace SpiceSharp.Algebra
 
             // Other
             _diagonal = new Element[_initialSize + 1];
-            _trashCan = new Element(0, 0);
+            _trashCan = new Element(new MatrixLocation());
             ElementCount = 1;
         }
 
@@ -104,9 +101,10 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="SparseMatrix{T}"/> class.
         /// </summary>
         /// <param name="size">The matrix size.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is negative.</exception>
         public SparseMatrix(int size)
         {
-            Size = size;
+            Size = size.GreaterThanOrEquals(nameof(size), 0);
             _allocatedSize = Math.Max(_initialSize, size);
 
             // Allocate rows
@@ -121,179 +119,153 @@ namespace SpiceSharp.Algebra
 
             // Other
             _diagonal = new Element[_allocatedSize + 1];
-            _trashCan = new Element(0, 0);
+            _trashCan = new Element(new MatrixLocation());
             ElementCount = 1;
         }
 
         /// <summary>
-        /// Gets a value in the matrix at a specific row and column.
+        /// Gets a pointer to the matrix element at the specified row and column. If
+        /// the element doesn't exist, it is created.
         /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
+        /// <param name="location">The matrix location.</param>
         /// <returns>
-        /// The value at the specified row and column.
+        /// The matrix element.
         /// </returns>
-        protected T GetMatrixValue(int row, int column)
+        public Element<T> GetElement(MatrixLocation location)
         {
-            var element = FindElement(row, column);
-            if (element == null)
-                return default;
-            return element.Value;
-        }
-
-        /// <summary>
-        /// Sets the value in the matrix at a specific row and column.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <param name="value">The value.</param>
-        protected void SetMatrixValue(int row, int column, T value)
-        {
-            if (value.Equals(default))
-            {
-                // We don't need to create a new element unnecessarily
-                var element = FindElement(row, column);
-                if (element != null)
-                    element.Value = default;
-            }
-            else
-            {
-                // We have to create an element if it doesn't exist yet
-                var element = GetElement(row, column);
-                element.Value = value;
-            }
-        }
-
-        /// <summary>
-        /// Get an element in the matrix. This method creates a new element if it doesn't exist.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>The matrix element at the specified row and column.</returns>
-        public Element<T> GetElement(int row, int column)
-        {
-            if (row < 0)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0)
-                throw new ArgumentOutOfRangeException(nameof(column));
-            if (row == 0 || column == 0)
+            if (location.Row == 0 || location.Column == 0)
                 return _trashCan;
 
             // Expand our matrix if it is necessary!
-            if (row > Size || column > Size)
-                Expand(Math.Max(row, column));
+            if (location.Row > Size || location.Column > Size)
+                Expand(Math.Max(location.Row, location.Column));
 
             // Quick access to diagonals
-            if (row == column && _diagonal[row] != null)
-                return _diagonal[row];
+            if (location.Row == location.Column && _diagonal[location.Row] != null)
+                return _diagonal[location.Row];
 
-            if (!_rows[row].CreateGetElement(row, column, out var element))
+            if (!_rows[location.Row].CreateOrGetElement(location, out var element))
             {
                 ElementCount++;
-                _columns[column].Insert(element);
-                if (row == column)
-                    _diagonal[row] = element;
+                _columns[location.Column].Insert(element);
+                if (location.Row == location.Column)
+                    _diagonal[location.Row] = element;
             }
 
             return element;
         }
 
         /// <summary>
-        /// Get a diagonal element.
+        /// Finds the diagonal element.
         /// </summary>
         /// <param name="index">The row/column index.</param>
-        /// <returns>The matrix element at the specified diagonal index.</returns>
+        /// <returns>
+        /// The diagonal element.
+        /// </returns>
+        /// <exception cref="IndexOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
         public Element<T> FindDiagonalElement(int index)
         {
-            if (index < 0)
-                throw new IndexOutOfRangeException(nameof(index));
+            index.GreaterThanOrEquals(nameof(index), 0);
             if (index > Size)
                 return null;
             return _diagonal[index];
         }
 
-        /// <summary>
-        /// Finds the <see cref="ISparseMatrixElement{T}" /> on the diagonal.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
         ISparseMatrixElement<T> ISparseMatrix<T>.FindDiagonalElement(int index)
         {
-            if (index < 0)
-                throw new IndexOutOfRangeException(nameof(index));
+            index.GreaterThanOrEquals(nameof(index), 0);
             if (index > Size)
                 return null;
             return _diagonal[index];
         }
 
         /// <summary>
-        /// Find an element. This method will not create a new element if it doesn't exist.
+        /// Finds a pointer to the matrix element at the specified row and column. If
+        /// the element doesn't exist, <c>null</c> is returned.
         /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>The element at the specified row and column, or null if it doesn't exist.</returns>
-        public Element<T> FindElement(int row, int column)
+        /// <param name="location">The matrix location.</param>
+        /// <returns>
+        /// The matrix element if it exists; otherwise <c>null</c>.
+        /// </returns>
+        public Element<T> FindElement(MatrixLocation location)
         {
-            if (row < 0)
-                throw new ArgumentOutOfRangeException(nameof(row));
-            if (column < 0)
-                throw new ArgumentOutOfRangeException(nameof(column));
-            if (row > Size || column > Size)
+            if (location.Row > Size || location.Column > Size)
                 return null;
-            if (row == 0 || column == 0)
+            if (location.Row == 0 || location.Column == 0)
                 return _trashCan;
 
             // Find the element
-            return _rows[row].Find(column);
+            return _rows[location.Row].Find(location.Column);
         }
 
         /// <summary>
-        /// Gets the first element in a row.
+        /// Gets the first non-default <see cref="ISparseMatrixElement{T}" /> in the specified row.
         /// </summary>
         /// <param name="row">The row index.</param>
-        /// <returns>The first element in the row or null if there are none.</returns>
-        public ISparseMatrixElement<T> GetFirstInRow(int row) => _rows[row].FirstInRow;
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row" /> is negative.</exception>
+        public ISparseMatrixElement<T> GetFirstInRow(int row)
+            => row.GreaterThanOrEquals(nameof(row), 0) > Size ? null : _rows[row].FirstInRow;
 
         /// <summary>
-        /// Gets the last element in a row.
+        /// Gets the last non-default <see cref="ISparseMatrixElement{T}" /> in the specified row.
         /// </summary>
         /// <param name="row">The row index.</param>
-        /// <returns>The last element in the row of null if there are none.</returns>
-        public ISparseMatrixElement<T> GetLastInRow(int row) => _rows[row].LastInRow;
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
+        public ISparseMatrixElement<T> GetLastInRow(int row)
+            => row.GreaterThanOrEquals(nameof(row), 0) > Size ? null : _rows[row].LastInRow;
 
         /// <summary>
-        /// Gets the first element in a column.
+        /// Gets the first non-default <see cref="ISparseMatrixElement{T}" /> in the specified column.
         /// </summary>
         /// <param name="column">The column index.</param>
-        /// <returns>The first element in the column or null if there are none.</returns>
-        public ISparseMatrixElement<T> GetFirstInColumn(int column) => _columns[column].FirstInColumn;
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="column"/> is negative.</exception>
+        public ISparseMatrixElement<T> GetFirstInColumn(int column)
+            => column.GreaterThanOrEquals(nameof(column), 0) > Size ? null : _columns[column].FirstInColumn;
 
         /// <summary>
-        /// Gets the last element in a column.
+        /// Gets the last non-default <see cref="ISparseMatrixElement{T}" /> in the specified column.
         /// </summary>
         /// <param name="column">The column index.</param>
-        /// <returns>The last element in the column or null if there are none.</returns>
-        public ISparseMatrixElement<T> GetLastInColumn(int column) => _columns[column].LastInColumn;
+        /// <returns>
+        /// The matrix element.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="column"/> is negative.</exception>
+        public ISparseMatrixElement<T> GetLastInColumn(int column) 
+            => column.GreaterThanOrEquals(nameof(column), 0) > Size ? null : _columns[column].LastInColumn;
 
         /// <summary>
         /// Swaps two rows in the matrix.
         /// </summary>
         /// <param name="row1">The first row index.</param>
         /// <param name="row2">The second row index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
+        /// </exception>
         public void SwapRows(int row1, int row2)
         {
-            if (row1 < 1 || row1 > Size)
-                throw new ArgumentOutOfRangeException(nameof(row1));
-            if (row2 < 1 || row2 > Size)
-                throw new ArgumentOutOfRangeException(nameof(row2));
+            row1.GreaterThan(nameof(row1), 0);
+            row2.GreaterThan(nameof(row2), 0);
             if (row1 == row2)
                 return;
+
+            // Simplify algorithm: first index is always the lowest one
             if (row2 < row1)
             {
                 var tmp = row1;
                 row1 = row2;
                 row2 = tmp;
             }
+            if (row2 > Size)
+                Expand(row2);
 
             // Get the two elements
             var row1Element = _rows[row1].FirstInRow;
@@ -360,20 +332,25 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="column1">The first column index.</param>
         /// <param name="column2">The second column index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
+        /// </exception>
         public void SwapColumns(int column1, int column2)
         {
-            if (column1 < 1 || column1 > Size)
-                throw new ArgumentOutOfRangeException(nameof(column1));
-            if (column2 < 1 || column2 > Size)
-                throw new ArgumentOutOfRangeException(nameof(column2));
+            column1.GreaterThan(nameof(column1), 0);
+            column2.GreaterThan(nameof(column2), 0);
             if (column1 == column2)
                 return;
+
+            // Simplify algorithm: column1 is always the lowest index
             if (column2 < column1)
             {
                 var tmp = column1;
                 column1 = column2;
                 column2 = tmp;
             }
+            if (column2 > Size)
+                Expand(column2);
 
             // Get the two elements
             var column1Element = _columns[column1].FirstInColumn;
@@ -473,9 +450,36 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Expands the matrix.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <param name="newSize">The new matrix size.</param>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
+        public override string ToString() => "Sparse matrix ({0}x{0})".FormatString(Size);
+
+        private T GetMatrixValue(MatrixLocation location)
+        {
+            var element = FindElement(location);
+            if (element == null)
+                return default;
+            return element.Value;
+        }
+        private void SetMatrixValue(MatrixLocation location, T value)
+        {
+            if (value.Equals(default))
+            {
+                // We don't need to create a new element unnecessarily
+                var element = FindElement(location);
+                if (element != null)
+                    element.Value = default;
+            }
+            else
+            {
+                // We have to create an element if it doesn't exist yet
+                var element = GetElement(location);
+                element.Value = value;
+            }
+        }
         private void Expand(int newSize)
         {
             // Only expanding here!
@@ -507,89 +511,5 @@ namespace SpiceSharp.Algebra
             Array.Resize(ref _diagonal, newSize + 1);
             _allocatedSize = newSize;
         }
-
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public override string ToString()
-        {
-            return ToString(null, CultureInfo.CurrentCulture.NumberFormat);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="formatProvider">The format provider.</param>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            // Show the contents of the matrix
-            var displayData = new string[Size][];
-            var columnWidths = new int[Size];
-            for (var r = 1; r <= Size; r++)
-            {
-                // Initialize
-                displayData[r - 1] = new string[Size];
-
-                var element = _rows[r].FirstInRow;
-                for (var c = 1; c <= Size; c++)
-                {
-                    // Go to the next element if necessary
-                    if (element != null && element.Column < c)
-                        element = element.Right;
-
-                    // Show the element
-                    if (element == null || element.Column != c)
-                        displayData[r - 1][c - 1] = "...";
-                    else
-                        displayData[r - 1][c - 1] = element.Value.ToString(format, formatProvider);
-                    columnWidths[c - 1] = Math.Max(columnWidths[c - 1], displayData[r - 1][c - 1].Length);
-                }
-            }
-
-            // Build the string
-            var sb = new StringBuilder();
-            for (var r = 0; r < Size; r++)
-            {
-                for (var c = 0; c < Size; c++)
-                {
-                    var displayElement = displayData[r][c];
-                    sb.Append(new string(' ', columnWidths[c] - displayElement.Length + 2));
-                    sb.Append(displayElement);
-                }
-                sb.Append(Environment.NewLine);
-            }
-            return sb.ToString();
-        }
-#if DEBUG        
-        /// <summary>
-        /// Writes the matrix to a file.
-        /// </summary>
-        /// <param name="filename">The filename.</param>
-        /// <param name="label">The name of the matrix.</param>
-        public void ToFile(string filename, string label = "matrix")
-        {
-            using var file = System.IO.File.OpenWrite(filename);
-            using var sw = new System.IO.StreamWriter(file);
-
-            sw.WriteLine(label);
-            sw.WriteLine("{0} {1}", Size, typeof(T));
-            for (var i = 1; i <= Size; i++)
-            {
-                var elt = GetFirstInRow(i);
-                while (elt != null)
-                {
-                    sw.WriteLine("{0} {1} {2}", elt.Row, elt.Column, elt.Value.ToString("g", CultureInfo.InvariantCulture));
-                    elt = elt.Right;
-                }
-            }
-        }
-#endif
     }
 }

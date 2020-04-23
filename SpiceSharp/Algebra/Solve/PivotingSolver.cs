@@ -1,7 +1,5 @@
 using SpiceSharp.Attributes;
 using System;
-using System.Globalization;
-using System.Text;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -16,7 +14,6 @@ namespace SpiceSharp.Algebra.Solve
     public abstract class PivotingSolver<M, V, T> : Parameterized, IPivotingSolver<M, V, T>
         where M : IMatrix<T>
         where V : IVector<T>
-        where T : IFormattable
     {
         private int _pivotSearchReduction = 0;
         private int _degeneracy = 0;
@@ -28,7 +25,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The degeneracy.
         /// </value>
-        /// <exception cref="ArgumentException">Thrown if the degeneracy is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [GreaterThanOrEquals(0)]
         public int Degeneracy
         {
@@ -48,7 +45,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The pivot search reduction.
         /// </value>
-        /// <exception cref="ArgumentException">Thrown if the pivot search reduction is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [GreaterThanOrEquals(0)]
         public int PivotSearchReduction
         {
@@ -65,7 +62,7 @@ namespace SpiceSharp.Algebra.Solve
         /// A solver needs to be factored becore it can solve for a solution.
         /// </summary>
         /// <value>
-        /// <c>true</c> if this solver is factored; otherwise, <c>false</c>.
+        ///   <c>true</c> if this solver is factored; otherwise, <c>false</c>.
         /// </value>
         public bool IsFactored { get; protected set; }
 
@@ -73,27 +70,30 @@ namespace SpiceSharp.Algebra.Solve
         /// Gets or sets a value indicating whether the solver needs to be reordered all the way from the start.
         /// </summary>
         /// <value>
-        /// <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
+        ///   <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
         /// </value>
         public bool NeedsReordering { get; set; }
 
         /// <summary>
-        /// Gets the order of the matrix (matrix size).
+        /// Gets the size of the solver. This is the total number of equations.
         /// </summary>
         /// <value>
-        /// The order.
+        /// The size.
         /// </value>
         public int Size => Math.Max(Matrix.Size, Vector.Length);
 
         /// <summary>
-        /// Gets or sets the matrix value at the specified row and column.
+        /// Gets or sets the value of the matrix at the specified row and column.
         /// </summary>
         /// <value>
         /// The value.
         /// </value>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>The value.</returns>
+        /// <param name="row">The row.</param>
+        /// <param name="column">The column.</param>
+        /// <returns>
+        /// The value.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> or <paramref name="column"/> is negative.</exception>
         public T this[int row, int column]
         {
             get => this[new MatrixLocation(row, column)];
@@ -104,10 +104,12 @@ namespace SpiceSharp.Algebra.Solve
         /// Gets or sets the value of the matrix at the specified location.
         /// </summary>
         /// <value>
-        /// The value.
+        /// The value of the matrix element.
         /// </value>
         /// <param name="location">The location.</param>
-        /// <returns>The value.</returns>
+        /// <returns>
+        /// The value.
+        /// </returns>
         public T this[MatrixLocation location]
         {
             get => Matrix[ExternalToInternal(location)];
@@ -115,24 +117,27 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Gets or sets the vector value at the specified index.
+        /// Gets or sets the value of the right hand side vector at the specified row.
         /// </summary>
         /// <value>
-        /// The value.
+        /// The value of the right hand side vector.
         /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns>Value</returns>
-        public T this[int index]
+        /// <param name="row">The row.</param>
+        /// <returns>
+        /// The value.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
+        public T this[int row]
         {
             get
             {
-                index = Row[index];
-                return Vector[index];
+                row = Row[row];
+                return Vector[row];
             }
             set
             {
-                index = Row[index];
-                Vector[index] = value;
+                row = Row[row];
+                Vector[row] = value;
             }
         }
 
@@ -179,7 +184,10 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="row1">The first row index.</param>
         /// <param name="row2">The second row index.</param>
-        public void SwapRows(int row1, int row2)
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
+        /// </exception>
+        protected void SwapRows(int row1, int row2)
         {
             Matrix.SwapRows(row1, row2);
             Vector.SwapElements(row1, row2);
@@ -191,7 +199,10 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="column1">The first column index.</param>
         /// <param name="column2">The second column index.</param>
-        public void SwapColumns(int column1, int column2)
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
+        /// </exception>
+        protected void SwapColumns(int column1, int column2)
         {
             Matrix.SwapColumns(column1, column2);
             Column.Swap(column1, column2);
@@ -222,11 +233,11 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Maps an external row/column tuple to an internal one.
+        /// Maps an external matrix location to an internal one.
         /// </summary>
-        /// <param name="indices">The external row/column indices.</param>
+        /// <param name="indices">The external matrix location.</param>
         /// <returns>
-        /// The internal row/column indices.
+        /// The internal matrix location.
         /// </returns>
         public MatrixLocation ExternalToInternal(MatrixLocation indices)
         {
@@ -234,11 +245,11 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Maps an internal row/column tuple to an external one.
+        /// Maps an internal matrix location to an external one.
         /// </summary>
-        /// <param name="indices">The internal row/column indices.</param>
+        /// <param name="indices">The internal matrix location.</param>
         /// <returns>
-        /// The external row/column indices.
+        /// The external matrix location.
         /// </returns>
         public MatrixLocation InternalToExternal(MatrixLocation indices)
         {
@@ -251,36 +262,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return ToString(null, CultureInfo.CurrentCulture);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="formatProvider">The format provider.</param>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public string ToString(string format, IFormatProvider formatProvider)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (var r = 1; r <= Size; r++)
-            {
-                sb.Append("[ ");
-                for (var c = 1; c <= Size; c++)
-                {
-                    sb.Append(this[r, c].ToString(format, formatProvider));
-                    sb.Append(" ");
-                }
-                sb.Append(this[r].ToString(format, formatProvider));
-                sb.Append(" ]");
-                sb.Append(Environment.NewLine);
-            }
-            return sb.ToString();
-        }
+        public override string ToString() => "Pivoting solver ({0}x{1})".FormatString(Size, Size + 1);
 
         /// <summary>
         /// Solves the equations using the Y-matrix and Rhs-vector.

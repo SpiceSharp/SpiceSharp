@@ -19,6 +19,7 @@ namespace SpiceSharp.Algebra.Solve
             /// Initializes a new instance of the <see cref="ReorderedMatrix"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> is <c>null</c>.</exception>
             public ReorderedMatrix(DenseLUSolver<T> parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
@@ -67,6 +68,9 @@ namespace SpiceSharp.Algebra.Solve
             /// </summary>
             /// <param name="row1">The first row index.</param>
             /// <param name="row2">The second row index.</param>
+            /// <exception cref="ArgumentOutOfRangeException">
+            /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
+            /// </exception>
             public void SwapRows(int row1, int row2) => _parent.SwapRows(row1, row2);
 
             /// <summary>
@@ -74,6 +78,9 @@ namespace SpiceSharp.Algebra.Solve
             /// </summary>
             /// <param name="column1">The first column index.</param>
             /// <param name="column2">The second column index.</param>
+            /// <exception cref="ArgumentOutOfRangeException">
+            /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
+            /// </exception>
             public void SwapColumns(int column1, int column2) => _parent.SwapColumns(column1, column2);
 
             /// <summary>
@@ -93,16 +100,6 @@ namespace SpiceSharp.Algebra.Solve
             /// A <see cref="System.String" /> that represents this instance.
             /// </returns>
             public override string ToString() => _parent.Matrix.ToString();
-
-            /// <summary>
-            /// Converts to string.
-            /// </summary>
-            /// <param name="format">The format.</param>
-            /// <param name="formatProvider">The format provider.</param>
-            /// <returns>
-            /// A <see cref="System.String" /> that represents this instance.
-            /// </returns>
-            public string ToString(string format, IFormatProvider formatProvider) => _parent.Matrix.ToString(format, formatProvider);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A helper class that is specific to Modified Nodal Analysis.
     /// </summary>
-    public static class ModifiedNodalAnalysisHelper<T> where T : IFormattable
+    public static class ModifiedNodalAnalysisHelper<T>
     {
         /// <summary>
         /// Gets or sets the magnitude method.

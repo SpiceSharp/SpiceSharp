@@ -8,7 +8,7 @@ namespace SpiceSharp.Algebra.Solve
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     [GeneratedParameters]
-    public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T> where T : IFormattable
+    public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T>
     {
         private static int _tiesMultiplier = 5;
 
@@ -18,13 +18,14 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The multiplier for searching pivots with the same markowitz products.
         /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         /// <remarks>
         /// Instead of searching the whole matrix for a pivot on the diagonal, the search strategy can
         /// choose to stop searching for more pivot elements with the lowest "Markowitz product", which
         /// scores how many extra unwanted elements a row/column could create as a by-product of factoring
         /// the solver. When this score is tied, this search strategy will keep a list of them with a
         /// maximum of (MarkowitzProduct * TiesMultiplier) elements. In other words, pivots with a high
-        /// Markowitz product will ask the search strategy for more entries to make sure that we can do 
+        /// Markowitz product will ask the search strategy for more entries to make sure that we can do
         /// better.
         /// </remarks>
         [GreaterThanOrEquals(0)]
@@ -48,12 +49,13 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The pivot element, or null if no pivot was found.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="markowitz" /> or <paramref name="matrix" /> is <c>null</c>.</exception>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
-            if (eliminationStep < 1)
-                throw new ArgumentOutOfRangeException(nameof(eliminationStep));
+            if (eliminationStep < 1 || eliminationStep > max)
+                return Pivot<ISparseMatrixElement<T>>.Empty;
 
             ISparseMatrixElement<T> chosen = null;
             var minMarkowitzProduct = long.MaxValue;

@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// A set of matrix and right-hand-side vector elements
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public class ElementSet<T> : IFormattable where T : IFormattable
+    public class ElementSet<T>
     {
         /// <summary>
         /// Gets the elements.
@@ -31,7 +31,7 @@ namespace SpiceSharp.Algebra
             if (matrixPins != null)
             {
                 for (var i = 0; i < matrixPins.Length; i++)
-                    _elements[i] = solver.GetElement(matrixPins[i].Row, matrixPins[i].Column);
+                    _elements[i] = solver.GetElement(matrixPins[i]);
                 offset = matrixPins.Length;
             }
             if (rhsPins != null)
@@ -90,24 +90,25 @@ namespace SpiceSharp.Algebra
         /// A <see cref="String" /> that represents this instance.
         /// </returns>
         public override string ToString()
-            => ToString(null, System.Globalization.CultureInfo.CurrentCulture);
-
-        /// <summary>
-        /// Converts to string.
-        /// </summary>
-        /// <param name="format">The format.</param>
-        /// <param name="provider">The provider.</param>
-        /// <returns>
-        /// A <see cref="String" /> that represents this instance.
-        /// </returns>
-        public string ToString(string format, IFormatProvider provider)
         {
-            var sb = new StringBuilder();
-            sb.Append("[");
-            for (var i = 0; i < _elements.Length; i++)
-                sb.Append(_elements[i].ToString(format, provider));
-            sb.Append("]");
-            return sb.ToString();
+            if (_elements.Length < 256)
+            {
+                var sb = new StringBuilder(_elements.Length * 10);
+                sb.Append('(');
+                bool isFirst = true;
+                foreach (var elt in _elements)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        sb.Append(", ");
+                    sb.Append(elt.ToString());
+                }
+                sb.Append(')');
+                return sb.ToString();
+            }
+            else
+                return "ElementSet ({0} elements)".FormatString(_elements.Length);
         }
     }
 }

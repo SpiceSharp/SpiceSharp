@@ -1,7 +1,4 @@
 ﻿using SpiceSharp.Simulations;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpiceSharp.Components.CommonBehaviors
 {
@@ -13,7 +10,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// of the nodes is equal to the current out of the other one of the same port.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct TwoPort<T> where T : IFormattable
+    public struct TwoPort<T>
     {
         /// <summary>
         /// The left port.

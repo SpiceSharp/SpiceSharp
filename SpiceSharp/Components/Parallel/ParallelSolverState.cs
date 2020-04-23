@@ -18,7 +18,6 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// <seealso cref="ISolverSimulationState{T}" />
     public abstract class ParallelSolverState<T, S> : ISolverSimulationState<T>
         where S : ISolverSimulationState<T>
-        where T : IFormattable
     {
         private readonly ParallelSolver<T> _solver;
 

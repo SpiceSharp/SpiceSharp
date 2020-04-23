@@ -341,6 +341,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter value is outside the allowed range {0}-{1}..
+        /// </summary>
+        public static string Parameters_NotWithinRange {
+            get {
+                return ResourceManager.GetString("Parameters.NotWithinRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A parameter set of type &apos;{0}&apos; could not be found..
         /// </summary>
         public static string Parameters_ParameterSetNotFound {

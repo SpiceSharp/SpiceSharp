@@ -20,51 +20,19 @@ namespace SpiceSharp.Algebra
             public Element LastInRow { get; private set; }
 
             /// <summary>
-            /// Insert an element in the row. This method assumes an element does not exist at its indices!
-            /// </summary>
-            /// <param name="newElement">The new element to insert.</param>
-            public void Insert(Element newElement)
-            {
-                var column = newElement.Column;
-                Element element = FirstInRow, lastElement = null;
-                while (element != null)
-                {
-                    if (element.Column > column)
-                        break;
-                    lastElement = element;
-                    element = element.Right;
-                }
-
-                // Update links for last element
-                if (lastElement == null)
-                    FirstInRow = newElement;
-                else
-                    lastElement.Right = newElement;
-                newElement.Left = lastElement;
-
-                // Update links for next element
-                if (element == null)
-                    LastInRow = newElement;
-                else
-                    element.Left = newElement;
-                newElement.Right = element;
-            }
-
-            /// <summary>
             /// Creates or get an element in the row.
             /// </summary>
-            /// <param name="row">The row index used for creating a new element</param>
-            /// <param name="column">The column index.</param>
+            /// <param name="location">The location of the element.</param>
             /// <param name="result">The found or created element.</param>
             /// <returns>True if the element was found, false if it was created.</returns>
-            public bool CreateGetElement(int row, int column, out Element result)
+            public bool CreateOrGetElement(MatrixLocation location, out Element result)
             {
                 Element element = FirstInRow, lastElement = null;
                 while (element != null)
                 {
-                    if (element.Column > column)
+                    if (element.Column > location.Column)
                         break;
-                    if (element.Column == column)
+                    if (element.Column == location.Column)
                     {
                         // Found the element
                         result = element;
@@ -76,7 +44,7 @@ namespace SpiceSharp.Algebra
                 }
 
                 // Create a new element
-                result = new Element(row, column);
+                result = new Element(location);
 
                 // Update links for last element
                 if (lastElement == null)

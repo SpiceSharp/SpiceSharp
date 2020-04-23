@@ -3,9 +3,10 @@
 namespace SpiceSharp.Algebra.Solve
 {
     /// <summary>
-    /// Describes a pivot.
+    /// Describes a pivot for reordering solvers.
     /// </summary>
     /// <typeparam name="P">The pivot output.</typeparam>
+    /// <seealso cref="IEquatable{T}"/>
     public struct Pivot<P> : IEquatable<Pivot<P>>
     {
         /// <summary>
@@ -99,7 +100,8 @@ namespace SpiceSharp.Algebra.Solve
     public enum PivotInfo
     {
         /// <summary>
-        /// A good pivot is one that meets the required tolerances.
+        /// A good pivot is one that meets the required tolerances and does
+        /// not cause unwanted side-effects.
         /// </summary>
         Good,
 

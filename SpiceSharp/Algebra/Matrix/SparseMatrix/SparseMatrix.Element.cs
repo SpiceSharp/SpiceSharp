@@ -10,7 +10,7 @@
         protected class Element : Element<T>, ISparseMatrixElement<T>
         {
             /// <summary>
-            /// Gets or sets the row index.
+            /// Gets the row of the matrix element.
             /// </summary>
             /// <value>
             /// The row index.
@@ -18,7 +18,7 @@
             public int Row { get; set; }
 
             /// <summary>
-            /// Gets or sets the column index.
+            /// Gets the column of the matrix element.
             /// </summary>
             /// <value>
             /// The column index.
@@ -48,8 +48,19 @@
             /// <summary>
             /// Initializes a new instance of the <see cref="Element"/> class.
             /// </summary>
-            /// <param name="row">The row index.</param>
-            /// <param name="column">The column index.</param>
+            /// <param name="location">The location of the element.</param>
+            public Element(MatrixLocation location)
+            {
+                Value = default;
+                Row = location.Row;
+                Column = location.Column;
+            }
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Element"/> class.
+            /// </summary>
+            /// <param name="row">The row.</param>
+            /// <param name="column">The column.</param>
             public Element(int row, int column)
             {
                 Value = default;
@@ -57,36 +68,9 @@
                 Column = column;
             }
 
-            /// <summary>
-            /// Gets the matrix element above this one.
-            /// </summary>
-            /// <value>
-            /// The matrix element.
-            /// </value>
             ISparseMatrixElement<T> ISparseMatrixElement<T>.Above => Above;
-
-            /// <summary>
-            /// Gets the matrix element below this one.
-            /// </summary>
-            /// <value>
-            /// The matrix element.
-            /// </value>
             ISparseMatrixElement<T> ISparseMatrixElement<T>.Below => Below;
-
-            /// <summary>
-            /// Gets the right.
-            /// </summary>
-            /// <value>
-            /// The right.
-            /// </value>
             ISparseMatrixElement<T> ISparseMatrixElement<T>.Right => Right;
-
-            /// <summary>
-            /// Gets the left.
-            /// </summary>
-            /// <value>
-            /// The left.
-            /// </value>
             ISparseMatrixElement<T> ISparseMatrixElement<T>.Left => Left;
         }
     }

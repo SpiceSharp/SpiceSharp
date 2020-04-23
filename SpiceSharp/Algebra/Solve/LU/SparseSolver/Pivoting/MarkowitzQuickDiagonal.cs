@@ -8,7 +8,7 @@ namespace SpiceSharp.Algebra.Solve
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     [GeneratedParameters]
-    public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T> where T : IFormattable
+    public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T>
     {
         private static int _maxMarkowitzTies = 100, _tiesMultiplier = 5;
         private readonly ISparseMatrixElement<T>[] _tiedElements = new ISparseMatrixElement<T>[MaxMarkowitzTies];
@@ -19,10 +19,11 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The maximum number of searched pivots with the same markowitz product.
         /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not greater than 1.</exception>
         /// <remarks>
         /// The pivot search strategy will try to find pivots with the lowest "Markowitz product", which
         /// scores how many extra unwanted elements a row/column could create as a by-product of factoring
-        /// the solver. When this score is tied, this search strategy will keep a list of them with a 
+        /// the solver. When this score is tied, this search strategy will keep a list of them with a
         /// maximum of this amount of elements.
         /// </remarks>
         [GreaterThan(1)]
@@ -52,10 +53,12 @@ namespace SpiceSharp.Algebra.Solve
         /// better. Set this value to <see cref="MaxMarkowitzTies"/> to always search for the maximum
         /// number of eligible pivots.
         /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
+        [GreaterThanOrEquals(0)]
         public static int TiesMultiplier
         {
             get => _tiesMultiplier;
-            set => _tiesMultiplier = value < 0 ? 0 : value;
+            set => _tiesMultiplier = Math.Max(value, 0);
         }
 
         /// <summary>
@@ -65,15 +68,15 @@ namespace SpiceSharp.Algebra.Solve
         /// <param name="matrix">The matrix</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <param name="max">The maximum row/column index.</param>
-        /// <returns>
-        /// The pivot element, or null if no pivot was found.
-        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// Thrown if <paramref name="markowitz"/> or <paramref name="matrix"/> is <c>null</c>.
+        /// </exception>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
             matrix.ThrowIfNull(nameof(matrix));
-            if (eliminationStep < 1)
-                throw new ArgumentOutOfRangeException(nameof(eliminationStep));
+            if (eliminationStep < 1 || eliminationStep > max)
+                return Pivot<ISparseMatrixElement<T>>.Empty;
 
             var minMarkowitzProduct = int.MaxValue;
             var numberOfTies = -1;

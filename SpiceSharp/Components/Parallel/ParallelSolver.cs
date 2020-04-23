@@ -11,11 +11,12 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <seealso cref="ISparseSolver{T}" />
-    public partial class ParallelSolver<T> : ISparsePivotingSolver<T> where T : IFormattable
+    public partial class ParallelSolver<T> : ISparsePivotingSolver<T>
     {
         // TODO: More verbosity for exceptions in the whole class.
         private readonly ISparsePivotingSolver<T> _parent;
-        private readonly HashSet<int> _shared = new HashSet<int>();
+        private readonly HashSet<MatrixLocation> _sharedMatrixElements = new HashSet<MatrixLocation>();
+        private readonly HashSet<int> _sharedVectorElements = new HashSet<int>();
         private readonly List<BridgeElement> _bridgeElements = new List<BridgeElement>();
 
         P IParameterized.GetParameterSet<P>() => _parent.GetParameterSet<P>();
@@ -101,27 +102,25 @@ namespace SpiceSharp.Components.ParallelBehaviors
         void IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method) => throw new ArgumentException();
         void ISolver<T>.Clear()
         {
-            _shared.Clear();
+            _sharedMatrixElements.Clear();
             _bridgeElements.Clear();
         }
         bool ISolver<T>.Factor() => throw new SpiceSharpException();
         int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor() => throw new SpiceSharpException();
 
         /// <summary>
-        /// Finds the element at the specified position in the matrix.
+        /// Finds the element at the specified location in the matrix.
         /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
+        /// <param name="location">The location.</param>
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
-        public Element<T> FindElement(int row, int column)
+        public Element<T> FindElement(MatrixLocation location)
         {
-            var elt = _parent.FindElement(row, column);
+            var elt = _parent.FindElement(location);
             if (elt == null)
                 return null;
-            var index = row * Size + column;
-            if (_shared.Contains(index))
+            if (_sharedMatrixElements.Contains(location))
             {
                 // We only allow one reference to an element
                 var bridge = new BridgeElement(elt);
@@ -129,7 +128,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
                 return bridge;
             }
             else
-                _shared.Contains(index);
+                _sharedMatrixElements.Add(location);
             return elt;
         }
 
@@ -140,43 +139,42 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <returns>
         /// The element if it exists; otherwise <c>null</c>.
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
         public Element<T> FindElement(int row)
         {
             var elt = _parent.FindElement(row);
             if (elt == null)
                 return null;
-            if (_shared.Contains(row))
+            if (_sharedVectorElements.Contains(row))
             {
                 var bridge = new BridgeElement(elt);
                 _bridgeElements.Add(bridge);
                 return bridge;
             }
             else
-                _shared.Add(row);
+                _sharedVectorElements.Add(row);
             return elt;
         }
 
         /// <summary>
-        /// Gets the element at the specified position in the matrix. A new element is
+        /// Gets the element at the specified location in the matrix. A new element is
         /// created if it doesn't exist yet.
         /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
+        /// <param name="location">The location.</param>
         /// <returns>
         /// The matrix element.
         /// </returns>
-        public Element<T> GetElement(int row, int column)
+        public Element<T> GetElement(MatrixLocation location)
         {
-            var elt = _parent.GetElement(row, column);
-            var index = row * Size + column;
-            if (_shared.Contains(index))
+            var elt = _parent.GetElement(location);
+            if (_sharedMatrixElements.Contains(location))
             {
                 var bridge = new BridgeElement(elt);
                 _bridgeElements.Add(bridge);
                 return bridge;
             }
             else
-                _shared.Add(index);
+                _sharedMatrixElements.Add(location);
             return elt;
         }
 
@@ -188,17 +186,18 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <returns>
         /// The vector element.
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
         public Element<T> GetElement(int row)
         {
             var elt = _parent.GetElement(row);
-            if (_shared.Contains(row))
+            if (_sharedVectorElements.Contains(row))
             {
                 var bridge = new BridgeElement(elt);
                 _bridgeElements.Add(bridge);
                 return bridge;
             }
             else
-                _shared.Add(row);
+                _sharedVectorElements.Add(row);
             return elt;
         }
 

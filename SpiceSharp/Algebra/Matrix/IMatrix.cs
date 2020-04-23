@@ -6,7 +6,7 @@ namespace SpiceSharp.Algebra
     /// Describes a matrix.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface IMatrix<T> : IFormattable where T : IFormattable
+    public interface IMatrix<T>
     {
         /// <summary>
         /// Gets the size of the matrix.
@@ -25,6 +25,9 @@ namespace SpiceSharp.Algebra
         /// <param name="row">The row index.</param>
         /// <param name="column">The column index.</param>
         /// <returns>The value.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row"/> or <paramref name="column"/> is not positive.
+        /// </exception>
         T this[int row, int column] { get; set; }
 
         /// <summary>
@@ -42,6 +45,9 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="row1">The first row index.</param>
         /// <param name="row2">The second row index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
+        /// </exception>
         void SwapRows(int row1, int row2);
 
         /// <summary>
@@ -49,6 +55,9 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="column1">The first column index.</param>
         /// <param name="column2">The second column index.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
+        /// </exception>
         void SwapColumns(int column1, int column2);
 
         /// <summary>

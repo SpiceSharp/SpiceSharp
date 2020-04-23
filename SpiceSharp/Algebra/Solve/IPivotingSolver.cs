@@ -12,7 +12,6 @@ namespace SpiceSharp.Algebra
     public interface IPivotingSolver<M, V, T> : ISolver<T>
         where M : IMatrix<T>
         where V : IVector<T>
-        where T : IFormattable
     {
         /// <summary>
         /// Gets or sets the pivot search reduction. This makes sure that pivots cannot
@@ -22,6 +21,7 @@ namespace SpiceSharp.Algebra
         /// <value>
         /// The pivot search reduction.
         /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         int PivotSearchReduction { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SpiceSharp.Algebra
         ///   <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
         /// </value>
         /// <remarks>
-        /// If this flag is false, the solver will still reorder when using <see cref="OrderAndFactor"/>, but
+        /// If this flag is false, the solver will still reorder when using <see cref="OrderAndFactor" />, but
         /// it will try to stay away from reordering as long as possible. This flag will force the solver to
         /// immediately start reordering.
         /// </remarks>
@@ -53,17 +53,21 @@ namespace SpiceSharp.Algebra
         int OrderAndFactor();
 
         /// <summary>
-        /// Maps an internal row/column tuple to an external one.
+        /// Maps an internal matrix location to an external one.
         /// </summary>
-        /// <param name="indices">The internal row/column indices.</param>
-        /// <returns>The external row/column indices.</returns>
+        /// <param name="indices">The internal matrix location.</param>
+        /// <returns>
+        /// The external matrix location.
+        /// </returns>
         MatrixLocation InternalToExternal(MatrixLocation indices);
 
         /// <summary>
-        /// Maps an external row/column tuple to an internal one.
+        /// Maps an external matrix location to an internal one.
         /// </summary>
-        /// <param name="indices">The external row/column indices.</param>
-        /// <returns>The internal row/column indices.</returns>
+        /// <param name="indices">The external matrix location.</param>
+        /// <returns>
+        /// The internal matrix location.
+        /// </returns>
         MatrixLocation ExternalToInternal(MatrixLocation indices);
     }
 
@@ -77,6 +81,5 @@ namespace SpiceSharp.Algebra
     /// <param name="vector">The vector.</param>
     public delegate void PreconditioningMethod<M, V, T>(M matrix, V vector)
             where M : IMatrix<T>
-            where V : IVector<T>
-            where T : IFormattable;
+            where V : IVector<T>;
 }
