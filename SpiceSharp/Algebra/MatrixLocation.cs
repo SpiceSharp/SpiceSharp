@@ -45,11 +45,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="Object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="Object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -69,7 +69,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+        /// <c>true</c> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(MatrixLocation other)
         {
@@ -84,18 +84,15 @@ namespace SpiceSharp.Algebra
         /// Converts to string.
         /// </summary>
         /// <returns>
-        /// A <see cref="String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return "({0},{1})".FormatString(Row, Column);
-        }
+        public override string ToString() => "({0},{1})".FormatString(Row, Column);
 
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
@@ -105,8 +102,8 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Implements the operator !=.
         /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>

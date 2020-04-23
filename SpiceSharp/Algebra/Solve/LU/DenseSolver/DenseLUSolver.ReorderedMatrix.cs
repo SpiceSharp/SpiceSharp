@@ -15,6 +15,24 @@ namespace SpiceSharp.Algebra.Solve
         {
             private readonly DenseLUSolver<T> _parent;
 
+            /// <inheritdoc/>
+            public int Size => _parent.Matrix.Size;
+
+            /// <inheritdoc/>
+            public T this[int row, int column]
+            {
+                get => _parent.Matrix[row, column];
+                set => _parent.Matrix[row, column] = value;
+
+            }
+
+            /// <inheritdoc/>
+            public T this[MatrixLocation location]
+            {
+                get => _parent.Matrix[location];
+                set => _parent.Matrix[location] = value;
+            }
+
             /// <summary>
             /// Initializes a new instance of the <see cref="ReorderedMatrix"/> class.
             /// </summary>
@@ -25,79 +43,23 @@ namespace SpiceSharp.Algebra.Solve
                 _parent = parent.ThrowIfNull(nameof(parent));
             }
 
-            /// <summary>
-            /// Gets the size of the matrix.
-            /// </summary>
-            /// <value>
-            /// The matrix size.
-            /// </value>
-            public int Size => _parent.Matrix.Size;
-
-            /// <summary>
-            /// Gets or sets the value with the specified row.
-            /// </summary>
-            /// <value>
-            /// The value.
-            /// </value>
-            /// <param name="row">The row.</param>
-            /// <param name="column">The column.</param>
-            /// <returns></returns>
-            public T this[int row, int column]
-            {
-                get => _parent.Matrix[row, column];
-                set => _parent.Matrix[row, column] = value;
-            
-            }
-
-            /// <summary>
-            /// Gets or sets the value with the specified location.
-            /// </summary>
-            /// <value>
-            /// The value.
-            /// </value>
-            /// <param name="location">The location.</param>
-            /// <returns></returns>
-            public T this[MatrixLocation location] 
-            {
-                get => _parent.Matrix[location]; 
-                set => _parent.Matrix[location] = value;
-            }
-
-            /// <summary>
-            /// Swaps two rows in the matrix.
-            /// </summary>
-            /// <param name="row1">The first row index.</param>
-            /// <param name="row2">The second row index.</param>
-            /// <exception cref="ArgumentOutOfRangeException">
-            /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
-            /// </exception>
+            /// <inheritdoc/>
             public void SwapRows(int row1, int row2) => _parent.SwapRows(row1, row2);
 
-            /// <summary>
-            /// Swaps two columns in the matrix.
-            /// </summary>
-            /// <param name="column1">The first column index.</param>
-            /// <param name="column2">The second column index.</param>
-            /// <exception cref="ArgumentOutOfRangeException">
-            /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
-            /// </exception>
+            /// <inheritdoc/>
             public void SwapColumns(int column1, int column2) => _parent.SwapColumns(column1, column2);
 
-            /// <summary>
-            /// Resets all elements in the matrix to their default value.
-            /// </summary>
+            /// <inheritdoc/>
             public void Reset() => _parent.Matrix.Reset();
 
-            /// <summary>
-            /// Clears the matrix of any elements. The size of the matrix becomes 0.
-            /// </summary>
+            /// <inheritdoc/>
             public void Clear() => _parent.Matrix.Reset();
 
             /// <summary>
             /// Converts to string.
             /// </summary>
             /// <returns>
-            /// A <see cref="System.String" /> that represents this instance.
+            /// A <see cref="string" /> that represents this instance.
             /// </returns>
             public override string ToString() => _parent.Matrix.ToString();
         }

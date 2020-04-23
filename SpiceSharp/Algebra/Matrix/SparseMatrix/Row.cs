@@ -12,19 +12,25 @@ namespace SpiceSharp.Algebra
             /// <summary>
             /// Gets the first element in the row.
             /// </summary>
+            /// <value>
+            /// The first element in the row.
+            /// </value>
             public Element FirstInRow { get; private set; }
 
             /// <summary>
             /// Gets the last element in the row.
             /// </summary>
+            /// <value>
+            /// The last element in the row.
+            /// </value>
             public Element LastInRow { get; private set; }
 
             /// <summary>
-            /// Creates or get an element in the row.
+            /// Gets an element in the row, or creates it if it doesn't exist yet.
             /// </summary>
             /// <param name="location">The location of the element.</param>
             /// <param name="result">The found or created element.</param>
-            /// <returns>True if the element was found, false if it was created.</returns>
+            /// <returns><c>true</c> if the element was found, <c>false</c> if it was created.</returns>
             public bool CreateOrGetElement(MatrixLocation location, out Element result)
             {
                 Element element = FirstInRow, lastElement = null;
@@ -68,7 +74,7 @@ namespace SpiceSharp.Algebra
             /// Find an element in the row without creating it.
             /// </summary>
             /// <param name="column">The column index.</param>
-            /// <returns>The element at the specified column, or null if it doesn't exist.</returns>
+            /// <returns>The element at the specified column, or <c>null</c> if the element doesn't exist.</returns>
             public Element Find(int column)
             {
                 var element = FirstInRow;
@@ -111,7 +117,7 @@ namespace SpiceSharp.Algebra
 
             /// <summary>
             /// Swap two elements in the row, <paramref name="first"/> and <paramref name="columnFirst"/> 
-            /// are supposed to come first in the row. Does not update column pointers!
+            /// are supposed to come first in the row.
             /// </summary>
             /// <param name="first">The first matrix element.</param>
             /// <param name="second">The second matrix element.</param>

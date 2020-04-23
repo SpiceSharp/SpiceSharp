@@ -8,7 +8,7 @@
     public interface ISparseVectorElement<T>
     {
         /// <summary>
-        /// Gets or sets the value.
+        /// Gets or sets the value of the element.
         /// </summary>
         /// <value>
         /// The value.
@@ -16,7 +16,7 @@
         T Value { get; set; }
 
         /// <summary>
-        /// Gets the index.
+        /// Gets the index in the vector.
         /// </summary>
         /// <value>
         /// The index.
@@ -24,7 +24,7 @@
         int Index { get; }
 
         /// <summary>
-        /// Gets the non-default <see cref="ISparseVectorElement{T}"/> above this one.
+        /// Gets the nearest <see cref="ISparseVectorElement{T}"/> above this one.
         /// </summary>
         /// <value>
         /// The vector element.
@@ -32,7 +32,7 @@
         ISparseVectorElement<T> Above { get; }
 
         /// <summary>
-        /// Gets the non-default <see cref="ISparseVectorElement{T}"/> below this one.
+        /// Gets the nearest <see cref="ISparseVectorElement{T}"/> below this one.
         /// </summary>
         /// <value>
         /// The vector element.

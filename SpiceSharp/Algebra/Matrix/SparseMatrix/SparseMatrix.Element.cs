@@ -9,40 +9,42 @@
         /// <seealso cref="ISparseMatrixElement{T}"/>
         protected class Element : Element<T>, ISparseMatrixElement<T>
         {
-            /// <summary>
-            /// Gets the row of the matrix element.
-            /// </summary>
-            /// <value>
-            /// The row index.
-            /// </value>
+            /// <inheritdoc/>
             public int Row { get; set; }
 
-            /// <summary>
-            /// Gets the column of the matrix element.
-            /// </summary>
-            /// <value>
-            /// The column index.
-            /// </value>
+            /// <inheritdoc/>
             public int Column { get; set; }
 
             /// <summary>
             /// Gets or sets the next element in the row.
             /// </summary>
+            /// <value>
+            /// The matrix element.
+            /// </value>
             public Element Right { get; set; }
 
             /// <summary>
             /// Gets or sets the next element in the column.
             /// </summary>
+            /// <value>
+            /// The matrix element.
+            /// </value>
             public Element Below { get; set; }
 
             /// <summary>
             /// Gets or sets the previous element in the row.
             /// </summary>
+            /// <value>
+            /// The matrix element.
+            /// </value>
             public Element Left { get; set; }
 
             /// <summary>
             /// Gets or sets the previous element in the column.
             /// </summary>
+            /// <value>
+            /// The matrix element.
+            /// </value>
             public Element Above { get; set; }
 
             /// <summary>
@@ -59,8 +61,8 @@
             /// <summary>
             /// Initializes a new instance of the <see cref="Element"/> class.
             /// </summary>
-            /// <param name="row">The row.</param>
-            /// <param name="column">The column.</param>
+            /// <param name="row">The row index.</param>
+            /// <param name="column">The column index.</param>
             public Element(int row, int column)
             {
                 Value = default;

@@ -15,6 +15,16 @@ namespace SpiceSharp.Algebra.Solve
         {
             private readonly DenseLUSolver<T> _parent;
 
+            /// <inheritdoc/>
+            public int Length => _parent.Vector.Length;
+
+            /// <inheritdoc/>
+            public T this[int index]
+            {
+                get => _parent.Vector[index];
+                set => _parent.Vector[index] = value;
+            }
+
             /// <summary>
             /// Initializes a new instance of the <see cref="ReorderedVector"/> class.
             /// </summary>
@@ -25,60 +35,27 @@ namespace SpiceSharp.Algebra.Solve
                 _parent = parent.ThrowIfNull(nameof(parent));
             }
 
-            /// <summary>
-            /// Gets the length of the vector.
-            /// </summary>
-            /// <value>
-            /// The length.
-            /// </value>
-            public int Length => _parent.Vector.Length;
-
-            /// <summary>
-            /// Gets or sets the value at the specified index.
-            /// </summary>
-            /// <value>
-            /// The value.
-            /// </value>
-            /// <param name="index">The index.</param>
-            /// <returns></returns>
-            public T this[int index] 
-            {
-                get => _parent.Vector[index];
-                set => _parent.Vector[index] = value;
-            }
-
-            /// <summary>
-            /// Swaps two elements in the vector.
-            /// </summary>
-            /// <param name="index1">The first index.</param>
-            /// <param name="index2">The second index.</param>
+            /// <inheritdoc/>
             public void SwapElements(int index1, int index2)
             {
                 // This is why we had to implement our own reordered matrix...
                 _parent.SwapRows(index1, index2);
             }
 
-            /// <summary>
-            /// Copies the contents of the vector to another one.
-            /// </summary>
-            /// <param name="target">The target vector.</param>
+            /// <inheritdoc/>
             public void CopyTo(IVector<T> target) => _parent.Vector.CopyTo(target);
 
-            /// <summary>
-            /// Resets all elements in the vector to their default value.
-            /// </summary>
+            /// <inheritdoc/>
             public void Reset() => _parent.Vector.Reset();
 
-            /// <summary>
-            /// Clears all elements in the vector. The size of the vector becomes 0.
-            /// </summary>
+            /// <inheritdoc/>
             public void Clear() => _parent.Vector.Clear();
 
             /// <summary>
             /// Converts to string.
             /// </summary>
             /// <returns>
-            /// A <see cref="System.String" /> that represents this instance.
+            /// A <see cref="string" /> that represents this instance.
             /// </returns>
             public override string ToString() => _parent.Vector.ToString();
         }

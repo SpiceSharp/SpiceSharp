@@ -18,14 +18,7 @@ namespace SpiceSharp.Algebra.Solve
         private int _pivotSearchReduction = 0;
         private int _degeneracy = 0;
 
-        /// <summary>
-        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
-        /// expected to be linearly dependent on the others.
-        /// </summary>
-        /// <value>
-        /// The degeneracy.
-        /// </value>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
+        /// <inheritdoc/>
         [GreaterThanOrEquals(0)]
         public int Degeneracy
         {
@@ -37,15 +30,7 @@ namespace SpiceSharp.Algebra.Solve
             }
         }
 
-        /// <summary>
-        /// Gets or sets the pivot search reduction. This makes sure that pivots cannot
-        /// be chosen from the last N rows. The default, 0, lets the pivot strategy to
-        /// choose from the whole matrix.
-        /// </summary>
-        /// <value>
-        /// The pivot search reduction.
-        /// </value>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
+        /// <inheritdoc/>
         [GreaterThanOrEquals(0)]
         public int PivotSearchReduction
         {
@@ -57,76 +42,30 @@ namespace SpiceSharp.Algebra.Solve
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this solver has been factored.
-        /// A solver needs to be factored becore it can solve for a solution.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this solver is factored; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsFactored { get; protected set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the solver needs to be reordered all the way from the start.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool NeedsReordering { get; set; }
 
-        /// <summary>
-        /// Gets the size of the solver. This is the total number of equations.
-        /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
+        /// <inheritdoc/>
         public int Size => Math.Max(Matrix.Size, Vector.Length);
 
-        /// <summary>
-        /// Gets or sets the value of the matrix at the specified row and column.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="row">The row.</param>
-        /// <param name="column">The column.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> or <paramref name="column"/> is negative.</exception>
+        /// <inheritdoc/>
         public T this[int row, int column]
         {
             get => this[new MatrixLocation(row, column)];
             set => this[new MatrixLocation(row, column)] = value;
         }
 
-        /// <summary>
-        /// Gets or sets the value of the matrix at the specified location.
-        /// </summary>
-        /// <value>
-        /// The value of the matrix element.
-        /// </value>
-        /// <param name="location">The location.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
+        /// <inheritdoc/>
         public T this[MatrixLocation location]
         {
             get => Matrix[ExternalToInternal(location)];
             set => Matrix[ExternalToInternal(location)] = value;
         }
 
-        /// <summary>
-        /// Gets or sets the value of the right hand side vector at the specified row.
-        /// </summary>
-        /// <value>
-        /// The value of the right hand side vector.
-        /// </value>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
+        /// <inheritdoc/>
         public T this[int row]
         {
             get
@@ -144,21 +83,33 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// Gets the row translation.
         /// </summary>
+        /// <value>
+        /// The row translation.
+        /// </value>
         protected Translation Row { get; } = new Translation();
 
         /// <summary>
         /// Gets the column translation.
         /// </summary>
+        /// <value>
+        /// The column translation.
+        /// </value>
         protected Translation Column { get; } = new Translation();
 
         /// <summary>
-        /// Gets the matrix to work on.
+        /// Gets the reordered equation matrix.
         /// </summary>
+        /// <value>
+        /// The reordered equation matrix.
+        /// </value>
         protected M Matrix { get; }
 
         /// <summary>
-        /// Gets the right-hand side vector.
+        /// Gets the reordered right hand side vector.
         /// </summary>
+        /// <value>
+        /// The reordered right hand side vector.
+        /// </value>
         protected V Vector { get; }
 
         /// <summary>
@@ -172,10 +123,7 @@ namespace SpiceSharp.Algebra.Solve
             IsFactored = false;
         }
 
-        /// <summary>
-        /// Preconditions the solver matrix and right hand side vector.
-        /// </summary>
-        /// <param name="method">The method.</param>
+        /// <inheritdoc/>
         public abstract void Precondition(PreconditioningMethod<M, V, T> method);
 
         /// <summary>
@@ -208,9 +156,7 @@ namespace SpiceSharp.Algebra.Solve
             Column.Swap(column1, column2);
         }
 
-        /// <summary>
-        /// Resets all elements in the matrix and vector.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual void Reset()
         {
             Matrix.Reset();
@@ -218,9 +164,7 @@ namespace SpiceSharp.Algebra.Solve
             IsFactored = false;
         }
 
-        /// <summary>
-        /// Clears the system of any elements. The size of the system becomes 0.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual void Clear()
         {
             Matrix.Clear();
@@ -232,25 +176,13 @@ namespace SpiceSharp.Algebra.Solve
             Degeneracy = 0;
         }
 
-        /// <summary>
-        /// Maps an external matrix location to an internal one.
-        /// </summary>
-        /// <param name="indices">The external matrix location.</param>
-        /// <returns>
-        /// The internal matrix location.
-        /// </returns>
+        /// <inheritdoc/>
         public MatrixLocation ExternalToInternal(MatrixLocation indices)
         {
             return new MatrixLocation(Row[indices.Row], Column[indices.Column]);
         }
 
-        /// <summary>
-        /// Maps an internal matrix location to an external one.
-        /// </summary>
-        /// <param name="indices">The internal matrix location.</param>
-        /// <returns>
-        /// The external matrix location.
-        /// </returns>
+        /// <inheritdoc/>
         public MatrixLocation InternalToExternal(MatrixLocation indices)
         {
             return new MatrixLocation(Row.Reverse(indices.Row), Column.Reverse(indices.Column));
@@ -264,58 +196,26 @@ namespace SpiceSharp.Algebra.Solve
         /// </returns>
         public override string ToString() => "Pivoting solver ({0}x{1})".FormatString(Size, Size + 1);
 
-        /// <summary>
-        /// Solves the equations using the Y-matrix and Rhs-vector.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
+        /// <inheritdoc/>
         public abstract void Solve(IVector<T> solution);
 
-        /// <summary>
-        /// Solves the equations using the transposed Y-matrix.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
+        /// <inheritdoc/>
         public abstract void SolveTransposed(IVector<T> solution);
 
-        /// <summary>
-        /// Factor the Y-matrix and Rhs-vector.
-        /// This method can save time when factoring similar matrices in succession.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the factoring was successful; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public abstract bool Factor();
 
-        /// <summary>
-        /// Order and factor the Y-matrix and Rhs-vector.
-        /// This method will reorder the matrix as it sees fit.
-        /// </summary>
-        /// <returns>
-        /// The number of rows that were successfully eliminated.
-        /// </returns>
+        /// <inheritdoc/>
         public abstract int OrderAndFactor();
 
-        /// <summary>
-        /// Sets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
+        /// <inheritdoc/>
         public new ISolver<T> SetParameter<P>(string name, P value)
         {
             base.SetParameter(name, value);
             return this;
         }
 
-        /// <summary>
-        /// Call a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
+        /// <inheritdoc/>
         public new ISolver<T> SetParameter(string name)
         {
             base.SetParameter(name);

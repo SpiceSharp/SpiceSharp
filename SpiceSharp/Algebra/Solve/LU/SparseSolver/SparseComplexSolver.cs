@@ -23,13 +23,7 @@ namespace SpiceSharp.Algebra
         {
         }
 
-        /// <summary>
-        /// Solves the equations using the factored matrix and right hand side vector.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
+        /// <inheritdoc/>
         public override void Solve(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -91,13 +85,7 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <summary>
-        /// Solves the equations using the transposed factored matrix and right hand side vector.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
+        /// <inheritdoc/>
         public override void SolveTransposed(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -153,11 +141,7 @@ namespace SpiceSharp.Algebra
             Row.Unscramble(_intermediate, solution);
         }
 
-        /// <summary>
-        /// Eliminates the matrix right and below the pivot.
-        /// </summary>
-        /// <param name="pivot">The pivot element.</param>
-        /// <exception cref="AlgebraException">Thrown if the pivot is <c>null</c> or has a magnitude of zero.</exception>
+        /// <inheritdoc/>
         protected override void Eliminate(ISparseMatrixElement<Complex> pivot)
         {
             // Test for zero pivot

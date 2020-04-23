@@ -21,11 +21,8 @@ namespace SpiceSharp.Algebra
             : base(Math.Abs)
         {
         }
-        
-        /// <summary>
-        /// Solves the equations using the Y-matrix and Rhs-vector.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
+
+        /// <inheritdoc/>
         public override void Solve(IVector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -91,10 +88,7 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <summary>
-        /// Solves the equations using the transposed Y-matrix.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
+        /// <inheritdoc/>
         public override void SolveTransposed(IVector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -102,6 +96,7 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored);
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             var order = Size - Degeneracy;
@@ -150,13 +145,7 @@ namespace SpiceSharp.Algebra
             Row.Unscramble(_intermediate, solution);
         }
 
-        /// <summary>
-        /// Eliminates the matrix right and below the pivot.
-        /// </summary>
-        /// <param name="pivot">The pivot element.</param>
-        /// <returns>
-        /// <c>true</c> if the elimination was successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         protected override void Eliminate(ISparseMatrixElement<double> pivot)
         {
             // Test for zero pivot

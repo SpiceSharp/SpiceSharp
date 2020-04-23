@@ -13,10 +13,6 @@ namespace SpiceSharp.Algebra.Solve
     {
         private double _absolutePivotThreshold = 1e-13;
         private double _relativePivotThreshold = 1e-3;
-
-        /// <summary>
-        /// Markowitz numbers
-        /// </summary>
         private int[] _markowitzRow;
         private int[] _markowitzColumn;
         private int[] _markowitzProduct;

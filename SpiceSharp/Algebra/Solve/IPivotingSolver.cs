@@ -44,7 +44,7 @@ namespace SpiceSharp.Algebra
         void Precondition(PreconditioningMethod<M, V, T> method);
 
         /// <summary>
-        /// Order and factor the Y-matrix and Rhs-vector.
+        /// Order and factor the equation matrix and right hand side vector.
         /// This method will reorder the matrix as it sees fit.
         /// </summary>
         /// <returns>

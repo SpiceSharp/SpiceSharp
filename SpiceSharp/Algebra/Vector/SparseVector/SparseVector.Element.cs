@@ -25,14 +25,7 @@
             /// </summary>
             public Element PreviousInVector { get; set; }
 
-            /// <summary>
-            /// Gets the next element.
-            /// </summary>
             ISparseVectorElement<T> ISparseVectorElement<T>.Below => NextInVector;
-
-            /// <summary>
-            /// Gets the previous element.
-            /// </summary>
             ISparseVectorElement<T> ISparseVectorElement<T>.Above => PreviousInVector;
 
             /// <summary>

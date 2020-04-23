@@ -35,6 +35,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element.
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
         Element<T> GetElement(int index);
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The vector element; otherwise <c>null</c>.
         /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
         Element<T> FindElement(int index);
     }
 }

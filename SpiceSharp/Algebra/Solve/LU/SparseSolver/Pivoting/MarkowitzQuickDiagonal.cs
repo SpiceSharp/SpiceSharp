@@ -58,19 +58,14 @@ namespace SpiceSharp.Algebra.Solve
         public static int TiesMultiplier
         {
             get => _tiesMultiplier;
-            set => _tiesMultiplier = Math.Max(value, 0);
+            set
+            {
+                Utility.GreaterThanOrEquals(value, nameof(TiesMultiplier), 0);
+                _tiesMultiplier = value;
+            }
         }
 
-        /// <summary>
-        /// Find a pivot in a matrix.
-        /// </summary>
-        /// <param name="markowitz">The Markowitz pivot strategy.</param>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="eliminationStep">The current elimination step.</param>
-        /// <param name="max">The maximum row/column index.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown if <paramref name="markowitz"/> or <paramref name="matrix"/> is <c>null</c>.
-        /// </exception>
+        /// <inheritdoc/>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));

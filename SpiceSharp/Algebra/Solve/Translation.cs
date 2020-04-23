@@ -7,22 +7,19 @@ namespace SpiceSharp.Algebra.Solve
     /// </summary>
     public class Translation
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
-        private const float _expansionFactor = 1.5f;
-        private const int _initialSize = 4;
-
-        /// <summary>
-        /// Private variable
-        /// </summary>
         private int[] _extToInt;
         private int[] _intToExt;
         private int _allocated;
 
+        private const float _expansionFactor = 1.5f;
+        private const int _initialSize = 4;
+
         /// <summary>
         /// Gets the current length of the translation vector.
         /// </summary>
+        /// <value>
+        /// The length of the translation vector.
+        /// </value>
         public int Length { get; private set; }
 
         /// <summary>
@@ -62,7 +59,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The internal index.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is negative.</exception>
         public int this[int index]
         {
             get
@@ -85,7 +82,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// The external index.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index" /> is negative.</exception>
         public int Reverse(int index)
         {
             index.GreaterThanOrEquals(nameof(index), 0);
@@ -103,9 +100,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="index1">First index.</param>
         /// <param name="index2">Second index.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="index1"/> or <paramref name="index2"/> is negative.
-        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index1" /> or <paramref name="index2" /> is negative.</exception>
         public void Swap(int index1, int index2)
         {
             index1.GreaterThanOrEquals(nameof(index1), 0);
@@ -130,10 +125,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown if <paramref name="source"/> or <paramref name="target"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="target"/> does not have the same length as <paramref name="source"/>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="target" /> does not have the same length as <paramref name="source" />.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> or <paramref name="target" /> is <c>null</c>.</exception>
         public void Scramble<T>(IVector<T> source, IVector<T> target)
         {
             source.ThrowIfNull(nameof(source));
@@ -155,13 +148,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <typeparam name="T">The value type of the vector.</typeparam>
         /// <param name="source">The source vector.</param>
         /// <param name="target">The target vector.</param>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown if <paramref name="source"/> or <paramref name="target"/> is <c>null</c>.
-        /// </exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="target"/> (including the trashcan element)
-        /// does not have the same number of elements as <paramref name="source"/>.
-        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="target" /> (including the trashcan element)
+        /// does not have the same number of elements as <paramref name="source" />.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> or <paramref name="target" /> is <c>null</c>.</exception>
         public void Unscramble<T>(T[] source, IVector<T> target)
         {
             source.ThrowIfNull(nameof(source));

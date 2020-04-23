@@ -9,7 +9,6 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IMatrix{T}" />
     /// <seealso cref="IVector{T}" />
-    /// <seealso cref="IFormattable" />
     public abstract partial class DenseLUSolver<T> : PivotingSolver<IMatrix<T>, IVector<T>, T>, ISolver<T>, IParameterized<RookPivoting<T>>
     {
         /// <summary>
@@ -24,6 +23,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Initializes a new instance of the <see cref="DenseLUSolver{T}"/> class.
         /// </summary>
         /// <param name="magnitude">The magnitude.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="magnitude"/> is <c>null</c>.</exception>
         protected DenseLUSolver(Func<T, double> magnitude)
             : base(new DenseMatrix<T>(), new DenseVector<T>())
         {
@@ -36,6 +36,8 @@ namespace SpiceSharp.Algebra.Solve
         /// </summary>
         /// <param name="size">The size.</param>
         /// <param name="magnitude">The magnitude.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="magnitude"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is negative.</exception>
         protected DenseLUSolver(int size, Func<T, double> magnitude)
             : base(new DenseMatrix<T>(size), new DenseVector<T>(size))
         {
@@ -43,10 +45,7 @@ namespace SpiceSharp.Algebra.Solve
             Parameters = new RookPivoting<T>(magnitude);
         }
 
-        /// <summary>
-        /// Preconditions the solver matrix and right hand side vector.
-        /// </summary>
-        /// <param name="method">The method.</param>
+        /// <inheritdoc/>
         public override void Precondition(PreconditioningMethod<IMatrix<T>, IVector<T>, T> method)
         {
             var reorderedMatrix = new ReorderedMatrix(this);
@@ -54,16 +53,11 @@ namespace SpiceSharp.Algebra.Solve
             method(reorderedMatrix, reorderedVector);
         }
 
-        /// <summary>
-        /// Factor the Y-matrix and Rhs-vector.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public override bool Factor() => Factor(Size);
 
         /// <summary>
-        /// Factor they Y-matrix and Rhs-vector.
+        /// Factor the equation matrix and right hand side vector.
         /// </summary>
         /// <param name="size">The size of the matrix that should be factored.</param>
         /// <returns>
@@ -86,9 +80,7 @@ namespace SpiceSharp.Algebra.Solve
             return true;
         }
 
-        /// <summary>
-        /// Order and factor the Y-matrix and Rhs-vector.
-        /// </summary>
+        /// <inheritdoc/>
         public override int OrderAndFactor()
         {
             var size = Size;
@@ -138,6 +130,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// <c>true</c> if the elimination was succesful; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="AlgebraException">Thrown if the pivot has a magnitude of zero.</exception>
         protected abstract void Eliminate(int step, int size);
 
         /// <summary>

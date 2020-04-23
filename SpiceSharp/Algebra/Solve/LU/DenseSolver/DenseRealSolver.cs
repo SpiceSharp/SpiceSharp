@@ -28,15 +28,7 @@ namespace SpiceSharp.Algebra
         {
         }
 
-        /// <summary>
-        /// Solves the system of equations.
-        /// </summary>
-        /// <param name="solution">The solution vector that will hold the solution to the set of equations.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
-        /// </exception>
+        /// <inheritdoc/>
         public override void Solve(IVector<double> solution)
             => Solve(solution, Size);
 
@@ -82,15 +74,7 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <summary>
-        /// Solves the transposed.
-        /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
-        /// </exception>
+        /// <inheritdoc/>
         public override void SolveTransposed(IVector<double> solution)
             => SolveTransposed(solution, Size);
 
@@ -109,6 +93,7 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored);
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
+
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             steps = Math.Max(steps, Size);
@@ -139,14 +124,7 @@ namespace SpiceSharp.Algebra
             Row.Unscramble(_intermediate, solution);
         }
 
-        /// <summary>
-        /// Eliminates the submatrix right and below the pivot.
-        /// </summary>
-        /// <param name="step">The current elimination step.</param>
-        /// <param name="size">The maximum row/column to be eliminated.</param>
-        /// <returns>
-        /// <c>true</c> if the elimination was succesful; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         protected override void Eliminate(int step, int size)
         {
             var diagonal = Matrix[step, step];

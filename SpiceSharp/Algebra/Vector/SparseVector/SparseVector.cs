@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra
     /// A vector that uses sparse storage methods with doubly-linked elements.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    /// <seealso cref="IFormattable" />
+    /// <seealso cref="ISparseVector{T}" />
     /// <remarks>
     /// <para>The element at index 0 is considered a "trashcan" element under the hood, consistent to <see cref="SparseMatrix{T}" />.
     /// This doesn't really make a difference for indexing the vector though.
@@ -16,6 +16,9 @@ namespace SpiceSharp.Algebra
     /// </remarks>
     public partial class SparseVector<T> : ISparseVector<T>
     {
+        private Element _firstInVector, _lastInVector;
+        private readonly Element _trashCan;
+
         /// <summary>
         /// Gets the length of the vector.
         /// </summary>
@@ -24,33 +27,15 @@ namespace SpiceSharp.Algebra
         /// </value>
         public int Length { get; private set; }
 
-        /// <summary>
-        /// Gets the number of elements in the vector.
-        /// </summary>
-        /// <value>
-        /// The element count.
-        /// </value>
+        /// <inheritdoc/>
         public int ElementCount { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the value at the specified index.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns>The value.</returns>
+        /// <inheritdoc/>
         public T this[int index]
         {
             get => GetVectorValue(index);
             set => SetVectorValue(index, value);
         }
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private Element _firstInVector, _lastInVector;
-        private readonly Element _trashCan;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SparseVector{T}"/> class.
@@ -66,60 +51,18 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="SparseVector{T}"/> class.
         /// </summary>
         /// <param name="length">The length of the vector.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="length"/> is negative.</exception>
         public SparseVector(int length)
         {
-            if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length));
-            Length = length;
+            Length = length.GreaterThanOrEquals(nameof(length), 0);
             _trashCan = new Element(0);
             ElementCount = 1;
         }
 
-        /// <summary>
-        /// Gets the value of the vector at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
-        public T GetVectorValue(int index)
-        {
-            var element = FindElement(index);
-            if (element == null)
-                return default;
-            return element.Value;
-        }
-
-        /// <summary>
-        /// Sets the value of the vector at the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="value">The value.</param>
-        public void SetVectorValue(int index, T value)
-        {
-            if (value.Equals(default))
-            {
-                // We don't need to create a new element unnecessarily
-                var element = FindElement(index);
-                if (element != null)
-                    element.Value = default;
-            }
-            else
-            {
-                var element = GetElement(index);
-                element.Value = value;
-            }
-        }
-
-        /// <summary>
-        /// Creates or get an element in the vector.
-        /// </summary>
-        /// <param name="index">Index in the vector</param>
-        /// <returns>The vector element at the specified index</returns>
+        /// <inheritdoc/>
         public Element<T> GetElement(int index)
         {
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
+            index.GreaterThanOrEquals(nameof(index), 0);
             if (index == 0)
                 return _trashCan;
 
@@ -160,15 +103,10 @@ namespace SpiceSharp.Algebra
             return result;
         }
 
-        /// <summary>
-        /// Find an element in the vector without creating it.
-        /// </summary>
-        /// <param name="index">The index in the vector.</param>
-        /// <returns>The element at the specified index, or null if the element does not exist.</returns>
+        /// <inheritdoc/>
         public Element<T> FindElement(int index)
         {
-            if (index < 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
+            index.GreaterThanOrEquals(nameof(index), 0);
             if (index > Length)
                 return null;
             if (index == 0)
@@ -187,42 +125,13 @@ namespace SpiceSharp.Algebra
             return null;
         }
 
-        /// <summary>
-        /// Gets the first <see cref="ISparseVectorElement{T}" /> in the vector.
-        /// </summary>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
+        /// <inheritdoc/>
         public ISparseVectorElement<T> GetFirstInVector() => _firstInVector;
 
-        /// <summary>
-        /// Gets the last <see cref="ISparseVectorElement{T}" /> in the vector.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public ISparseVectorElement<T> GetLastInVector() => _lastInVector;
 
-        /// <summary>
-        /// Remove an element.
-        /// </summary>
-        /// <param name="element">Element to be removed.</param>
-        private void Remove(Element element)
-        {
-            // Update surrounding links
-            if (element.PreviousInVector == null)
-                _firstInVector = element.NextInVector;
-            else
-                element.PreviousInVector.NextInVector = element.NextInVector;
-            if (element.NextInVector == null)
-                _lastInVector = element.PreviousInVector;
-            else
-                element.NextInVector.PreviousInVector = element.PreviousInVector;
-            ElementCount--;
-        }
-
-        /// <summary>
-        /// Copies the contents of the vector to another one.
-        /// </summary>
-        /// <param name="target">The target vector.</param>
+        /// <inheritdoc/>
         public void CopyTo(IVector<T> target)
         {
             target.ThrowIfNull(nameof(target));
@@ -234,17 +143,11 @@ namespace SpiceSharp.Algebra
                 target[i] = GetVectorValue(i);
         }
 
-        /// <summary>
-        /// Swap two elements.
-        /// </summary>
-        /// <param name="index1">The index of the first element.</param>
-        /// <param name="index2">The index of the second element.</param>
+        /// <inheritdoc/>
         public void SwapElements(int index1, int index2)
         {
-            if (index1 < 0)
-                throw new ArgumentOutOfRangeException(nameof(index1));
-            if (index2 < 0)
-                throw new ArgumentOutOfRangeException(nameof(index2));
+            index1.GreaterThan(nameof(index1), 0);
+            index2.GreaterThan(nameof(index2), 0);
             if (index1 == index2)
                 return;
             if (index2 < index1)
@@ -282,13 +185,58 @@ namespace SpiceSharp.Algebra
             Swap(first, second, index1, index2);
         }
 
+        /// <inheritdoc/>
+        public void Reset()
+        {
+            _trashCan.Value = default;
+            var elt = _firstInVector;
+            while (elt != null)
+            {
+                elt.Value = default;
+                elt = elt.NextInVector;
+            }
+        }
+
+        /// <inheritdoc/>
+        public void Clear()
+        {
+            _trashCan.Value = default;
+            _firstInVector = null;
+            _lastInVector = null;
+            ElementCount = 1;
+            Length = 0;
+        }
+
         /// <summary>
-        /// Swaps the specified elements.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <param name="first">The first element.</param>
-        /// <param name="second">The second element.</param>
-        /// <param name="index1">The index of the first element.</param>
-        /// <param name="index2">The index of the second element.</param>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
+        public override string ToString() => "Sparse vector ({0})".FormatString(Length);
+
+        private T GetVectorValue(int index)
+        {
+            var element = FindElement(index);
+            if (element == null)
+                return default;
+            return element.Value;
+        }
+        private void SetVectorValue(int index, T value)
+        {
+            if (value.Equals(default))
+            {
+                // We don't need to create a new element unnecessarily
+                var element = FindElement(index);
+                if (element != null)
+                    element.Value = default;
+            }
+            else
+            {
+                var element = GetElement(index);
+                element.Value = value;
+            }
+        }
         private void Swap(Element first, Element second, int index1, int index2)
         {
             // Nothing to do
@@ -397,39 +345,18 @@ namespace SpiceSharp.Algebra
                 }
             }
         }
-
-        /// <summary>
-        /// Resets all elements in the vector to their default value.
-        /// </summary>
-        public void Reset()
+        private void Remove(Element element)
         {
-            _trashCan.Value = default;
-            var elt = _firstInVector;
-            while (elt != null)
-            {
-                elt.Value = default;
-                elt = elt.NextInVector;
-            }
+            // Update surrounding links
+            if (element.PreviousInVector == null)
+                _firstInVector = element.NextInVector;
+            else
+                element.PreviousInVector.NextInVector = element.NextInVector;
+            if (element.NextInVector == null)
+                _lastInVector = element.PreviousInVector;
+            else
+                element.NextInVector.PreviousInVector = element.PreviousInVector;
+            ElementCount--;
         }
-
-        /// <summary>
-        /// Clears all elements in the vector. The size of the vector becomes 0.
-        /// </summary>
-        public void Clear()
-        {
-            _trashCan.Value = default;
-            _firstInVector = null;
-            _lastInVector = null;
-            ElementCount = 1;
-            Length = 0;
-        }
-
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public override string ToString() => "Sparse vector ({0})".FormatString(Length);
     }
 }

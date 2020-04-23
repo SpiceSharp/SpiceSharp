@@ -9,12 +9,6 @@ namespace SpiceSharp.Algebra
     /// <typeparam name="T">The base type.</typeparam>
     public class ElementSet<T>
     {
-        /// <summary>
-        /// Gets the elements.
-        /// </summary>
-        /// <value>
-        /// The elements.
-        /// </value>
         private readonly Element<T>[] _elements;
 
         /// <summary>
@@ -23,17 +17,23 @@ namespace SpiceSharp.Algebra
         /// <param name="solver">The solver.</param>
         /// <param name="matrixPins">The Y-matrix indices.</param>
         /// <param name="rhsPins">The right-hand side vector indices.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solver"/> is <c>null</c>.</exception>
         public ElementSet(ISparseSolver<T> solver, MatrixLocation[] matrixPins, int[] rhsPins = null)
         {
+            solver.ThrowIfNull(nameof(solver));
+
+            // Allocate memory for all the elements
             int length = (rhsPins?.Length ?? 0) + (matrixPins?.Length ?? 0);
             _elements = new Element<T>[length];
             int offset = 0;
+            
             if (matrixPins != null)
             {
                 for (var i = 0; i < matrixPins.Length; i++)
                     _elements[i] = solver.GetElement(matrixPins[i]);
                 offset = matrixPins.Length;
             }
+
             if (rhsPins != null)
             {
                 for (var i = 0; i < rhsPins.Length; i++)
@@ -46,6 +46,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="matrixPins">The matrix pins.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solver"/> is <c>null</c>.</exception>
         public ElementSet(ISparseSolver<T> solver, params MatrixLocation[] matrixPins)
             : this(solver, matrixPins, null)
         {
@@ -56,6 +57,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="solver">The solver.</param>
         /// <param name="rhsPins">The RHS pins.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solver"/> is <c>null</c>.</exception>
         public ElementSet(ISparseSolver<T> solver, params int[] rhsPins)
             : this(solver, null, rhsPins)
         {
@@ -68,6 +70,8 @@ namespace SpiceSharp.Algebra
         /// <param name="values">The values.</param>
         public void Add(params T[] values)
         {
+            if (values == null)
+                return;
             for (var i = 0; i < values.Length; i++)
                 _elements[i].Add(values[i]);
         }
@@ -79,6 +83,8 @@ namespace SpiceSharp.Algebra
         /// <param name="values">The values.</param>
         public void Subtract(params T[] values)
         {
+            if (values == null)
+                return;
             for (var i = 0; i < values.Length; i++)
                 _elements[i].Subtract(values[i]);
         }
@@ -87,28 +93,8 @@ namespace SpiceSharp.Algebra
         /// Converts to string.
         /// </summary>
         /// <returns>
-        /// A <see cref="String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            if (_elements.Length < 256)
-            {
-                var sb = new StringBuilder(_elements.Length * 10);
-                sb.Append('(');
-                bool isFirst = true;
-                foreach (var elt in _elements)
-                {
-                    if (isFirst)
-                        isFirst = false;
-                    else
-                        sb.Append(", ");
-                    sb.Append(elt.ToString());
-                }
-                sb.Append(')');
-                return sb.ToString();
-            }
-            else
-                return "ElementSet ({0} elements)".FormatString(_elements.Length);
-        }
+        public override string ToString() => "ElementSet ({0})".FormatString(_elements.Length);
     }
 }

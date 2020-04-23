@@ -10,53 +10,24 @@ namespace SpiceSharp.Algebra
     /// <seealso cref="IMatrix{T}"/>
     public class DenseMatrix<T> : IMatrix<T>
     {
-        /// <summary>
-        /// Constants
-        /// </summary>
-        private const int _initialSize = 4;
-        private const float _expansionFactor = 1.25f; // expansion for dense matrices allocates ~1.25^2 (1.55X) more memory.
-
-        /// <summary>
-        /// Gets the size of the matrix.
-        /// </summary>
-        /// <value>
-        /// The matrix size.
-        /// </value>
-        public int Size { get; private set; }
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
         private T[] _array;
         private T _trashCan;
         private int _allocatedSize;
 
-        /// <summary>
-        /// Gets or sets the value with the specified row.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>The value</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="row"/> or <paramref name="column"/> is not positive.
-        /// </exception>
+        private const int _initialSize = 4;
+        private const float _expansionFactor = 1.25f; // expansion for dense matrices allocates ~1.25^2 (1.55X) more memory.
+
+        /// <inheritdoc/>
+        public int Size { get; private set; }
+
+        /// <inheritdoc/>
         public T this[int row, int column]
         {
             get => GetMatrixValue(new MatrixLocation(row, column));
             set => SetMatrixValue(new MatrixLocation(row, column), value);
         }
 
-        /// <summary>
-        /// Gets or sets the value at the specified location.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="location">The location.</param>
-        /// <returns>The value.</returns>
+        /// <inheritdoc/>
         public T this[MatrixLocation location]
         {
             get => GetMatrixValue(location);
@@ -78,30 +49,16 @@ namespace SpiceSharp.Algebra
         /// Initializes a new instance of the <see cref="DenseMatrix{T}"/> class.
         /// </summary>
         /// <param name="size">The matrix size.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="size"/> is negative.</exception>
         public DenseMatrix(int size)
         {
-            Size = size;
+            Size = size.GreaterThanOrEquals(nameof(size), 0);
             _allocatedSize = Math.Max(_initialSize, size);
             _array = new T[_allocatedSize * _allocatedSize];
             _trashCan = default;
         }
 
-        /// <summary>
-        /// Returns a <see cref="string" /> that represents this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="string" /> that represents this instance.
-        /// </returns>
-        public override string ToString() => "DenseMatrix ({0}x{0})".FormatString(Size);
-
-        /// <summary>
-        /// Swaps two rows in the matrix.
-        /// </summary>
-        /// <param name="row1">The first row index.</param>
-        /// <param name="row2">The second row index.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
-        /// </exception>
+        /// <inheritdoc/>
         public void SwapRows(int row1, int row2)
         {
             row1.GreaterThan(nameof(row1), 0);
@@ -124,14 +81,7 @@ namespace SpiceSharp.Algebra
             }
         }
 
-        /// <summary>
-        /// Swaps two columns in the matrix.
-        /// </summary>
-        /// <param name="column1">The first column index.</param>
-        /// <param name="column2">The second column index.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
-        /// </exception>
+        /// <inheritdoc/>
         public void SwapColumns(int column1, int column2)
         {
             column1.GreaterThan(nameof(column1), 0);
@@ -154,18 +104,14 @@ namespace SpiceSharp.Algebra
             }
         }
 
-        /// <summary>
-        /// Resets all elements in the matrix to their default value.
-        /// </summary>
+        /// <inheritdoc/>
         public void Reset()
         {
             for (var i = 0; i < _array.Length; i++)
                 _array[i] = default;
         }
 
-        /// <summary>
-        /// Clears the matrix of any elements. The size of the matrix becomes 0.
-        /// </summary>
+        /// <inheritdoc/>
         public void Clear()
         {
             _trashCan = default;
@@ -173,6 +119,14 @@ namespace SpiceSharp.Algebra
             _allocatedSize = _initialSize;
             Size = 0;
         }
+
+        /// <summary>
+        /// Returns a <see cref="string" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="string" /> that represents this instance.
+        /// </returns>
+        public override string ToString() => "DenseMatrix ({0}x{0})".FormatString(Size);
 
         private T GetMatrixValue(MatrixLocation location)
         {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace SpiceSharp.Algebra
@@ -25,48 +23,20 @@ namespace SpiceSharp.Algebra
         private const int _initialSize = 4;
         private const float _expansionFactor = 1.5f;
 
-        /// <summary>
-        /// Gets the number of elements in the matrix.
-        /// </summary>
-        /// <value>
-        /// The element count.
-        /// </value>
+        /// <inheritdoc/>
         public int ElementCount { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the size.
-        /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
+        /// <inheritdoc/>
         public int Size { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the value at the specified row and column.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="row">The row index.</param>
-        /// <param name="column">The column index.</param>
-        /// <returns>The value.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="row"/> or <paramref name="column"/> is not positive.
-        /// </exception>
+        /// <inheritdoc/>
         public T this[int row, int column]
         {
             get => GetMatrixValue(new MatrixLocation(row, column));
             set => SetMatrixValue(new MatrixLocation(row, column), value);
         }
 
-        /// <summary>
-        /// Gets or sets the value at the specified location.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="location">The location.</param>
-        /// <returns>The value.</returns>
+        /// <inheritdoc/>
         public T this[MatrixLocation location]
         {
             get => GetMatrixValue(location);
@@ -123,14 +93,7 @@ namespace SpiceSharp.Algebra
             ElementCount = 1;
         }
 
-        /// <summary>
-        /// Gets a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, it is created.
-        /// </summary>
-        /// <param name="location">The matrix location.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> GetElement(MatrixLocation location)
         {
             if (location.Row == 0 || location.Column == 0)
@@ -155,15 +118,8 @@ namespace SpiceSharp.Algebra
             return element;
         }
 
-        /// <summary>
-        /// Finds the diagonal element.
-        /// </summary>
-        /// <param name="index">The row/column index.</param>
-        /// <returns>
-        /// The diagonal element.
-        /// </returns>
-        /// <exception cref="IndexOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
-        public Element<T> FindDiagonalElement(int index)
+        /// <inheritdoc/>
+        public ISparseMatrixElement<T> FindDiagonalElement(int index)
         {
             index.GreaterThanOrEquals(nameof(index), 0);
             if (index > Size)
@@ -171,22 +127,7 @@ namespace SpiceSharp.Algebra
             return _diagonal[index];
         }
 
-        ISparseMatrixElement<T> ISparseMatrix<T>.FindDiagonalElement(int index)
-        {
-            index.GreaterThanOrEquals(nameof(index), 0);
-            if (index > Size)
-                return null;
-            return _diagonal[index];
-        }
-
-        /// <summary>
-        /// Finds a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, <c>null</c> is returned.
-        /// </summary>
-        /// <param name="location">The matrix location.</param>
-        /// <returns>
-        /// The matrix element if it exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> FindElement(MatrixLocation location)
         {
             if (location.Row > Size || location.Column > Size)
@@ -198,58 +139,23 @@ namespace SpiceSharp.Algebra
             return _rows[location.Row].Find(location.Column);
         }
 
-        /// <summary>
-        /// Gets the first non-default <see cref="ISparseMatrixElement{T}" /> in the specified row.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row" /> is negative.</exception>
+        /// <inheritdoc/>
         public ISparseMatrixElement<T> GetFirstInRow(int row)
             => row.GreaterThanOrEquals(nameof(row), 0) > Size ? null : _rows[row].FirstInRow;
 
-        /// <summary>
-        /// Gets the last non-default <see cref="ISparseMatrixElement{T}" /> in the specified row.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
+        /// <inheritdoc/>
         public ISparseMatrixElement<T> GetLastInRow(int row)
             => row.GreaterThanOrEquals(nameof(row), 0) > Size ? null : _rows[row].LastInRow;
 
-        /// <summary>
-        /// Gets the first non-default <see cref="ISparseMatrixElement{T}" /> in the specified column.
-        /// </summary>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="column"/> is negative.</exception>
+        /// <inheritdoc/>
         public ISparseMatrixElement<T> GetFirstInColumn(int column)
             => column.GreaterThanOrEquals(nameof(column), 0) > Size ? null : _columns[column].FirstInColumn;
 
-        /// <summary>
-        /// Gets the last non-default <see cref="ISparseMatrixElement{T}" /> in the specified column.
-        /// </summary>
-        /// <param name="column">The column index.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="column"/> is negative.</exception>
+        /// <inheritdoc/>
         public ISparseMatrixElement<T> GetLastInColumn(int column) 
             => column.GreaterThanOrEquals(nameof(column), 0) > Size ? null : _columns[column].LastInColumn;
 
-        /// <summary>
-        /// Swaps two rows in the matrix.
-        /// </summary>
-        /// <param name="row1">The first row index.</param>
-        /// <param name="row2">The second row index.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="row1"/> or <paramref name="row2"/> is not greater than 0.
-        /// </exception>
+        /// <inheritdoc/>
         public void SwapRows(int row1, int row2)
         {
             row1.GreaterThan(nameof(row1), 0);
@@ -327,14 +233,7 @@ namespace SpiceSharp.Algebra
             }
         }
 
-        /// <summary>
-        /// Swaps two columns in the matrix.
-        /// </summary>
-        /// <param name="column1">The first column index.</param>
-        /// <param name="column2">The second column index.</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown if <paramref name="column1"/> or <paramref name="column2"/> is not greater than 0.
-        /// </exception>
+        /// <inheritdoc/>
         public void SwapColumns(int column1, int column2)
         {
             column1.GreaterThan(nameof(column1), 0);
@@ -412,9 +311,7 @@ namespace SpiceSharp.Algebra
             }
         }
 
-        /// <summary>
-        /// Resets all elements in the matrix to their default value.
-        /// </summary>
+        /// <inheritdoc/>
         public void Reset()
         {
             _trashCan.Value = default;
@@ -429,9 +326,7 @@ namespace SpiceSharp.Algebra
             }
         }
 
-        /// <summary>
-        /// Clears the matrix of any elements. The size of the matrix becomes 0.
-        /// </summary>
+        /// <inheritdoc/>
         public void Clear()
         {
             _trashCan.Value = default;

@@ -46,10 +46,7 @@ namespace SpiceSharp.Algebra.Solve
             Fillins = 0;
         }
 
-        /// <summary>
-        /// Preconditions the solver matrix and right hand side vector.
-        /// </summary>
-        /// <param name="method">The method.</param>
+        /// <inheritdoc/>
         public override void Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method)
         {
             var reorderedMatrix = new ReorderedMatrix(this);
@@ -57,12 +54,7 @@ namespace SpiceSharp.Algebra.Solve
             method(reorderedMatrix, reorderedVector);
         }
 
-        /// <summary>
-        /// Factor the Y-matrix and Rhs-vector.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if the factoring was successful; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public override bool Factor()
         {
             IsFactored = false;
@@ -80,13 +72,7 @@ namespace SpiceSharp.Algebra.Solve
             return true;
         }
 
-        /// <summary>
-        /// Order and factor the Y-matrix and Rhs-vector.
-        /// This method will reorder the matrix as it sees fit.
-        /// </summary>
-        /// <returns>
-        /// The number of rows that were successfully eliminated.
-        /// </returns>
+        /// <inheritdoc/>
         public override int OrderAndFactor()
         {
             IsFactored = false;
@@ -166,33 +152,13 @@ namespace SpiceSharp.Algebra.Solve
             return Matrix.FindElement(new MatrixLocation(row, column));
         }
 
-        /// <summary>
-        /// Finds a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, <c>null</c> is returned.
-        /// </summary>
-        /// <param name="location">The matrix location.</param>
-        /// <returns>
-        /// The matrix element if it exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> FindElement(MatrixLocation location) => Matrix.FindElement(ExternalToInternal(location));
 
-        /// <summary>
-        /// Finds the element at the specified position in the right-hand side vector.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> FindElement(int row) => Vector.FindElement(Row[row]);
 
-        /// <summary>
-        /// Gets a pointer to the matrix element at the specified row and column. If
-        /// the element doesn't exist, it is created.
-        /// </summary>
-        /// <param name="location">The matrix location.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> GetElement(MatrixLocation location)
         {
             location = ExternalToInternal(location);
@@ -210,14 +176,7 @@ namespace SpiceSharp.Algebra.Solve
             return elt;
         }
 
-        /// <summary>
-        /// Gets the element at the specified position in the right-hand side vector.
-        /// A new element is created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> GetElement(int row)
         {
             if (row < 0)
@@ -235,7 +194,7 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <summary>
-        /// Move a chosen pivot to the diagonal.
+        /// Moves a chosen pivot to the diagonal.
         /// </summary>
         /// <param name="pivot">The pivot element.</param>
         /// <param name="step">The current step of factoring.</param>
@@ -267,9 +226,7 @@ namespace SpiceSharp.Algebra.Solve
             return result;
         }
 
-        /// <summary>
-        /// Clears the system of any elements. The size of the solver becomes 0.
-        /// </summary>
+        /// <inheritdoc/>
         public override void Clear()
         {
             base.Clear();

@@ -19,20 +19,6 @@ namespace SpiceSharp.Algebra
         /// </summary>
         protected readonly static Func<T, T, T> Subtraction = CompileDefaultSubtraction();
 
-        private static Func<T, T, T> CompileDefaultAddition()
-        {
-            var a = Expression.Parameter(typeof(T));
-            var b = Expression.Parameter(typeof(T));
-            return Expression.Lambda<Func<T, T, T>>(Expression.Add(a, b), a, b).Compile();
-        }
-
-        private static Func<T, T, T> CompileDefaultSubtraction()
-        {
-            var a = Expression.Parameter(typeof(T));
-            var b = Expression.Parameter(typeof(T));
-            return Expression.Lambda<Func<T, T, T>>(Expression.Subtract(a, b), a, b).Compile();
-        }
-
         /// <summary>
         /// Gets or sets the value of the matrix element.
         /// </summary>
@@ -57,5 +43,18 @@ namespace SpiceSharp.Algebra
         /// </summary>
         /// <param name="value">The value.</param>
         public void Subtract(T value) => Value = Subtraction(Value, value);
+
+        private static Func<T, T, T> CompileDefaultAddition()
+        {
+            var a = Expression.Parameter(typeof(T));
+            var b = Expression.Parameter(typeof(T));
+            return Expression.Lambda<Func<T, T, T>>(Expression.Add(a, b), a, b).Compile();
+        }
+        private static Func<T, T, T> CompileDefaultSubtraction()
+        {
+            var a = Expression.Parameter(typeof(T));
+            var b = Expression.Parameter(typeof(T));
+            return Expression.Lambda<Func<T, T, T>>(Expression.Subtract(a, b), a, b).Compile();
+        }
     }
 }

@@ -8,15 +8,15 @@
     public interface ISparseMatrixElement<T>
     {
         /// <summary>
-        /// Gets or sets the value.
+        /// Gets or sets the value of the element.
         /// </summary>
         /// <value>
-        /// The value.
+        /// The value of the element.
         /// </value>
         T Value { get; set; }
 
         /// <summary>
-        /// Gets the row of the matrix element.
+        /// Gets the row index of the matrix element.
         /// </summary>
         /// <value>
         /// The row index.
@@ -24,7 +24,7 @@
         int Row { get; }
 
         /// <summary>
-        /// Gets the column of the matrix element.
+        /// Gets the column index of the matrix element.
         /// </summary>
         /// <value>
         /// The column index.
@@ -32,7 +32,7 @@
         int Column { get; }
 
         /// <summary>
-        /// Gets the first non-default <see cref="ISparseMatrixElement{T}"/> left of this one.
+        /// Gets the nearest <see cref="ISparseMatrixElement{T}"/> left of this one.
         /// </summary>
         /// <value>
         /// The matrix element.
@@ -40,7 +40,7 @@
         ISparseMatrixElement<T> Left { get; }
 
         /// <summary>
-        /// Gets the first non-default <see cref="ISparseMatrixElement{T}"/> right of this one.
+        /// Gets the nearest <see cref="ISparseMatrixElement{T}"/> right of this one.
         /// </summary>
         /// <value>
         /// The matrix element.
@@ -48,7 +48,7 @@
         ISparseMatrixElement<T> Right { get; }
 
         /// <summary>
-        /// Gets the first non-default <see cref="ISparseMatrixElement{T}"/> above this one.
+        /// Gets the nearest <see cref="ISparseMatrixElement{T}"/> above this one.
         /// </summary>
         /// <value>
         /// The matrix element.
@@ -56,7 +56,7 @@
         ISparseMatrixElement<T> Above { get; }
 
         /// <summary>
-        /// Gets the first non-default <see cref="ISparseMatrixElement{T}"/> below this one.
+        /// Gets the nearest <see cref="ISparseMatrixElement{T}"/> below this one.
         /// </summary>
         /// <value>
         /// The matrix element.

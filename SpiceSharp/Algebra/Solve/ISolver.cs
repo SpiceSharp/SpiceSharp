@@ -79,26 +79,22 @@ namespace SpiceSharp.Algebra
         /// Solves the equations using the factored matrix and right hand side vector.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="solution"/> does not have <see cref="Size"/> elements.
-        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="Size" /> elements.</exception>
         void Solve(IVector<T> solution);
 
         /// <summary>
         /// Solves the equations using the transposed factored matrix and right hand side vector.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="solution"/> does not have <see cref="Size"/> elements.
-        /// </exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="Size" /> elements.</exception>
         void SolveTransposed(IVector<T> solution);
 
         /// <summary>
-        /// Factor the Y-matrix and Rhs-vector.
+        /// Factor the equation matrix and right hand side vector.
         /// This method can save time when factoring similar matrices in succession.
         /// </summary>
         /// <returns>

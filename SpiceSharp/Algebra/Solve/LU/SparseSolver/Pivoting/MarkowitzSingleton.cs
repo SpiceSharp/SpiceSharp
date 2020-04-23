@@ -9,17 +9,7 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="T">The base value type.</typeparam>
     public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T>
     {
-        /// <summary>
-        /// Find a pivot in a matrix.
-        /// </summary>
-        /// <param name="markowitz">The Markowitz pivot strategy.</param>
-        /// <param name="matrix">The matrix</param>
-        /// <param name="eliminationStep">The current elimination step.</param>
-        /// <param name="max">The maximum row/column index.</param>
-        /// <returns>
-        /// The pivot element, or null if no pivot was found.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="markowitz" /> or <paramref name="matrix" /> is <c>null</c>.</exception>
+        /// <inheritdoc/>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));
