@@ -1,12 +1,15 @@
 ﻿using SpiceSharp.Algebra;
-using System;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// An <see cref="ISimulationState"/> that describes a simulation state that uses a solver for modified nodal analysis.
     /// </summary>
-    /// <typeparam name="T">The base type.</typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="ISimulationState"/>
+    /// <seealso cref="IVariableFactory{V}"/>
+    /// <seealso cref="IVariableDictionary{V}"/>
+    /// <seealso cref="IVariable{T}"/>
     public interface ISolverSimulationState<T> : 
         ISimulationState,
         IVariableFactory<IVariable<T>>,
@@ -21,7 +24,7 @@ namespace SpiceSharp.Simulations
         ISparsePivotingSolver<T> Solver { get; }
 
         /// <summary>
-        /// Gets the solution.
+        /// Gets the solution to the solved equations.
         /// </summary>
         /// <value>
         /// The solution.
@@ -29,10 +32,10 @@ namespace SpiceSharp.Simulations
         IVector<T> Solution { get; }
 
         /// <summary>
-        /// Gets the map that maps variables to indices for the solver.
+        /// Gets the <see cref="IVariableMap"/> that maps variables to indices for the solver.
         /// </summary>
         /// <value>
-        /// The map.
+        /// The variable map.
         /// </value>
         IVariableMap Map { get; }
     }

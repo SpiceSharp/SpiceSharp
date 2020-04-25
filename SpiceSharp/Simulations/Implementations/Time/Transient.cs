@@ -334,9 +334,9 @@ namespace SpiceSharp.Simulations
                 else
                 {
                     // Decompose
-                    base.Statistics.DecompositionTime.Start();
+                    base.Statistics.FactoringTime.Start();
                     var success = solver.Factor();
-                    base.Statistics.DecompositionTime.Stop();
+                    base.Statistics.FactoringTime.Stop();
 
                     if (!success)
                     {

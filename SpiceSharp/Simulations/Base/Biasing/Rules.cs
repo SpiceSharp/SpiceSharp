@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Validation;
+﻿using System;
+using SpiceSharp.Validation;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations.Biasing
@@ -7,6 +8,8 @@ namespace SpiceSharp.Simulations.Biasing
     /// Necessary rules for biasing simulations.
     /// </summary>
     /// <seealso cref="BaseRules" />
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="ComponentRuleParameters"/>
     public class Rules : BaseRules,
         IParameterized<ComponentRuleParameters>
     {
@@ -14,12 +17,7 @@ namespace SpiceSharp.Simulations.Biasing
         private readonly VoltageLoopRule _voltageLoop = new VoltageLoopRule();
         private readonly VariablePresenceRule _groundPresence;
 
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
+        /// <inheritdoc/>
         public ComponentRuleParameters Parameters { get; }
 
         /// <summary>
@@ -27,9 +25,10 @@ namespace SpiceSharp.Simulations.Biasing
         /// </summary>
         /// <param name="factory">The variable factory.</param>
         /// <param name="comparer">The comparer for variable names.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="factory"/> is <c>null</c>.</exception>
         public Rules(IVariableFactory<IVariable> factory, IEqualityComparer<string> comparer)
         {
-            var ground = factory.GetSharedVariable(Constants.Ground);
+            var ground = factory.ThrowIfNull(nameof(factory)).GetSharedVariable(Constants.Ground);
             _floatingNode = new FloatingNodeRule(ground);
             _groundPresence = new VariablePresenceRule(ground);
             Parameters = new ComponentRuleParameters(factory, comparer);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -6,6 +7,7 @@ namespace SpiceSharp.Simulations
     /// A template for mapping a variable to indices.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
+    /// <seealso cref="IVariable"/>
     public interface IVariableMap : IEnumerable<KeyValuePair<IVariable, int>>
     {
         /// <summary>
@@ -26,6 +28,8 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The variable index.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="variable"/> is <c>null</c>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if the variable was not found.</exception>
         int this[IVariable variable] { get; }
 
         /// <summary>
@@ -38,6 +42,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The associated variable.
         /// </returns>
+        /// <exception cref="ArgumentException">Thrown if no variable was found at the specified index.</exception>
         IVariable this[int index] { get; }
 
         /// <summary>
@@ -47,6 +52,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="variable"/> is <c>null</c>.</exception>
         bool Contains(IVariable variable);
     }
 }

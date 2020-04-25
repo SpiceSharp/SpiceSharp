@@ -6,6 +6,8 @@ namespace SpiceSharp.Simulations.Frequency
     /// Necessary rules for frequency simulation.
     /// </summary>
     /// <seealso cref="Biasing.Rules" />
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="RuleParameters"/>
     public class Rules : Biasing.Rules,
         IParameterized<RuleParameters>
     {

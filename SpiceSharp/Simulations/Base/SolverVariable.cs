@@ -13,28 +13,13 @@ namespace SpiceSharp.Simulations
         private readonly ISolverSimulationState<T> _state;
         private readonly int _index;
 
-        /// <summary>
-        /// Gets the name of the variable.
-        /// </summary>
-        /// <value>
-        /// The name of the variable.
-        /// </value>
+        /// <inheritdoc/>
         public string Name { get; }
 
-        /// <summary>
-        /// Gets the value of the variable.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
+        /// <inheritdoc/>
         public T Value => _state.Solution[_index];
 
-        /// <summary>
-        /// Gets the units of the quantity.
-        /// </summary>
-        /// <value>
-        /// The units.
-        /// </value>
+        /// <inheritdoc/>
         public IUnit Unit { get; }
 
         /// <summary>
@@ -44,10 +29,11 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the variable.</param>
         /// <param name="index">The index of the variable.</param>
         /// <param name="unit">The unit of the variable.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="state"/> is <c>null</c>.</exception>
         public SolverVariable(ISolverSimulationState<T> state, string name, int index, IUnit unit)
         {
             _state = state.ThrowIfNull(nameof(state));
-            Name = name.ThrowIfNull(nameof(name));
+            Name = name;
             _index = index;
             Unit = unit;
         }

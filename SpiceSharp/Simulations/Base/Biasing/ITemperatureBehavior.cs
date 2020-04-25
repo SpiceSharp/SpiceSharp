@@ -3,7 +3,7 @@
     /// <summary>
     /// An interface that describes temperature-dependent behaviors.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.IBehavior" />
+    /// <seealso cref="IBehavior" />
     public interface ITemperatureBehavior : IBehavior
     {
         /// <summary>

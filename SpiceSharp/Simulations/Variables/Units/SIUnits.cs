@@ -7,6 +7,7 @@ namespace SpiceSharp.Simulations.Variables
     /// <summary>
     /// SI units.
     /// </summary>
+    /// <seealso cref="IEquatable{T}"/>
     [StructLayout(LayoutKind.Explicit)]
     public struct SIUnits : IEquatable<SIUnits>
     {

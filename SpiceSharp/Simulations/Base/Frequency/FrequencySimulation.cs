@@ -12,14 +12,16 @@ namespace SpiceSharp.Simulations
     /// A template for frequency-dependent analysis.
     /// </summary>
     /// <seealso cref="BiasingSimulation" />
+    /// <seealso cref="IFrequencySimulation"/>
+    /// <seealso cref="IBehavioral{B}"/>
+    /// <seealso cref="IFrequencyUpdateBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="FrequencyParameters"/>
     public abstract partial class FrequencySimulation : BiasingSimulation,
         IFrequencySimulation,
         IBehavioral<IFrequencyUpdateBehavior>,
         IParameterized<FrequencyParameters>
     {
-        /// <summary>
-        /// Private variables
-        /// </summary>
         private BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
         private BehaviorList<IFrequencyUpdateBehavior> _frequencyUpdateBehaviors;
         private LoadStateEventArgs _loadStateEventArgs;
@@ -68,6 +70,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="FrequencySimulation"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected FrequencySimulation(string name) 
             : base(name)
         {
@@ -80,16 +83,14 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <param name="frequencySweep">The frequency points.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected FrequencySimulation(string name, IEnumerable<double> frequencySweep) 
             : this(name)
         {
             FrequencyParameters.Frequencies = frequencySweep;
         }
 
-        /// <summary>
-        /// Set up the simulation.
-        /// </summary>
-        /// <param name="entities">The circuit that will be used.</param>
+        /// <inheritdoc/>
         protected override void Setup(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -105,11 +106,7 @@ namespace SpiceSharp.Simulations
             _state.Setup();
         }
 
-        /// <summary>
-        /// Validates the circuit.
-        /// </summary>
-        /// <param name="entities">The entities to be validated.</param>
-        /// <exception cref="ValidationFailedException">Thrown if the simulation failed its validation.</exception>
+        /// <inheritdoc/>
         protected override void Validate(IEntityCollection entities)
         {
             if (FrequencyParameters.Validate)
@@ -122,29 +119,21 @@ namespace SpiceSharp.Simulations
         /// Default complex magnitude.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>The magnitude of the complex number.</returns>
         private double ComplexMagnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
-        /// <summary>
-        /// Creates all behaviors for the simulation.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
+        /// <inheritdoc/>
         protected override void CreateBehaviors(IEntityCollection entities)
         {
             _state = new ComplexSimulationState(
                 FrequencyParameters.Solver ?? new SparseComplexSolver(),
                 BiasingParameters.NodeComparer
                 );
-            /* var strategy = ComplexState.Solver.Strategy;
-            strategy.RelativePivotThreshold = config.RelativePivotThreshold;
-            strategy.AbsolutePivotThreshold = config.AbsolutePivotThreshold; */
 
             base.CreateBehaviors(entities);
         }
 
-        /// <summary>
-        /// Executes the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Execute()
         {
             base.Execute();
@@ -153,9 +142,7 @@ namespace SpiceSharp.Simulations
             _shouldReorderAc = true;
         }
 
-        /// <summary>
-        /// Destroys the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Unsetup()
         {
             // Remove references
@@ -166,8 +153,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Acs the iterate.
+        /// Iterate small-signal matrix and vector.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if a behavior cannot load the complex matrix and/or right hand side vector.</exception>
+        /// <exception cref="SingularException">Thrown if the equation matrix is singular.</exception>
         protected void AcIterate()
         {
             var solver = _state.Solver;
@@ -226,7 +215,7 @@ namespace SpiceSharp.Simulations
         protected virtual void OnAfterFrequencyLoad(LoadStateEventArgs args) => AfterFrequencyLoad?.Invoke(this, args);
 
         /// <summary>
-        /// Initializes the ac parameters.
+        /// Initializes the small-signal parameters.
         /// </summary>
         protected void InitializeAcParameters()
         {
@@ -237,8 +226,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Loads the Y-matrix and right-hand side vector.
+        /// Loads the Y-matrix and right hand side vector.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if a behavior cannot load the complex matrix and/or right hand side vector.</exception>
         protected void FrequencyLoad()
         {
             OnBeforeFrequencyLoad(_loadStateEventArgs);
@@ -250,8 +240,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Loads the Y-matrix and right-hand side vector.
+        /// Loads the Y-matrix and right hand side vector.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if a behavior cannot load the complex matrix and/or right hand side vector.</exception>
         protected virtual void LoadFrequencyBehaviors()
         {
             foreach (var behavior in _frequencyBehaviors)

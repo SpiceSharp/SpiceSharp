@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Simulations
 {
@@ -40,6 +41,8 @@ namespace SpiceSharp.Simulations
         /// <param name="variable">The variable.</param>
         /// <param name="state">The biasing simulation state.</param>
         /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="variable"/> or <paramref name="state"/> is <c>null</c>.</exception>
+        /// <exception cref="SpiceSharpException">Thrown if the variable for the convergence aid was not found.</exception>
         public ConvergenceAid(IVariable variable, IBiasingSimulationState state, double value)
         {
             Variable = variable.ThrowIfNull(nameof(variable));

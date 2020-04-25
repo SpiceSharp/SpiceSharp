@@ -9,28 +9,36 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <typeparam name="V">The variable type.</typeparam>
     /// <seealso cref="IVariableDictionary{V}" />
+    /// <seealso cref="IVariable"/>
     public class VariableDictionary<V> : IVariableDictionary<V> where V : IVariable
     {
         private readonly Dictionary<string, V> _map = new Dictionary<string, V>();
 
-        /// <summary>
-        /// Gets the <see cref="IEqualityComparer{T}"/> that is used to determine equality of keys.
-        /// </summary>
+        /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => _map.Comparer;
 
         /// <summary>
-        /// Gets the number of variables.
+        /// Gets the number of variables in the dictionary.
         /// </summary>
+        /// <value>
+        /// The number of variables in the dictionary.
+        /// </value>
         public int Count => _map.Count;
 
         /// <summary>
-        /// Gets an enumerable collection that contains the names of all variables in the set.
+        /// Gets an enumerable collection that contains the identifiers of all variables in the set.
         /// </summary>
+        /// <value>
+        /// An enumerable of all the identifiers in the dictionary.
+        /// </value>
         public IEnumerable<string> Keys => _map.Keys;
 
         /// <summary>
         /// Gets an enumerable collection that contains the variables in the set.
         /// </summary>
+        /// <value>
+        /// An enumerable of all the variables in the dictionary.
+        /// </value>
         public IEnumerable<V> Values => _map.Values;
 
         /// <summary>
@@ -41,14 +49,16 @@ namespace SpiceSharp.Simulations
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns>The variable with the specified name.</returns>
-        /// <exception cref="ArgumentException">Thrown if the variable wasn't found.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if the variable couldn't be found.</exception>
         public V this[string name]
         {
             get
             {
+                name.ThrowIfNull(nameof(name));
                 if (_map.TryGetValue(name, out var node))
                     return node;
-                throw new ArgumentException(Properties.Resources.VariableNotFound.FormatString(name));
+                throw new KeyNotFoundException(Properties.Resources.VariableNotFound.FormatString(name));
             }
         }
 
@@ -69,11 +79,7 @@ namespace SpiceSharp.Simulations
             _map = new Dictionary<string, V>(comparer);
         }
 
-        /// <summary>
-        /// Adds a variable to the dictionary.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="variable">The variable.</param>
+        /// <inheritdoc/>
         public void Add(string id, V variable)
         {
             id.ThrowIfNull(nameof(id));
@@ -81,19 +87,21 @@ namespace SpiceSharp.Simulations
             {
                 _map.Add(id, variable);
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
-                throw new ArgumentException(Properties.Resources.VariableDictionary_KeyExists.FormatString(id));
+                // supply our own
+                throw new ArgumentException(Properties.Resources.VariableDictionary_KeyExists.FormatString(id), ex);
             }
         }
 
         /// <summary>
-        /// Determines whether the read-only dictionary contains an element that has the specified key.
+        /// Determines whether the dictionary contains an element that has the specified key.
         /// </summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>
-        /// true if the read-only dictionary contains an element that has the specified key; otherwise, false.
+        /// <c>true</c> if the read-only dictionary contains an element that has the specified key; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         public bool ContainsKey(string key) => _map.ContainsKey(key);
 
         /// <summary>
@@ -104,6 +112,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// <c>true</c> if the dictionary contains an element that has the specified key; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         public bool TryGetValue(string key, out V value) => _map.TryGetValue(key, out value);
 
         /// <summary>
@@ -113,7 +122,6 @@ namespace SpiceSharp.Simulations
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator<KeyValuePair<string, V>> GetEnumerator() => _map.GetEnumerator();
-
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

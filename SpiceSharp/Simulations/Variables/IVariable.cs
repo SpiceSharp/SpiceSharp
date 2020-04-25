@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// Gets the name of the variable.
         /// </summary>
         /// <value>
-        /// The name of the variable.
+        /// The name of the variable. Can be <c>null</c>.
         /// </value>
         string Name { get; }
 

@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations.Variables
         private readonly sbyte _fraction;
 
         /// <summary>
-        /// The binary code for a <see cref="Fraction"/> that represents 1.
+        /// One in a byte.
         /// </summary>
         public const sbyte One = 0b00001_000;
 
@@ -53,6 +53,15 @@ namespace SpiceSharp.Simulations.Variables
             // Double-check that the numerator and denominator are represented correctly
             if (Numerator != numerator || Denominator != denominator)
                 throw new ArgumentException(Properties.Resources.Units_InvalidExponent.FormatString(numerator, denominator));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Fraction"/> struct.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        public Fraction(sbyte code)
+        {
+            _fraction = code;
         }
 
         /// <summary>

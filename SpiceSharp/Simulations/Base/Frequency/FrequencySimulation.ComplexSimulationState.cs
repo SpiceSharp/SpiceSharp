@@ -2,6 +2,7 @@
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.Variables;
+using System;
 
 namespace SpiceSharp.Simulations
 {
@@ -15,30 +16,16 @@ namespace SpiceSharp.Simulations
         {
             private readonly VariableMap _map;
 
-            /// <summary>
-            /// Gets the solution.
-            /// </summary>
+            /// <inheritdoc/>
             public IVector<Complex> Solution { get; private set; }
 
-            /// <summary>
-            /// Gets or sets the current laplace variable.
-            /// </summary>
+            /// <inheritdoc/>
             public Complex Laplace { get; set; } = new Complex();
 
-            /// <summary>
-            /// Gets the map that maps variables to indices for the solver.
-            /// </summary>
-            /// <value>
-            /// The map.
-            /// </value>
+            /// <inheritdoc/>
             public IVariableMap Map => _map;
 
-            /// <summary>
-            /// Gets the solver.
-            /// </summary>
-            /// <value>
-            /// The solver.
-            /// </value>
+            /// <inheritdoc/>
             public ISparsePivotingSolver<Complex> Solver { get; }
 
             /// <summary>
@@ -46,6 +33,7 @@ namespace SpiceSharp.Simulations
             /// </summary>
             /// <param name="solver">The solver.</param>
             /// <param name="comparer">The comparer.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="solver"/> is <c>null</c>.</exception>
             public ComplexSimulationState(ISparsePivotingSolver<Complex> solver, IEqualityComparer<string> comparer)
                 : base(comparer)
             {
@@ -56,13 +44,7 @@ namespace SpiceSharp.Simulations
                 Add(Constants.Ground, gnd);
             }
 
-            /// <summary>
-            /// Maps a shared node in the simulation.
-            /// </summary>
-            /// <param name="name">The name of the shared node.</param>
-            /// <returns>
-            /// The shared node variable.
-            /// </returns>
+            /// <inheritdoc/>
             public IVariable<Complex> GetSharedVariable(string name)
             {
                 if (TryGetValue(name, out var result))
@@ -74,14 +56,7 @@ namespace SpiceSharp.Simulations
                 return result;
             }
 
-            /// <summary>
-            /// Creates a local variable that should not be shared by the state with anyone else.
-            /// </summary>
-            /// <param name="name">The name.</param>
-            /// <param name="unit">The unit of the variable.</param>
-            /// <returns>
-            /// The local variable.
-            /// </returns>
+            /// <inheritdoc/>
             public IVariable<Complex> CreatePrivateVariable(string name, IUnit unit)
             {
                 var index = _map.Count;

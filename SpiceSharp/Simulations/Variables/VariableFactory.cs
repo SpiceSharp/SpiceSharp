@@ -5,7 +5,9 @@ namespace SpiceSharp.Simulations.Variables
     /// <summary>
     /// A simple variable factory where the variables don't have any extra functionality.
     /// </summary>
+    /// <seealso cref="VariableDictionary{V}"/>
     /// <seealso cref="IVariableFactory{V}" />
+    /// <seealso cref="IVariable"/>
     public class VariableFactory : VariableDictionary<IVariable>, IVariableFactory<IVariable>
     {
         /// <summary>
@@ -17,13 +19,7 @@ namespace SpiceSharp.Simulations.Variables
         {
         }
 
-        /// <summary>
-        /// Maps a shared node in the simulation.
-        /// </summary>
-        /// <param name="name">The name of the shared node.</param>
-        /// <returns>
-        /// The shared node variable.
-        /// </returns>
+        /// <inheritdoc/>
         public IVariable GetSharedVariable(string name)
         {
             if (TryGetValue(name, out var result))
@@ -33,14 +29,7 @@ namespace SpiceSharp.Simulations.Variables
             return result;
         }
 
-        /// <summary>
-        /// Creates a local variable that should not be shared by the state with anyone else.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="unit">The unit of the variable.</param>
-        /// <returns>
-        /// The local variable.
-        /// </returns>
+        /// <inheritdoc/>
         public IVariable CreatePrivateVariable(string name, IUnit unit) => new Variable(name, unit);
     }
 }

@@ -15,38 +15,23 @@ namespace SpiceSharp.Simulations
     {
         private readonly Dictionary<IVariable, int> _map = new Dictionary<IVariable, int>();
 
-        /// <summary>
-        /// Gets the number of mapped variables.
-        /// </summary>
-        /// <value>
-        /// The number of mapped variables.
-        /// </value>
+        /// <inheritdoc/>
         public int Count => _map.Count;
 
-        /// <summary>
-        /// Gets the index associated with the specified variable.
-        /// </summary>
-        /// <value>
-        /// The index.
-        /// </value>
-        /// <param name="variable">The variable.</param>
-        /// <returns>
-        /// The variable index.
-        /// </returns>
+        /// <inheritdoc/>
         public int this[IVariable variable] => _map[variable];
 
-        /// <summary>
-        /// Gets the <see cref="IVariable"/> at assiciated to the specified index.
-        /// </summary>
-        /// <value>
-        /// The <see cref="IVariable"/>.
-        /// </value>
-        /// <param name="index">The index.</param>
-        /// <returns>
-        /// The associated variable.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
-        public IVariable this[int index] => _map.First(p => p.Value == index).Key;
+        /// <inheritdoc/>
+        public IVariable this[int index]
+        {
+            get
+            {
+                var result = _map.FirstOrDefault(p => p.Value == index);
+                if (result.Equals(default(IVariable)))
+                    throw new ArgumentException(Properties.Resources.VariableNotFound.FormatString(index));
+                return result.Key;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableMap"/> class.
@@ -57,13 +42,7 @@ namespace SpiceSharp.Simulations
             _map.Add(ground, 0);
         }
 
-        /// <summary>
-        /// Determines whether a variable is mapped.
-        /// </summary>
-        /// <param name="variable">The variable.</param>
-        /// <returns>
-        ///   <c>true</c> if the variable is mapped; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool Contains(IVariable variable) => _map.ContainsKey(variable);
 
         /// <summary>
@@ -71,12 +50,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="variable">The variable.</param>
         /// <param name="index">The index.</param>
-        /// <exception cref="IndexOutOfRangeException">Thrown if the index is not strictly positive.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is not strictly positive.</exception>
+        /// <exception cref="ArgumentException">Thrown if a variable already exists with the same index.</exception>
         public void Add(IVariable variable, int index)
         {
             variable.ThrowIfNull(nameof(variable));
-            if (index <= 0)
-                throw new ArgumentOutOfRangeException(nameof(index));
+            index.GreaterThan(nameof(index), 0);
             try
             {
                 _map.Add(variable, index);

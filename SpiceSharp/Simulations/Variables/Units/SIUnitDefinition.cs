@@ -12,20 +12,10 @@ namespace SpiceSharp.Simulations
     {
         private readonly string _name;
 
-        /// <summary>
-        /// Gets the base value expressed in SI units (no transformations applied).
-        /// </summary>
-        /// <value>
-        /// The base value.
-        /// </value>
+        /// <inheritdoc/>
         public double BaseValue => 1.0;
 
-        /// <summary>
-        /// Gets the SI units.
-        /// </summary>
-        /// <value>
-        /// The SI units.
-        /// </value>
+        /// <inheritdoc/>
         public SIUnits SI { get; }
 
         /// <summary>
@@ -33,19 +23,14 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the unit.</param>
         /// <param name="units">The SI units.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public SIUnitDefinition(string name, SIUnits units)
         {
             _name = name.ThrowIfNull(nameof(name));
             SI = units;
         }
 
-        /// <summary>
-        /// Converts a base value expressed strictly in SI units (no transformations) to this unit.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// The value in these units.
-        /// </returns>
+        /// <inheritdoc/>
         public double From(double value) => value;
 
         /// <summary>
@@ -53,7 +38,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns>
-        /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
+        ///   <c>true</c> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <c>false</c>.
         /// </returns>
         public bool Equals(IUnit other)
         {
@@ -67,11 +52,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// Determines whether the specified <see cref="object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
         /// <returns>
-        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
         public override bool Equals(object obj)
         {
@@ -92,7 +77,7 @@ namespace SpiceSharp.Simulations
         /// Converts to string.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString() => _name;
     }

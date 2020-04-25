@@ -10,8 +10,9 @@ namespace SpiceSharp.Behaviors
     public interface IBiasingBehavior : IBehavior
     {
         /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
+        /// Loads the Y-matrix and right hand side vector.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if the behavior can't load the matrix and/or right hand side vector.</exception>
         void Load();
     }
 }

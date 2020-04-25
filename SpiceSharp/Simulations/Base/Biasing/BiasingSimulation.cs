@@ -12,7 +12,12 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="Simulation" />
     /// <seealso cref="IBiasingSimulation"/>
+    /// <seealso cref="IStateful{S}"/>
+    /// <seealso cref="TemperatureSimulationState"/>
+    /// <seealso cref="IIterationSimulationState"/>
+    /// <seealso cref="IBiasingUpdateBehavior"/>
     /// <seealso cref="IBehavioral{T}" />
+    /// <seealso cref="IParameterized{P}"/>
     public abstract partial class BiasingSimulation : Simulation,
         IBiasingSimulation, IStateful<TemperatureSimulationState>,
         IStateful<IIterationSimulationState>,
@@ -118,10 +123,7 @@ namespace SpiceSharp.Simulations
             Statistics = new BiasingSimulationStatistics();
         }
 
-        /// <summary>
-        /// Set up the simulation.
-        /// </summary>
-        /// <param name="entities">The entities that are included in the simulation.</param>
+        /// <inheritdoc/>
         protected override void Setup(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -156,20 +158,14 @@ namespace SpiceSharp.Simulations
             }
         }
 
-        /// <summary>
-        /// Validates the circuit.
-        /// </summary>
-        /// <param name="entities">The entities to be validated.</param>
-        /// <exception cref="ValidationFailedException">Thrown if the simulation failed its validation.</exception>
+        /// <inheritdoc/>
         protected override void Validate(IEntityCollection entities)
         {
             if (BiasingParameters.Validate)
                 Validate(new Rules(_state, BiasingParameters.NodeComparer), entities);
         }
 
-        /// <summary>
-        /// Executes the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Execute()
         {
             // Perform temperature-dependent calculations
@@ -192,9 +188,7 @@ namespace SpiceSharp.Simulations
             OnAfterTemperature(args);
         }
 
-        /// <summary>
-        /// Destroys the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Unsetup()
         {
             base.Unsetup();
@@ -386,6 +380,9 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the iterations converged to a solution; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="SpiceSharpException">Thrown if any behavior cannot load the matrix and/or right hand side vector, or if the solution
+        /// is not a number (NaN).</exception>
+        /// <exception cref="SingularException">Thrown if the equation matrix is singular.</exception>
         protected virtual bool Iterate(int maxIterations)
         {
             var solver = _state.Solver;
@@ -433,9 +430,9 @@ namespace SpiceSharp.Simulations
                 else
                 {
                     // Decompose
-                    Statistics.DecompositionTime.Start();
+                    Statistics.FactoringTime.Start();
                     var success = solver.Factor();
-                    Statistics.DecompositionTime.Stop();
+                    Statistics.FactoringTime.Stop();
 
                     if (!success)
                     {
@@ -518,6 +515,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Load the current simulation state solver.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if any behavior cannot load the matrix or right hand side vector.</exception>
         protected void Load()
         {
             // Start the stopwatch
@@ -556,6 +554,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         ///   <c>true</c> if the solution converges; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="SpiceSharpException">Thrown if a solution is not a number (NaN).</exception>
         protected bool IsConvergent()
         {
             // Check convergence for each node

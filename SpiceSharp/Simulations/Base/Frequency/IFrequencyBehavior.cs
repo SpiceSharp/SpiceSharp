@@ -12,7 +12,7 @@
         void InitializeParameters();
 
         /// <summary>
-        /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
+        /// Load the Y-matrix and right hand side vector for frequency domain analysis.
         /// </summary>
         void Load();
     }

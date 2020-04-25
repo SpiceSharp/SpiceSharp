@@ -18,6 +18,9 @@
         /// Gets the nominal temperature in Kelvin for the circuit in Kelvin.
         /// Used by models as the default temperature where the parameters were measured.
         /// </summary>
+        /// <value>
+        /// The nominal temperature.
+        /// </value>
         double NominalTemperature { get; }
     }
 }

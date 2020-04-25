@@ -1,12 +1,11 @@
 ﻿using SpiceSharp.Algebra;
-using SpiceSharp.Simulations.Variables;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Simulation state for a <see cref="IBiasingSimulation"/>.
+    /// Simulation state for a <see cref="IBiasingSimulation" />.
     /// </summary>
-    /// <seealso cref="ISimulationState" />
+    /// <seealso cref="ISolverSimulationState{T}" />
     public interface IBiasingSimulationState : ISolverSimulationState<double>
     {
         /// <summary>

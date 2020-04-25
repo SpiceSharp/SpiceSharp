@@ -14,21 +14,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets a value indicating whether the operation point should be exported.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if operating point information should be exported; otherwise, <c>false</c>.
+        /// </value>
         public bool KeepOpInfo { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the absolute threshold for choosing pivots.
+        /// Gets or sets the frequency points to be simulated.
         /// </summary>
-        public double AbsolutePivotThreshold { get; set; }
-
-        /// <summary>
-        /// Gets or sets the relative threshold for choosing pivots.
-        /// </summary>
-        public double RelativePivotThreshold { get; set; } = 1e-3;
-
-        /// <summary>
-        /// Gets or sets the frequency sweep.
-        /// </summary>
+        /// <value>
+        /// The frequency points.
+        /// </value>
         public IEnumerable<double> Frequencies { get; set; }
 
         /// <summary>
@@ -41,16 +37,6 @@ namespace SpiceSharp.Simulations
         public ISparsePivotingSolver<Complex> Solver { get; set; }
 
         /// <summary>
-        /// Gets or sets the mapper used to map <see cref="Variable"/> to equation indices. If <c>null</c>,
-        /// a default mapper will be used.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
-        [ParameterName("complex.map"), ParameterInfo("The mapper used to map variables to node indices.")]
-        public IVariableMap Map { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the simulation should be validated.
         /// </summary>
         /// <value>
@@ -61,6 +47,7 @@ namespace SpiceSharp.Simulations
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyParameters"/> class.
+        /// Automatically specifies a sweep from 1Hz to 100Hz with 10 points per decade.
         /// </summary>
         public FrequencyParameters()
         {

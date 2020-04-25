@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations.Variables;
+﻿using System;
+using SpiceSharp.Simulations.Variables;
 
 namespace SpiceSharp.Simulations
 {
@@ -6,7 +7,7 @@ namespace SpiceSharp.Simulations
     /// A template for a variable factory.
     /// </summary>
     /// <typeparam name="V">The base variable type.</typeparam>
-    /// <seealso cref="IVariableDictionary{V}"/>
+    /// <seealso cref="IVariable"/>
     public interface IVariableFactory<out V> where V : IVariable
     {
         /// <summary>
@@ -17,6 +18,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// The shared variable.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         V GetSharedVariable(string name);
 
         /// <summary>

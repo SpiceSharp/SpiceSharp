@@ -29,12 +29,18 @@
         /// <summary>
         /// Gets or sets the a conductance that is shunted with PN junctions to aid convergence.
         /// </summary>
+        /// <value>
+        /// The minimum conductance for PN junctions.
+        /// </value>
         double Gmin { get; }
 
         /// <summary>
         /// Is the current iteration convergent?
         /// This parameter is used to communicate convergence.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if this the iteration is convergent; otherwise, <c>false</c>.
+        /// </value>
         bool IsConvergent { get; set; }
     }
 

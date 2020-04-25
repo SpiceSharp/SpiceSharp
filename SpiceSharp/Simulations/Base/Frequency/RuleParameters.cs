@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace SpiceSharp.Simulations.Frequency
 {
@@ -20,6 +21,7 @@ namespace SpiceSharp.Simulations.Frequency
         /// Initializes a new instance of the <see cref="RuleParameters"/> class.
         /// </summary>
         /// <param name="frequencies">The frequencies.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="frequencies"/> is <c>null</c>.</exception>
         public RuleParameters(IEnumerable<double> frequencies)
         {
             Frequencies = frequencies.ThrowIfNull(nameof(frequencies));

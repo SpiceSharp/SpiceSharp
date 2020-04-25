@@ -6,18 +6,10 @@
     /// <seealso cref="ITemperatureSimulationState" />
     public class TemperatureSimulationState : ITemperatureSimulationState
     {
-        /// <summary>
-        /// Gets or ets the current temperature in Kelvin for this circuit in Kelvin.
-        /// </summary>
-        /// <value>
-        /// The temperature.
-        /// </value>
+        /// <inheritdoc/>
         public double Temperature { get; set; }
 
-        /// <summary>
-        /// The nominal temperature for the circuit in Kelvin.
-        /// It can be used by models as the default temperature where the parameters were measured.
-        /// </summary>
+        /// <inheritdoc/>
         public double NominalTemperature { get; }
 
         /// <summary>
