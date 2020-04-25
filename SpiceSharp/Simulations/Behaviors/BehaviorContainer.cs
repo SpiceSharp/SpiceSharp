@@ -9,32 +9,27 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// A dictionary of <see cref="Behavior" />. Only on instance of each type is allowed.
     /// </summary>
-    /// <seealso cref="IBehaviorContainer" />
     /// <seealso cref="InterfaceTypeDictionary{Behavior}" />
-    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>, IBehaviorContainer, IParameterized
+    /// <seealso cref="IBehaviorContainer" />
+    /// <seealso cref="IParameterized"/>
+    public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>,
+        IBehaviorContainer, 
+        IParameterized
     {
-        /// <summary>
-        /// Gets the source name.
-        /// </summary>
+        /// <inheritdoc/>
         public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
         /// </summary>
         /// <param name="source">The entity name that will provide the behaviors.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
         public BehaviorContainer(string source)
         {
             Name = source.ThrowIfNull(nameof(source));
         }
 
-        /// <summary>
-        /// Gets the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <returns>
-        /// The parameter set.
-        /// </returns>
-        /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
+        /// <inheritdoc/>
         public P GetParameterSet<P>() where P : IParameterSet
         {
             foreach (var behavior in Values)
@@ -45,14 +40,7 @@ namespace SpiceSharp.Behaviors
             throw new ArgumentException(Properties.Resources.Parameters_ParameterSetNotFound);
         }
 
-        /// <summary>
-        /// Tries to get the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <param name="value">The parameter set.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
         {
             foreach (var behavior in Values)
@@ -64,12 +52,7 @@ namespace SpiceSharp.Behaviors
             return false;
         }
 
-        /// <summary>
-        /// Gets all parameter sets.
-        /// </summary>
-        /// <value>
-        /// The parameter sets.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<IParameterSet> ParameterSets
         {
             get
@@ -82,14 +65,7 @@ namespace SpiceSharp.Behaviors
             }
         }
 
-        /// <summary>
-        /// Gets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
+        /// <inheritdoc/>
         public P GetProperty<P>(string name)
         {
             foreach (var behavior in Values)
@@ -100,15 +76,7 @@ namespace SpiceSharp.Behaviors
             throw new ParameterNotFoundException(this, name, typeof(P));
         }
 
-        /// <summary>
-        /// Tries to get the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetProperty<P>(string name, out P value)
         {
             foreach (var behavior in Values)
@@ -120,14 +88,7 @@ namespace SpiceSharp.Behaviors
             return false;
         }
 
-        /// <summary>
-        /// Creates a getter for a parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <returns>
-        /// A getter if the parameter exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Func<P> CreatePropertyGetter<P>(string name)
         {
             foreach (var behavior in Values)
@@ -139,12 +100,7 @@ namespace SpiceSharp.Behaviors
             return null;
         }
 
-        /// <summary>
-        /// Adds a behavior to the container only if the behavior type doesn't exist yet.
-        /// </summary>
-        /// <typeparam name="B">The behavior (interface) type to be registering for.</typeparam>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="factory">The factory.</param>
+        /// <inheritdoc/>
         public IBehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory) where B : IBehavior
         {
             if (!simulation.UsesBehaviors<B>())

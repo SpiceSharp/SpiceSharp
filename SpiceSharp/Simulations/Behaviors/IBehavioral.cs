@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <typeparam name="B">The behavior type.</typeparam>
         /// <returns>
-        /// <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
+        ///   <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
         /// </returns>
         bool UsesBehaviors<B>() where B : IBehavior;
     }

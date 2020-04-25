@@ -45,12 +45,16 @@ namespace SpiceSharp.Behaviors
         /// </value>
         /// <param name="name">The name.</param>
         /// <returns>The container associated to the specified name.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if the behavior container could not be found.</exception>
         IBehaviorContainer this[string name] { get; }
 
         /// <summary>
         /// Adds the <see cref="IBehaviorContainer"/> with the specified name.
         /// </summary>
         /// <param name="container">The behavior container.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="container"/> if <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if a behavior container already exists with the same name.</exception>
         void Add(IBehaviorContainer container);
 
         /// <summary>
@@ -70,6 +74,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         /// <c>true</c> if the behavior was found; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         bool TryGetBehaviors(string name, out IBehaviorContainer container);
 
         /// <summary>
@@ -79,6 +84,7 @@ namespace SpiceSharp.Behaviors
         /// <returns>
         ///   <c>true</c> if the collection contains the container; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         bool Contains(string name);
 
         /// <summary>

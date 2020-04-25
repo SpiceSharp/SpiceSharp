@@ -12,32 +12,12 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation : Parameterized, IEventfulSimulation,
-        IParameterized<CollectionParameters>
+    public abstract class Simulation : Parameterized, IEventfulSimulation
     {
-        /// <summary>
-        /// Gets the current status of the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The status.
-        /// </value>
+        /// <inheritdoc/>
         public SimulationStatus Status { get; private set; }
 
-        /// <summary>
-        /// Gets the collection parameters.
-        /// </summary>
-        /// <value>
-        /// The collection parameters.
-        /// </value>
-        public CollectionParameters CollectionParameters { get; } = new CollectionParameters();
-        CollectionParameters IParameterized<CollectionParameters>.Parameters => CollectionParameters;
-
-        /// <summary>
-        /// Gets all the state types that are used by the class.
-        /// </summary>
-        /// <value>
-        /// The states.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IEnumerable<Type> States
         {
             get
@@ -51,12 +31,7 @@ namespace SpiceSharp.Simulations
             }
         }
 
-        /// <summary>
-        /// Gets all behavior types that are used by the class.
-        /// </summary>
-        /// <value>
-        /// The behaviors.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IEnumerable<Type> Behaviors
         {
             get
@@ -72,60 +47,38 @@ namespace SpiceSharp.Simulations
         }
 
         #region Events
-        /// <summary>
-        /// Occurs when simulation data can be exported.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<ExportDataEventArgs> ExportSimulationData;
 
-        /// <summary>
-        /// Occurs before the simulation is set up.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> BeforeSetup;
 
-        /// <summary>
-        /// Occurs after the simulation is set up.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> AfterSetup;
 
-        /// <summary>
-        /// Occurs before the simulation starts validating the input.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> BeforeValidation;
 
-        /// <summary>
-        /// Occurs after the simulation has validated the input.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> AfterValidation;
 
-        /// <summary>
-        /// Occurs before the simulation starts its execution.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
 
-        /// <summary>
-        /// Occurs after the simulation has executed.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<AfterExecuteEventArgs> AfterExecute;
 
-        /// <summary>
-        /// Occurs before the simulation is destroyed.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> BeforeUnsetup;
 
-        /// <summary>
-        /// Occurs after the simulation is destroyed.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> AfterUnsetup;
         #endregion
 
-        /// <summary>
-        /// Gets the name of the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         public string Name { get; }
 
-        /// <summary>
-        /// Gets a pool of all entity behaviors active in the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         public IBehaviorContainerCollection EntityBehaviors { get; private set; }
 
         /// <summary>
@@ -140,9 +93,10 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected Simulation(string name)
         {
-            Name = name;
+            Name = name.ThrowIfNull(nameof(name));
             Statistics = new SimulationStatistics();
         }
 
@@ -208,12 +162,16 @@ namespace SpiceSharp.Simulations
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The entities that are included in the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
         protected virtual void Setup(IEntityCollection entities)
         {
             // Validate the entities
             entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
-                throw new SpiceSharpException(Properties.Resources.Simulations_NoEntities.FormatString(Name));
+            {
+                // No entities! Don't stop here, but at least warn the user.
+                SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_NoEntities.FormatString(Name));
+            }
 
             // Create all entity behaviors
             CreateBehaviors(entities);
@@ -223,6 +181,8 @@ namespace SpiceSharp.Simulations
         /// Validates the input.
         /// </summary>
         /// <param name="entities">The entities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
+        /// <exception cref="ValidationFailedException">Thrown if the validation failed.</exception>
         protected abstract void Validate(IEntityCollection entities);
 
         /// <summary>
@@ -264,14 +224,17 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Executes the simulation.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if the simulation can't continue.</exception>
         protected abstract void Execute();
 
         /// <summary>
         /// Creates all behaviors for the simulation.
         /// </summary>
         /// <param name="entities">The entities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
         protected virtual void CreateBehaviors(IEntityCollection entities)
         {
+            entities.ThrowIfNull(nameof(entities));
             EntityBehaviors = new BehaviorContainerCollection(entities.Comparer);
 
             // Automatically create the behaviors of entities that need priority
@@ -298,13 +261,7 @@ namespace SpiceSharp.Simulations
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
         }
 
-        /// <summary>
-        /// Checks if the class uses the specified behaviors.
-        /// </summary>
-        /// <typeparam name="B">The behavior type.</typeparam>
-        /// <returns>
-        /// <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public virtual bool UsesBehaviors<B>() where B : IBehavior
         {
             if (this is IBehavioral<B>)
@@ -312,13 +269,7 @@ namespace SpiceSharp.Simulations
             return false;
         }
 
-        /// <summary>
-        /// Gets the state of the specified type.
-        /// </summary>
-        /// <typeparam name="S">The simulation state type.</typeparam>
-        /// <returns>
-        /// The type.
-        /// </returns>
+        /// <inheritdoc/>
         public virtual S GetState<S>() where S : ISimulationState
         {
             if (this is IStateful<S> stateful)
@@ -326,13 +277,7 @@ namespace SpiceSharp.Simulations
             return default;
         }
 
-        /// <summary>
-        /// Checks if the class uses the specified state.
-        /// </summary>
-        /// <typeparam name="S">The simulation state type.</typeparam>
-        /// <returns>
-        ///   <c>true</c> if the class uses the state; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public virtual bool UsesState<S>() where S : ISimulationState
             => this is IStateful<S>;
 

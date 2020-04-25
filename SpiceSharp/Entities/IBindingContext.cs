@@ -47,20 +47,23 @@ namespace SpiceSharp.Entities
         public bool TryGetSimulationParameterSet<P>(out P parameters) where P : IParameterSet;
 
         /// <summary>
-        /// Gets a parameter set.
+        /// Gets the parameter set of the specified type.
         /// </summary>
         /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <returns>The parameter set.</returns>
+        /// <returns>
+        /// The parameter set.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
         public P GetParameterSet<P>() where P : IParameterSet;
 
         /// <summary>
-        /// Tries to get a parameter set.
+        /// Tries to get the parameter set of the specified type.
         /// </summary>
         /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <param name="parameters">The parameters.</param>
+        /// <param name="value">The parameter set.</param>
         /// <returns>
-        /// <c>true</c> if the parameter set was found; otherwise <c>false</c>;
+        /// <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetParameterSet<P>(out P parameters) where P : IParameterSet;
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet;
     }
 }

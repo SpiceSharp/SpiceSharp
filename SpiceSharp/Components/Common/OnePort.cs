@@ -29,9 +29,13 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </summary>
         /// <param name="factory">The factory.</param>
         /// <param name="context">The context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        /// <exception cref="NodeMismatchException">Thrown if <paramref name="context"/> does not define exactly 2 nodes.</exception>
         public OnePort(IVariableFactory<IVariable<T>> factory, IComponentBindingContext context)
         {
-            context.Nodes.CheckNodes(2);
+            context
+                .ThrowIfNull(nameof(context))
+                .Nodes.CheckNodes(2);
             Positive = factory.GetSharedVariable(context.Nodes[0]);
             Negative = factory.GetSharedVariable(context.Nodes[1]);
         }

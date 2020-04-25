@@ -7,15 +7,22 @@ namespace SpiceSharp.Behaviors
     /// A container for behaviors
     /// </summary>
     /// <seealso cref="ITypeDictionary{T}" />
+    /// <seealso cref="IExportPropertySet"/>
+    /// <seealso cref="IParameterized"/>
     public interface IBehaviorContainer : 
-        ITypeDictionary<IBehavior>, IExportPropertySet, IParameterized
+        ITypeDictionary<IBehavior>, 
+        IExportPropertySet, 
+        IParameterized
     {
         /// <summary>
         /// Gets the name.
         /// </summary>
         /// <value>
-        /// The name.
+        /// The name of the behavior container.
         /// </value>
+        /// <remarks>
+        /// This is typically the name of the entity that creates the behaviors in this container.
+        /// </remarks>
         string Name { get; }
 
         /// <summary>
@@ -25,6 +32,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="simulation">The simulation.</param>
         /// <param name="factory">The factory.</param>
         /// <returns>The container itself for chaining calls.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> or <paramref name="factory"/> is <c>null</c>.</exception>
         IBehaviorContainer AddIfNo<B>(ISimulation simulation, Func<B> factory) where B : IBehavior;
     }
 }

@@ -11,7 +11,7 @@ namespace SpiceSharp.Simulations
     public interface ISimulation<V> : ISimulation where V : IVariable
     {
         /// <summary>
-        /// Gets the variables that are solved by the simulation.
+        /// Gets the variables that are being solved by the simulation.
         /// </summary>
         /// <value>
         /// The variables.
@@ -39,7 +39,7 @@ namespace SpiceSharp.Simulations
         /// Gets the current status of the <see cref="ISimulation"/>.
         /// </summary>
         /// <value>
-        /// The status.
+        /// The current status.
         /// </value>
         SimulationStatus Status { get; }
 

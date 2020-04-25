@@ -5,7 +5,7 @@ namespace SpiceSharp.Behaviors
     /// <summary>
     /// Event arguments
     /// </summary>
-    /// <seealso cref="System.EventArgs" />
+    /// <seealso cref="EventArgs" />
     public class BehaviorsNotFoundEventArgs : EventArgs
     {
         /// <summary>
@@ -28,6 +28,7 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BehaviorsNotFoundEventArgs"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public BehaviorsNotFoundEventArgs(string name)
         {
             Name = name.ThrowIfNull(nameof(name));

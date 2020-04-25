@@ -22,9 +22,10 @@ namespace SpiceSharp.Behaviors
         /// <remarks>
         /// The name of the behavior should be the same as that of the entity creating it.
         /// </remarks>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected Behavior(string name)
         {
-            Name = name;
+            Name = name.ThrowIfNull(nameof(name));
         }
 
         /// <summary>
