@@ -64,7 +64,7 @@ namespace SpiceSharp.General
         }
 
         /// <summary>
-        /// Gets the values.
+        /// Enumerates all values.
         /// </summary>
         /// <value>
         /// The values.
@@ -94,7 +94,7 @@ namespace SpiceSharp.General
         /// Adds the specified value to the type values.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <param name="isDirect">if set to <c>true</c>, the value type is a direct reference.</param>
+        /// <param name="isDirect">if set to <c>true</c>, the value type is a direct reference (ie. not a child).</param>
         public void Add(T value, bool isDirect = false)
         {
             if (_first == null)
@@ -150,26 +150,6 @@ namespace SpiceSharp.General
                     elt = elt.Next;
                 }
             }
-        }
-
-        /// <summary>
-        /// Clones this instance.
-        /// </summary>
-        /// <returns>The cloned instance.</returns>
-        public TypeValues<T> Clone()
-        {
-            TypeValues<T> clone = new TypeValues<T>();
-            var elt = _first;
-            while (elt != null)
-            {
-                T value;
-                if (elt.Value is ICloneable cloneable)
-                    value = (T)cloneable.Clone();
-                else
-                    value = elt.Value;
-                clone.Add(value);
-            }
-            return clone;
         }
     }
 }

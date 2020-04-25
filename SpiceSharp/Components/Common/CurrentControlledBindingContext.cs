@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.CommonBehaviors
 {
@@ -7,23 +8,11 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// A binding context for controlled sources.
     /// </summary>
     /// <seealso cref="ComponentBindingContext" />
+    /// <seealso cref="ICurrentControlledBindingContext"/>
     public class CurrentControlledBindingContext : ComponentBindingContext, ICurrentControlledBindingContext
     {
-        /// <summary>
-        /// Gets the name of the controlling source.
-        /// </summary>
-        /// <value>
-        /// The control source.
-        /// </value>
-        protected string ControlSource { get; }
-
-        /// <summary>
-        /// Gets the controlling source behaviors.
-        /// </summary>
-        /// <value>
-        /// The behaviors.
-        /// </value>
-        public IBehaviorContainer ControlBehaviors => Simulation.EntityBehaviors[ControlSource];
+        /// <inheritdoc/>
+        public IBehaviorContainer ControlBehaviors { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlledBindingContext" /> class.
@@ -31,10 +20,15 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <param name="component">The component that creates the behavior.</param>
         /// <param name="simulation">The simulation for which the behavior is created.</param>
         /// <param name="control">The controlling source identifier.</param>
-        public CurrentControlledBindingContext(Component component, ISimulation simulation, string control)
-            : base(component, simulation)
+        /// <param name = "linkParameters" > Flag indicating that parameters should be linked.If false, only cloned parameters are returned by the context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
+        public CurrentControlledBindingContext(IComponent component, ISimulation simulation, string control, bool linkParameters)
+            : base(component, simulation, linkParameters)
         {
-            ControlSource = control.ThrowIfNull(nameof(control));
+            if (control != null && simulation.EntityBehaviors.TryGetBehaviors(control, out var behaviors))
+                ControlBehaviors = behaviors;
+            else
+                ControlBehaviors = null;
         }
     }
 }

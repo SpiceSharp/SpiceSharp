@@ -47,8 +47,10 @@ namespace SpiceSharp
         /// <returns>
         /// An enumeration of all members of the type.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type" /> is <c>null</c>.</exception>
         public static IEnumerable<MemberDescription> GetMembers(Type type)
         {
+            type.ThrowIfNull(nameof(type));
             _lock.EnterUpgradeableReadLock();
             try
             {
@@ -79,8 +81,11 @@ namespace SpiceSharp
         /// <param name="type">The type that should be searched for the parameter.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>The member description.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> or <paramref name="name"/> is <c>null</c>.</exception>
         public static MemberDescription GetMember(Type type, string name)
         {
+            type.ThrowIfNull(nameof(type));
+            name.ThrowIfNull(nameof(name));
             _lock.EnterUpgradeableReadLock();
             try
             {
@@ -114,8 +119,11 @@ namespace SpiceSharp
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <returns>The original object, can be used to chain.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the the parameter with the specified <paramref name="name"/> could not be found.</exception>
         public static void Set<P>(object source, string name, P value)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !desc.TrySet(source, value))
                 throw new ParameterNotFoundException(source, name, typeof(P));
@@ -127,8 +135,11 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter method.</param>
         /// <returns>The original object, can be used to chain.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the the parameter with the specified <paramref name="name"/> could not be found.</exception>
         public static void Set(object source, string name)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length > 0)
                 throw new ParameterNotFoundException(source, name, typeof(void));
@@ -142,8 +153,11 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>The value of the parameter.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the the parameter with the specified <paramref name="name"/> could not be found.</exception>
         public static P Get<P>(object source, string name)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             if (desc != null && desc.TryGet(source, out P value))
                 return value;
@@ -157,23 +171,29 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
         public static bool TrySet<P>(object source, string name, P value)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             return desc != null && desc.TrySet(source, value);
         }
 
         /// <summary>
-        /// Tries calling a method with the specified name (tagged with the <see cref="ParameterNameAttribute"/>).
+        /// Tries calling a method with the specified name (tagged with the <see cref="ParameterNameAttribute" />).
         /// </summary>
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>
-        ///     <c>true</c> if the method was called; otherwise <c>false</c>.
+        ///   <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
         public static bool TrySet(object source, string name)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length != 0)
                 return false;
@@ -189,10 +209,12 @@ namespace SpiceSharp
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///     <c>true</c> if the parameter is returned; otherwise <c>false</c>.
+        ///   <c>true</c> if the parameter is returned; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
         public static bool TryGet<P>(object source, string name, out P value)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             if (desc == null)
             {
@@ -209,10 +231,12 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>
-        /// The function that can return the value of the parameter.
+        /// The function that can return the value of the parameter, or <c>null</c> if the property doesn't exist.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
         public static Func<P> CreateGetter<P>(object source, string name)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             return desc?.CreateGetter<P>(source);
         }
@@ -224,10 +248,12 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>
-        /// The action that cna set the value of the parameter.
+        /// The action that can set the value of the parameter, or <c>null</c> if the parameter doesn't exist.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
         public static Action<P> CreateSetter<P>(object source, string name)
         {
+            source.ThrowIfNull(nameof(source));
             var desc = GetMember(source.GetType(), name);
             return desc?.CreateSetter<P>(source);
         }
@@ -235,123 +261,17 @@ namespace SpiceSharp
 
         #region General reflection helper methods
         /// <summary>
-        /// Sets the value of a member.
-        /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="source">The source object.</param>
-        /// <param name="member">The member information.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the member was set; otherwise <c>false</c>.
-        /// </returns>
-        public static bool SetMember<T>(object source, MemberInfo member, T value)
-        {
-            member.ThrowIfNull(nameof(member));
-
-            if (member is PropertyInfo pi)
-            {
-                var info = pi.PropertyType.GetTypeInfo();
-                if (pi.CanWrite && info.IsAssignableFrom(typeof(T)))
-                {
-                    pi.SetValue(source, value);
-                    return true;
-                }
-                if (pi.CanRead && info.IsAssignableFrom(typeof(GivenParameter<T>)))
-                {
-                    pi.SetValue(source, new GivenParameter<T>(value));
-                    return true;
-                }
-            }
-            else if (member is FieldInfo fi)
-            {
-                var info = fi.FieldType.GetTypeInfo();
-                if (info.IsAssignableFrom(typeof(T)))
-                {
-                    fi.SetValue(source, value);
-                    return true;
-                }
-                if (info.IsAssignableFrom(typeof(GivenParameter<T>)))
-                {
-                    fi.SetValue(source, new GivenParameter<T>(value));
-                    return true;
-                }
-            }
-            else if (member is MethodInfo mi)
-            {
-                // Methods
-                if (mi.ReturnType == typeof(void))
-                {
-                    var paraminfo = mi.GetParameters();
-                    if (paraminfo.Length == 1 && paraminfo[0].ParameterType.GetTypeInfo().IsAssignableFrom(typeof(T)))
-                    {
-                        mi.Invoke(source, new object[] { value });
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Gets a value of a member.
-        /// </summary>
-        /// <typeparam name="T">The base value type.</typeparam>
-        /// <param name="source">The source object.</param>
-        /// <param name="member">The member information.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///     <c>true</c> if the member was read; otherwise <c>false</c>.
-        /// </returns>
-        public static bool GetMember<T>(object source, MemberInfo member, out T value)
-        {
-            member.ThrowIfNull(nameof(member));
-
-            var info = typeof(T).GetTypeInfo();
-            if (member is PropertyInfo pi)
-            {
-                if (pi.CanRead && info.IsAssignableFrom(pi.PropertyType))
-                {
-                    value = (T)pi.GetValue(source);
-                    return true;
-                }
-            }
-            else if (member is FieldInfo fi)
-            {
-                if (info.IsAssignableFrom(fi.FieldType))
-                {
-                    value = (T)fi.GetValue(source);
-                    return true;
-                }
-            }
-            else if (member is MethodInfo mi)
-            {
-                if (info.IsAssignableFrom(mi.ReturnType))
-                {
-                    // Methods
-                    var paraminfo = mi.GetParameters();
-                    if (paraminfo.Length == 0)
-                    {
-                        value = (T)mi.Invoke(source, Array<object>.Empty());
-                        return true;
-                    }
-                }
-            }
-
-            value = default;
-            return false;
-        }
-
-        /// <summary>
         /// Copies all properties and fields from a source object to a destination object.
         /// </summary>
-        /// <remarks>
-        /// This method heavily uses reflection to find valid properties and methods. It supports properties and fields
-        /// of types <see cref="double"/>, <see cref="int"/>, <see cref="string"/>, <see cref="bool"/> and
-        /// <see cref="ICloneable"/>.
-        /// </remarks>
         /// <param name="source">The source object.</param>
         /// <param name="destination">The destination object</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="destination" /> does not have the same type as <paramref name="source" />.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source" /> or <paramref name="destination" /> is <c>null</c>.</exception>
+        /// <remarks>
+        /// This method heavily uses reflection to find valid properties and methods. It supports properties and fields
+        /// of types <see cref="double" />, <see cref="int" />, <see cref="string" />, <see cref="bool" /> and
+        /// <see cref="ICloneable" />.
+        /// </remarks>
         public static void CopyPropertiesAndFields(object source, object destination)
         {
             source.ThrowIfNull(nameof(source));
@@ -408,6 +328,7 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="member">The member reflection information.</param>
         /// <returns>An action that sets the member of this object.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="member"/> is <c>null</c>.</exception>
         public static Action<T> CreateSetterForMember<T>(object source, MemberInfo member)
         {
             return member.ThrowIfNull(nameof(member)) switch
@@ -426,6 +347,7 @@ namespace SpiceSharp
         /// <param name="source">The source object.</param>
         /// <param name="member">The member reflection information.</param>
         /// <returns>A function that gets the member of this object.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="member"/> is <c>null</c>.</exception>
         public static Func<T> CreateGetterForMember<T>(object source, MemberInfo member)
         {
             return member.ThrowIfNull(nameof(member)) switch
@@ -446,6 +368,7 @@ namespace SpiceSharp
         /// <returns>
         /// An action that calls the method for this instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="method" /> is <c>null</c>.</exception>
         public static Action<T> CreateSetterForMethod<T>(object source, MethodInfo method)
         {
             method.ThrowIfNull(nameof(method));
@@ -472,6 +395,7 @@ namespace SpiceSharp
         /// <returns>
         /// A function that calls the method for this instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="method" /> is <c>null</c>.</exception>
         public static Func<T> CreateGetterForMethod<T>(object source, MethodInfo method)
         {
             method.ThrowIfNull(nameof(method));
@@ -498,6 +422,7 @@ namespace SpiceSharp
         /// <returns>
         /// An action that sets the property value for this instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="property"/> is <c>null</c>.</exception>
         public static Action<T> CreateSetterForProperty<T>(object source, PropertyInfo property)
         {
             property.ThrowIfNull(nameof(property));
@@ -519,6 +444,7 @@ namespace SpiceSharp
         /// <returns>
         /// A function that gets the property value for this instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="property"/> is <c>null</c>.</exception>
         public static Func<T> CreateGetterForProperty<T>(object source, PropertyInfo property)
         {
             property.ThrowIfNull(nameof(property));
@@ -540,6 +466,7 @@ namespace SpiceSharp
         /// <returns>
         /// An action that sets the field value for this instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="field"/> is <c>null</c>.</exception>
         public static Action<T> CreateSetterForField<T>(object source, FieldInfo field)
         {
             field.ThrowIfNull(nameof(field));
@@ -566,6 +493,7 @@ namespace SpiceSharp
         /// <returns>
         /// A function that gets the field value for this instance.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="field"/> is <c>null</c>.</exception>
         public static Func<T> CreateGetterForField<T>(object source, FieldInfo field)
         {
             field.ThrowIfNull(nameof(field));

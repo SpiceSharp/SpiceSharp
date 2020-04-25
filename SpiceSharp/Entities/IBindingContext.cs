@@ -15,6 +15,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The simulation state.
         /// </returns>
+        /// <exception cref="ArgumentException">Thrown if the state is not defined on the simulation.</exception>
         S GetState<S>() where S : ISimulationState;
 
         /// <summary>

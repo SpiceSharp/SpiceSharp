@@ -29,52 +29,22 @@ namespace SpiceSharp.Components.Common
         /// </value>
         public ITypeDictionary<ISimulationState> LocalStates { get; }
 
-        /// <summary>
-        /// Gets all the states that the class uses.
-        /// </summary>
-        /// <value>
-        /// The states.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<Type> States => Parent.States;
 
-        /// <summary>
-        /// Gets all behavior types that are used by the class.
-        /// </summary>
-        /// <value>
-        /// The behaviors.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<Type> Behaviors => Parent.Behaviors;
 
-        /// <summary>
-        /// Gets the name of the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
+        /// <inheritdoc/>
         public string Name => Parent.Name;
 
-        /// <summary>
-        /// Gets the current status of the <see cref="ISimulation" />.
-        /// </summary>
-        /// <value>
-        /// The status.
-        /// </value>
+        /// <inheritdoc/>
         public SimulationStatus Status => Parent.Status;
 
-        /// <summary>
-        /// Gets the entity behaviors.
-        /// </summary>
-        /// <value>
-        /// The entity behaviors.
-        /// </value>
+        /// <inheritdoc/>
         public IBehaviorContainerCollection EntityBehaviors { get; }
 
-        /// <summary>
-        /// Gets all parameter sets.
-        /// </summary>
-        /// <value>
-        /// The parameter sets.
-        /// </value>
+        /// <inheritdoc/>
         public virtual IEnumerable<IParameterSet> ParameterSets => Parent.ParameterSets;
 
         /// <summary>
@@ -83,6 +53,7 @@ namespace SpiceSharp.Components.Common
         /// <param name="parent">The parent.</param>
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="states">The simulation states.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/>, <paramref name="behaviors"/> or <paramref name="states"/> is <c>null</c>.</exception>
         public SimulationWrapper(ISimulation parent, 
             IBehaviorContainerCollection behaviors,
             ITypeDictionary<ISimulationState> states)
@@ -92,12 +63,14 @@ namespace SpiceSharp.Components.Common
             LocalStates = states.ThrowIfNull(nameof(states));
         }
 
-        /// <summary>
-        /// Runs the <see cref="ISimulation" /> on the specified <see cref="IEntityCollection" />.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
+        /// <inheritdoc/>
+        /// <remarks>
+        /// The behaviors are stored in the specified <see cref="EntityBehaviors"/> of the <see cref="SimulationWrapper"/>.
+        /// This can be a local collection, allowing you to keep a part of the behaviors separate.
+        /// </remarks>
         public void Run(IEntityCollection entities)
         {
+            // TODO: Add Try-catch blocks for verbose exceptions?
             void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
             {
                 if (entities.TryGetEntity(args.Name, out var entity))
@@ -123,13 +96,7 @@ namespace SpiceSharp.Components.Common
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
         }
 
-        /// <summary>
-        /// Gets the state of the specified type.
-        /// </summary>
-        /// <typeparam name="S">The simulation state type.</typeparam>
-        /// <returns>
-        /// The state, or <c>null</c> if the state isn't used.
-        /// </returns>
+        /// <inheritdoc/>
         public virtual S GetState<S>() where S : ISimulationState
         {
             if (LocalStates.TryGetValue(out S result))
@@ -147,42 +114,17 @@ namespace SpiceSharp.Components.Common
         public S GetParentState<S>() where S : ISimulationState
             => Parent.GetState<S>();
 
-        /// <summary>
-        /// Checks if the class uses the specified state.
-        /// </summary>
-        /// <typeparam name="S">The simulation state type.</typeparam>
-        /// <returns>
-        ///   <c>true</c> if the class uses the state; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool UsesState<S>() where S : ISimulationState => Parent.UsesState<S>();
 
-        /// <summary>
-        /// Checks if the class uses the specified behaviors.
-        /// </summary>
-        /// <typeparam name="B">The behavior type.</typeparam>
-        /// <returns>
-        ///   <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
 
-        /// <summary>
-        /// Gets the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <returns>
-        /// The parameter set.
-        /// </returns>
+        /// <inheritdoc/>
         public virtual P GetParameterSet<P>() where P : IParameterSet
             => Parent.GetParameterSet<P>();
 
-        /// <summary>
-        /// Tries to get the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <param name="value">The parameter set.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet
             => Parent.TryGetParameterSet(out value);
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Entities
 {
@@ -11,13 +12,15 @@ namespace SpiceSharp.Entities
     public interface IEntityCollection : IEnumerable<IEntity>, ICollection<IEntity>, ICloneable
     {
         /// <summary>
-        /// Gets the <see cref="Entity"/> with the specified name.
+        /// Gets the <see cref="IEntity"/> with the specified name.
         /// </summary>
         /// <value>
-        /// The <see cref="Entity"/>.
+        /// The <see cref="IEntity"/>.
         /// </value>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <param name="name">The name of the entity.</param>
+        /// <returns>The entity.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if no entity with the name <paramref name="name"/> could be found.</exception>
         IEntity this[string name] { get; }
 
         /// <summary>
@@ -29,20 +32,17 @@ namespace SpiceSharp.Entities
         IEqualityComparer<string> Comparer { get; }
 
         /// <summary>
-        /// Adds the specified entities to the collection.
+        /// Removes the <see cref="IEntity" /> with specified name.
         /// </summary>
-        /// <param name="entities">The entities.</param>
-        void Add(params IEntity[] entities);
-
-        /// <summary>
-        /// Removes the <see cref="Entity"/> with specified name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <param name="name">The name of the entity.</param>
+        /// <returns>
+        ///   <c>true</c> is the entity was removed succesfully; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         bool Remove(string name);
 
         /// <summary>
-        /// Determines whether this instance contains an <see cref="Entity"/> with the specified name.
+        /// Determines whether this instance contains an <see cref="IEntity"/> with the specified name.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>

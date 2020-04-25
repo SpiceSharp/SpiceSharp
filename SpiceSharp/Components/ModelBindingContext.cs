@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -16,18 +17,9 @@ namespace SpiceSharp.Components
         /// <param name="entity">The entity creating the behavior.</param>
         /// <param name="simulation">The simulation for which a behavior is created.</param>
         /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
         public ModelBindingContext(IEntity entity, ISimulation simulation, bool linkParameters)
             : base(entity, simulation, linkParameters)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBindingContext"/> class.
-        /// </summary>
-        /// <param name="entity">The entity creating the behavior.</param>
-        /// <param name="simulation">The simulation for which a behavior is created.</param>
-        public ModelBindingContext(Entity entity, ISimulation simulation)
-            : base(entity, simulation)
         {
         }
     }

@@ -14,6 +14,11 @@
         /// Returns an empty array.
         /// </summary>
         /// <returns>The empty array.</returns>
+        /// <remarks>
+        /// The static <see cref="System.Array"/> does not contain an Empty method
+        /// in .NET Standard 1.5, despite it being documented as such. That's why
+        /// I rolled out a custom one.
+        /// </remarks>
         public static T[] Empty() => _empty;
     }
 }

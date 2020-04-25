@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.MutualInductanceBehaviors
 {
@@ -11,28 +12,12 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
     public class MutualInductanceBindingContext : BindingContext
     {
         /// <summary>
-        /// Gets the name of the primary inductor.
-        /// </summary>
-        /// <value>
-        /// The name of the primary inductor.
-        /// </value>
-        protected string InductorName1 { get; }
-
-        /// <summary>
-        /// Gets the name of the secondary inductor.
-        /// </summary>
-        /// <value>
-        /// The name of the secondary inductor.
-        /// </value>
-        protected string InductorName2 { get; }
-
-        /// <summary>
         /// Gets the primary inductor behaviors.
         /// </summary>
         /// <value>
         /// The primary inductor behaviors.
         /// </value>
-        public IBehaviorContainer Inductor1Behaviors => Simulation.EntityBehaviors[InductorName1];
+        public IBehaviorContainer Inductor1Behaviors { get; }
 
         /// <summary>
         /// Gets the secondary inductor behaviors.
@@ -40,20 +25,20 @@ namespace SpiceSharp.Components.MutualInductanceBehaviors
         /// <value>
         /// The secondary inductor behaviors.
         /// </value>
-        public IBehaviorContainer Inductor2Behaviors => Simulation.EntityBehaviors[InductorName2];
+        public IBehaviorContainer Inductor2Behaviors { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MutualInductanceBindingContext" /> class.
         /// </summary>
         /// <param name="component">The component that creates the behavior.</param>
         /// <param name="simulation">The simulation for which the behavior is created.</param>
-        /// <param name="inductor1">The name of the primary inductor.</param>
-        /// <param name="inductor2">The name of the secondary inductor.</param>
-        public MutualInductanceBindingContext(Component component, ISimulation simulation, string inductor1, string inductor2)
-            : base(component, simulation)
+        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
+        public MutualInductanceBindingContext(MutualInductance component, ISimulation simulation, bool linkParameters)
+            : base(component, simulation, linkParameters)
         {
-            InductorName1 = inductor1.ThrowIfNull(nameof(inductor1));
-            InductorName2 = inductor2.ThrowIfNull(nameof(inductor2));
+            Inductor1Behaviors = simulation.EntityBehaviors[component.InductorName1.ThrowIfNull(nameof(component.InductorName1))];
+            Inductor2Behaviors = simulation.EntityBehaviors[component.InductorName2.ThrowIfNull(nameof(component.InductorName2))];
         }
     }
 }

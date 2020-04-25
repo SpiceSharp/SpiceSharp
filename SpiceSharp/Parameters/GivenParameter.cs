@@ -11,6 +11,7 @@ namespace SpiceSharp
     /// want these parameters to return a default value.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
+    /// <seealso cref="IEquatable{T}"/>
     public struct GivenParameter<T> : IEquatable<T>, IEquatable<GivenParameter<T>>
     {
         /// <summary>
@@ -114,8 +115,11 @@ namespace SpiceSharp
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
         /// </returns>
+        /// <remarks>
+        /// The hash code is not based on whether or not the value is given.
+        /// </remarks>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
@@ -124,8 +128,8 @@ namespace SpiceSharp
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
@@ -134,8 +138,8 @@ namespace SpiceSharp
         /// <summary>
         /// Implements the operator !=.
         /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
+        /// <param name="left">The left argument.</param>
+        /// <param name="right">The right argument.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>

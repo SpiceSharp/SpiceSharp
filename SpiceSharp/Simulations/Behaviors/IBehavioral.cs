@@ -18,6 +18,14 @@ namespace SpiceSharp.Simulations
         IEnumerable<Type> Behaviors { get; }
 
         /// <summary>
+        /// Gets the entity behaviors.
+        /// </summary>
+        /// <value>
+        /// The entity behaviors.
+        /// </value>
+        IBehaviorContainerCollection EntityBehaviors { get; }
+
+        /// <summary>
         /// Checks if the class uses the specified behaviors.
         /// </summary>
         /// <typeparam name="B">The behavior type.</typeparam>

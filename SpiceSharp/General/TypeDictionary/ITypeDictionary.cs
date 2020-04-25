@@ -26,6 +26,9 @@ namespace SpiceSharp
         /// </value>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if <paramref name="key"/> was not found.</exception>
+        /// <exception cref="AmbiguousTypeException">If there are multiple values of type <paramref name="key"/>.</exception>
         T this[Type key] { get; }
 
         /// <summary>
@@ -49,6 +52,8 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="V">The value type.</typeparam>
         /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if a value of type <typeparamref name="V"/> was already added.</exception>
         void Add<V>(V value) where V : T;
 
         /// <summary>
@@ -58,6 +63,7 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the value was removed; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         bool Remove(T value);
 
         /// <summary>
@@ -70,9 +76,10 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <returns>The result.</returns>
-        /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if a value of type <typeparamref name="TResult"/> could not be found.</exception>
+        /// <exception cref="AmbiguousTypeException">If there are multiple values of type <typeparamref name="TResult"/>.</exception>
         TResult GetValue<TResult>() where TResult : T;
-
+        
         /// <summary>
         /// Gets all strongly typed values from the dictionary.
         /// </summary>
@@ -99,7 +106,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the value was resolved; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
+        /// <exception cref="AmbiguousTypeException">If there are multiple values of type <paramref name="key"/>.</exception>
         bool TryGetValue(Type key, out T value);
 
         /// <summary>
@@ -109,6 +116,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the dictionary contains one ore more values of the specified type; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         bool ContainsKey(Type key);
 
         /// <summary>
@@ -118,6 +126,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         bool ContainsValue(T value);
     }
 }

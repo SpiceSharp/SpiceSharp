@@ -44,14 +44,6 @@ namespace SpiceSharp.Simulations
         SimulationStatus Status { get; }
 
         /// <summary>
-        /// Gets the entity behaviors.
-        /// </summary>
-        /// <value>
-        /// The entity behaviors.
-        /// </value>
-        IBehaviorContainerCollection EntityBehaviors { get; }
-
-        /// <summary>
         /// Runs the <see cref="ISimulation"/> on the specified <see cref="IEntityCollection"/>.
         /// </summary>
         /// <param name="entities">The entities.</param>

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace SpiceSharp.Entities
@@ -12,9 +11,6 @@ namespace SpiceSharp.Entities
     /// </summary>
     public class ConcurrentEntityCollection : IEntityCollection
     {
-        /// <summary>
-        /// Private variables
-        /// </summary>
         private readonly Dictionary<string, IEntity> _entities;
         private readonly ReaderWriterLockSlim _lock;
 
@@ -28,12 +24,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         public event EventHandler<EntityEventArgs> EntityRemoved;
 
-        /// <summary>
-        /// Search for an entity by its string.
-        /// </summary>
-        /// <param name="name">The string.</param>
-        /// <returns>The entity with the specified string.</returns>
-        [SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
+        /// <inheritdoc/>
         public IEntity this[string name]
         {
             get
@@ -50,9 +41,7 @@ namespace SpiceSharp.Entities
             }
         }
 
-        /// <summary>
-        /// Gets the comparer for entity names.
-        /// </summary>
+        /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => _entities.Comparer;
 
         /// <summary>
@@ -61,8 +50,11 @@ namespace SpiceSharp.Entities
         public bool IsReadOnly => false;
 
         /// <summary>
-        /// The number of entities.
+        /// Gets the number of entities in the collection
         /// </summary>
+        /// <value>
+        /// The number of entities.
+        /// </value>
         public int Count
         {
             get
@@ -76,26 +68,6 @@ namespace SpiceSharp.Entities
                 {
                     _lock.ExitReadLock();
                 }
-            }
-        }
-
-        /// <summary>
-        /// Enumerates the names of all entities in the collection.
-        /// </summary>
-        public IEnumerable<string> Keys
-        {
-            get
-            {
-                _lock.EnterReadLock();
-                try
-                {
-                    return _entities.Keys.ToArray();
-                }
-                finally
-                {
-                    _lock.ExitReadLock();
-                }
-                
             }
         }
 
@@ -135,9 +107,11 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Add an entity.
+        /// Adds an item to the <see cref="ICollection{T}" />.
         /// </summary>
-        /// <param name="item">The item to be added.</param>
+        /// <param name="item">The object to add to the <see cref="ICollection{T}" />.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="item"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if another entity with the same name already exists.</exception>
         public void Add(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
@@ -158,27 +132,10 @@ namespace SpiceSharp.Entities
             OnEntityAdded(new EntityEventArgs(item));
         }
 
-        /// <summary>
-        /// Add one or more entities.
-        /// </summary>
-        /// <param name="entities">The entities that need to be added.</param>
-        public void Add(params IEntity[] entities)
-        {
-            if (entities == null)
-                return;
-            foreach (var entity in entities)
-                Add(entity);
-        }
-
-        /// <summary>
-        /// Removes the specified entity from the collection.
-        /// </summary>
-        /// <param name="name">The name of the entity to be deleted.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public bool Remove(string name)
         {
             name.ThrowIfNull(nameof(name));
-
             _lock.EnterUpgradeableReadLock();
             try
             {
@@ -208,12 +165,14 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="item">The object to remove from the <see cref="ICollection{T}" />.</param>
         /// <returns>
-        /// true if <paramref name="item" /> was successfully removed from the <see cref="ICollection{T}" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="ICollection{T}" />.
+        ///   <c>true</c> if <paramref name="item" /> was successfully removed from the <see cref="ICollection{T}" />; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="item"/> is <c>null</c>.</exception>
         public bool Remove(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
             _lock.EnterUpgradeableReadLock();
+            bool success = false;
             try
             {
                 if (!_entities.TryGetValue(item.Name, out var result) || result != item)
@@ -222,9 +181,7 @@ namespace SpiceSharp.Entities
                 _lock.EnterWriteLock();
                 try
                 {
-                    _entities.Remove(item.Name);
-                    OnEntityRemoved(new EntityEventArgs(item));
-                    return true;
+                    success = _entities.Remove(item.Name);
                 }
                 finally
                 {
@@ -235,13 +192,15 @@ namespace SpiceSharp.Entities
             {
                 _lock.ExitUpgradeableReadLock();
             }
+            if (success)
+            {
+                OnEntityRemoved(new EntityEventArgs(item));
+                return true;
+            }
+            return false;
         }
 
-        /// <summary>
-        /// This method checks if a component exists with a specified string.
-        /// </summary>
-        /// <param name="name">The string.</param>
-        /// <returns>True if the collection contains an entity with a certain string.</returns>
+        /// <inheritdoc/>
         public bool Contains(string name)
         {
             _lock.EnterReadLock();
@@ -256,10 +215,13 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
-        /// Find out if an entity is contained in this collection.
+        /// Determines whether this instance contains the object.
         /// </summary>
         /// <param name="item">The entity.</param>
-        /// <returns></returns>
+        /// <returns>
+        ///   <c>true</c> if the collection contains the entity; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="item"/> is <c>null</c>.</exception>
         public bool Contains(IEntity item)
         {
             _lock.EnterReadLock();
@@ -275,12 +237,7 @@ namespace SpiceSharp.Entities
             }
         }
 
-        /// <summary>
-        /// Try to find an entity in the collection.
-        /// </summary>
-        /// <param name="name">The name to be searched for.</param>
-        /// <param name="entity">The found entity.</param>
-        /// <returns>True if the entity was found.</returns>
+        /// <inheritdoc/>
         public bool TryGetEntity(string name, out IEntity entity)
         {
             _lock.EnterReadLock();
@@ -294,13 +251,7 @@ namespace SpiceSharp.Entities
             }
         }
 
-        /// <summary>
-        /// Gets all entities that are of a specified type.
-        /// </summary>
-        /// <typeparam name="E">The type of entity.</typeparam>
-        /// <returns>
-        /// The entities.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<E> ByType<E>() where E : IEntity
         {
             _lock.EnterReadLock();
@@ -342,26 +293,8 @@ namespace SpiceSharp.Entities
                 yield return entity;
         }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
         ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <summary>
@@ -406,11 +339,6 @@ namespace SpiceSharp.Entities
             }
         }
 
-        /// <summary>
-        /// Copy the elements to an array.
-        /// </summary>
-        /// <param name="array">The array.</param>
-        /// <param name="arrayIndex">The starting index.</param>
         void ICollection<IEntity>.CopyTo(IEntity[] array, int arrayIndex)
         {
             array.ThrowIfNull(nameof(array));

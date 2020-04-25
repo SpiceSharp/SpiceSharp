@@ -8,6 +8,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     public interface IStateful
     {
+        // TODO: GetState and TryGetState?
+
         /// <summary>
         /// Gets the state of the specified type.
         /// </summary>

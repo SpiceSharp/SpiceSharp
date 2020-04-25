@@ -16,38 +16,16 @@ namespace SpiceSharp.General
         private readonly Dictionary<Type, T> _dictionary;
         private readonly Dictionary<Type, TypeValues<T>> _interfaces;
 
-        /// <summary>
-        /// Gets the keys.
-        /// </summary>
-        /// <value>
-        /// The keys.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<Type> Keys => _interfaces.Keys;
 
-        /// <summary>
-        /// Gets the values.
-        /// </summary>
-        /// <value>
-        /// The values.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<T> Values => _dictionary.Values;
 
-        /// <summary>
-        /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}" />.
-        /// </summary>
-        /// <value>
-        /// The count.
-        /// </value>
+        /// <inheritdoc/>
         public int Count => _dictionary.Count;
 
-        /// <summary>
-        /// Gets the value with the specified type.
-        /// </summary>
-        /// <value>
-        /// The associated value.
-        /// </value>
-        /// <param name="type">The type.</param>
-        /// <returns>The associated value.</returns>
+        /// <inheritdoc/>
         public T this[Type type]
         {
             get
@@ -67,15 +45,11 @@ namespace SpiceSharp.General
             _interfaces = new Dictionary<Type, TypeValues<T>>();
         }
 
-        /// <summary>
-        /// Adds the specified value to the dictionary.
-        /// </summary>
-        /// <typeparam name="V">The value type.</typeparam>
-        /// <param name="value">The value.</param>
+        /// <inheritdoc/>
         public void Add<V>(V value) where V : T
         {
             // Add a regular class entry
-            var ctype = value.GetType();
+            var ctype = value.ThrowIfNull(nameof(value)).GetType();
             try
             {
                 _dictionary.Add(value.GetType(), value);
@@ -99,13 +73,7 @@ namespace SpiceSharp.General
             }
         }
 
-        /// <summary>
-        /// Removes the specified value from the dictionary.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool Remove(T value)
         {
             var ctype = value.GetType();
@@ -119,13 +87,7 @@ namespace SpiceSharp.General
             return false;
         }
 
-        /// <summary>
-        /// Gets the strongly typed value from the dictionary.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <returns>
-        /// The result.
-        /// </returns>
+        /// <inheritdoc/>
         public TResult GetValue<TResult>() where TResult : T
         {
             if (_interfaces.TryGetValue(typeof(TResult), out var result))
@@ -137,13 +99,7 @@ namespace SpiceSharp.General
             return (TResult)_dictionary[typeof(TResult)];
         }
 
-        /// <summary>
-        /// Gets all strongly typed values from the dictionary.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <returns>
-        /// The results.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
         {
             if (_interfaces.TryGetValue(typeof(TResult), out var result))
@@ -151,12 +107,7 @@ namespace SpiceSharp.General
             return Enumerable.Empty<TResult>();
         }
 
-        /// <summary>
-        /// Tries to get a strongly typed value from the dictionary.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public bool TryGetValue<TResult>(out TResult value) where TResult : T
         {
             if (_interfaces.TryGetValue(typeof(TResult), out var result))
@@ -175,12 +126,7 @@ namespace SpiceSharp.General
             return false;
         }
 
-        /// <summary>
-        /// Tries to get a value from the dictionary.
-        /// </summary>
-        /// <param name="key">The key type.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public bool TryGetValue(Type key, out T value)
         {
             if (_interfaces.TryGetValue(key, out var result))
@@ -199,27 +145,13 @@ namespace SpiceSharp.General
             return false;
         }
 
-        /// <summary>
-        /// Determines whether the dictionary contains a value of the specified type.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>
-        /// <c>true</c> if the specified key contains key; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool ContainsKey(Type key) => _interfaces.ContainsKey(key) || _dictionary.ContainsKey(key);
 
-        /// <summary>
-        /// Determines whether the dictionary contains the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool ContainsValue(T value) => _dictionary.TryGetValue(value.GetType(), out var result) && result.Equals(value);
 
-        /// <summary>
-        /// Clears all items in the dictionary.
-        /// </summary>
+        /// <inheritdoc/>
         public void Clear()
         {
             _interfaces.Clear();
@@ -248,12 +180,6 @@ namespace SpiceSharp.General
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
         ICloneable ICloneable.Clone()
         {
             var clone = new InheritedTypeDictionary<T>();
@@ -266,11 +192,6 @@ namespace SpiceSharp.General
             }
             return clone;
         }
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
         void ICloneable.CopyFrom(ICloneable source)
         {
             _dictionary.Clear();

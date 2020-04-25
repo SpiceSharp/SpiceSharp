@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Entities
 {
@@ -11,8 +12,11 @@ namespace SpiceSharp.Entities
     /// This is an additional layer that allows to shield entities, simulations, etc. from the behavior that
     /// is being created. This makes sure that behaviors are only using the data that matters.
     /// </remarks>
+    /// <seealso cref="IBindingContext"/>
     public class BindingContext : IBindingContext
     {
+        private readonly Dictionary<IParameterSet, IParameterSet> _cloned;
+
         /// <summary>
         /// Gets the simulation to bind to without exposing the simulation itself.
         /// </summary>
@@ -29,20 +33,7 @@ namespace SpiceSharp.Entities
         /// </value>
         protected IEntity Entity { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether parameters should be linked. If not, then
-        /// the parameters are cloned instead of referenced.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if parameters should be linked; otherwise, <c>false</c>.
-        /// </value>
-        protected bool LinkParameters { get; }
-
-        /// <summary>
-        /// Gets a simulation state.
-        /// </summary>
-        /// <typeparam name="S">The type of simulation state.</typeparam>
-        /// <returns>The simulation state.</returns>
+        /// <inheritdoc/>
         public S GetState<S>() where S : ISimulationState
         {
             var state = Simulation.GetState<S>();
@@ -51,14 +42,7 @@ namespace SpiceSharp.Entities
             return state;
         }
 
-        /// <summary>
-        /// Tries to get a simulation state.
-        /// </summary>
-        /// <typeparam name="S">The type of simulation state.</typeparam>
-        /// <param name="state">The simulation state.</param>
-        /// <returns>
-        /// <c>true</c> if the state was found; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetState<S>(out S state) where S : ISimulationState
         {
             state = Simulation.GetState<S>();
@@ -91,10 +75,21 @@ namespace SpiceSharp.Entities
         /// </returns>
         public P GetParameterSet<P>() where P : IParameterSet
         {
-            var parameters = Entity.GetParameterSet<P>();
-            if (LinkParameters)
-                return parameters;
-            return (P)parameters.Clone();
+            var value = Entity.GetParameterSet<P>();
+
+            // Are we using cloned parameter sets?
+            if (_cloned != null)
+            {
+                if (!_cloned.TryGetValue(value, out var result))
+                {
+                    result = (IParameterSet)value.Clone();
+                    _cloned.Add(value, result);
+                }
+                return (P)result;
+            }
+
+            // Linking parameters by reference
+            return value;
         }
 
         /// <summary>
@@ -109,10 +104,24 @@ namespace SpiceSharp.Entities
         {
             if (Entity.TryGetParameterSet(out value))
             {
-                if (!LinkParameters)
-                    value = (P)value.Clone();
+                // Are we using cloned parameter sets?
+                if (_cloned != null)
+                {
+                    if (!_cloned.TryGetValue(value, out var result))
+                    {
+                        result = (IParameterSet)value.Clone();
+                        _cloned.Add(value, result);
+                    }
+                    value = (P)result;
+                    return true;
+                }
+
+                // Return the original
+                value = (P)value.Clone();
                 return true;
             }
+
+            // Linking parameters by reference
             value = default;
             return false;
         }
@@ -122,24 +131,13 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="entity">The entity creating the behavior.</param>
         /// <param name="simulation">The simulation for which a behavior is created.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
+        /// <param name="linkParameters">Flag indicating that parameters should be linked. If <c>false</c>, only cloned parameters are returned by the context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
         public BindingContext(IEntity entity, ISimulation simulation, bool linkParameters)
         {
             Entity = entity.ThrowIfNull(nameof(entity));
             Simulation = simulation.ThrowIfNull(nameof(simulation));
-            LinkParameters = linkParameters;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BindingContext"/> class.
-        /// </summary>
-        /// <param name="entity">The entity creating the behavior.</param>
-        /// <param name="simulation">The simulation for which a behavior is created.</param>
-        public BindingContext(Entity entity, ISimulation simulation)
-        {
-            Entity = entity.ThrowIfNull(nameof(entity));
-            Simulation = simulation.ThrowIfNull(nameof(simulation));
-            LinkParameters = entity.LinkParameters;
+            _cloned = linkParameters ? null : new Dictionary<IParameterSet, IParameterSet>();
         }
     }
 }

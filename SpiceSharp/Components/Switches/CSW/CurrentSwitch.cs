@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
-            var context = new CurrentControlledBindingContext(this, simulation, ControllingName);
+            var context = new CurrentControlledBindingContext(this, simulation, ControllingName, LinkParameters);
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(CurrentSwitchModel));
             behaviors

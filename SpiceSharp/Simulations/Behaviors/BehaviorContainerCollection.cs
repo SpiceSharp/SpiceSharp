@@ -168,14 +168,28 @@ namespace SpiceSharp.Behaviors
         /// <returns></returns>
         public virtual bool TryGetBehaviors(string name, out IBehaviorContainer ebd)
         {
-            _lock.EnterReadLock();
+            _lock.EnterUpgradeableReadLock();
             try
             {
-                return _dictionary.TryGetValue(name, out ebd);
+                if (_dictionary.TryGetValue(name, out ebd))
+                    return true;
+
+                // Try asking our event
+                var args = new BehaviorsNotFoundEventArgs(name);
+                OnBehaviorsNotFound(args);
+                if (args.Behaviors != null)
+                {
+                    ebd = args.Behaviors;
+                    return true;
+                }
+
+                // Nothing found
+                ebd = null;
+                return false;
             }
             finally
             {
-                _lock.ExitReadLock();
+                _lock.ExitUpgradeableReadLock();
             }
         }
 

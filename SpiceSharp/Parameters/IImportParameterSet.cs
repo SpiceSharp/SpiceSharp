@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -14,6 +15,8 @@ namespace SpiceSharp
         /// Call a parameter method with the specified name.
         /// </summary>
         /// <param name="name">The name of the method.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
         void SetParameter(string name);
 
         /// <summary>
@@ -21,8 +24,10 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>
-        /// <c>true</c> if the method was called; otherwise <c>false</c>.
+        ///   <c>true</c> if the method was called; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
         bool TrySetParameter(string name);
 
         /// <summary>
@@ -31,6 +36,8 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
         void SetParameter<P>(string name, P value);
 
         /// <summary>
@@ -40,8 +47,9 @@ namespace SpiceSharp
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
         /// <returns>
-        /// <c>true</c> if the parameter was set; otherwise <c>false</c>.
+        ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         bool TrySetParameter<P>(string name, P value);
 
         /// <summary>
@@ -52,6 +60,7 @@ namespace SpiceSharp
         /// <returns>
         /// A setter if the parameter exists; otherwise <c>null</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         Action<P> CreateParameterSetter<P>(string name);
     }
 
@@ -66,7 +75,11 @@ namespace SpiceSharp
         /// Call a parameter method with the specified name.
         /// </summary>
         /// <param name="name">The name of the method.</param>
-        /// <returns>The current instance for chaining.</returns>
+        /// <returns>
+        /// The current instance for chaining.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
         new T SetParameter(string name);
 
         /// <summary>
@@ -75,7 +88,11 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <param name="value">The value.</param>
-        /// <returns>The current instance for chaining.</returns>
+        /// <returns>
+        /// The current instance for chaining.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
         new T SetParameter<P>(string name, P value);
     }
 }

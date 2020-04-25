@@ -12,12 +12,18 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Small-signal magnitude.
         /// </summary>
+        /// <value>
+        /// The small-signal magnitude.
+        /// </value>
         [ParameterName("acmag"), ParameterInfo("AC magnitude value")]
         public double AcMagnitude { get; set; }
 
         /// <summary>
         /// Small-signal phase.
         /// </summary>
+        /// <value>
+        /// The small-signal phase.
+        /// </value>
         [ParameterName("acphase"), ParameterInfo("AC phase value")]
         public double AcPhase { get; set; }
 
@@ -25,6 +31,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// Sets the small-signal parameters of the source.
         /// </summary>
         /// <param name="ac">Parameters.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="ac"/> does not have 0-2 arguments.</exception>
         [ParameterName("ac"), ParameterInfo("A.C. magnitude, phase vector")]
         public void SetAc(double[] ac)
         {
@@ -46,32 +53,12 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <summary>
         /// Gets the phasor represented by the amplitude and phase.
         /// </summary>
+        /// <value>
+        /// The complex phasor.
+        /// </value>
         public Complex Phasor { get; private set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IndependentSourceFrequencyParameters"/> class.
-        /// </summary>
-        public IndependentSourceFrequencyParameters()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IndependentSourceFrequencyParameters"/> class.
-        /// </summary>
-        /// <param name="magnitude">Magnitude</param>
-        /// <param name="phase">Phase</param>
-        public IndependentSourceFrequencyParameters(double magnitude, double phase)
-        {
-            AcMagnitude = magnitude;
-            AcPhase = phase;
-        }
-
-        /// <summary>
-        /// Creates a deep clone of the parameter set.
-        /// </summary>
-        /// <returns>
-        /// A deep clone of the parameter set.
-        /// </returns>
+        /// <inheritdoc/>
         protected override ICloneable Clone()
         {
             var result = (IndependentSourceFrequencyParameters) base.Clone();
@@ -79,22 +66,14 @@ namespace SpiceSharp.Components.CommonBehaviors
             return result;
         }
 
-        /// <summary>
-        /// Copy parameters.
-        /// </summary>
-        /// <param name="source">The source object.</param>
+        /// <inheritdoc/>
         protected override void CopyFrom(ICloneable source)
         {
             base.CopyFrom(source);
             Phasor = ((IndependentSourceFrequencyParameters)source).Phasor;
         }
 
-        /// <summary>
-        /// Method for calculating the default values of derived parameters.
-        /// </summary>
-        /// <remarks>
-        /// These calculations should be run whenever a parameter has been changed.
-        /// </remarks>
+        /// <inheritdoc/>
         public override void CalculateDefaults()
         {
             var phase = AcPhase * Math.PI / 180.0;

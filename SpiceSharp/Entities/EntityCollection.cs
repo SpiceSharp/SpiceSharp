@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace SpiceSharp.Entities
 {
     /// <summary>
-    /// 
+    /// A default implementation for <see cref="IEntityCollection"/>.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Entities.IEntityCollection" />
+    /// <seealso cref="IEntityCollection" />
     public class EntityCollection : IEntityCollection
     {
         private readonly Dictionary<string, IEntity> _entities;
@@ -22,22 +22,10 @@ namespace SpiceSharp.Entities
         /// </summary>
         public event EventHandler<EntityEventArgs> EntityRemoved;
 
-        /// <summary>
-        /// Gets the <see cref="IEntity"/> with the specified name.
-        /// </summary>
-        /// <value>
-        /// The <see cref="IEntity"/>.
-        /// </value>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public IEntity this[string name] => _entities[name];
 
-        /// <summary>
-        /// Gets the comparer used to compare <see cref="Entity" /> names.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
+        /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => _entities.Comparer;
 
         /// <summary>
@@ -84,6 +72,8 @@ namespace SpiceSharp.Entities
         /// Adds an item to the <see cref="ICollection{T}" />.
         /// </summary>
         /// <param name="item">The object to add to the <see cref="ICollection{T}" />.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="item"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if another entity with the same name already exists.</exception>
         public void Add(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
@@ -95,25 +85,10 @@ namespace SpiceSharp.Entities
             {
                 throw new ArgumentException(Properties.Resources.EntityCollection_KeyExists.FormatString(item.Name));
             }
+            OnEntityAdded(new EntityEventArgs(item));
         }
 
-        /// <summary>
-        /// Adds the specified entities to the collection.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        public void Add(params IEntity[] entities)
-        {
-            if (entities == null)
-                return;
-            foreach (var entity in entities)
-                Add(entity);
-        }
-
-        /// <summary>
-        /// Removes the <see cref="Entity" /> with specified name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public bool Remove(string name)
         {
             name.ThrowIfNull(nameof(name));
@@ -131,6 +106,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// true if <paramref name="item" /> was successfully removed from the <see cref="ICollection{T}" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="ICollection{T}" />.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="item"/> is <c>null</c>.</exception>
         public bool Remove(IEntity item)
         {
             item.ThrowIfNull(nameof(item));
@@ -141,13 +117,7 @@ namespace SpiceSharp.Entities
             return true;
         }
 
-        /// <summary>
-        /// Determines whether this instance contains the object.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        ///   <c>true</c> if the collection contains the entity; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool Contains(string name) => _entities.ContainsKey(name);
 
         /// <summary>
@@ -155,32 +125,21 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns>
-        ///   <c>true</c> if [contains] [the specified entity]; otherwise, <c>false</c>.
+        ///   <c>true</c> if the collection contains the entity; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> is <c>null</c>.</exception>
         public bool Contains(IEntity entity)
         {
+            entity.ThrowIfNull(nameof(entity));
             if (_entities.TryGetValue(entity.Name, out var result))
                 return result == entity;
             return false;
         }
 
-        /// <summary>
-        /// Tries to find an <see cref="Entity" /> in the collection.
-        /// </summary>
-        /// <param name="name">The name of the entity.</param>
-        /// <param name="entity">The entity.</param>
-        /// <returns>
-        ///   <c>True</c> if the entity is found; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetEntity(string name, out IEntity entity) => _entities.TryGetValue(name, out entity);
 
-        /// <summary>
-        /// Gets all entities that are of a specified type.
-        /// </summary>
-        /// <typeparam name="E">The type of entity.</typeparam>
-        /// <returns>
-        /// The entities.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<E> ByType<E>() where E : IEntity
         {
             foreach (var entity in _entities.Values)
@@ -206,18 +165,7 @@ namespace SpiceSharp.Entities
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
         ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <summary>
@@ -238,21 +186,19 @@ namespace SpiceSharp.Entities
         /// Copies the contents of one interface to this one.
         /// </summary>
         /// <param name="source">The source parameter.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="source"/> does not have the same type.</exception>
         protected virtual void CopyFrom(ICloneable source)
         {
+            source.ThrowIfNull(nameof(source));
+            if (!source.GetType().Equals(GetType()))
+                throw new ArgumentException(Properties.Resources.Reflection_NotMatchingType);
             var src = (EntityCollection)source;
             _entities.Clear();
             foreach (var entity in src._entities.Values)
                 Add(entity);
         }
 
-        /// <summary>
-        /// Copies the elements of the <see cref="ICollection{T}" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
-        /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="ICollection{T}" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
-        /// <exception cref="ArgumentOutOfRangeException">arrayIndex</exception>
-        /// <exception cref="ArgumentException">Not enough elements in the array</exception>
         void ICollection<IEntity>.CopyTo(IEntity[] array, int arrayIndex)
         {
             array.ThrowIfNull(nameof(array));

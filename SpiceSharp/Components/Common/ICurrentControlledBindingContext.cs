@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// Gets the behaviors of the controlling source.
         /// </summary>
         /// <value>
-        /// The control behaviors.
+        /// The behaviors of the controlling source, or <c>null</c> if it wasn't found.
         /// </value>
         IBehaviorContainer ControlBehaviors { get; }
     }

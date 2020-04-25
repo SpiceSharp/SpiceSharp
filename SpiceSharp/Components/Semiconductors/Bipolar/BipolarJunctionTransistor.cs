@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
-            var context = new ComponentBindingContext(this, simulation);
+            var context = new ComponentBindingContext(this, simulation, LinkParameters);
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(BipolarJunctionTransistorModel));
             behaviors

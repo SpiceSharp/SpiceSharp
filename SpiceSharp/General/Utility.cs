@@ -56,7 +56,7 @@ namespace SpiceSharp
         /// The original object.
         /// </returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
-        public static T ThrowIfNull<T>(this T source, string name) where T : class
+        public static T ThrowIfNull<T>(this T source, string name)
         {
             if (source == null)
                 throw new ArgumentNullException(name);

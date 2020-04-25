@@ -14,10 +14,11 @@ namespace SpiceSharp
     public static class Documentation
     {
         /// <summary>
-        /// Gets all members.
+        /// Gets all the members that are defined on a type.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns></returns>
+        /// <returns>All the members on a type.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
         public static IEnumerable<MemberDescription> GetMembers(Type type)
         {
             var info = type.ThrowIfNull(nameof(type)).GetTypeInfo();
@@ -35,19 +36,35 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Enumerates all pins of the entity.
+        /// Enumerates all pins of a component type.
         /// </summary>
-        /// <param name="component">The component.</param>
+        /// <param name="type">The component type.</param>
         /// <returns>The pin names.</returns>
-        public static IEnumerable<string> Pins(Component component)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
+        public static IEnumerable<string> Pins(Type type)
         {
-            var info = component.GetType().GetTypeInfo();
-            var attributes = info.GetCustomAttributes<PinAttribute>().ToArray();
+            type.ThrowIfNull(nameof(type));
+            var attributes = AttributeCache
+                .GetAttributes(type)
+                .Where(a => a is PinAttribute)
+                .Cast<PinAttribute>()
+                .ToArray();
+
+            // Store the pin names in order
             var pins = new string[attributes.Length];
             foreach (var attr in attributes)
                 pins[attr.Index] = attr.Name;
             return pins;
         }
+
+        /// <summary>
+        /// Enumerates all pins of a component type.
+        /// </summary>
+        /// <param name="component">The component.</param>
+        /// <returns>The pin names.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> is <c>null</c>.</exception>
+        public static IEnumerable<string> Pins(IComponent component) 
+            => Pins(component.ThrowIfNull(nameof(component)).GetType());
 
         /// <summary>
         /// Enumerates all the named members.
@@ -74,13 +91,25 @@ namespace SpiceSharp
         }
 
         /// <summary>
-        /// Enumerates all the named members.
+        /// Enumerates all the named parameters and properties of an <see cref="IParameterSet"/>.
         /// </summary>
-        /// <param name="parameters">The parameters.</param>
+        /// <param name="parameters">The parameter set.</param>
+        /// <returns>
+        /// All the named parameters.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameters"/> is <c>null</c>.</exception>
+        public static IEnumerable<MemberDescription> Parameters(IParameterSet parameters)
+            => Parameters(parameters.ThrowIfNull(nameof(parameters)).GetType());
+
+        /// <summary>
+        /// Enumerates all the named members (all parameters and properties with the <see cref="ParameterNameAttribute"/> attribute) on a type.
+        /// </summary>
+        /// <param name="type">The type containing the parameters.</param>
         /// <returns>
         /// The named parameters.
         /// </returns>
-        public static IEnumerable<MemberDescription> Parameters(IParameterSet parameters)
-            => Reflection.GetMembers(parameters.GetType()).Where(p => p.Names.Count > 0);
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
+        public static IEnumerable<MemberDescription> Parameters(Type type)
+            => Reflection.GetMembers(type.ThrowIfNull(nameof(type))).Where(p => p.Names.Count > 0);
     }
 }

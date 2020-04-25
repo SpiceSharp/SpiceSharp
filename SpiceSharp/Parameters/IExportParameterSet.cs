@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -16,6 +17,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name.</param>
         /// <returns>The value.</returns>
+        /// <exception cref="ParameterNotFoundException">Thrown if the property could not be found.</exception>
         P GetProperty<P>(string name);
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name of the parameter.</param>
         /// <returns>
-        /// A getter if the parameter exists; otherwise <c>null</c>.
+        /// A getter for the parameter value if it exists; otherwise <c>null</c>.
         /// </returns>
         Func<P> CreatePropertyGetter<P>(string name);
     }

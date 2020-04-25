@@ -34,8 +34,11 @@ namespace SpiceSharp.General
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="comparer">The comparer used.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
         public ParameterMap(Type type, IEqualityComparer<string> comparer)
         {
+            type.ThrowIfNull(nameof(type));
+
             _members = new Dictionary<string, MemberDescription>(comparer);
             _values = new HashSet<MemberDescription>();
             foreach (var member in type.GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public))

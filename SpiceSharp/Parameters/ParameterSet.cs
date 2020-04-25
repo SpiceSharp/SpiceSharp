@@ -10,30 +10,14 @@ namespace SpiceSharp
     /// This class allows accessing parameters by their metadata. Metadata is specified by using 
     /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
     /// </remarks>
+    /// <seealso cref="IImportParameterSet{T}"/>
+    /// <seealso cref="IParameterSet"/>
     public abstract class ParameterSet : 
-        IImportParameterSet<ParameterSet>, IParameterSet, ICloneable
+        IImportParameterSet<ParameterSet>, IParameterSet
     {
-        /// <summary>
-        /// Method for calculating the default values of derived parameters.
-        /// </summary>
-        /// <remarks>
-        /// These calculations should be run whenever a parameter has been changed.
-        /// </remarks>
+        /// <inheritdoc/>
         public virtual void CalculateDefaults()
         {
-        }
-
-        /// <summary>
-        /// Creates a clone of the parameter set.
-        /// </summary>
-        /// <returns>
-        /// A clone of the parameter set.
-        /// </returns>
-        protected virtual ICloneable Clone()
-        {
-            var clone = (ParameterSet) Activator.CreateInstance(GetType());
-            clone.CopyFrom(this);
-            return clone;
         }
 
         /// <summary>
@@ -42,130 +26,68 @@ namespace SpiceSharp
         /// <returns>
         /// The cloned instance.
         /// </returns>
+        protected virtual ICloneable Clone()
+        {
+            var clone = (ParameterSet) Activator.CreateInstance(GetType());
+            clone.CopyFrom(this);
+            return clone;
+        }
+
         ICloneable ICloneable.Clone() => Clone();
 
         /// <summary>
-        /// Copy properties and fields from another parameter set.
+        /// Copies the contents of one interface to this one.
         /// </summary>
-        /// <param name="source">The source parameter set.</param>
+        /// <param name="source">The source parameter.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="source"/> does not have the same type.</exception>
         protected virtual void CopyFrom(ICloneable source)
         {
             source.ThrowIfNull(nameof(source));
             Reflection.CopyPropertiesAndFields(source, this);
         }
 
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
-        /// <summary>
-        /// Call a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
+        /// <inheritdoc/>
         public ParameterSet SetParameter(string name)
         {
             Reflection.Set(this, name);
             return this;
         }
 
-        /// <summary>
-        /// Sets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
+        /// <inheritdoc/>
         public ParameterSet SetParameter<P>(string name, P value)
         {
             Reflection.Set(this, name, value);
             return this;
         }
 
-        /// <summary>
-        /// Call a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
         void IImportParameterSet.SetParameter(string name) => SetParameter(name);
 
-        /// <summary>
-        /// Tries calling a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        ///   <c>true</c> if the method was called; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TrySetParameter(string name)
             => Reflection.TrySet(this, name);
 
-        /// <summary>
-        /// Sets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
         void IImportParameterSet.SetParameter<P>(string name, P value) => SetParameter(name, value);
 
-        /// <summary>
-        /// Tries to set the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TrySetParameter<P>(string name, P value)
             => Reflection.TrySet(this, name, value);
 
-        /// <summary>
-        /// Gets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
+        /// <inheritdoc/>
         public P GetProperty<P>(string name)
             => Reflection.Get<P>(this, name);
 
-        /// <summary>
-        /// Tries to get the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetProperty<P>(string name, out P value)
             => Reflection.TryGet(this, name, out value);
 
-        /// <summary>
-        /// Creates a getter for a parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <returns>
-        /// A getter if the parameter exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Func<P> CreatePropertyGetter<P>(string name)
             => Reflection.CreateGetter<P>(this, name);
 
-        /// <summary>
-        /// Creates a setter for a parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <returns>
-        /// A setter if the parameter exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Action<P> CreateParameterSetter<P>(string name)
             => Reflection.CreateSetter<P>(this, name);
     }

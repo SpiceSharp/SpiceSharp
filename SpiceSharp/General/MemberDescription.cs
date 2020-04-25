@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -118,14 +117,20 @@ namespace SpiceSharp.General
         /// <param name="source">The source object.</param>
         /// <param name="value">The value.</param>
         /// <returns>
-        /// <c>true</c> if the parameter was set; otherwise <c>false</c>.
+        ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="TargetException">Thrown if <paramref name="source" /> is <c>null</c> and the method is not static,</exception>
+        /// <exception cref="TargetInvocationException">Thrown if the invoked get method throws an exception.</exception>
         public bool TrySet<P>(object source, P value)
         {
             if (ReturnType == typeof(void))
             {
                 if (Member is MethodInfo mi)
                 {
+                    if (mi.IsStatic && source != null ||
+                        !mi.IsStatic && source == null)
+                        return false;
+
                     var ps = mi.GetParameters();
                     if (ps.Length == 1 && typeof(P).GetTypeInfo().IsAssignableFrom(ps[0].ParameterType))
                     {
@@ -144,11 +149,17 @@ namespace SpiceSharp.General
                             var setter = pi.GetSetMethod();
                             if (setter != null)
                             {
+                                if (setter.IsStatic && source != null ||
+                                    !setter.IsStatic && source == null)
+                                    return false;
                                 setter.Invoke(source, new object[] { value });
                                 return true;
                             }
                             break;
                         case FieldInfo fi:
+                            if (fi.IsStatic && source != null ||
+                                !fi.IsStatic && source == null)
+                                return false;
                             fi.SetValue(source, value);
                             return true;
                     }
@@ -218,6 +229,8 @@ namespace SpiceSharp.General
         /// <returns>
         /// <c>true</c> if the parameter value was returned; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="TargetException">Thrown if <paramref name="source"/> is <c>null</c> and the method is not static,</exception>
+        /// <exception cref="TargetInvocationException">Thrown if the invoked get method throws an exception.</exception>
         public bool TryGet<P>(object source, out P value)
         {
             if (typeof(P).GetTypeInfo().IsAssignableFrom(ReturnType))
@@ -228,16 +241,25 @@ namespace SpiceSharp.General
                         var getter = pi.GetGetMethod();
                         if (getter != null)
                         {
+                            if (getter.IsStatic && source != null ||
+                                !getter.IsStatic && source == null)
+                                break;
                             value = (P)getter.Invoke(source, Array<object>.Empty());
                             return true;
                         }
                         break;
                     case FieldInfo fi:
+                        if (fi.IsStatic && source != null ||
+                            !fi.IsStatic && source == null)
+                            break;
                         value = (P)fi.GetValue(source);
                         return true;
                     case MethodInfo mi:
                         if (mi.GetParameters().Length == 0)
                         {
+                            if (mi.IsStatic && source != null ||
+                                !mi.IsStatic && source == null)
+                                break;
                             value = (P)mi.Invoke(source, Array<object>.Empty());
                             return true;
                         }

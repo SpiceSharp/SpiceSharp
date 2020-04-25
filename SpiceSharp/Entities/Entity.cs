@@ -17,24 +17,20 @@ namespace SpiceSharp.Entities
         /// </value>
         public bool LinkParameters { get; set; } = true;
 
-        /// <summary>
-        /// Gets the name of the entity.
-        /// </summary>
+        /// <inheritdoc/>
         public string Name { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected Entity(string name)
         {
-            Name = name;
+            Name = name.ThrowIfNull(nameof(name));
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public abstract void CreateBehaviors(ISimulation simulation);
 
         /// <summary>
@@ -50,12 +46,6 @@ namespace SpiceSharp.Entities
             return clone;
         }
 
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
         ICloneable ICloneable.Clone() => Clone();
 
         /// <summary>
@@ -68,34 +58,16 @@ namespace SpiceSharp.Entities
             Reflection.CopyPropertiesAndFields(source, this);
         }
 
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
-        /// <summary>
-        /// Call a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
+        /// <inheritdoc/>
         public new IEntity SetParameter(string name)
         {
             base.SetParameter(name);
             return this;
         }
 
-        /// <summary>
-        /// Sets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
+        /// <inheritdoc/>
         public new IEntity SetParameter<P>(string name, P value)
         {
             base.SetParameter(name, value);

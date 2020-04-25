@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -16,6 +17,7 @@ namespace SpiceSharp
         /// <returns>
         /// The parameter set.
         /// </returns>
+        /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
         P GetParameterSet<P>() where P : IParameterSet;
 
         /// <summary>
@@ -29,7 +31,7 @@ namespace SpiceSharp
         bool TryGetParameterSet<P>(out P value) where P : IParameterSet;
 
         /// <summary>
-        /// Gets all parameter sets.
+        /// Gets all the parameter sets of this instance.
         /// </summary>
         /// <value>
         /// The parameter sets.

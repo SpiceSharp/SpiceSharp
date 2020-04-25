@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using SpiceSharp.Entities;
+using System;
 
 namespace SpiceSharp
 {
@@ -8,16 +9,11 @@ namespace SpiceSharp
     /// Represents an electronic circuit.
     /// </summary>
     /// <seealso cref="IEntityCollection" />
-    public partial class Circuit : IEntityCollection
+    public class Circuit : IEntityCollection
     {
         private readonly IEntityCollection _entities;
 
-        /// <summary>
-        /// Gets the comparer used to compare <see cref="Entity" /> names.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
+        /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => _entities.Comparer;
 
         /// <summary>
@@ -30,14 +26,7 @@ namespace SpiceSharp
         /// </summary>
         public bool IsReadOnly => _entities.IsReadOnly;
 
-        /// <summary>
-        /// Gets the <see cref="IEntity"/> with the specified name.
-        /// </summary>
-        /// <value>
-        /// The <see cref="IEntity"/>.
-        /// </value>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public IEntity this[string name] => _entities[name];
 
         /// <summary>
@@ -52,6 +41,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="Circuit"/> class.
         /// </summary>
         /// <param name="entities">The entities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
         public Circuit(IEntityCollection entities)
         {
             _entities = entities.ThrowIfNull(nameof(entities));
@@ -87,18 +77,13 @@ namespace SpiceSharp
         /// Merge a circuit with this one. Entities are merged by reference!
         /// </summary>
         /// <param name="ckt">The circuit to merge with.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="ckt"/> is <c>null</c>.</exception>
         public void Merge(Circuit ckt)
         {
             ckt.ThrowIfNull(nameof(ckt));
             foreach (var entity in ckt)
                 Add(entity);
         }
-
-        /// <summary>
-        /// Adds the specified entities to the collection.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        public void Add(params IEntity[] entities) => _entities.Add(entities);
 
         /// <summary>
         /// Removes the <see cref="Entity" /> with specified name.

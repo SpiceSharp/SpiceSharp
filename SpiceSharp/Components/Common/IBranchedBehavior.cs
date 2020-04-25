@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// An interface describing a behavior with a branch equation.
     /// </summary>
+    /// <seealso cref="IBehavior"/>
     public interface IBranchedBehavior<T> : IBehavior
     {
         /// <summary>

@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var container = new BehaviorContainer(Name)
             {
-                new ModelBehavior(Name, new ModelBindingContext(this, simulation))
+                new ModelBehavior(Name, new ModelBindingContext(this, simulation, LinkParameters))
             };
             simulation.EntityBehaviors.Add(container);
         }

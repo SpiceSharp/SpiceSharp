@@ -15,14 +15,7 @@ namespace SpiceSharp.General
         private readonly Dictionary<Type, TypeValues<T>> _dictionary;
         private readonly HashSet<T> _values;
 
-        /// <summary>
-        /// Gets the value of the specified type.
-        /// </summary>
-        /// <value>
-        /// The value.
-        /// </value>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public T this[Type key]
         {
             get
@@ -34,28 +27,13 @@ namespace SpiceSharp.General
             }
         }
 
-        /// <summary>
-        /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}" />.
-        /// </summary>
-        /// <value>
-        /// The count.
-        /// </value>
+        /// <inheritdoc/>
         public int Count => _values.Count;
 
-        /// <summary>
-        /// Gets the keys.
-        /// </summary>
-        /// <value>
-        /// The keys.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<Type> Keys => _dictionary.Keys;
 
-        /// <summary>
-        /// Gets the values.
-        /// </summary>
-        /// <value>
-        /// The values.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<T> Values => _values;
 
         /// <summary>
@@ -67,18 +45,10 @@ namespace SpiceSharp.General
             _values = new HashSet<T>();
         }
 
-        /// <summary>
-        /// Adds the specified value to the dictionary.
-        /// </summary>
-        /// <remarks>
-        /// If two types share a common base class, then the common base classes become impossible
-        /// to be used as a reference due to ambiguity.
-        /// </remarks>
-        /// <typeparam name="V">The value type.</typeparam>
-        /// <param name="value">The value.</param>
+        /// <inheritdoc/>
         public void Add<V>(V value) where V : T
         {
-            var ctype = value.GetType();
+            var ctype = value.ThrowIfNull(nameof(value)).GetType();
 
             // We should always be able to access the type by itself, so remove any ambiguous elements if necessary
             if (_dictionary.TryGetValue(ctype, out var values))
@@ -105,13 +75,7 @@ namespace SpiceSharp.General
             }
         }
 
-        /// <summary>
-        /// Removes the specified value from the dictionary.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool Remove(T value)
         {
             if (!_values.Contains(value))
@@ -124,21 +88,19 @@ namespace SpiceSharp.General
             return true;
         }
 
-        /// <summary>
-        /// Clears all items in the dictionary.
-        /// </summary>
+        /// <inheritdoc/>
         public void Clear()
         {
             _dictionary.Clear();
             _values.Clear();
         }
 
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
+        /// <inheritdoc/>
+        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key);
+
+        /// <inheritdoc/>
+        public bool ContainsValue(T value) => _values.Contains(value.ThrowIfNull(nameof(value)));
+
         ICloneable ICloneable.Clone()
         {
             var clone = new InheritedTypeDictionary<T>();
@@ -151,29 +113,6 @@ namespace SpiceSharp.General
             }
             return clone;
         }
-
-        /// <summary>
-        /// Determines whether the dictionary contains a value of the specified type.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>
-        /// <c>true</c> if the specified key contains key; otherwise, <c>false</c>.
-        /// </returns>
-        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key);
-
-        /// <summary>
-        /// Determines whether the dictionary contains the specified value.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
-        /// </returns>
-        public bool ContainsValue(T value) => _values.Contains(value);
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
         void ICloneable.CopyFrom(ICloneable source)
         {
             _dictionary.Clear();
@@ -195,13 +134,7 @@ namespace SpiceSharp.General
                 yield return new KeyValuePair<Type, T>(elt.Key, elt.Value.Value);
         }
 
-        /// <summary>
-        /// Gets the strongly typed value from the dictionary.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <returns>
-        /// The result.
-        /// </returns>
+        /// <inheritdoc/>
         public TResult GetValue<TResult>() where TResult : T
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
@@ -210,16 +143,10 @@ namespace SpiceSharp.General
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
-            throw new ArgumentException(Properties.Resources.Parameters_NotFoundTyped.FormatString(typeof(TResult).Name));
+            throw new KeyNotFoundException(Properties.Resources.Parameters_NotFoundTyped.FormatString(typeof(TResult).Name));
         }
 
-        /// <summary>
-        /// Gets all strongly typed values from the dictionary.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <returns>
-        /// The results.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
@@ -227,12 +154,7 @@ namespace SpiceSharp.General
             return Enumerable.Empty<TResult>();
         }
 
-        /// <summary>
-        /// Tries to get a strongly typed value from the dictionary.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public bool TryGetValue<TResult>(out TResult value) where TResult : T
         {
             if (_dictionary.TryGetValue(typeof(TResult), out var result))
@@ -246,14 +168,7 @@ namespace SpiceSharp.General
             return false;
         }
 
-        /// <summary>
-        /// Tries to get a value from the dictionary.
-        /// </summary>
-        /// <param name="key">The key type.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// <c>true</c> if the value was resolved; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetValue(Type key, out T value)
         {
             key.ThrowIfNull(nameof(key));
