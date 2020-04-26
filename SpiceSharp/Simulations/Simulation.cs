@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.Entities;
 using SpiceSharp.General;
 using SpiceSharp.Validation;
@@ -274,7 +275,19 @@ namespace SpiceSharp.Simulations
         {
             if (this is IStateful<S> stateful)
                 return stateful.State;
-            return default;
+            throw new TypeNotFoundException(typeof(S), Properties.Resources.Stateful_NotDefined.FormatString(typeof(S).FullName));
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGetState<S>(out S state) where S : ISimulationState
+        {
+            if (this is IStateful<S> stateful)
+            {
+                state = stateful.State;
+                return true;
+            }
+            state = default;
+            return false;
         }
 
         /// <inheritdoc/>

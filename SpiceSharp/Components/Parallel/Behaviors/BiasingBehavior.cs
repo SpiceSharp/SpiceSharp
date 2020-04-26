@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -22,7 +23,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             : base(name)
         {
             var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
-            _state = simulation.GetState<BiasingSimulationState>();
+            simulation.TryGetState(out _state);
             if (parameters.LoadDistributor != null)
             {
                 _loadWorkload = new Workload(parameters.LoadDistributor, simulation.EntityBehaviors.Count);

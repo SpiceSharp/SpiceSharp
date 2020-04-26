@@ -20,7 +20,7 @@ namespace SpiceSharp
         {
             if (this is IParameterized<P> parameterized && parameterized.Parameters != null)
                 return parameterized.Parameters;
-            throw new ArgumentException(Properties.Resources.Parameters_ParameterSetNotFound.FormatString(typeof(P)));
+            throw new TypeNotFoundException(Properties.Resources.ParameterSets_NotDefined.FormatString(typeof(P).FullName));
         }
 
         /// <inheritdoc/>

@@ -84,10 +84,7 @@ namespace SpiceSharp.Components
             Connect(pos, neg);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -100,10 +97,6 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

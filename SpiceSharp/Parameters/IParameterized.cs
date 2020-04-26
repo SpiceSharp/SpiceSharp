@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -17,7 +17,7 @@ namespace SpiceSharp
         /// <returns>
         /// The parameter set.
         /// </returns>
-        /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
+        /// <exception cref="TypeNotFoundException">Thrown if the parameter set could not be found.</exception>
         P GetParameterSet<P>() where P : IParameterSet;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The parameter set type.</typeparam>
         /// <param name="value">The parameter set.</param>
         /// <returns>
-        /// <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
+        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
         /// </returns>
         bool TryGetParameterSet<P>(out P value) where P : IParameterSet;
 

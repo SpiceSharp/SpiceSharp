@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Simulations
 {
@@ -8,21 +9,30 @@ namespace SpiceSharp.Simulations
     /// </summary>
     public interface IStateful
     {
-        // TODO: GetState and TryGetState?
-
         /// <summary>
         /// Gets the state of the specified type.
         /// </summary>
         /// <typeparam name="S">The simulation state type.</typeparam>
         /// <returns>The type, or <c>null</c> if the state isn't used.</returns>
+        /// <exception cref="TypeNotFoundException">Thrown if the simulation state is not defined on this instance.</exception>
         S GetState<S>() where S : ISimulationState;
+
+        /// <summary>
+        /// Tries to get a state of the specified type.
+        /// </summary>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <param name="state">The state.</param>
+        /// <returns>
+        ///   <c>true</c> if the state exists; otherwise <c>false</c>.
+        /// </returns>
+        bool TryGetState<S>(out S state) where S : ISimulationState;
 
         /// <summary>
         /// Checks if the class uses the specified state.
         /// </summary>
         /// <typeparam name="S">The simulation state type.</typeparam>
         /// <returns>
-        /// <c>true</c> if the class uses the state; otherwise <c>false</c>.
+        ///   <c>true</c> if the class uses the state; otherwise <c>false</c>.
         /// </returns>
         bool UsesState<S>() where S : ISimulationState;
 

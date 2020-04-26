@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
@@ -13,6 +14,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
     /// <seealso cref="Behavior"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="BaseParameters"/>
     public class BiasingBehavior : Behavior,
         IBiasingBehavior,
         IParameterized<BaseParameters>
@@ -57,10 +59,9 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context for the behavior.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name" />, <paramref name="context" />, the current
-        /// <see cref="ISolverSimulationState{T}.Solver" /> or <see cref="ISolverSimulationState{T}.Map" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if the simulation does not implement an <see cref="IBiasingSimulationState" />, or
-        /// if the controlling source does not define an <see cref="IBranchedBehavior{T}" /></exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="context"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if the context does not define an <see cref="IComplexSimulationState"/> or <see cref="BaseParameters"/>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if the controlling entity does not have a behavior of type <see cref="IBranchedBehavior{T}"/>.</exception>
         /// <exception cref="NodeMismatchException">Thrown if <paramref name="context" /> does not define exactly 2 nodes.</exception>
         public BiasingBehavior(string name, ICurrentControlledBindingContext context) : base(name)
         {

@@ -242,6 +242,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Node {1} of component {0} was &apos;null&apos;, and was connected to ground..
+        /// </summary>
+        public static string Nodes_NullToGround {
+            get {
+                return ResourceManager.GetString("Nodes.NullToGround", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No enough elements..
         /// </summary>
         public static string NotEnoughElements {
@@ -364,6 +373,15 @@ namespace SpiceSharp.Properties {
         public static string Parameters_UpperLimitReached {
             get {
                 return ResourceManager.GetString("Parameters.UpperLimitReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter set of type &apos;{0}&apos; is not defined..
+        /// </summary>
+        public static string ParameterSets_NotDefined {
+            get {
+                return ResourceManager.GetString("ParameterSets.NotDefined", resourceCulture);
             }
         }
         
@@ -494,15 +512,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A simulation state of type {0} was not defined..
-        /// </summary>
-        public static string Simulations_StateNotDefined {
-            get {
-                return ResourceManager.GetString("Simulations.StateNotDefined", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The expansion factor should be greater or equal than 1..
         /// </summary>
         public static string Simulations_Time_MaximumExpansionTooSmall {
@@ -544,6 +553,15 @@ namespace SpiceSharp.Properties {
         public static string Simulations_ValidationFailed {
             get {
                 return ResourceManager.GetString("Simulations.ValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A simulation state of type &apos;{0}&apos; is not defined..
+        /// </summary>
+        public static string Stateful_NotDefined {
+            get {
+                return ResourceManager.GetString("Stateful.NotDefined", resourceCulture);
             }
         }
         

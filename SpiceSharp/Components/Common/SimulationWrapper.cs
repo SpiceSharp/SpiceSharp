@@ -104,15 +104,36 @@ namespace SpiceSharp.Components.Common
             return default;
         }
 
+        /// <inheritdoc/>
+        public virtual bool TryGetState<S>(out S state) where S : ISimulationState
+        {
+            if (LocalStates.TryGetValue(out state))
+                return true;
+            state = default;
+            return false;
+        }
+
         /// <summary>
-        /// Gets the state of the parent simulation.
+        /// Gets the state of the parent simulation of the specified type.
         /// </summary>
         /// <typeparam name="S">The simulation state type.</typeparam>
         /// <returns>
-        /// The state, or <c>null</c> if the state isn't used.
+        /// The state.
         /// </returns>
+        /// <exception cref="ArgumentException">Thrown if the simulation state is not defined.</exception>
         public S GetParentState<S>() where S : ISimulationState
             => Parent.GetState<S>();
+
+        /// <summary>
+        /// Tries the state of the get parent simulatio nof the specified type.
+        /// </summary>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="state">The state.</param>
+        /// <returns>
+        /// <c>true</c> if the simulation state exists; otherwise <c>false</c>.
+        /// </returns>
+        public bool TryGetParentState<S>(out S state) where S : ISimulationState
+            => Parent.TryGetState(out state);
 
         /// <inheritdoc/>
         public bool UsesState<S>() where S : ISimulationState => Parent.UsesState<S>();
@@ -121,8 +142,7 @@ namespace SpiceSharp.Components.Common
         public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
 
         /// <inheritdoc/>
-        public virtual P GetParameterSet<P>() where P : IParameterSet
-            => Parent.GetParameterSet<P>();
+        public virtual P GetParameterSet<P>() where P : IParameterSet => Parent.GetParameterSet<P>();
 
         /// <inheritdoc/>
         public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet

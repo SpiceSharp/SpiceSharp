@@ -77,12 +77,7 @@ namespace SpiceSharp.Components
             return _connections[index];
         }
 
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
+        /// <inheritdoc/>
         protected override Entity Clone()
         {
             var clone = (Component)base.Clone();
@@ -91,10 +86,7 @@ namespace SpiceSharp.Components
             return clone;
         }
 
-        /// <summary>
-        /// Copy from another component.
-        /// </summary>
-        /// <param name="source">The source component.</param>
+        /// <inheritdoc/>
         protected override void CopyFrom(ICloneable source)
         {
             base.CopyFrom(source);
@@ -103,10 +95,6 @@ namespace SpiceSharp.Components
                 _connections[i] = c._connections[i];
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

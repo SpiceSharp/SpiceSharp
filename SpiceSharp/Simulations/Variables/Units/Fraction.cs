@@ -21,6 +21,9 @@ namespace SpiceSharp.Simulations.Variables
         /// <value>
         /// The numerator.
         /// </value>
+        /// <remarks>
+        /// The numerator can have a value ranging from -16 to +15.
+        /// </remarks>
         public sbyte Numerator => (sbyte)(_fraction >> 3);
 
         /// <summary>
@@ -29,7 +32,10 @@ namespace SpiceSharp.Simulations.Variables
         /// <value>
         /// The denominator.
         /// </value>
-        public sbyte Denominator => (sbyte)((_fraction & 0x7) + 1);
+        /// <remarks>
+        /// The denominator can have a value ranging from 1 to 8.
+        /// </remarks>
+        public sbyte Denominator => (sbyte)((_fraction & 0b00000_111) + 1);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Fraction"/> struct.
@@ -37,7 +43,7 @@ namespace SpiceSharp.Simulations.Variables
         /// <param name="numerator">The numerator.</param>
         /// <param name="denominator">The denominator.</param>
         /// <exception cref="DivideByZeroException">Thrown if the denominator is zero.</exception>
-        /// <exception cref="ArgumentException">Thrown if the fraction cannot be represented.</exception>
+        /// <exception cref="ArgumentException">Thrown if the numerator is not in the range -16 to +15, or if the denominator is not in the range 1 to 8.</exception>
         public Fraction(int numerator, int denominator)
         {
             if (denominator == 0)

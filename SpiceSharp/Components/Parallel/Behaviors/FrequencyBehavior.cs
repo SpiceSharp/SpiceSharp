@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             : base(name)
         {
             var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
-            _state = simulation.GetState<ComplexSimulationState>();
+            simulation.TryGetState(out _state);
             if (parameters.AcLoadDistributor != null)
                 _loadWorkload = new Workload(parameters.AcLoadDistributor, simulation.EntityBehaviors.Count);
             if (parameters.AcInitDistributor != null)

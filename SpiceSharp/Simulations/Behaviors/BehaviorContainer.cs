@@ -37,7 +37,7 @@ namespace SpiceSharp.Behaviors
                 if (behavior.TryGetParameterSet(out P value))
                     return value;
             }
-            throw new ArgumentException(Properties.Resources.Parameters_ParameterSetNotFound);
+            throw new TypeNotFoundException(Properties.Resources.ParameterSets_NotDefined.FormatString(typeof(P).FullName));
         }
 
         /// <inheritdoc/>

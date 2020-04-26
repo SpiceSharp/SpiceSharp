@@ -5,43 +5,47 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Validation;
 using System.Linq;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A current-controlled current source.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="BaseParameters"/>
+    /// <seealso cref="IRuleSubject"/>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
     public class CurrentControlledCurrentSource : Component,
         IParameterized<BaseParameters>,
         IRuleSubject
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
+        /// <inheritdoc/>
         public BaseParameters Parameters { get; } = new BaseParameters();
 
         /// <summary>
-        /// Parameters
+        /// Gets or sets the name of the controlling entity.
         /// </summary>
-        [ParameterName("control"), ParameterInfo("Name of the controlling source")]
+        /// <value>
+        /// The name of the controlling entity.
+        /// </value>
+        [ParameterName("control"), ParameterInfo("Name of the controlling entity/source")]
         public string ControllingSource { get; set; }
 
         /// <summary>
-        /// Constants
+        /// The number of pins for a <see cref="CurrentControlledCurrentSource"/>.
         /// </summary>
 		[ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int CurrentControlledCurrentSourcePinCount = 2;
+		public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlledCurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current controlled current source</param>
+        /// <param name="name">The name of the current controlled current source.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public CurrentControlledCurrentSource(string name) 
-            : base(name, CurrentControlledCurrentSourcePinCount)
+            : base(name, PinCount)
         {
         }
 
@@ -49,10 +53,11 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="CurrentControlledCurrentSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current controlled current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="voltageSource">The name of the voltage source</param>
-        /// <param name="gain">The current gain</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="voltageSource">The name of the voltage source.</param>
+        /// <param name="gain">The current gain.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public CurrentControlledCurrentSource(string name, string pos, string neg, string voltageSource, double gain)
             : this(name)
         {
@@ -61,10 +66,7 @@ namespace SpiceSharp.Components
             ControllingSource = voltageSource;
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -76,10 +78,6 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

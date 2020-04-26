@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.Simulations;
+using SpiceSharp.General;
 
 namespace SpiceSharp.Entities
 {
@@ -22,6 +24,9 @@ namespace SpiceSharp.Entities
         /// <param name="simulation">The simulation.</param>
         /// <returns>A dictionary of behaviors that can be used by the simulation.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if the simulation does not use an <see cref="IComplexSimulationState"/>.</exception>
+        /// <exception cref="KeyNotFoundException">Thrown if a required behavior could not be found.</exception>
+        /// <exception cref="AmbiguousTypeException">Thrown if another's entity behavior could not be resolved unambiguously.</exception>
         void CreateBehaviors(ISimulation simulation);
     }
 }

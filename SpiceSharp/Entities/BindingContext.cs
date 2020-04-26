@@ -34,28 +34,17 @@ namespace SpiceSharp.Entities
         protected IEntity Entity { get; }
 
         /// <inheritdoc/>
-        public S GetState<S>() where S : ISimulationState
-        {
-            var state = Simulation.GetState<S>();
-            if (state == null)
-                throw new ArgumentException(Properties.Resources.Simulations_StateNotDefined.FormatString(typeof(S).Name));
-            return state;
-        }
+        public S GetState<S>() where S : ISimulationState => Simulation.GetState<S>();
 
         /// <inheritdoc/>
-        public bool TryGetState<S>(out S state) where S : ISimulationState
-        {
-            state = Simulation.GetState<S>();
-            return state != null;
-        }
+        public bool TryGetState<S>(out S state) where S : ISimulationState => Simulation.TryGetState(out state);
 
         /// <summary>
         /// Gets a simulation parameter set of the specified type.
         /// </summary>
         /// <typeparam name="P">The parameter set type.</typeparam>
         /// <returns>The parameter set.</returns>
-        public P GetSimulationParameterSet<P>() where P : IParameterSet
-            => Simulation.GetParameterSet<P>();
+        public P GetSimulationParameterSet<P>() where P : IParameterSet => Simulation.GetParameterSet<P>();
 
         /// <summary>
         /// Tries to get a simulation parameter set of the specified type.
@@ -63,8 +52,7 @@ namespace SpiceSharp.Entities
         /// <typeparam name="P">The parameter set type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>The parameter set.</returns>
-        public bool TryGetSimulationParameterSet<P>(out P value) where P : IParameterSet
-            => Simulation.TryGetParameterSet(out value);
+        public bool TryGetSimulationParameterSet<P>(out P value) where P : IParameterSet => Simulation.TryGetParameterSet(out value);
 
         /// <summary>
         /// Gets the parameter set of the specified type.

@@ -7,9 +7,10 @@ using System;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Context for binding an <see cref="IBehavior"/> created by an <see cref="IComponent"/> to an <see cref="ISimulation"/>.
+    /// Context for binding an <see cref="IBehavior" /> created by an <see cref="IComponent" /> to an <see cref="ISimulation" />.
     /// </summary>
     /// <seealso cref="BindingContext" />
+    /// <seealso cref="IComponentBindingContext" />
     public class ComponentBindingContext : BindingContext, IComponentBindingContext
     {
         /// <summary>
@@ -38,7 +39,28 @@ namespace SpiceSharp.Components
         public ComponentBindingContext(IComponent component, ISimulation simulation, bool linkParameters)
             : base(component, simulation, linkParameters)
         {
-            Nodes = component.Nodes;
+            // Get the nodes of the component
+            var nodes = component.Nodes;
+            string[] myNodes;
+            if (nodes != null && nodes.Count > 0)
+            {
+                myNodes = new string[nodes.Count];
+                for (var i = 0; i < nodes.Count; i++)
+                {
+                    if (nodes[i] == null)
+                    {
+                        myNodes[i] = Constants.Ground;
+                        SpiceSharpWarning.Warning(this, Properties.Resources.Nodes_NullToGround.FormatString(component.Name, i));
+                    }
+                    else
+                        myNodes[i] = nodes[i];
+                }
+            }
+            else
+                myNodes = Array<string>.Empty();
+            Nodes = myNodes;
+
+            // Get the model of the component
             if (component.Model != null)
                 ModelBehaviors = simulation.EntityBehaviors[component.Model];
         }
