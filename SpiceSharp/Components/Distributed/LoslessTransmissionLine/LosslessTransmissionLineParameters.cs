@@ -1,14 +1,13 @@
 using SpiceSharp.Attributes;
-using System;
 
-namespace SpiceSharp.Components.LosslessTransmissionLineBehaviors
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// Base parameters for a <see cref="LosslessTransmissionLine" />.
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class BaseParameters : ParameterSet
+    public class LosslessTransmissionLineParameters : ParameterSet
     {
         private double _absoluteTolerance = 1.0;
         private double _relativeTolerance = 1.0;

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using NSubstitute;
 using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharpTest.Models
 {
