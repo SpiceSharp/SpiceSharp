@@ -141,9 +141,6 @@
   <data name="Behaviors.NoBehaviorFor" xml:space="preserve">
     <value>Could not find behaviors for '{0}'.</value>
   </data>
-  <data name="BJTs.DepletionCapCoefficientTooLarge" xml:space="preserve">
-    <value>{0}: depletion capacitance coefficient too large, limited to {1:g}.</value>
-  </data>
   <data name="Components.NodeMismatch" xml:space="preserve">
     <value>Node mismatch: {0} nodes expected, but {1} were given.</value>
   </data>
@@ -296,6 +293,9 @@
   </data>
   <data name="TypeDictionary.AmbiguousType" xml:space="preserve">
     <value>The type '{0}' resolved to multiple instances.</value>
+  </data>
+  <data name="TypeDictionary.TypeNotFound" xml:space="preserve">
+    <value>A value of the type '{0}' could not be found.</value>
   </data>
   <data name="Units.InvalidExponent" xml:space="preserve">
     <value>Invalid exponent. Cannot represent the exponent {0}/{1}.</value>

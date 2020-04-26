@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Validation;
@@ -14,15 +13,15 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Component"/>
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="BaseParameters"/>
+    /// <seealso cref="CurrentControlledCurrentSourceParameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
-    public class CurrentControlledCurrentSource : Component,
-        IParameterized<BaseParameters>,
+    public partial class CurrentControlledCurrentSource : Component,
+        IParameterized<CurrentControlledCurrentSourceParameters>,
         IRuleSubject
     {
         /// <inheritdoc/>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        public CurrentControlledCurrentSourceParameters Parameters { get; } = new CurrentControlledCurrentSourceParameters();
 
         /// <summary>
         /// Gets or sets the name of the controlling entity.

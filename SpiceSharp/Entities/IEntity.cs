@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SpiceSharp.Simulations;
 using SpiceSharp.General;
 
@@ -8,6 +7,9 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.
     /// </summary>
+    /// <seealso cref="ICloneable"/>
+    /// <seealso cref="IParameterized"/>
+    /// <seealso cref="IImportParameterSet{T}"/>
     public interface IEntity : ICloneable, IParameterized, IImportParameterSet<IEntity>
     {
         /// <summary>
@@ -25,8 +27,8 @@ namespace SpiceSharp.Entities
         /// <returns>A dictionary of behaviors that can be used by the simulation.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the simulation does not use an <see cref="IComplexSimulationState"/>.</exception>
-        /// <exception cref="KeyNotFoundException">Thrown if a required behavior could not be found.</exception>
-        /// <exception cref="AmbiguousTypeException">Thrown if another's entity behavior could not be resolved unambiguously.</exception>
+        /// <exception cref="TypeNotFoundException">Thrown if a required behavior or parameter set could not be found.</exception>
+        /// <exception cref="AmbiguousTypeException">Thrown if a behavior or parameter set could not be resolved unambiguously.</exception>
         void CreateBehaviors(ISimulation simulation);
     }
 }

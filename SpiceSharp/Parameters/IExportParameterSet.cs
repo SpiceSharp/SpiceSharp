@@ -17,6 +17,7 @@ namespace SpiceSharp
         /// <typeparam name="P">The value type.</typeparam>
         /// <param name="name">The name.</param>
         /// <returns>The value.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         /// <exception cref="ParameterNotFoundException">Thrown if the property could not be found.</exception>
         P GetProperty<P>(string name);
 
@@ -29,6 +30,7 @@ namespace SpiceSharp
         /// <returns>
         /// <c>true</c> if the parameter was found; otherwise <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         bool TryGetProperty<P>(string name, out P value);
 
         /// <summary>
@@ -39,6 +41,7 @@ namespace SpiceSharp
         /// <returns>
         /// A getter for the parameter value if it exists; otherwise <c>null</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         Func<P> CreatePropertyGetter<P>(string name);
     }
 }

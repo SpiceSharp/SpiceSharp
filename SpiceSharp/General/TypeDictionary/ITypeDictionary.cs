@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SpiceSharp.General;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp
 {
@@ -76,7 +77,7 @@ namespace SpiceSharp
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <returns>The result.</returns>
-        /// <exception cref="KeyNotFoundException">Thrown if a value of type <typeparamref name="TResult"/> could not be found.</exception>
+        /// <exception cref="TypeNotFoundException">Thrown if a value of type <typeparamref name="TResult"/> could not be found.</exception>
         /// <exception cref="AmbiguousTypeException">If there are multiple values of type <typeparamref name="TResult"/>.</exception>
         TResult GetValue<TResult>() where TResult : T;
         

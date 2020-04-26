@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Diagnostics;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -71,7 +72,16 @@ namespace SpiceSharp.General
 
         /// <inheritdoc/>
         public TResult GetValue<TResult>() where TResult : T
-            => (TResult)_dictionary[typeof(TResult)];
+        {
+            try
+            {
+                return (TResult)_dictionary[typeof(TResult)];
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName), ex);
+            }
+        }
 
         /// <inheritdoc/>
         public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T

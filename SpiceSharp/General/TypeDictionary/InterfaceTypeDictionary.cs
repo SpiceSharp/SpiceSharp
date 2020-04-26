@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Diagnostics;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +97,14 @@ namespace SpiceSharp.General
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
-            return (TResult)_dictionary[typeof(TResult)];
+            try
+            {
+                return (TResult)_dictionary[typeof(TResult)];
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName), ex);
+            }
         }
 
         /// <inheritdoc/>

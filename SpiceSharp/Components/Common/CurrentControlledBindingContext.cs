@@ -25,11 +25,9 @@ namespace SpiceSharp.Components.CommonBehaviors
         public CurrentControlledBindingContext(IComponent component, ISimulation simulation, string control, bool linkParameters)
             : base(component, simulation, linkParameters)
         {
-            // gets the current-controlled entity
-            if (control != null && simulation.EntityBehaviors.TryGetBehaviors(control, out var behaviors))
-                ControlBehaviors = behaviors;
-            else
-                ControlBehaviors = null;
+            // Gets the current controlling behaviors
+            if (control != null)
+                ControlBehaviors = simulation.EntityBehaviors[control];
         }
     }
 }

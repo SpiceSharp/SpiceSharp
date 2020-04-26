@@ -143,7 +143,7 @@ namespace SpiceSharp.General
                     throw new AmbiguousTypeException(typeof(TResult));
                 return (TResult)result.Value;
             }
-            throw new KeyNotFoundException(Properties.Resources.Parameters_NotFoundTyped.FormatString(typeof(TResult).Name));
+            throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName));
         }
 
         /// <inheritdoc/>

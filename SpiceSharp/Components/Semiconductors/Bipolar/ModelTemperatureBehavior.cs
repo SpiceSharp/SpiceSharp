@@ -187,17 +187,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             else
                 TransitTimeVoltageBcFactor = 0;
             ExcessPhaseFactor = Parameters.ExcessPhase / (180.0 / Math.PI) * Parameters.TransitTimeForward;
-            if (Parameters.DepletionCapCoefficient.Given)
-            {
-                if (Parameters.DepletionCapCoefficient > 0.9999)
-                {
-                    Parameters.DepletionCapCoefficient = 0.9999;
-                    SpiceSharpWarning.Warning(this,
-                        Properties.Resources.BJTs_DepletionCapCoefficientTooLarge.FormatString(Name, Parameters.DepletionCapCoefficient.Value));
-                }
-            }
-            else
-                Parameters.DepletionCapCoefficient = new GivenParameter<double>(0.5, false);
             Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);
             F2 = Math.Exp((1 + Parameters.JunctionExpBe) * Xfc);
             F3 = 1 - Parameters.DepletionCapCoefficient * (1 + Parameters.JunctionExpBe);

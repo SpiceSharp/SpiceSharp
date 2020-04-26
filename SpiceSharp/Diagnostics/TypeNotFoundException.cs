@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 #endif
 
-namespace SpiceSharp.Diagnostics
+namespace SpiceSharp
 {
     /// <summary>
     /// An exception that is thrown when a problem occurs with the generic type of a method.

@@ -134,15 +134,6 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}: depletion capacitance coefficient too large, limited to {1:g}..
-        /// </summary>
-        public static string BJTs_DepletionCapCoefficientTooLarge {
-            get {
-                return ResourceManager.GetString("BJTs.DepletionCapCoefficientTooLarge", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Node mismatch: {0} nodes expected, but {1} were given..
         /// </summary>
         public static string Components_NodeMismatch {
@@ -598,6 +589,15 @@ namespace SpiceSharp.Properties {
         public static string TypeDictionary_AmbiguousType {
             get {
                 return ResourceManager.GetString("TypeDictionary.AmbiguousType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A value of the type &apos;{0}&apos; could not be found..
+        /// </summary>
+        public static string TypeDictionary_TypeNotFound {
+            get {
+                return ResourceManager.GetString("TypeDictionary.TypeNotFound", resourceCulture);
             }
         }
         
