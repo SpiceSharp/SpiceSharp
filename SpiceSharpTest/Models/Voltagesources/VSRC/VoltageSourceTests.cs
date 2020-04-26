@@ -1,16 +1,9 @@
-﻿using NSubstitute;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using SpiceSharp.Validation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using SpiceSharp.Components.VoltageSourceBehaviors;
-using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Behaviors;
 
 namespace SpiceSharpTest.Models
 {

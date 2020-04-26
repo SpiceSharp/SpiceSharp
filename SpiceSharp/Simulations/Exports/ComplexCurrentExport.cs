@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Components;
+using System;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -41,9 +42,9 @@ namespace SpiceSharp.Simulations
             var state = Simulation.GetState<IComplexSimulationState>();
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
-                if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.FrequencyBehavior), out var behavior))
+                if (ebd.TryGetValue<IBranchedBehavior<Complex>>(out var behavior))
                 {
-                    Index = state.Map[((Components.VoltageSourceBehaviors.FrequencyBehavior) behavior).Branch];
+                    Index = state.Map[behavior.Branch];
                     Extractor = () => state.Solution[Index];
                 }
             }

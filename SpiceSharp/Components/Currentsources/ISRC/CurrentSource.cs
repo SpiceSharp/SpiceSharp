@@ -1,58 +1,41 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Components.CurrentSourceBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// An independent current source.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="IndependentSourceParameters"/>
+    /// <seealso cref="IRuleSubject"/>
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
-    public class CurrentSource : Component,
+    public partial class CurrentSource : Component,
         IParameterized<IndependentSourceParameters>,
-        IParameterized<IndependentSourceFrequencyParameters>,
         IRuleSubject
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
+        /// <inheritdoc/>
         public IndependentSourceParameters Parameters { get; } = new IndependentSourceParameters();
-
-        /// <summary>
-        /// Gets the frequency parameters.
-        /// </summary>
-        /// <value>
-        /// The frequency parameters.
-        /// </value>
-        public IndependentSourceFrequencyParameters FrequencyParameters { get; } = new IndependentSourceFrequencyParameters();
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        IndependentSourceFrequencyParameters IParameterized<IndependentSourceFrequencyParameters>.Parameters => FrequencyParameters;
 
         /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int CurrentSourcePinCount = 2;
+		public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current source</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public CurrentSource(string name)
-            : base(name, CurrentSourcePinCount)
+            : base(name, PinCount)
         {
         }
 

@@ -1,9 +1,11 @@
 ﻿using SpiceSharp.Attributes;
+using System;
+using System.Numerics;
 
 namespace SpiceSharp.Components.CommonBehaviors
 {
     /// <summary>
-    /// Base parameters for an independent source.
+    /// Parameters that are common to an independent source.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     public class IndependentSourceParameters : ParameterSet
@@ -25,5 +27,78 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </value>
         [ParameterName("waveform"), ParameterInfo("The waveform")]
         public IWaveformDescription Waveform { get; set; }
+
+        /// <summary>
+        /// Small-signal magnitude.
+        /// </summary>
+        /// <value>
+        /// The small-signal magnitude.
+        /// </value>
+        [ParameterName("acmag"), ParameterInfo("AC magnitude value")]
+        public double AcMagnitude { get; set; }
+
+        /// <summary>
+        /// Small-signal phase.
+        /// </summary>
+        /// <value>
+        /// The small-signal phase.
+        /// </value>
+        [ParameterName("acphase"), ParameterInfo("AC phase value")]
+        public double AcPhase { get; set; }
+
+        /// <summary>
+        /// Sets the small-signal parameters of the source.
+        /// </summary>
+        /// <param name="ac">Parameters.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="ac"/> does not have 0-2 arguments.</exception>
+        [ParameterName("ac"), ParameterInfo("A.C. magnitude, phase vector")]
+        public void SetAc(double[] ac)
+        {
+            ac.ThrowIfNotLength(nameof(ac), 0, 2);
+            switch (ac.Length)
+            {
+                case 2:
+                    AcPhase = ac[1];
+                    goto case 1;
+                case 1:
+                    AcMagnitude = ac[0];
+                    break;
+                case 0:
+                    AcMagnitude = 0.0;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Gets the phasor represented by the amplitude and phase.
+        /// </summary>
+        /// <value>
+        /// The complex phasor.
+        /// </value>
+        public Complex Phasor { get; private set; }
+
+        /// <inheritdoc/>
+        protected override ICloneable Clone()
+        {
+            var result = (IndependentSourceParameters)base.Clone();
+            result.Phasor = Phasor;
+            return result;
+        }
+
+        /// <inheritdoc/>
+        protected override void CopyFrom(ICloneable source)
+        {
+            base.CopyFrom(source);
+            Phasor = ((IndependentSourceParameters)source).Phasor;
+        }
+
+        /// <inheritdoc/>
+        public override void CalculateDefaults()
+        {
+            var phase = AcPhase * Math.PI / 180.0;
+            Phasor = new Complex(
+                AcMagnitude * Math.Cos(phase),
+                AcMagnitude * Math.Sin(phase));
+        }
     }
 }

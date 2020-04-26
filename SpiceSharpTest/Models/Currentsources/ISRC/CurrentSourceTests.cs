@@ -3,13 +3,6 @@ using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components;
-using SpiceSharp.Validation;
-using SpiceSharp.Components.CurrentSourceBehaviors;
-using NSubstitute;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CommonBehaviors;
-using System;
-using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {

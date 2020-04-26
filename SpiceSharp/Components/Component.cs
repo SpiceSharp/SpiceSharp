@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
@@ -11,12 +10,13 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A class that represents a (Spice) component/device.
     /// </summary>
-    public abstract class Component : Entity, IComponent,
+    /// <seealso cref="Entity"/>
+    /// <seealso cref="IComponent"/>
+    /// <seealso cref="IRuleSubject"/>
+    public abstract class Component : Entity, 
+        IComponent,
         IRuleSubject
     {
-        /// <summary>
-        /// Private variables
-        /// </summary>
         private readonly string[] _connections;
 
         /// <summary>
@@ -40,6 +40,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The string of the entity.</param>
         /// <param name="nodeCount">The node count.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected Component(string name, int nodeCount)
             : base(name)
         {
@@ -53,8 +54,18 @@ namespace SpiceSharp.Components
         /// <returns>
         /// The instance calling the method for chaining.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if a specified node is <c>null</c>.</exception>
+        /// <exception cref="NodeMismatchException">Thrown if the number of nodes does not match what is expected.</exception>
         public IComponent Connect(params string[] nodes)
         {
+            if (_connections == null)
+            {
+                if (nodes == null || nodes.Length == 0)
+                    return this;
+                else
+                    throw new NodeMismatchException(Name, 0, nodes.Length);
+            }
+
             if (nodes == null || nodes.Length != _connections.Length)
                 throw new NodeMismatchException(Name, _connections.Length, nodes?.Length ?? 0);
             for (var i = 0; i < nodes.Length; i++)
@@ -70,6 +81,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="index">The pin index.</param>
         /// <returns>The node index.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is negative </exception>
         public string GetNode(int index)
         {
             if (index < 0 || index >= _connections.Length)
