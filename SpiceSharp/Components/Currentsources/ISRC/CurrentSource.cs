@@ -5,6 +5,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
 using System;
+using SpiceSharp.Components.CurrentSources;
 
 namespace SpiceSharp.Components
 {
@@ -16,7 +17,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IndependentSourceParameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
-    public partial class CurrentSource : Component,
+    public class CurrentSource : Component,
         IParameterized<IndependentSourceParameters>,
         IRuleSubject
     {
@@ -74,9 +75,9 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
             behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
+                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

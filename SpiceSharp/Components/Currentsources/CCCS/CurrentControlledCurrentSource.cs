@@ -5,6 +5,7 @@ using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Validation;
 using System.Linq;
 using System;
+using SpiceSharp.Components.CurrentControlledCurrentSources;
 
 namespace SpiceSharp.Components
 {
@@ -13,15 +14,15 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Component"/>
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="CurrentControlledCurrentSourceParameters"/>
+    /// <seealso cref="Parameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
-    public partial class CurrentControlledCurrentSource : Component,
-        IParameterized<CurrentControlledCurrentSourceParameters>,
+    public class CurrentControlledCurrentSource : Component,
+        IParameterized<Parameters>,
         IRuleSubject
     {
         /// <inheritdoc/>
-        public CurrentControlledCurrentSourceParameters Parameters { get; } = new CurrentControlledCurrentSourceParameters();
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
         /// Gets or sets the name of the controlling entity.
@@ -72,8 +73,8 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new CurrentControlledBindingContext(this, simulation, ControllingSource, LinkParameters);
             behaviors
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

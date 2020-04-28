@@ -41,9 +41,9 @@ namespace SpiceSharpTest.Models
 
             resistor.Parameters.ParallelMultiplier = 1.0;
 
-            Assert.AreEqual(clone.Parameters.Resistance, 1.0e3, 1e-20);
-            Assert.AreEqual(clone.Parameters.SeriesMultiplier, 2.0, 1e-20);
-            Assert.AreEqual(clone.Parameters.ParallelMultiplier, 3.0, 1e-20);
+            Assert.AreEqual((double)clone.Parameters.Resistance, 1.0e3, 1e-20);
+            Assert.AreEqual((double)clone.Parameters.SeriesMultiplier, 2.0, 1e-20);
+            Assert.AreEqual((double)clone.Parameters.ParallelMultiplier, 3.0, 1e-20);
         }
 
         /// <summary>
@@ -250,7 +250,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("Rs", "in", "out", 10e3));
             ParallelSeries(cktReference, name => new Resistor(name, "", "", 1e3), "out", "0", 3, 2);
 
-            var noise = new Noise("op", "out", new LinearSweep(0, 10, 2));
+            var noise = new SpiceSharp.Simulations.Noise("op", "out", new LinearSweep(0, 10, 2));
             var exports = new IExport<double>[] { new OutputNoiseDensityExport(noise), new InputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);
