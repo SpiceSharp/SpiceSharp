@@ -3,131 +3,150 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="BipolarJunctionTransistorModel"/>
+    /// Temperature behavior for a <see cref="BipolarJunctionTransistorModel"/>.
     /// </summary>
-    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior,
-        IParameterized<ModelBaseParameters>,
-        IParameterized<ModelNoiseParameters>
+    /// <seealso cref="Behavior"/>
+    /// <seealso cref="ITemperatureBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="ModelParameters"/>
+    public class ModelTemperature : Behavior, 
+        ITemperatureBehavior,
+        IParameterized<ModelParameters>
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public ModelBaseParameters Parameters { get; }
+        private readonly ITemperatureSimulationState _temperature;
+
+        /// <inheritdoc/>
+        public ModelParameters Parameters { get; }
 
         /// <summary>
-        /// Gets the noise parameters.
+        /// Gets the inverse forward Early voltage.
         /// </summary>
         /// <value>
-        /// The noise parameters.
+        /// The inverse forward Early voltage.
         /// </value>
-        public ModelNoiseParameters NoiseParameters { get; }
-        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
-
-        /// <summary>
-        /// Gets the inverse Early voltage (forward).
-        /// </summary>
-        [ParameterName("invearlyvoltf"), ParameterInfo("Inverse Early voltage (forward)")]
         public double InverseEarlyVoltForward { get; protected set; }
 
         /// <summary>
-        /// Gets the inverse Early voltage (reverse).
+        /// Gets the inverse reverse Early voltage.
         /// </summary>
-        [ParameterName("invearlyvoltr"), ParameterInfo("Inverse Early voltage (reverse)")]
+        /// <value>
+        /// The inverse reverse Early voltage.
+        /// </value>
         public double InverseEarlyVoltReverse { get; protected set; }
 
         /// <summary>
-        /// Gets the inverse roll-off (forward).
+        /// Gets the inverse forward roll-off current.
         /// </summary>
-        [ParameterName("invrollofff"), ParameterInfo("Inverse roll off (forward)")]
+        /// <value>
+        /// The inverse forward roll-off current.
+        /// </value>
         public double InverseRollOffForward { get; protected set; }
 
         /// <summary>
-        /// Gets the inverse roll-off (reverse).
+        /// Gets the inverse reverse roll-off current.
         /// </summary>
-        [ParameterName("invrolloffr"), ParameterInfo("Inverse roll off (reverse)")]
+        /// <value>
+        /// The inverse reverse roll-off current.
+        /// </value>
         public double InverseRollOffReverse { get; protected set; }
 
         /// <summary>
         /// Gets the collector conductance.
         /// </summary>
+        /// <value>
+        /// The collector conductance.
+        /// </value>
         [ParameterName("collectorconduct"), ParameterInfo("Collector conductance")]
         public double CollectorConduct { get; protected set; }
 
         /// <summary>
         /// Gets the emitter conductance.
         /// </summary>
+        /// <value>
+        /// The emitter conductance.
+        /// </value>
         [ParameterName("emitterconduct"), ParameterInfo("Emitter conductance")]
         public double EmitterConduct { get; protected set; }
 
         /// <summary>
         /// Gets the transit time base-collector voltage factor.
         /// </summary>
+        /// <value>
+        /// The transit time base-collector factor.
+        /// </value>
         [ParameterName("transtimevbcfact"), ParameterInfo("Transit time VBC factor")]
         public double TransitTimeVoltageBcFactor { get; protected set; }
 
         /// <summary>
         /// Gets the excess phase factor.
         /// </summary>
+        /// <value>
+        /// The excess phase factor.
+        /// </value>
         [ParameterName("excessphasefactor"), ParameterInfo("Excess phase factor")]
         public double ExcessPhaseFactor { get; protected set; }
-        
+
         /// <summary>
         /// Gets generic factor 1.
         /// </summary>
+        /// <value>
+        /// The factor1.
+        /// </value>
         public double Factor1 { get; protected set; }
 
         /// <summary>
         /// Gets ???.
         /// </summary>
+        /// <value>
+        /// The XFC.
+        /// </value>
         public double Xfc { get; protected set; }
 
         /// <summary>
         /// Gets implementation-specific factor 2.
         /// </summary>
+        /// <value>
+        /// The f2.
+        /// </value>
         public double F2 { get; protected set; }
 
         /// <summary>
         /// Gets implementation-specific factor 3.
         /// </summary>
+        /// <value>
+        /// The f3.
+        /// </value>
         public double F3 { get; protected set; }
 
         /// <summary>
         /// Gets implementation-specific factor 6.
         /// </summary>
+        /// <value>
+        /// The f6.
+        /// </value>
         public double F6 { get; protected set; }
 
         /// <summary>
         /// Gets implementation-specific 7.
         /// </summary>
+        /// <value>
+        /// The f7.
+        /// </value>
         public double F7 { get; protected set; }
 
         /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-        private readonly ITemperatureSimulationState _temperature;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
+        /// Initializes a new instance of the <see cref="ModelTemperature"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperatureBehavior(string name, ModelBindingContext context) : base(name) 
+        public ModelTemperature(string name, ModelBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            Parameters = context.GetParameterSet<ModelBaseParameters>();
-            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
+            Parameters = context.GetParameterSet<ModelParameters>();
         }
 
         /// <summary>

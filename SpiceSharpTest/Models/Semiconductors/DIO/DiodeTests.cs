@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using NSubstitute;
+﻿using System.Numerics;
 using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
-using SpiceSharp.Components.DiodeBehaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models

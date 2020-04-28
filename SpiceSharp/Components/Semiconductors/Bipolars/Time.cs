@@ -4,12 +4,15 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.IntegrationMethods;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
-    /// Transient behavior for a <see cref="BipolarJunctionTransistor"/>
+    /// Transient behavior for a <see cref="BipolarJunctionTransistor"/>.
     /// </summary>
-    public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
+    /// <seealso cref="Dynamic"/>
+    /// <seealso cref="ITimeBehavior"/>
+    public class Time : Dynamic, 
+        ITimeBehavior
     {
         private readonly IDerivative _biasingStateChargeBe, _biasingStateChargeBc, _biasingStateChargeCs, _biasingStateChargeBx;
         private readonly StateValue<double> _biasingStateExcessPhaseCurrentBc;
@@ -21,63 +24,70 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base-emitter capacitor current.
         /// </summary>
+        /// <value>
+        /// The base-emitter capacitor current.
+        /// </value>
         [ParameterName("cqbe"), ParameterInfo("Capacitance current due to charges in the B-E junction")]
         public double CapCurrentBe => _biasingStateChargeBe.Derivative;
 
         /// <summary>
         /// Gets the base-collector capacitor current.
         /// </summary>
+        /// <value>
+        /// The base-collector capacitor current.
+        /// </value>
         [ParameterName("cqbc"), ParameterInfo("Capacitance current due to charges in the B-C junction")]
         public double CapCurrentBc => _biasingStateChargeBc.Derivative;
 
         /// <summary>
         /// Gets the collector-substrate capacitor current.
         /// </summary>
+        /// <value>
+        /// The collector-substrate capacitor current.
+        /// </value>
         [ParameterName("cqcs"), ParameterInfo("Capacitance current due to charges in the C-S junction")]
         public double CapCurrentCs => _biasingStateChargeCs.Derivative;
 
         /// <summary>
         /// Gets the base-X capacitor current.
         /// </summary>
+        /// <value>
+        /// The base-X capacitor current.
+        /// </value>
         [ParameterName("cqbx"), ParameterInfo("Capacitance current due to charges in the B-X junction")]
         public double CapCurrentBx => _biasingStateChargeBx.Derivative;
 
         /// <summary>
         /// Gets the excess phase base-X capacitor current.
         /// </summary>
+        /// <value>
+        /// The excess phase base-X capacitor current.
+        /// </value>
         [ParameterName("cexbc"), ParameterInfo("Total capacitance in B-X junction")]
         public double CurrentExBc => _biasingStateExcessPhaseCurrentBc.Value;
 
-        /// <summary>
-        /// Gets or sets the base-emitter charge storage.
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override double ChargeBe
         {
             get => _biasingStateChargeBe.Value;
             protected set => _biasingStateChargeBe.Value = value;
         }
 
-        /// <summary>
-        /// Gets or sets the base-collector charge storage.
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override double ChargeBc
         {
             get => _biasingStateChargeBc.Value;
             protected set => _biasingStateChargeBc.Value = value;
         }
 
-        /// <summary>
-        /// Gets or sets the collector-substract charge storage.
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override double ChargeCs
         {
             get => _biasingStateChargeCs.Value;
             protected set => _biasingStateChargeCs.Value = value;
         }
 
-        /// <summary>
-        /// Gets or sets the base-X charge storage.
-        /// </summary>
+        /// <inheritdoc/>
         public sealed override double ChargeBx
         {
             get => _biasingStateChargeBx.Value;
@@ -85,11 +95,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TimeBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public Time(string name, ComponentBindingContext context) : base(name, context) 
         {
             _time = context.GetState<ITimeSimulationState>();
             
@@ -125,9 +135,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             _method.RegisterState(_biasingStateExcessPhaseCurrentBc);
         }
 
-        /// <summary>
-        /// Calculate state variables
-        /// </summary>
         void ITimeBehavior.InitializeStates()
         {
             // Calculate capacitances
@@ -139,9 +146,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             _biasingStateExcessPhaseCurrentBc.Value = CapCurrentBe / BaseCharge;
         }
 
-        /// <summary>
-        /// Transient behavior
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Load()
         {
             base.Load();
@@ -205,11 +210,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 ceqbe);
         }
 
-        /// <summary>
-        /// Initializes the voltages for the current iteration.
-        /// </summary>
-        /// <param name="vbe">The base-emitter voltage.</param>
-        /// <param name="vbc">The base-collector voltage.</param>
+        /// <inheritdoc/>
         protected override void Initialize(out double vbe, out double vbc)
         {
             if (Iteration.Mode == IterationModes.Junction && _time.UseDc && _time.UseIc)
@@ -222,12 +223,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
             base.Initialize(out vbe, out vbc);
         }
 
-        /// <summary>
-        /// Excess phase calculation.
-        /// </summary>
-        /// <param name="cc">The collector current.</param>
-        /// <param name="cex">The excess phase current.</param>
-        /// <param name="gex">The excess phase conductance.</param>
+        /// <inheritdoc/>
         protected override void ExcessPhaseCalculation(ref double cc, ref double cex, ref double gex)
         {
             var td = ModelTemperature.ExcessPhaseFactor;

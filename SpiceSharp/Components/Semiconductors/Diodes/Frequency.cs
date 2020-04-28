@@ -4,30 +4,39 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
-    /// AC behavior for <see cref="Diode"/>
+    /// Small-signal behavior for <see cref="Diode"/>.
     /// </summary>
-    public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
+    /// <seealso cref="Dynamic"/>
+    /// <seealso cref="IFrequencyBehavior"/>
+    public class Frequency : Dynamic, 
+        IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
 
         /// <summary>
-        /// The copmplex variables used by the behavior.
+        /// The complex variables used by the behavior.
         /// </summary>
         protected readonly DiodeVariables<Complex> ComplexVariables;
 
         /// <summary>
-        /// Gets the voltage.
+        /// Gets the complex voltage.
         /// </summary>
+        /// <value>
+        /// The complex voltage.
+        /// </value>
         [ParameterName("v_c"), ParameterName("vd_c"), ParameterInfo("Voltage across the internal diode")]
         public Complex ComplexVoltage => (ComplexVariables.PosPrime.Value - ComplexVariables.Negative.Value) / Parameters.SeriesMultiplier;
 
         /// <summary>
-        /// Gets the current.
+        /// Gets the complex current.
         /// </summary>
+        /// <value>
+        /// The complex current.
+        /// </value>
         [ParameterName("i_c"), ParameterName("id_c"), ParameterInfo("Current through the diode")]
         public Complex ComplexCurrent
         {
@@ -41,15 +50,18 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the power.
         /// </summary>
+        /// <value>
+        /// The complex power.
+        /// </value>
         [ParameterName("p_c"), ParameterName("pd_c"), ParameterInfo("Power")]
         public Complex ComplexPower => ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
             ComplexVariables = new DiodeVariables<Complex>(name, _complex, context);
@@ -57,17 +69,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 ComplexVariables.GetMatrixLocations(_complex.Map));
         }
 
-        /// <summary>
-        /// Calculate the small-signal parameters.
-        /// </summary>
         void IFrequencyBehavior.InitializeParameters()
         {
             CalculateCapacitance(LocalVoltage);
         }
 
-        /// <summary>
-        /// Load the Y-matrix and Rhs-vector.
-        /// </summary>
         void IFrequencyBehavior.Load()
         {
             var state = _complex;

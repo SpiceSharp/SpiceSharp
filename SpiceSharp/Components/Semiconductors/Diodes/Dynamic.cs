@@ -1,17 +1,20 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// Common logic for dynamic (time-dependent) parameters of a <see cref="Diode" />.
     /// </summary>
-    /// <seealso cref="BiasingBehavior" />
-    public abstract class DynamicParameterBehavior : BiasingBehavior
+    /// <seealso cref="Biasing" />
+    public abstract class Dynamic : Biasing
     {
         /// <summary>
         /// Diode capacitance
         /// </summary>
+        /// <value>
+        /// The capacitance.
+        /// </value>
         [ParameterName("cd"), ParameterInfo("Diode capacitance")]
         public double Capacitance => LocalCapacitance * Parameters.ParallelMultiplier / Parameters.SeriesMultiplier;
 
@@ -23,6 +26,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets or sets the capacitor charge.
         /// </summary>
+        /// <value>
+        /// The capacitor charge.
+        /// </value>
         [ParameterName("charge"), ParameterInfo("Diode capacitor charge")]
         public double CapCharge => LocalCapCharge * Parameters.ParallelMultiplier;
 
@@ -32,11 +38,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         protected double LocalCapCharge;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DynamicParameterBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Dynamic"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        protected DynamicParameterBehavior(string name, IComponentBindingContext context)
+        protected Dynamic(string name, IComponentBindingContext context)
             : base(name, context)
         {
         }
@@ -44,7 +50,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Calculates the capacitance based on the current voltage.
         /// </summary>
-        /// <param name="vd">The vd.</param>
+        /// <param name="vd">The diode voltage.</param>
         protected void CalculateCapacitance(double vd)
         {
             // charge storage elements

@@ -2,13 +2,17 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// Temperature behavior for a <see cref="Diode" />.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
-        IParameterized<BaseParameters>
+    /// <seealso cref="Behavior"/>
+    /// <seealso cref="ITemperatureBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Diodes.Parameters"/>
+    public class Temperature : Behavior, ITemperatureBehavior,
+        IParameterized<Parameters>
     {
         private readonly ITemperatureSimulationState _temperature;
 
@@ -26,84 +30,103 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <value>
         /// The model parameters.
         /// </value>
-        protected ModelBaseParameters ModelParameters { get; }
+        protected ModelParameters ModelParameters { get; }
 
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get;  }
+        /// <inheritdoc/>
+        public Parameters Parameters { get;  }
 
         /// <summary>
         /// Gets the model temperature behavior.
         /// </summary>
-        protected ModelTemperatureBehavior ModelTemperature { get; private set; }
+        protected ModelTemperature ModelTemperature { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified junction capacitance.
         /// </summary>
+        /// <value>
+        /// The temperature-modified junction capacitance.
+        /// </value>
         public double TempJunctionCap { get; protected set; }
 
         /// <summary>
         /// Gets the temperature-modified junction built-in potential.
         /// </summary>
+        /// <value>
+        /// The temperature-modified junction built-in potential.
+        /// </value>
         public double TempJunctionPot { get; protected set; }
 
         /// <summary>
         /// Gets the temperature-modified saturation current.
         /// </summary>
+        /// <value>
+        /// The temperature-modified saturation current.
+        /// </value>
         public double TempSaturationCurrent { get; protected set; }
 
         /// <summary>
         /// Gets the temperature-modified implementation-specific factor 1.
         /// </summary>
+        /// <value>
+        /// The temperature-modified implementation-specific factor 1.
+        /// </value>
         public double TempFactor1 { get; protected set; }
 
         /// <summary>
         /// Gets the temperature-modified depletion capacitance.
         /// </summary>
+        /// <value>
+        /// The temperature-modified depletion capacitance.
+        /// </value>
         public double TempDepletionCap { get; protected set; }
 
         /// <summary>
         /// Gets the temperature-modified critical voltage.
         /// </summary>
+        /// <value>
+        /// The temperature-modified critical voltage.
+        /// </value>
         public double TempVCritical { get; protected set; }
 
         /// <summary>
         /// Gets the temperature-modified breakdown voltage.
         /// </summary>
+        /// <value>
+        /// The temperature-modified breakdown voltage.
+        /// </value>
         public double TempBreakdownVoltage { get; protected set; }
 
         /// <summary>
         /// Gets the thermal voltage.
         /// </summary>
+        /// <value>
+        /// The thermal voltage.
+        /// </value>
         protected double Vt { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified and emission-modified thermal voltage.
         /// </summary>
+        /// <value>
+        /// The temperature-modified and emission-modified thermal voltage.
+        /// </value>
         protected double Vte { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TemperatureBehavior(string name, IComponentBindingContext context) : base(name) 
+        public Temperature(string name, IComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
-            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperature>();
             BiasingParameters = context.GetSimulationParameterSet<BiasingParameters>();
-            Parameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<Parameters>();
         }
 
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
         void ITemperatureBehavior.Temperature()
         {
             var xcbv = 0.0;

@@ -2,128 +2,180 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="BipolarJunctionTransistor"/>
+    /// Temperature behavior for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
-        IParameterized<BaseParameters>
+    /// <seealso cref="Behavior" />
+    /// <seealso cref="ITemperatureBehavior" />
+    /// <seealso cref="IParameterized{P}" />
+    /// <seealso cref="Bipolars.Parameters"/>
+    public class Temperature : Behavior,
+        ITemperatureBehavior,
+        IParameterized<Parameters>
     {
-        /// <summary>
-        /// Gets the base parameters.
-        /// </summary>
-        public BaseParameters Parameters { get; }
+        private readonly ITemperatureSimulationState _temperature;
+
+        /// <inheritdoc/>
+        public Parameters Parameters { get; }
 
         /// <summary>
         /// Gets the model parameters.
         /// </summary>
-        protected ModelBaseParameters ModelParameters { get; }
+        /// <value>
+        /// The model parameters.
+        /// </value>
+        protected ModelParameters ModelParameters { get; }
 
         /// <summary>
         /// Gets the model temperature behavior.
         /// </summary>
-        protected ModelTemperatureBehavior ModelTemperature { get; }
+        /// <value>
+        /// The model temperature behavior.
+        /// </value>
+        protected ModelTemperature ModelTemperature { get; }
 
         /// <summary>
         /// Gets the temperature-modified saturation current.
         /// </summary>
+        /// <value>
+        /// The temperature-modified saturation current.
+        /// </value>
         protected double TempSaturationCurrent { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified forward beta.
         /// </summary>
+        /// <value>
+        /// The temperature-modified forward beta.
+        /// </value>
         protected double TempBetaForward { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified reverse beta.
         /// </summary>
+        /// <value>
+        /// The temperature-modified reverse beta.
+        /// </value>
         protected double TempBetaReverse { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified base-emitter saturation current.
         /// </summary>
+        /// <value>
+        /// the temperature-modified base-emitter saturation current.
+        /// </value>
         protected double TempBeLeakageCurrent { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified base-collector saturation current.
         /// </summary>
+        /// <value>
+        /// The temperature-modified base-collector saturation current.
+        /// </value>
         protected double TempBcLeakageCurrent { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified base-emitter capacitance.
         /// </summary>
+        /// <value>
+        /// The temperature-modified base-emitter capacitance.
+        /// </value>
         protected double TempBeCap { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified base-emitter built-in potential.
         /// </summary>
+        /// <value>
+        /// The temperature-modified base-emitter built-in potential.
+        /// </value>
         protected double TempBePotential { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified base-collector capacitance.
         /// </summary>
+        /// <value>
+        /// The temperature-modified base-collector capacitance.
+        /// </value>
         protected double TempBcCap { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified base-collector built-in potential.
         /// </summary>
+        /// <value>
+        /// The temperature-modified base-collector built-in potential.
+        /// </value>
         protected double TempBcPotential { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified depletion capacitance.
         /// </summary>
+        /// <value>
+        /// The temperature-modified depletion capacitance.
+        /// </value>
         protected double TempDepletionCap { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified implementation-specific factor 1.
         /// </summary>
+        /// <value>
+        /// The temperature-modified implementation-specific factor 1.
+        /// </value>
         protected double TempFactor1 { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified implementation-specific factor 4.
         /// </summary>
+        /// <value>
+        /// The temperature-modified implementation-specific factor 4.
+        /// </value>
         protected double TempFactor4 { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified implementation-specific factor 5.
         /// </summary>
+        /// <value>
+        /// The temperature-modified implementation-specific factor 5.
+        /// </value>
         protected double TempFactor5 { get; private set; }
 
         /// <summary>
         /// Gets the temperature-modified critical voltage.
         /// </summary>
+        /// <value>
+        /// The temperature-modified critical voltage.
+        /// </value>
         protected double TempVCritical { get; private set; }
 
         /// <summary>
         /// Gets the thermal voltage.
         /// </summary>
+        /// <value>
+        /// The thermal voltage.
+        /// </value>
         protected double Vt { get; private set; }
 
         /// <summary>
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
-        private readonly ITemperatureSimulationState _temperature;
-
+        
         /// <summary>
-        /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TemperatureBehavior(string name, ComponentBindingContext context) : base(name) 
+        public Temperature(string name, ComponentBindingContext context) : base(name) 
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
-            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
-            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperatureBehavior>();
-            Parameters = context.GetParameterSet<BaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperature>();
+            Parameters = context.GetParameterSet<Parameters>();
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.Temperature.Given)

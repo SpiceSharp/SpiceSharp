@@ -1,79 +1,110 @@
 ﻿using System;
 using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
     /// Common dynamic (time-dependent) parameter logic for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Components.BipolarBehaviors.BiasingBehavior" />
-    public abstract class DynamicParameterBehavior : BiasingBehavior
+    /// <seealso cref="Biasing" />
+    public abstract class Dynamic : Biasing
     {
         /// <summary>
         /// Gets the internal base-emitter capacitance.
         /// </summary>
+        /// <value>
+        /// The internal base-emitter capacitance.
+        /// </value>
         [ParameterName("cpi"), ParameterInfo("Internal base to emitter capactance")]
         public double CapBe { get; private set; }
 
         /// <summary>
-        /// Gets the internal bsae-collector capacitance.
+        /// Gets the internal base-collector capacitance.
         /// </summary>
+        /// <value>
+        /// The internal base-collector capacitance.
+        /// </value>
         [ParameterName("cmu"), ParameterInfo("Internal base to collector capactiance")]
         public double CapBc { get; private set; }
 
         /// <summary>
         /// Gets the base-collector capacitance.
         /// </summary>
+        /// <value>
+        /// The base-collector capacitance.
+        /// </value>
         [ParameterName("cbx"), ParameterInfo("Base to collector capacitance")]
         public double CapBx { get; private set; }
 
         /// <summary>
         /// Gets the collector-substrate capacitance.
         /// </summary>
+        /// <value>
+        /// The collector-substrate capacitance.
+        /// </value>
         [ParameterName("ccs"), ParameterInfo("Collector to substrate capacitance")]
         public double CapCs { get; private set; }
 
         /// <summary>
         /// Gets or sets the base-emitter charge storage.
         /// </summary>
+        /// <value>
+        /// The base-emitter charge storage.
+        /// </value>
         [ParameterName("qbe"), ParameterInfo("Charge storage B-E junction")]
         public virtual double ChargeBe { get; protected set; }
 
         /// <summary>
         /// Gets or sets the base-collector charge storage.
         /// </summary>
+        /// <value>
+        /// The base-collector charge storage.
+        /// </value>
         [ParameterName("qbc"), ParameterInfo("Charge storage B-C junction")]
         public virtual double ChargeBc { get; protected set; }
 
         /// <summary>
         /// Gets or sets the base-X charge storage.
         /// </summary>
+        /// <value>
+        /// The base-X charge storage.
+        /// </value>
         [ParameterName("qbx"), ParameterInfo("Charge storage B-X junction")]
         public virtual double ChargeBx { get; protected set; }
 
         /// <summary>
         /// Gets or sets the collector-substract charge storage.
         /// </summary>
+        /// <value>
+        /// The collector-substrate charge storage.
+        /// </value>
         [ParameterName("qcs"), ParameterInfo("Charge storage C-S junction")]
         public virtual double ChargeCs { get; protected set; }
 
         /// <summary>
         /// Gets the small-signal equivalent collector-bulk conductance.
         /// </summary>
+        /// <value>
+        /// The small-signal equivalent collector-bulk conductance.
+        /// </value>
         protected double Geqcb { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DynamicParameterBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Dynamic"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        protected DynamicParameterBehavior(string name, ComponentBindingContext context) : base(name, context)
+        protected Dynamic(string name, ComponentBindingContext context) : base(name, context)
         {
         }
 
         /// <summary>
         /// Calculates the capacitances.
         /// </summary>
+        /// <param name="vbe">The base-emitter voltage.</param>
+        /// <param name="vbc">The base-collector voltage.</param>
+        /// <param name="vbx">The base-X voltage.</param>
+        /// <param name="vcs">The collector-substrate voltage.</param>
         protected void CalculateCapacitances(double vbe, double vbc, double vbx, double vcs)
         {
             var cbe = CurrentBe;

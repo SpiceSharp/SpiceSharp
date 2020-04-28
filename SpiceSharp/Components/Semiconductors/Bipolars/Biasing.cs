@@ -5,12 +5,17 @@ using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
     /// DC biasing behavior for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
+    /// <seealso cref="Temperature"/>
+    /// <seealso cref="IBiasingBehavior"/>
+    /// <seealso cref="IConvergenceBehavior"/>
+    public class Biasing : Temperature, 
+        IBiasingBehavior, 
+        IConvergenceBehavior
     {
         private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
         private readonly ElementSet<double> _elements;
@@ -23,59 +28,89 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets the base-emitter voltage.
         /// </summary>
+        /// <value>
+        /// The base-emitter voltage.
+        /// </value>
         [ParameterName("vbe"), ParameterInfo("B-E voltage")]
         public double VoltageBe { get; private set; }
 
         /// <summary>
         /// Gets the base-collector voltage.
         /// </summary>
+        /// <value>
+        /// The base-collector voltage.
+        /// </value>
         [ParameterName("vbc"), ParameterInfo("B-C voltage")]
         public double VoltageBc { get; private set; }
 
         /// <summary>
-        /// Gets or modifies the collector current.
+        /// Gets the collector current.
         /// </summary>
+        /// <value>
+        /// The collector current.
+        /// </value>
         [ParameterName("cc"), ParameterName("ic"), ParameterInfo("Current at collector node")]
         public double CollectorCurrent { get; protected set; }
 
         /// <summary>
-        /// Gets or modifies the base current.
+        /// Gets the base current.
         /// </summary>
+        /// <value>
+        /// The base current.
+        /// </value>
         [ParameterName("cb"), ParameterName("ib"), ParameterInfo("Current at base node")]
         public double BaseCurrent { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the small signal input conductance - pi.
+        /// Gets the small signal input conductance - pi.
         /// </summary>
+        /// <value>
+        /// The small signal input conductance - pi.
+        /// </value>
         [ParameterName("gpi"), ParameterInfo("Small signal input conductance - pi")]
         public double ConductancePi { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the small signal conductance mu.
+        /// Gets the small signal conductance mu.
         /// </summary>
+        /// <value>
+        /// The small signal conductance mu.
+        /// </value>
         [ParameterName("gmu"), ParameterInfo("Small signal conductance - mu")]
         public double ConductanceMu { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the transconductance.
+        /// Gets the transconductance.
         /// </summary>
+        /// <value>
+        /// The transconductance.
+        /// </value>
         [ParameterName("gm"), ParameterInfo("Small signal transconductance")]
         public double Transconductance { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the output conductance.
+        /// Gets the output conductance.
         /// </summary>
+        /// <value>
+        /// The output conductance.
+        /// </value>
         [ParameterName("go"), ParameterInfo("Small signal output conductance")]
         public double OutputConductance { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the conductance - X.
+        /// Gets the conductance - X.
         /// </summary>
+        /// <value>
+        /// The conductance - X.
+        /// </value>
         public double ConductanceX { get; protected set; }
 
         /// <summary>
-        /// Gets the dissipated power.
+        /// Gets the instantaneously dissipated power.
         /// </summary>
+        /// <value>
+        /// The instantaneously dissipated power.
+        /// </value>
         [ParameterName("p"), ParameterInfo("Power dissipation")]
         public virtual double Power
         {
@@ -113,28 +148,43 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected IVariable<double> EmitterPrime { get; private set; }
 
         /// <summary>
-        /// Gets or modifies the base-emitter current.
+        /// Gets the base-emitter current.
         /// </summary>
+        /// <value>
+        /// The base-emitter current.
+        /// </value>
         public virtual double CurrentBe { get; protected set; }
 
         /// <summary>
-        /// Gets or modifies the base-collector current.
+        /// Gets the base-collector current.
         /// </summary>
+        /// <value>
+        /// The base-collector current.
+        /// </value>
         public virtual double CurrentBc { get; protected set; }
 
         /// <summary>
-        /// Gets or modifies the base-emitter conductance.
+        /// Gets the base-emitter conductance.
         /// </summary>
+        /// <value>
+        /// The base-emitter conductance.
+        /// </value>
         public double CondBe { get; protected set; }
 
         /// <summary>
-        /// Gets or modifies the base-collector conductance.
+        /// Gets the base-collector conductance.
         /// </summary>
+        /// <value>
+        /// The base-collector conductance.
+        /// </value>
         public double CondBc { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the base charge.
+        /// Gets the base charge.
         /// </summary>
+        /// <value>
+        /// The base charge.
+        /// </value>
         public double BaseCharge { get; protected set; }
 
         /// <summary>
@@ -158,11 +208,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected IIterationSimulationState Iteration { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public Biasing(string name, ComponentBindingContext context) : base(name, context) 
         {
             context.Nodes.CheckNodes(4);
 
@@ -217,7 +267,7 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
+        /// Loads the Y-matrix and right hand side vector.
         /// </summary>
         protected virtual void Load()
         {
@@ -363,9 +413,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 ceqbc, -ceqbe - ceqbc, ceqbe);
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
-        /// </summary>
         void IBiasingBehavior.Load() => Load();
 
         /// <summary>
@@ -382,8 +429,8 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Initializes the voltages for the current iteration.
         /// </summary>
-        /// <param name="vbe">The VBE.</param>
-        /// <param name="vbc">The VBC.</param>
+        /// <param name="vbe">The base-emitter voltage.</param>
+        /// <param name="vbc">The base-collector voltage.</param>
         protected virtual void Initialize(out double vbe, out double vbc)
         {
             var state = BiasingState;
@@ -415,10 +462,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         // TODO: I believe this method of checking convergence can be improved. These calculations seem to be common for multiple behaviors.
-        /// <summary>
-        /// Check if the BJT is convergent
-        /// </summary>
-        /// <returns></returns>
         bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState;

@@ -1,13 +1,13 @@
 using SpiceSharp.Attributes;
-using System;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
-    /// Base parameters for a <see cref="BipolarJunctionTransistor"/>
+    /// Base parameters for a <see cref="BipolarJunctionTransistor"/>.
     /// </summary>
+    /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public class BaseParameters : ParameterSet
+    public class Parameters : ParameterSet
     {
         private double _area = 1;
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
@@ -15,6 +15,9 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
+        /// <value>
+        /// The temperature in degrees Celsius.
+        /// </value>
         [ParameterName("temp"), ParameterInfo("Instance temperature", Units = "\u00b0C")]
         [DerivedProperty(), GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
@@ -24,8 +27,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Gets the temperature parameter in degrees Kelvin.
+        /// Gets or sets the temperature parameter in degrees Kelvin.
         /// </summary>
+        /// <value>
+        /// The temperature in degrees Kelvin.
+        /// </value>
         [GreaterThan(0)]
         public GivenParameter<double> Temperature
         {
@@ -38,8 +44,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         }
 
         /// <summary>
-        /// Gets the area parameter.
+        /// Gets or sets the area of the transistor.
         /// </summary>
+        /// <value>
+        /// The area of the transistor.
+        /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         [GreaterThan(0)]
         public double Area
@@ -55,18 +64,27 @@ namespace SpiceSharp.Components.BipolarBehaviors
         /// <summary>
         /// Gets or sets whether or not the device is initially off (non-conducting).
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the device is initially off; otherwise, <c>false</c>.
+        /// </value>
         [ParameterName("off"), ParameterInfo("Device initially off")]
         public bool Off { get; set; }
 
         /// <summary>
         /// Gets the initial base-emitter voltage parameter.
         /// </summary>
+        /// <value>
+        /// The initial base-emitter voltage.
+        /// </value>
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage", Units = "V")]
         public double InitialVoltageBe { get; set; }
 
         /// <summary>
         /// Gets the initial collector-emitter voltage parameter.
         /// </summary>
+        /// <value>
+        /// The initial collector-emitter voltage.
+        /// </value>
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage", Units = "V")]
         public double InitialVoltageCe { get; set; }
 

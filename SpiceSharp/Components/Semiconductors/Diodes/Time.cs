@@ -2,37 +2,40 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// Transient behavior for a <see cref="Diode"/>
     /// </summary>
-    public class TimeBehavior : DynamicParameterBehavior, ITimeBehavior
+    /// <seealso cref="Dynamic"/>
+    /// <seealso cref="ITimeBehavior"/>
+    public class Time : Dynamic, 
+        ITimeBehavior
     {
         private readonly IDerivative _capCharge;
         private readonly ITimeSimulationState _time;
 
         /// <summary>
-        /// Gets the capacitor current.
+        /// Gets the diode capacitor current.
         /// </summary>
+        /// <value>
+        /// The diode capacitor current.
+        /// </value>
         [ParameterName("capcur"), ParameterInfo("Diode capacitor current")]
         public double CapCurrent => _capCharge.Derivative;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TimeBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TimeBehavior(string name, IComponentBindingContext context) : base(name, context)
+        public Time(string name, IComponentBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
             var method = context.GetState<IIntegrationMethod>();
             _capCharge = method.CreateDerivative();
         }
 
-        /// <summary>
-        /// Calculate the state values
-        /// </summary>
         void ITimeBehavior.InitializeStates()
         {
             double vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
@@ -40,9 +43,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
             _capCharge.Value = LocalCapCharge;
         }
 
-        /// <summary>
-        /// Transient behavior
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Load()
         {
             base.Load();

@@ -3,7 +3,7 @@ using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// Variables for a diode.
@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         {
             context.Nodes.CheckNodes(2);
 
-            var mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
+            var mbp = context.ModelBehaviors.GetParameterSet<ModelParameters>();
 
             Positive = factory.GetSharedVariable(context.Nodes[0]);
             Negative = factory.GetSharedVariable(context.Nodes[1]);

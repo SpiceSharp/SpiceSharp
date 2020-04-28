@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
     /// Event arguments for modifying charges and currents

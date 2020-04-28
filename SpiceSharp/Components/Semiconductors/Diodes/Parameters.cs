@@ -1,14 +1,14 @@
 using SpiceSharp.Attributes;
 using System;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// Base parameters for a <see cref="Diode" />
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class BaseParameters : ParameterSet
+    public class Parameters : ParameterSet
     {
         private double _seriesMultiplier = 1.0;
         private double _parallelMultiplier = 1.0;
@@ -16,8 +16,11 @@ namespace SpiceSharp.Components.DiodeBehaviors
         private double _area = 1;
 
         /// <summary>
-        /// Gets the area parameter.
+        /// Gets or sets the area.
         /// </summary>
+        /// <value>
+        /// The area of the diode.
+        /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         [GreaterThanOrEquals(0)]
         public double Area
@@ -33,18 +36,27 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets or sets whether or not the diode is initially off (non-conducting).
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the diode is initially off; otherwise, <c>false</c>.
+        /// </value>
         [ParameterName("off"), ParameterInfo("Initially off")]
         public bool Off { get; set; }
 
         /// <summary>
         /// Gets or sets the initial condition.
         /// </summary>
+        /// <value>
+        /// The initial voltage.
+        /// </value>
         [ParameterName("ic"), ParameterInfo("Initial device voltage", Units = "V")]
         public double InitCond { get; set; }
 
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
+        /// <value>
+        /// The temperature in degrees Celsius.
+        /// </value>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature", Units = "\u00b0C")]
         [GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
@@ -56,6 +68,9 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// <summary>
         /// Gets the temperature parameter in degrees Kelvin.
         /// </summary>
+        /// <value>
+        /// The temperature in degrees Kelvin.
+        /// </value>
         [GreaterThan(0)]
         public GivenParameter<double> Temperature
         {
@@ -68,10 +83,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Gets or sets the parallel multiplier.
+        /// Gets or sets the number of diodes in parallel.
         /// </summary>
         /// <value>
-        /// The parallel multiplier.
+        /// The number of diodes in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
         [GreaterThanOrEquals(0)]
@@ -86,10 +101,10 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Gets or sets the series multiplier.
+        /// Gets or sets the number of diodes in series.
         /// </summary>
         /// <value>
-        /// The series multiplier.
+        /// The number of diodes in series.
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
         [GreaterThan(0)]

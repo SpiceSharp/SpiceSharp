@@ -4,83 +4,78 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// Temperature behavior for a <see cref="DiodeModel"/>
     /// </summary>
-    public class ModelTemperatureBehavior : Behavior, ITemperatureBehavior,
-        IParameterized<ModelBaseParameters>,
-        IParameterized<ModelNoiseParameters>
+    /// <seealso cref="Behavior"/>
+    /// <seealso cref="ITemperatureBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="ModelParameters"/>
+    public class ModelTemperature : Behavior, 
+        ITemperatureBehavior,
+        IParameterized<ModelParameters>
     {
-        /// <summary>
-        /// Gets the noise parameters.
-        /// </summary>
-        /// <value>
-        /// The noise parameters.
-        /// </value>
-        public ModelNoiseParameters NoiseParameters { get; }
+        /// <inheritdoc/>
+        public ModelParameters Parameters { get; }
 
         /// <summary>
-        /// Gets the parameter set.
+        /// The ohmic conductance.
         /// </summary>
         /// <value>
-        /// The parameter set.
+        /// The ohmic conductance.
         /// </value>
-        ModelNoiseParameters IParameterized<ModelNoiseParameters>.Parameters => NoiseParameters;
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public ModelBaseParameters Parameters { get; }
-
-        /// <summary>
-        /// Conductance
-        /// </summary>
         [ParameterName("cond"), ParameterInfo("Ohmic conductance")]
         public double Conductance { get; protected set; }
 
         /// <summary>
         /// Gets the nominal thermal voltage.
         /// </summary>
+        /// <value>
+        /// The nominal thermal voltage.
+        /// </value>
         public double VtNominal { get; protected set; }
 
         /// <summary>
         /// Gets ???
         /// </summary>
+        /// <value>
+        /// The XFC.
+        /// </value>
         public double Xfc { get; protected set; }
 
         /// <summary>
         /// Gets the implementation-specific factor 2.
         /// </summary>
+        /// <value>
+        /// The f2.
+        /// </value>
         public double F2 { get; protected set; }
 
         /// <summary>
         /// Gets the implementation-specific factor 3.
         /// </summary>
+        /// <value>
+        /// The f3.
+        /// </value>
         public double F3 { get; protected set; }
 
         private readonly ITemperatureSimulationState _temperature;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelTemperatureBehavior"/> class.
+        /// Initializes a new instance of the <see cref="ModelTemperature"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperatureBehavior(string name, IBindingContext context) : base(name) 
+        public ModelTemperature(string name, IBindingContext context) 
+            : base(name) 
         {
             context.ThrowIfNull(nameof(context));
-            NoiseParameters = context.GetParameterSet<ModelNoiseParameters>();
             _temperature = context.GetState<ITemperatureSimulationState>();
-            Parameters = context.GetParameterSet<ModelBaseParameters>();
+            Parameters = context.GetParameterSet<ModelParameters>();
         }
 
-        /// <summary>
-        /// Do temperature-dependent calculations
-        /// </summary>
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.NominalTemperature.Given)

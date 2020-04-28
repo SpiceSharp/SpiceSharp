@@ -3,12 +3,15 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Components.BipolarBehaviors
+namespace SpiceSharp.Components.Bipolars
 {
     /// <summary>
-    /// AC behavior for <see cref="BipolarJunctionTransistor"/>
+    /// Small-signal behavior for <see cref="BipolarJunctionTransistor"/>.
     /// </summary>
-    public class FrequencyBehavior : DynamicParameterBehavior, IFrequencyBehavior
+    /// <seealso cref="Dynamic"/>
+    /// <seealso cref="IFrequencyBehavior"/>
+    public class Frequency : Dynamic, 
+        IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
@@ -39,11 +42,11 @@ namespace SpiceSharp.Components.BipolarBehaviors
         protected new IVariable<Complex> EmitterPrime { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, ComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
 
@@ -96,9 +99,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
                 new MatrixLocation(_collectorPrimeNode, _baseNode));
         }
 
-        /// <summary>
-        /// Initialize AC parameters
-        /// </summary>
         void IFrequencyBehavior.InitializeParameters()
         {
             var vbe = VoltageBe;
@@ -108,9 +108,6 @@ namespace SpiceSharp.Components.BipolarBehaviors
             CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 
-        /// <summary>
-        /// Execute behavior for AC analysis
-        /// </summary>
         void IFrequencyBehavior.Load()
         {
             var cstate = _complex;

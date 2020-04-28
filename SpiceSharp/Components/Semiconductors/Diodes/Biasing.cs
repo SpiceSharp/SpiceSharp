@@ -5,12 +5,17 @@ using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Components.DiodeBehaviors
+namespace SpiceSharp.Components.Diodes
 {
     /// <summary>
     /// DC biasing behavior for a <see cref="Diode" />.
     /// </summary>
-    public class BiasingBehavior : TemperatureBehavior, IBiasingBehavior, IConvergenceBehavior
+    /// <seealso cref="Temperature"/>
+    /// <seealso cref="IBiasingBehavior"/>
+    /// <seealso cref="IConvergenceBehavior"/>
+    public class Biasing : Temperature,
+        IBiasingBehavior, 
+        IConvergenceBehavior
     {
         private readonly IIterationSimulationState _iteration;
 
@@ -18,60 +23,78 @@ namespace SpiceSharp.Components.DiodeBehaviors
         /// The variables used by the behavior.
         /// </summary>
         protected readonly DiodeVariables<double> Variables;
-        
-        /// <summary>
-        /// Gets the matrix elements.
-        /// </summary>
-        /// <value>
-        /// The matrix elements.
-        /// </value>
-        protected ElementSet<double> Elements { get; private set; }
 
         /// <summary>
-        /// Gets the voltage.
+        /// The matrix elements.
         /// </summary>
+        protected readonly ElementSet<double> Elements;
+
+        /// <summary>
+        /// Gets the instantaneous voltage.
+        /// </summary>
+        /// <value>
+        /// The instantaneous voltage.
+        /// </value>
         [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
         public double Voltage => LocalVoltage * Parameters.SeriesMultiplier;
 
         /// <summary>
-        /// Gets the current.
+        /// Gets the instantaneous current.
         /// </summary>
+        /// <value>
+        /// The instantaneous current.
+        /// </value>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
         public double Current => LocalCurrent * Parameters.ParallelMultiplier;
 
         /// <summary>
         /// Gets the small-signal conductance.
         /// </summary>
+        /// <value>
+        /// The small-signal conductance.
+        /// </value>
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
         public double Conductance => LocalConductance * Parameters.ParallelMultiplier;
 
         /// <summary>
         /// Gets the power dissipated.
         /// </summary>
+        /// <value>
+        /// The power dissipated.
+        /// </value>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public double Power => Current * Voltage;
 
         /// <summary>
         /// The voltage across a single diode (not including parallel or series multipliers).
         /// </summary>
+        /// <value>
+        /// The local voltage.
+        /// </value>
         protected double LocalVoltage;
 
         /// <summary>
         /// The current through a single diode (not including parallel or series multipliers).
         /// </summary>
+        /// <value>
+        /// The local current.
+        /// </value>
         protected double LocalCurrent;
 
         /// <summary>
         /// The conductance through a single diode (not including paralle or series multipliers).
         /// </summary>
+        /// <value>
+        /// The local conductance.
+        /// </value>
         protected double LocalConductance;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, IComponentBindingContext context) : base(name, context) 
+        public Biasing(string name, IComponentBindingContext context) : base(name, context) 
         {
             context.Nodes.CheckNodes(2);
 
@@ -85,7 +108,7 @@ namespace SpiceSharp.Components.DiodeBehaviors
         }
 
         /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
+        /// Loads the Y-matrix and right hand side vector.
         /// </summary>
         protected virtual void Load()
         {
@@ -150,9 +173,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
                 cdeq, -cdeq);
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
-        /// </summary>
         void IBiasingBehavior.Load() => Load();
 
         /// <summary>
@@ -188,10 +208,6 @@ namespace SpiceSharp.Components.DiodeBehaviors
             }
         }
 
-        /// <summary>
-        /// Check convergence for the diode
-        /// </summary>
-        /// <returns></returns>
         bool IConvergenceBehavior.IsConvergent()
         {
             var vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;

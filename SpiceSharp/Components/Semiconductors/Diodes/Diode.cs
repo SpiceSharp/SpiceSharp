@@ -1,38 +1,38 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.DiodeBehaviors;
+using SpiceSharp.Components.Diodes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A diode
+    /// A diode.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Diodes.Parameters"/>
     [Pin(0, "D+"), Pin(1, "D-")]
     public class Diode : Component,
-        IParameterized<BaseParameters>
+        IParameterized<Parameters>
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
-        /// Constants
+        /// The pin count for diodes.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int DiodePinCount = 2;
+		public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Diode"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Diode(string name) 
-            : base(name, DiodePinCount)
+            : base(name, PinCount)
         {
         }
 
@@ -43,6 +43,7 @@ namespace SpiceSharp.Components
         /// <param name="anode">The anode.</param>
         /// <param name="cathode">The cathode.</param>
         /// <param name="model">The model.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Diode(string name, string anode, string cathode, string model)
             : this(name)
         {
@@ -50,23 +51,20 @@ namespace SpiceSharp.Components
             Model = model;
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
-            if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsKey(typeof(ModelTemperatureBehavior)))
+            if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsKey(typeof(ModelTemperature)))
                 throw new NoModelException(Name, typeof(DiodeModel));
             behaviors
-                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
+                .AddIfNo<INoiseBehavior>(simulation, () => new Diodes.Noise(Name, context))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }
