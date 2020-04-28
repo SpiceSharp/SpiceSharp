@@ -5,7 +5,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
-using SpiceSharp.Components.ResistorBehaviors;
+using SpiceSharp.Components.Resistors;
 using SpiceSharp.Behaviors;
 using NSubstitute;
 
@@ -25,7 +25,7 @@ namespace SpiceSharpTest.Models
             {
                 var solver = op.GetState<IBiasingSimulationState>().Solver;
                 var elt = solver.FindElement(new SpiceSharp.Algebra.MatrixLocation(1, 1));
-                Assert.AreEqual(1.0 / SpiceSharp.Components.ResistorBehaviors.Parameters.MinimumResistance, elt.Value, 1e-20);
+                Assert.AreEqual(1.0 / SpiceSharp.Components.Resistors.Parameters.MinimumResistance, elt.Value, 1e-20);
             };
             op.Run(ckt);
         }

@@ -1,14 +1,13 @@
 using SpiceSharp.Attributes;
-using System;
 
-namespace SpiceSharp.Components.CapacitorBehaviors
+namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Parameters for the capacitor model
+    /// Parameters for a <see cref="CapacitorModel"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class ModelBaseParameters : ParameterSet
+    public class CapacitorModelParameters : ParameterSet
     {
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
         private double _defaultWidth = 10e-6;

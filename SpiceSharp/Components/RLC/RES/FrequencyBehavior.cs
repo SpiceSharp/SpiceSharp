@@ -5,12 +5,15 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
 
-namespace SpiceSharp.Components.ResistorBehaviors
+namespace SpiceSharp.Components.Resistors
 {
     /// <summary>
-    /// AC behavior for <see cref="Resistor"/>
+    /// Small-signal behavior for <see cref="Resistor"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    /// <seealso cref="BiasingBehavior"/>
+    /// <seealso cref="IFrequencyBehavior"/>
+    public class FrequencyBehavior : BiasingBehavior,
+        IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;
@@ -18,18 +21,27 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets the (complex) voltage across the resistor.
         /// </summary>
+        /// <value>
+        /// The complex voltage.
+        /// </value>
         [ParameterName("v_c"), ParameterInfo("Complex voltage across the capacitor.")]
         public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
         /// <summary>
         /// Gets the (complex) current through the resistor.
         /// </summary>
+        /// <value>
+        /// The complex current.
+        /// </value>
         [ParameterName("i_c"), ParameterInfo("Complex current through the capacitor.")]
         public Complex ComplexCurrent => ComplexVoltage * Conductance;
 
         /// <summary>
         /// Gets the (complex) power dissipated by the resistor.
         /// </summary>
+        /// <value>
+        /// The complex power.
+        /// </value>
         [ParameterName("p_c"), ParameterInfo("Power")]
         public Complex ComplexPower
         {
@@ -45,23 +57,17 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context) 
+        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context) 
         {
             var state = context.GetState<IComplexSimulationState>();
             _variables = new OnePort<Complex>(state, context);
             _elements = new ElementSet<Complex>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
-        /// <summary>
-        /// Initialize the small-signal parameters.
-        /// </summary>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
-        /// <summary>
-        /// Load the Y-matrix and Rhs-vector.
-        /// </summary>
         void IFrequencyBehavior.Load()
         {
             _elements.Add(Conductance, -Conductance, -Conductance, Conductance);

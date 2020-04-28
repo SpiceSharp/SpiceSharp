@@ -3,28 +3,31 @@ using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.ResistorBehaviors
+namespace SpiceSharp.Components.Resistors
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Resistor"/>
+    /// Temperature behavior for a <see cref="Resistor"/>.
     /// </summary>
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior,
+    /// <seealso cref="Behavior"/>
+    /// <seealso cref="ITemperatureBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Parameters"/>
+    public class TemperatureBehavior : Behavior,
+        ITemperatureBehavior,
         IParameterized<Parameters>
     {
         private readonly ITemperatureSimulationState _temperature;
-        private readonly ModelBaseParameters _mbp = null;
+        private readonly ResistorModelParameters _mbp = null;
 
-        /// <summary>
-        /// Gets the base parameters.
-        /// </summary>
-        /// <value>
-        /// The base parameters.
-        /// </value>
+        /// <inheritdoc/>
         public Parameters Parameters { get; }
 
         /// <summary>
-        /// Gets the default conductance for this model
+        /// Gets the conductance for this resistor.
         /// </summary>
+        /// <value>
+        /// The conductance.
+        /// </value>
         [ParameterName("g"), ParameterInfo("The conductance of the resistor.")]
         public double Conductance { get; private set; }
 
@@ -33,18 +36,15 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public TemperatureBehavior(string name, IComponentBindingContext context) : base(name) 
+        public TemperatureBehavior(string name, ComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
             Parameters = context.GetParameterSet<Parameters>();
             if (context.ModelBehaviors != null)
-                _mbp = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
+                _mbp = context.ModelBehaviors.GetParameterSet<ResistorModelParameters>();
         }
 
-        /// <summary>
-        /// Execute behavior
-        /// </summary>
         void ITemperatureBehavior.Temperature()
         {
             double factor;

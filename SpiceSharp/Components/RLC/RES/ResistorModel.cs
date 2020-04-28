@@ -1,26 +1,26 @@
-﻿using SpiceSharp.Components.ResistorBehaviors;
+﻿using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A model for semiconductor <see cref="Resistor"/>
     /// </summary>
-    public class ResistorModel : Model,
-        IParameterized<ModelBaseParameters>
+    /// <seealso cref="Model"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="ResistorModelParameters"/>
+    public partial class ResistorModel : Model,
+        IParameterized<ResistorModelParameters>
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public ModelBaseParameters Parameters { get; } = new ModelBaseParameters();
+        /// <inheritdoc/>
+        public ResistorModelParameters Parameters { get; } = new ResistorModelParameters();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResistorModel"/> class.
         /// </summary>
-        /// <param name="name"></param>
-        public ResistorModel(string name) : base(name)
+        /// <param name="name">The name of the model.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public ResistorModel(string name) 
+            : base(name)
         {
         }
     }

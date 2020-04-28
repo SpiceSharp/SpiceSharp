@@ -1,14 +1,13 @@
 using SpiceSharp.Attributes;
-using System;
 
-namespace SpiceSharp.Components.InductorBehaviors
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// Base parameters for a <see cref="Inductor" />
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class BaseParameters : ParameterSet
+    public class InductorParameters : ParameterSet
     {
         private double _seriesMultiplier = 1.0;
         private double _parallelMultiplier = 1.0;
@@ -17,6 +16,9 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the inductance parameter.
         /// </summary>
+        /// <value>
+        /// The inductance.
+        /// </value>
         [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units = "H", IsPrincipal = true)]
         [GreaterThanOrEquals(0)]
         public double Inductance
@@ -32,12 +34,18 @@ namespace SpiceSharp.Components.InductorBehaviors
         /// <summary>
         /// Gets the initial current parameter.
         /// </summary>
+        /// <value>
+        /// The initial current.
+        /// </value>
         [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Units = "V", Interesting = false)]
         public GivenParameter<double> InitialCondition { get; set; }
 
         /// <summary>
         /// Gets or sets the parallel multiplier.
         /// </summary>
+        /// <value>
+        /// The parallel multiplier.
+        /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
         [GreaterThan(0)]
         public double ParallelMultiplier
@@ -66,22 +74,6 @@ namespace SpiceSharp.Components.InductorBehaviors
                 Utility.GreaterThanOrEquals(value, nameof(SeriesMultiplier), 0);
                 _seriesMultiplier = value;
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
-        /// </summary>
-        public BaseParameters()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseParameters"/> class.
-        /// </summary>
-        /// <param name="inductance">Inductor</param>
-        public BaseParameters(double inductance)
-        {
-            Inductance = inductance;
         }
     }
 }

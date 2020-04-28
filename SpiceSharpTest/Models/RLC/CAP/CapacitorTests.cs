@@ -6,11 +6,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Biasing;
 using SpiceSharp.Simulations.IntegrationMethods;
-using SpiceSharp.Components.CapacitorBehaviors;
-using SpiceSharp.Behaviors;
-using System.Collections.Generic;
-using NSubstitute;
-using SpiceSharp.Validation;
 
 namespace SpiceSharpTest.Models
 {

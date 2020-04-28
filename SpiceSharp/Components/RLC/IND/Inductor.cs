@@ -1,6 +1,6 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.InductorBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
@@ -8,11 +8,15 @@ using System.Linq;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// An inductor
+    /// An inductor.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="InductorParameters"/>
+    /// <seealso cref="IRuleSubject"/>
     [Pin(0, "L+"), Pin(1, "L-"), VoltageDriver(0, 1)]
-    public class Inductor : Component,
-        IParameterized<BaseParameters>,
+    public partial class Inductor : Component,
+        IParameterized<InductorParameters>,
         IRuleSubject
     {
         /// <summary>
@@ -21,7 +25,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The parameter set.
         /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        public InductorParameters Parameters { get; } = new InductorParameters();
 
         /// <summary>
         /// Constants
@@ -33,6 +37,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="Inductor"/> class.
         /// </summary>
         /// <param name="name">The name of the inductor</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Inductor(string name)
             : base(name, InductorPinCount)
         {
@@ -45,6 +50,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="inductance">The inductance</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Inductor(string name, string pos, string neg, double inductance) 
             : this(name)
         {
@@ -52,10 +58,7 @@ namespace SpiceSharp.Components
             Connect(pos, neg);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -69,10 +72,6 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

@@ -1,11 +1,11 @@
 using SpiceSharp.Attributes;
-using System;
 
-namespace SpiceSharp.Components.ResistorBehaviors
+namespace SpiceSharp.Components.Resistors
 {
     /// <summary>
     /// Parameters for a <see cref="Resistor" />.
     /// </summary>
+    /// <seealso cref="ParameterSet"/>
 	[GeneratedParameters]
     public class Parameters : ParameterSet
     {
@@ -19,11 +19,14 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// The minimum resistance for any resistor.
         /// </summary>
-        public const double MinimumResistance = 1e-9;
+        public const double MinimumResistance = 1e-12;
 
         /// <summary>
-        /// Gets the temperature parameter in degrees Kelvin.
+        /// Gets or sets the temperature parameter in degrees Kelvin.
         /// </summary>
+        /// <value>
+        /// The temperature of the resistor.
+        /// </value>
         [GreaterThanOrEquals(0)]
         public GivenParameter<double> Temperature
         {
@@ -36,9 +39,15 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// The resistance of the resistor. If the resistance is limited to <see cref="MinimumResistance"/> to avoid
-        /// numerical instability issues. If a 0 Ohm resistance is wanted, consider using an ideal voltage source instead.
+        /// Gets or sets the resistance of the resistor.
         /// </summary>
+        /// <value>
+        /// The resistance.
+        /// </value>
+        /// <remarks>
+        /// If the resistance is limited to <see cref="MinimumResistance" /> to avoid numerical instability issues. 
+        /// If a 0 Ohm resistance is wanted, consider using an ideal voltage source instead.
+        /// </remarks>
         [ParameterName("resistance"), ParameterName("r"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
         [GreaterThanOrEquals(0), LowerLimit(MinimumResistance)]
         public GivenParameter<double> Resistance
@@ -53,8 +62,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Instance operating temperature
+        /// Gets or sets the resistor operating temperature in degrees Celsius.
         /// </summary>
+        /// <value>
+        /// The resistor operating temperature in degrees Celsius.
+        /// </value>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
         [GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
@@ -64,8 +76,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Width
+        /// Gets or sets the width of the resistor.
         /// </summary>
+        /// <value>
+        /// The width of the resistor.
+        /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
         [GreaterThan(0)]
         public GivenParameter<double> Width
@@ -79,8 +94,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Length
+        /// Gets or sets the length of the resistor.
         /// </summary>
+        /// <value>
+        /// The length of the resistor.
+        /// </value>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
         [GreaterThanOrEquals(0)]
         public GivenParameter<double> Length
@@ -94,8 +112,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Parallel multiplier
+        /// Gets or sets the number of resistors in parallel.
         /// </summary>
+        /// <value>
+        /// The number of resistors in parallel.
+        /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
         [GreaterThanOrEquals(0)]
         public double ParallelMultiplier
@@ -109,8 +130,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Series multiplier
+        /// Gets or sets the number of resistors in series.
         /// </summary>
+        /// <value>
+        /// The number of resistors in series.
+        /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
         [GreaterThan(0)]
         public double SeriesMultiplier

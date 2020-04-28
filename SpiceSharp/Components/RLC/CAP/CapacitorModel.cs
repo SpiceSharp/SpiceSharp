@@ -1,43 +1,32 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A model for a semiconductor <see cref="Capacitor"/>
     /// </summary>
-    public class CapacitorModel : Model,
-        IParameterized<ModelBaseParameters>
+    /// <seealso cref="Model"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="CapacitorModelParameters"/>
+    public partial class CapacitorModel : Model,
+        IParameterized<CapacitorModelParameters>
     {
-        /// <summary>
-        /// Gets the model parameters.
-        /// </summary>
-        /// <value>
-        /// The model parameters.
-        /// </value>
-        public ModelBaseParameters Parameters { get; } = new ModelBaseParameters();
-
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        ModelBaseParameters IParameterized<ModelBaseParameters>.Parameters => Parameters;
+        /// <inheritdoc/>
+        public CapacitorModelParameters Parameters { get; } = new CapacitorModelParameters();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CapacitorModel"/> class.
         /// </summary>
-        /// <param name="name"></param>
-        public CapacitorModel(string name) : base(name)
+        /// <param name="name">The name of the capacitor model.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public CapacitorModel(string name) 
+            : base(name)
         {
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var container = new BehaviorContainer(Name)

@@ -1,6 +1,6 @@
-﻿using SpiceSharp.Attributes;
+﻿using System;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CapacitorBehaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
@@ -10,41 +10,42 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A capacitor
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="CapacitorParameters"/>
+    /// <seealso cref="IRuleSubject"/>
     [Pin(0, "C+"), Pin(1, "C-"), Connected]
-    public class Capacitor : Component,
-        IParameterized<BaseParameters>,
+    public partial class Capacitor : Component,
+        IParameterized<CapacitorParameters>,
         IRuleSubject
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public CapacitorParameters Parameters { get; } = new CapacitorParameters();
 
         /// <summary>
-        /// Constants
+        /// Gets the pin count.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int CapacitorPinCount = 2;
+		public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Capacitor"/> class.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The name of the capacitor.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Capacitor(string name) 
-            : base(name, CapacitorPinCount)
+            : base(name, PinCount)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Capacitor"/> class.
         /// </summary>
-        /// <param name="name">The name of the capacitor</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="cap">The capacitance</param>
+        /// <param name="name">The name of the capacitor.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="cap">The capacitance value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Capacitor(string name, string pos, string neg, double cap) 
             : this(name)
         {
@@ -52,10 +53,7 @@ namespace SpiceSharp.Components
             Connect(pos, neg);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -68,10 +66,6 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

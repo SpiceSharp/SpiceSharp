@@ -1,13 +1,13 @@
 using SpiceSharp.Attributes;
-using System;
 
-namespace SpiceSharp.Components.ResistorBehaviors
+namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Parameters for a <see cref="ResistorModel"/>
+    /// Parameters for a <see cref="ResistorModel"/>.
     /// </summary>
+    /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public class ModelBaseParameters : ParameterSet
+    public class ResistorModelParameters : ParameterSet
     {
         private double _defaultWidth = 10e-6;
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
@@ -15,6 +15,9 @@ namespace SpiceSharp.Components.ResistorBehaviors
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
+        /// <value>
+        /// The nominal temperature in degrees Celsius.
+        /// </value>
         [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
         [GreaterThan(Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
@@ -24,8 +27,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the nominal temperature parameter in degrees Kelvin.
+        /// Gets or sets the nominal temperature parameter in degrees Kelvin.
         /// </summary>
+        /// <value>
+        /// The nominal temperature in degrees Kelvin.
+        /// </value>
         [GreaterThan(0)]
         public GivenParameter<double> NominalTemperature
         {
@@ -38,32 +44,47 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the first-order temperature coefficient parameter.
+        /// Gets or sets the first-order temperature coefficient parameter.
         /// </summary>
+        /// <value>
+        /// The temperature coefficient 1.
+        /// </value>
         [ParameterName("tc1"), ParameterInfo("First order temperature coefficient", Units = "\u03a9/K")]
         public double TemperatureCoefficient1 { get; set; }
 
         /// <summary>
-        /// Gets the second-order temperature coefficient parameter.
+        /// Gets or sets the second-order temperature coefficient parameter.
         /// </summary>
+        /// <value>
+        /// The temperature coefficient 2.
+        /// </value>
         [ParameterName("tc2"), ParameterInfo("Second order temperature coefficient", Units = "\u03a9/K^2")]
         public double TemperatureCoefficient2 { get; set; }
 
         /// <summary>
-        /// Gets the exponential temperature coefficient parameter.
+        /// Gets or sets the exponential temperature coefficient parameter.
         /// </summary>
+        /// <value>
+        /// The exponential temperature coefficient parameter.
+        /// </value>
         [ParameterName("tce"), ParameterInfo("Exponential temperature coefficient")]
         public GivenParameter<double> ExponentialCoefficient { get; set; }
 
         /// <summary>
-        /// Gets the sheet resistance parameter.
+        /// Gets or sets the sheet resistance.
         /// </summary>
-        [ParameterName("rsh"), ParameterInfo("Sheet resistance")]
+        /// <value>
+        /// The sheet resistance.
+        /// </value>
+        [ParameterName("rsh"), ParameterInfo("Sheet resistance", Units = "\u03a9/\u2b1c")]
         public double SheetResistance { get; set; }
 
         /// <summary>
-        /// Gets the default width parameter.
+        /// Gets or sets the default width.
         /// </summary>
+        /// <value>
+        /// The default width.
+        /// </value>
         [ParameterName("defw"), ParameterInfo("Default device width", Units = "m")]
         [GreaterThan(0)]
         public double DefaultWidth
@@ -77,8 +98,11 @@ namespace SpiceSharp.Components.ResistorBehaviors
         }
 
         /// <summary>
-        /// Gets the narrowing coefficient parameter.
+        /// Gets or sets the narrowing coefficient.
         /// </summary>
+        /// <value>
+        /// The narrowing coefficient.
+        /// </value>
         [ParameterName("narrow"), ParameterInfo("Narrowing of resistor", Units = "m")]
         public double Narrow { get; set; }
     }

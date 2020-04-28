@@ -1,15 +1,17 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.ResistorBehaviors;
+using SpiceSharp.Components.Resistors;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A resistor
+    /// A resistor.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
     [Pin(0, "R+"), Pin(1, "R-")]
-    public class Resistor : Component,
+    public partial class Resistor : Component,
         IParameterized<Parameters>
     {
         /// <summary>

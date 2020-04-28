@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.InductorBehaviors
+namespace SpiceSharp.Components
 {
     /// <summary>
     /// An interface that describes a behavior that defines an inductance.

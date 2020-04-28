@@ -6,10 +6,6 @@ using SpiceSharp.Simulations;
 using NUnit.Framework;
 using System.Linq;
 using SpiceSharp.Validation;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Components.InductorBehaviors;
-using System.Collections.Generic;
-using NSubstitute;
 
 namespace SpiceSharpTest.Models
 {
