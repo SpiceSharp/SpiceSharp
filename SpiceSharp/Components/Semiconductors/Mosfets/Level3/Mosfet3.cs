@@ -1,49 +1,44 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.MosfetBehaviors.Level3;
+using SpiceSharp.Components.Mosfets;
+using SpiceSharp.Components.Mosfets.Level3;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A MOS3 Mosfet
-    /// Level 3, a semi-empirical model(see reference for level 3).
+    /// A Level 3, semi-empirical model (see reference for level 3).
     /// </summary>
-    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
+    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk")]
+    [Connected(0, 2), Connected(0, 3)]
     public class Mosfet3 : Component,
-        IParameterized<BaseParameters>,
+        IParameterized<Parameters>,
         IRuleSubject
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
-        /// Constants
+        /// The pin count for mosfets.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int Mosfet3PinCount = 4;
+		public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet3"/> class.
         /// </summary>
-        /// <param name="name">The name of the device</param>
+        /// <param name="name">The name of the device.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet3(string name) 
-            : base(name, Mosfet3PinCount)
+            : base(name, PinCount)
         {
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -52,18 +47,14 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(Mosfet3Model));
             behaviors
-                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
+                .AddIfNo<INoiseBehavior>(simulation, () => new Mosfets.Level3.Noise(Name, context))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

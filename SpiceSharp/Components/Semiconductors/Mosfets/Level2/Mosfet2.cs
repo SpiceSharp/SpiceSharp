@@ -1,42 +1,44 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.MosfetBehaviors.Level2;
+using SpiceSharp.Components.Mosfets;
+using SpiceSharp.Components.Mosfets.Level2;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A MOS2 Mosfet.
-    /// Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.
+    /// A Level 2 Mosfet using models by A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.
     /// </summary>
-    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Mosfets.Parameters"/>
+    /// <seealso cref="IRuleSubject"/>
+    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk")]
+    [Connected(0, 2), Connected(0, 3)]
     public class Mosfet2 : Component,
-        IParameterized<BaseParameters>,
+        IParameterized<Parameters>,
         IRuleSubject
     {
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
+
         /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
-        
-        /// <summary>
-        /// Constants
+        /// The pin count for mofsets.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int Mosfet2PinCount = 4;
+        public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet2"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet2(string name) 
-            : base(name, Mosfet2PinCount)
+            : base(name, PinCount)
         {
         }
 
@@ -49,6 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="s">The source node.</param>
         /// <param name="b">The bulk node.</param>
         /// <param name="model">The mosfet model.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet2(string name, string d, string g, string s, string b, string model)
             : this(name)
         {
@@ -56,10 +59,7 @@ namespace SpiceSharp.Components
             Model = model;
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -68,18 +68,14 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(Mosfet2Model));
             behaviors
-                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
+                .AddIfNo<INoiseBehavior>(simulation, () => new Mosfets.Level2.Noise(Name, context))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

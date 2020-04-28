@@ -1,22 +1,22 @@
 ﻿using System;
 
-namespace SpiceSharp.Components.MosfetBehaviors
+namespace SpiceSharp.Components.Mosfets
 {
     /// <summary>
-    /// A class with static methods for Mosfet transistors
+    /// A class with static methods for Mosfet transistors.
     /// </summary>
     public static class Transistor
     {
         /// <summary>
-        /// Limiting function FET
+        /// Limiting function for a FET.
         /// </summary>
         /// <remarks>
         /// Update taken from ngSpice, which was fixed by Alan Gillespie's code.
         /// </remarks>
-        /// <param name="newVoltage">New voltage</param>
-        /// <param name="oldVoltage">Olt voltage</param>
-        /// <param name="threshold">Threshold</param>
-        /// <returns></returns>
+        /// <param name="newVoltage">New voltage.</param>
+        /// <param name="oldVoltage">Old voltage.</param>
+        /// <param name="threshold">Threshold value.</param>
+        /// <returns>The new voltage, limited if necessary.</returns>
         public static double LimitFet(double newVoltage, double oldVoltage, double threshold)
         {
             var vtstlo = Math.Abs(oldVoltage - threshold) + 1;
@@ -78,11 +78,11 @@ namespace SpiceSharp.Components.MosfetBehaviors
         }
 
         /// <summary>
-        /// Limiting function VDS
+        /// Limiting function for the drain-source voltage.
         /// </summary>
-        /// <param name="newVoltage">New voltage</param>
-        /// <param name="oldVoltage">Old voltage</param>
-        /// <returns>The limited vds</returns>
+        /// <param name="newVoltage">The new voltage.</param>
+        /// <param name="oldVoltage">The old voltage.</param>
+        /// <returns>The new voltage, limited if necessary.</returns>
         public static double LimitVds(double newVoltage, double oldVoltage)
         {
             if (oldVoltage >= 3.5)
@@ -98,17 +98,17 @@ namespace SpiceSharp.Components.MosfetBehaviors
         }
 
         /// <summary>
-        /// QMeyer method for calculating capacitances
+        /// QMeyer method for calculating capacitances.
         /// </summary>
-        /// <param name="vgs">Gate-source voltage</param>
-        /// <param name="vgd">Gate-drain voltage</param>
-        /// <param name="von">Von</param>
-        /// <param name="vdsat">Saturation voltage</param>
-        /// <param name="capGs">Gate-source capacitance</param>
-        /// <param name="capGd">Gate-drain capacitance</param>
-        /// <param name="capGb">Gate-bulk capacitance</param>
-        /// <param name="phi">Phi</param>
-        /// <param name="cox">Cox</param>
+        /// <param name="vgs">The gate-source voltage.</param>
+        /// <param name="vgd">The gate-drain voltage.</param>
+        /// <param name="von">The threshold voltage for switching on.</param>
+        /// <param name="vdsat">The saturation voltage.</param>
+        /// <param name="capGs">The gate-source capacitance.</param>
+        /// <param name="capGd">The gate-drain capacitance.</param>
+        /// <param name="capGb">The gate-bulk capacitance.</param>
+        /// <param name="phi">The gate-bulk voltage.</param>
+        /// <param name="cox">The oxide capacitance.</param>
         public static void MeyerCharges(double vgs, double vgd, double von, double vdsat, out double capGs, out double capGd, out double capGb, double phi, double cox)
         {
             var vgst = vgs - von;

@@ -1,8 +1,9 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.JFETBehaviors;
+using SpiceSharp.Components.JFETs;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -10,29 +11,27 @@ namespace SpiceSharp.Components
     /// A junction field-effect transistor.
     /// </summary>
     /// <seealso cref="Component" />
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="JFETs.Parameters"/>
     [Pin(0, "drain"), Pin(1, "gate"), Pin(2, "source")]
     public class JFET : Component,
-        IParameterized<BaseParameters>
+        IParameterized<Parameters>
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
-        /// The number of pins on a JFET.
+        /// The pin count for JFETs.
         /// </summary>
-        public const int JFETPinCount = 3;
+        public const int PinCount = 3;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JFET"/> class.
         /// </summary>
         /// <param name="name">The string of the entity.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public JFET(string name)
-            : base(name, JFETPinCount)
+            : base(name, PinCount)
         {
         }
 
@@ -45,16 +44,13 @@ namespace SpiceSharp.Components
         /// <param name="source">The source node.</param>
         /// <param name="model">The model name.</param>
         public JFET(string name, string drain, string gate, string source, string model)
-            : base(name, JFETPinCount)
+            : base(name, PinCount)
         {
             Model = model;
             Connect(drain, gate, source);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -64,9 +60,9 @@ namespace SpiceSharp.Components
                 throw new NoModelException(Name, typeof(JFETModel));
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
+                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

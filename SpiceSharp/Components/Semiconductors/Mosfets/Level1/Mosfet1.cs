@@ -1,42 +1,44 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.MosfetBehaviors.Level1;
+using SpiceSharp.Components.Mosfets;
+using SpiceSharp.Components.Mosfets.Level1;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A Mosfet.
-    /// Level 1, Shichman-Hodges.
+    /// A Level 1 Mosfet using the Shichman-Hodges model.
     /// </summary>
-    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk"), Connected(0, 2), Connected(0, 3)]
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Mosfets.Parameters"/>
+    /// <seealso cref="IRuleSubject"/>
+    [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk")]
+    [Connected(0, 2), Connected(0, 3)]
     public class Mosfet1 : Component,
-        IParameterized<BaseParameters>,
+        IParameterized<Parameters>,
         IRuleSubject
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
-        /// Constants
+        /// The pin count for mofsets.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int Mosfet1PinCount = 4;
+		public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet1"/> class.
         /// </summary>
         /// <param name="name">The name of the device</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet1(string name) 
-            : base(name, Mosfet1PinCount)
+            : base(name, PinCount)
         {
         }
 
@@ -56,10 +58,7 @@ namespace SpiceSharp.Components
             Model = model;
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -68,18 +67,14 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(Mosfet1Model));
             behaviors
-                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new TimeBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(Name, context));
+                .AddIfNo<INoiseBehavior>(simulation, () => new Mosfets.Level1.Noise(Name, context))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

@@ -53,7 +53,7 @@ namespace SpiceSharpTest
         {
             // Create the mosfet
             var model = new Mosfet1Model("M1");
-            var parameters = model.GetParameterSet<SpiceSharp.Components.MosfetBehaviors.Level1.ModelBaseParameters>();
+            var parameters = model.GetParameterSet<SpiceSharp.Components.Mosfets.Level1.ModelParameters>();
 
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model

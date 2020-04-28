@@ -5,12 +5,12 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Components.JFETBehaviors
+namespace SpiceSharp.Components.JFETs
 {
     /// <summary>
     /// Frequency behavior for a <see cref="JFET" />.
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : Biasing, IFrequencyBehavior
     {
         private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
 
@@ -108,8 +108,8 @@ namespace SpiceSharp.Components.JFETBehaviors
             var vgd = Vgd;
 
             // Calculate charge storage elements
-            var czgs = TempCapGs * BaseParameters.Area;
-            var czgd = TempCapGd * BaseParameters.Area;
+            var czgs = TempCapGs * Parameters.Area;
+            var czgd = TempCapGd * Parameters.Area;
             var twop = TempGatePotential + TempGatePotential;
             var czgsf2 = czgs / ModelTemperature.F2;
             var czgdf2 = czgd / ModelTemperature.F2;
@@ -137,8 +137,8 @@ namespace SpiceSharp.Components.JFETBehaviors
         {
             var omega = ComplexState.Laplace.Imaginary;
 
-            var gdpr = ModelParameters.DrainConductance * BaseParameters.Area;
-            var gspr = ModelParameters.SourceConductance * BaseParameters.Area;
+            var gdpr = ModelParameters.DrainConductance * Parameters.Area;
+            var gspr = ModelParameters.SourceConductance * Parameters.Area;
             var gm = Gm;
             var gds = Gds;
             var ggs = Ggs;
