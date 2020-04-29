@@ -19,20 +19,10 @@ namespace SpiceSharp.Components
     {
         private readonly string[] _connections;
 
-        /// <summary>
-        /// Gets the nodes.
-        /// </summary>
-        /// <value>
-        /// The nodes.
-        /// </value>
+        /// <inheritdoc/>
         public IReadOnlyList<string> Nodes => new ReadOnlyCollection<string>(_connections);
 
-        /// <summary>
-        /// Gets or sets the model of the component.
-        /// </summary>
-        /// <value>
-        /// The model of the component.
-        /// </value>
+        /// <inheritdoc/>
         public string Model { get; set; }
 
         /// <summary>
@@ -47,15 +37,7 @@ namespace SpiceSharp.Components
             _connections = nodeCount > 0 ? new string[nodeCount] : null;
         }
 
-        /// <summary>
-        /// Connects the component in the circuit.
-        /// </summary>
-        /// <param name="nodes">The node indices.</param>
-        /// <returns>
-        /// The instance calling the method for chaining.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if a specified node is <c>null</c>.</exception>
-        /// <exception cref="NodeMismatchException">Thrown if the number of nodes does not match what is expected.</exception>
+        /// <inheritdoc/>
         public IComponent Connect(params string[] nodes)
         {
             if (_connections == null)
@@ -74,19 +56,6 @@ namespace SpiceSharp.Components
                 _connections[i] = nodes[i];
             }
             return this;
-        }
-
-        /// <summary>
-        /// Gets the node name by pin index.
-        /// </summary>
-        /// <param name="index">The pin index.</param>
-        /// <returns>The node index.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is negative </exception>
-        public string GetNode(int index)
-        {
-            if (index < 0 || index >= _connections.Length)
-                throw new ArgumentOutOfRangeException(nameof(index));
-            return _connections[index];
         }
 
         /// <inheritdoc/>

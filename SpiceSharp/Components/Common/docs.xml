@@ -1,0 +1,31 @@
+﻿<docs>
+  <members name="biasing">
+    <Voltage>
+      <summary>Gets the DC or instantaneous voltage over the device.</summary>
+      <value>The DC or instantaneous voltage.</value>
+    </Voltage>
+    <Current>
+      <summary>Gets the DC or instantaneous current through the device.</summary>
+      <value>The DC or instantaneous current.</value>
+    </Current>
+    <Power>
+      <summary>Gets the DC or instantaneous power dissipation by the device.</summary>
+      <value>The DC or instantaneous power dissipation.</value>
+    </Power>
+  </members>
+  
+  <members name="frequency">
+    <Voltage>
+      <summary>Gets the complex voltage over the device.</summary>
+      <value>The complex voltage.</value>
+    </Voltage>
+    <Current>
+      <summary>Gets the complex current through the device.</summary>
+      <value>The complex current.</value>
+    </Current>
+    <Power>
+      <summary>Gets the complex power dissipation by the device.</summary>
+      <value>The complex power dissipation.</value>
+    </Power>
+  </members>
+</docs>

@@ -131,8 +131,10 @@ namespace SpiceSharpTest.Models
 
             // Check
             Assert.AreEqual(isrc.Name, clone.Name);
-            Assert.AreEqual(isrc.GetNode(0), clone.GetNode(0));
-            Assert.AreEqual(isrc.GetNode(1), clone.GetNode(1));
+            var origNodes = isrc.Nodes;
+            var cloneNodes = clone.Nodes;
+            Assert.AreEqual(origNodes[0], cloneNodes[0]);
+            Assert.AreEqual(origNodes[1], cloneNodes[1]);
             var waveform = (Pulse)clone.GetProperty<IWaveformDescription>("waveform");
             Assert.AreEqual(0.0, waveform.InitialValue, 1e-12);
             Assert.AreEqual(1.0, waveform.PulsedValue, 1e-12);

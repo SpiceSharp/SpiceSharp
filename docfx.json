@@ -3,24 +3,21 @@
     {
       "src": [
         {
-          "files": [ "**.csproj" ],
-          "src": "SpiceSharp",
-          "exclude": [ "obj/**", "bin/**" ]
+          "files": [ "SpiceSharp/bin/Debug/net45/*.dll" ]
         }
       ],
       "force": false,
-      "dest": "SpiceSharp/obj/api",
-      "properties":
-      {
-        "TargetFramework": "net45"
-      }
-	}
+      "dest": "SpiceSharp/bin/api",
+	    "properties": {
+		    "TargetFramework": "net45"
+	    }
+	  }
   ],
   "build": {
     "content": [
       {
         "files": [ "api/*.yml" ],
-        "src": "SpiceSharp/obj"
+        "src": "SpiceSharp/bin"
       },
       {
         "files": [

@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SwitchBehaviors;
+using SpiceSharp.Components.Switches;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "S+"), Pin(1, "S-"), Pin(2, "SC+"), Pin(3, "SC-"), Connected(0, 1)]
     public class VoltageSwitch : Component,
-        IParameterized<BaseParameters>,
+        IParameterized<Parameters>,
         IRuleSubject
     {
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The parameter set.
         /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageSwitch"/> class.
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new VoltageControlled(context)))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new VoltageControlled(context)))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context, new VoltageControlled(context)));
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context, new VoltageControlled(context)));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

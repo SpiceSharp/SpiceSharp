@@ -17,30 +17,15 @@ namespace SpiceSharp.Components.Resistors
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
 
-        /// <summary>
-        /// Gets the instantaneous voltage across the resistor.
-        /// </summary>
-        /// <value>
-        /// The instantaneous voltage.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// Gets the instantaneous current through the resistor.
-        /// </summary>
-        /// <value>
-        /// The instantaneous current.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterInfo("Current")]
         public double Current => Voltage * Conductance;
 
-        /// <summary>
-        /// Gets the instantaneous power dissipated by the resistor.
-        /// </summary>
-        /// <value>
-        /// The instantaneous power dissipation.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Power")]
         public double Power
         {

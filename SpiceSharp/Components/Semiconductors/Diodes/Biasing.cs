@@ -29,21 +29,11 @@ namespace SpiceSharp.Components.Diodes
         /// </summary>
         protected readonly ElementSet<double> Elements;
 
-        /// <summary>
-        /// Gets the instantaneous voltage.
-        /// </summary>
-        /// <value>
-        /// The instantaneous voltage.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
         public double Voltage => LocalVoltage * Parameters.SeriesMultiplier;
 
-        /// <summary>
-        /// Gets the instantaneous current.
-        /// </summary>
-        /// <value>
-        /// The instantaneous current.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
         public double Current => LocalCurrent * Parameters.ParallelMultiplier;
 
@@ -56,12 +46,7 @@ namespace SpiceSharp.Components.Diodes
         [ParameterName("gd"), ParameterInfo("Small-signal conductance")]
         public double Conductance => LocalConductance * Parameters.ParallelMultiplier;
 
-        /// <summary>
-        /// Gets the power dissipated.
-        /// </summary>
-        /// <value>
-        /// The power dissipated.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
         public double Power => Current * Voltage;
 

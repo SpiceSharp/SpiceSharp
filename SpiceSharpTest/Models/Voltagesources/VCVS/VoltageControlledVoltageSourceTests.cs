@@ -6,10 +6,6 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Components;
 using System.Linq;
 using SpiceSharp.Validation;
-using System.Collections.Generic;
-using SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors;
-using SpiceSharp.Behaviors;
-using NSubstitute;
 
 namespace SpiceSharpTest.Models
 {

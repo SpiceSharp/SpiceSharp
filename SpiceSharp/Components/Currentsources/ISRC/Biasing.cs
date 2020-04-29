@@ -39,30 +39,15 @@ namespace SpiceSharp.Components.CurrentSources
         /// </value>
         public IWaveform Waveform { get; }
 
-        /// <summary>
-        /// Gets the instantaneous voltage across the supply.
-        /// </summary>
-        /// <value>
-        /// The instantaneous voltage.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// Get the instantaneous power dissipation supplied by the source.
-        /// </summary>
-        /// <value>
-        /// The instantaneous power.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
         public double Power => (_variables.Positive.Value - _variables.Negative.Value) * -Current;
 
-        /// <summary>
-        /// Get the instantaneous current through the source.
-        /// </summary>
-        /// <value>
-        /// The instantaneous current through the source.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("c"), ParameterName("i"), ParameterName("i_r"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
 

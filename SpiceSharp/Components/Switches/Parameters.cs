@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.SwitchBehaviors
+namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// Base parameters for a switch.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class BaseParameters : ParameterSet
+    public class Parameters : ParameterSet
     {
         /// <summary>
         /// Sets the switch initially to conducting.
@@ -23,6 +23,9 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <summary>
         /// Gets or sets initial state.
         /// </summary>
+        /// <value>
+        ///   <c>true</c> if the switch is initially on; otherwise, <c>false</c>.
+        /// </value>
         public bool ZeroState { get; set; }
     }
 }

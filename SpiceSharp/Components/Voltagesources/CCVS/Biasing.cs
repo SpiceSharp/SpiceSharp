@@ -4,65 +4,56 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
 
-namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
+namespace SpiceSharp.Components.CurrentControlledVoltageSources
 {
     /// <summary>
-    /// General behavior for <see cref="CurrentControlledVoltageSource"/>
+    /// General behavior for <see cref="CurrentControlledVoltageSource"/>.
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior, IBranchedBehavior<double>,
-        IParameterized<BaseParameters>
+    /// <seealso cref="Behavior"/>
+    /// <seealso cref="IBiasingBehavior"/>
+    /// <seealso cref="IBranchedBehavior{T}"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="CurrentControlledVoltageSources.Parameters"/>
+    public class Biasing : Behavior, 
+        IBiasingBehavior, 
+        IBranchedBehavior<double>,
+        IParameterized<Parameters>
     {
         private readonly OnePort<double> _variables;
         private readonly IBiasingSimulationState _biasing;
         private readonly ElementSet<double> _elements;
         private readonly IVariable<double> _control;
 
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; }
+        /// <inheritdoc/>
+        public Parameters Parameters { get; }
 
-        /// <summary>
-        /// Gets the current through the source.
-        /// </summary>
-        /// <returns></returns>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Output current")]
         public double Current => Branch.Value;
 
-        /// <summary>
-        /// Gets the voltage applied by the source.
-        /// </summary>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Output voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// Gets the power dissipated by the source.
-        /// </summary>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
         public double Power => -Voltage * Current;
 
-        /// <summary>
-        /// Gets the branch equation.
-        /// </summary>
-        /// <value>
-        /// The branch.
-        /// </value>
+        /// <inheritdoc/>
         public IVariable<double> Branch { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, ICurrentControlledBindingContext context) : base(name)
+        public Biasing(string name, ICurrentControlledBindingContext context) 
+            : base(name)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);
 
-            Parameters = context.GetParameterSet<BaseParameters>();
+            Parameters = context.GetParameterSet<Parameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
             _variables = new OnePort<double>(_biasing, context);
             _control = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>().Branch;
@@ -81,9 +72,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors
                 new MatrixLocation(br, cbr));
         }
 
-        /// <summary>
-        /// Execute behavior
-        /// </summary>
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             _elements.Add(1, -1, 1, -1, -Parameters.Coefficient);

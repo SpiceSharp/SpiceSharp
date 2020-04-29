@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Components.VoltageSources;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IRuleSubject"/>
     /// <seealso cref="IndependentSourceParameters"/>
     [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
-    public partial class VoltageSource : Component,
+    public class VoltageSource : Component,
         IParameterized<IndependentSourceParameters>,
         IRuleSubject
     {
@@ -76,7 +77,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
             behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context))
+                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);

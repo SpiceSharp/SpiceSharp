@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Entities;
 using System.Collections.Generic;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -10,15 +11,15 @@ namespace SpiceSharp.Components
     public interface IComponent : IEntity
     {
         /// <summary>
-        /// Gets or sets the model of the component.
+        /// Gets or sets the name of the component model.
         /// </summary>
         /// <value>
-        /// The model of the component.
+        /// The name of the component model.
         /// </value>
         string Model { get; set; }
 
         /// <summary>
-        /// Gets the nodes.
+        /// Gets a list of all the nodes that the component is connected to.
         /// </summary>
         /// <value>
         /// The nodes.
@@ -30,6 +31,8 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="nodes">The node indices.</param>
         /// <returns>The instance calling the method for chaining.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="nodes"/> or any of the nodes is <c>null</c>.</exception>
+        /// <exception cref="NodeMismatchException">Thrown if the number of nodes does not match the pin count of the component.</exception>
         IComponent Connect(params string[] nodes);
     }
 }

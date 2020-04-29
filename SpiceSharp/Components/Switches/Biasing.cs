@@ -4,13 +4,17 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
 
-namespace SpiceSharp.Components.SwitchBehaviors
+namespace SpiceSharp.Components.Switches
 {
     /// <summary>
-    /// (DC) biasing behavior for switches.
+    /// Basing behavior for switches.
     /// </summary>
-    public class BiasingBehavior : Behavior, IBiasingBehavior,
-        IParameterized<BaseParameters>
+    /// <seealso cref="Behavior"/>
+    /// <seealso cref="IBiasingBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Switches.Parameters"/>
+    public class Biasing : Behavior, IBiasingBehavior,
+        IParameterized<Parameters>
     {
         private readonly Controller _controller;
         private readonly IIterationSimulationState _iteration;
@@ -23,52 +27,55 @@ namespace SpiceSharp.Components.SwitchBehaviors
         /// <value>
         /// The parameter set.
         /// </value>
-        public BaseParameters Parameters { get; }
+        public Parameters Parameters { get; }
 
         /// <summary>
-        /// Gets the model parameters.
+        /// The model parameters.
         /// </summary>
-        protected ModelBaseParameters ModelParameters { get; private set; }
+        protected readonly ModelParameters ModelParameters;
 
         /// <summary>
-        /// Gets or sets the old state of the switch
+        /// Gets or sets the old state of the switch.
         /// </summary>
+        /// <value>
+        /// The old state of the switch.
+        /// </value>
         protected bool PreviousState { get; set; }
 
         /// <summary>
-        /// Flag for using the old state or not
+        /// Flag for using the old state or not.
         /// </summary>
+        /// <value>
+        /// If <c>true</c>, the old state is used; otherwise <c>false</c>.
+        /// </value>
         protected bool UseOldState { get; set; }
 
         /// <summary>
-        /// Gets the current state of the switch
+        /// Gets the current state of the switch.
         /// </summary>
+        /// <value>
+        /// The current state of the switch.
+        /// </value>
         [ParameterName("state"), ParameterInfo("The current state of the switch.")]
         public bool CurrentState { get; protected set; }
 
         /// <summary>
         /// Gets the currently active conductance.
         /// </summary>
+        /// <value>
+        /// The current conductance of the switch.
+        /// </value>
         public double Conductance { get; private set; }
 
-        /// <summary>
-        /// Gets the voltage over the switch.
-        /// </summary>
-        /// <returns></returns>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// Gets the current through the switch.
-        /// </summary>
-        /// <returns></returns>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterInfo("Switch current")]
         public double Current => Voltage * Conductance;
 
-        /// <summary>
-        /// Gets the power dissipated by the switch.
-        /// </summary>
-        /// <returns></returns>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double Power
         {
@@ -80,28 +87,25 @@ namespace SpiceSharp.Components.SwitchBehaviors
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         /// <param name="controller">The controller.</param>
-        public BiasingBehavior(string name, ComponentBindingContext context, Controller controller) : base(name)
+        public Biasing(string name, ComponentBindingContext context, Controller controller) : base(name)
         {
             context.ThrowIfNull(nameof(context));
 
             _iteration = context.GetState<IIterationSimulationState>();
             _controller = controller.ThrowIfNull(nameof(controller));
-            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelBaseParameters>();
-            Parameters = context.GetParameterSet<BaseParameters>();
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            Parameters = context.GetParameterSet<Parameters>();
 
             var state = context.GetState<IBiasingSimulationState>();
             _variables = new OnePort<double>(state.GetSharedVariable(context.Nodes[0]), state.GetSharedVariable(context.Nodes[1]));
             _elements = new ElementSet<double>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
-        /// </summary>
         void IBiasingBehavior.Load()
         {
             bool currentState;

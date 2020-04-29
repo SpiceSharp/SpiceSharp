@@ -5,46 +5,43 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
 
-namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
+namespace SpiceSharp.Components.VoltageControlledVoltageSources
 {
     /// <summary>
     /// AC behavior for a <see cref="VoltageControlledVoltageSource"/>
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior, IBranchedBehavior<Complex>
+    /// <seealso cref="Biasing"/>
+    /// <seealso cref="IFrequencyBehavior"/>
+    /// <seealso cref="IBranchedBehavior{T}"/>
+    public class Frequency : Biasing, 
+        IFrequencyBehavior,
+        IBranchedBehavior<Complex>
     {
         private readonly TwoPort<Complex> _variables;
         private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
 
-        /// <summary>
-        /// Gets the voltage applied by the source.
-        /// </summary>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
         public Complex ComplexVoltage => _variables.Right.Positive.Value - _variables.Right.Negative.Value;
 
-        /// <summary>
-        /// Gets the current through the source.
-        /// </summary>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => Branch.Value;
 
-        /// <summary>
-        /// Gets the power dissipated by the source.
-        /// </summary>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
         public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
-        /// <summary>
-        /// Gets the branch equation.
-        /// </summary>
+        /// <inheritdoc/>
         public new IVariable<Complex> Branch { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context)
+        public Frequency(string name, IComponentBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
             _variables = new TwoPort<Complex>(_complex, context);
@@ -64,16 +61,12 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors
                 new MatrixLocation(br, contNeg));
         }
 
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
-        /// <summary>
-        /// Execute behavior for AC analysis
-        /// </summary>
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var value = Parameters.Coefficient;

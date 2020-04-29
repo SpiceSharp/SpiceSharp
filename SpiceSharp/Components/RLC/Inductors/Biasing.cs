@@ -22,30 +22,15 @@ namespace SpiceSharp.Components.Inductors
         /// <inheritdoc/>
         public IVariable<double> Branch { get; }
 
-        /// <summary>
-        /// Gets the instantaneous current.
-        /// </summary>
-        /// <value>
-        /// The instantaneous current.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
         public double Current => Branch.Value;
 
-        /// <summary>
-        /// Gets the instantaneous voltage.
-        /// </summary>
-        /// <value>
-        /// The instantaneous voltage.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// Gets the power dissipated by the inductor.
-        /// </summary>
-        /// <value>
-        /// The instantaneous power.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Power")]
         public double Power => -Voltage * Current;
 

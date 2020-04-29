@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.SwitchBehaviors
+namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// Controller for making a switch voltage-controlled.

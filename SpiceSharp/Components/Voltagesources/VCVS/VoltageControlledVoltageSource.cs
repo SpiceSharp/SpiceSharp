@@ -1,40 +1,42 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors;
+using SpiceSharp.Components.VoltageControlledVoltageSources;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A voltage-controlled current-source
+    /// A voltage-controlled current-source.
     /// </summary>
-    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-"), VoltageDriver(0, 1), Connected(0, 1)]
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="VoltageControlledCurrentSources.Parameters"/>
+    /// <seealso cref="IRuleSubject"/>
+    [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-")]
+    [VoltageDriver(0, 1), Connected(0, 1)]
     public class VoltageControlledVoltageSource : Component,
-        IParameterized<BaseParameters>,
+        IParameterized<Parameters>,
         IRuleSubject
     {
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
-        /// Constants
+        /// The pin count for voltage-controlled voltage sources.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int VoltageControlledVoltageSourcePinCount = 4;
+		public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageControlledVoltageSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the voltage-controlled voltage source</param>
+        /// <param name="name">The name of the entity.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public VoltageControlledVoltageSource(string name) 
-            : base(name, VoltageControlledVoltageSourcePinCount)
+            : base(name, PinCount)
         {
         }
 
@@ -47,6 +49,7 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain) 
             : this(name)
         {
@@ -54,25 +57,19 @@ namespace SpiceSharp.Components
             Connect(pos, neg, controlPos, controlNeg);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
             CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
             behaviors
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
+        /// <inheritdoc/>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

@@ -1,14 +1,16 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SwitchBehaviors;
+using SpiceSharp.Components.Common;
+using SpiceSharp.Components.Switches;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A model for a <see cref="CurrentSwitch"/>
+    /// A model for a <see cref="VoltageSwitch"/>
     /// </summary>
-    public class CurrentSwitchModel : Model,
-        IParameterized<CurrentModelParameters>
+    public class VoltageSwitchModel : Model,
+        IParameterized<VoltageModelParameters>
     {
         /// <summary>
         /// Gets the parameter set.
@@ -16,13 +18,13 @@ namespace SpiceSharp.Components
         /// <value>
         /// The parameter set.
         /// </value>
-        public CurrentModelParameters Parameters { get; } = new CurrentModelParameters();
+        public VoltageModelParameters Parameters { get; } = new VoltageModelParameters();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CurrentSwitchModel"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSwitchModel"/> class.
         /// </summary>
         /// <param name="name">The name of the model</param>
-        public CurrentSwitchModel(string name) 
+        public VoltageSwitchModel(string name)
             : base(name)
         {
         }
@@ -36,7 +38,7 @@ namespace SpiceSharp.Components
             CalculateDefaults();
             var container = new BehaviorContainer(Name)
             {
-                new ModelBehavior(Name, new ModelBindingContext(this, simulation, LinkParameters))
+                new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, LinkParameters))
             };
             simulation.EntityBehaviors.Add(container);
         }

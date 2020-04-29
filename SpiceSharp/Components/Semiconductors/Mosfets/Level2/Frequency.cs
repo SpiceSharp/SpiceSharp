@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         void IFrequencyBehavior.InitializeParameters()
         {
             CalculateBaseCapacitances();
-            CalculateCapacitances(VoltageGs, VoltageDs, VoltageBs);
+            CalculateCapacitances(VoltageDs, VoltageBs);
             CalculateMeyerCharges(VoltageGs, VoltageGs - VoltageDs);
         }
 

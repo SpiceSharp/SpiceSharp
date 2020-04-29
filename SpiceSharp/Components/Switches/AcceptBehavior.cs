@@ -1,11 +1,11 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.SwitchBehaviors
+namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// Accepting behavior for switches.
     /// </summary>
-    public class AcceptBehavior : BiasingBehavior, IAcceptBehavior
+    public class AcceptBehavior : Biasing, IAcceptBehavior
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.

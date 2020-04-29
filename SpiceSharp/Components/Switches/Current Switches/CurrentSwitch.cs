@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SwitchBehaviors;
+using SpiceSharp.Components.Switches;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Diagnostics;
@@ -12,7 +12,7 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "W+"), Pin(1, "W-"), Connected(0, 1)]
     public class CurrentSwitch : Component,
-        IParameterized<BaseParameters>
+        IParameterized<Parameters>
     {
         /// <summary>
         /// Controlling source name
@@ -32,7 +32,7 @@ namespace SpiceSharp.Components
         /// <value>
         /// The parameter set.
         /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSwitch"/> class.
@@ -71,7 +71,7 @@ namespace SpiceSharp.Components
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new CurrentControlled(context)))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new CurrentControlled(context)))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context, new CurrentControlled(context)));
+                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context, new CurrentControlled(context)));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

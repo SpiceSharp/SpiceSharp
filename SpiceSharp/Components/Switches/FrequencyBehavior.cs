@@ -4,12 +4,12 @@ using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
 
-namespace SpiceSharp.Components.SwitchBehaviors
+namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// Frequency behavior for switches.
     /// </summary>
-    public class FrequencyBehavior : BiasingBehavior, IFrequencyBehavior
+    public class FrequencyBehavior : Biasing, IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;

@@ -155,7 +155,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             var vgb = vgs - vbs;
 
             CalculateBaseCapacitances();
-            CalculateCapacitances(vgs, vds, vbs);
+            CalculateCapacitances(vds, vbs);
 
             // Calculate Meyer capacitance
             CalculateMeyerCharges(vgs, vgd);
@@ -189,7 +189,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             var vgd = vgs - vds;
             var vgb = vgs - vbs;
 
-            CalculateCapacitances(vgs, vds, vbs);
+            CalculateCapacitances(vds, vbs);
             
             _chargeBd.Integrate();
             var gbd = _chargeBd.GetContributions(CapBd).Jacobian;

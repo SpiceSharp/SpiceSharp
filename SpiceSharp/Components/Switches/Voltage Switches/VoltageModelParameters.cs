@@ -1,23 +1,23 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.SwitchBehaviors
+namespace SpiceSharp.Components.Switches
 {
     /// <summary>
-    /// Model parameters for a <see cref="CurrentSwitchModel" />.
+    /// Model parameters for a <see cref="VoltageSwitchModel" />.
     /// </summary>
-    /// <seealso cref="ModelBaseParameters" />
-    public class CurrentModelParameters : ModelBaseParameters
+    /// <seealso cref="ModelParameters" />
+    public class VoltageModelParameters : ModelParameters
     {
         /// <summary>
         /// Gets the threshold current.
         /// </summary>
-        [ParameterName("it"), ParameterInfo("Threshold current")]
+        [ParameterName("vt"), ParameterInfo("Threshold current")]
         public override double Threshold { get; set; }
 
         /// <summary>
         /// Gets the hysteresis current.
         /// </summary>
-        [ParameterName("ih"), ParameterInfo("Hysteresis current")]
+        [ParameterName("vh"), ParameterInfo("Hysteresis current")]
         public override double Hysteresis { get; set; }
     }
 }

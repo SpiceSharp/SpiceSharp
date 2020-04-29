@@ -63,6 +63,8 @@ namespace SpiceSharp.Components
             // Get the model of the component
             if (component.Model != null)
                 ModelBehaviors = simulation.EntityBehaviors[component.Model];
+            else
+                ModelBehaviors = null;
         }
     }
 }

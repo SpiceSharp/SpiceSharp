@@ -285,10 +285,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <summary>
         /// Calculates the capacitances based on the current biasing point.
         /// </summary>
-        /// <param name="vgs">The gate-source voltage.</param>
         /// <param name="vds">The drain-source voltage.</param>
         /// <param name="vbs">The bulk-source voltage.</param>
-        protected void CalculateCapacitances(double vgs, double vds, double vbs)
+        protected void CalculateCapacitances(double vds, double vbs)
         {
             var vbd = vbs - vds;
 

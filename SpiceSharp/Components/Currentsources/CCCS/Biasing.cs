@@ -26,30 +26,15 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
         /// <inheritdoc/>
         public Parameters Parameters { get; }
 
-        /// <summary>
-        /// Gets the instantaneous current through the source.
-        /// </summary>
-        /// <value>
-        /// The instantaneous current.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
         public double Current => _control.Value * Parameters.Coefficient;
 
-        /// <summary>
-        /// Gets the instantaneous volage over the source.
-        /// </summary>
-        /// <value>
-        /// The instantaneous voltage.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// The instantaneous power dissipation by the source.
-        /// </summary>
-        /// <value>
-        /// The instantaneous power dissipation.
-        /// </value>
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
         public double Power => -Voltage * Current;
 
