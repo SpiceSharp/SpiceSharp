@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current source</param>
+        /// <param name="name">The name of the current source.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public CurrentSource(string name)
             : base(name, PinCount)
@@ -43,10 +43,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="dc">The DC value</param>
+        /// <param name="name">The name of the current source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="dc">The DC value.</param>
         public CurrentSource(string name, string pos, string neg, double dc)
             : this(name)
         {
@@ -57,10 +57,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="waveform">The Waveform-object</param>
+        /// <param name="name">The name of the current source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="waveform">The Waveform-object.</param>
         public CurrentSource(string name, string pos, string neg, IWaveformDescription waveform)
             : this(name)
         {

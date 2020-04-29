@@ -119,7 +119,7 @@ namespace SpiceSharp.General
         /// <returns>
         ///   <c>true</c> if the parameter was set; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="TargetException">Thrown if <paramref name="source" /> is <c>null</c> and the method is not static,</exception>
+        /// <exception cref="TargetException">Thrown if <paramref name="source" /> is <c>null</c> and the method is not static.</exception>
         /// <exception cref="TargetInvocationException">Thrown if the invoked get method throws an exception.</exception>
         public bool TrySet<P>(object source, P value)
         {
@@ -229,7 +229,7 @@ namespace SpiceSharp.General
         /// <returns>
         /// <c>true</c> if the parameter value was returned; otherwise <c>false</c>.
         /// </returns>
-        /// <exception cref="TargetException">Thrown if <paramref name="source"/> is <c>null</c> and the method is not static,</exception>
+        /// <exception cref="TargetException">Thrown if <paramref name="source"/> is <c>null</c> and the method is not static.</exception>
         /// <exception cref="TargetInvocationException">Thrown if the invoked get method throws an exception.</exception>
         public bool TryGet<P>(object source, out P value)
         {

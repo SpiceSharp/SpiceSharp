@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="Inductor"/> class.
         /// </summary>
-        /// <param name="name">The name of the inductor</param>
+        /// <param name="name">The name of the inductor.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Inductor(string name)
             : base(name, InductorPinCount)
@@ -47,10 +47,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="Inductor"/> class.
         /// </summary>
-        /// <param name="name">The name of the inductor</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="inductance">The inductance</param>
+        /// <param name="name">The name of the inductor.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="inductance">The inductance.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Inductor(string name, string pos, string neg, double inductance) 
             : this(name)

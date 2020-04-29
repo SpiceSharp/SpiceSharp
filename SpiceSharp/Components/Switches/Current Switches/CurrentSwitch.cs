@@ -37,7 +37,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
-        /// <param name="name">The name of the current-controlled switch</param>
+        /// <param name="name">The name of the current-controlled switch.</param>
         public CurrentSwitch(string name) 
             : base(name, CurrentSwitchPinCount)
         {
@@ -46,10 +46,10 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
-        /// <param name="name">The name of the current-controlled switch</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="controllingSource">The controlling voltage source</param>
+        /// <param name="name">The name of the current-controlled switch.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="controllingSource">The controlling voltage source.</param>
         public CurrentSwitch(string name, string pos, string neg, string controllingSource)
             : base(name, CurrentSwitchPinCount)
         {

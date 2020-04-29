@@ -1,11 +1,8 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Variables;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Text;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -26,14 +23,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         protected readonly S Parent;
 
-        /// <summary>
-        /// Gets the <see cref="IVariable{Complex}"/> with the specified name.
-        /// </summary>
-        /// <value>
-        /// The <see cref="IVariable{Complex}"/>.
-        /// </value>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public IVariable<T> this[string name] => Parent[name];
 
         /// <summary>
@@ -41,12 +31,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         public int Count => Parent.Count;
 
-        /// <summary>
-        /// Gets the comparer used for comparing variable names.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
+        /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => Parent.Comparer;
 
         /// <summary>
@@ -59,28 +44,13 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         public IEnumerable<IVariable<T>> Values => Parent.Values;
 
-        /// <summary>
-        /// Gets the solver used to solve the system of equations.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
+        /// <inheritdoc/>
         public ISparsePivotingSolver<T> Solver => _solver;
 
-        /// <summary>
-        /// Gets the solution.
-        /// </summary>
-        /// <value>
-        /// The solution.
-        /// </value>
+        /// <inheritdoc/>
         public IVector<T> Solution => Parent.Solution;
 
-        /// <summary>
-        /// Gets the map that maps variables to indices for the solver.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
+        /// <inheritdoc/>
         public IVariableMap Map => Parent.Map;
 
         /// <summary>
@@ -103,25 +73,10 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         public void Apply() => _solver.Apply();
 
-        /// <summary>
-        /// Gets a variable that can be shared with other behaviors by the factory. If another variable
-        /// already exists with the same name, that is returned instead.
-        /// </summary>
-        /// <param name="name">The name of the shared variable.</param>
-        /// <returns>
-        /// The shared variable.
-        /// </returns>
+        /// <inheritdoc/>
         public IVariable<T> GetSharedVariable(string name) => Parent.GetSharedVariable(name);
 
-        /// <summary>
-        /// Creates a variable that is private to whoever requested it. The factory will not shared this
-        /// variable with anyone else, and the name is only used for display purposes.
-        /// </summary>
-        /// <param name="name">The name of the private variable.</param>
-        /// <param name="unit">The unit of the variable.</param>
-        /// <returns>
-        /// The private variable.
-        /// </returns>
+        /// <inheritdoc/>
         public IVariable<T> CreatePrivateVariable(string name, IUnit unit) => Parent.CreatePrivateVariable(name, unit);
 
         /// <summary>
@@ -136,7 +91,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>
-        /// true if the read-only dictionary contains an element that has the specified key; otherwise, false.
+        ///   <c>true</c> if the read-only dictionary contains an element that has the specified key; otherwise, <c>false</c>.
         /// </returns>
         public bool ContainsKey(string key) => Parent.ContainsKey(key);
 
@@ -146,7 +101,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <param name="key">The key to locate.</param>
         /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value" /> parameter. This parameter is passed uninitialized.</param>
         /// <returns>
-        /// <c>true</c> if the dictionary contains a variable that has the specified key; otherwise, <c>false</c>.
+        ///   <c>true</c> if the dictionary contains a variable that has the specified key; otherwise, <c>false</c>.
         /// </returns>
         public bool TryGetValue(string key, out IVariable<T> value) => Parent.TryGetValue(key, out value);
 
@@ -158,6 +113,12 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// </returns>
         public IEnumerator<KeyValuePair<string, IVariable<T>>> GetEnumerator() => Parent.GetEnumerator();
 
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

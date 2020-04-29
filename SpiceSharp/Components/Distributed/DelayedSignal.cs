@@ -196,7 +196,7 @@ namespace SpiceSharp.Components.Distributed
         /// </summary>
         /// <param name="back">The number of points to go back in time.</param>
         /// <param name="index">The index.</param>
-        /// <returns></returns>
+        /// <returns>The value in history.</returns>
         public double GetValue(int back, int index)
         {
             switch (back)
@@ -215,7 +215,7 @@ namespace SpiceSharp.Components.Distributed
         /// Gets a tracked timepoint.
         /// </summary>
         /// <param name="back">The number of points to go back in time.</param>
-        /// <returns></returns>
+        /// <returns>The time point in history.</returns>
         public double GetTime(int back)
         {
             switch (back)

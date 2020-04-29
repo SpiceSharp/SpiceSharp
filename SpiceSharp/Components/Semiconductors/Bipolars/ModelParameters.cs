@@ -64,6 +64,7 @@ namespace SpiceSharp.Components.Bipolars
         /// <summary>
         /// Set the model to be an NPN transistor.
         /// </summary>
+        /// <param name="value">If set to <c>true</c>, the model is set to describe an NPN transistor.</param>
         [ParameterName("npn"), ParameterInfo("NPN type device")]
         public void SetNpn(bool value)
         {
@@ -74,7 +75,7 @@ namespace SpiceSharp.Components.Bipolars
         /// <summary>
         /// Set the model to be a PNP transistor.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">If set to <c>true</c>, the model is set to describe a PNP transistor.</param>
         [ParameterName("pnp"), ParameterInfo("PNP type device")]
         public void SetPnp(bool value)
         {

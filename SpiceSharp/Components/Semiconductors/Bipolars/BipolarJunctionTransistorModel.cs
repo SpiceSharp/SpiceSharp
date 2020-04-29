@@ -19,7 +19,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="BipolarJunctionTransistorModel"/> class.
         /// </summary>
-        /// <param name="name">The name of the device</param>
+        /// <param name="name">The name of the device.</param>
         public BipolarJunctionTransistorModel(string name) 
             : base(name)
         {

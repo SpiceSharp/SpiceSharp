@@ -74,8 +74,8 @@
         /// Note that EXPONENT = -1 gives a different equation than EXPONENT != -1.
         /// </summary>
         /// <param name="noiseDensity">The noise density.</param>
-        /// <param name="logNoiseDensity">The previous noise density</param>
-        /// <param name="lastLogNoiseDensity">The previous log noise density</param>
+        /// <param name="logNoiseDensity">The previous noise density.</param>
+        /// <param name="lastLogNoiseDensity">The previous log noise density.</param>
         /// <returns>
         /// The integrated noise.
         /// </returns>

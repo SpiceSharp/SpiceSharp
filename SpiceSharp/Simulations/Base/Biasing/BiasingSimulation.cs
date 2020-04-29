@@ -535,8 +535,8 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Applies nodesets.
         /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Arguments</param>
+        /// <param name="sender">The object sending the event.</param>
+        /// <param name="e">The event arguments for loading the convergence aids.</param>
         protected void LoadNodeSets(object sender, LoadStateEventArgs e)
         {
             // Consider doing nodeset assignments when we're starting out or in trouble

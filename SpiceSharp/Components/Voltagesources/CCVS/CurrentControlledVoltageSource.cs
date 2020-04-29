@@ -42,7 +42,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current-controlled current source</param>
+        /// <param name="name">The name of the current-controlled current source.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public CurrentControlledVoltageSource(string name) 
             : base(name, PinCount)
@@ -52,11 +52,11 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current-controlled current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="controllingSource">The controlling voltage source name</param>
-        /// <param name="gain">The transresistance (gain)</param>
+        /// <param name="name">The name of the current-controlled current source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="controllingSource">The controlling voltage source name.</param>
+        /// <param name="gain">The transresistance (gain).</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain) 
             : this(name)

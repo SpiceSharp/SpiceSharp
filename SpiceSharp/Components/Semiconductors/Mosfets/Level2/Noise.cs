@@ -51,8 +51,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="context"></param>
+        /// <param name="name">Name.</param>
+        /// <param name="context">The binding context.</param>
         public Noise(string name, ComponentBindingContext context) : base(name, context)
         {
             _noise = context.GetState<INoiseSimulationState>();

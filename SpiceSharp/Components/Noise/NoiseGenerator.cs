@@ -71,8 +71,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseGenerator"/> class.
         /// </summary>
-        /// <param name="name">Name of the noise source</param>
-        /// <param name="pins">Pins</param>
+        /// <param name="name">Name of the noise source.</param>
+        /// <param name="pins">Pins.</param>
         protected NoiseGenerator(string name, params int[] pins)
         {
             Name = name;
@@ -121,7 +121,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Set the values for evaluating the noise generator
         /// </summary>
-        /// <param name="coefficients">Coefficients</param>
+        /// <param name="coefficients">Coefficients.</param>
         public abstract void SetCoefficients(params double[] coefficients);
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Calculates the noise contributions.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The noise contribution.</returns>
         protected abstract double CalculateNoise();
     }
 }

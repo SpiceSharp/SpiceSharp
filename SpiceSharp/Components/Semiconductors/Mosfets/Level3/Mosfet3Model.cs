@@ -32,8 +32,8 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet3Model"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="nmos">True for NMOS transistors, false for PMOS transistors</param>
+        /// <param name="name">Name.</param>
+        /// <param name="nmos">True for NMOS transistors, false for PMOS transistors.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet3Model(string name, bool nmos) 
             : base(name)

@@ -53,7 +53,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Finalizes the export.
         /// </summary>
-        /// <param name="sender">The object (simulation) sending the event</param>
+        /// <param name="sender">The object (simulation) sending the event.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected override void Finalize(object sender, EventArgs e)
         {

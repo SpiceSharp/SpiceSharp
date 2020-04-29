@@ -18,13 +18,15 @@ namespace SpiceSharp.Algebra
         /// <summary>
         /// Gets the first <see cref="ISparseVectorElement{T}"/> in the vector.
         /// </summary>
-        /// <returns>The vector element.</returns>
+        /// <returns>The first element in the vector.</returns>
         ISparseVectorElement<T> GetFirstInVector();
 
         /// <summary>
         /// Gets the last <see cref="ISparseVectorElement{T}"/> in the vector.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// The last element in the vector.
+        /// </returns>
         ISparseVectorElement<T> GetLastInVector();
 
         /// <summary>

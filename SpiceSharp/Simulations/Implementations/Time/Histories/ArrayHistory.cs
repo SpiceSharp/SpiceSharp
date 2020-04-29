@@ -84,7 +84,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <returns>
         /// The previous value.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">index</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative or higher than the number of history points.</exception>
         public T GetPreviousValue(int index)
         {
             if (index < 0 || index >= Length)

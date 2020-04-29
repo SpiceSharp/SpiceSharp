@@ -186,8 +186,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <summary>
         /// Initializes a new instance of the <see cref="Dynamic"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="context"></param>
+        /// <param name="name">The name of the behavior.</param>
+        /// <param name="context">The binding context.</param>
         protected Dynamic(string name, ComponentBindingContext context) : base(name, context)
         {
         }

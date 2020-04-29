@@ -41,8 +41,8 @@ namespace SpiceSharp.Components.CurrentSources
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
-        /// <param name="context">The context.</param>
+        /// <param name="name">The name of the behavior.</param>
+        /// <param name="context">The binding context.</param>
         public Frequency(string name, ComponentBindingContext context)
             : base(name, context)
         {

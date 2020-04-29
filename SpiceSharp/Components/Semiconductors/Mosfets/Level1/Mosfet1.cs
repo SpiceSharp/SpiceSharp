@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet1"/> class.
         /// </summary>
-        /// <param name="name">The name of the device</param>
+        /// <param name="name">The name of the device.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet1(string name) 
             : base(name, PinCount)

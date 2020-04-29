@@ -73,7 +73,7 @@ namespace SpiceSharp.Algebra
         /// <returns>
         /// The value.
         /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">index</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative</exception>
         public T GetVectorValue(int index)
         {
             if (index < 0)

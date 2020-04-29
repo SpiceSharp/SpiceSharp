@@ -52,7 +52,7 @@
         /// The relationship is assumed to be linear.
         /// </summary>
         /// <param name="coefficient">The coefficient of the quantity that is derived.</param>
-        /// <returns>The information for filling in the Y-matrix and Rhs-vector</returns>
+        /// <returns>The information for filling in the Y-matrix and Rhs-vector.</returns>
         JacobianInfo GetContributions(double coefficient);
 
         /// <summary>

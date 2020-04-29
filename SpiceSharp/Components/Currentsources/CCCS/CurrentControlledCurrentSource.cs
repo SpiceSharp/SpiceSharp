@@ -52,7 +52,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlledCurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current controlled current source</param>
+        /// <param name="name">The name of the current controlled current source.</param>
         /// <param name="pos">The positive node.</param>
         /// <param name="neg">The negative node.</param>
         /// <param name="voltageSource">The name of the voltage source.</param>

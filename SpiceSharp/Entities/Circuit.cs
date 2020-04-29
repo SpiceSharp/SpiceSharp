@@ -85,39 +85,16 @@ namespace SpiceSharp
                 Add(entity);
         }
 
-        /// <summary>
-        /// Removes the <see cref="Entity" /> with specified name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public bool Remove(string name) => _entities.Remove(name);
 
-        /// <summary>
-        /// Determines whether this instance contains the object.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        ///   <c>true</c> if the collection contains the entity; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool Contains(string name) => _entities.Contains(name);
 
-        /// <summary>
-        /// Tries to find an <see cref="Entity" /> in the collection.
-        /// </summary>
-        /// <param name="name">The name of the entity.</param>
-        /// <param name="entity">The entity.</param>
-        /// <returns>
-        ///   <c>True</c> if the entity is found; otherwise <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetEntity(string name, out IEntity entity) => _entities.TryGetEntity(name, out entity);
 
-        /// <summary>
-        /// Gets all entities that are of a specified type.
-        /// </summary>
-        /// <typeparam name="E">The type of entity.</typeparam>
-        /// <returns>
-        /// The entities.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<E> ByType<E>() where E : IEntity => _entities.ByType<E>();
 
         /// <summary>

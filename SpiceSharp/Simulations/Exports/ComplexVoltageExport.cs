@@ -105,11 +105,7 @@ namespace SpiceSharp.Simulations
             }
         }
 
-        /// <summary>
-        /// Finalizes the export.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <inheritdoc/>
         protected override void Finalize(object sender, EventArgs e)
         {
             base.Finalize(sender, e);

@@ -16,8 +16,8 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Gets a noise generator
         /// </summary>
-        /// <param name="index">Index</param>
-        /// <returns>Noise source</returns>
+        /// <param name="index">Index.</param>
+        /// <returns>Noise source.</returns>
         public NoiseGenerator this[int index] => _generators[index];
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseGeneratorCollection"/> class.
         /// </summary>
-        /// <param name="generators">Generators</param>
+        /// <param name="generators">Generators.</param>
         public NoiseGeneratorCollection(IEnumerable<NoiseGenerator> generators)
         {
             generators.ThrowIfNull(nameof(generators));
@@ -38,15 +38,19 @@ namespace SpiceSharp.Components.NoiseSources
         }
 
         /// <summary>
-        /// Gets enumerator
+        /// Returns an enumerator that iterates through the collection.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
         public IEnumerator<NoiseGenerator> GetEnumerator() => _generators.GetEnumerator();
 
         /// <summary>
-        /// Gets enumerator
+        /// Returns an enumerator that iterates through a collection.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => _generators.GetEnumerator();
     }
 }

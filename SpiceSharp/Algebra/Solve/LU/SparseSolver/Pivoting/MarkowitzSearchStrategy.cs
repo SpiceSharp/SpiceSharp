@@ -13,7 +13,7 @@ namespace SpiceSharp.Algebra.Solve
         /// Find a pivot in a matrix.
         /// </summary>
         /// <param name="markowitz">The Markowitz pivot strategy.</param>
-        /// <param name="matrix">The matrix</param>
+        /// <param name="matrix">The matrix.</param>
         /// <param name="eliminationStep">The current elimination step.</param>
         /// <param name="max">The maximum row/column index.</param>
         /// <returns>

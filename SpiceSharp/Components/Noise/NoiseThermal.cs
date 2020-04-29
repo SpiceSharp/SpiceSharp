@@ -19,9 +19,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseThermal"/> class.
         /// </summary>
-        /// <param name="name">Name of the noise source</param>
-        /// <param name="node1">Node 1</param>
-        /// <param name="node2">Node 2</param>
+        /// <param name="name">Name of the noise source.</param>
+        /// <param name="node1">Node 1.</param>
+        /// <param name="node2">Node 2.</param>
         public NoiseThermal(string name, int node1, int node2) : base(name, node1, node2)
         {
             Node2 = node2;
@@ -37,10 +37,7 @@
             Conductance = coefficients[0];
         }
 
-        /// <summary>
-        /// Calculates the noise contributions.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc/>
         protected override double CalculateNoise()
         {
             var val = ComplexState.Solution[Nodes[0]] - ComplexState.Solution[Nodes[1]];

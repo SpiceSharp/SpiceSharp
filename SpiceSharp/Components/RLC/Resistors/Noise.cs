@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.Resistors
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">Name</param>
+        /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
         public Noise(string name, ComponentBindingContext context) : base(name, context) 
         {

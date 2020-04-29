@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Diodes
     /// <summary>
     /// Variables for a diode.
     /// </summary>
-    /// <typeparam name="T">The base value type</typeparam>
+    /// <typeparam name="T">The base value type.</typeparam>
     public struct DiodeVariables<T>
     {
         /// <summary>
@@ -78,10 +78,10 @@ namespace SpiceSharp.Components.Diodes
         }
 
         /// <summary>
-        /// Gets the RHS indicies.
+        /// Gets the right hand side vector indicies.
         /// </summary>
         /// <param name="map">The map.</param>
-        /// <returns></returns>
+        /// <returns>The right hand side vector indices.</returns>
         public int[] GetRhsIndicies(IVariableMap map) => new[] { map[Negative], map[PosPrime] };
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
-        /// <param name="generators">Names of the generators</param>
+        /// <param name="generators">Names of the generators.</param>
         public ComponentNoise(params NoiseGenerator[] generators)
         {
             generators.ThrowIfNull(nameof(generators));
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
-        /// <param name="generators"></param>
+        /// <param name="generators">The noise generators.</param>
         public ComponentNoise(IEnumerable<NoiseGenerator> generators)
         {
             generators.ThrowIfNull(nameof(generators));
