@@ -15,23 +15,23 @@ namespace SpiceSharp.Components
         /// <seealso cref="IWaveform" />
         protected class Instance : IWaveform
         {
-            /// <summary>
-            /// Private variables
-            /// </summary>
             private readonly double _v1, _v2, _td, _tr, _tf, _pw, _per;
             private readonly IIntegrationMethod _method;
 
-            /// <summary>
-            /// Gets the value that is currently being probed.
-            /// </summary>
-            /// <value>
-            /// The value at the probed timepoint.
-            /// </value>
+            /// <inheritdoc/>
             public double Value { get; private set; }
 
             /// <summary>
-            /// Sets up the waveform.
+            /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>
+            /// <param name="method">The integration method.</param>
+            /// <param name="v1">The initial/low value.</param>
+            /// <param name="v2">The pulsed/high value.</param>
+            /// <param name="td">The delay.</param>
+            /// <param name="tr">The rise time.</param>
+            /// <param name="tf">The fall time.</param>
+            /// <param name="pw">The pulse width.</param>
+            /// <param name="per">The period.</param>
             public Instance(IIntegrationMethod method,
                 double v1, double v2, double td, double tr, double tf, double pw, double per)
             {
@@ -51,9 +51,9 @@ namespace SpiceSharp.Components
             }
 
             /// <summary>
-            /// Calculate the pulse value at the designated timepoint
+            /// Calculate the pulse value at the designated timepoint.
             /// </summary>
-            /// <param name="time">The time.</param>
+            /// <param name="time">The time value.</param>
             private void At(double time)
             {
                 // Get a relative time variable
@@ -74,18 +74,14 @@ namespace SpiceSharp.Components
                     Value = _v2 + (_v1 - _v2) * (time - _tr - _pw) / _tf;
             }
 
-            /// <summary>
-            /// Probes a new timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Probe()
             {
                 var time = _method?.Time ?? 0.0;
                 At(time);
             }
 
-            /// <summary>
-            /// Accepts the current timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Accept()
             {
                 _method.ThrowIfNull("time state");

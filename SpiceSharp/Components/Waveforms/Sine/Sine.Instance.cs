@@ -6,23 +6,15 @@ namespace SpiceSharp.Components
     public partial class Sine
     {
         /// <summary>
-        /// An instance of a sine waveform.
+        /// An instance of a <see cref="Sine"/> waveform.
         /// </summary>
         /// <seealso cref="IWaveform" />
         protected class Instance : IWaveform
         {
-            /// <summary>
-            /// Private variables
-            /// </summary>
             private readonly double _vo, _va, _freq, _td, _theta, _phase;
             private readonly IIntegrationMethod _method;
 
-            /// <summary>
-            /// Gets the value that is currently being probed.
-            /// </summary>
-            /// <value>
-            /// The value at the probed timepoint.
-            /// </value>
+            /// <inheritdoc/>
             public double Value { get; private set; }
 
             /// <summary>
@@ -48,9 +40,7 @@ namespace SpiceSharp.Components
                 Value = _vo;
             }
 
-            /// <summary>
-            /// Probes a new timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Probe()
             {
                 var time = _method?.Time ?? 0.0;
@@ -71,9 +61,7 @@ namespace SpiceSharp.Components
                 Value = _vo + result;
             }
 
-            /// <summary>
-            /// Accepts the last probed timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Accept()
             {
             }

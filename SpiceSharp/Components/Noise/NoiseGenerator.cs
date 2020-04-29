@@ -5,44 +5,60 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
-    /// A class that represents a noise generator
+    /// A class that represents a noise generator.
     /// </summary>
+    /// TODO: Noise needs refactoring.
     public abstract class NoiseGenerator
     {
+        private readonly int[] _pins;
+
         /// <summary>
-        /// Gets the name of the noise generator
+        /// Gets the name of the noise generator.
         /// </summary>
+        /// <value>
+        /// The name of the noise generator.
+        /// </value>
         public string Name { get; }
 
         /// <summary>
-        /// Gets the calculated noise density
+        /// Gets the calculated noise density.
         /// </summary>
+        /// <value>
+        /// The calculated noise density.
+        /// </value>
         public double Noise { get; private set; }
 
         /// <summary>
-        /// Gets the log of the calculated noise density
+        /// Gets the natural logarithm of the calculated noise density.
         /// </summary>
+        /// <value>
+        /// The natural logarithm of the calculated noise density.
+        /// </value>
         public double LogNoise { get; private set; }
 
         /// <summary>
-        /// Integrated output noise
+        /// Gets the total integrated output noise.
         /// </summary>
+        /// <value>
+        /// The total integrated output noise.
+        /// </value>
         public double TotalOutputNoise { get; private set; }
 
         /// <summary>
-        /// Integrated input noise
+        /// Gets the total integrated input noise.
         /// </summary>
+        /// <value>
+        /// The total integrated input noise.
+        /// </value>
         public double TotalInputNoise { get; private set; }
 
         /// <summary>
-        /// Gets the nodes this noise generator is connected to
+        /// Gets the nodes this noise generator is connected to.
         /// </summary>
+        /// <value>
+        /// The node collection with all the generator nodes.
+        /// </value>
         public NodeCollection Nodes { get; private set; }
-
-        /// <summary>
-        /// Private variables
-        /// </summary>
-        private readonly int[] _pins;
 
         /// <summary>
         /// Gets the biasing simulation state.

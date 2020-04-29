@@ -9,22 +9,23 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
-    public partial class Pwl : ParameterSet, IWaveformDescription
+    public partial class Pwl : ParameterSet,
+        IWaveformDescription
     {
         /// <summary>
-        /// Gets or sets the times.
+        /// Gets or sets the time point values.
         /// </summary>
         /// <value>
-        /// The times.
+        /// The time point values.
         /// </value>
         [ParameterName("times"), ParameterInfo("The time points.")]
         public IEnumerable<double> Times { get; set; }
 
         /// <summary>
-        /// Gets or sets the values.
+        /// Gets or sets the value point values.
         /// </summary>
         /// <value>
-        /// The values.
+        /// The value point values.
         /// </value>
         [ParameterName("values"), ParameterInfo("The values.")]
         public IEnumerable<double> Values { get; set; }
@@ -47,13 +48,7 @@ namespace SpiceSharp.Components
         {
         }
 
-        /// <summary>
-        /// Creates a waveform instance for the specified simulation and entity.
-        /// </summary>
-        /// <param name="method">The integration method.</param>
-        /// <returns>
-        /// A waveform instance.
-        /// </returns>
+        /// <inheritdoc/>
         public IWaveform Create(IIntegrationMethod method)
         {
             return new Instance(Times, Values, method);

@@ -1,54 +1,78 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// This class describes a sine wave.
     /// </summary>
+    /// <seealso cref="ParameterSet"/>
     /// <seealso cref="IWaveformDescription" />
-    public partial class Sine : ParameterSet, IWaveformDescription
+    [GeneratedParameters]
+    public partial class Sine : ParameterSet,
+        IWaveformDescription
     {
         /// <summary>
-        /// Gets the offset.
+        /// Gets or sets the offset.
         /// </summary>
+        /// <value>
+        /// The offset of the sine wave.
+        /// </value>
         [ParameterName("vo"), ParameterInfo("The offset of the sine wave")]
         public double Offset { get; set; }
 
         /// <summary>
-        /// Gets the amplitude of the sine wave.
+        /// Gets or sets the amplitude of the sine wave.
         /// </summary>
+        /// <value>
+        /// The amplitude of the sine wave.
+        /// </value>
         [ParameterName("va"), ParameterInfo("The amplitude of the sine wave")]
         public double Amplitude { get; set; }
 
         /// <summary>
-        /// Gets the frequency of the sine wave in Hertz (Hz).
+        /// Gets or sets the frequency of the sine wave in Hertz (Hz).
         /// </summary>
-        [ParameterName("freq"), ParameterInfo("The frequency in Hz")]
+        /// <value>
+        /// The frequency of the sine wave.
+        /// </value>
+        [ParameterName("freq"), ParameterInfo("The frequency in Hz", Units = "Hz")]
+        [GreaterThanOrEquals(0)]
         public double Frequency { get; set; }
 
         /// <summary>
-        /// Gets the delay of the sine wave in seconds.
+        /// Gets or sets the delay of the sine wave in seconds.
         /// </summary>
-        [ParameterName("td"), ParameterInfo("The delay in seconds")]
+        /// <value>
+        /// The delay of the sine wave.
+        /// </value>
+        [ParameterName("td"), ParameterInfo("The delay", Units = "s")]
         public double Delay { get; set; }
 
         /// <summary>
-        /// Gets the damping factor theta of the sinewave.
+        /// Gets or sets the damping factor theta of the sine wave.
         /// </summary>
+        /// <value>
+        /// The damping factor theta.
+        /// </value>
         [ParameterName("theta"), ParameterInfo("The damping factor")]
         public double Theta { get; set; }
 
         /// <summary>
-        /// Gets the phase of the sinewave.
+        /// Gets or sets the phase of the sine wave.
         /// </summary>
-        [ParameterName("phase"), ParameterInfo("The phase")]
+        /// <value>
+        /// The phase.
+        /// </value>
+        [ParameterName("phase"), ParameterInfo("The phase", Units = "\u00b0")]
         public double Phase { get; set; }
 
         /// <summary>
         /// Sets all the sine parameters.
         /// </summary>
-        /// <param name="sine"></param>
+        /// <param name="sine">The sine parameters.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="sine"/> does not have 1 to 6 arguments.</exception>
         [ParameterName("sine"), ParameterInfo("A vector of all sine waveform parameters")]
         public void SetSine(double[] sine)
         {
@@ -76,13 +100,7 @@ namespace SpiceSharp.Components
             }
         }
 
-        /// <summary>
-        /// Creates a waveform instance for the specified simulation and entity.
-        /// </summary>
-        /// <param name="method">The integration method.</param>
-        /// <returns>
-        /// A waveform instance.
-        /// </returns>
+        /// <inheritdoc/>
         public IWaveform Create(IIntegrationMethod method)
             => new Instance(method, Offset, Amplitude, Frequency, Delay, Theta, Phase);
 
@@ -102,6 +120,7 @@ namespace SpiceSharp.Components
         /// <param name="delay">The delay.</param>
         /// <param name="theta">The theta.</param>
         /// <param name="phase">The phase.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="frequency"/> is negative.</exception>
         public Sine(double offset, double amplitude, double frequency, double delay, double theta, double phase)
         {
             Offset = offset;
@@ -120,6 +139,7 @@ namespace SpiceSharp.Components
         /// <param name="frequency">The frequency.</param>
         /// <param name="delay">The delay.</param>
         /// <param name="theta">The theta.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="frequency"/> is negative.</exception>
         public Sine(double offset, double amplitude, double frequency, double delay, double theta)
         {
             Offset = offset;
@@ -135,6 +155,7 @@ namespace SpiceSharp.Components
         /// <param name="offset">The offset.</param>
         /// <param name="amplitude">The amplitude.</param>
         /// <param name="frequency">The frequency.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="frequency"/> is negative.</exception>
         public Sine(double offset, double amplitude, double frequency)
         {
             Offset = offset;

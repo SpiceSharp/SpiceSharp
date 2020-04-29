@@ -51,21 +51,17 @@ namespace SpiceSharp.Components
                     => _m * x + _q;
             }
 
-            /// <summary>
-            /// Gets the value that is currently being probed.
-            /// </summary>
-            /// <value>
-            /// The value at the probed timepoint.
-            /// </value>
+            /// <inheritdoc/>
             public double Value { get; private set; }
 
+            /// TODO: Work with a 2D point.
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>
             /// <param name="times">The times.</param>
             /// <param name="values">The values.</param>
             /// <param name="method">The integration method.</param>
-            /// <exception cref="ArgumentException">Thrown if no points are specified. </exception>
+            /// <exception cref="ArgumentException">Thrown if no points are specified, or if the time values are not monotonically increasing.</exception>
             public Instance(IEnumerable<double> times, IEnumerable<double> values, IIntegrationMethod method)
             {
                 _method = method;
@@ -87,9 +83,7 @@ namespace SpiceSharp.Components
                 Probe();
             }
 
-            /// <summary>
-            /// Probes a new timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Probe()
             {
                 var time = _method?.Time ?? 0.0;
@@ -132,9 +126,7 @@ namespace SpiceSharp.Components
                 Value = _line.At(time);
             }
 
-            /// <summary>
-            /// Accepts the last probed timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Accept()
             {
                 if (_method is IBreakpointMethod breakpoints)

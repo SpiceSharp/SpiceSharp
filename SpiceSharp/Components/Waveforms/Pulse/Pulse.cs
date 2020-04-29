@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -8,54 +9,77 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
-    public partial class Pulse : ParameterSet, IWaveformDescription
+    public partial class Pulse : ParameterSet,
+        IWaveformDescription
     {
         /// <summary>
-        /// Gets the initial value.
+        /// Gets or sets the initial/low value.
         /// </summary>
+        /// <value>
+        /// The initial/low value.
+        /// </value>
         [ParameterName("v1"), ParameterInfo("The initial value")]
         public double InitialValue { get; set; }
 
         /// <summary>
-        /// Gets the pulsed value.
+        /// Gets or sets the pulsed/high value.
         /// </summary>
+        /// <value>
+        /// The pulsed/high value.
+        /// </value>
         [ParameterName("v2"), ParameterInfo("The peak value")]
         public double PulsedValue { get; set; }
 
         /// <summary>
         /// Gets the delay of the waveform in seconds.
         /// </summary>
-        [ParameterName("td"), ParameterInfo("The initial delay time in seconds")]
+        /// <value>
+        /// The delay of the waveform.
+        /// </value>
+        [ParameterName("td"), ParameterInfo("The initial delay time in seconds", Units = "s")]
         public double Delay { get; set; }
 
         /// <summary>
-        /// Gets the rise time in seconds.
+        /// Gets or sets the rise time in seconds.
         /// </summary>
-        [ParameterName("tr"), ParameterInfo("The rise time in seconds")]
+        /// <value>
+        /// The rise time.
+        /// </value>
+        [ParameterName("tr"), ParameterInfo("The rise time", Units = "s")]
         public double RiseTime { get; set; }
 
         /// <summary>
-        /// Gets the fall time in seconds.
+        /// Gets or sets the fall time in seconds.
         /// </summary>
-        [ParameterName("tf"), ParameterInfo("The fall time in seconds")]
+        /// <value>
+        /// The fall time.
+        /// </value>
+        [ParameterName("tf"), ParameterInfo("The fall time", Units = "s")]
         public double FallTime { get; set; }
 
         /// <summary>
-        /// Gets the width of the pulse in seconds.
+        /// Gets or sets the width of the pulse in seconds.
         /// </summary>
-        [ParameterName("pw"), ParameterInfo("The pulse width in seconds")]
+        /// <value>
+        /// The pulse width.
+        /// </value>
+        [ParameterName("pw"), ParameterInfo("The pulse width", Units = "s")]
         public double PulseWidth { get; set; } = double.PositiveInfinity;
 
         /// <summary>
-        /// Gets the period in seconds.
+        /// Gets or sets the period in seconds.
         /// </summary>
-        [ParameterName("per"), ParameterInfo("The period in seconds")]
+        /// <value>
+        /// The period.
+        /// </value>
+        [ParameterName("per"), ParameterInfo("The period", Units = "s")]
         public double Period { get; set; } = double.PositiveInfinity;
 
         /// <summary>
         /// Sets all the pulse parameters.
         /// </summary>
-        /// <param name="pulse">The pulse parameters</param>
+        /// <param name="pulse">The pulse parameters.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="pulse"/> does not have 1-7 parameters.</exception>
         [ParameterName("pulse"), ParameterInfo("A vector of all pulse waveform parameters")]
         public void SetPulse(double[] pulse)
         {
@@ -86,13 +110,7 @@ namespace SpiceSharp.Components
             }
         }
 
-        /// <summary>
-        /// Creates a waveform instance for the specified simulation and entity.
-        /// </summary>
-        /// <param name="method">The time simulation state.</param>
-        /// <returns>
-        /// A waveform instance.
-        /// </returns>
+        /// <inheritdoc/>
         public IWaveform Create(IIntegrationMethod method)
         {
             return new Instance(method,

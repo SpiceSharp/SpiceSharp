@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A waveform.
+    /// A waveform description.
     /// </summary>
     /// <seealso cref="IParameterSet" />
     public interface IWaveformDescription : IParameterSet
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="state">The time simulation state.</param>
         /// <returns>
-        /// A waveform instance.
+        /// The waveform instance.
         /// </returns>
         IWaveform Create(IIntegrationMethod state);
     }

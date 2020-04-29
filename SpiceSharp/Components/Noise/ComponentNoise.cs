@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Noise variables
+    /// A description for component noise.
     /// </summary>
     public class ComponentNoise
     {
@@ -16,32 +16,48 @@ namespace SpiceSharp.Components
         /// <summary>
         /// Gets the total output-referred noise density
         /// </summary>
+        /// <value>
+        /// The noise density.
+        /// </value>
         public double Noise { get; private set; }
 
         /// <summary>
-        /// Gets the log of the total output-referred noise density
+        /// Gets the natural logarithm of the total output-referred noise density.
         /// </summary>
+        /// <value>
+        /// The natural logarithm of the total output-referred noise density.
+        /// </value>
         public double LogNoise { get; private set; }
 
         /// <summary>
-        /// Gets the total integrated output-referred noise
+        /// Gets the total integrated output-referred noise.
         /// </summary>
+        /// <value>
+        /// The total integrated output-referred noise.
+        /// </value>
         public double TotalOutNoise { get; private set; }
 
         /// <summary>
-        /// Gets the total integrated input-referred noise
+        /// Gets the total integrated input-referred noise.
         /// </summary>
+        /// <value>
+        /// The total integrated input-referred noise.
+        /// </value>
         public double TotalInNoise { get; private set; }
 
         /// <summary>
-        /// Gets all generators
+        /// Gets a collection of all the noise generators.
         /// </summary>
+        /// <value>
+        /// A collection of all the noise generators.
+        /// </value>
         public NoiseGeneratorCollection Generators { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
         /// <param name="generators">Names of the generators.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="generators"/> or any of the noise generators is <c>null</c>.</exception>
         public ComponentNoise(params NoiseGenerator[] generators)
         {
             generators.ThrowIfNull(nameof(generators));
@@ -52,6 +68,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="ComponentNoise"/> class.
         /// </summary>
         /// <param name="generators">The noise generators.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="generators"/> or any of the noise generators is <c>null</c>.</exception>
         public ComponentNoise(IEnumerable<NoiseGenerator> generators)
         {
             generators.ThrowIfNull(nameof(generators));
@@ -63,6 +80,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="context">The binding context.</param>
         /// <param name="nodes">The nodes.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
         public void Bind(IComponentBindingContext context, params IVariable<Complex>[] nodes)
         {
             context.ThrowIfNull(nameof(context));
