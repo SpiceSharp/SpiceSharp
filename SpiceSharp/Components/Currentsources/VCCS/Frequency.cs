@@ -19,31 +19,16 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         private readonly ElementSet<Complex> _elements;
         private readonly TwoPort<Complex> _variables;
 
-        /// <summary>
-        /// Get the complex voltage.
-        /// </summary>
-        /// <value>
-        /// The complex voltage.
-        /// </value>
-        [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex ComplexVoltage => _variables.Right.Positive.Value - _variables.Right.Negative.Value;
 
-        /// <summary>
-        /// Get the complex current.
-        /// </summary>
-        /// <value>
-        /// The complex current.
-        /// </value>
-        [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => (_variables.Left.Positive.Value - _variables.Left.Negative.Value) * Parameters.Transconductance;
 
-        /// <summary>
-        /// Get the complex power dissipation.
-        /// </summary>
-        /// <value>
-        /// The complex power dissipation.
-        /// </value>
-        [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Power")]
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        [ParameterName("p"), ParameterInfo("Power")]
         public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <summary>

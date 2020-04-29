@@ -30,11 +30,19 @@ namespace SpiceSharp.Components.Diodes
         protected readonly ElementSet<double> Elements;
 
         /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
-        [ParameterName("v"), ParameterName("vd"), ParameterInfo("Diode voltage")]
+        /// <remarks>
+        /// If the series multiplier is set, then this voltage is the sum of all voltage drops over all the
+        /// diodes in series.
+        /// </remarks>
+        [ParameterName("v"), ParameterName("vd"), ParameterInfo("The voltage across the internal diode")]
         public double Voltage => LocalVoltage * Parameters.SeriesMultiplier;
 
         /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
-        [ParameterName("i"), ParameterName("id"), ParameterInfo("Diode current")]
+        /// <remarks>
+        /// If the parallel multiplier is set, then this current is the sum of all currents through all the
+        /// diodes in parallel.
+        /// </remarks>
+        [ParameterName("i"), ParameterName("id"), ParameterName("c"), ParameterName("cd"), ParameterInfo("The complex current through the diode")]
         public double Current => LocalCurrent * Parameters.ParallelMultiplier;
 
         /// <summary>
@@ -47,31 +55,25 @@ namespace SpiceSharp.Components.Diodes
         public double Conductance => LocalConductance * Parameters.ParallelMultiplier;
 
         /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
-        [ParameterName("p"), ParameterName("pd"), ParameterInfo("Power")]
+        /// <remarks>
+        /// The power does not take into account losses by parasitic series resistors.
+        /// </remarks>
+        [ParameterName("p"), ParameterName("pd"), ParameterInfo("The dissipated power")]
         public double Power => Current * Voltage;
 
         /// <summary>
         /// The voltage across a single diode (not including parallel or series multipliers).
         /// </summary>
-        /// <value>
-        /// The local voltage.
-        /// </value>
         protected double LocalVoltage;
 
         /// <summary>
         /// The current through a single diode (not including parallel or series multipliers).
         /// </summary>
-        /// <value>
-        /// The local current.
-        /// </value>
         protected double LocalCurrent;
 
         /// <summary>
         /// The conductance through a single diode (not including paralle or series multipliers).
         /// </summary>
-        /// <value>
-        /// The local conductance.
-        /// </value>
         protected double LocalConductance;
 
         /// <summary>

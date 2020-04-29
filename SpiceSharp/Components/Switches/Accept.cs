@@ -5,28 +5,28 @@ namespace SpiceSharp.Components.Switches
     /// <summary>
     /// Accepting behavior for switches.
     /// </summary>
-    public class AcceptBehavior : Biasing, IAcceptBehavior
+    /// <seealso cref="Biasing"/>
+    /// <seealso cref="IAcceptBehavior"/>
+    public class Accept : Biasing, 
+        IAcceptBehavior
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Accept"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         /// <param name="controller">The controller.</param>
-        public AcceptBehavior(string name, ComponentBindingContext context, Controller controller) : base(name, context, controller)
+        public Accept(string name, ComponentBindingContext context, Controller controller) 
+            : base(name, context, controller)
         {
         }
 
-        /// <summary>
-        /// Called when a new timepoint is being tested.
-        /// </summary>
+        /// <inheritdoc/>
         void IAcceptBehavior.Probe()
         {
         }
 
-        /// <summary>
-        /// Accepts the current timepoint.
-        /// </summary>
+        /// <inheritdoc/>
         void IAcceptBehavior.Accept()
         {
             UseOldState = true;

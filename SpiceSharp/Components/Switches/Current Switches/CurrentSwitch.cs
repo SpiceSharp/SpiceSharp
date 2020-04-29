@@ -69,8 +69,8 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(CurrentSwitchModel));
             behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new CurrentControlled(context)))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new CurrentControlled(context)))
+                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context, new CurrentControlled(context)))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context, new CurrentControlled(context)))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context, new CurrentControlled(context)));
             simulation.EntityBehaviors.Add(behaviors);
         }

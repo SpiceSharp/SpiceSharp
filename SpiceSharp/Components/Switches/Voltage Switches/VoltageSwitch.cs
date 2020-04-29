@@ -67,8 +67,8 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(VoltageSwitchModel));
             behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new AcceptBehavior(Name, context, new VoltageControlled(context)))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context, new VoltageControlled(context)))
+                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context, new VoltageControlled(context)))
+                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context, new VoltageControlled(context)))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context, new VoltageControlled(context)));
             simulation.EntityBehaviors.Add(behaviors);
         }

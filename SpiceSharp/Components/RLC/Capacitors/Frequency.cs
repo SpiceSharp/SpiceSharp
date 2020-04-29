@@ -19,31 +19,16 @@ namespace SpiceSharp.Components.Capacitors
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;
 
-        /// <summary>
-        /// Gets the complex voltage.
-        /// </summary>
-        /// <value>
-        /// The complex voltage.
-        /// </value>
-        [ParameterName("v"), ParameterInfo("Capacitor voltage")]
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        [ParameterName("v"), ParameterInfo("The complex voltage")]
         public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <summary>
-        /// Gets the complex current.
-        /// </summary>
-        /// <value>
-        /// The complex current.
-        /// </value>
-        [ParameterName("i"), ParameterName("c"), ParameterInfo("Capacitor current")]
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        [ParameterName("i"), ParameterName("c"), ParameterInfo("The complex current")]
         public Complex ComplexCurrent => ComplexVoltage * _complex.Laplace * Capacitance;
 
-        /// <summary>
-        /// Gets the complex power.
-        /// </summary>
-        /// <value>
-        /// The complex power.
-        /// </value>
-        [ParameterName("p"), ParameterInfo("Capacitor power")]
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        [ParameterName("p"), ParameterInfo("The complex power")]
         public Complex ComplexPower
         {
             get

@@ -3,6 +3,7 @@ using SpiceSharp.Simulations;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Inductors
 {
@@ -19,6 +20,18 @@ namespace SpiceSharp.Components.Inductors
         private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;
+
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        [ParameterName("v"), ParameterInfo("The complex voltage")]
+        public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
+
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        [ParameterName("i"), ParameterName("c"), ParameterInfo("The complex current")]
+        public Complex ComplexCurrent => Branch.Value;
+
+        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        [ParameterName("p"), ParameterName("The complex power")]
+        public Complex ComplexPower => -Branch.Value * (_variables.Positive.Value - _variables.Negative.Value);
 
         /// <inheritdoc/>
         public new IVariable<Complex> Branch { get; }

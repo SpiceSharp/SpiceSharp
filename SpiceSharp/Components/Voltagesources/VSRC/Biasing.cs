@@ -37,15 +37,15 @@ namespace SpiceSharp.Components.VoltageSources
         protected IWaveform Waveform { get; }
 
         /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
-        [ParameterName("i"), ParameterName("i_r"), ParameterInfo("Voltage source current")]
+        [ParameterName("i"), ParameterInfo("Voltage source current")]
         public double Current => Branch.Value;
 
         /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
-        [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Instantaneous power")]
+        [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double Power => Voltage * -Branch.Value;
 
         /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
-        [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Instantaneous voltage")]
+        [ParameterName("v"), ParameterInfo("Instantaneous voltage")]
         public double Voltage { get; private set; }
 
         /// <inheritdoc/>

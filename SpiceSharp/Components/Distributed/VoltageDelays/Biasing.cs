@@ -22,9 +22,7 @@ namespace SpiceSharp.Components.VoltageDelays
         /// <inheritdoc/>
         public VoltageDelayParameters Parameters { get; }
 
-        /// <summary>
-        /// Gets the branch equation row.
-        /// </summary>
+        /// <inheritdoc/>
         public IVariable<double> Branch { get; }
 
         /// <summary>

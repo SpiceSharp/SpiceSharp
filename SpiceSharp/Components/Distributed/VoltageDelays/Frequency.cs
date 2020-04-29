@@ -19,9 +19,7 @@ namespace SpiceSharp.Components.VoltageDelays
         private readonly IComplexSimulationState _complex;
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
-        /// <summary>
-        /// Gets the branch equation row.
-        /// </summary>
+        /// <inheritdoc/>
         public new IVariable<Complex> Branch { get; }
 
         /// <summary>

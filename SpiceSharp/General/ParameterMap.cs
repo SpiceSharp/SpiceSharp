@@ -52,6 +52,7 @@ namespace SpiceSharp.General
                 var desc = new MemberDescription(member);
                 _values.Add(desc);
 
+                // TODO: This does not support parameters/properties with the same name but different types!!!
                 // Add named parameters
                 if (desc.Names.Count > 0)
                 {
