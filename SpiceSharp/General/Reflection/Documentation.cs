@@ -110,6 +110,6 @@ namespace SpiceSharp.Reflection
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
         public static IEnumerable<MemberDescription> Parameters(Type type)
-            => ReflectionHelper.GetMap(type.ThrowIfNull(nameof(type))).Members.Where(p => p.Names.Count > 0);
+            => ReflectionHelper.GetParameterMap(type.ThrowIfNull(nameof(type))).Members.Where(p => p.Names.Count > 0);
     }
 }

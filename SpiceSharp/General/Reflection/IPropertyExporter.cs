@@ -6,7 +6,7 @@ namespace SpiceSharp.Reflection
     /// An interface that describes a type that can export parameters of a specific type.
     /// </summary>
     /// <typeparam name="T">The base valye type.</typeparam>
-    public interface IPropertyExporter<out T> : IMembers
+    public interface IPropertyExporter<out T> : IMemberMap
     {
         /// <summary>
         /// Tries getting the value of a parameter.

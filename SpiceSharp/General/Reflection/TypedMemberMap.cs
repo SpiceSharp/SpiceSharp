@@ -9,7 +9,7 @@ namespace SpiceSharp.Reflection
     /// <typeparam name="T">The base type.</typeparam>
     /// <seealso cref="IParameterImporter{T}" />
     /// <seealso cref="IPropertyExporter{T}" />
-    public class TypedMemberMap<T> : IParameterImporter<T>, IPropertyExporter<T>, IMemberMap
+    public class TypedMemberMap<T> : IParameterImporter<T>, IPropertyExporter<T>
     {
         private readonly Dictionary<string, MemberDescription> _members;
 

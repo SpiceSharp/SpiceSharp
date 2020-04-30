@@ -1,16 +1,37 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace SpiceSharp.Reflection
 {
     /// <summary>
-    /// A cached map of type members. Can be used to quickly map parameter names to
-    /// <see cref="MemberDescription"/> objects, or to enumerate all members in a class.
+    /// A cached map of type members. Can be used to map parameter names to
+    /// <see cref="MemberDescription"/> instances.
     /// </summary>
-    public class ParameterMap : IMembers
+    public class ParameterMap
     {
+        private static readonly ConcurrentDictionary<Type, Func<IEqualityComparer<string>, IMemberMap>> _factories
+            = new ConcurrentDictionary<Type, Func<IEqualityComparer<string>, IMemberMap>>();
+
         private readonly Dictionary<Type, IMemberMap> _memberMaps = new Dictionary<Type, IMemberMap>();
+
+        private static IMemberMap CreateMap(Type type, IEqualityComparer<string> comparer)
+        {
+            type.ThrowIfNull(nameof(type));
+            var factory = _factories.GetOrAdd(type, type =>
+            {
+                // This is quite expensive, so we cache the creation of maps into a function
+                var ntype = typeof(TypedMemberMap<>).MakeGenericType(type);
+                var param = Expression.Parameter(typeof(IEqualityComparer<string>), "comparer");
+                return Expression.Lambda<Func<IEqualityComparer<string>, IMemberMap>>(
+                    Expression.New(ntype.GetTypeInfo().GetConstructor(new[] { typeof(IEqualityComparer<string>) }), param),
+                    param
+                    ).Compile();
+            });
+            return factory(comparer);
+        }
 
         /// <inheritdoc/>
         public IEnumerable<MemberDescription> Members
@@ -59,8 +80,7 @@ namespace SpiceSharp.Reflection
                 if (!_memberMaps.TryGetValue(descType, out var members))
                 {
                     // Create a new instance
-                    var ntype = typeof(TypedMemberMap<>).MakeGenericType(descType);
-                    members = (IMemberMap)Activator.CreateInstance(ntype, new[] { comparer });
+                    members = CreateMap(descType, comparer);
                     _memberMaps.Add(descType, members);
                 }
                 members.Add(desc);
@@ -76,7 +96,7 @@ namespace SpiceSharp.Reflection
             var d = new Dictionary<Type, IMemberMap>();
             foreach (var map in _memberMaps)
             {
-                var nmap = (IMemberMap)Activator.CreateInstance(map.Value.GetType(), new object[] { comparer });
+                var nmap = CreateMap(map.Key, comparer);
                 foreach (var desc in map.Value.Members)
                     nmap.Add(desc);
                 d.Add(map.Key, nmap);

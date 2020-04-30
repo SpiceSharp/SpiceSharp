@@ -6,7 +6,7 @@ namespace SpiceSharp.Reflection
     /// An interface that describes a type that can import parameters of a specific type.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public interface IParameterImporter<in T> : IMembers
+    public interface IParameterImporter<in T> : IMemberMap
     {
         /// <summary>
         /// Tries setting a parameter value.

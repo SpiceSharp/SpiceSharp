@@ -15,6 +15,9 @@ namespace SpiceSharp
     /// </summary>
     public static class ReflectionHelper
     {
+        private static IEqualityComparer<string> _comparer = EqualityComparer<string>.Default;
+        private static readonly ConcurrentDictionary<Type, ParameterMap> _parameterMapDict = new ConcurrentDictionary<Type, ParameterMap>();
+
         /// <summary>
         /// Gets or sets the default comparer used when creating a parameter mapping.
         /// </summary>
@@ -36,16 +39,13 @@ namespace SpiceSharp
             }
         }
 
-        private static IEqualityComparer<string> _comparer = EqualityComparer<string>.Default;
-        private static readonly ConcurrentDictionary<Type, ParameterMap> _parameterMapDict = new ConcurrentDictionary<Type, ParameterMap>();
-
         /// <summary>
         /// Gets the parameter map of the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The parameter map.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
-        public static ParameterMap GetMap(Type type)
+        public static ParameterMap GetParameterMap(Type type)
         {
             type.ThrowIfNull(nameof(type));
             return _parameterMapDict.GetOrAdd(type, t =>
@@ -68,7 +68,7 @@ namespace SpiceSharp
         public static void Set<P>(object source, string name, P value)
         {
             source.ThrowIfNull(nameof(source));
-            var map = GetMap(source.GetType());
+            var map = GetParameterMap(source.GetType());
             if (!map.TrySet(source, name, value))
                 throw new ParameterNotFoundException(source, name, typeof(P));
         }
@@ -85,7 +85,7 @@ namespace SpiceSharp
         public static P Get<P>(object source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            var map = GetMap(source.GetType());
+            var map = GetParameterMap(source.GetType());
             if (!map.TryGet(source, name, out P value))
                 throw new ParameterNotFoundException(source, name, typeof(P));
             return value;
@@ -105,7 +105,7 @@ namespace SpiceSharp
         public static bool TrySet<P>(object source, string name, P value)
         {
             source.ThrowIfNull(nameof(source));
-            var map = GetMap(source.GetType());
+            var map = GetParameterMap(source.GetType());
             return map.TrySet(source, name, value);
         }
 
@@ -123,7 +123,7 @@ namespace SpiceSharp
         public static bool TryGet<P>(object source, string name, out P value)
         {
             source.ThrowIfNull(nameof(source));
-            var map = GetMap(source.GetType());
+            var map = GetParameterMap(source.GetType());
             return map.TryGet(source, name, out value);
         }
 
@@ -140,7 +140,7 @@ namespace SpiceSharp
         public static Func<P> CreateGetter<P>(object source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            var map = GetMap(source.GetType());
+            var map = GetParameterMap(source.GetType());
             return map.CreateGetter<P>(source, name);
         }
 
@@ -157,7 +157,7 @@ namespace SpiceSharp
         public static Action<P> CreateSetter<P>(object source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            var map = GetMap(source.GetType());
+            var map = GetParameterMap(source.GetType());
             return map.CreateSetter<P>(source, name);
         }
         #endregion
