@@ -307,11 +307,11 @@ namespace SpiceSharpTest.Models
             var p = s.Parameters;
 
             // Check on
-            s.SetParameter("on");
+            s.SetParameter("on", true);
             Assert.AreEqual(true, p.ZeroState);
 
             // Check off
-            s.SetParameter("off");
+            s.SetParameter("off", true);
             Assert.AreEqual(false, p.ZeroState);
         }
     }

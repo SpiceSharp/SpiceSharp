@@ -12,25 +12,6 @@ namespace SpiceSharp
     public interface IImportParameterSet
     {
         /// <summary>
-        /// Call a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
-        void SetParameter(string name);
-
-        /// <summary>
-        /// Tries calling a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        ///   <c>true</c> if the method was called; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
-        bool TrySetParameter(string name);
-
-        /// <summary>
         /// Sets the value of the parameter with the specified name.
         /// </summary>
         /// <typeparam name="P">The value type.</typeparam>
@@ -71,17 +52,6 @@ namespace SpiceSharp
     /// <seealso cref="IParameterSet" />
     public interface IImportParameterSet<T> : IImportParameterSet
     {
-        /// <summary>
-        /// Call a parameter method with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the method.</param>
-        /// <returns>
-        /// The current instance for chaining.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ParameterNotFoundException">Thrown if the parameter could not be found.</exception>
-        new T SetParameter(string name);
-
         /// <summary>
         /// Sets the value of the parameter with the specified name.
         /// </summary>

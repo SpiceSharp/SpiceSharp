@@ -214,12 +214,5 @@ namespace SpiceSharp.Algebra.Solve
             base.SetParameter(name, value);
             return this;
         }
-
-        /// <inheritdoc/>
-        public new ISolver<T> SetParameter(string name)
-        {
-            base.SetParameter(name);
-            return this;
-        }
     }
 }

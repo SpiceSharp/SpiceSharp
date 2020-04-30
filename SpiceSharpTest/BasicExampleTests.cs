@@ -299,7 +299,7 @@ namespace SpiceSharpTest
             foreach (var parameter in Documentation.Parameters(entity))
             {
                 Console.Write(string.Join(", ", parameter.Names));
-                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType.Name})");
+                Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
             }
             // </example_EntityDocumentation>
 
@@ -310,7 +310,7 @@ namespace SpiceSharpTest
             foreach (var parameter in Documentation.Parameters(simulation))
             {
                 Console.Write(string.Join(", ", parameter.Names));
-                Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType.Name})");
+                Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
             }
             // </example_SimulationDocumentation>
 
@@ -328,7 +328,7 @@ namespace SpiceSharpTest
                 foreach (var parameter in Documentation.Parameters(op.EntityBehaviors["V1"]))
                 {
                     Console.Write(string.Join(", ", parameter.Names));
-                    Console.WriteLine($" : {parameter.Description} ({parameter.ReturnType})");
+                    Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
                 }
             };
             op.Run(ckt);

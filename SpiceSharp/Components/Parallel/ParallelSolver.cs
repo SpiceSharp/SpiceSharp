@@ -22,11 +22,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
         P IParameterized.GetParameterSet<P>() => _parent.GetParameterSet<P>();
         bool IParameterized.TryGetParameterSet<P>(out P value) => _parent.TryGetParameterSet(out value);
         IEnumerable<IParameterSet> IParameterized.ParameterSets => _parent.ParameterSets;
-        ISolver<T> IImportParameterSet<ISolver<T>>.SetParameter(string name) { _parent.SetParameter(name); return this; }
         ISolver<T> IImportParameterSet<ISolver<T>>.SetParameter<P>(string name, P value) { _parent.SetParameter(name, value); return this; }
-        void IImportParameterSet.SetParameter(string name) => _parent.SetParameter(name);
         void IImportParameterSet.SetParameter<P>(string name, P value) => _parent.SetParameter(name, value);
-        bool IImportParameterSet.TrySetParameter(string name) => _parent.TrySetParameter(name);
         bool IImportParameterSet.TrySetParameter<P>(string name, P value) => _parent.TrySetParameter(name, value);
         Action<P> IImportParameterSet.CreateParameterSetter<P>(string name) => _parent.CreateParameterSetter<P>(name);
 

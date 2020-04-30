@@ -2,11 +2,11 @@
 using SpiceSharp.Diagnostics;
 using SpiceSharp.General;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading;
 
 namespace SpiceSharp
 {
@@ -37,77 +37,21 @@ namespace SpiceSharp
         }
 
         private static IEqualityComparer<string> _comparer = EqualityComparer<string>.Default;
-        private static readonly Dictionary<Type, ParameterMap> _parameterMapDict = new Dictionary<Type, ParameterMap>();
-        private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        private static readonly ConcurrentDictionary<Type, ParameterMap> _parameterMapDict = new ConcurrentDictionary<Type, ParameterMap>();
 
         /// <summary>
-        /// Gets the members for a specific type.
+        /// Gets the parameter map of the specified type.
         /// </summary>
-        /// <param name="type">The member type.</param>
-        /// <returns>
-        /// An enumeration of all members of the type.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type" /> is <c>null</c>.</exception>
-        public static IEnumerable<MemberDescription> GetMembers(Type type)
+        /// <param name="type">The type.</param>
+        /// <returns>The parameter map.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
+        public static ParameterMap GetMap(Type type)
         {
             type.ThrowIfNull(nameof(type));
-            _lock.EnterUpgradeableReadLock();
-            try
+            return _parameterMapDict.GetOrAdd(type, t =>
             {
-                if (!_parameterMapDict.TryGetValue(type, out var result))
-                {
-                    result = new ParameterMap(type, Comparer);
-                    _lock.EnterWriteLock();
-                    try
-                    {
-                        _parameterMapDict.Add(type, result);
-                    }
-                    finally
-                    {
-                        _lock.ExitWriteLock();
-                    }
-                }
-                return result.Members;
-            }
-            finally
-            {
-                _lock.ExitUpgradeableReadLock();
-            }
-        }
-
-        /// <summary>
-        /// Gets the member for a specific type with the specified name and target type.
-        /// </summary>
-        /// <param name="type">The type that should be searched for the parameter.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <returns>The member description.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> or <paramref name="name"/> is <c>null</c>.</exception>
-        public static MemberDescription GetMember(Type type, string name)
-        {
-            type.ThrowIfNull(nameof(type));
-            name.ThrowIfNull(nameof(name));
-            _lock.EnterUpgradeableReadLock();
-            try
-            {
-                if (!_parameterMapDict.TryGetValue(type, out var result))
-                {
-                    _lock.EnterWriteLock();
-                    try
-                    {
-                        result = new ParameterMap(type, Comparer);
-                        _parameterMapDict.Add(type, result);
-                    }
-                    finally
-                    {
-                        _lock.ExitWriteLock();
-                    }
-                }
-                return result.Get(name);
-            }
-            finally
-            {
-                _lock.ExitUpgradeableReadLock();
-            }
+                return new ParameterMap(type, Comparer);
+            });
         }
 
         #region Parameter helpers
@@ -124,26 +68,9 @@ namespace SpiceSharp
         public static void Set<P>(object source, string name, P value)
         {
             source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            if (desc == null || !desc.TrySet(source, value))
+            var map = GetMap(source.GetType());
+            if (!map.TrySet(source, name, value))
                 throw new ParameterNotFoundException(source, name, typeof(P));
-        }
-
-        /// <summary>
-        /// Calls the method with the specified name (tagged with <see cref="ParameterNameAttribute"/>).
-        /// </summary>
-        /// <param name="source">The source object.</param>
-        /// <param name="name">The name of the parameter method.</param>
-        /// <returns>The original object, can be used to chain.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="ParameterNotFoundException">Thrown if the the parameter with the specified <paramref name="name"/> could not be found.</exception>
-        public static void Set(object source, string name)
-        {
-            source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length > 0)
-                throw new ParameterNotFoundException(source, name, typeof(void));
-            mi.Invoke(source, null);
         }
 
         /// <summary>
@@ -158,10 +85,10 @@ namespace SpiceSharp
         public static P Get<P>(object source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            if (desc != null && desc.TryGet(source, out P value))
-                return value;
-            throw new ParameterNotFoundException(source, name, typeof(P));
+            var map = GetMap(source.GetType());
+            if (!map.TryGet(source, name, out P value))
+                throw new ParameterNotFoundException(source, name, typeof(P));
+            return value;
         }
 
         /// <summary>
@@ -178,27 +105,8 @@ namespace SpiceSharp
         public static bool TrySet<P>(object source, string name, P value)
         {
             source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            return desc != null && desc.TrySet(source, value);
-        }
-
-        /// <summary>
-        /// Tries calling a method with the specified name (tagged with the <see cref="ParameterNameAttribute" />).
-        /// </summary>
-        /// <param name="source">The source object.</param>
-        /// <param name="name">The name of the parameter.</param>
-        /// <returns>
-        ///   <c>true</c> if the method was called; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> or <paramref name="name"/> is <c>null</c>.</exception>
-        public static bool TrySet(object source, string name)
-        {
-            source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            if (desc == null || !(desc.Member is MethodInfo mi) || mi.GetParameters().Length != 0)
-                return false;
-            mi.Invoke(source, Array<object>.Empty());
-            return true;
+            var map = GetMap(source.GetType());
+            return map.TrySet(source, name, value);
         }
 
         /// <summary>
@@ -215,13 +123,8 @@ namespace SpiceSharp
         public static bool TryGet<P>(object source, string name, out P value)
         {
             source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            if (desc == null)
-            {
-                value = default;
-                return false;
-            }
-            return desc.TryGet(source, out value);
+            var map = GetMap(source.GetType());
+            return map.TryGet(source, name, out value);
         }
 
         /// <summary>
@@ -237,8 +140,8 @@ namespace SpiceSharp
         public static Func<P> CreateGetter<P>(object source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            return desc?.CreateGetter<P>(source);
+            var map = GetMap(source.GetType());
+            return map.CreateGetter<P>(source, name);
         }
 
         /// <summary>
@@ -254,8 +157,8 @@ namespace SpiceSharp
         public static Action<P> CreateSetter<P>(object source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            var desc = GetMember(source.GetType(), name);
-            return desc?.CreateSetter<P>(source);
+            var map = GetMap(source.GetType());
+            return map.CreateSetter<P>(source, name);
         }
         #endregion
 

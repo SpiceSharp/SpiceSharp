@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+using SpiceSharp.Attributes;
 using SpiceSharp.Simulations;
 using System;
 
@@ -13,6 +13,8 @@ namespace SpiceSharp.Components
     public partial class Sine : ParameterSet,
         IWaveformDescription
     {
+        private double _frequency;
+
         /// <summary>
         /// Gets or sets the offset.
         /// </summary>
@@ -39,7 +41,15 @@ namespace SpiceSharp.Components
         /// </value>
         [ParameterName("freq"), ParameterInfo("The frequency in Hz", Units = "Hz")]
         [GreaterThanOrEquals(0)]
-        public double Frequency { get; set; }
+        public double Frequency
+        {
+            get => _frequency;
+            set
+            {
+                Utility.GreaterThanOrEquals(value, nameof(Frequency), 0);
+                _frequency = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the delay of the sine wave in seconds.

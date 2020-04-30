@@ -50,24 +50,11 @@ namespace SpiceSharp
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <inheritdoc/>
-        public ParameterSet SetParameter(string name)
-        {
-            Reflection.Set(this, name);
-            return this;
-        }
-
-        /// <inheritdoc/>
         public ParameterSet SetParameter<P>(string name, P value)
         {
             Reflection.Set(this, name, value);
             return this;
         }
-
-        void IImportParameterSet.SetParameter(string name) => SetParameter(name);
-
-        /// <inheritdoc/>
-        public bool TrySetParameter(string name)
-            => Reflection.TrySet(this, name);
 
         void IImportParameterSet.SetParameter<P>(string name, P value) => SetParameter(name, value);
 

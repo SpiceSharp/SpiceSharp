@@ -60,28 +60,6 @@ namespace SpiceSharp
         }
 
         /// <inheritdoc/>
-        public void SetParameter(string name)
-        {
-            foreach (var ps in ParameterSets)
-            {
-                if (ps != null && ps.TrySetParameter(name))
-                    return;
-            }
-            throw new ParameterNotFoundException(this, name, typeof(void));
-        }
-
-        /// <inheritdoc/>
-        public virtual bool TrySetParameter(string name)
-        {
-            foreach (var ps in ParameterSets)
-            {
-                if (ps != null && ps.TrySetParameter(name))
-                    return true;
-            }
-            return false;
-        }
-
-        /// <inheritdoc/>
         public virtual void SetParameter<P>(string name, P value)
         {
             foreach (var ps in ParameterSets)

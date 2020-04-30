@@ -61,13 +61,6 @@ namespace SpiceSharp.Entities
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <inheritdoc/>
-        public new IEntity SetParameter(string name)
-        {
-            base.SetParameter(name);
-            return this;
-        }
-
-        /// <inheritdoc/>
         public new IEntity SetParameter<P>(string name, P value)
         {
             base.SetParameter(name, value);

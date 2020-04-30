@@ -8,17 +8,31 @@ using System.Reflection;
 namespace SpiceSharp.General
 {
     /// <summary>
-    /// A description of a member
+    /// The description of a member on a type with named parameters.
     /// </summary>
     public class MemberDescription
     {
         /// <summary>
-        /// Gets the type of the return.
+        /// Gets the type for setting the parameter value.
         /// </summary>
         /// <value>
-        /// The type of the return.
+        /// The type that can be used for setting the member value.
         /// </value>
-        public Type ReturnType { get; }
+        /// <remarks>
+        /// A parameter is a named quantity that can be specified by the user.
+        /// </remarks>
+        public Type ParameterType { get; }
+
+        /// <summary>
+        /// Gets the type for getting the property value.
+        /// </summary>
+        /// <value>
+        /// The type that can be used for getting the member value.
+        /// </value>
+        /// <remarks>
+        /// A property is a named quantity that can be asked by the user.
+        /// </remarks>
+        public Type PropertyType { get; }
 
         /// <summary>
         /// Gets the member.
@@ -83,12 +97,21 @@ namespace SpiceSharp.General
         }
 
         /// <summary>
+        /// Gets a value indicating whether the member is static.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this member is static; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsStatic { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MemberDescription"/> class.
         /// </summary>
         /// <param name="member">The member.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="member"/> is <c>null</c>.</exception>
         public MemberDescription(MemberInfo member)
         {
-            Member = member;
+            Member = member.ThrowIfNull(nameof(member));
 
             // Get all the names of this parameter
             Names = member
@@ -96,16 +119,29 @@ namespace SpiceSharp.General
                 .Select(attr => ((ParameterNameAttribute)attr).Name).ToArray();
 
             // Cache the return type
+            ParameterType = typeof(void);
+            PropertyType = typeof(void);
             switch (member)
             {
                 case FieldInfo fi:
-                    ReturnType = fi.FieldType;
+                    ParameterType = fi.FieldType;
+                    PropertyType = fi.FieldType;
+                    IsStatic = fi.IsStatic;
                     break;
                 case PropertyInfo pi:
-                    ReturnType = pi.PropertyType;
+                    ParameterType = pi.PropertyType;
+                    PropertyType = pi.PropertyType;
+                    IsStatic = 
+                        pi.GetGetMethod()?.IsStatic ?? 
+                        pi.GetSetMethod()?.IsStatic ?? 
+                        throw new ArgumentException();
                     break;
                 case MethodInfo mi:
-                    ReturnType = mi.ReturnType;
+                    var ps = mi.GetParameters();
+                    if (ps.Length == 0)
+                        PropertyType = mi.ReturnType;
+                    else if (ps.Length == 1)
+                        ParameterType = ps[0].ParameterType;
                     break;
             }
         }
@@ -123,48 +159,29 @@ namespace SpiceSharp.General
         /// <exception cref="TargetInvocationException">Thrown if the invoked get method throws an exception.</exception>
         public bool TrySet<P>(object source, P value)
         {
-            if (ReturnType == typeof(void))
-            {
-                if (Member is MethodInfo mi)
-                {
-                    if (mi.IsStatic && source != null ||
-                        !mi.IsStatic && source == null)
-                        return false;
+            // The value can't be set here!
+            if (typeof(P) != ParameterType)
+                return false;
+            if (IsStatic && source != null || !IsStatic && source == null)
+                return false;
 
-                    var ps = mi.GetParameters();
-                    if (ps.Length == 1 && typeof(P).GetTypeInfo().IsAssignableFrom(ps[0].ParameterType))
+            switch (Member)
+            {
+                case MethodInfo mi:
+                    mi.Invoke(source, new object[] { value });
+                    return true;
+
+                case PropertyInfo pi:
+                    var setter = pi.GetSetMethod();
+                    if (setter != null)
                     {
-                        mi.Invoke(source, new object[] { value });
+                        setter.Invoke(source, new object[] { value });
                         return true;
                     }
-                }
-            }
-            else
-            {
-                if (ReturnType.GetTypeInfo().IsAssignableFrom(typeof(P)))
-                {
-                    switch (Member)
-                    {
-                        case PropertyInfo pi:
-                            var setter = pi.GetSetMethod();
-                            if (setter != null)
-                            {
-                                if (setter.IsStatic && source != null ||
-                                    !setter.IsStatic && source == null)
-                                    return false;
-                                setter.Invoke(source, new object[] { value });
-                                return true;
-                            }
-                            break;
-                        case FieldInfo fi:
-                            if (fi.IsStatic && source != null ||
-                                !fi.IsStatic && source == null)
-                                return false;
-                            fi.SetValue(source, value);
-                            return true;
-                    }
-                }
-                else if (TrySet<GivenParameter<P>>(source, value))
+                    break;
+
+                case FieldInfo fi:
+                    fi.SetValue(source, value);
                     return true;
             }
             return false;
@@ -180,43 +197,32 @@ namespace SpiceSharp.General
         /// </returns>
         public Action<P> CreateSetter<P>(object source)
         {
-            if (ReturnType == typeof(void))
-            {
-                if (Member is MethodInfo mi)
-                {
-                    var ps = mi.GetParameters();
-                    if (ps.Length == 1 && ps[0].ParameterType == typeof(P))
-                        return (Action<P>)mi.CreateDelegate(typeof(Action<P>), source);
-                }
-            }
-            else if (ReturnType.GetTypeInfo().IsAssignableFrom(typeof(P)))
-            {
-                switch (Member)
-                {
-                    case PropertyInfo pi:
-                        var setter = pi.GetSetMethod();
-                        if (setter != null)
-                            return (Action<P>)setter.CreateDelegate(typeof(Action<P>), source);
-                        break;
-                    case FieldInfo fi:
-                        if (fi.FieldType == typeof(P))
-                        {
-                            var constThis = Expression.Constant(source);
-                            var constField = Expression.Field(constThis, fi);
-                            var paramValue = Expression.Parameter(typeof(P), "value");
-                            var assignField = Expression.Assign(constField, paramValue);
-                            return Expression.Lambda<Action<P>>(assignField, paramValue).Compile();
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                var setter = CreateSetter<GivenParameter<P>>(source);
-                if (setter != null)
-                    return new Action<P>(value => setter(value));
-            }
+            if (ParameterType != typeof(P))
+                return null;
+            if (IsStatic && source != null || !IsStatic && source == null)
+                return null;
 
+            switch (Member)
+            {
+                case MethodInfo mi:
+                    return (Action<P>)mi.CreateDelegate(typeof(Action<P>), source);
+
+                case PropertyInfo pi:
+                    var setter = pi.GetSetMethod();
+                    if (setter != null)
+                        return (Action<P>)setter.CreateDelegate(typeof(Action<P>), source);
+                    break;
+
+                case FieldInfo fi:
+                    var paramValue = Expression.Parameter(typeof(P), "value");
+                    return Expression.Lambda<Action<P>>(
+                        Expression.Assign(
+                            Expression.Field(
+                                Expression.Constant(source),
+                                fi),
+                            paramValue
+                        ), paramValue).Compile();
+            }
             return null;
         }
 
@@ -233,45 +239,33 @@ namespace SpiceSharp.General
         /// <exception cref="TargetInvocationException">Thrown if the invoked get method throws an exception.</exception>
         public bool TryGet<P>(object source, out P value)
         {
-            if (typeof(P).GetTypeInfo().IsAssignableFrom(ReturnType))
+            if (typeof(P) != PropertyType ||
+                IsStatic && source != null || 
+                !IsStatic && source == null)
             {
-                switch (Member)
-                {
-                    case PropertyInfo pi:
-                        var getter = pi.GetGetMethod();
-                        if (getter != null)
-                        {
-                            if (getter.IsStatic && source != null ||
-                                !getter.IsStatic && source == null)
-                                break;
-                            value = (P)getter.Invoke(source, Array<object>.Empty());
-                            return true;
-                        }
-                        break;
-                    case FieldInfo fi:
-                        if (fi.IsStatic && source != null ||
-                            !fi.IsStatic && source == null)
-                            break;
-                        value = (P)fi.GetValue(source);
-                        return true;
-                    case MethodInfo mi:
-                        if (mi.GetParameters().Length == 0)
-                        {
-                            if (mi.IsStatic && source != null ||
-                                !mi.IsStatic && source == null)
-                                break;
-                            value = (P)mi.Invoke(source, Array<object>.Empty());
-                            return true;
-                        }
-                        break;
-                }
+                value = default;
+                return false;
             }
-            else if (TryGet(source, out GivenParameter<P> gp))
+            
+            switch (Member)
             {
-                value = gp.Value;
-                return true;
-            }
+                case MethodInfo mi:
+                    value = (P)mi.Invoke(source, null);
+                    return true;
 
+                case PropertyInfo pi:
+                    var getter = pi.GetGetMethod();
+                    if (getter != null)
+                    {
+                        value = (P)getter.Invoke(source, null);
+                        return true;
+                    }
+                    break;
+
+                case FieldInfo fi:
+                    value = (P)fi.GetValue(source);
+                    return true;
+            }
             value = default;
             return false;
         }
@@ -286,36 +280,32 @@ namespace SpiceSharp.General
         /// </returns>
         public Func<P> CreateGetter<P>(object source)
         {
-            if (typeof(P).GetTypeInfo().IsAssignableFrom(ReturnType))
-            {
-                switch (Member)
-                {
-                    case PropertyInfo pi:
-                        if (pi.CanRead)
-                            return (Func<P>)pi.GetGetMethod().CreateDelegate(typeof(Func<P>), source);
-                        break;
-                    case FieldInfo fi:
-                        if (fi.FieldType == typeof(P))
-                        {
-                            var constThis = Expression.Constant(source);
-                            var constField = Expression.Field(constThis, fi);
-                            var returnLabel = Expression.Label(typeof(P));
-                            return Expression.Lambda<Func<P>>(Expression.Label(returnLabel, constField)).Compile();
-                        }
-                        break;
-                    case MethodInfo mi:
-                        if (mi.GetParameters().Length == 0)
-                            return (Func<P>)mi.CreateDelegate(typeof(Func<P>), source);
-                        break;
-                }
-            }
-            else
-            {
-                var getter = CreateGetter<GivenParameter<P>>(source);
-                if (getter != null)
-                    return new Func<P>(() => getter());
-            }
+            if (typeof(P) != PropertyType ||
+                IsStatic && source != null ||
+                !IsStatic && source == null)
+                return null;
 
+            switch (Member)
+            {
+                case MethodInfo mi:
+                    return (Func<P>)mi.CreateDelegate(typeof(Func<P>), source);
+
+                case PropertyInfo pi:
+                    var getter = pi.GetGetMethod();
+                    if (getter != null)
+                        return (Func<P>)getter.CreateDelegate(typeof(Func<P>), source);
+                    break;
+
+                case FieldInfo fi:
+                    return Expression.Lambda<Func<P>>(
+                        Expression.Label(
+                            Expression.Label(typeof(P)),
+                            Expression.Field(
+                                Expression.Constant(source),
+                                fi)
+                            )
+                        ).Compile();
+            }
             return null;
         }
     }

@@ -8,26 +8,25 @@ namespace SpiceSharp.General
     /// A cached map of type members. Can be used to quickly map parameter names to
     /// <see cref="MemberDescription"/> objects, or to enumerate all members in a class.
     /// </summary>
-    public class ParameterMap
+    public class ParameterMap : IMembers
     {
-        private Dictionary<string, MemberDescription> _members;
-        private readonly HashSet<MemberDescription> _values;
+        private readonly Dictionary<Type, IMemberMap> _memberMaps = new Dictionary<Type, IMemberMap>();
 
-        /// <summary>
-        /// Enumerate all members in the map.
-        /// </summary>
-        /// <value>
-        /// The members.
-        /// </value>
-        public IEnumerable<MemberDescription> Members => _values;
+        /// <inheritdoc/>
+        public IEnumerable<MemberDescription> Members
+        {
+            get
+            {
+                foreach (var map in _memberMaps.Values)
+                {
+                    foreach (var member in map.Members)
+                        yield return member;
+                }
+            }
+        }
 
-        /// <summary>
-        /// Gets the comparer used for parameter names.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
-        public IEqualityComparer<string> Comparer => _members.Comparer;
+        /// <inheritdoc/>
+        public IEqualityComparer<string> Comparer { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterMap"/> class.
@@ -39,35 +38,32 @@ namespace SpiceSharp.General
         {
             type.ThrowIfNull(nameof(type));
 
-            _members = new Dictionary<string, MemberDescription>(comparer);
-            _values = new HashSet<MemberDescription>();
             foreach (var member in type.GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public))
             {
+                // Ignore unsupported members
                 var mt = member.MemberType;
                 if (mt != MemberTypes.Property &&
                     mt != MemberTypes.Field &&
                     mt != MemberTypes.Method)
                     continue;
-
                 var desc = new MemberDescription(member);
-                _values.Add(desc);
+                if (desc.Names.Count == 0)
+                    continue;
+                var descType = desc.ParameterType;
+                if (descType == typeof(void))
+                    descType = desc.PropertyType;
+                if (descType == typeof(void))
+                    continue;
 
-                // TODO: This does not support parameters/properties with the same name but different types!!!
-                // Add named parameters
-                if (desc.Names.Count > 0)
+                // Add a map
+                if (!_memberMaps.TryGetValue(descType, out var members))
                 {
-                    foreach (var name in desc.Names)
-                    {
-                        if (!_members.TryGetValue(name, out var old))
-                            _members.Add(name, desc);
-                        else
-                        {
-                            // Prefer the child class
-                            if (old.Member.DeclaringType.GetTypeInfo().IsAssignableFrom(desc.Member.DeclaringType))
-                                _members[name] = desc;
-                        }
-                    }
+                    // Create a new instance
+                    var ntype = typeof(TypedMemberMap<>).MakeGenericType(descType);
+                    members = (IMemberMap)Activator.CreateInstance(ntype, new[] { comparer });
+                    _memberMaps.Add(descType, members);
                 }
+                members.Add(desc);
             }
         }
 
@@ -77,31 +73,195 @@ namespace SpiceSharp.General
         /// <param name="comparer">The comparer.</param>
         public void Remap(IEqualityComparer<string> comparer)
         {
-            var nmap = new Dictionary<string, MemberDescription>(comparer);
-            foreach (var type in _members)
-            {   
-                foreach (var desc in nmap.Values)
-                {
-                    foreach (var name in desc.Names)
-                        nmap.Add(name, desc);
-                }
+            var d = new Dictionary<Type, IMemberMap>();
+            foreach (var map in _memberMaps)
+            {
+                var nmap = (IMemberMap)Activator.CreateInstance(map.Value.GetType(), new object[] { comparer });
+                foreach (var desc in map.Value.Members)
+                    nmap.Add(desc);
+                d.Add(map.Key, nmap);
             }
-            _members.Clear();
-            _members = nmap;
+            _memberMaps.Clear();
+            foreach (var pair in d)
+                _memberMaps.Add(pair.Key, pair.Value);
         }
 
         /// <summary>
-        /// Gets the <see cref="MemberDescription"/> that matches a specified name.
+        /// Tries to set the value of a parameter with the specified name.
         /// </summary>
-        /// <param name="name">The parameter name.</param>
-        /// <returns>The description of the parameter.</returns>
-        public MemberDescription Get(string name)
+        /// <typeparam name="P">The parameter value type.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the parameter was set succesfully; otherwise <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public bool TrySet<P>(object source, string name, P value)
         {
-            if (_members.TryGetValue(name, out var result))
-                return result;
+            if (_memberMaps.TryGetValue(typeof(P), out var direct))
+            {
+                if (direct is IParameterImporter<P> importer)
+                {
+                    if (importer.TrySet(source, name, value))
+                        return true;
+                }
+            }
+            foreach (var map in _memberMaps.Values)
+            {
+                if (map is IParameterImporter<P> importer)
+                {
+                    if (importer.TrySet(source, name, value))
+                        return true;
+                }    
+            }
 
-            // Get the matching name
-            return null;
+            // Fall back to a given parameter
+            if (_memberMaps.TryGetValue(typeof(GivenParameter<P>), out var gpm) &&
+                gpm is IParameterImporter<GivenParameter<P>> gimporter)
+            {
+                if (gimporter.TrySet(source, name, value))
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Creates a setter for a parameter with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The parameter value type.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The parameter name.</param>
+        /// <returns>
+        /// The setter; or <c>null</c> if the parameter was not found.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public Action<P> CreateSetter<P>(object source, string name)
+        {
+            Action<P> result = null;
+            if (_memberMaps.TryGetValue(typeof(P), out var direct))
+            {
+                if (direct is IParameterImporter<P> importer)
+                    result = importer.CreateSetter(source, name);
+            }
+            if (result != null)
+            {
+                foreach (var map in _memberMaps)
+                {
+                    if (map.Value is IParameterImporter<P> importer)
+                    {
+                        result = importer.CreateSetter(source, name);
+                        if (result != null)
+                            return result;
+                    }
+                }
+            }
+
+            // Try once more with GivenParameter
+            if (result == null)
+            {
+                if (_memberMaps.TryGetValue(typeof(GivenParameter<P>), out var gpm) &&
+                    gpm is IParameterImporter<GivenParameter<P>> importer)
+                {
+                    var gresult = importer.CreateSetter(source, name);
+                    if (gresult != null)
+                        result = v => gresult(v);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Tries to get the value of a property with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The property value type.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// <c>true</c> if the property was found; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public bool TryGet<P>(object source, string name, out P value)
+        {
+            bool isValid;
+            if (_memberMaps.TryGetValue(typeof(P), out var direct))
+            {
+                if (direct is IPropertyExporter<P> exporter)
+                {
+                    value = exporter.TryGet(source, name, out isValid);
+                    if (isValid)
+                        return true;
+                }
+            }
+            foreach (var map in _memberMaps.Values)
+            {
+                if (map is IPropertyExporter<P> exporter)
+                {
+                    value = exporter.TryGet(source, name, out isValid);
+                    if (isValid)
+                        return true;
+                }
+            }
+
+            // Try again with GivenParameter
+            if (_memberMaps.TryGetValue(typeof(GivenParameter<P>), out var gpm) &&
+                gpm is IPropertyExporter<GivenParameter<P>> gexporter)
+            {
+                value = gexporter.TryGet(source, name, out isValid).Value;
+                if (isValid)
+                    return true;
+            }
+
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Creates a getter for a property with the specified name.
+        /// </summary>
+        /// <typeparam name="P">The property value type.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The property name.</param>
+        /// <returns>
+        /// The getter; or <c>null</c> if the property was not found.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public Func<P> CreateGetter<P>(object source, string name)
+        {
+            Func<P> result = null;
+            if (_memberMaps.TryGetValue(typeof(P), out var direct))
+            {
+                if (direct is IPropertyExporter<P> exporter)
+                    result = exporter.CreateGetter(source, name);
+            }
+            if (result != null)
+            {
+                foreach (var map in _memberMaps.Values)
+                {
+                    if (map is IPropertyExporter<P> exporter)
+                    {
+                        result = exporter.CreateGetter(source, name);
+                        if (result != null)
+                            return result;
+                    }
+                }
+            }
+
+            // Try again with GivenParameter
+            if (result == null)
+            {
+                if (_memberMaps.TryGetValue(typeof(GivenParameter<P>), out var gpm) &&
+                    gpm is IPropertyExporter<GivenParameter<P>> exporter)
+                {
+                    var gresult = exporter.CreateGetter(source, name);
+                    if (gresult != null)
+                        result = () => gresult().Value;
+                }
+            }
+
+            return result;
         }
     }
 }
