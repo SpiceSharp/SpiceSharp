@@ -6,10 +6,10 @@ using SpiceSharp.Components;
 using SpiceSharp.Attributes;
 using System.Linq;
 
-namespace SpiceSharp
+namespace SpiceSharp.Reflection
 {
     /// <summary>
-    /// A helper class that helps listing documentation.
+    /// A helper class that helps listing documentation at runtime.
     /// </summary>
     public static class Documentation
     {
@@ -110,6 +110,6 @@ namespace SpiceSharp
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
         public static IEnumerable<MemberDescription> Parameters(Type type)
-            => Reflection.GetMap(type.ThrowIfNull(nameof(type))).Members.Where(p => p.Names.Count > 0);
+            => ReflectionHelper.GetMap(type.ThrowIfNull(nameof(type))).Members.Where(p => p.Names.Count > 0);
     }
 }

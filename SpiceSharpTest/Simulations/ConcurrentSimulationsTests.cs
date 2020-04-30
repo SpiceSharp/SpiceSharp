@@ -63,7 +63,7 @@ namespace SpiceSharpTest.Simulations
             );
 
             var transientSimulations = new List<Transient>();
-            var n = 10000;
+            var n = 1000;
 
             for (var i = 0; i < n; i++)
             {

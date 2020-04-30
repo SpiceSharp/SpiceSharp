@@ -42,7 +42,7 @@ namespace SpiceSharp.Entities
         protected virtual Entity Clone()
         {
             var clone = (Entity)Activator.CreateInstance(GetType(), Name);
-            Reflection.CopyPropertiesAndFields(this, clone);
+            ReflectionHelper.CopyPropertiesAndFields(this, clone);
             return clone;
         }
 
@@ -55,7 +55,7 @@ namespace SpiceSharp.Entities
         protected virtual void CopyFrom(ICloneable source)
         {
             source.ThrowIfNull(nameof(source));
-            Reflection.CopyPropertiesAndFields(source, this);
+            ReflectionHelper.CopyPropertiesAndFields(source, this);
         }
 
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);

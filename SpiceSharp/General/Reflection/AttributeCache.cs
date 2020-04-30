@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Reflection
 {
     /// <summary>
     /// A static class that caches attributes for types.

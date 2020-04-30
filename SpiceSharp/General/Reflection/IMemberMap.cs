@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Reflection
 {
     /// <summary>
     /// A class that contains the members of a certain type.

@@ -37,7 +37,7 @@ namespace SpiceSharpTest.Models
             resistor.Parameters.SeriesMultiplier = 2.0;
             resistor.Parameters.ParallelMultiplier = 3.0;
             var clone = (Resistor)Activator.CreateInstance(typeof(Resistor), new object[] { "R1Clone" });
-            Reflection.CopyPropertiesAndFields(resistor, clone);
+            ReflectionHelper.CopyPropertiesAndFields(resistor, clone);
 
             resistor.Parameters.ParallelMultiplier = 1.0;
 

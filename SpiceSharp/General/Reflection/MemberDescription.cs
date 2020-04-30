@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Reflection
 {
     /// <summary>
     /// The description of a member on a type with named parameters.

@@ -44,7 +44,7 @@ namespace SpiceSharp
         protected virtual void CopyFrom(ICloneable source)
         {
             source.ThrowIfNull(nameof(source));
-            Reflection.CopyPropertiesAndFields(source, this);
+            ReflectionHelper.CopyPropertiesAndFields(source, this);
         }
 
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
@@ -52,7 +52,7 @@ namespace SpiceSharp
         /// <inheritdoc/>
         public ParameterSet SetParameter<P>(string name, P value)
         {
-            Reflection.Set(this, name, value);
+            ReflectionHelper.Set(this, name, value);
             return this;
         }
 
@@ -60,22 +60,22 @@ namespace SpiceSharp
 
         /// <inheritdoc/>
         public bool TrySetParameter<P>(string name, P value)
-            => Reflection.TrySet(this, name, value);
+            => ReflectionHelper.TrySet(this, name, value);
 
         /// <inheritdoc/>
         public P GetProperty<P>(string name)
-            => Reflection.Get<P>(this, name);
+            => ReflectionHelper.Get<P>(this, name);
 
         /// <inheritdoc/>
         public bool TryGetProperty<P>(string name, out P value)
-            => Reflection.TryGet(this, name, out value);
+            => ReflectionHelper.TryGet(this, name, out value);
 
         /// <inheritdoc/>
         public Func<P> CreatePropertyGetter<P>(string name)
-            => Reflection.CreateGetter<P>(this, name);
+            => ReflectionHelper.CreateGetter<P>(this, name);
 
         /// <inheritdoc/>
         public Action<P> CreateParameterSetter<P>(string name)
-            => Reflection.CreateSetter<P>(this, name);
+            => ReflectionHelper.CreateSetter<P>(this, name);
     }
 }

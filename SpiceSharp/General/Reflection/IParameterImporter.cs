@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Reflection
 {
     /// <summary>
     /// An interface that describes a type that can import parameters of a specific type.

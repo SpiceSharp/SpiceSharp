@@ -296,7 +296,7 @@ namespace SpiceSharpTest
         {
             // <example_EntityDocumentation>
             var entity = new ResistorModel("RM1");
-            foreach (var parameter in Documentation.Parameters(entity))
+            foreach (var parameter in SpiceSharp.Reflection.Documentation.Parameters(entity))
             {
                 Console.Write(string.Join(", ", parameter.Names));
                 Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
@@ -307,7 +307,7 @@ namespace SpiceSharpTest
 
             // <example_SimulationDocumentation>
             var simulation = new Transient("tran");
-            foreach (var parameter in Documentation.Parameters(simulation))
+            foreach (var parameter in SpiceSharp.Reflection.Documentation.Parameters(simulation))
             {
                 Console.Write(string.Join(", ", parameter.Names));
                 Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
@@ -325,7 +325,7 @@ namespace SpiceSharpTest
             {
                 // Behaviors are created when executing a simulation,
                 // so we need to register for the event to have access to them.
-                foreach (var parameter in Documentation.Parameters(op.EntityBehaviors["V1"]))
+                foreach (var parameter in SpiceSharp.Reflection.Documentation.Parameters(op.EntityBehaviors["V1"]))
                 {
                     Console.Write(string.Join(", ", parameter.Names));
                     Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Reflection
 {
     /// <summary>
     /// A cached map of type members. Can be used to quickly map parameter names to

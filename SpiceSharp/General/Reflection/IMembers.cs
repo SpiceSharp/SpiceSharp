@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SpiceSharp.General
+namespace SpiceSharp.Reflection
 {
     /// <summary>
     /// Interface for types that can get or set members.

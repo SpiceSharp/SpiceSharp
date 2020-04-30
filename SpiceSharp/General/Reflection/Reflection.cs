@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.General;
+using SpiceSharp.Reflection;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -11,9 +11,9 @@ using System.Reflection;
 namespace SpiceSharp
 {
     /// <summary>
-    /// Helper class for using reflection in Spice#.
+    /// Helper class for using reflection in combination with Spice#.
     /// </summary>
-    public static class Reflection
+    public static class ReflectionHelper
     {
         /// <summary>
         /// Gets or sets the default comparer used when creating a parameter mapping.

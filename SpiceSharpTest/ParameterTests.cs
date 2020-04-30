@@ -52,7 +52,7 @@ namespace SpiceSharpTest.Parameters
                 Field2 = 2
             };
             var destination = new ParameterExample();
-            Reflection.CopyPropertiesAndFields(source, destination);
+            ReflectionHelper.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1.0, destination.Field1, 1e-12);
             Assert.AreEqual(2, destination.Field2);
 
@@ -72,7 +72,7 @@ namespace SpiceSharpTest.Parameters
             var source = new ParameterExample();
             source.SetMethod1(1);
             var destination = new ParameterExample();
-            Reflection.CopyPropertiesAndFields(source, destination);
+            ReflectionHelper.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Property1);
 
             destination.SetMethod1(2);
@@ -93,7 +93,7 @@ namespace SpiceSharpTest.Parameters
                 Property2 = 1
             };
             var destination = new ParameterExample();
-            Reflection.CopyPropertiesAndFields(source, destination);
+            ReflectionHelper.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Property2);
 
             destination.Property2 = 2;
@@ -114,7 +114,7 @@ namespace SpiceSharpTest.Parameters
                 Parameter1 = 1
             };
             var destination = new ParameterExample();
-            Reflection.CopyPropertiesAndFields(source, destination);
+            ReflectionHelper.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter1.Value);
 
             destination.Parameter1 = 2;
@@ -135,7 +135,7 @@ namespace SpiceSharpTest.Parameters
                 Parameter2 = 1
             };
             var destination = new ParameterExample();
-            Reflection.CopyPropertiesAndFields(source, destination);
+            ReflectionHelper.CopyPropertiesAndFields(source, destination);
             Assert.AreEqual(1, destination.Parameter2.Value);
 
             destination.Parameter2 = 2;

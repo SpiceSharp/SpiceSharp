@@ -40,7 +40,7 @@ namespace SpiceSharp.Behaviors
         {
             if (base.TryGetProperty(name, out P result))
                 return result;
-            return Reflection.Get<P>(this, name);
+            return ReflectionHelper.Get<P>(this, name);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SpiceSharp.Behaviors
         {
             if (base.TryGetProperty(name, out value))
                 return true;
-            return Reflection.TryGet(this, name, out value);
+            return ReflectionHelper.TryGet(this, name, out value);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace SpiceSharp.Behaviors
         {
             var getter = base.CreatePropertyGetter<P>(name);
             if (getter == null)
-                getter = Reflection.CreateGetter<P>(this, name);
+                getter = ReflectionHelper.CreateGetter<P>(this, name);
             return getter;
         }
     }
