@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Simulations.IntegrationMethods
+namespace SpiceSharp.Simulations.Histories
 {
     /// <summary>
     /// A class that implements a history using a linked list.
@@ -149,6 +149,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <returns>
         /// The previous value.
         /// </returns>
+        /// TODO: Throw exception here if index is out of range!
         public T GetPreviousValue(int index)
         {
             // Find the matching node

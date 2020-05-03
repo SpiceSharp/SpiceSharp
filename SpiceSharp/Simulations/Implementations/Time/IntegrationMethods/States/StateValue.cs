@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Simulations.Histories;
+using System;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {

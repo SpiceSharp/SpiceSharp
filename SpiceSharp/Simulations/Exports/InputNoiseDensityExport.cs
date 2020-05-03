@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         protected override void Initialize(object sender, EventArgs e)
         {
             var state = Simulation.GetState<INoiseSimulationState>();
-            Extractor = () => state.OutputNoiseDensity * state.GainInverseSquared;
+            Extractor = () => state.OutputNoiseDensity * state.Point.Value.InverseGainSquared;
         }
     }
 }

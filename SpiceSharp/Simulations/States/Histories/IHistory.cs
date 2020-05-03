@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Simulations.IntegrationMethods
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Interface describing a history of a value.
@@ -25,6 +25,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <returns>
         /// The previous value.
         /// </returns>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="index"/> is out of range.</exception>
         T GetPreviousValue(int index);
 
         /// <summary>

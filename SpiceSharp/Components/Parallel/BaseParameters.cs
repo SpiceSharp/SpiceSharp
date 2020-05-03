@@ -99,12 +99,21 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public IWorkDistributor AcceptDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the noise distributor.
+        /// Gets or sets the workload distributor for noise computations.
         /// </summary>
         /// <value>
-        /// The noise distributor.
+        /// The workload distributor for noise computations.
         /// </value>
-        [ParameterName("noise.noise"), ParameterInfo("Work distributor for calculating noise contributions")]
-        public IWorkDistributor NoiseDistributor { get; set; }
+        [ParameterName("noise.compute"), ParameterInfo("Work distributor for computing noise contributions")]
+        public IWorkDistributor NoiseComputeDistributor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the workload distributor for noise initialization.
+        /// </summary>
+        /// <value>
+        /// The workload distributor for noise initialization.
+        /// </value>
+        [ParameterName("noise.initialize"), ParameterInfo("Work distributor for initializing noise sources")]
+        public IWorkDistributor NoiseInitializeDistributor { get; set; }
     }
 }

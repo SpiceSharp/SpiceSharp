@@ -1,42 +1,40 @@
-﻿using System;
+﻿using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
-    /// Shotnoise generator
+    /// A noise source that can be described using shot noise models.
     /// </summary>
-    public class NoiseShot : NoiseGenerator
+    /// <seealso cref="NoiseSource"/>
+    public class NoiseShot : NoiseSource
     {
-        /// <summary>
-        /// Gets or sets the gain of the shot noise
-        /// The noise will be 2 * q * Gain
-        /// </summary>
-        public double Current { get; set; }
+        private readonly OnePort<Complex> _variables;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoiseShot"/> class.
+        /// Initializes a new instance of the <see cref="NoiseShot" /> class.
         /// </summary>
         /// <param name="name">Name of the noise source.</param>
-        /// <param name="node1">Node 1.</param>
-        /// <param name="node2">Node 2.</param>
-        public NoiseShot(string name, int node1, int node2) : base(name, node1, node2) { }
-
-        /// <summary>
-        /// Set the parameters of the shot noise
-        /// </summary>
-        /// <param name="coefficients">Values.</param>
-        public override void SetCoefficients(params double[] coefficients)
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        public NoiseShot(string name, IVariable<Complex> pos, IVariable<Complex> neg) 
+            : base(name)
         {
-            coefficients.ThrowIfNotLength(nameof(coefficients), 1);
-            Current = coefficients[0];
+            _variables = new OnePort<Complex>(pos, neg);
         }
 
-        /// <inheritdoc/>
-        protected override double CalculateNoise()
+        /// <summary>
+        /// Computes the noise density of shot noise.
+        /// This is equal to 2 * q * I
+        /// </summary>
+        public void Compute(double current)
         {
-            var val = ComplexState.Solution[Nodes[0]] - ComplexState.Solution[Nodes[1]];
+            var val = _variables.Positive.Value - _variables.Negative.Value;
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 2.0 * Constants.Charge * Math.Abs(Current) * gain;
+            OutputNoiseDensity = 2.0 * Constants.Charge * Math.Abs(current) * gain;
         }
     }
 }

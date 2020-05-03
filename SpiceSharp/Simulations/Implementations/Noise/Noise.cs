@@ -72,8 +72,7 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Get behaviors, parameters and states
-            _state = new NoiseSimulationState();
-            _state.Setup();
+            _state = new NoiseSimulationState(Name);
             base.Setup(entities);
 
             // Cache local variables
@@ -109,31 +108,35 @@ namespace SpiceSharp.Simulations
             var freq = FrequencyParameters.Frequencies.GetEnumerator();
             if (!freq.MoveNext())
                 return;
-            _state.Reset(freq.Current);
             cstate.Laplace = 0;
             Op(BiasingParameters.DcMaxIterations);
 
-            // Load all in order to calculate the AC info for all devices
+            // Initialize all devices for small-signal analysis and reset all noise contributions
             InitializeAcParameters();
+            foreach (var behavior in _noiseBehaviors)
+                behavior.Initialize();
 
             // Loop through noise figures
             do
             {
-                _state.Frequency = freq.Current;
+                // First compute the AC gain
                 cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq.Current);
                 AcIterate();
 
                 var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                _state.GainInverseSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                var inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
 
                 // Solve the adjoint system
                 NzIterate(posOutNode, negOutNode);
 
                 // Now we use the adjoint system to calculate the noise
                 // contributions of each generator in the circuit
-                _state.OutputNoiseDensity = 0.0;
                 foreach (var behavior in _noiseBehaviors)
-                    behavior.Noise();
+                {
+                    behavior.Compute();
+                    _state.Add(behavior);
+                }
 
                 // Export the data
                 OnExport(exportargs);

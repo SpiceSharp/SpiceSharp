@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System.Linq;
 
 namespace SpiceSharp.Components.ParallelBehaviors
 {
@@ -8,7 +9,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="INoiseBehavior" />
-    public partial class NoiseBehavior : Behavior, INoiseBehavior
+    public partial class NoiseBehavior : Behavior, 
+        INoiseBehavior
     {
         /// <summary>
         /// Prepares the specified simulation.
@@ -17,7 +19,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public static void Prepare(ParallelSimulation simulation)
         {
             var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
-            if (parameters.NoiseDistributor != null)
+            if (parameters.NoiseComputeDistributor != null)
             {
                 if (simulation.UsesState<INoiseSimulationState>())
                 {
@@ -27,8 +29,17 @@ namespace SpiceSharp.Components.ParallelBehaviors
             }
         }
 
-        private readonly Workload _noiseWorkload;
+        private readonly Workload _noiseInitializeWorkload, _noiseComputeWorkload;
         private readonly BehaviorList<INoiseBehavior> _noiseBehaviors;
+
+        /// <inheritdoc/>
+        public double OutputNoiseDensity => _noiseBehaviors.Sum(nb => nb.OutputNoiseDensity);
+
+        /// <inheritdoc/>
+        public double TotalOutputNoise => _noiseBehaviors.Sum(nb => nb.TotalOutputNoise);
+
+        /// <inheritdoc/>
+        public double TotalInputNoise => _noiseBehaviors.Sum(nb => nb.TotalInputNoise);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
@@ -40,22 +51,41 @@ namespace SpiceSharp.Components.ParallelBehaviors
         {
             var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
             _noiseBehaviors = simulation.EntityBehaviors.GetBehaviorList<INoiseBehavior>();
-            if (parameters.NoiseDistributor != null)
+            if (parameters.NoiseComputeDistributor != null)
             {
-                _noiseWorkload = new Workload(parameters.NoiseDistributor, _noiseBehaviors.Count);
+                _noiseComputeWorkload = new Workload(parameters.NoiseComputeDistributor, _noiseBehaviors.Count);
                 foreach (var behavior in _noiseBehaviors)
-                    _noiseWorkload.Actions.Add(behavior.Noise);
+                    _noiseComputeWorkload.Actions.Add(behavior.Compute);
+            }
+            if (parameters.NoiseInitializeDistributor != null)
+            {
+                _noiseInitializeWorkload = new Workload(parameters.NoiseInitializeDistributor, _noiseBehaviors.Count);
+                foreach (var behavior in _noiseBehaviors)
+                    _noiseInitializeWorkload.Actions.Add(behavior.Initialize);
             }
         }
 
-        void INoiseBehavior.Noise()
+        /// <inheritdoc/>
+        void INoiseSource.Initialize()
         {
-            if (_noiseWorkload != null)
-                _noiseWorkload.Execute();
+            if (_noiseInitializeWorkload != null)
+                _noiseInitializeWorkload.Execute();
             else
             {
                 foreach (var behavior in _noiseBehaviors)
-                    behavior.Noise();
+                    behavior.Initialize();
+            }
+        }
+
+        /// <inheritdoc/>
+        void INoiseBehavior.Compute()
+        {
+            if (_noiseComputeWorkload != null)
+                _noiseComputeWorkload.Execute();
+            else
+            {
+                foreach (var behavior in _noiseBehaviors)
+                    behavior.Compute();
             }
         }
     }

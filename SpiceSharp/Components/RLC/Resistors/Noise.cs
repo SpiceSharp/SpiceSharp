@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.Simulations;
 
@@ -11,13 +12,25 @@ namespace SpiceSharp.Components.Resistors
     /// <seealso cref="INoiseBehavior"/>
     public class Noise : Frequency, INoiseBehavior
     {
+        private readonly NoiseThermal _thermal;
+
+        /// <inheritdoc/>
+        public double OutputNoiseDensity => _thermal.OutputNoiseDensity;
+
+        /// <inheritdoc/>
+        public double TotalOutputNoise => _thermal.TotalOutputNoise;
+
+        /// <inheritdoc/>
+        public double TotalInputNoise => _thermal.TotalInputNoise;
+
         /// <summary>
-        /// Gets resistor noise sources
+        /// Gets the thermal noise source of the resistor.
         /// </summary>
         /// <value>
-        /// The resistor noise generators.
+        /// The thermal noise source.
         /// </value>
-        public ComponentNoise ResistorNoise { get; } = new ComponentNoise(new NoiseThermal("thermal", 0, 1));
+        [ParameterName("thermal"), ParameterInfo("The thermal noise source")]
+        public INoiseSource Thermal => _thermal;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
@@ -27,16 +40,21 @@ namespace SpiceSharp.Components.Resistors
         public Noise(string name, ComponentBindingContext context) : base(name, context) 
         {
             var state = context.GetState<IComplexSimulationState>();
-            ResistorNoise.Bind(context, state.GetSharedVariable(context.Nodes[0]), state.GetSharedVariable(context.Nodes[1]));
+            _thermal = new NoiseThermal("r",
+                state.GetSharedVariable(context.Nodes[0]), 
+                state.GetSharedVariable(context.Nodes[1]));
         }
 
-        /// <summary>
-        /// Noise calculations
-        /// </summary>
-        void INoiseBehavior.Noise()
+        /// <inheritdoc/>
+        void INoiseSource.Initialize()
         {
-            ResistorNoise.Generators[0].SetCoefficients(Conductance);
-            ResistorNoise.Evaluate();
+            _thermal.Initialize();
+        }
+
+        /// <inheritdoc/>
+        void INoiseBehavior.Compute()
+        {
+            _thermal.Compute(Conductance, Parameters.Temperature);
         }
     }
 }

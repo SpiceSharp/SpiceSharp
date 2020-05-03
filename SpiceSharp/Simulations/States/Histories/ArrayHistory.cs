@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Simulations.IntegrationMethods
+namespace SpiceSharp.Simulations.Histories
 {
     /// <summary>
     /// A class that implements a history with an array.

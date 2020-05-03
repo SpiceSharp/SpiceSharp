@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using System.Collections.Generic;
+using SpiceSharp.Simulations.Histories;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {

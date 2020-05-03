@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Simulations.Histories;
 using System;
 using System.Collections.Generic;
 

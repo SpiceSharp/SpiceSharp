@@ -1,48 +1,40 @@
-﻿namespace SpiceSharp.Components.NoiseSources
+﻿using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Simulations;
+using System.Numerics;
+
+namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
-    /// Thermal noise generator
+    /// A noise source that can be described by Johnson noise (thermal noise) models.
     /// </summary>
-    public class NoiseThermal : NoiseGenerator
+    /// <seealso cref="NoiseSource"/>
+    public class NoiseThermal : NoiseSource
     {
-        /// <summary>
-        /// The second node of the noise source.
-        /// </summary>
-        public int Node2 { get; }
+        private readonly OnePort<Complex> _variables;
 
         /// <summary>
-        /// Gets or sets the gain of the thermal noise
-        /// The noise is 4 * k * T * G
-        /// </summary>
-        public double Conductance { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NoiseThermal"/> class.
+        /// Initializes a new instance of the <see cref="NoiseThermal" /> class.
         /// </summary>
         /// <param name="name">Name of the noise source.</param>
-        /// <param name="node1">Node 1.</param>
-        /// <param name="node2">Node 2.</param>
-        public NoiseThermal(string name, int node1, int node2) : base(name, node1, node2)
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        public NoiseThermal(string name, IVariable<Complex> pos, IVariable<Complex> neg)
+            : base(name)
         {
-            Node2 = node2;
+            _variables = new OnePort<Complex>(pos, neg);
         }
 
         /// <summary>
-        /// Set the parameters for the thermal noise
+        /// Computes the Johnson or thermal noise output density.
+        /// This is 4 * k * T * G.
         /// </summary>
-        /// <param name="coefficients">The coefficients.</param>
-        public override void SetCoefficients(params double[] coefficients)
+        /// <param name="conductance">The conductance.</param>
+        /// <param name="temperature">The temperature.</param>
+        public void Compute(double conductance, double temperature)
         {
-            coefficients.ThrowIfNotLength(nameof(coefficients), 1);
-            Conductance = coefficients[0];
-        }
-
-        /// <inheritdoc/>
-        protected override double CalculateNoise()
-        {
-            var val = ComplexState.Solution[Nodes[0]] - ComplexState.Solution[Nodes[1]];
+            var val = _variables.Positive.Value - _variables.Negative.Value;
             var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return 4.0 * Constants.Boltzmann * TemperatureState.Temperature * Conductance * gain;
+            OutputNoiseDensity = 4.0 * Constants.Boltzmann * temperature * conductance * gain;
         }
     }
 }

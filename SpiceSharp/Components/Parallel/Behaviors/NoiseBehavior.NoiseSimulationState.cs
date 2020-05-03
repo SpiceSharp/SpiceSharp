@@ -14,63 +14,8 @@ namespace SpiceSharp.Components.ParallelBehaviors
             private readonly INoiseSimulationState _parent;
             private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-            double INoiseSimulationState.Frequency => _parent.Frequency;
-            double INoiseSimulationState.DeltaFrequency => _parent.DeltaFrequency;
-            double INoiseSimulationState.OutputNoise 
-            {
-                get
-                {
-                    _lock.EnterReadLock();
-                    try
-                    {
-                        return _parent.OutputNoise;
-                    }
-                    finally
-                    {
-                        _lock.ExitReadLock();
-                    }
-                }
-                set
-                {
-                    _lock.EnterWriteLock();
-                    try
-                    {
-                        _parent.OutputNoise = value;
-                    }
-                    finally
-                    {
-                        _lock.ExitWriteLock();
-                    }
-                }
-            }
-            double INoiseSimulationState.InputNoise 
-            {
-                get
-                {
-                    _lock.EnterReadLock();
-                    try
-                    {
-                        return _parent.InputNoise;
-                    }
-                    finally
-                    {
-                        _lock.ExitReadLock();
-                    }
-                }
-                set
-                {
-                    _lock.EnterWriteLock();
-                    try
-                    {
-                        _parent.InputNoise = value;
-                    }
-                    finally
-                    {
-                        _lock.ExitWriteLock();
-                    }
-                }
-            }
-            double INoiseSimulationState.OutputNoiseDensity 
+            /// <inheritdoc/>
+            public double OutputNoiseDensity
             {
                 get
                 {
@@ -84,21 +29,58 @@ namespace SpiceSharp.Components.ParallelBehaviors
                         _lock.ExitReadLock();
                     }
                 }
-                set
+            }
+
+            /// <inheritdoc/>
+            public double TotalOutputNoise
+            {
+                get
                 {
-                    _lock.EnterWriteLock();
+                    _lock.EnterReadLock();
                     try
                     {
-                        _parent.OutputNoiseDensity = value;
+                        return _parent.TotalOutputNoise;
                     }
                     finally
                     {
-                        _lock.ExitWriteLock();
+                        _lock.ExitReadLock();
                     }
                 }
             }
-            double INoiseSimulationState.GainInverseSquared => _parent.GainInverseSquared;
-            double INoiseSimulationState.LogInverseGain => _parent.LogInverseGain;
+
+            /// <inheritdoc/>
+            public double TotalInputNoise
+            {
+                get
+                {
+                    _lock.EnterReadLock();
+                    try
+                    {
+                        return _parent.TotalInputNoise;
+                    }
+                    finally
+                    {
+                        _lock.ExitReadLock();
+                    }
+                }
+            }
+
+            /// <inheritdoc/>
+            public IHistory<NoisePoint> Point
+            {
+                get
+                {
+                    _lock.EnterReadLock();
+                    try
+                    {
+                        return _parent.Point;
+                    }
+                    finally
+                    {
+                        _lock.ExitReadLock();
+                    }
+                }
+            }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="NoiseSimulationState"/> class.
@@ -108,9 +90,6 @@ namespace SpiceSharp.Components.ParallelBehaviors
             {
                 _parent = parent.ThrowIfNull(nameof(parent));
             }
-
-            double INoiseSimulationState.Integrate(double noiseDensity, double logNoiseDensity, double lastLogNoiseDensity)
-                => _parent.Integrate(noiseDensity, logNoiseDensity, lastLogNoiseDensity);
         }
     }
 }

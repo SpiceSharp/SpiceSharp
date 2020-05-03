@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(BipolarJunctionTransistorModel));
             behaviors
-                .AddIfNo<INoiseBehavior>(simulation, () => new NoiseBehavior(Name, context))
+                .AddIfNo<INoiseBehavior>(simulation, () => new Bipolars.Noise(Name, context))
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SpiceSharp.Simulations.Histories;
+using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -10,123 +12,84 @@ namespace SpiceSharp.Simulations
         /// <seealso cref="ISimulationState" />
         protected class NoiseSimulationState : INoiseSimulationState
         {
-            /// <summary>
-            /// Private variables
-            /// </summary>
-            private double _gainSquareInverted, _currentFrequency, _lastFrequency, _logLastFrequency, _deltaFrequency, _deltaLogFrequency, _logFrequency;
+            /// <inheritdoc/>
+            public string Name { get; }
+
+            /// <inheritdoc/>
+            public double OutputNoiseDensity { get; private set; }
+
+            /// <inheritdoc/>
+            public double TotalOutputNoise { get; private set; }
+
+            /// <inheritdoc/>
+            public double TotalInputNoise { get; private set; }
+
+            /// <inheritdoc/>
+            public IHistory<NoisePoint> Point { get; }
 
             /// <summary>
-            /// Gets or sets the current frequency.
+            /// Initializes a new instance of the <see cref="NoiseSimulationState"/> class.
             /// </summary>
-            public double Frequency
+            /// <param name="name">The name.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+            public NoiseSimulationState(string name)
             {
-                get => _currentFrequency;
-                set
-                {
-                    // Shift current frequency to last frequency
-                    _lastFrequency = _currentFrequency;
-                    _logLastFrequency = _logFrequency;
-
-                    // Update new values
-                    _currentFrequency = value;
-                    _logFrequency = Math.Log(Math.Max(_currentFrequency, 1e-38));
-
-                    // Delta
-                    _deltaFrequency = _currentFrequency - _lastFrequency;
-                    _deltaLogFrequency = _logFrequency - _logLastFrequency;
-                }
+                Name = name.ThrowIfNull(nameof(name));
+                Point = new ArrayHistory<NoisePoint>(2);
             }
 
             /// <summary>
-            /// Gets or sets the frequency step.
+            /// Reset the frequency, and resets all noise contributions as well as the total
+            /// integrated noise.
             /// </summary>
-            public double DeltaFrequency => _deltaFrequency;
-
-            /// <summary>
-            /// Output referred noise
-            /// </summary>
-            public double OutputNoise { get; set; }
-
-            /// <summary>
-            /// Gets or sets the total input-referred noise.
-            /// </summary>
-            public double InputNoise { get; set; }
-
-            /// <summary>
-            /// Gets or sets the total output noise density.
-            /// </summary>
-            public double OutputNoiseDensity { get; set; } = 0.0;
-
-            /// <summary>
-            /// Gets or sets the inverse squared gain.
-            /// </summary>
-            /// <remarks>
-            /// This value is used to compute the input noise density from the output noise density.
-            /// </remarks>
-            public double GainInverseSquared
+            /// <param name="point">The point.</param>
+            public void Reset(NoisePoint point)
             {
-                get => _gainSquareInverted;
-                set
-                {
-                    _gainSquareInverted = value;
-                    LogInverseGain = Math.Log(value);
-                }
-            }
-
-            /// <summary>
-            /// Gets the logarithm of the gain squared.
-            /// </summary>
-            public double LogInverseGain { get; private set; }
-
-            /// <summary>
-            /// Reset the frequency.
-            /// </summary>
-            /// <param name="frequency">The new frequency point.</param>
-            public void Reset(double frequency)
-            {
-                // Set the current and last frequency
-                _currentFrequency = frequency;
-                _lastFrequency = frequency;
-
-                // Reset integrated noise
-                OutputNoise = 0;
-                InputNoise = 0;
-            }
-
-            /// <summary>
-            /// Set up the simulation state for the simulation.
-            /// </summary>
-            public void Setup()
-            {
-                OutputNoise = 0;
-                InputNoise = 0;
+                Point.Set(point);
                 OutputNoiseDensity = 0;
+                TotalOutputNoise = 0;
+                TotalInputNoise = 0;
             }
 
             /// <summary>
-            /// This subroutine evaluate the integration of the function
-            /// NOISE = a * (FREQUENCY) ^ (EXPONENT)
-            /// given two points from the curve. If EXPONENT is relatively close to 0, the noise is simply multiplied
-            /// by the change in frequency.
-            /// If it isn't, a more complicated expression must be used.
-            /// Note that EXPONENT = -1 gives a different equation than EXPONENT != -1.
+            /// Sets the current noise data point.
             /// </summary>
-            /// <param name="noiseDensity">The noise density.</param>
-            /// <param name="logNoiseDensity">The previous noise density.</param>
-            /// <param name="lastLogNoiseDensity">The previous log noise density.</param>
-            /// <returns>
-            /// The integrated noise.
-            /// </returns>
-            public double Integrate(double noiseDensity, double logNoiseDensity, double lastLogNoiseDensity)
+            /// <param name="point">The noise data point.</param>
+            public void SetCurrentPoint(NoisePoint point)
             {
-                var exponent = (logNoiseDensity - lastLogNoiseDensity) / _deltaLogFrequency;
-                if (Math.Abs(exponent) < 1e-10)
-                    return noiseDensity * _deltaFrequency;
-                var a = Math.Exp(logNoiseDensity - exponent * _logFrequency);
-                exponent += 1.0;
-                if (Math.Abs(exponent) < 1e-10)
-                    return a * (_logFrequency - _logLastFrequency);
-                return a * (Math.Exp(exponent * _logFrequency) - Math.Exp(exponent * _logLastFrequency)) / exponent;
+                Point.Accept();
+                Point.Value = point;
+
+                // Reset the total noise density for our new point
+                OutputNoiseDensity = 0;
+                TotalOutputNoise = 0;
+                TotalInputNoise = 0;
+            }
+
+
+            /// <summary>
+            /// Adds the contributions of the specified noise source.
+            /// </summary>
+            /// <param name="source">The noise source.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
+            public void Add(INoiseSource source)
+            {
+                source.ThrowIfNull(nameof(source));
+                OutputNoiseDensity += source.OutputNoiseDensity;
+                TotalInputNoise += source.TotalInputNoise;
+                TotalOutputNoise += source.TotalOutputNoise;
+            }
+
+            /// <summary>
+            /// Adds the contributions of the specified noise sources.
+            /// </summary>
+            /// <param name="sources">The noise sources.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="sources"/> or any of the noise sources is <c>null</c>.</exception>
+            public void Add(params INoiseSource[] sources)
+            {
+                sources.ThrowIfNull(nameof(sources));
+                for (var i = 0; i < sources.Length; i++)
+                    Add(sources[i]);
             }
         }
     }
