@@ -2,14 +2,17 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
     /// <summary>
     /// An <see cref="IBiasingBehavior"/> for a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IBiasingBehavior" />
-    public partial class BiasingBehavior : SubcircuitBehavior<IBiasingBehavior>, IBiasingBehavior, IConvergenceBehavior
+    /// <seealso cref="IConvergenceBehavior"/>
+    public partial class Biasing : SubcircuitBehavior<IBiasingBehavior>, 
+        IBiasingBehavior, 
+        IConvergenceBehavior
     {
         private readonly BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
 
@@ -19,7 +22,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(SubcircuitSimulation simulation)
         {
-            var parameters = simulation.GetParameterSet<BaseParameters>();
+            var parameters = simulation.GetParameterSet<Parameters>();
             if (simulation.UsesState<IBiasingSimulationState>())
             {
                 var parent = simulation.GetState<IBiasingSimulationState>();
@@ -34,11 +37,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         private readonly LocalSimulationState _state;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="simulation">The simulation.</param>
-        public BiasingBehavior(string name, SubcircuitSimulation simulation)
+        public Biasing(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
             if (simulation.LocalStates.TryGetValue(out _state))
@@ -46,10 +49,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             _convergenceBehaviors = simulation.EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
-        /// </summary>
-        public void Load()
+        /// <inheritdoc/>
+        void IBiasingBehavior.Load()
         {
             if (_state != null)
             {
@@ -74,13 +75,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
                 behavior.Load();
         }
 
-        /// <summary>
-        /// Tests convergence at the device-level.
-        /// </summary>
-        /// <returns>
-        ///   <c>true</c> if the device determines the solution converges; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsConvergent()
+        /// <inheritdoc/>
+        bool IConvergenceBehavior.IsConvergent()
         {
             _state?.Update();
             var result = true;

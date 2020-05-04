@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// A wrapper for handling rules with subcircuits.
@@ -14,28 +14,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         private readonly IRules _parent;
         private readonly ComponentRuleParameters _validationParameters, _parentValidationParameters;
 
-        /// <summary>
-        /// Gets the number of rule violations.
-        /// </summary>
-        /// <value>
-        /// The number of rule violations.
-        /// </value>
+        /// <inheritdoc/>
         public int ViolationCount => _parent.ViolationCount;
 
-        /// <summary>
-        /// Gets the violated rules.
-        /// </summary>
-        /// <value>
-        /// The violated rules.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<IRuleViolation> Violations => _parent.Violations;
 
-        /// <summary>
-        /// Gets all parameter sets.
-        /// </summary>
-        /// <value>
-        /// The parameter sets.
-        /// </value>
+        /// <inheritdoc/>
         public IEnumerable<IParameterSet> ParameterSets
         {
             get
@@ -55,6 +40,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <param name="parameters">The parameters.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> or <paramref name="parameters"/> is <c>null</c>.</exception>
+        /// <exception cref="TypeNotFoundException">Thrown if <paramref name="parent"/> does not define a <see cref="ComponentRuleParameters"/>.</exception>
         public SubcircuitRules(IRules parent, ComponentRuleParameters parameters)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
@@ -62,9 +49,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             _validationParameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
-        /// <summary>
-        /// Resets all the rules.
-        /// </summary>
+        /// <inheritdoc/>
         public void Reset() => _parent.Reset();
 
         /// <summary>
@@ -75,14 +60,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </returns>
         public IEnumerator<IRule> GetEnumerator() => _parent.GetEnumerator();
 
-        /// <summary>
-        /// Gets the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <returns>
-        /// The parameter set.
-        /// </returns>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <inheritdoc/>
         public P GetParameterSet<P>() where P : IParameterSet
         {
             if (_validationParameters is P p)
@@ -90,23 +68,10 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             return _parent.GetParameterSet<P>();
         }
 
-        /// <summary>
-        /// Gets all rules of the specified type.
-        /// </summary>
-        /// <typeparam name="R">The rule type.</typeparam>
-        /// <returns>
-        /// The rules of the specified type.
-        /// </returns>
+        /// <inheritdoc/>
         public IEnumerable<R> GetRules<R>() where R : IRule => _parent.GetRules<R>();
 
-        /// <summary>
-        /// Tries to get the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <param name="value">The parameter set.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
         {
             if (_validationParameters is P p)

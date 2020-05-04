@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// Describes a bridge between the local and global circuit.
@@ -10,12 +10,12 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
     public struct Bridge<T> : IEquatable<Bridge<T>>
     {
         /// <summary>
-        /// The local instance.
+        /// The local/internal instance.
         /// </summary>
         public readonly T Local;
 
         /// <summary>
-        /// The global instance.
+        /// The global/external instance.
         /// </summary>
         public readonly T Global;
 

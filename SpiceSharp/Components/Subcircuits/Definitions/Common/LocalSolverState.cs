@@ -4,7 +4,7 @@ using SpiceSharp.Simulations.Variables;
 using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// A simulation state that has a local solver.
@@ -25,28 +25,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         protected IVector<T> LocalSolution;
 
-        /// <summary>
-        /// Gets the solver used to solve the system of equations.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
+        /// <inheritdoc/>
         public override ISparsePivotingSolver<T> Solver { get; }
 
-        /// <summary>
-        /// Gets the solution.
-        /// </summary>
-        /// <value>
-        /// The solution.
-        /// </value>
+        /// <inheritdoc/>
         public override IVector<T> Solution => LocalSolution;
 
-        /// <summary>
-        /// Gets the map that maps variables to indices for the solver.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
+        /// <inheritdoc/>
         public override IVariableMap Map => _map;
 
         /// <summary>
@@ -63,6 +48,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="name">The name of the subcircuit instance.</param>
         /// <param name="parent">The parent simulation state.</param>
         /// <param name="solver">The local solver.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/> or <paramref name="solver"/> is <c>null</c>.</exception>
         protected LocalSolverState(string name, S parent, ISparsePivotingSolver<T> solver)
             : base(name, parent)
         {
@@ -77,6 +63,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Initializes the specified shared.
         /// </summary>
         /// <param name="nodes">The node map.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="nodes"/> is <c>null</c>.</exception>
         public virtual void Initialize(IReadOnlyList<Bridge<string>> nodes)
         {
             LocalSolution = new DenseVector<T>(Solver.Size);
@@ -90,8 +77,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// Reorders the local solver.
         /// </summary>
         /// <param name="nodes">The nodes.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="nodes"/> is <c>null</c>.</exception>
         private void ReorderLocalSolver(IReadOnlyList<Bridge<string>> nodes)
         {
+            nodes.ThrowIfNull(nameof(nodes));
+
             // Map each local node on the global node
             _indices.Clear();
             foreach (var bridge in nodes)
@@ -241,13 +231,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             Updated = true;
         }
 
-        /// <summary>
-        /// Maps a shared node in the simulation.
-        /// </summary>
-        /// <param name="name">The name of the shared node.</param>
-        /// <returns>
-        /// The shared node variable.
-        /// </returns>
+        /// <inheritdoc/>
         public override IVariable<T> GetSharedVariable(string name)
         {
             // Get the local node!
@@ -261,14 +245,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             return result;
         }
 
-        /// <summary>
-        /// Creates a local variable that should not be shared by the state with anyone else.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="unit">The unit of the variable.</param>
-        /// <returns>
-        /// The local variable.
-        /// </returns>
+        /// <inheritdoc/>
         public override IVariable<T> CreatePrivateVariable(string name, IUnit unit)
         {
             var index = _map.Count;

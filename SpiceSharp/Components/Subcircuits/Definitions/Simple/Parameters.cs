@@ -1,12 +1,12 @@
 ﻿using SpiceSharp.Attributes;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
     /// <summary>
     /// Parameters for biasing behaviors of a subcircuit.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class BaseParameters : ParameterSet
+    public class Parameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets a value indicating whether a local solver should be used or not for biasing simulations.

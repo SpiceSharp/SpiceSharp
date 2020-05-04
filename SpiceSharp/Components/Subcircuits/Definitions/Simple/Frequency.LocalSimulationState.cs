@@ -1,26 +1,29 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
-    public partial class FrequencyBehavior
+    public partial class Frequency
     {
         /// <summary>
         /// An <see cref="IComplexSimulationState"/> that can be used with a local solver and solution.
         /// </summary>
         /// <seealso cref="LocalSolverState{T, S}" />
         /// <seealso cref="IComplexSimulationState" />
-        protected class LocalSimulationState : LocalSolverState<Complex, IComplexSimulationState>, IComplexSimulationState
+        protected class LocalSimulationState : LocalSolverState<Complex, IComplexSimulationState>,
+            IComplexSimulationState
         {
             /// <summary>
             /// Gets or sets a value indicating whether the solution converges.
             /// </summary>
+            /// <value>
+            /// If <c>true</c>, the solution for this subcircuit converges.
+            /// </value>
             public bool IsConvergent { get; set; }
 
-            /// <summary>
-            /// Gets or sets the current laplace variable.
-            /// </summary>
+            /// <inheritdoc/>
             public Complex Laplace => Parent.Laplace;
 
             /// <summary>
@@ -29,18 +32,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <param name="name">The name.</param>
             /// <param name="parent">The parent.</param>
             /// <param name="solver">The solver.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/> or <paramref name="solver"/> is <c>null</c>.</exception>
             public LocalSimulationState(string name, IComplexSimulationState parent, ISparsePivotingSolver<Complex> solver)
                 : base(name, parent, solver)
             {
             }
 
-            /// <summary>
-            /// Applies the local solver to the parent solver.
-            /// </summary>
-            /// <returns>
-            /// <c>true</c> if the application was successful; otherwise, <c>false</c>.
-            /// </returns>
-            /// <exception cref="NoEquivalentSubcircuitException">Thrown if no equivalent contributions could be calculated.</exception>
+            /// <inheritdoc/>
             public override bool Apply() => base.Apply();
         }
     }

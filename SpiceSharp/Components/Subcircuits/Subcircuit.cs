@@ -25,20 +25,10 @@ namespace SpiceSharp.Components
         /// </value>
         public ISubcircuitDefinition Definition { get; }
 
-        /// <summary>
-        /// Gets or sets the model of the component.
-        /// </summary>
-        /// <value>
-        /// The model of the component.
-        /// </value>
+        /// <inheritdoc/>
         public string Model { get; set; }
 
-        /// <summary>
-        /// Gets the nodes.
-        /// </summary>
-        /// <value>
-        /// The nodes.
-        /// </value>
+        /// <inheritdoc/>
         public IReadOnlyList<string> Nodes => new ReadOnlyCollection<string>(_connections);
 
         /// <summary>
@@ -47,6 +37,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="definition">The subcircuit definition.</param>
         /// <param name="nodes">The nodes that the subcircuit is connected to.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="definition"/> is <c>null</c>.</exception>
         public Subcircuit(string name, ISubcircuitDefinition definition, params string[] nodes)
             : base(name)
         {
@@ -54,10 +45,7 @@ namespace SpiceSharp.Components
             Connect(nodes);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
+        /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
@@ -66,10 +54,7 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
-        /// <summary>
-        /// Connects the specified nodes.
-        /// </summary>
-        /// <param name="nodes">The nodes.</param>
+        /// <inheritdoc/>
         public IComponent Connect(params string[] nodes)
         {
             nodes.ThrowIfNull(nameof(nodes));
@@ -79,10 +64,7 @@ namespace SpiceSharp.Components
             return this;
         }
 
-        /// <summary>
-        /// Copy properties from another entity.
-        /// </summary>
-        /// <param name="source">The source entity.</param>
+        /// <inheritdoc/>
         protected override void CopyFrom(ICloneable source)
         {
             base.CopyFrom(source);
@@ -92,10 +74,7 @@ namespace SpiceSharp.Components
                 _connections[i] = s._connections[i];
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
+        /// <inheritdoc/>
         public void Apply(IRules rules)
         {
             Definition.Apply(this, rules);

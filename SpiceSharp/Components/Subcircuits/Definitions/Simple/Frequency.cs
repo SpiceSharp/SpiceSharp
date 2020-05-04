@@ -1,15 +1,17 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
     /// <summary>
     /// An <see cref="IFrequencyBehavior"/> for a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IFrequencyBehavior" />
-    public partial class FrequencyBehavior : SubcircuitBehavior<IFrequencyBehavior>, IFrequencyBehavior
+    public partial class Frequency : SubcircuitBehavior<IFrequencyBehavior>, 
+        IFrequencyBehavior
     {
         /// <summary>
         /// Prepares the specified simulation for frequency behaviors.
@@ -17,7 +19,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(SubcircuitSimulation simulation)
         {
-            var parameters = simulation.GetParameterSet<BaseParameters>();
+            var parameters = simulation.GetParameterSet<Parameters>();
             if (simulation.UsesState<IComplexSimulationState>())
             {
                 var parent = simulation.GetState<IComplexSimulationState>();
@@ -32,30 +34,27 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         private readonly LocalSimulationState _state;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="simulation">The simulation.</param>
-        public FrequencyBehavior(string name, SubcircuitSimulation simulation)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
+        public Frequency(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
             if (simulation.LocalStates.TryGetValue(out _state))
                 _state.Initialize(simulation.Nodes);
         }
 
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
-        public void InitializeParameters()
+        /// <inheritdoc/>
+        void IFrequencyBehavior.InitializeParameters()
         {
             foreach (var behavior in Behaviors)
                 behavior.InitializeParameters();
         }
 
-        /// <summary>
-        /// Perform temperature-dependent calculations.
-        /// </summary>
-        public void Load()
+        /// <inheritdoc/>
+        void IFrequencyBehavior.Load()
         {
             if (_state != null)
             {

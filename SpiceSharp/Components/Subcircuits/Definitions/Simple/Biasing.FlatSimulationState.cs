@@ -1,27 +1,21 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
+using System;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
-    public partial class BiasingBehavior
+    public partial class Biasing
     {
         /// <summary>
         /// An <see cref="IBiasingSimulationState"/> that just maps nodes but uses the same solver.
         /// </summary>
         /// <seealso cref="SubcircuitSolverState{T, S}" />
         /// <seealso cref="IBiasingSimulationState" />
-        protected class FlatSimulationState : FlatSolverState<double, IBiasingSimulationState>, IBiasingSimulationState
+        protected class FlatSimulationState : FlatSolverState<double, IBiasingSimulationState>, 
+            IBiasingSimulationState
         {
-            /// <summary>
-            /// Gets the solution vector of the last computed iteration.
-            /// </summary>
-            /// <value>
-            /// The solution to the last iteration.
-            /// </value>
-            /// <remarks>
-            /// This vector is needed for determining convergence.
-            /// </remarks>
+            /// <inheritdoc/>
             public IVector<double> OldSolution => Parent.OldSolution;
 
             /// <summary>
@@ -30,6 +24,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <param name="name">The name.</param>
             /// <param name="parent">The parent.</param>
             /// <param name="nodes">The nodes.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/> or <paramref name="nodes"/> is <c>null</c>.</exception>
             public FlatSimulationState(string name, IBiasingSimulationState parent, IEnumerable<Bridge<string>> nodes)
                 : base(name, parent, nodes)
             {

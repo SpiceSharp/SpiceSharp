@@ -5,7 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// A subcircuit simulation state with a solver.
@@ -26,28 +26,13 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         protected readonly S Parent;
 
-        /// <summary>
-        /// Gets the solver used to solve the system of equations.
-        /// </summary>
-        /// <value>
-        /// The solver.
-        /// </value>
+        /// <inheritdoc/>
         public abstract ISparsePivotingSolver<T> Solver { get; }
 
-        /// <summary>
-        /// Gets the solution.
-        /// </summary>
-        /// <value>
-        /// The solution.
-        /// </value>
+        /// <inheritdoc/>
         public abstract IVector<T> Solution { get; }
 
-        /// <summary>
-        /// Gets the map that maps variables to indices for the solver.
-        /// </summary>
-        /// <value>
-        /// The map.
-        /// </value>
+        /// <inheritdoc/>
         public abstract IVariableMap Map { get; }
 
         /// <summary>
@@ -55,46 +40,23 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="parent">The parent.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="parent"/> is <c>null</c>.</exception>
         protected SubcircuitSolverState(string name, S parent)
         {
             Name = name.ThrowIfNull(nameof(name));
-            Parent = parent;
+            Parent = parent.ThrowIfNull(nameof(parent));
         }
 
-        /// <summary>
-        /// Gets a variable that can be shared with other behaviors by the factory. If another variable
-        /// already exists with the same name, that is returned instead.
-        /// </summary>
-        /// <param name="name">The name of the shared variable.</param>
-        /// <returns>
-        /// The shared variable.
-        /// </returns>
+        /// <inheritdoc/>
         public abstract IVariable<T> GetSharedVariable(string name);
 
-        /// <summary>
-        /// Creates a variable that is private to whoever requested it. The factory will not shared this
-        /// variable with anyone else, and the name is only used for display purposes.
-        /// </summary>
-        /// <param name="name">The name of the private variable.</param>
-        /// <param name="unit">The unit of the variable.</param>
-        /// <returns>
-        /// The private variable.
-        /// </returns>
+        /// <inheritdoc/>
         public abstract IVariable<T> CreatePrivateVariable(string name, IUnit unit);
 
-        /// <summary>
-        /// Gets the comparer used for comparing variable names.
-        /// </summary>
-        /// <value>
-        /// The comparer.
-        /// </value>
+        /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => Parent.Comparer;
 
-        /// <summary>
-        /// Adds a variable to the dictionary.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="variable">The variable.</param>
+        /// <inheritdoc/>
         public void Add(string id, IVariable<T> variable)
         {
             // Add the variable but prefix our subcircuit name.
@@ -102,11 +64,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Determines whether the read-only dictionary contains an element that has the specified key.
+        /// Determines whether the dictionary contains an element that has the specified key.
         /// </summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>
-        /// true if the read-only dictionary contains an element that has the specified key; otherwise, false.
+        ///   <c>true</c> if the read-only dictionary contains an element that has the specified key; otherwise, <c>false</c>.
         /// </returns>
         public bool ContainsKey(string key)
         {
@@ -123,7 +85,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="key">The key to locate.</param>
         /// <param name="value">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="value" /> parameter. This parameter is passed uninitialized.</param>
         /// <returns>
-        /// <c>true</c> if the dictionary contains a variable that has the specified key; otherwise, <c>false</c>.
+        ///   <c>true</c> if the dictionary contains a variable that has the specified key; otherwise, <c>false</c>.
         /// </returns>
         public bool TryGetValue(string key, out IVariable<T> value)
         {
@@ -140,7 +102,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// The <see cref="IVariable{T}"/>.
         /// </value>
         /// <param name="key">The key.</param>
-        /// <returns></returns>
+        /// <returns>The variable.</returns>
         public IVariable<T> this[string key]
         {
             get
@@ -153,18 +115,21 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         }
 
         /// <summary>
-        /// Gets an enumerable collection that contains the keys in the read-only dictionary.
+        /// Gets an enumerable collection that contains the keys in the dictionary.
         /// </summary>
         public IEnumerable<string> Keys => Parent.Keys;
 
         /// <summary>
-        /// Gets an enumerable collection that contains the values in the read-only dictionary.
+        /// Gets an enumerable collection that contains the values in the dictionary.
         /// </summary>
         public IEnumerable<IVariable<T>> Values => Parent.Values;
 
         /// <summary>
         /// Gets the number of elements in the collection.
         /// </summary>
+        /// <value>
+        /// The number of elements in the collection.
+        /// </value>
         public int Count => Parent.Count;
 
         /// <summary>

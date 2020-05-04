@@ -3,8 +3,9 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Common;
 using SpiceSharp.General;
 using SpiceSharp.Simulations;
+using System;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// A subcircuit simulation that captures created behaviors in a local container.
@@ -43,7 +44,8 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
         /// <param name="name">The name of the subcircuit.</param>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="definition">The subcircuit definition.</param>
-        /// <param name="nodes">The nodes.</param>
+        /// <param name="nodes">The node bridges.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/>, <paramref name="definition"/> or <paramref name="nodes"/> is <c>null</c>.</exception>
         public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IReadOnlyList<Bridge<string>> nodes)
             : base(parent,
                   new BehaviorContainerCollection(),
@@ -54,13 +56,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             InstanceName = name.ThrowIfNull(nameof(name));
         }
 
-        /// <summary>
-        /// Gets the state of the specified type.
-        /// </summary>
-        /// <typeparam name="S">The simulation state type.</typeparam>
-        /// <returns>
-        /// The state, or <c>null</c> if the state isn't used.
-        /// </returns>
+        /// <inheritdoc/>
         public override S GetState<S>()
         {
             if (LocalStates.TryGetValue(out S result))
@@ -68,13 +64,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             return Parent.GetState<S>();
         }
 
-        /// <summary>
-        /// Gets the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <returns>
-        /// The parameter set.
-        /// </returns>
+        /// <inheritdoc/>
         public override P GetParameterSet<P>()
         {
             if (Definition.TryGetParameterSet(out P result))
@@ -82,14 +72,7 @@ namespace SpiceSharp.Components.SubcircuitBehaviors
             return base.GetParameterSet<P>();
         }
 
-        /// <summary>
-        /// Tries to get the parameter set of the specified type.
-        /// </summary>
-        /// <typeparam name="P">The parameter set type.</typeparam>
-        /// <param name="value">The parameter set.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public override bool TryGetParameterSet<P>(out P value)
         {
             if (Definition.TryGetParameterSet(out value))

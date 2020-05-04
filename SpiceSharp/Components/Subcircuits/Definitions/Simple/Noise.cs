@@ -2,14 +2,14 @@
 using SpiceSharp.Simulations;
 using System.Linq;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
     /// <summary>
     /// An <see cref="INoiseBehavior"/> for a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="INoiseBehavior" />
-    public class NoiseBehavior : SubcircuitBehavior<INoiseBehavior>, 
+    public class Noise : SubcircuitBehavior<INoiseBehavior>, 
         INoiseBehavior
     {
         /// <inheritdoc/>
@@ -22,11 +22,11 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
         public double TotalInputNoise => Behaviors.Sum(nb => nb.TotalInputNoise);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="simulation">The simulation.</param>
-        public NoiseBehavior(string name, SubcircuitSimulation simulation)
+        public Noise(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
         }

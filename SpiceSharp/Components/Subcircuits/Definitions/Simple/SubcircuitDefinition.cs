@@ -1,13 +1,11 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.SubcircuitBehaviors;
-using SpiceSharp.Components.SubcircuitBehaviors.Simple;
+using SpiceSharp.Components.Subcircuits;
+using SpiceSharp.Components.Subcircuits.Simple;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -16,34 +14,21 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="ISubcircuitDefinition" />
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="Subcircuits.Simple.Parameters"/>
     public class SubcircuitDefinition : Parameterized, ISubcircuitDefinition,
-        IParameterized<BaseParameters>
+        IParameterized<Parameters>
     {
         private readonly string[] _pins;
 
-        /// <summary>
-        /// Gets the parameters.
-        /// </summary>
-        /// <value>
-        /// The parameters.
-        /// </value>
-        public BaseParameters Parameters { get; } = new BaseParameters();
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
-        /// <summary>
-        /// Gets the entities defined in the subcircuit.
-        /// </summary>
-        /// <value>
-        /// The entities inside the subcircuit.
-        /// </value>
+        /// <inheritdoc/>
         [ParameterName("entities"), ParameterInfo("The entities in the subcircuit.")]
         public IEntityCollection Entities { get; }
 
-        /// <summary>
-        /// Gets the number of pins defined by the subcircuit.
-        /// </summary>
-        /// <value>
-        /// The pin count.
-        /// </value>
+        /// <inheritdoc/>
         [ParameterName("pins"), ParameterInfo("The number of pins.")]
         public int PinCount => _pins.Length;
 
@@ -52,6 +37,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="entities">The entities.</param>
         /// <param name="pins">The pins.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
         public SubcircuitDefinition(IEntityCollection entities, params string[] pins)
         {
             Entities = entities.ThrowIfNull(nameof(entities));
@@ -65,13 +51,7 @@ namespace SpiceSharp.Components
                 _pins = Array<string>.Empty();
         }
 
-        /// <summary>
-        /// Creates the behaviors for the entities in the subcircuit.
-        /// </summary>
-        /// <param name="subcircuit">The subcircuit that wants to create the behaviors through the definition.</param>
-        /// <param name="parentSimulation">The parent simulation.</param>
-        /// <param name="behaviors">The <see cref="IBehaviorContainer" /> used for the subcircuit.</param>
-        /// <exception cref="NodeMismatchException">Thrown if the number of nodes do not match.</exception>
+        /// <inheritdoc/>
         public virtual void CreateBehaviors(Subcircuit subcircuit, ISimulation parentSimulation, IBehaviorContainer behaviors)
         {
             if (Entities.Count == 0)
@@ -87,30 +67,26 @@ namespace SpiceSharp.Components
 
             // Keep all local behaviors in our subcircuit simulation instead of adding them to the parent simulation.
             var simulation = new SubcircuitSimulation(subcircuit.Name, parentSimulation, this, nodes);
-            BiasingBehavior.Prepare(simulation);
-            FrequencyBehavior.Prepare(simulation);
+            Biasing.Prepare(simulation);
+            Frequency.Prepare(simulation);
 
             // Create the behaviors for the subcircuit
             simulation.Run(Entities);
 
             // Create the behaviors necessary for the subcircuit
             behaviors
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new TemperatureBehavior(subcircuit.Name, simulation))
-                .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdateBehavior(subcircuit.Name, simulation))
-                .AddIfNo<ITimeBehavior>(parentSimulation, () => new TimeBehavior(subcircuit.Name, simulation))
-                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new BiasingBehavior(subcircuit.Name, simulation))
-                .AddIfNo<IAcceptBehavior>(parentSimulation, () => new AcceptBehavior(subcircuit.Name, simulation))
-                .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdateBehavior(subcircuit.Name, simulation))
-                .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new FrequencyBehavior(subcircuit.Name, simulation))
-                .AddIfNo<INoiseBehavior>(parentSimulation, () => new NoiseBehavior(subcircuit.Name, simulation));
+                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(subcircuit.Name, simulation))
+                .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdate(subcircuit.Name, simulation))
+                .AddIfNo<ITimeBehavior>(parentSimulation, () => new Time(subcircuit.Name, simulation))
+                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new Biasing(subcircuit.Name, simulation))
+                .AddIfNo<IAcceptBehavior>(parentSimulation, () => new Accept(subcircuit.Name, simulation))
+                .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdate(subcircuit.Name, simulation))
+                .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new Frequency(subcircuit.Name, simulation))
+                .AddIfNo<INoiseBehavior>(parentSimulation, () => new Subcircuits.Simple.Noise(subcircuit.Name, simulation));
         }
 
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="subcircuit">The subcircuit instance.</param>
-        /// <param name="rules">The rule provider.</param>
-        public void Apply(Subcircuit subcircuit, IRules rules)
+        /// <inheritdoc/>
+        void ISubcircuitDefinition.Apply(Subcircuit subcircuit, IRules rules)
         {
             // Make a list of node bridges
             var outNodes = subcircuit.Nodes;

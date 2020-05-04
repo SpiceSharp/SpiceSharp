@@ -1,24 +1,21 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
+using System;
 
-namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
+namespace SpiceSharp.Components.Subcircuits.Simple
 {
-    public partial class BiasingBehavior
+    public partial class Biasing
     {
         /// <summary>
         /// An <see cref="IBiasingSimulationState" /> that can be used with a local solver and solution.
         /// </summary>
         /// <seealso cref="LocalSolverState{T, S}" />
         /// <seealso cref="IBiasingSimulationState" />
-        protected class LocalSimulationState : LocalSolverState<double, IBiasingSimulationState>, IBiasingSimulationState
+        protected class LocalSimulationState : LocalSolverState<double, IBiasingSimulationState>,
+            IBiasingSimulationState
         {
-            /// <summary>
-            /// Gets the previous solution vector.
-            /// </summary>
-            /// <remarks>
-            /// This vector is needed for determining convergence.
-            /// </remarks>
+            /// <inheritdoc/>
             public IVector<double> OldSolution { get; private set; }
 
             /// <summary>
@@ -27,24 +24,20 @@ namespace SpiceSharp.Components.SubcircuitBehaviors.Simple
             /// <param name="name">The name of the subcircuit instance.</param>
             /// <param name="parent">The parent simulation state.</param>
             /// <param name="solver">The solver.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/> or <paramref name="solver"/> is <c>null</c>.</exception>
             public LocalSimulationState(string name, IBiasingSimulationState parent, ISparsePivotingSolver<double> solver)
                 : base(name, parent, solver)
             {
             }
 
-            /// <summary>
-            /// Initializes the specified shared.
-            /// </summary>
-            /// <param name="nodes">The nodes.</param>
+            /// <inheritdoc/>
             public override void Initialize(IReadOnlyList<Bridge<string>> nodes)
             {
                 base.Initialize(nodes);
                 OldSolution = new DenseVector<double>(Solver.Size);
             }
 
-            /// <summary>
-            /// Updates the state with the new solution.
-            /// </summary>
+            /// <inheritdoc/>
             public override void Update()
             {
                 if (Updated)
