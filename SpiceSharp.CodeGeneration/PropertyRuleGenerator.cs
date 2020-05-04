@@ -11,7 +11,7 @@ namespace SpiceSharp.CodeGeneration
     /// The class that is in charge for expanding auto-generated parts.
     /// </summary>
     /// <seealso cref="CSharpSyntaxRewriter" />
-    public class ClassRewriter : CSharpSyntaxRewriter
+    public class PropertyRuleGenerator : CSharpSyntaxRewriter
     {
         /// <summary>
         /// The default value of RaiseException for rule attributes.

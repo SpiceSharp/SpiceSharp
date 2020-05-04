@@ -28,7 +28,9 @@ namespace SpiceSharp.CodeGeneration
                         BackupPath = backupPath
                     };
                     if (doc.ShouldGenerate)
+                    {
                         doc.Export(file);
+                    }
                 }
             }
 
