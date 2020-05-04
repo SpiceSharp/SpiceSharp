@@ -47,7 +47,7 @@ namespace SpiceSharpTest.Simulations
             }
             var maxConcurrentSimulations = 2;
 
-            Parallel.ForEach(
+            System.Threading.Tasks.Parallel.ForEach(
                 dcSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations }, 
                 (simulation) => simulation.Run(ckt));
@@ -78,7 +78,7 @@ namespace SpiceSharpTest.Simulations
             }
 
             var maxConcurrentSimulations = 8;
-            Parallel.ForEach(
+            System.Threading.Tasks.Parallel.ForEach(
                 transientSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
                 (simulation) => simulation.Run(ckt));

@@ -3,7 +3,7 @@ using SpiceSharp.Components.Common;
 using SpiceSharp.General;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// A subcircuit simulation that captures created behaviors in a local container.
@@ -32,13 +32,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             LocalParameters = parameters.ThrowIfNull(nameof(parameters));
         }
 
-        /// <summary>
-        /// Gets the state of the specified type.
-        /// </summary>
-        /// <typeparam name="S">The simulation state type.</typeparam>
-        /// <returns>
-        /// The state, or <c>null</c> if the state isn't used.
-        /// </returns>
+        /// <inheritdoc/>
         public override S GetState<S>()
         {
             if (LocalStates.TryGetValue(out S result))

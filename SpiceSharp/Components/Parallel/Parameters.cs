@@ -1,13 +1,13 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Entities;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// Base parameters for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class BaseParameters : ParameterSet
+    public class Parameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the entities that should be run in parallel.
@@ -18,82 +18,82 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public IEntityCollection Entities { get; set; }
 
         /// <summary>
-        /// Gets or sets the temperature distributor.
+        /// Gets or sets the workload distributor for temperature-dependent calculations.
         /// </summary>
         /// <value>
-        /// The temperature distributor.
+        /// The workload distributor.
         /// </value>
-        [ParameterName("temperature"), ParameterInfo("Work distributor for temperature-dependent calculations.")]
+        [ParameterName("temperature"), ParameterInfo("Workload distributor for temperature-dependent calculations.")]
         public IWorkDistributor TemperatureDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the work distributor for loading in biasing simulations.
+        /// Gets or sets the workload distributor for loading in biasing simulations.
         /// </summary>
         /// <value>
-        /// The load distributor.
+        /// The workload distributor.
         /// </value>
         [ParameterName("biasing.load"), ParameterInfo("Work distributor for loading the Y-matrix and Rhs-vector")]
-        public IWorkDistributor LoadDistributor { get; set; }
+        public IWorkDistributor BiasLoadDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the work distributor for testing convergence.
+        /// Gets or sets the workload distributor for testing convergence in biasing simulations.
         /// </summary>
         /// <value>
-        /// The convergence distributor.
+        /// The workload distributor.
         /// </value>
-        [ParameterName("biasing.convergence"), ParameterInfo("Work distributor for testing convergence")]
-        public IWorkDistributor<bool> ConvergenceDistributor { get; set; }
+        [ParameterName("biasing.convergence"), ParameterInfo("Workload distributor for testing convergence")]
+        public IWorkDistributor<bool> BiasConvergenceDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the biasing update distributor.
+        /// Gets or sets the workload distributor for updating a behavior after solving.
         /// </summary>
         /// <value>
         /// The biasing update distributor.
         /// </value>
-        [ParameterName("biasing.update"), ParameterInfo("Work distributor for updating a behavior after solving")]
-        public IWorkDistributor UpdateDistributor { get; set; }
+        [ParameterName("biasing.update"), ParameterInfo("Workload distributor for updating a behavior after solving")]
+        public IWorkDistributor BiasUpdateDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the ac load distributor.
+        /// Gets or sets the workload distributor for loading the small-signal contributions.
         /// </summary>
         /// <value>
-        /// The ac load distributor.
+        /// The workload distributor.
         /// </value>
-        [ParameterName("frequency.load"), ParameterInfo("Work distributor for loading the small-signal components")]
+        [ParameterName("frequency.load"), ParameterInfo("Work distributor for loading the small-signal contributions")]
         public IWorkDistributor AcLoadDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the ac initialize distributor.
+        /// Gets or sets the workload distributor for initializing small-signal parameters.
         /// </summary>
         /// <value>
-        /// The ac initialize distributor.
+        /// The workload distributor.
         /// </value>
         [ParameterName("frequency.init"), ParameterName("frequency.initialize"), ParameterInfo("Work distributor for initializing small-signal parameters")]
         public IWorkDistributor AcInitDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the time initialize distributor.
+        /// Gets or sets workload distributor for initializing time-dependent parameters.
         /// </summary>
         /// <value>
-        /// The time initialize distributor.
+        /// The workload distributor.
         /// </value>
         [ParameterName("time.init"), ParameterName("time.initialize"), ParameterInfo("Work distributor for initializing time-dependent quantities")]
         public IWorkDistributor TimeInitDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the probe distributor.
+        /// Gets or sets the workload distributor for probing a new timepoint.
         /// </summary>
         /// <value>
-        /// The probe distributor.
+        /// The workload distributor.
         /// </value>
         [ParameterName("time.probe"), ParameterInfo("Work distributor for probing a new timepoint")]
         public IWorkDistributor ProbeDistributor { get; set; }
 
         /// <summary>
-        /// Gets or sets the accept distributor.
+        /// Gets or sets the workload distributor for accepting a timepoint.
         /// </summary>
         /// <value>
-        /// The accept distributor.
+        /// The workload distributor.
         /// </value>
         [ParameterName("time.accept"), ParameterInfo("Work distributor for accepting a timepoint")]
         public IWorkDistributor AcceptDistributor { get; set; }

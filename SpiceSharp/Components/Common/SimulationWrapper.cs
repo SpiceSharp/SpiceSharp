@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.Common
         protected ISimulation Parent { get; }
 
         /// <summary>
-        /// Gets the local states.
+        /// Gets the local states. These states are returned first!
         /// </summary>
         /// <value>
         /// The local states.
@@ -114,7 +114,7 @@ namespace SpiceSharp.Components.Common
         }
 
         /// <summary>
-        /// Gets the state of the parent simulation of the specified type.
+        /// Gets the state of the parent simulation of the specified type, bypassing any local states.
         /// </summary>
         /// <typeparam name="S">The simulation state type.</typeparam>
         /// <returns>
@@ -125,12 +125,12 @@ namespace SpiceSharp.Components.Common
             => Parent.GetState<S>();
 
         /// <summary>
-        /// Tries the state of the get parent simulatio nof the specified type.
+        /// Tries the state of the get parent simulatio nof the specified type, bypassing any local states.
         /// </summary>
-        /// <typeparam name="S"></typeparam>
-        /// <param name="state">The state.</param>
+        /// <typeparam name="S">The simulation state type.</typeparam>
+        /// <param name="state">The simulation state.</param>
         /// <returns>
-        /// <c>true</c> if the simulation state exists; otherwise <c>false</c>.
+        ///   <c>true</c> if the simulation state exists; otherwise <c>false</c>.
         /// </returns>
         public bool TryGetParentState<S>(out S state) where S : ISimulationState
             => Parent.TryGetState(out state);

@@ -1,26 +1,27 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="ITemperatureBehavior"/> for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="ITemperatureBehavior" />
-    public class TemperatureBehavior : Behavior, ITemperatureBehavior
+    public class Temperature : Behavior, 
+        ITemperatureBehavior
     {
         private readonly Workload _workload;
         private readonly BehaviorList<ITemperatureBehavior> _behaviors;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TemperatureBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="simulation">The parallel simulation.</param>
-        public TemperatureBehavior(string name, ParallelSimulation simulation)
+        public Temperature(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             if (parameters.TemperatureDistributor != null)
             {
                 _workload = new Workload(parameters.TemperatureDistributor, simulation.EntityBehaviors.Count);
@@ -33,9 +34,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             _behaviors = simulation.EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
         }
 
-        /// <summary>
-        /// Perform temperature-dependent calculations.
-        /// </summary>
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             if (_workload != null)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="IWorkDistributor{R}"/> that combines the results using the boolean And operator.
@@ -10,13 +10,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// <seealso cref="IWorkDistributor{R}" />
     public class TPLBooleanAndWorkDistributor : IWorkDistributor<bool>
     {
-        /// <summary>
-        /// Executes the specified methods and accumulates the result.
-        /// </summary>
-        /// <param name="methods">The methods to be executed.</param>
-        /// <returns>
-        /// The result.
-        /// </returns>
+        /// <inheritdoc/>
         public bool Execute(IReadOnlyList<Func<bool>> methods)
         {
             methods.ThrowIfNull(nameof(methods));
@@ -25,7 +19,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
                 tasks[i] = Task.Run(methods[i]);
             Task.WaitAll(tasks);
 
-            // Combine the results
+            // Combine the results synchronously
             var result = true;
             for (int i = 0; i < tasks.Length; i++)
                 result &= tasks[i].Result;

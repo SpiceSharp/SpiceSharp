@@ -2,14 +2,14 @@
 using SpiceSharp.Simulations;
 using System.Linq;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="INoiseBehavior"/> for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="INoiseBehavior" />
-    public partial class NoiseBehavior : Behavior, 
+    public partial class Noise : Behavior, 
         INoiseBehavior
     {
         /// <summary>
@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <param name="simulation">The simulation.</param>
         public static void Prepare(ParallelSimulation simulation)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             if (parameters.NoiseComputeDistributor != null)
             {
                 if (simulation.UsesState<INoiseSimulationState>())
@@ -42,14 +42,14 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public double TotalInputNoise => _noiseBehaviors.Sum(nb => nb.TotalInputNoise);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoiseBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="simulation">The simulation.</param>
-        public NoiseBehavior(string name, ParallelSimulation simulation)
+        public Noise(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             _noiseBehaviors = simulation.EntityBehaviors.GetBehaviorList<INoiseBehavior>();
             if (parameters.NoiseComputeDistributor != null)
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="IWorkDistributor"/> that simply gives each method its own task using the Task Parallel Library.
@@ -10,10 +10,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
     /// <seealso cref="IWorkDistributor" />
     public class TPLWorkDistributor : IWorkDistributor
     {
-        /// <summary>
-        /// Executes the specified methods.
-        /// </summary>
-        /// <param name="methods">The methods to be executed.</param>
+        /// <inheritdoc/>
         public void Execute(IReadOnlyList<Action> methods)
         {
             methods.ThrowIfNull(nameof(methods));

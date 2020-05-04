@@ -3,8 +3,9 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Variables;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An abstract class with a default implementation for parallel access to solvers
@@ -35,13 +36,19 @@ namespace SpiceSharp.Components.ParallelBehaviors
         public IEqualityComparer<string> Comparer => Parent.Comparer;
 
         /// <summary>
-        /// Gets an enumerable collection that contains the keys in the read-only dictionary.
+        /// Gets an enumerable collection that contains the keys in the dictionary.
         /// </summary>
+        /// <value>
+        /// The variable names.
+        /// </value>
         public IEnumerable<string> Keys => Parent.Keys;
 
         /// <summary>
-        /// Gets an enumerable collection that contains the values in the read-only dictionary.
+        /// Gets an enumerable collection that contains the values in the dictionary.
         /// </summary>
+        /// <value>
+        /// The variables.
+        /// </value>
         public IEnumerable<IVariable<T>> Values => Parent.Values;
 
         /// <inheritdoc/>
@@ -57,14 +64,15 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// Initializes a new instance of the <see cref="ParallelSolverState{T, S}"/> class.
         /// </summary>
         /// <param name="parent">The parent simulation state.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> is <c>null</c>.</exception>
         protected ParallelSolverState(S parent)
         {
-            Parent = parent;
+            Parent = parent.ThrowIfNull(nameof(parent));
             _solver = new ParallelSolver<T>(parent.Solver);
         }
 
         /// <summary>
-        /// Resets the elements.
+        /// Resets all elements in the common solver.
         /// </summary>
         public void Reset() => _solver.Reset();
 
@@ -79,20 +87,17 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <inheritdoc/>
         public IVariable<T> CreatePrivateVariable(string name, IUnit unit) => Parent.CreatePrivateVariable(name, unit);
 
-        /// <summary>
-        /// Adds a variable to the dictionary.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="variable">The variable.</param>
+        /// <inheritdoc/>
         public void Add(string id, IVariable<T> variable) => Parent.Add(id, variable);
 
         /// <summary>
-        /// Determines whether the read-only dictionary contains an element that has the specified key.
+        /// Determines whether the dictionary contains an element that has the specified key.
         /// </summary>
         /// <param name="key">The key to locate.</param>
         /// <returns>
-        ///   <c>true</c> if the read-only dictionary contains an element that has the specified key; otherwise, <c>false</c>.
+        ///   <c>true</c> if the dictionary contains an element that has the specified key; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         public bool ContainsKey(string key) => Parent.ContainsKey(key);
 
         /// <summary>
@@ -103,6 +108,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         /// <returns>
         ///   <c>true</c> if the dictionary contains a variable that has the specified key; otherwise, <c>false</c>.
         /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         public bool TryGetValue(string key, out IVariable<T> value) => Parent.TryGetValue(key, out value);
 
         /// <summary>

@@ -1,29 +1,29 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="IFrequencyUpdateBehavior"/> for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IFrequencyUpdateBehavior" />
-    public class FrequencyUpdateBehavior : Behavior, IFrequencyUpdateBehavior
+    public class FrequencyUpdate : Behavior, IFrequencyUpdateBehavior
     {
         private readonly Workload _updateWorkload;
         private readonly BehaviorList<IFrequencyUpdateBehavior> _updateBehaviors;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyUpdateBehavior"/> class.
+        /// Initializes a new instance of the <see cref="FrequencyUpdate"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="simulation">The parallel simulation.</param>
-        public FrequencyUpdateBehavior(string name, ParallelSimulation simulation)
+        public FrequencyUpdate(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
-            if (parameters.UpdateDistributor != null)
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
+            if (parameters.BiasUpdateDistributor != null)
             {
-                _updateWorkload = new Workload(parameters.UpdateDistributor, simulation.EntityBehaviors.Count);
+                _updateWorkload = new Workload(parameters.BiasUpdateDistributor, simulation.EntityBehaviors.Count);
                 foreach (var behavior in simulation.EntityBehaviors)
                 {
                     if (behavior.TryGetValue(out IFrequencyUpdateBehavior update))
@@ -35,6 +35,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             _updateBehaviors = simulation.EntityBehaviors.GetBehaviorList<IFrequencyUpdateBehavior>();
         }
 
+        /// <inheritdoc/>
         void IFrequencyUpdateBehavior.Update()
         {
             if (_updateWorkload != null)

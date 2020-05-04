@@ -1,6 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     public partial class ParallelSolver<T>
     {

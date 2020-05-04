@@ -1,9 +1,10 @@
 ﻿using SpiceSharp.Simulations;
 using System.Threading;
+using System;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
-    public partial class NoiseBehavior
+    public partial class Noise
     {
         /// <summary>
         /// An <see cref="INoiseSimulationState"/> for a <see cref="ParallelComponents"/>.
@@ -86,6 +87,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// Initializes a new instance of the <see cref="NoiseSimulationState"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> is <c>null</c>.</exception>
             public NoiseSimulationState(INoiseSimulationState parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));

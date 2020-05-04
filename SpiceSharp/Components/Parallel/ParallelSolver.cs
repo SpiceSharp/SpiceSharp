@@ -3,7 +3,7 @@ using SpiceSharp.Algebra.Solve;
 using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="ISparseSolver{T}"/> that only allows direct access to an element once. All subsequent calls will be

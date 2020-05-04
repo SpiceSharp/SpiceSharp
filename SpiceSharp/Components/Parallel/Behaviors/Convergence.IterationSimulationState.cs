@@ -1,9 +1,10 @@
 ﻿using SpiceSharp.Simulations;
 using System.Threading;
+using System;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
-    public partial class ConvergenceBehavior
+    public partial class Convergence
     {
         /// <summary>
         /// An <see cref="IIterationSimulationState"/> that allows concurrent access.
@@ -14,9 +15,16 @@ namespace SpiceSharp.Components.ParallelBehaviors
             private readonly IIterationSimulationState _parent;
             private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
+            /// <inheritdoc/>
             IterationModes IIterationSimulationState.Mode => _parent.Mode;
+
+            /// <inheritdoc/>
             double IIterationSimulationState.SourceFactor => _parent.SourceFactor;
+
+            /// <inheritdoc/>
             double IIterationSimulationState.Gmin => _parent.Gmin;
+
+            /// <inheritdoc/>
             bool IIterationSimulationState.IsConvergent
             {
                 get
@@ -49,6 +57,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             /// Initializes a new instance of the <see cref="IterationSimulationState"/> class.
             /// </summary>
             /// <param name="parent">The parent.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> is <c>null</c>.</exception>
             public IterationSimulationState(IIterationSimulationState parent)
             {
                 _parent = parent.ThrowIfNull(nameof(parent));

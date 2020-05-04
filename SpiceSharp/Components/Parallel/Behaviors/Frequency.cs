@@ -1,14 +1,15 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="IFrequencyBehavior" /> for a <see cref="ParallelComponents" />.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IFrequencyBehavior" />
-    public partial class FrequencyBehavior : Behavior, IFrequencyBehavior
+    public partial class Frequency : Behavior, 
+        IFrequencyBehavior
     {
         /// <summary>
         /// Prepares the specified simulation.
@@ -18,7 +19,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
         {
             if (!simulation.UsesState<IComplexSimulationState>())
                 return;
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             if (parameters.AcLoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
             {
                 var state = simulation.GetParentState<IComplexSimulationState>();
@@ -31,14 +32,14 @@ namespace SpiceSharp.Components.ParallelBehaviors
         private readonly BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="simulation">The parallel simulation.</param>
-        public FrequencyBehavior(string name, ParallelSimulation simulation)
+        public Frequency(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             simulation.TryGetState(out _state);
             if (parameters.AcLoadDistributor != null)
                 _loadWorkload = new Workload(parameters.AcLoadDistributor, simulation.EntityBehaviors.Count);
@@ -60,9 +61,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             _frequencyBehaviors = simulation.EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
         }
 
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
             if (_initWorkload != null)
@@ -74,9 +73,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             }
         }
 
-        /// <summary>
-        /// Load the Y-matrix and right-hand side vector for frequency domain analysis.
-        /// </summary>
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             if (_loadWorkload != null)

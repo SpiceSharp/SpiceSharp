@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Components.ParallelBehaviors;
+using SpiceSharp.Components.ParallelComponents;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new ParallelComponents("PC1", 
+                new Parallel("PC1", 
                     new Resistor("R1", "in", "out", 1e3), 
                     new Resistor("R2", "out", "0", 1e3))
                     .SetParameter("biasing.load", workDistributor));
@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new ParallelComponents("PC1",
+                new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Resistor("R2", "out", "0", 1e3))
                     .SetParameter("biasing.convergence", workDistributor));
@@ -51,7 +51,7 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
-                new ParallelComponents("PC1", 
+                new Parallel("PC1", 
                     new Resistor("R1", "in", "out", 1e3), 
                     new Capacitor("C1", "out", "0", 1e-6))
                     .SetParameter("frequency.load", workDistributor));
@@ -68,7 +68,7 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new ParallelComponents("PC1",
+                new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Capacitor("C1", "out", "0", 1e-6))
                     .SetParameter("biasing.load", workDistributor));
@@ -85,7 +85,7 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new ParallelComponents("PC1",
+                new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Capacitor("C1", "out", "0", 1e-6),
                     new Capacitor("C2", "out", "0", 1e-6))

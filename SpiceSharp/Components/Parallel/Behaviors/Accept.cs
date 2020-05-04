@@ -1,26 +1,27 @@
 ﻿using SpiceSharp.Behaviors;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="IAcceptBehavior"/> for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IAcceptBehavior" />
-    public class AcceptBehavior : Behavior, IAcceptBehavior
+    public class Accept : Behavior, 
+        IAcceptBehavior
     {
         private readonly Workload _probeWorkload, _acceptWorkload;
         private readonly BehaviorList<IAcceptBehavior> _acceptBehaviors;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AcceptBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Accept"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="simulation">The simulation.</param>
-        public AcceptBehavior(string name, ParallelSimulation simulation)
+        public Accept(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             if (parameters.ProbeDistributor != null)
                 _probeWorkload = new Workload(parameters.ProbeDistributor, simulation.EntityBehaviors.Count);
             if (parameters.AcceptDistributor != null)
@@ -41,6 +42,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             _acceptBehaviors = simulation.EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
         }
 
+        /// <inheritdoc/>
         void IAcceptBehavior.Probe()
         {
             if (_probeWorkload != null)
@@ -52,6 +54,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             }
         }
 
+        /// <inheritdoc/>
         void IAcceptBehavior.Accept()
         {
             if (_acceptWorkload != null)

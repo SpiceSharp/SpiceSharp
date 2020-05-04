@@ -1,32 +1,33 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 
-namespace SpiceSharp.Components.ParallelBehaviors
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
     /// An <see cref="IBiasingBehavior"/> for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IBiasingBehavior" />
-    public partial class BiasingBehavior : Behavior, IBiasingBehavior
+    public partial class Biasing : Behavior, 
+        IBiasingBehavior
     {
         private readonly BiasingSimulationState _state;
         private readonly Workload _loadWorkload;
         private readonly BehaviorList<IBiasingBehavior> _biasingBehaviors;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="simulation">The parallel simulation.</param>
-        public BiasingBehavior(string name, ParallelSimulation simulation)
+        public Biasing(string name, ParallelSimulation simulation)
             : base(name)
         {
-            var parameters = simulation.LocalParameters.GetParameterSet<BaseParameters>();
+            var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
             simulation.TryGetState(out _state);
-            if (parameters.LoadDistributor != null)
+            if (parameters.BiasLoadDistributor != null)
             {
-                _loadWorkload = new Workload(parameters.LoadDistributor, simulation.EntityBehaviors.Count);
+                _loadWorkload = new Workload(parameters.BiasLoadDistributor, simulation.EntityBehaviors.Count);
                 foreach (var container in simulation.EntityBehaviors)
                 {
                     if (container.TryGetValue(out IBiasingBehavior biasing))
@@ -38,9 +39,7 @@ namespace SpiceSharp.Components.ParallelBehaviors
             _biasingBehaviors = simulation.EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and Rhs-vector.
-        /// </summary>
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             if (_loadWorkload != null)
