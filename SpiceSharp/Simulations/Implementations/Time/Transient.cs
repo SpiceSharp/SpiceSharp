@@ -5,6 +5,7 @@ using SpiceSharp.Entities;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharp.Simulations.Time;
 using SpiceSharp.Validation;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {

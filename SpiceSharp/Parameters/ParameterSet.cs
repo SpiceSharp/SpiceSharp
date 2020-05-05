@@ -1,25 +1,19 @@
 ﻿using System;
-using SpiceSharp.Attributes;
 
-namespace SpiceSharp
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
-    /// Base class for a set of parameters.
+    /// The default implementation for a <see cref="IParameterSet"/>. It uses reflection as a 
+    /// last line of defense.
     /// </summary>
     /// <remarks>
-    /// This class allows accessing parameters by their metadata. Metadata is specified by using 
-    /// the <see cref="ParameterNameAttribute"/> and <see cref="ParameterInfoAttribute"/>.
+    /// This class will use the <see cref="IExportPropertySet{P}"/> or <see cref="IImportParameterSet{P}"/>
+    /// if they are defined on the class to avoid reflection. If it isn't defined, it will fall back to
+    /// reflection.
     /// </remarks>
-    /// <seealso cref="IImportParameterSet{T}"/>
     /// <seealso cref="IParameterSet"/>
-    public abstract class ParameterSet : 
-        IImportParameterSet<ParameterSet>, IParameterSet
+    public abstract class ParameterSet : IParameterSet
     {
-        /// <inheritdoc/>
-        public virtual void CalculateDefaults()
-        {
-        }
-
         /// <summary>
         /// Clones the instance.
         /// </summary>
@@ -28,11 +22,12 @@ namespace SpiceSharp
         /// </returns>
         protected virtual ICloneable Clone()
         {
-            var clone = (ParameterSet) Activator.CreateInstance(GetType());
+            var clone = (ParameterSet)Activator.CreateInstance(GetType());
             clone.CopyFrom(this);
             return clone;
         }
 
+        /// <inheritdoc/>
         ICloneable ICloneable.Clone() => Clone();
 
         /// <summary>
@@ -47,35 +42,64 @@ namespace SpiceSharp
             ReflectionHelper.CopyPropertiesAndFields(source, this);
         }
 
+        /// <inheritdoc/>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <inheritdoc/>
-        public ParameterSet SetParameter<P>(string name, P value)
+        public virtual void SetParameter<P>(string name, P value)
         {
-            ReflectionHelper.Set(this, name, value);
-            return this;
+            if (this is IImportParameterSet<P> ips)
+                ips.SetParameter(name, value);
+            else
+                ReflectionHelper.Set(this, name, value);
         }
 
-        void IImportParameterSet.SetParameter<P>(string name, P value) => SetParameter(name, value);
+        /// <inheritdoc/>
+        public virtual bool TrySetParameter<P>(string name, P value)
+        {
+            if (this is IImportParameterSet<P> ips)
+                return ips.TrySetParameter(name, value);
+            else
+                return ReflectionHelper.TrySet(this, name, value);
+        }
 
         /// <inheritdoc/>
-        public bool TrySetParameter<P>(string name, P value)
-            => ReflectionHelper.TrySet(this, name, value);
+        public virtual P GetProperty<P>(string name)
+        {
+            if (this is IExportPropertySet<P> eps)
+                return eps.GetProperty(name);
+            else
+                return ReflectionHelper.Get<P>(this, name);
+        }
 
         /// <inheritdoc/>
-        public P GetProperty<P>(string name)
-            => ReflectionHelper.Get<P>(this, name);
+        public virtual bool TryGetProperty<P>(string name, out P value)
+        {
+            if (this is IExportPropertySet<P> eps)
+            {
+                value = eps.TryGetProperty(name, out var isValid);
+                return isValid;
+            }
+            else
+                return ReflectionHelper.TryGet(this, name, out value);
+        }
 
         /// <inheritdoc/>
-        public bool TryGetProperty<P>(string name, out P value)
-            => ReflectionHelper.TryGet(this, name, out value);
+        public virtual Action<P> CreateParameterSetter<P>(string name)
+        {
+            if (this is IImportParameterSet<P> ips)
+                return ips.CreateParameterSetter(name);
+            else
+                return ReflectionHelper.CreateSetter<P>(this, name);
+        }
 
         /// <inheritdoc/>
-        public Func<P> CreatePropertyGetter<P>(string name)
-            => ReflectionHelper.CreateGetter<P>(this, name);
-
-        /// <inheritdoc/>
-        public Action<P> CreateParameterSetter<P>(string name)
-            => ReflectionHelper.CreateSetter<P>(this, name);
+        public virtual Func<P> CreatePropertyGetter<P>(string name)
+        {
+            if (this is IExportPropertySet<P> eps)
+                return eps.CreatePropertyGetter(name);
+            else
+                return ReflectionHelper.CreateGetter<P>(this, name);
+        }
     }
 }

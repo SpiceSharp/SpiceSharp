@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Common
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
@@ -67,7 +67,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
             var context = new MutualInductances.BindingContext(this, simulation, LinkParameters);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))

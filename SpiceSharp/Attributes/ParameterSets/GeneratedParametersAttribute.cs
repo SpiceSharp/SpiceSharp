@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Attributes
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
     /// Indicates that a class has parameters with attributes that could have an effect

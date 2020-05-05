@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Bipolars;
 using SpiceSharp.Simulations;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
@@ -29,7 +30,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
             var context = new ModelBindingContext(this, simulation, LinkParameters);
             behaviors
                 .AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperature(Name, context));

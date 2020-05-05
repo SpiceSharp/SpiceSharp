@@ -3,7 +3,7 @@ using SpiceSharp.Simulations;
 using System.Numerics;
 using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Switches
 {

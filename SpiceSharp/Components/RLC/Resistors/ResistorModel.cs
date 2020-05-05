@@ -4,6 +4,7 @@ using SpiceSharp.Components.Common;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Behaviors
@@ -7,12 +8,10 @@ namespace SpiceSharp.Behaviors
     /// A container for behaviors
     /// </summary>
     /// <seealso cref="ITypeDictionary{T}" />
-    /// <seealso cref="IExportPropertySet"/>
-    /// <seealso cref="IParameterized"/>
+    /// <seealso cref="IParameterSetCollection"/>
     public interface IBehaviorContainer : 
-        ITypeDictionary<IBehavior>, 
-        IExportPropertySet, 
-        IParameterized
+        ITypeDictionary<IBehavior>,
+        IParameterSetCollection
     {
         /// <summary>
         /// Gets the name.

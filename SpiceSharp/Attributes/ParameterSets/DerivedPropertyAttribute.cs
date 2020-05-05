@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Attributes
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
     /// Indicates that a property is derived from other properties.

@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Validation;
 using System.Collections.Generic;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations.Biasing
 {

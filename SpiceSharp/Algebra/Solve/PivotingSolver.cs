@@ -1,4 +1,4 @@
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Algebra.Solve
@@ -11,7 +11,8 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IPivotingSolver{M, V, T}" />
     [GeneratedParameters]
-    public abstract class PivotingSolver<M, V, T> : Parameterized, IPivotingSolver<M, V, T>
+    public abstract class PivotingSolver<M, V, T> : ParameterSetCollection,
+        IPivotingSolver<M, V, T>
         where M : IMatrix<T>
         where V : IVector<T>
     {

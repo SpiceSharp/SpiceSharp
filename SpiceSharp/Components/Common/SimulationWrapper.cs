@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SpiceSharp.Components.Common
 {
@@ -147,5 +149,35 @@ namespace SpiceSharp.Components.Common
         /// <inheritdoc/>
         public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet
             => Parent.TryGetParameterSet(out value);
+
+        /// <inheritdoc/>
+        public virtual void SetParameter<P>(string name, P value) => Parent.SetParameter(name, value);
+
+        /// <inheritdoc/>
+        public virtual bool TrySetParameter<P>(string name, P value) => Parent.TrySetParameter(name, value);
+
+        /// <inheritdoc/>
+        public virtual P GetProperty<P>(string name) => Parent.GetProperty<P>(name);
+
+        /// <inheritdoc/>
+        public virtual bool TryGetProperty<P>(string name, out P value) => Parent.TryGetProperty(name, out value);
+
+        /// <inheritdoc/>
+        public virtual Action<P> CreateParameterSetter<P>(string name) => Parent.CreateParameterSetter<P>(name);
+
+        /// <inheritdoc/>
+        public virtual Func<P> CreatePropertyGetter<P>(string name) => Parent.CreatePropertyGetter<P>(name);
+
+        /// <inheritdoc/>
+        public ICloneable Clone()
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <inheritdoc/>
+        public void CopyFrom(ICloneable cloneable)
+        {
+            throw new NotSupportedException();
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Mosfets.Level2
 {

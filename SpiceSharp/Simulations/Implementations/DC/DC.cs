@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {
@@ -84,7 +85,8 @@ namespace SpiceSharp.Simulations
             _enumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];
             for (var i = 0; i < sweeps.Length; i++)
             {
-                sweeps[i].CalculateDefaults();
+                // TODO: Try to get rid of calculating defaults
+                // sweeps[i].CalculateDefaults();
                 _enumerators[i] = sweeps[i].CreatePoints(this);
                 if (!_enumerators[i].MoveNext())
                     throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[i].Name));

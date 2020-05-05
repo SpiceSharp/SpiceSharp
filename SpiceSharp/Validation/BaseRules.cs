@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SpiceSharp.ParameterSets;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace SpiceSharp.Validation
     /// A base rule provider implementation.
     /// </summary>
     /// <seealso cref="IRules" />
-    public abstract class BaseRules : Parameterized, IRules
+    public abstract class BaseRules : ParameterSetCollection, IRules
     {
         /// <summary>
         /// Gets the number of rules that are violated.

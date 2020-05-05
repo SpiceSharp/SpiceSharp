@@ -4,6 +4,7 @@ using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
@@ -105,7 +106,6 @@ namespace SpiceSharp.Components
                 return;
 
             var container = new BehaviorContainer(Name);
-            CalculateDefaults();
 
             // Create our parallel simulation
             var psim = new ParallelSimulation(simulation, this);

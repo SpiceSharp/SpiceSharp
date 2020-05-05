@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Simulations.IntegrationMethods

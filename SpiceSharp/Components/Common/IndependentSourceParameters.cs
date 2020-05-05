@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using System;
 using System.Numerics;
 
@@ -93,7 +93,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         }
 
         /// <inheritdoc/>
-        public override void CalculateDefaults()
+        public void CalculateDefaults()
         {
             var phase = AcPhase * Math.PI / 180.0;
             Phasor = new Complex(

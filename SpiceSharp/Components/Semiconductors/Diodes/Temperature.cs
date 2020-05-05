@@ -1,6 +1,7 @@
 ﻿using System;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Diodes
 {

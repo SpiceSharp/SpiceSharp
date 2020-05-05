@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components

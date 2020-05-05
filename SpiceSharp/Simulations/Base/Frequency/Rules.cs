@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations.Frequency
 {

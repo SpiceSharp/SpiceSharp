@@ -1,8 +1,9 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.LosslessTransmissionLines;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -72,7 +73,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
+            Parameters.CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))

@@ -1,7 +1,6 @@
-﻿using SpiceSharp.Simulations;
-using System;
+﻿using System;
 
-namespace SpiceSharp.Attributes
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
     /// This attribute specifies a description and other metadata of a parameter. It can be applied to a field, property or method

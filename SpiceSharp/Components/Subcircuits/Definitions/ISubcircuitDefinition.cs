@@ -3,14 +3,15 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Validation;
 using System;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// Interface that describes an entity collection for a <see cref="Subcircuit"/>.
     /// </summary>
-    /// <seealso cref="IParameterized"/>
-    public interface ISubcircuitDefinition : IParameterized
+    /// <seealso cref="IParameterSetCollection"/>
+    public interface ISubcircuitDefinition : IParameterSetCollection
     {
         /// <summary>
         /// Gets the entities defined in the subcircuit.

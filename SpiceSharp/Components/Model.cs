@@ -25,7 +25,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

@@ -1,6 +1,8 @@
 ﻿using System;
 using SpiceSharp.Simulations;
 using SpiceSharp.General;
+using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Entities
 {
@@ -8,9 +10,10 @@ namespace SpiceSharp.Entities
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.
     /// </summary>
     /// <seealso cref="ICloneable"/>
-    /// <seealso cref="IParameterized"/>
-    /// <seealso cref="IImportParameterSet{T}"/>
-    public interface IEntity : ICloneable, IParameterized, IImportParameterSet<IEntity>
+    /// <seealso cref="IParameterSetCollection"/>
+    public interface IEntity :
+        ICloneable,
+        IParameterSetCollection
     {
         /// <summary>
         /// Gets the name of the entity.

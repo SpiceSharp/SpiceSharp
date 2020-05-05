@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Attributes
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
     /// An attribute that indicates a maximum value for a parameter.

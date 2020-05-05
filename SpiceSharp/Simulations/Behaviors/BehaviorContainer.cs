@@ -3,6 +3,7 @@ using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Behaviors
 {
@@ -11,10 +12,10 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     /// <seealso cref="InterfaceTypeDictionary{Behavior}" />
     /// <seealso cref="IBehaviorContainer" />
-    /// <seealso cref="IParameterized"/>
+    /// <seealso cref="IParameterSetCollection"/>
     public class BehaviorContainer : InterfaceTypeDictionary<IBehavior>,
-        IBehaviorContainer, 
-        IParameterized
+        IBehaviorContainer,
+        IParameterSetCollection
     {
         /// <inheritdoc/>
         public string Name { get; }
@@ -63,6 +64,40 @@ namespace SpiceSharp.Behaviors
                         yield return ps;
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public void SetParameter<P>(string name, P value)
+        {
+            foreach (var behavior in Values)
+            {
+                if (behavior.TrySetParameter(name, value))
+                    return;
+            }
+            throw new ParameterNotFoundException(this, name, typeof(P));
+        }
+
+        /// <inheritdoc/>
+        public bool TrySetParameter<P>(string name, P value)
+        {
+            foreach (var behavior in Values)
+            {
+                if (behavior.TrySetParameter(name, value))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public Action<P> CreateParameterSetter<P>(string name)
+        {
+            foreach (var behavior in Values)
+            {
+                var result = behavior.CreateParameterSetter<P>(name);
+                if (result != null)
+                    return result;
+            }
+            return null;
         }
 
         /// <inheritdoc/>

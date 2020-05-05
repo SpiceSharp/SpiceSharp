@@ -1,11 +1,12 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.ParameterSets;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Contract for a behavior.
     /// </summary>
-    /// <seealso cref="IExportPropertySet"/>
-    /// <seealso cref="IParameterized"/>
-    public interface IBehavior : IExportPropertySet, IParameterized
+    /// <seealso cref="IParameterSet"/>
+    public interface IBehavior : IParameterSetCollection
     {
         /// <summary>
         /// Gets the name of the behavior.

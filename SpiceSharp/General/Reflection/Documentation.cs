@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using SpiceSharp.General;
+using SpiceSharp.Attributes;
 using System.Reflection;
 using SpiceSharp.Components;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using System.Linq;
 
 namespace SpiceSharp.Reflection
@@ -73,12 +73,12 @@ namespace SpiceSharp.Reflection
         /// <returns>
         /// The named parameters.
         /// </returns>
-        public static IEnumerable<MemberDescription> Parameters(IParameterized parameterized)
+        public static IEnumerable<MemberDescription> Parameters(IParameterSetCollection parameterized)
         {
             foreach (var ps in parameterized.ParameterSets)
             {
                 // Allow recursive parameterized objects
-                if (ps is IParameterized child)
+                if (ps is IParameterSetCollection child)
                 {
                     foreach (var md in Parameters(child))
                         yield return md;

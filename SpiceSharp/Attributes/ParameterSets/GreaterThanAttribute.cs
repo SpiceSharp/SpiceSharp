@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace SpiceSharp.Attributes
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
     /// An attribute that indicates a minimum value for a parameter.
     /// </summary>
     /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Property)]
-    public sealed class GreaterThanOrEqualsAttribute : Attribute
+    public sealed class GreaterThanAttribute : Attribute
     {
         /// <summary>
         /// Gets the minimum value.
@@ -21,7 +21,7 @@ namespace SpiceSharp.Attributes
         /// Initializes a new instance of the <see cref="GreaterThanAttribute"/> class.
         /// </summary>
         /// <param name="value">The value.</param>
-        public GreaterThanOrEqualsAttribute(double value)
+        public GreaterThanAttribute(double value)
         {
             Minimum = value;
         }

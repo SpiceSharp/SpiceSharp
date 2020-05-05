@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Subcircuits;
 using SpiceSharp.Components.Subcircuits.Simple;
@@ -16,7 +16,8 @@ namespace SpiceSharp.Components
     /// <seealso cref="ISubcircuitDefinition" />
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Subcircuits.Simple.Parameters"/>
-    public class SubcircuitDefinition : Parameterized, ISubcircuitDefinition,
+    public class SubcircuitDefinition : ParameterSetCollection, 
+        ISubcircuitDefinition,
         IParameterized<Parameters>
     {
         private readonly string[] _pins;

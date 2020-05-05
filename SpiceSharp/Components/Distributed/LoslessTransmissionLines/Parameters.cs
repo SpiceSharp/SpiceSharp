@@ -1,4 +1,4 @@
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.LosslessTransmissionLines
 {
@@ -135,7 +135,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// <summary>
         /// Method for calculating the default values of derived parameters.
         /// </summary>
-        public override void CalculateDefaults()
+        public void CalculateDefaults()
         {
             if (!Delay.Given)
                 Delay = new GivenParameter<double>(NormalizedLength / Frequency, false);

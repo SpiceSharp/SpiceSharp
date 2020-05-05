@@ -1,4 +1,4 @@
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Components.JFETs
@@ -330,7 +330,7 @@ namespace SpiceSharp.Components.JFETs
         public double FnExponent { get; set; } = 1;
 
         /// <inheritdoc/>
-        public override void CalculateDefaults()
+        public void CalculateDefaults()
         {
             DrainConductance = DrainResistance > 0 ? 1 / DrainResistance : 0;
             SourceConductance = SourceResistance > 0 ? 1 / SourceResistance : 0;

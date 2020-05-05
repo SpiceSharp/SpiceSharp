@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {
@@ -24,8 +25,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="IStateful" />
     /// <seealso cref="IBehavioral" />
-    /// <seealso cref="IParameterized" />
-    public interface ISimulation : IStateful, IBehavioral, IParameterized
+    /// <seealso cref="IParameterSetCollection" />
+    public interface ISimulation : IStateful, IBehavioral, IParameterSetCollection
     {
         /// <summary>
         /// Gets the name of the <see cref="ISimulation"/>.

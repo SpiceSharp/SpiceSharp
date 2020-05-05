@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations.Frequency
 {

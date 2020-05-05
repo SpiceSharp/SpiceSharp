@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Entities;
 
 namespace SpiceSharp.Components.ParallelComponents

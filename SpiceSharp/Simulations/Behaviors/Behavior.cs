@@ -1,18 +1,21 @@
-﻿using System;
+﻿using SpiceSharp.ParameterSets;
+using System;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
-    /// Template for a behavior.
+    /// A base template for an <see cref="IBehavior"/>.
     /// </summary>
-    public abstract class Behavior : Parameterized, IBehavior
+    /// <remarks>
+    /// This class also allows the behavior to define its own named parameters and properties,
+    /// as well as link to existing <see cref="IParameterSet"/> classes.
+    /// </remarks>
+    /// <seealso cref="ParameterSetCollection"/>
+    /// <seealso cref="IBehavior"/>
+    public abstract class Behavior : ParameterSetCollection, 
+        IBehavior
     {
-        /// <summary>
-        /// Gets the name of the behavior.
-        /// </summary>
-        /// <remarks>
-        /// This should be the same name as the entity that created it.
-        /// </remarks>
+        /// <inheritdoc/>
         public string Name { get; }
 
         /// <summary>
@@ -26,53 +29,6 @@ namespace SpiceSharp.Behaviors
         protected Behavior(string name)
         {
             Name = name.ThrowIfNull(nameof(name));
-        }
-
-        /// <summary>
-        /// Gets the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        /// The value.
-        /// </returns>
-        public override P GetProperty<P>(string name)
-        {
-            if (base.TryGetProperty(name, out P result))
-                return result;
-            return ReflectionHelper.Get<P>(this, name);
-        }
-
-        /// <summary>
-        /// Tries to get the value of the parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the parameter was found; otherwise <c>false</c>.
-        /// </returns>
-        public override bool TryGetProperty<P>(string name, out P value)
-        {
-            if (base.TryGetProperty(name, out value))
-                return true;
-            return ReflectionHelper.TryGet(this, name, out value);
-        }
-
-        /// <summary>
-        /// Creates a getter for a parameter with the specified name.
-        /// </summary>
-        /// <typeparam name="P">The value type.</typeparam>
-        /// <param name="name">The name of the parameter.</param>
-        /// <returns>
-        /// A getter if the parameter exists; otherwise <c>null</c>.
-        /// </returns>
-        public override Func<P> CreatePropertyGetter<P>(string name)
-        {
-            var getter = base.CreatePropertyGetter<P>(name);
-            if (getter == null)
-                getter = ReflectionHelper.CreateGetter<P>(this, name);
-            return getter;
         }
     }
 }

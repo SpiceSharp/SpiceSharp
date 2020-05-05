@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.VoltageDelays
 {
@@ -63,6 +64,7 @@ namespace SpiceSharp.Components.VoltageDelays
                     });
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             BiasingElements.Add(1, -1, 1, -1, -1, 1);

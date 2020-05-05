@@ -1,5 +1,5 @@
 ﻿using SpiceSharp.Algebra;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using System.Collections.Generic;
 using System.Numerics;
 

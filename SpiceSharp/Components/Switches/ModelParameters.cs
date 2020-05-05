@@ -1,5 +1,5 @@
 ﻿using System;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Switches
 {
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.Switches
         public double OffConductance { get; private set; }
 
         /// <inheritdoc/>
-        public override void CalculateDefaults()
+        public void CalculateDefaults()
         {
             // Only positive hysteresis values!
             if (Hysteresis < 0)

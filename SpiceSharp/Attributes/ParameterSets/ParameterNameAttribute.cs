@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SpiceSharp.Attributes
+namespace SpiceSharp.ParameterSets
 {
     /// <summary>
     /// Specifies the name for a member. It can be applied to properties or method. Multiple names are allowed.

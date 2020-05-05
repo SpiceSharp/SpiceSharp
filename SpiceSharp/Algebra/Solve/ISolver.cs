@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Algebra
 {
@@ -7,7 +8,7 @@ namespace SpiceSharp.Algebra
     /// the equations and the variables.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    public interface ISolver<T> : IParameterized, IImportParameterSet<ISolver<T>>
+    public interface ISolver<T> : IParameterSetCollection
     {
         /// <summary>
         /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is

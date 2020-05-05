@@ -2,6 +2,7 @@
 using SpiceSharp.Algebra.Solve;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
@@ -19,72 +20,47 @@ namespace SpiceSharp.Components.ParallelComponents
         private readonly HashSet<int> _sharedVectorElements = new HashSet<int>();
         private readonly List<BridgeElement> _bridgeElements = new List<BridgeElement>();
 
-        P IParameterized.GetParameterSet<P>() => _parent.GetParameterSet<P>();
-        bool IParameterized.TryGetParameterSet<P>(out P value) => _parent.TryGetParameterSet(out value);
-        IEnumerable<IParameterSet> IParameterized.ParameterSets => _parent.ParameterSets;
-        ISolver<T> IImportParameterSet<ISolver<T>>.SetParameter<P>(string name, P value) { _parent.SetParameter(name, value); return this; }
-        void IImportParameterSet.SetParameter<P>(string name, P value) => _parent.SetParameter(name, value);
-        bool IImportParameterSet.TrySetParameter<P>(string name, P value) => _parent.TrySetParameter(name, value);
-        Action<P> IImportParameterSet.CreateParameterSetter<P>(string name) => _parent.CreateParameterSetter<P>(name);
+        P IParameterSetCollection.GetParameterSet<P>() => _parent.GetParameterSet<P>();
+        bool IParameterSetCollection.TryGetParameterSet<P>(out P value) => _parent.TryGetParameterSet(out value);
+        IEnumerable<IParameterSet> IParameterSetCollection.ParameterSets => _parent.ParameterSets;
 
-        /// <summary>
-        /// Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
-        /// expected to be linearly dependent on the others.
-        /// </summary>
-        /// <value>
-        /// The degeneracy.
-        /// </value>
+        /// <inheritdoc/>
         /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
         public int Degeneracy { get => _parent.Degeneracy; set => throw new ArgumentException(); }
 
-        /// <summary>
-        /// Gets or sets the pivot search reduction.
-        /// </summary>
-        /// <value>
-        /// The pivot search reduction.
-        /// </value>
+        /// <inheritdoc/>
         /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
         public int PivotSearchReduction { get => _parent.PivotSearchReduction; set => throw new ArgumentException(); }
 
-        /// <summary>
-        /// Gets a value indicating whether the solver needs to be reordered.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the solver needs reordering; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
+        /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
         public bool NeedsReordering { get => _parent.NeedsReordering; set => throw new ArgumentException(); }
 
-        /// <summary>
-        /// Gets a value indicating whether this solver has been factored.
-        /// A solver needs to be factored becore it can solve for a solution.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this solver is factored; otherwise, <c>false</c>.
-        /// </value>
+        /// <inheritdoc/>
         public bool IsFactored => _parent.IsFactored;
 
+        /// <inheritdoc/>
         T ISolver<T>.this[int row, int column]
         {
             get => _parent[row, column];
             set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString("this[row, column]"));
         }
+
+        /// <inheritdoc/>
         T ISolver<T>.this[MatrixLocation location]
         {
             get => _parent[location];
             set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString("this[location]"));
         }
+
+        /// <inheritdoc/>
         T ISolver<T>.this[int row]
         {
             get => _parent[row];
             set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString("this[row]"));
         }
 
-        /// <summary>
-        /// Gets the size of the matrix and right-hand side vector.
-        /// </summary>
-        /// <value>
-        /// The size.
-        /// </value>
+        /// <inheritdoc/>
         public int Size => _parent.Size;
 
         /// <summary>
@@ -96,22 +72,23 @@ namespace SpiceSharp.Components.ParallelComponents
             _parent = parent.ThrowIfNull(nameof(parent));
         }
 
+        /// <inheritdoc/>
         void IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method) => throw new ArgumentException();
+
+        /// <inheritdoc/>
         void ISolver<T>.Clear()
         {
             _sharedMatrixElements.Clear();
             _bridgeElements.Clear();
         }
+
+        /// <inheritdoc/>
         bool ISolver<T>.Factor() => throw new SpiceSharpException();
+
+        /// <inheritdoc/>
         int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor() => throw new SpiceSharpException();
 
-        /// <summary>
-        /// Finds the element at the specified location in the matrix.
-        /// </summary>
-        /// <param name="location">The location.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> FindElement(MatrixLocation location)
         {
             var elt = _parent.FindElement(location);
@@ -129,14 +106,7 @@ namespace SpiceSharp.Components.ParallelComponents
             return elt;
         }
 
-        /// <summary>
-        /// Finds the element at the specified position in the right-hand side vector.
-        /// </summary>
-        /// <param name="row">The row index.</param>
-        /// <returns>
-        /// The element if it exists; otherwise <c>null</c>.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
+        /// <inheritdoc/>
         public Element<T> FindElement(int row)
         {
             var elt = _parent.FindElement(row);
@@ -153,14 +123,7 @@ namespace SpiceSharp.Components.ParallelComponents
             return elt;
         }
 
-        /// <summary>
-        /// Gets the element at the specified location in the matrix. A new element is
-        /// created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="location">The location.</param>
-        /// <returns>
-        /// The matrix element.
-        /// </returns>
+        /// <inheritdoc/>
         public Element<T> GetElement(MatrixLocation location)
         {
             var elt = _parent.GetElement(location);
@@ -175,15 +138,7 @@ namespace SpiceSharp.Components.ParallelComponents
             return elt;
         }
 
-        /// <summary>
-        /// Gets the element at the specified position in the right-hand side vector.
-        /// A new element is created if it doesn't exist yet.
-        /// </summary>
-        /// <param name="row">The row.</param>
-        /// <returns>
-        /// The vector element.
-        /// </returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="row"/> is negative.</exception>
+        /// <inheritdoc/>
         public Element<T> GetElement(int row)
         {
             var elt = _parent.GetElement(row);
@@ -207,9 +162,16 @@ namespace SpiceSharp.Components.ParallelComponents
                 bridge.Value = default;
         }
 
+        /// <inheritdoc/>
         void ISolver<T>.Solve(IVector<T> solution) => throw new SpiceSharpException();
+
+        /// <inheritdoc/>
         void ISolver<T>.SolveTransposed(IVector<T> solution) => throw new SpiceSharpException();
+
+        /// <inheritdoc/>
         MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.InternalToExternal(MatrixLocation location) => _parent.InternalToExternal(location);
+
+        /// <inheritdoc/>
         MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.ExternalToInternal(MatrixLocation location) => _parent.ExternalToInternal(location);
 
         /// <summary>
@@ -219,6 +181,36 @@ namespace SpiceSharp.Components.ParallelComponents
         {
             foreach (var bridge in _bridgeElements)
                 bridge.Apply();
+        }
+
+        /// <inheritdoc/>
+        public void SetParameter<P>(string name, P value) => _parent.SetParameter(name, value);
+
+        /// <inheritdoc/>
+        public bool TrySetParameter<P>(string name, P value) => _parent.TrySetParameter(name, value);
+
+        /// <inheritdoc/>
+        public P GetProperty<P>(string name) => _parent.GetProperty<P>(name);
+        
+        /// <inheritdoc/>
+        public bool TryGetProperty<P>(string name, out P value) => _parent.TryGetProperty(name, out value);
+
+        /// <inheritdoc/>
+        public Action<P> CreateParameterSetter<P>(string name) => _parent.CreateParameterSetter<P>(name);
+
+        /// <inheritdoc/>
+        public Func<P> CreatePropertyGetter<P>(string name) => _parent.CreatePropertyGetter<P>(name);
+
+        /// <inheritdoc/>
+        public ICloneable Clone()
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <inheritdoc/>
+        public void CopyFrom(ICloneable source)
+        {
+            throw new NotSupportedException();
         }
     }
 }

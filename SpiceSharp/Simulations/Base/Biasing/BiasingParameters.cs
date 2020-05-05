@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SpiceSharp.Algebra;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {

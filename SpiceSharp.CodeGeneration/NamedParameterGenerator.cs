@@ -15,11 +15,18 @@ namespace SpiceSharp.CodeGeneration
     /// </summary>
     public class NamedParameterGenerator : CSharpSyntaxWalker
     {
+        /// <summary>
+        /// Gets the result.
+        /// </summary>
+        /// <value>
+        /// The result.
+        /// </value>
         public CompilationUnitSyntax Result { get; private set; }
 
-        private Dictionary<string, (SyntaxToken Name, TypeSyntax Type, bool HasSetter, bool HasGetter)> _properties
+        private readonly Dictionary<string, (SyntaxToken Name, TypeSyntax Type, bool HasSetter, bool HasGetter)> _properties
             = new Dictionary<string, (SyntaxToken Name, TypeSyntax Type, bool HasSetter, bool HasGetter)>();
 
+        /// <inheritdoc/>
         public override void VisitCompilationUnit(CompilationUnitSyntax node)
         {
             Result = SyntaxFactory.CompilationUnit(
@@ -31,6 +38,7 @@ namespace SpiceSharp.CodeGeneration
             base.VisitCompilationUnit(node);
         }
 
+        /// <inheritdoc/>
         public override void VisitNamespaceDeclaration(NamespaceDeclarationSyntax node)
         {
             Result = Result.AddMembers(
@@ -39,6 +47,7 @@ namespace SpiceSharp.CodeGeneration
             base.VisitNamespaceDeclaration(node);
         }
 
+        /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
             if (node.Modifiers.Any(SyntaxKind.PartialKeyword) && 
@@ -78,6 +87,7 @@ namespace SpiceSharp.CodeGeneration
             }
         }
 
+        /// <inheritdoc/>
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
         {
             // Check for any named attribute that we can use

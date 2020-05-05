@@ -1,4 +1,5 @@
 ﻿using System;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -9,7 +10,10 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IMatrix{T}" />
     /// <seealso cref="IVector{T}" />
-    public abstract partial class DenseLUSolver<T> : PivotingSolver<IMatrix<T>, IVector<T>, T>, ISolver<T>, IParameterized<RookPivoting<T>>
+    public abstract partial class DenseLUSolver<T> : PivotingSolver<IMatrix<T>,
+        IVector<T>, T>,
+        ISolver<T>,
+        IParameterized<RookPivoting<T>>
     {
         /// <summary>
         /// Gets the pivoting strategy.

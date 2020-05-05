@@ -3,10 +3,11 @@ using SpiceSharp.Validation;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharpTest.Models
 {
-    public class ComponentRules : Parameterized, IRules, IParameterized<ComponentRuleParameters>
+    public class ComponentRules : ParameterSetCollection, IRules, IParameterized<ComponentRuleParameters>
     {
         private readonly HashSet<IRule> _rules = new HashSet<IRule>();
 

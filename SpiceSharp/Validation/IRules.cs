@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Validation
 {
     /// <summary>
     /// Describes a rule provider.
     /// </summary>
-    /// <seealso cref="IParameterized" />
+    /// <seealso cref="IParameterSetCollection" />
     /// <seealso cref="IEnumerable{IRule}" />
-    public interface IRules : IParameterized, IEnumerable<IRule>
+    public interface IRules : IParameterSetCollection, IEnumerable<IRule>
     {
         /// <summary>
         /// Gets the number of rule violations.

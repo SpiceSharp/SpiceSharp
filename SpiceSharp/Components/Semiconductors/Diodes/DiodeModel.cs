@@ -2,6 +2,7 @@
 using SpiceSharp.Components.Diodes;
 using SpiceSharp.Simulations;
 using System;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
@@ -36,7 +37,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
             var context = new ModelBindingContext(this, simulation, LinkParameters);
             behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);

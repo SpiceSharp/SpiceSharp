@@ -1,12 +1,14 @@
 ﻿using System;
 using SpiceSharp.Simulations;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.Entities
 {
     /// <summary>
     /// Base class for any circuit object that can take part in simulations.
     /// </summary>
-    public abstract class Entity : Parameterized, IEntity
+    public abstract class Entity : ParameterSetCollection, IEntity
     {
         /// <summary>
         /// Gets or sets a value indicating whether the parameters should reference that of the entity.
@@ -34,37 +36,29 @@ namespace SpiceSharp.Entities
         public abstract void CreateBehaviors(ISimulation simulation);
 
         /// <summary>
-        /// Clones the instance.
+        /// Sets the value of a parameter of the specified type and with the specified name. This is just a wrapper
+        /// that allows chaining these commands.
         /// </summary>
+        /// <typeparam name="P">The parameter value type.</typeparam>
+        /// <param name="name">The name of the parameter.</param>
+        /// <param name="value">The value of the parameter.</param>
         /// <returns>
-        /// The cloned instance.
+        /// The entity.
         /// </returns>
-        protected virtual Entity Clone()
-        {
-            var clone = (Entity)Activator.CreateInstance(GetType(), Name);
-            ReflectionHelper.CopyPropertiesAndFields(this, clone);
-            return clone;
-        }
-
-        ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
-        /// Copy properties from another entity.
-        /// </summary>
-        /// <param name="source">The source entity.</param>
-        protected virtual void CopyFrom(ICloneable source)
-        {
-            source.ThrowIfNull(nameof(source));
-            ReflectionHelper.CopyPropertiesAndFields(source, this);
-        }
-
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
-
-        /// <inheritdoc/>
-        public new IEntity SetParameter<P>(string name, P value)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ParameterNotFoundException">Thrown if the parameter was not found.</exception>
+        public new Entity SetParameter<P>(string name, P value)
         {
             base.SetParameter(name, value);
             return this;
+        }
+
+        /// <inheritdoc/>
+        protected override ICloneable Clone()
+        {
+            var clone = (Entity)Activator.CreateInstance(GetType(), Name);
+            clone.CopyFrom(this);
+            return clone;
         }
     }
 }

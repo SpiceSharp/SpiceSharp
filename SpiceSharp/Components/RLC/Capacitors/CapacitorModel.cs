@@ -4,6 +4,7 @@ using System;
 using SpiceSharp.Components.Capacitors;
 using SpiceSharp.Components.Common;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {

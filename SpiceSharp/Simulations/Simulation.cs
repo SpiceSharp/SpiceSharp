@@ -7,13 +7,17 @@ using SpiceSharp.Diagnostics;
 using SpiceSharp.Entities;
 using SpiceSharp.General;
 using SpiceSharp.Validation;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation : Parameterized, IEventfulSimulation
+    /// <seealso cref="ParameterSetCollection"/>
+    /// <seealso cref="IEventfulSimulation"/>
+    public abstract class Simulation : ParameterSetCollection,
+        IEventfulSimulation
     {
         /// <inheritdoc/>
         public SimulationStatus Status { get; private set; }

@@ -5,6 +5,7 @@ using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations.Frequency;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {
@@ -16,7 +17,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IBehavioral{B}"/>
     /// <seealso cref="IFrequencyUpdateBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="FrequencyParameters"/>
+    /// <seealso cref="Simulations.FrequencyParameters"/>
     public abstract partial class FrequencySimulation : BiasingSimulation,
         IFrequencySimulation,
         IBehavioral<IFrequencyUpdateBehavior>,

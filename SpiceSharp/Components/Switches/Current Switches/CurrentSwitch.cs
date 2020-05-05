@@ -1,9 +1,10 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Switches;
 using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -64,7 +65,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
             var context = new CurrentControlledBindingContext(this, simulation, ControllingName, LinkParameters);
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(CurrentSwitchModel));

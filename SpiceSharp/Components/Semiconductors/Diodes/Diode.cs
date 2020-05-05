@@ -1,9 +1,10 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Diodes;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.Simulations;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -55,7 +56,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
             if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsKey(typeof(ModelTemperature)))
                 throw new NoModelException(Name, typeof(DiodeModel));

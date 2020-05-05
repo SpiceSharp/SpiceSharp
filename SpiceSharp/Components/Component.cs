@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        protected override Entity Clone()
+        protected override ICloneable Clone()
         {
             var clone = (Component)base.Clone();
             for (var i = 0; i < _connections.Length; i++)

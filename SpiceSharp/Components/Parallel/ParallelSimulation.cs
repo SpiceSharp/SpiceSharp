@@ -2,6 +2,7 @@
 using SpiceSharp.Components.Common;
 using SpiceSharp.General;
 using SpiceSharp.Simulations;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
@@ -17,14 +18,14 @@ namespace SpiceSharp.Components.ParallelComponents
         /// <value>
         /// The local configurations.
         /// </value>
-        public IParameterized LocalParameters { get; }
+        public IParameterSetCollection LocalParameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParallelSimulation"/> class.
         /// </summary>
         /// <param name="parent">The parent simulation.</param>
         /// <param name="parameters">The parallel component parameters.</param>
-        public ParallelSimulation(ISimulation parent, IParameterized parameters)
+        public ParallelSimulation(ISimulation parent, IParameterSetCollection parameters)
             : base(parent,
                   new BehaviorContainerCollection(parent?.EntityBehaviors.Comparer),
                   new InheritedTypeDictionary<ISimulationState>())

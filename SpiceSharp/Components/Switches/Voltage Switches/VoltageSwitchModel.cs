@@ -3,6 +3,7 @@ using SpiceSharp.Components.Common;
 using SpiceSharp.Components.Switches;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
@@ -35,7 +36,7 @@ namespace SpiceSharp.Components
         /// <param name="simulation">The simulation.</param>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            CalculateDefaults();
+            Parameters.CalculateDefaults();
             var container = new BehaviorContainer(Name)
             {
                 new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, LinkParameters))

@@ -1,4 +1,4 @@
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Components.Mosfets
@@ -386,7 +386,8 @@ namespace SpiceSharp.Components.Mosfets
         }
 
         /// <summary>
-        /// Gets or sets the bulk junction saturation current density.        /// </summary>
+        /// Gets or sets the bulk junction saturation current density.
+        /// </summary>
         /// <value>
         /// The bulk junction saturation current density.
         /// </value>
@@ -633,7 +634,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <remarks>
         /// These calculations should be run whenever a parameter has been changed.
         /// </remarks>
-        public override void CalculateDefaults()
+        public virtual void CalculateDefaults()
         {
             // Calculate the oxide capacitance
             OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;

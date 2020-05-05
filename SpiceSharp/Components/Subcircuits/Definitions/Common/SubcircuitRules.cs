@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Subcircuits
 {
@@ -9,7 +10,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// A wrapper for handling rules with subcircuits.
     /// </summary>
     /// <seealso cref="IRules" />
-    public class SubcircuitRules : IRules
+    public class SubcircuitRules : ParameterSetCollection, IRules
     {
         private readonly IRules _parent;
         private readonly ComponentRuleParameters _validationParameters, _parentValidationParameters;
@@ -21,7 +22,7 @@ namespace SpiceSharp.Components.Subcircuits
         public IEnumerable<IRuleViolation> Violations => _parent.Violations;
 
         /// <inheritdoc/>
-        public IEnumerable<IParameterSet> ParameterSets
+        public override IEnumerable<IParameterSet> ParameterSets
         {
             get
             {
@@ -61,7 +62,7 @@ namespace SpiceSharp.Components.Subcircuits
         public IEnumerator<IRule> GetEnumerator() => _parent.GetEnumerator();
 
         /// <inheritdoc/>
-        public P GetParameterSet<P>() where P : IParameterSet
+        public override P GetParameterSet<P>()
         {
             if (_validationParameters is P p)
                 return p;
@@ -72,14 +73,14 @@ namespace SpiceSharp.Components.Subcircuits
         public IEnumerable<R> GetRules<R>() where R : IRule => _parent.GetRules<R>();
 
         /// <inheritdoc/>
-        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        public override bool TryGetParameterSet<P>(out P value)
         {
             if (_validationParameters is P p)
             {
                 value = p;
                 return true;
             }
-            return _parent.TryGetParameterSet<P>(out value);
+            return _parent.TryGetParameterSet(out value);
         }
 
         /// <summary>
