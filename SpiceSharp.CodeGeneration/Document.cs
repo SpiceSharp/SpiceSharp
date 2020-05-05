@@ -35,7 +35,12 @@ namespace SpiceSharp.CodeGeneration
             _generated.Visit(_unit);
         }
 
-
+        /// <summary>
+        /// Gets a value indicating whether things can be generated.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if code should be generated; otherwise, <c>false</c>.
+        /// </value>
         public bool ShouldGenerate => _generated.GeneratedClasses.Count > 0;
 
         /// <summary>
@@ -51,7 +56,7 @@ namespace SpiceSharp.CodeGeneration
                 foreach (var c in _generated.GeneratedClasses)
                     result = result.ReplaceNode(c, rw.Visit(c));
                 result = Format(result);
-                if (string.Compare(_unit.ToFullString(), result.ToFullString()) != 0)
+                if (string.CompareOrdinal(_unit.ToFullString(), result.ToFullString()) != 0)
                 {
                     // Only export if the file changed in any meaningful way
                     Console.WriteLine($"Applying changes to \"{filename}\"");
@@ -63,6 +68,24 @@ namespace SpiceSharp.CodeGeneration
             {
                 var rw = new NamedParameterGenerator();
                 rw.Visit(_unit);
+
+                if (rw.GeneratedClassCount > 0)
+                {
+                    var result = Format(rw.Result);
+                    string original = null;
+                    var namedFile = Path.Combine(Path.GetDirectoryName(filename), $"{Path.GetFileNameWithoutExtension(filename)}.Named.cs");
+                    if (File.Exists(namedFile))
+                    {
+                        using StreamReader sr = new StreamReader(namedFile);
+                        original = sr.ReadToEnd();
+                    }
+                    if (string.CompareOrdinal(result.ToFullString(), original) != 0)
+                    {
+                        // Only export if the file changed in a meaningful way
+                        Console.WriteLine($"Applying changes to \"{namedFile}\"");
+                        ExportFile(namedFile, result);
+                    }
+                }
             }
         }
 
