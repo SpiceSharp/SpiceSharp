@@ -94,7 +94,7 @@ namespace SpiceSharpTest.Simulations
 
             // Run DC and op
             dc.Run(ckt);
-            dc.Run(ckt);
+            op.Run(ckt);
         }
     }
 }
