@@ -21,7 +21,7 @@ namespace SpiceSharp.ParameterSets
         /// <value>
         ///   <c>true</c> if the the class should be extended with methods for setting or getting parameters; otherwise, <c>false</c>.
         /// </value>
-        public bool NamedAccess { get; set; } = false;
+        public bool AddNames { get; set; } = false;
 
         /// <summary>
         /// Gets or sets a value indicating whether the rule attributes should be made explicit in the getters and setters
@@ -30,6 +30,6 @@ namespace SpiceSharp.ParameterSets
         /// <value>
         ///   <c>true</c> if the rule attributes should be made explicit in the getters and setters; otherwise, <c>false</c>.
         /// </value>
-        public bool Rules { get; set; } = true;
+        public bool AddRules { get; set; } = true;
     }
 }

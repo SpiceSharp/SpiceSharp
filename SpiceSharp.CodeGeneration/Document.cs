@@ -53,8 +53,8 @@ namespace SpiceSharp.CodeGeneration
             {
                 var rw = new PropertyRuleGenerator();
                 SyntaxNode result = _unit;
-                foreach (var c in _generated.GeneratedClasses)
-                    result = result.ReplaceNode(c, rw.Visit(c));
+                foreach (var c in _generated.GeneratedClasses.Where(g => g.AddRules))
+                    result = result.ReplaceNode(c.Class, rw.Visit(c.Class));
                 result = Format(result);
                 if (string.CompareOrdinal(_unit.ToFullString(), result.ToFullString()) != 0)
                 {
@@ -66,11 +66,11 @@ namespace SpiceSharp.CodeGeneration
 
             // Extend the class with generated setters and getters
             {
-                var rw = new NamedParameterGenerator();
-                rw.Visit(_unit);
-
-                if (rw.GeneratedClassCount > 0)
+                if (_generated.GeneratedClasses.Any(g => g.AddNames))
                 {
+                    var rw = new NamedParameterGenerator();
+                    rw.Visit(_unit);
+
                     var result = Format(rw.Result);
                     string original = null;
                     var namedFile = Path.Combine(Path.GetDirectoryName(filename), $"{Path.GetFileNameWithoutExtension(filename)}.Named.cs");

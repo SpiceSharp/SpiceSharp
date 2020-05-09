@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.Resistors
     /// Parameters for a <see cref="Resistor" />.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-	[GeneratedParameters(NamedAccess = true)]
+	[GeneratedParameters(AddNames = true)]
     public partial class Parameters : ParameterSet
     {
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);

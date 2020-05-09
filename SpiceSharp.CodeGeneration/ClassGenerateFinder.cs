@@ -18,7 +18,7 @@ namespace SpiceSharp.CodeGeneration
         /// <value>
         /// The generated classes.
         /// </value>
-        public List<ClassDeclarationSyntax> GeneratedClasses { get; } = new List<ClassDeclarationSyntax>();
+        public List<Generation> GeneratedClasses { get; } = new List<Generation>();
 
         /// <summary>
         /// Called when the visitor visits a ClassDeclarationSyntax node.
@@ -26,19 +26,16 @@ namespace SpiceSharp.CodeGeneration
         /// <param name="node"></param>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            if (node.AttributeLists
-                .Any(list => list.Attributes.Any(a =>
+            GeneratedClasses.AddRange(
+                node.AttributeLists
+                .SelectMany(list => list.Attributes)
+                .Where(attr => string.CompareOrdinal(attr.Name.ToString(), "GeneratedParameters") == 0 || string.CompareOrdinal(attr.Name.ToString(), "GeneratedParametersAttribute") == 0)
+                .Select(attr =>
                 {
-                    switch (a.Name.ToString())
-                    {
-                        case "GeneratedParameters":
-                        case "GeneratedParametersAttribute": return true;
-                        default: return false;
-                    }
-                })))
-            {
-                GeneratedClasses.Add(node);
-            }
+                    var addRules = attr.ArgumentList?.Arguments.FirstOrDefault(arg => string.CompareOrdinal(arg.NameEquals?.Name.ToString(), "AddRules") == 0)?.Expression?.ToString().Equals("true") ?? false;
+                    var addNames = attr.ArgumentList?.Arguments.FirstOrDefault(arg => string.CompareOrdinal(arg.NameEquals?.Name.ToString(), "AddNames") == 0)?.Expression?.ToString().Equals("true") ?? false;
+                    return new Generation(node, addRules, addNames);
+                }));
 
             // Needed for nested classes
             base.VisitClassDeclaration(node);

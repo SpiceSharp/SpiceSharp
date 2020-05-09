@@ -8,7 +8,8 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// Parameters that are common to an independent source.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-    public class IndependentSourceParameters : ParameterSet
+    [GeneratedParameters(AddNames = true, AddRules = false)]
+    public partial class IndependentSourceParameters : ParameterSet
     {
         /// <summary>
         /// The DC value of the source.

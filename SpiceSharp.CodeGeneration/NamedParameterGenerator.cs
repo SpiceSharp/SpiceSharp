@@ -85,7 +85,7 @@ namespace SpiceSharp.CodeGeneration
                         attr =>  attr.ArgumentList != null &&
                             attr.ArgumentList.Arguments.Any(
                                 arg => arg.NameEquals != null && 
-                                arg.NameEquals.Name.ToString().Equals("NamedAccess") && 
+                                arg.NameEquals.Name.ToString().Equals("AddNames") && 
                                 arg.Expression.ToString().Equals("true")))))
             {
                 _baseDefinitions.Clear();
