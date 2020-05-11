@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// <seealso cref="IWaveform"/>
         protected class Instance : IWaveform
         {
-            private readonly double[] _times, _values;
+            private readonly Point[] _points;
             private readonly IIntegrationMethod _method;
             private Line _line;
             private int _index;
@@ -58,24 +58,20 @@ namespace SpiceSharp.Components
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>
-            /// <param name="times">The times.</param>
-            /// <param name="values">The values.</param>
+            /// <param name="points">The points.</param>
             /// <param name="method">The integration method.</param>
             /// <exception cref="ArgumentException">Thrown if no points are specified, or if the time values are not monotonically increasing.</exception>
-            public Instance(IEnumerable<double> times, IEnumerable<double> values, IIntegrationMethod method)
+            public Instance(IEnumerable<Point> points, IIntegrationMethod method)
             {
                 _method = method;
-                _times = times.ThrowIfNull(nameof(times)).ToArray();
-                _values = values.ThrowIfNull(nameof(values)).ToArray();
-                if (_times.Length == 0 || _values.Length == 0)
+                _points = points.ThrowIfNull(nameof(points)).ToArray();
+                if (_points.Length == 0)
                     throw new ArgumentException(Properties.Resources.Waveforms_Pwl_Empty);
-                if (_times.Length != _values.Length)
-                    throw new ArgumentException(Properties.Resources.Waveforms_Pwl_TimeValueLength);
-
+                
                 // Check monotonically increasing timepoints
-                for (var i = 1; i < _times.Length; i++)
+                for (var i = 1; i < _points.Length; i++)
                 {
-                    if (_times[i - 1] >= _times[i])
+                    if (_points[i - 1].Time >= _points[i].Time)
                         throw new ArgumentException(Properties.Resources.Waveforms_Pwl_NoIncreasingTimeValues);
                 }
                 _index = 0;
@@ -90,12 +86,12 @@ namespace SpiceSharp.Components
 
                 // Find the line segment
                 // The line segment is likely to be very close to the current segment.
-                while (_index > 1 && _times[_index - 1] > time)
+                while (_index > 1 && _points[_index - 1].Time > time)
                 {
                     _line = null;
                     _index--;
                 }
-                while (_index < _times.Length && time >= _times[_index])
+                while (_index < _points.Length && time >= _points[_index].Time)
                 {
                     _line = null;
                     _index++;
@@ -104,23 +100,23 @@ namespace SpiceSharp.Components
                 {
                     if (_index == 0)
                         _line = new Line(
-                            double.NegativeInfinity, _values[0],
-                            _times[0], _values[0]);
-                    else if (_index >= _times.Length)
+                            double.NegativeInfinity, _points[0].Value,
+                            _points[0].Time, _points[0].Value);
+                    else if (_index >= _points.Length)
                     {
                         _line = new Line(
-                            double.NegativeInfinity, _values[_times.Length - 1],
-                            double.PositiveInfinity, _values[_times.Length - 1]
+                            double.NegativeInfinity, _points[_points.Length - 1].Value,
+                            double.PositiveInfinity, _points[_points.Length - 1].Value
                             );
                     }
-                    else if (time > _times[_index])
+                    else if (time > _points[_index].Time)
                         _line = new Line(
-                            _times[_index], _values[_index],
-                            double.PositiveInfinity, _values[_index]);
+                            _points[_index].Time, _points[_index].Value,
+                            double.PositiveInfinity, _points[_index].Value);
                     else
                         _line = new Line(
-                            _times[_index - 1], _values[_index - 1],
-                            _times[_index], _values[_index]);
+                            _points[_index - 1].Time, _points[_index - 1].Value,
+                            _points[_index].Time, _points[_index].Value);
                 }
 
                 Value = _line.At(time);
@@ -134,8 +130,8 @@ namespace SpiceSharp.Components
                     if (breakpoints.Break)
                     {
                         // Add the next point as a breakpoint
-                        if (_index < _times.Length && _times[_index] > _method.Time)
-                            breakpoints.Breakpoints.SetBreakpoint(_times[_index]);
+                        if (_index < _points.Length && _points[_index].Time > _method.Time)
+                            breakpoints.Breakpoints.SetBreakpoint(_points[_index].Time);
                     }
                 }
             }

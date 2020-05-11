@@ -75,7 +75,6 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            Parameters.CalculateDefaults();
             var context = new ComponentBindingContext(this, simulation, LinkParameters);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))

@@ -53,6 +53,7 @@ namespace SpiceSharp.Components.CurrentSources
 
         void IFrequencyBehavior.InitializeParameters()
         {
+            Parameters.UpdatePhasor();
         }
 
         void IFrequencyBehavior.Load()

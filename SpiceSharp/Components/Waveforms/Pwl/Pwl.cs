@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 
@@ -13,45 +14,34 @@ namespace SpiceSharp.Components
         IWaveformDescription
     {
         /// <summary>
-        /// Gets or sets the time point values.
+        /// Gets or sets the waveform points.
         /// </summary>
         /// <value>
-        /// The time point values.
+        /// The waveform points
         /// </value>
-        [ParameterName("times"), ParameterInfo("The time points.")]
-        public IEnumerable<double> Times { get; set; }
+        [ParameterName("points"), ParameterInfo("The points of the waveform")]
+        public IEnumerable<Point> Points { get; set; }
 
         /// <summary>
-        /// Gets or sets the value point values.
+        /// Sets the waveform points using a vector sequence of times and values.
         /// </summary>
-        /// <value>
-        /// The value point values.
-        /// </value>
-        [ParameterName("values"), ParameterInfo("The values.")]
-        public IEnumerable<double> Values { get; set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Pwl"/> class.
-        /// </summary>
-        /// <param name="times">Enumeration of time points.</param>
-        /// <param name="values">Enumeration of values.</param>
-        public Pwl(IEnumerable<double> times, IEnumerable<double> values)
+        /// <param name="vector">The array of alternating timepoints and values.</param>
+        [ParameterName("points"), ParameterInfo("The vector of time and point values")]
+        public void SetPoints(params double[] vector)
         {
-            Times = times;
-            Values = values;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Pwl"/> class.
-        /// </summary>
-        public Pwl()
-        {
+            vector.ThrowIfNull(nameof(vector));
+            var n = Math.Max(vector.Length / 2, 2);
+            vector.ThrowIfNotLength(nameof(vector), n * 2);
+            Point[] arr = new Point[n];
+            for (var i = 0; i < n; i++)
+                arr[i] = new Point(vector[i * 2], vector[i * 2 + 1]);
+            Points = arr;
         }
 
         /// <inheritdoc/>
         public IWaveform Create(IIntegrationMethod method)
         {
-            return new Instance(Times, Values, method);
+            return new Instance(Points, method);
         }
     }
 }

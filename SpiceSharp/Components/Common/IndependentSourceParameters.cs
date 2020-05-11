@@ -78,23 +78,10 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </value>
         public Complex Phasor { get; private set; }
 
-        /// <inheritdoc/>
-        protected override ICloneable Clone()
-        {
-            var result = (IndependentSourceParameters)base.Clone();
-            result.Phasor = Phasor;
-            return result;
-        }
-
-        /// <inheritdoc/>
-        protected override void CopyFrom(ICloneable source)
-        {
-            base.CopyFrom(source);
-            Phasor = ((IndependentSourceParameters)source).Phasor;
-        }
-
-        /// <inheritdoc/>
-        public void CalculateDefaults()
+        /// <summary>
+        /// Updates the phasor.
+        /// </summary>
+        public void UpdatePhasor()
         {
             var phase = AcPhase * Math.PI / 180.0;
             Phasor = new Complex(

@@ -149,9 +149,12 @@ namespace SpiceSharp.Simulations.Histories
         /// <returns>
         /// The previous value.
         /// </returns>
-        /// TODO: Throw exception here if index is out of range!
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the index is out of range.</exception>
         public T GetPreviousValue(int index)
         {
+            if (index < 0 || index >= Length)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
             // Find the matching node
             var point = _currentPoint;
             for (var i = 0; i < index; i++)

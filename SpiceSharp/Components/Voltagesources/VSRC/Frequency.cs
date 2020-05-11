@@ -63,6 +63,7 @@ namespace SpiceSharp.Components.VoltageSources
         /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
+            Parameters.UpdatePhasor();
         }
 
         /// <inheritdoc/>

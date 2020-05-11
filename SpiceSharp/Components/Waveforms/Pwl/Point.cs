@@ -1,35 +1,40 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace SpiceSharp.CodeGeneration
+﻿namespace SpiceSharp.Components
 {
     /// <summary>
-    /// Properties of a class that needs auto-generated code.
+    /// Represents a point for a <see cref="Pwl"/>.
     /// </summary>
-    public struct Generation
+    public struct Point
     {
         /// <summary>
-        /// The class
+        /// The point time.
         /// </summary>
-        public readonly ClassDeclarationSyntax Class;
+        public readonly double Time;
 
         /// <summary>
-        /// The flag set if rules need to be added in the properties.
+        /// The point value.
         /// </summary>
-        public readonly bool AddRules;
+        public readonly double Value;
 
         /// <summary>
-        /// The flag set if a quick-reference needs to be added.
+        /// Initializes a new instance of the <see cref="Point"/> struct.
         /// </summary>
-        public readonly bool AddNames;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Generation"/> struct.
-        /// </summary>
-        public Generation(ClassDeclarationSyntax @class, bool addRules, bool addNames)
+        /// <param name="time">The time.</param>
+        /// <param name="value">The value.</param>
+        public Point(double time, double value)
         {
-            Class = @class;
-            AddRules = addRules;
-            AddNames = addNames;
+            Time = time;
+            Value = value;
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return (Time.GetHashCode() * 13) ^ Value.GetHashCode();
         }
 
         /// <summary>
@@ -41,18 +46,18 @@ namespace SpiceSharp.CodeGeneration
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj is Generation gen)
-                return Class.Equals(gen.Class);
+            if (obj is Point pt)
+            {
+                // This is probably only relevant for dictionaries &
+                // sorted sets, so let's not work with tolerances.
+                if (!Time.Equals(pt.Time))
+                    return false;
+                if (!Value.Equals(pt.Value))
+                    return false;
+                return true;
+            }
             return false;
         }
-
-        /// <summary>
-        /// Returns a hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-        /// </returns>
-        public override int GetHashCode() => Class.GetHashCode();
 
         /// <summary>
         /// Implements the operator ==.
@@ -62,7 +67,7 @@ namespace SpiceSharp.CodeGeneration
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(Generation left, Generation right)
+        public static bool operator ==(Point left, Point right)
         {
             return left.Equals(right);
         }
@@ -75,7 +80,7 @@ namespace SpiceSharp.CodeGeneration
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(Generation left, Generation right)
+        public static bool operator !=(Point left, Point right)
         {
             return !(left == right);
         }

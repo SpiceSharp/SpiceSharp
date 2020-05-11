@@ -5,7 +5,7 @@ using SpiceSharp.ParameterSets;
 namespace SpiceSharp.Components.Common
 {
     /// <summary>
-    /// A behavior with the sole purpose of providing parameters.
+    /// A behavior with the sole purpose of providing a parameter set.
     /// </summary>
     /// <typeparam name="P">The parameter set type.</typeparam>
     /// <seealso cref="Behavior" />

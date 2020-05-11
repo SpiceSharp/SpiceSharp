@@ -13,20 +13,19 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PwlHasEmptyArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentException>(() => new Pwl(Array.Empty<double>(), Array.Empty<double>()).Create(null));
+            Assert.Throws<ArgumentException>(() => new Pwl() { Points = Array.Empty<Point>() }.Create(null));
         }
 
         [Test]
         public void When_PwlHasNullArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentNullException>(() => new Pwl(null, Array.Empty<double>()).Create(null));
-            Assert.Throws<ArgumentNullException>(() => new Pwl(new double[] { 1.0 }, null).Create(null));
+            Assert.Throws<ArgumentNullException>(() => new Pwl() { Points = null }.Create(null));
         }
 
         [Test]
         public void When_PwlHasNonMonotonouslyIncreasingTimePointsArray_Expect_Exception()
         {
-            Assert.Throws<ArgumentException>(() => new Pwl(new double[] { 1.0, 0.9 }, new double[] { 1.2, 1.3 }).Create(null));
+            Assert.Throws<ArgumentException>(() => new Pwl() { Points = new[] { new Point(1, 1.2), new Point(0.9, 1.3) } }.Create(null));
         }
 
         [Test]
@@ -34,7 +33,7 @@ namespace SpiceSharpTest.Waveforms
         {
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pwl(new double[] { 1.0 }, new double[] { 2.0 })),
+                new VoltageSource("V1", "in", "0", new Pwl() { Points = new[] { new Point(1, 2) } }),
                 new Resistor("R1", "in", "0", 10.0)
             );
 
@@ -52,7 +51,7 @@ namespace SpiceSharpTest.Waveforms
         {
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pwl(new double[] { 0.0, 1.0 }, new double[] { 0.0, 2.0 })),
+                new VoltageSource("V1", "in", "0", new Pwl() { Points = new[] { new Point(0, 0), new Point(1, 2) } }),
                 new Resistor("R1", "in", "0", 10.0)
             );
 
@@ -70,7 +69,7 @@ namespace SpiceSharpTest.Waveforms
         {
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pwl(new double[] { -1.0, 1.0 }, new double[] { 0.0, 2.0 })),
+                new VoltageSource("V1", "in", "0", new Pwl() { Points = new[] { new Point(-1, 0), new Point(1, 2) } }),
                 new Resistor("R1", "in", "0", 10.0)
             );
 
@@ -87,18 +86,14 @@ namespace SpiceSharpTest.Waveforms
         public void When_PwlHasManyLinearPoints_Expect_Reference()
         {
             int n = 10000;
-            var times = new double[n];
-            var voltages = new double[n];
+            var pts = new Point[n];
 
             for (var i = 0; i < n; i++)
-            {
-                times[i] = i;
-                voltages[i] = i;
-            }
+                pts[i] = new Point(i, i);
 
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pwl(times, voltages)),
+                new VoltageSource("V1", "in", "0", new Pwl() { Points = pts }),
                 new Resistor("R1", "in", "0", 10.0)
             );
 
@@ -115,18 +110,14 @@ namespace SpiceSharpTest.Waveforms
         public void When_PwlHasManySawPoints_Expect_Reference()
         {
             int n = 10000;
-            var times = new double[n];
-            var voltages = new double[n];
+            var pts = new Point[n];
 
             for (var i = 0; i < n; i++)
-            {
-                times[i] = i;
-                voltages[i] = i % 2;
-            }
+                pts[i] = new Point(i, i % 2);
 
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pwl(times, voltages)),
+                new VoltageSource("V1", "in", "0", new Pwl() { Points = pts }),
                 new Resistor("R1", "in", "0", 10.0)
             );
 
@@ -156,11 +147,11 @@ namespace SpiceSharpTest.Waveforms
         }
 
         [Test]
-        public void When_PwlHasTwoPositiveTimePointsTheyShouldBeHitted_Expect_Reference()
+        public void When_PwlHasTwoPositiveTimePointsTheyShouldBeHit_Expect_Reference()
         {
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pwl(new double[] { 1.111, 3.34 }, new double[] { 2.0, 2.0 })),
+                new VoltageSource("V1", "in", "0", new Pwl() { Points = new[] { new Point(1.111, 2.0), new Point(3.34, 2.0) } }),
                 new Resistor("R1", "in", "0", 10.0)
             );
 

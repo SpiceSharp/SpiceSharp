@@ -4,7 +4,6 @@ using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace SpiceSharp.Components.Common
 {
