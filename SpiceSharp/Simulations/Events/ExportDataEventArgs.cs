@@ -136,7 +136,7 @@ namespace SpiceSharp.Simulations
         public double[] GetSweepValues()
         {
             if (_simulation is DC dc)
-                return dc.GetSweepValues();
+                return dc.GetCurrentSweepValue();
             return null;
         }
     }

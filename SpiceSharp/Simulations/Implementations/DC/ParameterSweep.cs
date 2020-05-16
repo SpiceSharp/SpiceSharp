@@ -62,6 +62,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         /// <param name="points">The points.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="points"/> is <c>null</c>.</exception>
         public ParameterSweep(string name, IEnumerable<double> points)
         {
             Name = name.ThrowIfNull(nameof(name));

@@ -164,8 +164,8 @@ namespace SpiceSharpTest
             // Run the simulation
             dc.ExportSimulationData += (sender, args) =>
             {
-                var vgsVoltage = dc.GetSweepValues()[0];
-                var vdsVoltage = dc.GetSweepValues()[1];
+                var vgsVoltage = dc.GetCurrentSweepValue()[0];
+                var vdsVoltage = dc.GetCurrentSweepValue()[1];
                 var current = currentExport.Value;
             };
             dc.Run(ckt);

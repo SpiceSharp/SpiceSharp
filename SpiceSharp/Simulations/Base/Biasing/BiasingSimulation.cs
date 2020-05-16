@@ -59,11 +59,22 @@ namespace SpiceSharp.Simulations
         /// </value>
         protected IterationState Iteration { get; } = new IterationState();
 
+        /// <inheritdoc />
         IIterationSimulationState IStateful<IIterationSimulationState>.State => Iteration;
+
+        /// <inheritdoc />
         ITemperatureSimulationState IStateful<ITemperatureSimulationState>.State => _temperature;
+
+        /// <inheritdoc />
         IBiasingSimulationState IStateful<IBiasingSimulationState>.State => _state;
+
+        /// <inheritdoc />
         TemperatureSimulationState IStateful<TemperatureSimulationState>.State => _temperature;
+
+        /// <inheritdoc />
         BiasingParameters IParameterized<BiasingParameters>.Parameters => BiasingParameters;
+
+        /// <inheritdoc />
         IVariableDictionary<IVariable<double>> ISimulation<IVariable<double>>.Solved => _state;
 
         #region Events
@@ -117,6 +128,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="BiasingSimulation"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected BiasingSimulation(string name)
             : base(name)
         {
@@ -125,10 +137,8 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Setup(IEntityCollection entities)
+        protected override void CreateStates()
         {
-            entities.ThrowIfNull(nameof(entities));
-
             // Create simulation states
             _temperature = new TemperatureSimulationState(BiasingParameters.Temperature, BiasingParameters.NominalTemperature);
             _state = new SimulationState(
@@ -137,19 +147,22 @@ namespace SpiceSharp.Simulations
             Iteration.Gmin = BiasingParameters.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
+            _realStateLoadArgs = new LoadStateEventArgs(_state);
+        }
 
-            // Setup the rest of the circuit.
-            base.Setup(entities);
-
-            // Cache local variables
+        /// <inheritdoc/>
+        protected override void CreateBehaviors(IEntityCollection entities)
+        {
+            base.CreateBehaviors(entities);
             _temperatureBehaviors = EntityBehaviors.GetBehaviorList<ITemperatureBehavior>();
             _loadBehaviors = EntityBehaviors.GetBehaviorList<IBiasingBehavior>();
             _convergenceBehaviors = EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
             _updateBehaviors = EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
-            _realStateLoadArgs = new LoadStateEventArgs(_state);
+
+            // We're going to set up our state now that all behaviors have allocated elements in the solver
             _state.Setup();
 
-            // Set up nodesets
+            // Set up nodesets for nodes that were referenced by an entity
             foreach (var ns in BiasingParameters.Nodesets)
             {
                 if (_state.TryGetValue(ns.Key, out var variable))
@@ -192,15 +205,12 @@ namespace SpiceSharp.Simulations
         /// <inheritdoc/>
         protected override void Unsetup()
         {
-            base.Unsetup();
-
-            // Remove nodeset
+            // Remove nodeset events
             AfterLoad -= LoadNodeSets;
             _nodesets.Clear();
 
+            // Remove references
             _realStateLoadArgs = null;
-
-            // Remove behavior and configuration references
             _loadBehaviors = null;
             _temperatureBehaviors = null;
         }
@@ -390,121 +400,127 @@ namespace SpiceSharp.Simulations
             var pass = false;
             var iterno = 0;
 
-            // Perform iteration
-            while (true)
+            try
             {
-                // Reset convergence flag
-                Iteration.IsConvergent = true;
-
-                try
+                while (true)
                 {
+                    // Load the Y-matrix and right hand side vector
+                    Iteration.IsConvergent = true;
                     Load();
                     iterno++;
-                }
-                catch (SpiceSharpException)
-                {
-                    iterno++;
-                    Statistics.Iterations = iterno;
-                    throw;
-                }
 
-                // Preorder matrix
-                if (!_isPreordered)
-                {
-                    solver.Precondition((matrix, vector)
-                        => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Size - solver.Degeneracy));
-                    _isPreordered = true;
-                }
-                if (Iteration.Mode == IterationModes.Junction)
-                    _shouldReorder = true;
-
-                // Reorder
-                if (_shouldReorder)
-                {
-                    Statistics.ReorderTime.Start();
-                    var eliminated = solver.OrderAndFactor();
-                    if (eliminated < solver.Size)
-                        throw new SingularException(eliminated + 1);
-                    Statistics.ReorderTime.Stop();
-                    _shouldReorder = false;
-                }
-                else
-                {
-                    // Decompose
-                    Statistics.FactoringTime.Start();
-                    var success = solver.Factor();
-                    Statistics.FactoringTime.Stop();
-
-                    if (!success)
+                    // Preorder matrix
+                    if (!_isPreordered)
                     {
+                        solver.Precondition((matrix, vector)
+                            => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, solver.Size - solver.Degeneracy));
+                        _isPreordered = true;
+                    }
+                    if (Iteration.Mode == IterationModes.Junction)
                         _shouldReorder = true;
-                        continue;
+
+                    if (_shouldReorder)
+                    {
+                        // Reorder and factor the solver
+                        Statistics.ReorderTime.Start();
+                        try
+                        {
+                            var eliminated = solver.OrderAndFactor();
+                            if (eliminated < solver.Size)
+                                throw new SingularException(eliminated + 1);
+                            _shouldReorder = false;
+                        }
+                        finally
+                        {
+                            Statistics.ReorderTime.Stop();
+                        }
+                    }
+                    else
+                    {
+                        // Just factor the solver (without losing time reordering)
+                        Statistics.FactoringTime.Start();
+                        try
+                        {
+                            if (!solver.Factor())
+                            {
+                                _shouldReorder = true;
+                                continue;
+                            }
+                        }
+                        finally
+                        {
+                            Statistics.FactoringTime.Stop();
+                        }
+                    }
+
+                    // The current solution becomes the old solution
+                    _state.StoreSolution();
+
+                    // Solve the equation
+                    Statistics.SolveTime.Start();
+                    try
+                    {
+                        solver.Solve(_state.Solution);
+                    }
+                    finally
+                    {
+                        Statistics.SolveTime.Stop();
+                    }
+
+                    // Reset ground nodes
+                    solver.GetElement(0).Value = 0.0;
+                    _state.Solution[0] = 0.0;
+                    _state.OldSolution[0] = 0.0;
+
+                    // Update 
+                    foreach (var behavior in _updateBehaviors)
+                        behavior.Update();
+
+                    // Exceeded maximum number of iterations
+                    if (iterno > maxIterations)
+                        return false;
+
+                    if (Iteration.IsConvergent && iterno != 1)
+                        Iteration.IsConvergent = IsConvergent();
+                    else
+                        Iteration.IsConvergent = false;
+
+                    switch (Iteration.Mode)
+                    {
+                        case IterationModes.Float:
+                            if (_nodesets.Count > 0)
+                            {
+                                if (pass)
+                                    Iteration.IsConvergent = false;
+                                pass = false;
+                            }
+                            if (Iteration.IsConvergent)
+                                return true;
+                            break;
+
+                        case IterationModes.Junction:
+                            Iteration.Mode = IterationModes.Fix;
+                            _shouldReorder = true;
+                            break;
+
+                        case IterationModes.Fix:
+                            if (Iteration.IsConvergent)
+                                Iteration.Mode = IterationModes.Float;
+                            pass = true;
+                            break;
+
+                        case IterationModes.None:
+                            Iteration.Mode = IterationModes.Float;
+                            break;
+
+                        default:
+                            throw new SpiceSharpException(Properties.Resources.Simulations_InvalidInitializationMode);
                     }
                 }
-
-                // The current solution becomes the old solution
-                _state.StoreSolution();
-
-                // Solve the equation
-                Statistics.SolveTime.Start();
-                solver.Solve(_state.Solution);
-                Statistics.SolveTime.Stop();
-
-                // Reset ground nodes
-                solver.GetElement(0).Value = 0.0;
-                _state.Solution[0] = 0.0;
-                _state.OldSolution[0] = 0.0;
-
-                foreach (var behavior in _updateBehaviors)
-                    behavior.Update();
-
-                // Exceeded maximum number of iterations
-                if (iterno > maxIterations)
-                {
-                    Statistics.Iterations += iterno;
-                    return false;
-                }
-
-                if (Iteration.IsConvergent && iterno != 1)
-                    Iteration.IsConvergent = IsConvergent();
-                else
-                    Iteration.IsConvergent = false;
-
-                switch (Iteration.Mode)
-                {
-                    case IterationModes.Float:
-                        if (_nodesets.Count > 0)
-                        {
-                            if (pass)
-                                Iteration.IsConvergent = false;
-                            pass = false;
-                        }
-                        if (Iteration.IsConvergent)
-                        {
-                            Statistics.Iterations += iterno;
-                            return true;
-                        }
-                        break;
-
-                    case IterationModes.Junction:
-                        Iteration.Mode = IterationModes.Fix;
-                        _shouldReorder = true;
-                        break;
-
-                    case IterationModes.Fix:
-                        if (Iteration.IsConvergent)
-                            Iteration.Mode = IterationModes.Float;
-                        pass = true;
-                        break;
-
-                    case IterationModes.None:
-                        Iteration.Mode = IterationModes.Float;
-                        break;
-
-                    default:
-                        Statistics.Iterations += iterno;
-                        throw new SpiceSharpException(Properties.Resources.Simulations_InvalidInitializationMode);
-                }
+            }
+            finally
+            {
+                Statistics.Iterations += iterno;
             }
         }
 
@@ -519,18 +535,22 @@ namespace SpiceSharp.Simulations
         /// <exception cref="SpiceSharpException">Thrown if any behavior cannot load the matrix or right hand side vector.</exception>
         protected void Load()
         {
-            // Start the stopwatch
-            Statistics.LoadTime.Start();
             OnBeforeLoad(_realStateLoadArgs);
 
-            // Clear rhs and matrix
-            _state.Solver.Reset();
-            foreach (var behavior in _loadBehaviors)
-                behavior.Load();
+            Statistics.LoadTime.Start();
+            try
+            {
+                // Clear rhs and matrix
+                _state.Solver.Reset();
+                foreach (var behavior in _loadBehaviors)
+                    behavior.Load();
+            }
+            finally
+            {
+                Statistics.LoadTime.Stop();
+            }
 
-            // Keep statistics
             OnAfterLoad(_realStateLoadArgs);
-            Statistics.LoadTime.Stop();
         }
 
         /// <summary>

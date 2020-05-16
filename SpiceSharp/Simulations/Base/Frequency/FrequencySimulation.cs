@@ -63,8 +63,13 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterFrequencyLoad;
 
+        /// <inheritdoc/>
         IComplexSimulationState IStateful<IComplexSimulationState>.State => _state;
+
+        /// <inheritdoc/>
         FrequencyParameters IParameterized<FrequencyParameters>.Parameters => FrequencyParameters;
+
+        /// <inheritdoc/>
         IVariableDictionary<IVariable<Complex>> ISimulation<IVariable<Complex>>.Solved => _state;
 
         /// <summary>
@@ -91,19 +96,23 @@ namespace SpiceSharp.Simulations
             FrequencyParameters.Frequencies = frequencySweep;
         }
 
-        /// <inheritdoc/>
-        protected override void Setup(IEntityCollection entities)
+        /// <inheritdoc />
+        protected override void CreateStates()
         {
-            entities.ThrowIfNull(nameof(entities));
+            base.CreateStates();
+            _state = new ComplexSimulationState(
+                FrequencyParameters.Solver ?? new SparseComplexSolver(),
+                BiasingParameters.NodeComparer
+                );
+            _loadStateEventArgs = new LoadStateEventArgs(_state);
+        }
 
-            // Setup the rest of the behaviors
-            base.Setup(entities);
-
-            // Cache local variables
+        /// <inheritdoc />
+        protected override void CreateBehaviors(IEntityCollection entities)
+        {
+            base.CreateBehaviors(entities);
             _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
             _frequencyUpdateBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyUpdateBehavior>();
-            _loadStateEventArgs = new LoadStateEventArgs(_state);
-
             _state.Setup();
         }
 
@@ -122,17 +131,6 @@ namespace SpiceSharp.Simulations
         /// <param name="value">The value.</param>
         /// <returns>The magnitude of the complex number.</returns>
         private double ComplexMagnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
-
-        /// <inheritdoc/>
-        protected override void CreateBehaviors(IEntityCollection entities)
-        {
-            _state = new ComplexSimulationState(
-                FrequencyParameters.Solver ?? new SparseComplexSolver(),
-                BiasingParameters.NodeComparer
-                );
-
-            base.CreateBehaviors(entities);
-        }
 
         /// <inheritdoc/>
         protected override void Execute()
@@ -170,29 +168,46 @@ namespace SpiceSharp.Simulations
             if (_shouldReorderAc)
             {
                 Statistics.ComplexReorderTime.Start();
-                var eliminated = solver.OrderAndFactor();
-                if (eliminated < solver.Size)
-                    throw new SingularException(eliminated + 1);
-                Statistics.ComplexReorderTime.Stop();
-                _shouldReorderAc = false;
+                try
+                {
+                    var eliminated = solver.OrderAndFactor();
+                    if (eliminated < solver.Size)
+                        throw new SingularException(eliminated + 1);
+                    _shouldReorderAc = false;
+                }
+                finally
+                {
+                    Statistics.ComplexReorderTime.Stop();
+                }
             }
             else
             {
                 Statistics.ComplexDecompositionTime.Start();
-                var factored = solver.Factor();
-                Statistics.ComplexDecompositionTime.Stop();
-
-                if (!factored)
+                try
                 {
-                    _shouldReorderAc = true;
-                    goto retry;
+                    var factored = solver.Factor();
+                    if (!factored)
+                    {
+                        _shouldReorderAc = true;
+                        goto retry;
+                    }
+                }
+                finally
+                {
+                    Statistics.ComplexDecompositionTime.Stop();
                 }
             }
 
             // Solve
             Statistics.ComplexSolveTime.Start();
-            solver.Solve(_state.Solution);
-            Statistics.ComplexSolveTime.Stop();
+            try
+            {
+                solver.Solve(_state.Solution);
+            }
+            finally
+            {
+                Statistics.ComplexSolveTime.Stop();
+            }
 
             // Update with the found solution
             foreach (var behavior in _frequencyUpdateBehaviors)
@@ -220,8 +235,18 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void InitializeAcParameters()
         {
-            // Support legacy models
-            Load();
+            // Some behaviors want to have the most up to date information from their biasing behavior
+            base.Statistics.LoadTime.Start();
+            try
+            {
+                Load();
+            }
+            finally
+            {
+                base.Statistics.LoadTime.Stop();
+            }
+
+            // Initialize the parameters
             foreach (var behavior in _frequencyBehaviors)
                 behavior.InitializeParameters();
         }
@@ -233,10 +258,18 @@ namespace SpiceSharp.Simulations
         protected void FrequencyLoad()
         {
             OnBeforeFrequencyLoad(_loadStateEventArgs);
+
             Statistics.ComplexLoadTime.Start();
-            _state.Solver.Reset();
-            LoadFrequencyBehaviors();
-            Statistics.ComplexLoadTime.Reset();
+            try
+            {
+                _state.Solver.Reset();
+                LoadFrequencyBehaviors();
+            }
+            finally
+            {
+                Statistics.ComplexLoadTime.Reset();
+            }
+
             OnAfterFrequencyLoad(_loadStateEventArgs);
         }
 

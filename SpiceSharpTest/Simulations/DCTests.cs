@@ -46,8 +46,8 @@ namespace SpiceSharpTest.Simulations
             // Run simulation
             dc.ExportSimulationData += (sender, args) =>
             {
-                var resistance = Math.Max(dc.GetSweepValues()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
-                var voltage = dc.GetSweepValues()[1];
+                var resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
+                var voltage = dc.GetCurrentSweepValue()[1];
                 var expected = voltage * resistance / (resistance + 1.0e4);
                 Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
             };

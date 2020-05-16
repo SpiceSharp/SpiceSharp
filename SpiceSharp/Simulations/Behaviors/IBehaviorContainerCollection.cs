@@ -46,7 +46,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="name">The name.</param>
         /// <returns>The container associated to the specified name.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        /// <exception cref="KeyNotFoundException">Thrown if the behavior container could not be found.</exception>
+        /// <exception cref="BehaviorsNotFoundException">Thrown if the behavior container of the specified name could not be found.</exception>
         IBehaviorContainer this[string name] { get; }
 
         /// <summary>

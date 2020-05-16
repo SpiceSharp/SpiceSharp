@@ -71,7 +71,6 @@ namespace SpiceSharp.Components.Common
         /// </remarks>
         public void Run(IEntityCollection entities)
         {
-            // TODO: Add Try-catch blocks for verbose exceptions?
             void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
             {
                 if (entities.TryGetEntity(args.Name, out var entity))
@@ -82,7 +81,6 @@ namespace SpiceSharp.Components.Common
                 }
                 else
                 {
-                    // Try finding it in the parent simulation
                     args.Behaviors = Parent.EntityBehaviors[args.Name];
                 }
             }

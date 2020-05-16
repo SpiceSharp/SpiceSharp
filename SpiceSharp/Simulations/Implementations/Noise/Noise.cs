@@ -26,13 +26,17 @@ namespace SpiceSharp.Simulations
         /// </value>
         public NoiseParameters NoiseParameters { get; } = new NoiseParameters();
 
+        /// <inheritdoc/>
         NoiseParameters IParameterized<NoiseParameters>.Parameters => NoiseParameters;
+
+        /// <inheritdoc/>
         INoiseSimulationState IStateful<INoiseSimulationState>.State => _state;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Noise(string name) 
             : base(name)
         {
@@ -44,6 +48,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation.</param>
         /// <param name="output">The output node name.</param>
         /// <param name="frequencySweep">The frequency points.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Noise(string name, string output, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
@@ -57,6 +62,7 @@ namespace SpiceSharp.Simulations
         /// <param name="output">The output node name.</param>
         /// <param name="reference">The reference output node name.</param>
         /// <param name="frequencySweep">The frequency points.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Noise(string name, string output, string reference, IEnumerable<double> frequencySweep) 
             : base(name, frequencySweep)
         {
@@ -64,25 +70,21 @@ namespace SpiceSharp.Simulations
             NoiseParameters.OutputRef = reference;
         }
 
-        /// <summary>
-        /// Set up the simulation.
-        /// </summary>
-        /// <param name="entities">The circuit that will be used.</param>
-        protected override void Setup(IEntityCollection entities)
+        /// <inheritdoc />
+        protected override void CreateStates()
         {
-            entities.ThrowIfNull(nameof(entities));
-
-            // Get behaviors, parameters and states
+            base.CreateStates();
             _state = new NoiseSimulationState(Name);
-            base.Setup(entities);
+        }
 
-            // Cache local variables
+        /// <inheritdoc />
+        protected override void CreateBehaviors(IEntityCollection entities)
+        {
+            base.CreateBehaviors(entities);
             _noiseBehaviors = EntityBehaviors.GetBehaviorList<INoiseBehavior>();
         }
 
-        /// <summary>
-        /// Destroys the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Unsetup()
         {
             // Remove references
@@ -90,9 +92,7 @@ namespace SpiceSharp.Simulations
             base.Unsetup();
         }
 
-        /// <summary>
-        /// Executes the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Execute()
         {
             base.Execute();

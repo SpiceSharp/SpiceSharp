@@ -259,7 +259,7 @@ namespace SpiceSharpTest.Models
                     catch (Exception ex)
                     {
                         var sweeps = sim.DCParameters.Sweeps;
-                        var values = sim.GetSweepValues();
+                        var values = sim.GetCurrentSweepValue();
                         string msg = ex.Message + " at ";
                         var index = 0;
                         foreach (var sweep in sweeps)
@@ -289,7 +289,7 @@ namespace SpiceSharpTest.Models
                 while (exportIt.MoveNext() && referencesIt.MoveNext())
                 {
                     var actual = exportIt.Current?.Value ?? throw new ArgumentNullException();
-                    var expected = referencesIt.Current?.Invoke(sim.GetSweepValues()[0]) ?? throw new ArgumentNullException();
+                    var expected = referencesIt.Current?.Invoke(sim.GetCurrentSweepValue()[0]) ?? throw new ArgumentNullException();
                     var tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
 
                     try
@@ -299,7 +299,7 @@ namespace SpiceSharpTest.Models
                     catch (Exception ex)
                     {
                         var sweeps = sim.DCParameters.Sweeps;
-                        var values = sim.GetSweepValues();
+                        var values = sim.GetCurrentSweepValue();
                         string msg = ex.Message + " at ";
                         var index = 0;
                         foreach (var sweep in sweeps)

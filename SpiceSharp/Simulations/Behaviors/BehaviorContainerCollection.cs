@@ -54,7 +54,9 @@ namespace SpiceSharp.Behaviors
                     OnBehaviorsNotFound(args);
                     if (args.Behaviors != null)
                         return args.Behaviors;
-                    throw new KeyNotFoundException(Properties.Resources.Behaviors_NoBehaviorFor.FormatString(name));
+
+                    // The behaviors could not be found...
+                    throw new BehaviorsNotFoundException(name, Properties.Resources.Behaviors_NoBehaviorFor.FormatString(name));
                 }
                 finally
                 {

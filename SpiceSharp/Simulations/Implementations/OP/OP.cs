@@ -1,4 +1,6 @@
-﻿namespace SpiceSharp.Simulations
+﻿using System;
+
+namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class that implements the operating point analysis.
@@ -10,13 +12,13 @@
         /// Initializes a new instance of the <see cref="OP"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        public OP(string name) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public OP(string name)
+            : base(name)
         {
         }
 
-        /// <summary>
-        /// Executes the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Execute()
         {
             base.Execute();

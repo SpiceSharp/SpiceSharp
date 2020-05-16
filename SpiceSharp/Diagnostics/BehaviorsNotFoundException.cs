@@ -13,15 +13,15 @@ namespace SpiceSharp
 #if !NETSTANDARD1_5
     [Serializable]
 #endif
-    public class TypeNotFoundException : SpiceSharpException
+    public class BehaviorsNotFoundException : SpiceSharpException
     {
         /// <summary>
-        /// Gets the type of the generic.
+        /// Gets the name of the behaviors.
         /// </summary>
         /// <value>
-        /// The type of the generic.
+        /// The name.
         /// </value>
-        public Type Type { get; }
+        public string Name { get; }
 
 #if !NETSTANDARD1_5
         /// <summary>
@@ -29,10 +29,10 @@ namespace SpiceSharp
         /// </summary>
         /// <param name="info">The serialization info.</param>
         /// <param name="context">The streaming context.</param>
-        protected TypeNotFoundException(SerializationInfo info, StreamingContext context)
+        protected BehaviorsNotFoundException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Type = Type.GetType(info.GetString(nameof(Type)));
+            Name = info.GetString(nameof(Name));
         }
 
         /// <summary>
@@ -44,59 +44,59 @@ namespace SpiceSharp
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.ThrowIfNull(nameof(info));
-            info.AddValue(nameof(Type), Type.FullName);
+            info.AddValue(nameof(Name), Name);
             base.GetObjectData(info, context);
         }
 #endif
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public TypeNotFoundException(string message)
+        public BehaviorsNotFoundException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public TypeNotFoundException(string message, Exception innerException)
+        public BehaviorsNotFoundException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name="name">The name of the behavior container.</param>
         /// <param name="message">The message.</param>
-        public TypeNotFoundException(Type type, string message)
+        public BehaviorsNotFoundException(string name, string message)
             : base(message)
         {
-            Type = type;
+            Name = name;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
         /// </summary>
-        /// <param name="type">The type.</param>
+        /// <param name="name">The name of the behavior container.</param>
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
-        public TypeNotFoundException(Type type, string message, Exception innerException)
+        public BehaviorsNotFoundException(string name, string message, Exception innerException)
             : base(message, innerException)
         {
-            Type = type;
+            Name = name;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
         /// </summary>
-        public TypeNotFoundException()
+        public BehaviorsNotFoundException()
         {
-            Type = null;
+            Name = null;
         }
     }
 }

@@ -12,6 +12,8 @@ namespace SpiceSharp.Simulations
     public class DC : BiasingSimulation,
         IParameterized<DCParameters>
     {
+        private IEnumerator<double>[] _sweepEnumerators;
+
         /// <summary>
         /// Gets the dc parameters.
         /// </summary>
@@ -20,6 +22,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         public DCParameters DCParameters { get; } = new DCParameters();
 
+        /// <inheritdoc/>
         DCParameters IParameterized<DCParameters>.Parameters => DCParameters;
 
         /// <summary>
@@ -28,15 +31,12 @@ namespace SpiceSharp.Simulations
         public event EventHandler<EventArgs> IterationFailed;
 
         /// <summary>
-        /// The enumerators
-        /// </summary>
-        private IEnumerator<double>[] _enumerators;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        public DC(string name) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public DC(string name)
+            : base(name)
         {
         }
 
@@ -48,6 +48,7 @@ namespace SpiceSharp.Simulations
         /// <param name="start">The starting value.</param>
         /// <param name="stop">The stop value.</param>
         /// <param name="step">The step value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="source"/> is <c>null</c>.</exception>
         public DC(string name, string source, double start, double stop, double step) 
             : this(name)
         {
@@ -59,6 +60,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="sweeps"/> is <c>null</c>.</exception>
         public DC(string name, IEnumerable<ISweep> sweeps) 
             : this(name)
         {
@@ -67,9 +69,7 @@ namespace SpiceSharp.Simulations
                 DCParameters.Sweeps.Add(sweep);
         }
 
-        /// <summary>
-        /// Executes the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Execute()
         {
             // Base
@@ -82,13 +82,11 @@ namespace SpiceSharp.Simulations
             
             // Initialize
             var sweeps = DCParameters.Sweeps.ToArray();
-            _enumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];
+            _sweepEnumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];
             for (var i = 0; i < sweeps.Length; i++)
             {
-                // TODO: Try to get rid of calculating defaults
-                // sweeps[i].CalculateDefaults();
-                _enumerators[i] = sweeps[i].CreatePoints(this);
-                if (!_enumerators[i].MoveNext())
+                _sweepEnumerators[i] = sweeps[i].CreatePoints(this);
+                if (!_sweepEnumerators[i].MoveNext())
                     throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[i].Name));
             }
 
@@ -100,8 +98,8 @@ namespace SpiceSharp.Simulations
                 while (level < sweeps.Length - 1)
                 {
                     level++;
-                    _enumerators[level] = sweeps[level].CreatePoints(this);
-                    if (!_enumerators[level].MoveNext())
+                    _sweepEnumerators[level] = sweeps[level].CreatePoints(this);
+                    if (!_sweepEnumerators[level].MoveNext())
                         throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[level].Name));
                     Iteration.Mode = IterationModes.Junction;
                 }
@@ -117,7 +115,7 @@ namespace SpiceSharp.Simulations
                 OnExport(exportargs);
 
                 // Remove all values that are greater or equal to the maximum value
-                while (level >= 0 && !_enumerators[level].MoveNext())
+                while (level >= 0 && !_sweepEnumerators[level].MoveNext())
                     level--;
                 if (level < 0)
                     break;
@@ -125,25 +123,17 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Destroys the simulation.
+        /// Gets the current sweep values.
+        /// The last element indicates the inner-most sweep value.
         /// </summary>
-        protected override void Unsetup()
+        /// <returns>The sweep values, or <c>null</c> if there are no sweeps active.</returns>
+        public double[] GetCurrentSweepValue()
         {
-            // Clear configuration
-            base.Unsetup();
-        }
-
-        /// <summary>
-        /// Gets the sweep values.
-        /// </summary>
-        /// <returns>The sweep values.</returns>
-        public double[] GetSweepValues()
-        {
-            if (_enumerators == null)
+            if (_sweepEnumerators == null)
                 return null;
-            var result = new double[_enumerators.Length];
-            for (var i = 0; i < _enumerators.Length; i++)
-                result[i] = _enumerators[i].Current;
+            var result = new double[_sweepEnumerators.Length];
+            for (var i = 0; i < _sweepEnumerators.Length; i++)
+                result[i] = _sweepEnumerators[i].Current;
             return result;
         }
     }

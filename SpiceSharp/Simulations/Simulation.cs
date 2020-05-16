@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.Entities;
 using SpiceSharp.General;
 using SpiceSharp.Validation;
@@ -116,17 +115,29 @@ namespace SpiceSharp.Simulations
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
             Statistics.SetupTime.Start();
-            Status = SimulationStatus.Setup;
-            Setup(entities);
-            Statistics.SetupTime.Stop();
+            try
+            {
+                Status = SimulationStatus.Setup;
+                Setup(entities);
+            }
+            finally
+            {
+                Statistics.SetupTime.Stop();
+            }
             OnAfterSetup(EventArgs.Empty);
 
             // Validate the input
             OnBeforeValidation(EventArgs.Empty);
             Statistics.ValidationTime.Start();
-            Status = SimulationStatus.Validation;
-            Validate(entities);
-            Statistics.ValidationTime.Stop();
+            try
+            {
+                Status = SimulationStatus.Validation;
+                Validate(entities);
+            }
+            finally
+            {
+                Statistics.ValidationTime.Stop();
+            }
             OnAfterValidation(EventArgs.Empty);
 
             // Execute the simulation
@@ -140,8 +151,14 @@ namespace SpiceSharp.Simulations
 
                 // Execute simulation
                 Statistics.ExecutionTime.Start();
-                Execute();
-                Statistics.ExecutionTime.Stop();
+                try
+                {
+                    Execute();
+                }
+                finally
+                {
+                    Statistics.ExecutionTime.Stop();
+                }
 
                 // Reset
                 afterArgs.Repeat = false;
@@ -155,9 +172,15 @@ namespace SpiceSharp.Simulations
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
             Statistics.UnsetupTime.Start();
-            Status = SimulationStatus.Unsetup;
-            Unsetup();
-            Statistics.UnsetupTime.Stop();
+            try
+            {
+                Status = SimulationStatus.Unsetup;
+                Unsetup();
+            }
+            finally
+            {
+                Statistics.UnsetupTime.Stop();
+            }
             OnAfterUnsetup(EventArgs.Empty);
 
             Status = SimulationStatus.None;
@@ -168,7 +191,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="entities">The entities that are included in the simulation.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
-        protected virtual void Setup(IEntityCollection entities)
+        private void Setup(IEntityCollection entities)
         {
             // Validate the entities
             entities.ThrowIfNull(nameof(entities));
@@ -178,8 +201,56 @@ namespace SpiceSharp.Simulations
                 SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_NoEntities.FormatString(Name));
             }
 
-            // Create all entity behaviors
+            // Create all simulation states
+            CreateStates();
+
+            // Create all entity behaviors (using the created simulation states)
             CreateBehaviors(entities);
+        }
+
+        /// <summary>
+        /// Creates all the simulation states for the simulation.
+        /// </summary>
+        protected abstract void CreateStates();
+
+        /// <summary>
+        /// Creates all behaviors for the simulation.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
+        protected virtual void CreateBehaviors(IEntityCollection entities)
+        {
+            entities.ThrowIfNull(nameof(entities));
+            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer);
+
+            // Automatically create the behaviors of entities that need priority
+            void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
+            {
+                if (entities.TryGetEntity(args.Name, out var entity))
+                {
+                    entity.CreateBehaviors(this);
+                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var container))
+                        args.Behaviors = container;
+                }
+            }
+            EntityBehaviors.BehaviorsNotFound += BehaviorsNotFound;
+
+            // Create the behaviors
+            Statistics.BehaviorCreationTime.Start();
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    if (!EntityBehaviors.Contains(entity.Name))
+                        entity.CreateBehaviors(this);
+                }
+            }
+            finally
+            {
+                Statistics.BehaviorCreationTime.Stop();
+            }
+
+            EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
         }
 
         /// <summary>
@@ -220,51 +291,15 @@ namespace SpiceSharp.Simulations
         }
 
         /// <summary>
-        /// Destroys the simulation.
-        /// </summary>
-        protected virtual void Unsetup()
-        {
-        }
-
-        /// <summary>
         /// Executes the simulation.
         /// </summary>
         /// <exception cref="SpiceSharpException">Thrown if the simulation can't continue.</exception>
         protected abstract void Execute();
 
         /// <summary>
-        /// Creates all behaviors for the simulation.
+        /// Free all objects used by the simulation.
         /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
-        protected virtual void CreateBehaviors(IEntityCollection entities)
-        {
-            entities.ThrowIfNull(nameof(entities));
-            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer);
-
-            // Automatically create the behaviors of entities that need priority
-            void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
-            {
-                if (entities.TryGetEntity(args.Name, out var entity))
-                {
-                    entity.CreateBehaviors(this);
-                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var container))
-                        args.Behaviors = container;
-                }
-            }
-            EntityBehaviors.BehaviorsNotFound += BehaviorsNotFound;
-
-            // Create the behaviors
-            Statistics.BehaviorCreationTime.Start();
-            foreach (var entity in entities)
-            {
-                if (!EntityBehaviors.Contains(entity.Name))
-                    entity.CreateBehaviors(this);
-            }
-            Statistics.BehaviorCreationTime.Stop();
-
-            EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
-        }
+        protected abstract void Unsetup();
 
         /// <inheritdoc/>
         public virtual bool UsesBehaviors<B>() where B : IBehavior
