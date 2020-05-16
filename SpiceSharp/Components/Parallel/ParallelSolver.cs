@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Algebra;
-using SpiceSharp.Algebra.Solve;
 using System;
 using System.Collections.Generic;
 using SpiceSharp.ParameterSets;
@@ -14,27 +13,31 @@ namespace SpiceSharp.Components.ParallelComponents
     /// <seealso cref="ISparseSolver{T}" />
     public partial class ParallelSolver<T> : ISparsePivotingSolver<T>
     {
-        // TODO: More verbosity for exceptions in the whole class.
         private readonly ISparsePivotingSolver<T> _parent;
         private readonly HashSet<MatrixLocation> _sharedMatrixElements = new HashSet<MatrixLocation>();
         private readonly HashSet<int> _sharedVectorElements = new HashSet<int>();
         private readonly List<BridgeElement> _bridgeElements = new List<BridgeElement>();
 
+        /// <inheritdoc/>
         P IParameterSetCollection.GetParameterSet<P>() => _parent.GetParameterSet<P>();
+
+        /// <inheritdoc/>
         bool IParameterSetCollection.TryGetParameterSet<P>(out P value) => _parent.TryGetParameterSet(out value);
+
+        /// <inheritdoc/>
         IEnumerable<IParameterSet> IParameterSetCollection.ParameterSets => _parent.ParameterSets;
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
-        public int Degeneracy { get => _parent.Degeneracy; set => throw new ArgumentException(); }
+        public int Degeneracy { get => _parent.Degeneracy; set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(Degeneracy))); }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
-        public int PivotSearchReduction { get => _parent.PivotSearchReduction; set => throw new ArgumentException(); }
+        public int PivotSearchReduction { get => _parent.PivotSearchReduction; set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(PivotSearchReduction))); }
 
         /// <inheritdoc/>
         /// <exception cref="ArgumentException">Thrown when trying to write in a parallel solver.</exception>
-        public bool NeedsReordering { get => _parent.NeedsReordering; set => throw new ArgumentException(); }
+        public bool NeedsReordering { get => _parent.NeedsReordering; set => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(NeedsReordering))); }
 
         /// <inheritdoc/>
         public bool IsFactored => _parent.IsFactored;
@@ -73,7 +76,8 @@ namespace SpiceSharp.Components.ParallelComponents
         }
 
         /// <inheritdoc/>
-        void IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method) => throw new ArgumentException();
+        void IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method)
+            => throw new ArgumentException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.Precondition)));
 
         /// <inheritdoc/>
         void ISolver<T>.Clear()
@@ -83,10 +87,12 @@ namespace SpiceSharp.Components.ParallelComponents
         }
 
         /// <inheritdoc/>
-        bool ISolver<T>.Factor() => throw new SpiceSharpException();
+        bool ISolver<T>.Factor() 
+            => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.Factor)));
 
         /// <inheritdoc/>
-        int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor() => throw new SpiceSharpException();
+        int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor() 
+            => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor)));
 
         /// <inheritdoc/>
         public Element<T> FindElement(MatrixLocation location)
@@ -163,16 +169,20 @@ namespace SpiceSharp.Components.ParallelComponents
         }
 
         /// <inheritdoc/>
-        void ISolver<T>.Solve(IVector<T> solution) => throw new SpiceSharpException();
+        void ISolver<T>.Solve(IVector<T> solution)
+            => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.Solve)));
 
         /// <inheritdoc/>
-        void ISolver<T>.SolveTransposed(IVector<T> solution) => throw new SpiceSharpException();
+        void ISolver<T>.SolveTransposed(IVector<T> solution)
+            => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.SolveTransposed)));
 
         /// <inheritdoc/>
-        MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.InternalToExternal(MatrixLocation location) => _parent.InternalToExternal(location);
+        MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.InternalToExternal(MatrixLocation location)
+            => _parent.InternalToExternal(location);
 
         /// <inheritdoc/>
-        MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.ExternalToInternal(MatrixLocation location) => _parent.ExternalToInternal(location);
+        MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.ExternalToInternal(MatrixLocation location)
+            => _parent.ExternalToInternal(location);
 
         /// <summary>
         /// Applies all bridge elements.
@@ -204,13 +214,13 @@ namespace SpiceSharp.Components.ParallelComponents
         /// <inheritdoc/>
         public ICloneable Clone()
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(Clone)));
         }
 
         /// <inheritdoc/>
         public void CopyFrom(ICloneable source)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(CopyFrom)));
         }
     }
 }
