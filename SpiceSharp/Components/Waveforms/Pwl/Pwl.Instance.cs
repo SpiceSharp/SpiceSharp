@@ -54,7 +54,6 @@ namespace SpiceSharp.Components
             /// <inheritdoc/>
             public double Value { get; private set; }
 
-            /// TODO: Work with a 2D point.
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>

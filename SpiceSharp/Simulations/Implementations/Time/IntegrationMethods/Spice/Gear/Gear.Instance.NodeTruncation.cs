@@ -45,7 +45,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     {
                         var node = v.Key;
                         var index = v.Value;
-                        var tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * parameters.RelTol + parameters.AbsTol;
+                        var tol = Math.Max(Math.Abs(state.Solution[index]), Math.Abs(prediction[index])) * parameters.RelativeTolerance + parameters.AbsoluteTolerance;
                         var diff = state.Solution[index] - prediction[index];
 
                         if (!diff.Equals(0.0))

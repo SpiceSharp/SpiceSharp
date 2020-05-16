@@ -71,10 +71,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The allowed voltage tolerance.
         /// </value>
-        /// <remarks>
-        /// This parameter is currently not used, but is included for compatibility.
-        /// </remarks>
-        /// TODO: Check where this may affect code.
         [ParameterName("vntol"), ParameterInfo("The absolute voltage error tolerance.")]
         public double VoltageTolerance { get; set; } = 1e-6;
 
@@ -86,19 +82,6 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("abstol"), ParameterInfo("The absolute error tolerance.")]
         public double AbsoluteTolerance { get; set; } = 1e-12;
-
-        /// <summary>
-        /// Gets or sets the tolerance on charges.
-        /// </summary>
-        /// <value>
-        /// The allowed charge tolerance.
-        /// </value>
-        /// <remarks>
-        /// This quantity is currently not used, but is included for compatibility.
-        /// </remarks>
-        /// TODO: Check where this may affect code.
-        [ParameterName("chgtol"), ParameterInfo("The absolute charge error tolerance.")]
-        public double ChargeTolerance { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets or sets the maximum number of iterations for operating point simulation.

@@ -3,7 +3,7 @@
 namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
-    /// The default integration method as implemented by Spice 3f5
+    /// A default integration method as implemented by most Spice simulators.
     /// </summary>
     public abstract partial class SpiceMethod : VariableTimestepConfiguration
     {
@@ -23,16 +23,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// The absolute tolerance.
         /// </value>
         [ParameterName("abstol"), ParameterInfo("The absolute tolerance.")]
-        public double AbsTol { get; set; } = 1e-12;
+        public double AbsoluteTolerance { get; set; } = 1e-12;
 
         /// <summary>
-        /// The tolerance on charges.
+        /// The tolerance on charge.
         /// </summary>
         /// <value>
         /// The charge tolerance.
         /// </value>
         [ParameterName("chgtol"), ParameterInfo("The charge tolerance.")]
-        public double ChgTol { get; set; } = 1e-14;
+        public double ChargeTolerance { get; set; } = 1e-14;
 
         /// <summary>
         /// Gets or sets the relative tolerance.
@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// The relative tolerance.
         /// </value>
         [ParameterName("reltol"), ParameterInfo("The relative tolerance.")]
-        public double RelTol { get; set; } = 1e-3;
+        public double RelativeTolerance { get; set; } = 1e-3;
 
         /// <summary>
         /// Gets or sets the transient tolerance factor.

@@ -590,7 +590,7 @@ namespace SpiceSharp.Simulations
 
                 if (node.Unit == Units.Volt)
                 {
-                    var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
+                    var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.VoltageTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
