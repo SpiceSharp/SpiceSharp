@@ -32,7 +32,7 @@ namespace SpiceSharp.CodeGeneration
                 .Where(attr => string.CompareOrdinal(attr.Name.ToString(), "GeneratedParameters") == 0 || string.CompareOrdinal(attr.Name.ToString(), "GeneratedParametersAttribute") == 0)
                 .Select(attr =>
                 {
-                    var addRules = attr.ArgumentList?.Arguments.FirstOrDefault(arg => string.CompareOrdinal(arg.NameEquals?.Name.ToString(), "AddRules") == 0)?.Expression?.ToString().Equals("true") ?? false;
+                    var addRules = attr.ArgumentList?.Arguments.FirstOrDefault(arg => string.CompareOrdinal(arg.NameEquals?.Name.ToString(), "AddRules") == 0)?.Expression?.ToString().Equals("true") ?? true;
                     var addNames = attr.ArgumentList?.Arguments.FirstOrDefault(arg => string.CompareOrdinal(arg.NameEquals?.Name.ToString(), "AddNames") == 0)?.Expression?.ToString().Equals("true") ?? false;
                     return new Generation(node, addRules, addNames);
                 }));

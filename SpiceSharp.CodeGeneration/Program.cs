@@ -13,6 +13,8 @@ namespace SpiceSharp.CodeGeneration
                 Environment.Exit(1);
                 return;
             }
+            else
+                Console.WriteLine($"Generating files in {args[0]}");
 
             // Use the executable directory as the backup path
             var backupPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "backup" + DateTime.Now.ToString("yyyymmdd_hhmms"));

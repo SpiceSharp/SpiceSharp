@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.ParameterSets;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -9,8 +10,12 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="FrequencySimulation" />.
     /// </summary>
     /// <seealso cref="ParameterSet" />
+    [GeneratedParameters]
     public class FrequencyParameters : ParameterSet
     {
+        private double _absolutePivotThreshold = 1e-13;
+        private double _relativePivotThreshold = 1e-3;
+
         /// <summary>
         /// Gets or sets a value indicating whether the operation point should be exported.
         /// </summary>
@@ -28,13 +33,58 @@ namespace SpiceSharp.Simulations
         public IEnumerable<double> Frequencies { get; set; }
 
         /// <summary>
-        /// Gets or sets the solver used to solve equations. If <c>null</c>, a default solver will be used.
+        /// Gets or sets the relative threshold for choosing a pivot.
         /// </summary>
         /// <value>
-        /// The solver.
+        /// The relative pivot threshold.
         /// </value>
-        [ParameterName("complex.solver"), ParameterInfo("The solver used to solve equations.")]
-        public ISparsePivotingSolver<Complex> Solver { get; set; }
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the value is not greater than 0.
+        /// </exception>
+        [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
+        [GreaterThan(0)]
+        public double RelativePivotThreshold
+        {
+            get => _relativePivotThreshold;
+            set
+            {
+                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
+                _relativePivotThreshold = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the absolute threshold for choosing a pivot.
+        /// </summary>
+        /// <value>
+        /// The absolute pivot threshold.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the value is negative.
+        /// </exception>
+        [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
+        [GreaterThanOrEquals(0)]
+        public double AbsolutePivotThreshold
+        {
+            get => _absolutePivotThreshold;
+            set
+            {
+                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
+                _absolutePivotThreshold = value;
+            }
+        }
+
+        /// <summary>
+        /// Creates solver used to solve equations.
+        /// </summary>
+        /// <returns>A solver that can be used to solve equations.</returns>
+        public ISparsePivotingSolver<Complex> CreateSolver()
+        {
+            var solver = new SparseComplexSolver();
+            solver.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+            solver.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+            return solver;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should be validated.

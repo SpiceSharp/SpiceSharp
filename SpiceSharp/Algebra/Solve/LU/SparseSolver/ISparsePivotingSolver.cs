@@ -8,7 +8,9 @@
     /// <seealso cref="ISparseMatrix{T}"/>
     /// <seealso cref="ISparseVector{T}"/>
     /// <seealso cref="IPivotingSolver{M, V, T}" />
-    public interface ISparsePivotingSolver<T> : ISparseSolver<T>, IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>
+    public interface ISparsePivotingSolver<T> :
+        ISparseSolver<T>,
+        IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>
     {
     }
 }

@@ -100,10 +100,7 @@ namespace SpiceSharp.Simulations
         protected override void CreateStates()
         {
             base.CreateStates();
-            _state = new ComplexSimulationState(
-                FrequencyParameters.Solver ?? new SparseComplexSolver(),
-                BiasingParameters.NodeComparer
-                );
+            _state = new ComplexSimulationState(FrequencyParameters.CreateSolver(), BiasingParameters.NodeComparer);
             _loadStateEventArgs = new LoadStateEventArgs(_state);
         }
 

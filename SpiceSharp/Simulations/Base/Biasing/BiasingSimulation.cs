@@ -141,9 +141,7 @@ namespace SpiceSharp.Simulations
         {
             // Create simulation states
             _temperature = new TemperatureSimulationState(BiasingParameters.Temperature, BiasingParameters.NominalTemperature);
-            _state = new SimulationState(
-                BiasingParameters.Solver ?? new SparseRealSolver(),
-                BiasingParameters.NodeComparer);
+            _state = new SimulationState(BiasingParameters.CreateSolver(), BiasingParameters.NodeComparer);
             Iteration.Gmin = BiasingParameters.Gmin;
             _isPreordered = false;
             _shouldReorder = true;
