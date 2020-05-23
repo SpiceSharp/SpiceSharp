@@ -1,7 +1,5 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
-using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -25,14 +23,6 @@ namespace SpiceSharp.Components.Diodes
         /// The negative node.
         /// </summary>
         public readonly IVariable<T> Negative;
-
-        /// <summary>
-        /// Gets the variables.
-        /// </summary>
-        /// <value>
-        /// The variables.
-        /// </value>
-        public IReadOnlyList<IVariable<T>> Variables => new[] { Positive, PosPrime, Negative };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DiodeVariables{T}"/> struct.
@@ -66,7 +56,8 @@ namespace SpiceSharp.Components.Diodes
             var posPrime = map[PosPrime];
             var neg = map[Negative];
 
-            return new[] {
+            return new[]
+            {
                 new MatrixLocation(pos, pos),
                 new MatrixLocation(neg, neg),
                 new MatrixLocation(posPrime, posPrime),

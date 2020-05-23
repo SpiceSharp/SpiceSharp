@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<docs>
+  <members>
+    <DrainCurrent>
+      <summary>Gets the drain current.</summary>
+      <value>The drain current.</value>
+    </DrainCurrent>
+    <BulkSourceCurrent>
+      <summary>Gets the bulk-source current.</summary>
+      <value>The bulk-source current.</value>
+    </BulkSourceCurrent>
+    <BulkDrainCurrent>
+      <summary>Gets the bulk-drain current.</summary>
+      <value>The bulk-drain current.</value>
+    </BulkDrainCurrent>
+    <Transconductance>
+      <summary>Gets the small-signal transconductance (gm).</summary>
+      <value>The small-signal transconductance.</value>
+    </Transconductance>
+    <BulkSourceTransconductance>
+      <summary>Gets the small-signal bulk-source transconductance (gmb).</summary>
+      <value>The small-signal bulk-source transconductance.</value>
+    </BulkSourceTransconductance>
+    <DrainSourceConductance>
+      <summary>Gets the small-signal drain-source conductance (gds).</summary>
+      <value>The small-signal drain-source conductance.</value>
+    </DrainSourceConductance>
+    <BulkSourceConductance>
+      <summary>Gets the small-signal bulk-source conductance (gbs).</summary>
+      <value>The small-signal bulk-source conductance.</value>
+    </BulkSourceConductance>
+    <BulkDrainConductance>
+      <summary>Gets the small-signal bulk-drain conductance (gbd).</summary>
+      <value>The small-signal bulk-drain conductance.</value>
+    </BulkDrainConductance>
+    <Von>
+      <summary>Gets the turn-on or threshold voltage (von or vth).</summary>
+      <value>The turn-on/threshold voltage.</value>
+    </Von>
+    <SaturationVoltage>
+      <summary>Gets the saturation voltage (vdsat).</summary>
+      <remarks>If vds is larger than vdsat, then the transistor can be considered to be in the saturation region.</remarks>
+      <value>The saturation voltage.</value>
+    </SaturationVoltage>
+    <Mode>
+      <summary>Gets the current mode of operation. A value of -1.0 means that the source and drain have switched.</summary>
+      <value>The current mode of operation.</value>
+    </Mode>
+    <GateSourceVoltage>
+      <summary>Gets the gate-source voltage (vgs).</summary>
+      <value>The gate-source voltage.</value>
+    </GateSourceVoltage>
+    <DrainSourceVoltage>
+      <summary>Gets the drain-source voltage (vds).</summary>
+      <value>The drain-source voltage.</value>
+    </DrainSourceVoltage>
+    <BulkSourceVoltage>
+      <summary>Gets the bulk-source voltage (vbs).</summary>
+      <value>The bulk-source voltage.</value>
+    </BulkSourceVoltage>
+    <BulkDrainVoltage>
+      <summary>Gets the bulk-drain voltage (vbd).</summary>
+      <value>The bulk-drain voltage.</value>
+    </BulkDrainVoltage>
+  </members>
+</docs>

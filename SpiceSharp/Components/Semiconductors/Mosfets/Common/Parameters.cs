@@ -10,6 +10,7 @@ namespace SpiceSharp.Components.Mosfets
     [GeneratedParameters]
     public class Parameters : ParameterSet
     {
+        private double _parallelMultplier = 1.0;
         private double _drainSquares = 1;
         private double _sourceSquares = 1;
         private double _drainPerimeter;
@@ -223,6 +224,23 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
         public double InitialVoltageGs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the parallel multplier (the number of transistors in parallel).
+        /// </summary>
+        /// <value>
+        /// The parallel multplier.
+        /// </value>
+        [GreaterThan(0)]
+        public double ParallelMultplier
+        {
+            get => _parallelMultplier;
+            set
+            {
+                Utility.GreaterThan(value, nameof(ParallelMultplier), 0);
+                _parallelMultplier = value;
+            }
+        }
 
         /// <summary>
         /// Set the initial conditions of the device.

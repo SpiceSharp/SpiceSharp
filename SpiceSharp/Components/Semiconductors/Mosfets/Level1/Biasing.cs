@@ -20,24 +20,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
         private readonly IIntegrationMethod _method;
         private readonly ITimeSimulationState _time;
         private readonly IIterationSimulationState _iteration;
-        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly MosfetVariables<double> _variables;
         private readonly ElementSet<double> _elements;
-
-        /// <summary>
-        /// Gets the internal drain node.
-        /// </summary>
-        /// <value>
-        /// The internal drain node.
-        /// </value>
-        protected IVariable<double> DrainPrime { get; }
-
-        /// <summary>
-        /// Gets the internal source node.
-        /// </summary>
-        /// <value>
-        /// The internal source node.
-        /// </value>
-        protected IVariable<double> SourcePrime { get; }
 
         /// <summary>
         /// The maximum exponent argument
@@ -49,139 +33,64 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// </summary>
         protected BiasingParameters BiasingParameters { get; }
 
-        /// <summary>
-        /// Gets the drain current.
-        /// </summary>
-        /// <value>
-        /// The drain current.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainCurrent/*'/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
         public double DrainCurrent { get; private set; }
 
-        /// <summary>
-        /// Gets the bulk-source current.
-        /// </summary>
-        /// <value>
-        /// The bulk-source current.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceCurrent/*'/>
         [ParameterName("ibs"), ParameterInfo("B-S junction current")]
         public double BsCurrent { get; private set; }
 
-        /// <summary>
-        /// Gets the bulk-drain current.
-        /// </summary>
-        /// <value>
-        /// The bulk-drain current.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainCurrent/*'/>
         [ParameterName("ibd"), ParameterInfo("B-D junction current")]
         public double BdCurrent { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal transconductance.
-        /// </summary>
-        /// <value>
-        /// The transconductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/Transconductance/*'/>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
-        public double Transconductance { get; private set; }
+        public double Gm { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal bulk transconductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal bulk transconductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceTransconductance/*'/>
         [ParameterName("gmb"), ParameterName("gmbs"), ParameterInfo("Bulk-Source transconductance")]
-        public double TransconductanceBs { get; private set; }
+        public double Gmbs { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal drain-source conductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal drain-source conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainSourceConductance/*'/>
         [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
         public double CondDs { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal bulk-source conductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal bulk-source conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceConductance/*'/>
         [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
         public double CondBs { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal bulk-drain conductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal bulk-drain conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainConductance/*'/>
         [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
         public double CondBd { get; private set; }
 
-        /// <summary>
-        /// Gets the turn-on voltage.
-        /// </summary>
-        /// <value>
-        /// The turn-on voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/von/*'/>
         [ParameterName("von"), ParameterInfo("Turn-on voltage")]
         public double Von { get; private set; }
 
-        /// <summary>
-        /// Gets the saturation voltage.
-        /// </summary>
-        /// <value>
-        /// The saturation voltage.
-        /// </value>
-        [ParameterName("vdsat"), ParameterInfo("Saturation DrainNode voltage")]
-        public double SaturationVoltageDs { get; private set; }
+        /// <include file='../common/docs.xml' path='docs/members/SaturationVoltage/*'/>
+        [ParameterName("vdsat"), ParameterInfo("Saturation drain-source voltage")]
+        public double Vdsat { get; private set; }
 
-        /// <summary>
-        /// Gets the current mode of operation. +1.0 if vds is positive, -1 if it is negative.
-        /// </summary>
-        /// <value>
-        /// The current operation mode.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/Mode/*'/>
         public double Mode { get; private set; }
 
-        /// <summary>
-        /// Gets the gate-source voltage.
-        /// </summary>
-        /// <value>
-        /// The gate-source voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/GateSourceVoltage/*'/>
         [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
-        public virtual double VoltageGs { get; protected set; }
+        public virtual double Vgs { get; protected set; }
 
-        /// <summary>
-        /// Gets the drain-source voltage.
-        /// </summary>
-        /// <value>
-        /// The drain-source voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainSourceVoltage/*'/>
         [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
-        public virtual double VoltageDs { get; protected set; }
+        public virtual double Vds { get; protected set; }
 
-        /// <summary>
-        /// Gets the bulk-source voltage.
-        /// </summary>
-        /// <value>
-        /// The bulk-source voltage
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceVoltage/*'/>
         [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
-        public virtual double VoltageBs { get; protected set; }
+        public virtual double Vbs { get; protected set; }
 
-        /// <summary>
-        /// Gets the bulk-drain voltage.
-        /// </summary>
-        /// <value>
-        /// The bulk-drain voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainVoltage/*'/>
         [ParameterName("vbd"), ParameterInfo("Bulk-Drain voltage")]
-        public virtual double VoltageBd { get; protected set; }
+        public virtual double Vbd { get; protected set; }
 
         /// <summary>
         /// Gets the state of the biasing.
@@ -198,170 +107,229 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// <param name="context">The context.</param>
         public Biasing(string name, ComponentBindingContext context) : base(name, context) 
         {
-            context.Nodes.CheckNodes(4);
             BiasingState = context.GetState<IBiasingSimulationState>();
             BiasingParameters = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
-            SaturationVoltageDs = 0;
+            Vdsat = 0;
             Von = 0;
             Mode = 1;
 
-            DrainPrime = BiasingState.GetSharedVariable(context.Nodes[0]);
-            _drainNode = BiasingState.Map[DrainPrime];
-            _gateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
-            SourcePrime = BiasingState.GetSharedVariable(context.Nodes[2]);
-            _sourceNode = BiasingState.Map[SourcePrime];
-            _bulkNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
-
-            // Add series drain node if necessary
-            if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
-                DrainPrime = BiasingState.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
-            _drainNodePrime = BiasingState.Map[DrainPrime];
-
-            // Add series source node if necessary
-            if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
-                SourcePrime = BiasingState.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
-            _sourceNodePrime = BiasingState.Map[SourcePrime];
+            _variables = new MosfetVariables<double>(name, BiasingState, context.Nodes,
+                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
+                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
 
             // Get matrix pointers
-            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(_drainNode, _drainNode),
-                new MatrixLocation(_sourceNode, _sourceNode),
-                new MatrixLocation(_bulkNode, _bulkNode),
-                new MatrixLocation(_drainNodePrime, _drainNodePrime),
-                new MatrixLocation(_sourceNodePrime, _sourceNodePrime),
-                new MatrixLocation(_drainNode, _drainNodePrime),
-                new MatrixLocation(_sourceNode, _sourceNodePrime),
-                new MatrixLocation(_bulkNode, _drainNodePrime),
-                new MatrixLocation(_bulkNode, _sourceNodePrime),
-                new MatrixLocation(_drainNodePrime, _drainNode),
-                new MatrixLocation(_drainNodePrime, _gateNode),
-                new MatrixLocation(_drainNodePrime, _bulkNode),
-                new MatrixLocation(_drainNodePrime, _sourceNodePrime),
-                new MatrixLocation(_sourceNodePrime, _gateNode),
-                new MatrixLocation(_sourceNodePrime, _sourceNode),
-                new MatrixLocation(_sourceNodePrime, _bulkNode),
-                new MatrixLocation(_sourceNodePrime, _drainNodePrime)
-            }, new[] { _bulkNode, _drainNodePrime, _sourceNodePrime });
+            _elements = new ElementSet<double>(BiasingState.Solver, 
+                _variables.GetMatrixLocations(BiasingState.Map), 
+                _variables.GetRhsIndices(BiasingState.Map));
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and right hand side vector.
-        /// </summary>
-        protected virtual void Load()
+        /// <inheritdoc/>
+        void IBiasingBehavior.Load()
         {
+            Contributions<double> con = new Contributions<double>();
+
             // Get the current voltages
             Initialize(out double vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
+            var beta = Properties.TempTransconductance * Parameters.ParallelMultplier *
+                    Parameters.Width / Properties.EffectiveLength;
 
             /*
-			 * bulk-source and bulk-drain diodes
-			 * here we just evaluate the ideal diode current and the
-			 * corresponding derivative (conductance).
-			 */
-            if (vbs <= 0)
+             * bulk-source and bulk-drain diodes
+             *   here we just evaluate the ideal diode current and the
+             *   corresponding derivative (conductance).
+             */
+            if (vbs <= -3 * Properties.TempVt)
             {
-                CondBs = SourceSatCurrent / Vt;
-                BsCurrent = CondBs * vbs;
-                CondBs += BiasingParameters.Gmin;
+                con.Bs.G = BiasingParameters.Gmin;
+                con.Bs.C = con.Bs.G * vbs - Properties.SourceSatCurrent;
             }
             else
             {
-                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Vt));
-                CondBs = SourceSatCurrent * evbs / Vt + BiasingParameters.Gmin;
-                BsCurrent = SourceSatCurrent * (evbs - 1);
+                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Properties.TempVt));
+                con.Bs.G = Properties.SourceSatCurrent * evbs / Properties.TempVt + BiasingParameters.Gmin;
+                con.Bs.C = Properties.SourceSatCurrent * (evbs - 1) + BiasingParameters.Gmin * vbs;
             }
-            if (vbd <= 0)
+            if (vbd <= -3 * Properties.TempVt)
             {
-                CondBd = DrainSatCurrent / Vt;
-                BdCurrent = CondBd * vbd;
-                CondBd += BiasingParameters.Gmin;
+                con.Bd.G = BiasingParameters.Gmin;
+                con.Bd.C = con.Bd.G * vbd - Properties.DrainSatCurrent;
             }
             else
             {
-                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Vt));
-                CondBd = DrainSatCurrent * evbd / Vt + BiasingParameters.Gmin;
-                BdCurrent = DrainSatCurrent * (evbd - 1);
+                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Properties.TempVt));
+                con.Bd.G = Properties.DrainSatCurrent * evbd / Properties.TempVt + BiasingParameters.Gmin;
+                con.Bd.C = Properties.DrainSatCurrent * (evbd - 1) + BiasingParameters.Gmin * vbd;
             }
 
-            /*
-             * Now to determine whether the user was able to correctly
-			 * identify the source and drain of his device
-			 */
+            // Now to determine whether the user was able to correctly
+            // identify the source and drain of his device
             if (vds >= 0)
-            {
-                // normal mode
                 Mode = 1;
-            }
             else
-            {
-                // inverse mode
                 Mode = -1;
+
+            {
+                /*
+                 *     this block of code evaluates the drain current and its
+                 *     derivatives using the shichman-hodges model and the
+                 *     charges associated with the gate, channel and bulk for
+                 *     mosfets
+                 *
+                 */
+
+                /* the following 4 variables are local to this code block until
+                 * it is obvious that they can be made global
+                 */
+                double arg;
+                double betap;
+                double sarg;
+                double vgst;
+
+                if ((Mode == 1 ? vbs : vbd) <= 0)
+                {
+                    sarg = Math.Sqrt(Properties.TempPhi - (Mode == 1 ? vbs : vbd));
+                }
+                else
+                {
+                    sarg = Math.Sqrt(Properties.TempPhi);
+                    sarg -= (Mode == 1 ? vbs : vbd) / (sarg + sarg);
+                    sarg = Math.Max(0, sarg);
+                }
+                var von = (Properties.TempVbi * ModelParameters.MosfetType) + ModelParameters.Gamma * sarg;
+                vgst = (Mode == 1 ? vgs : vgd) - von;
+                var vdsat = Math.Max(vgst, 0);
+                if (sarg <= 0)
+                    arg = 0;
+                else
+                    arg = ModelParameters.Gamma / (sarg + sarg);
+                if (vgst <= 0)
+                {
+                    // Cutoff region
+                    con.Ds.C = 0;
+                    Gm = 0;
+                    con.Ds.G = 0;
+                    Gmbs = 0;
+                }
+                else
+                {
+                    // Saturation region
+                    betap = beta * (1 + ModelParameters.Lambda * (vds * Mode));
+                    if (vgst <= (vds * Mode))
+                    {
+                        con.Ds.C = betap * vgst * vgst * .5;
+                        Gm = betap * vgst;
+                        con.Ds.G = ModelParameters.Lambda * beta * vgst * vgst * .5;
+                        Gmbs = Gm * arg;
+                    }
+                    else
+                    {
+                        // Linear region / triode region
+                        con.Ds.C = betap * (vds * Mode) * (vgst - .5 * (vds * Mode));
+                        Gm = betap * (vds * Mode);
+                        con.Ds.G = betap * (vgst - (vds * Mode)) + ModelParameters.Lambda * beta * (vds * Mode) * (vgst - .5 * (vds * Mode));
+                        Gmbs = Gm * arg;
+                    }
+                }
+
+                // Export some useful quantities (vth, vdsat and ids).
+                Von = ModelParameters.MosfetType * von;
+                Vdsat = ModelParameters.MosfetType * vdsat;
+                DrainCurrent = Mode * con.Ds.C - con.Bd.C;
             }
 
-            // Update
-            VoltageBs = vbs;
-            VoltageBd = vbd;
-            VoltageGs = vgs;
-            VoltageDs = vds;
-
-            // Evaluate the currents and derivatives
-            var cdrain = Mode > 0 ? Evaluate(vgs, vds, vbs) : Evaluate(vgd, -vds, vbd);
-            DrainCurrent = Mode * cdrain - BdCurrent;
+            // Give the option to add contributions for time analysis
+            UpdateTime(vgs, vds, vbs, ref con);
 
             // Check convergence
-            if (!Parameters.Off || _iteration.Mode != IterationModes.Fix)
+            if (!Parameters.Off || (_iteration.Mode != IterationModes.Fix))
             {
                 if (check)
                     _iteration.IsConvergent = false;
             }
 
-            // Load current vector
-            double xnrm, xrev, cdreq;
-            var ceqbs = ModelParameters.MosfetType * (BsCurrent - (CondBs - BiasingParameters.Gmin) * vbs);
-            var ceqbd = ModelParameters.MosfetType * (BdCurrent - (CondBd - BiasingParameters.Gmin) * vbd);
+            // Save things away for next time
+            Vbs = vbs;
+            Vbd = vbd;
+            Vgs = vgs;
+            Vds = vds;
+
+            CondDs = con.Ds.G;
+            CondBs = con.Bs.G;
+            CondBd = con.Bd.G;
+
+            // Calculate right hand side vector contributions
+            double xnrm, xrev;
+            con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
+            con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = ModelParameters.MosfetType * (cdrain - CondDs * vds - Transconductance * vgs - TransconductanceBs * vbs);
+                con.Ds.C = ModelParameters.MosfetType * (con.Ds.C - con.Ds.G * vds - Gm * vgs - Gmbs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -ModelParameters.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
+                con.Ds.C = -(ModelParameters.MosfetType) * (con.Ds.C - con.Ds.G * (-vds) - Gm * vgd - Gmbs * vbd);
             }
 
             _elements.Add(
                 // Y-matrix
-                DrainConductance,
-                SourceConductance,
-                CondBd + CondBs,
-                DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs),
-                SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs),
-                -DrainConductance,
-                -SourceConductance,
-                -CondBd,
-                -CondBs,
-                -DrainConductance,
-                (xnrm - xrev) * Transconductance,
-                -CondBd + (xnrm - xrev) * TransconductanceBs,
-                -CondDs - xnrm * (Transconductance + TransconductanceBs),
-                -(xnrm - xrev) * Transconductance,
-                -SourceConductance,
-                -CondBs - (xnrm - xrev) * TransconductanceBs,
-                -CondDs - xrev * (Transconductance + TransconductanceBs),
-                // RHS vector
-                -(ceqbs + ceqbd), 
-                ceqbd - cdreq, 
-                cdreq + ceqbs);
+                Properties.DrainConductance,
+                con.Gd.G + con.Gs.G + con.Gb.G,
+                Properties.SourceConductance,
+                con.Bd.G + con.Bs.G + con.Gb.G,
+                Properties.DrainConductance + con.Ds.G + con.Bd.G + xrev * (Gm + Gmbs) + con.Gd.G,
+                Properties.SourceConductance + con.Ds.G + con.Bs.G + xnrm * (Gm + Gmbs) + con.Gs.G,
+
+                -Properties.DrainConductance,
+
+                -con.Gb.G,
+                -con.Gd.G,
+                -con.Gs.G,
+
+                -Properties.SourceConductance,
+
+                -con.Gb.G,
+                -con.Bd.G,
+                -con.Bs.G,
+
+                -Properties.DrainConductance,
+                (xnrm - xrev) * Gm - con.Gd.G,
+                -con.Bd.G + (xnrm - xrev) * Gmbs,
+                -con.Ds.G - xnrm * (Gm + Gmbs),
+
+                -(xnrm - xrev) * Gm - con.Gs.G,
+                -Properties.SourceConductance,
+                -con.Bs.G - (xnrm - xrev) * Gmbs,
+                -con.Ds.G - xrev * (Gm + Gmbs),
+
+                // Right hand side vector
+                -ModelParameters.MosfetType * (con.Gs.C + con.Gb.C + con.Gd.C),
+                -(con.Bs.C + con.Bd.C - ModelParameters.MosfetType * con.Gb.C),
+                con.Bd.C - con.Ds.C + ModelParameters.MosfetType * con.Gd.C,
+                con.Ds.C + con.Bs.C + ModelParameters.MosfetType * con.Gs.C
+                );
         }
 
-        void IBiasingBehavior.Load() => Load();
+        /// <summary>
+        /// Updates the contributions for transient simulations.
+        /// </summary>
+        /// <param name="vgs">The current gate-source voltage.</param>
+        /// <param name="vds">The current drain-source voltage.</param>
+        /// <param name="vbs">The current bulk-source voltage.</param>
+        /// <param name="c">The contributions.</param>
+        protected virtual void UpdateTime(double vgs, double vds, double vbs, ref Contributions<double> c)
+        {
+            // No time-dependent stuff when we're just biasing, so let's save some time
+            // by not calculating these quantities.
+        }
 
         /// <summary>
         /// Initializes the voltages to be used for calculating the current iteration.
@@ -372,21 +340,20 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// <param name="check">If set to <c>true</c>, the current voltage was limited and another iteration should be calculated.</param>
         protected void Initialize(out double vgs, out double vds, out double vbs, out bool check)
         {
-            var state = BiasingState;
             check = true;
 
             if (_iteration.Mode == IterationModes.Float || (_time != null && !_time.UseDc && _method != null && _method.BaseTime.Equals(0.0)) ||
                 _iteration.Mode == IterationModes.Fix && !Parameters.Off)
             {
                 // General iteration
-                vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
-                vgs = ModelParameters.MosfetType * (state.Solution[_gateNode] - state.Solution[_sourceNodePrime]);
-                vds = ModelParameters.MosfetType * (state.Solution[_drainNodePrime] - state.Solution[_sourceNodePrime]);
+                vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - _variables.SourcePrime.Value);
+                vgs = ModelParameters.MosfetType * (_variables.Gate.Value - _variables.SourcePrime.Value);
+                vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - _variables.SourcePrime.Value);
 
                 // now some common crunching for some more useful quantities
                 var vbd = vbs - vds;
                 var vgd = vgs - vds;
-                var vgdo = VoltageGs - VoltageDs;
+                var vgdo = Vgs - Vds;
                 var von = ModelParameters.MosfetType * Von;
 
                 /*
@@ -396,26 +363,26 @@ namespace SpiceSharp.Components.Mosfets.Level1
 				 * and similar rudeness
 				 */
                 // NOTE: Spice 3f5 does not write out Vgs during DC analysis, so DEVfetlim may give different results in Spice 3f5
-                if (VoltageDs >= 0)
+                if (Vds >= 0)
                 {
-                    vgs = Transistor.LimitFet(vgs, VoltageGs, von);
+                    vgs = Transistor.LimitFet(vgs, Vgs, von);
                     vds = vgs - vgd;
-                    vds = Transistor.LimitVds(vds, VoltageDs);
+                    vds = Transistor.LimitVds(vds, Vds);
                 }
                 else
                 {
                     vgd = Transistor.LimitFet(vgd, vgdo, von);
                     vds = vgs - vgd;
-                    vds = -Transistor.LimitVds(-vds, -VoltageDs);
+                    vds = -Transistor.LimitVds(-vds, -Vds);
                     vgs = vgd + vds;
                 }
 
                 check = false;
                 if (vds >= 0)
-                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, Vt, SourceVCritical, ref check);
+                    vbs = Semiconductor.LimitJunction(vbs, Vbs, Properties.TempVt, SourceVCritical, ref check);
                 else
                 {
-                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, Vt, DrainVCritical, ref check);
+                    vbd = Semiconductor.LimitJunction(vbd, Vbd, Properties.TempVt, DrainVCritical, ref check);
                     vbs = vbd + vds;
                 }
             }
@@ -435,7 +402,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                     if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))
                     {
                         vbs = -1;
-                        vgs = ModelParameters.MosfetType * TempVt0;
+                        vgs = ModelParameters.MosfetType * Properties.TempVt0;
                         vds = 0;
                     }
                 }
@@ -446,123 +413,35 @@ namespace SpiceSharp.Components.Mosfets.Level1
             }
         }
 
-        /// <summary>
-        /// Evaluate drain-source current quantities.
-        /// </summary>
-        protected double Evaluate(double vgs, double vds, double vbs)
-        {
-            double von;
-            double vdsat, cDrainNode;
-            var effectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion;
-            var beta = TempTransconductance * Parameters.Width / effectiveLength;
-            
-            {
-                /*
-				 * this block of code evaluates the DrainNode current and its
-				 * derivatives using the shichman - hodges model and the
-				 * charges associated with the gate, channel and bulk for
-				 * mosfets
-				 */
-
-                /* the following 4 variables are local to this code block until
-				 * it is obvious that they can be made global
-				 */
-                double arg;
-                double sarg;
-
-                if (vbs <= 0)
-                {
-                    sarg = Math.Sqrt(TempPhi - vbs);
-                }
-                else
-                {
-                    sarg = Math.Sqrt(TempPhi);
-                    sarg -= vbs / (sarg + sarg);
-                    sarg = Math.Max(0, sarg);
-                }
-                von = TempVoltageBi * ModelParameters.MosfetType + ModelParameters.Gamma * sarg;
-                var vgst = vgs - von;
-                vdsat = Math.Max(vgst, 0);
-                if (sarg <= 0)
-                {
-                    arg = 0;
-                }
-                else
-                {
-                    arg = ModelParameters.Gamma / (sarg + sarg);
-                }
-                if (vgst <= 0)
-                {
-                    /*
-					 * cutoff region
-					 */
-                    cDrainNode = 0;
-                    Transconductance = 0;
-                    CondDs = 0;
-                    TransconductanceBs = 0;
-                }
-                else
-                {
-                    /*
-					 * saturation region
-					 */
-                    var betap = beta * (1 + ModelParameters.Lambda * vds);
-                    if (vgst <= vds)
-                    {
-                        cDrainNode = betap * vgst * vgst * .5;
-                        Transconductance = betap * vgst;
-                        CondDs = ModelParameters.Lambda * beta * vgst * vgst * .5;
-                        TransconductanceBs = Transconductance * arg;
-                    }
-                    else
-                    {
-                        /*
-						* linear region
-						*/
-                        cDrainNode = betap * vds * (vgst - .5 * vds);
-                        Transconductance = betap * vds;
-                        CondDs = betap * (vgst - vds) + ModelParameters.Lambda * beta * vds * (vgst - .5 * vds);
-                        TransconductanceBs = Transconductance * arg;
-                    }
-                }
-                /*
-				 * finished
-				 */
-            }
-
-            /* now deal with n vs p polarity */
-            Von = ModelParameters.MosfetType * von;
-            SaturationVoltageDs = ModelParameters.MosfetType * vdsat;
-            return cDrainNode;
-        }
-
+        /// <inheritdoc/>
         bool IConvergenceBehavior.IsConvergent()
         {
             double cdhat;
 
-            var vbs = ModelParameters.MosfetType * (BiasingState.Solution[_bulkNode] - BiasingState.Solution[_sourceNodePrime]);
-            var vgs = ModelParameters.MosfetType * (BiasingState.Solution[_gateNode] - BiasingState.Solution[_sourceNodePrime]);
-            var vds = ModelParameters.MosfetType * (BiasingState.Solution[_drainNodePrime] - BiasingState.Solution[_sourceNodePrime]);
+            var vs = _variables.SourcePrime.Value;
+            var vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - vs);
+            var vgs = ModelParameters.MosfetType * (_variables.Gate.Value - vs);
+            var vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - vs);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
-            var vgdo = VoltageGs - VoltageDs;
-            var delvbs = vbs - VoltageBs;
-            var delvbd = vbd - VoltageBd;
-            var delvgs = vgs - VoltageGs;
-            var delvds = vds - VoltageDs;
+            var vgdo = Vgs - Vds;
+            var delvbs = vbs - Vbs;
+            var delvbd = vbd - Vbd;
+            var delvgs = vgs - Vgs;
+            var delvds = vds - Vds;
             var delvgd = vgd - vgdo;
 
             // these are needed for convergence testing
             // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
             if (Mode >= 0)
             {
-                cdhat = DrainCurrent - CondBd * delvbd + TransconductanceBs * delvbs +
-                    Transconductance * delvgs + CondDs * delvds;
+                cdhat = DrainCurrent - CondBd * delvbd + Gmbs * delvbs +
+                    Gm * delvgs + CondDs * delvds;
             }
             else
             {
-                cdhat = DrainCurrent - (CondBd - TransconductanceBs) * delvbd -
-                    Transconductance * delvgd + CondDs * delvds;
+                cdhat = DrainCurrent - (CondBd - Gmbs) * delvbd -
+                    Gm * delvgd + CondDs * delvds;
             }
             var cbhat = BsCurrent + BdCurrent + CondBd * delvbd + CondBs * delvbs;
 

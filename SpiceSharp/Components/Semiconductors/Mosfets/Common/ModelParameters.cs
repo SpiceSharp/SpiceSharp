@@ -10,12 +10,12 @@ namespace SpiceSharp.Components.Mosfets
     [GeneratedParameters]
     public abstract class ModelParameters : ParameterSet
     {
+        private GivenParameter<double> _sheetResistance;
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
         private GivenParameter<double> _surfaceStateDensity;
         private GivenParameter<double> _substrateDoping = new GivenParameter<double>(2e10, false); // Value isn't used...
         private double _forwardCapDepletionCoefficient = 0.5;
         private double _surfaceMobility = 600;
-        private double _sheetResistance;
         private double _lateralDiffusion;
         private GivenParameter<double> _oxideThickness = new GivenParameter<double>(1e-7, false);
         private double _junctionSatCurDensity;
@@ -159,7 +159,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
         [GreaterThanOrEquals(0)]
-        public double DrainResistance
+        public GivenParameter<double> DrainResistance
         {
             get => _drainResistance;
             set
@@ -177,7 +177,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
         [GreaterThanOrEquals(0)]
-        public double SourceResistance
+        public GivenParameter<double> SourceResistance
         {
             get => _sourceResistance;
             set
@@ -447,7 +447,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("rsh"), ParameterInfo("Sheet resistance", Units = "\u03a9")]
         [GreaterThanOrEquals(0)]
-        public double SheetResistance
+        public GivenParameter<double> SheetResistance
         {
             get => _sheetResistance;
             set

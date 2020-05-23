@@ -73,14 +73,10 @@ namespace SpiceSharp.Components.Mosfets.Level1
             : base(name, context)
         {
             _state = context.GetState<INoiseSimulationState>();
-            var complex = context.GetState<IComplexSimulationState>();
-
-            var d = complex.GetSharedVariable(context.Nodes[0]);
-            // var g = complex.GetSharedVariable(context.Nodes[1]);
-            var s = complex.GetSharedVariable(context.Nodes[2]);
-            // var b = complex.GetSharedVariable(context.Nodes[3]);
-            var dp = DrainPrime;
-            var sp = SourcePrime;
+            var d = Variables.Drain;
+            var s = Variables.Source;
+            var dp = Variables.DrainPrime;
+            var sp = Variables.SourcePrime;
 
             _rd = new NoiseThermal("rd", d, dp);
             _rs = new NoiseThermal("rs", s, sp);
@@ -107,9 +103,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
             coxSquared *= coxSquared;
 
-            _rd.Compute(DrainConductance, Parameters.Temperature);
-            _rs.Compute(SourceConductance, Parameters.Temperature);
-            _id.Compute(2.0 / 3.0 * Math.Abs(Transconductance));
+            _rd.Compute(Properties.DrainConductance, Parameters.Temperature);
+            _rs.Compute(Properties.SourceConductance, Parameters.Temperature);
+            _id.Compute(2.0 / 3.0 * Math.Abs(Gm));
             _flicker.Compute(ModelParameters.FlickerNoiseCoefficient *
                 Math.Exp(ModelParameters.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(DrainCurrent), 1e-38))) /
                 (Parameters.Width * (Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
