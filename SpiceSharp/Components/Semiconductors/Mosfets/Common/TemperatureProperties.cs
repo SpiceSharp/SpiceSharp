@@ -7,6 +7,7 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     public class TemperatureProperties
     {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public double TempSurfaceMobility { get; private set; }
         public double TempPhi { get; private set; }
         public double TempVbi { get; private set; }
@@ -37,6 +38,7 @@ namespace SpiceSharp.Components.Mosfets
         public double F4s { get; private set; }
         public double EffectiveLength { get; private set; }
         public double OxideCap { get; private set; }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
         /// Updates the specified properties.

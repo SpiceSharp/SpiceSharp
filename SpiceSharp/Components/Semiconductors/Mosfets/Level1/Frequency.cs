@@ -2,6 +2,7 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Mosfets.Level1
 {
@@ -18,16 +19,29 @@ namespace SpiceSharp.Components.Mosfets.Level1
         private readonly MosfetCharges _charges = new MosfetCharges();
 
         /// <summary>
-        /// The variables for the small-signal behavior.
+        /// The variables used by the transistor.
         /// </summary>
-        protected readonly MosfetVariables<Complex> Variables;
+        protected MosfetVariables<Complex> Variables;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateSourceCapacitance/*'/>
+        [ParameterName("cgs"), ParameterInfo("Gate-source capacitance", Units = "F")]
+        public double Cgs => _charges.Cgs;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateDrainCapacitance/*'/>
+        [ParameterName("cgd"), ParameterInfo("Gate-drain capacitance", Units = "F")]
+        public double Cgd => _charges.Cgd;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateBulkCapacitance/*'/>
+        [ParameterName("cgb"), ParameterInfo("Gate-bulk capacitance", Units = "F")]
+        public double Cgb => _charges.Cgb;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
-        public Frequency(string name, ComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, ComponentBindingContext context)
+            : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
             Variables = new MosfetVariables<Complex>(name, _complex, context.Nodes,
@@ -36,6 +50,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             _elements = new ElementSet<Complex>(_complex.Solver, Variables.GetMatrixLocations(_complex.Map));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
             // Update the small-signal parameters
@@ -46,6 +61,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 Properties);
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             int xnrm, xrev;
@@ -81,9 +97,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 Properties.DrainConductance,
                 new Complex(0.0, xgd + xgs + xgb),
                 Properties.SourceConductance,
-                new Complex(CondBd + CondBs, xgb + xbd + xbs),
-                new Complex(Properties.DrainConductance + CondDs + CondBd + xrev * (Gm + Gmbs), xgd + xbd),
-                new Complex(Properties.SourceConductance + CondDs + CondBs + xnrm * (Gm + Gmbs), xgs + xbs),
+                new Complex(Gbd + Gbs, xgb + xbd + xbs),
+                new Complex(Properties.DrainConductance + Gds + Gbd + xrev * (Gm + Gmbs), xgd + xbd),
+                new Complex(Properties.SourceConductance + Gds + Gbs + xnrm * (Gm + Gmbs), xgs + xbs),
 
                 -Properties.DrainConductance,
 
@@ -94,18 +110,18 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 -Properties.SourceConductance,
 
                 -new Complex(0.0, xgb),
-                -new Complex(CondBd, xbd),
-                -new Complex(CondBs, xbs),
+                -new Complex(Gbd, xbd),
+                -new Complex(Gbs, xbs),
 
                 -Properties.DrainConductance,
                 new Complex((xnrm - xrev) * Gm, -xgd),
-                new Complex(-CondBd + (xnrm - xrev) * Gmbs, -xbd),
-                -CondDs - xnrm * (Gm + Gmbs),
+                new Complex(-Gbd + (xnrm - xrev) * Gmbs, -xbd),
+                -Gds - xnrm * (Gm + Gmbs),
 
                 -new Complex((xnrm - xrev) * Gm, xgs),
                 -Properties.SourceConductance,
-                -new Complex(CondBs + (xnrm - xrev) * Gmbs, xbs),
-                -CondDs - xrev * (Gm + Gmbs));
+                -new Complex(Gbs + (xnrm - xrev) * Gmbs, xbs),
+                -Gds - xrev * (Gm + Gmbs));
         }
     }
 }

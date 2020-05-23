@@ -62,5 +62,85 @@
       <summary>Gets the bulk-drain voltage (vbd).</summary>
       <value>The bulk-drain voltage.</value>
     </BulkDrainVoltage>
+    <GateSourceCharge>
+      <summary>Gets the charge on the gate-source capacitance (qgs).</summary>
+      <value>The gate-source charge.</value>
+    </GateSourceCharge>
+    <GateSourceCapacitance>
+      <summary>Gets the gate-source capacitance (cgs).</summary>
+      <value>The gate-source capacitance.</value>
+    </GateSourceCapacitance>
+    <GateDrainCharge>
+      <summary>Gets the charge on the gate-drain capacitance (qgd).</summary>
+      <value>The gate-drain charge.</value>
+    </GateDrainCharge>
+    <GateDrainCapacitance>
+      <summary>Gets the gate-drain capacitance (cgd).</summary>
+      <value>The gate-drain capacitance.</value>
+    </GateDrainCapacitance>
+    <GateBulkCharge>
+      <summary>Gets the charge on the gate-bulk capacitance (cgb).</summary>
+      <value>The gate-bulk charge.</value>
+    </GateBulkCharge>
+    <GateBulkCapacitance>
+      <summary>Gets the gate-bulk capacitance (cgb).</summary>
+      <value>The gate-bulk capacitance.</value>
+    </GateBulkCapacitance>
+    <BulkSourceCharge>
+      <summary>Gets the charge on the bulk-source capacitance (qbs).</summary>
+      <value>The bulk-source charge.</value>
+    </BulkSourceCharge>
+    <BulkSourceCapacitance>
+      <summary>Gets the bulk-source capacitance (cbs).</summary>
+      <value>The bulk-source capacitance.</value>
+    </BulkSourceCapacitance>
+    <BulkDrainCharge>
+      <summary>Gets the charge on the bulk-drain capacitance (qbd).</summary>
+      <value>The bulk-drain charge.</value>
+    </BulkDrainCharge>
+    <BulkDrainCapacitance>
+      <summary>Gets the bulk-drain capacitance (cbd).</summary>
+      <value>The bulk-drain capacitance.</value>
+    </BulkDrainCapacitance>
+    <SourceConductance>
+      <summary>Gets the conductance of the source diffusion region.</summary>
+      <value>The conductance of the source diffusion region.</value>
+    </SourceConductance>
+    <SourceResistance>
+      <summary>Gets the resistance of the source diffusion region.</summary>
+      <value>The resistance of the source diffusion region.</value>
+    </SourceResistance>
+    <DrainConductance>
+      <summary>Gets the conductance of the drain diffusion region.</summary>
+      <value>The conductance of the drain diffusion region.</value>
+    </DrainConductance>
+    <DrainResistance>
+      <summary>Gets the resistance of the drain diffusion region.</summary>
+      <value>The resistance of the drain diffusion region.</value>
+    </DrainResistance>
+    <CriticalSourceVoltage>
+      <summary>Gets the critical voltage of the source junction.</summary>
+      <value>The critical voltage.</value>
+    </CriticalSourceVoltage>
+    <CriticalDrainVoltage>
+      <summary>Gets the critical voltage of the drain junction.</summary>
+      <value>The critical voltage.</value>
+    </CriticalDrainVoltage>
+    <ThermalDrain>
+      <summary>Gets the noise source that represents the thermal noise of the drain resistance.</summary>
+      <value>The thermal noise source for the drain.</value>
+    </ThermalDrain>
+    <ThermalSource>
+      <summary>Gets the noise source that represents the thermal noise of the source resistance.</summary>
+      <value>The thermal noise source for the source.</value>
+    </ThermalSource>
+    <ShotNoise>
+      <summary>Gets the noise source that represents the shot noise of the drain-source current.</summary>
+      <value>The shot noise source for the drain-source current.</value>
+    </ShotNoise>
+    <FlickerNoise>
+      <summary>Gets the noise source that represents the flicker noise of the drain-source current.</summary>
+      <value>The flicker noise source for the drain-source current.</value>
+    </FlickerNoise>
   </members>
 </docs>

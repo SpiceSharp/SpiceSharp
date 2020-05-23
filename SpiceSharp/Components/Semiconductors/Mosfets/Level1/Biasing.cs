@@ -17,33 +17,29 @@ namespace SpiceSharp.Components.Mosfets.Level1
         IBiasingBehavior, 
         IConvergenceBehavior
     {
-        private readonly IIntegrationMethod _method;
         private readonly ITimeSimulationState _time;
+        private readonly IIntegrationMethod _method;
         private readonly IIterationSimulationState _iteration;
         private readonly MosfetVariables<double> _variables;
         private readonly ElementSet<double> _elements;
+        private readonly BiasingParameters _config;
 
         /// <summary>
         /// The maximum exponent argument
         /// </summary>
         protected const double MaximumExponentArgument = 709.0;
 
-        /// <summary>
-        /// Gets the base configuration.
-        /// </summary>
-        protected BiasingParameters BiasingParameters { get; }
-
         /// <include file='../common/docs.xml' path='docs/members/DrainCurrent/*'/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
-        public double DrainCurrent { get; private set; }
+        public double Id { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkSourceCurrent/*'/>
         [ParameterName("ibs"), ParameterInfo("B-S junction current")]
-        public double BsCurrent { get; private set; }
+        public double Ibs { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkDrainCurrent/*'/>
         [ParameterName("ibd"), ParameterInfo("B-D junction current")]
-        public double BdCurrent { get; private set; }
+        public double Ibd { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/Transconductance/*'/>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
@@ -55,15 +51,15 @@ namespace SpiceSharp.Components.Mosfets.Level1
 
         /// <include file='../common/docs.xml' path='docs/members/DrainSourceConductance/*'/>
         [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
-        public double CondDs { get; private set; }
+        public double Gds { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkSourceConductance/*'/>
         [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
-        public double CondBs { get; private set; }
+        public double Gbs { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkDrainConductance/*'/>
         [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
-        public double CondBd { get; private set; }
+        public double Gbd { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/von/*'/>
         [ParameterName("von"), ParameterInfo("Turn-on voltage")]
@@ -78,11 +74,11 @@ namespace SpiceSharp.Components.Mosfets.Level1
 
         /// <include file='../common/docs.xml' path='docs/members/GateSourceVoltage/*'/>
         [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
-        public virtual double Vgs { get; protected set; }
+        public double Vgs { get; protected set; }
 
         /// <include file='../common/docs.xml' path='docs/members/DrainSourceVoltage/*'/>
         [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
-        public virtual double Vds { get; protected set; }
+        public double Vds { get; protected set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkSourceVoltage/*'/>
         [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
@@ -93,22 +89,14 @@ namespace SpiceSharp.Components.Mosfets.Level1
         public virtual double Vbd { get; protected set; }
 
         /// <summary>
-        /// Gets the state of the biasing.
-        /// </summary>
-        /// <value>
-        /// The state of the biasing.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         public Biasing(string name, ComponentBindingContext context) : base(name, context) 
         {
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            BiasingParameters = context.GetSimulationParameterSet<BiasingParameters>();
+            var state = context.GetState<IBiasingSimulationState>();
+            _config = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
@@ -116,14 +104,14 @@ namespace SpiceSharp.Components.Mosfets.Level1
             Von = 0;
             Mode = 1;
 
-            _variables = new MosfetVariables<double>(name, BiasingState, context.Nodes,
+            _variables = new MosfetVariables<double>(name, state, context.Nodes,
                 !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
                 !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
 
             // Get matrix pointers
-            _elements = new ElementSet<double>(BiasingState.Solver, 
-                _variables.GetMatrixLocations(BiasingState.Map), 
-                _variables.GetRhsIndices(BiasingState.Map));
+            _elements = new ElementSet<double>(state.Solver, 
+                _variables.GetMatrixLocations(state.Map), 
+                _variables.GetRhsIndices(state.Map));
         }
 
         /// <inheritdoc/>
@@ -145,25 +133,25 @@ namespace SpiceSharp.Components.Mosfets.Level1
              */
             if (vbs <= -3 * Properties.TempVt)
             {
-                con.Bs.G = BiasingParameters.Gmin;
+                con.Bs.G = _config.Gmin;
                 con.Bs.C = con.Bs.G * vbs - Properties.SourceSatCurrent;
             }
             else
             {
                 var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Properties.TempVt));
-                con.Bs.G = Properties.SourceSatCurrent * evbs / Properties.TempVt + BiasingParameters.Gmin;
-                con.Bs.C = Properties.SourceSatCurrent * (evbs - 1) + BiasingParameters.Gmin * vbs;
+                con.Bs.G = Properties.SourceSatCurrent * evbs / Properties.TempVt + _config.Gmin;
+                con.Bs.C = Properties.SourceSatCurrent * (evbs - 1) + _config.Gmin * vbs;
             }
             if (vbd <= -3 * Properties.TempVt)
             {
-                con.Bd.G = BiasingParameters.Gmin;
+                con.Bd.G = _config.Gmin;
                 con.Bd.C = con.Bd.G * vbd - Properties.DrainSatCurrent;
             }
             else
             {
                 var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Properties.TempVt));
-                con.Bd.G = Properties.DrainSatCurrent * evbd / Properties.TempVt + BiasingParameters.Gmin;
-                con.Bd.C = Properties.DrainSatCurrent * (evbd - 1) + BiasingParameters.Gmin * vbd;
+                con.Bd.G = Properties.DrainSatCurrent * evbd / Properties.TempVt + _config.Gmin;
+                con.Bd.C = Properties.DrainSatCurrent * (evbd - 1) + _config.Gmin * vbd;
             }
 
             // Now to determine whether the user was able to correctly
@@ -239,7 +227,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 // Export some useful quantities (vth, vdsat and ids).
                 Von = ModelParameters.MosfetType * von;
                 Vdsat = ModelParameters.MosfetType * vdsat;
-                DrainCurrent = Mode * con.Ds.C - con.Bd.C;
+                Id = Mode * con.Ds.C - con.Bd.C;
             }
 
             // Give the option to add contributions for time analysis
@@ -258,12 +246,14 @@ namespace SpiceSharp.Components.Mosfets.Level1
             Vgs = vgs;
             Vds = vds;
 
-            CondDs = con.Ds.G;
-            CondBs = con.Bs.G;
-            CondBd = con.Bd.G;
+            Gds = con.Ds.G;
+            Gbs = con.Bs.G;
+            Gbd = con.Bd.G;
 
             // Calculate right hand side vector contributions
             double xnrm, xrev;
+            Ibs = con.Bs.C;
+            Ibd = -con.Bd.C;
             con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
             con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
             if (Mode >= 0)
@@ -287,24 +277,18 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 con.Bd.G + con.Bs.G + con.Gb.G,
                 Properties.DrainConductance + con.Ds.G + con.Bd.G + xrev * (Gm + Gmbs) + con.Gd.G,
                 Properties.SourceConductance + con.Ds.G + con.Bs.G + xnrm * (Gm + Gmbs) + con.Gs.G,
-
                 -Properties.DrainConductance,
-
                 -con.Gb.G,
                 -con.Gd.G,
                 -con.Gs.G,
-
                 -Properties.SourceConductance,
-
                 -con.Gb.G,
                 -con.Bd.G,
                 -con.Bs.G,
-
                 -Properties.DrainConductance,
                 (xnrm - xrev) * Gm - con.Gd.G,
                 -con.Bd.G + (xnrm - xrev) * Gmbs,
                 -con.Ds.G - xnrm * (Gm + Gmbs),
-
                 -(xnrm - xrev) * Gm - con.Gs.G,
                 -Properties.SourceConductance,
                 -con.Bs.G - (xnrm - xrev) * Gmbs,
@@ -432,31 +416,28 @@ namespace SpiceSharp.Components.Mosfets.Level1
             var delvgd = vgd - vgdo;
 
             // these are needed for convergence testing
-            // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
             if (Mode >= 0)
             {
-                cdhat = DrainCurrent - CondBd * delvbd + Gmbs * delvbs +
-                    Gm * delvgs + CondDs * delvds;
+                cdhat = Id - Gbd * delvbd + Gmbs * delvbs +
+                    Gm * delvgs + Gds * delvds;
             }
             else
             {
-                cdhat = DrainCurrent - (CondBd - Gmbs) * delvbd -
-                    Gm * delvgd + CondDs * delvds;
+                cdhat = Id - (Gbd - Gmbs) * delvbd -
+                    Gm * delvgd + Gds * delvds;
             }
-            var cbhat = BsCurrent + BdCurrent + CondBd * delvbd + CondBs * delvbs;
+            var cbhat = Ibs + Ibd + Gbd * delvbd + Gbs * delvbs;
 
-            /*
-             *  check convergence
-             */
-            var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + BiasingParameters.AbsoluteTolerance;
-            if (Math.Abs(cdhat - DrainCurrent) >= tol)
+            // Check convergence
+            var tol = _config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Id)) + _config.AbsoluteTolerance;
+            if (Math.Abs(cdhat - Id) >= tol)
             {
                 _iteration.IsConvergent = false;
                 return false;
             }
 
-            tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + BiasingParameters.AbsoluteTolerance;
-            if (Math.Abs(cbhat - (BsCurrent + BdCurrent)) > tol)
+            tol = _config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(Ibs + Ibd)) + _config.AbsoluteTolerance;
+            if (Math.Abs(cbhat - (Ibs + Ibd)) > tol)
             {
                 _iteration.IsConvergent = false;
                 return false;

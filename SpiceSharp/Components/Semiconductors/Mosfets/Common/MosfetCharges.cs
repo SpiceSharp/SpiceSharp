@@ -7,20 +7,38 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     public class MosfetCharges
     {
+        /// <include file='docs.xml' path='docs/members/BulkSourceCharge/*'/>
         public double Qbs { get; private set; }
 
+        /// <include file='docs.xml' path='docs/members/BulkDrainCharge/*'/>
         public double Qbd { get; private set; }
 
+        /// <include file='docs.xml' path='docs/members/BulkSourceCapacitance/*'/>
         public double Cbs { get; private set; }
 
+        /// <include file='docs.xml' path='docs/members/BulkDrainCapacitance/*'/>
         public double Cbd { get; private set; }
 
+        /// <include file='docs.xml' path='docs/members/GateSourceCapacitance/*'/>
         public double Cgs { get; private set; }
 
+        /// <include file='docs.xml' path='docs/members/GateDrainCapacitance/*'/>
         public double Cgd { get; private set; }
 
+        /// <include file='docs.xml' path='docs/members/GateBulkCapacitance/*'/>
         public double Cgb { get; private set; }
 
+        /// <summary>
+        /// Updates the charges and capacitances..
+        /// </summary>
+        /// <param name="mode">The mode.</param>
+        /// <param name="vgs">The gate-source voltage.</param>
+        /// <param name="vds">The drain-source voltage.</param>
+        /// <param name="vbs">The bulk-source voltage.</param>
+        /// <param name="von">The threshold voltage.</param>
+        /// <param name="vdsat">The saturation voltage.</param>
+        /// <param name="mp">The model parameters.</param>
+        /// <param name="tp">The temperature-dependent properties.</param>
         public void Update(double mode, double vgs, double vds, double vbs, double von, double vdsat,
             ModelParameters mp,
             TemperatureProperties tp)

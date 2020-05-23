@@ -30,14 +30,6 @@ namespace SpiceSharp.Components.Mosfets.Level1
         public ModelProperties Properties { get; } = new ModelProperties();
 
         /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        /// <value>
-        /// The biasing simulation state.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; private set; }
-        
-        /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperature"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -48,9 +40,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
             Parameters = context.GetParameterSet<ModelParameters>();
-            BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             // Perform model defaulting

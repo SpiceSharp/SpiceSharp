@@ -75,6 +75,7 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
+        /// <inheritdoc/>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
@@ -83,6 +84,7 @@ namespace SpiceSharp.Components
             {
                 rule.AddPath(this, nodes[0], nodes[2], nodes[3]);
                 rule.AddPath(this, ConductionTypes.Ac, nodes[0], nodes[1]); // Gate-source capacitance
+                rule.AddPath(this, ConductionTypes.Ac, nodes[0], nodes[2]); // Gate-drain capacitance
             }
         }
     }

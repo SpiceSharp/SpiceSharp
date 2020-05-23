@@ -7,24 +7,13 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     public class ModelProperties
     {
-        /// <summary>
-        /// Gets the temperature factor.
-        /// </summary>
-        /// <value>
-        /// The temperature factor.
-        /// </value>
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public double Factor1 { get; private set; }
-
-        /// <summary>
-        /// Gets the nominal thermal voltage.
-        /// </summary>
-        /// <value>
-        /// The nominal thermal voltage.
-        /// </value>
         public double Vtnom { get; private set; }
         public double Kt1 { get; private set; }
         public double EgFet1 { get; private set; }
         public double PbFactor1 { get; private set; }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelProperties"/> struct.

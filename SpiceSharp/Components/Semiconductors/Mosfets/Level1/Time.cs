@@ -18,14 +18,45 @@ namespace SpiceSharp.Components.Mosfets.Level1
         private readonly StateValue<double> _cgs, _cgd, _cgb, _vgs, _vbs, _vds;
         private readonly MosfetCharges _charges = new MosfetCharges();
 
-        [ParameterName("qgs"), ParameterName("Gate-Source charge storage")]
+        /// <include file='../common/docs.xml' path='docs/members/GateSourceCharge/*'/>
+        [ParameterName("qgs"), ParameterInfo("Gate-source charge storage", Units = "C")]
         public double Qgs => _qgs.Value;
 
-        [ParameterName("qgd"), ParameterName("Gate-Drain charge storage")]
+        /// <include file='../common/docs.xml' path='docs/members/GateSourceCapacitance/*'/>
+        [ParameterName("cgs"), ParameterInfo("Gate-source capacitance", Units = "F")]
+        public double Cgs => _charges.Cgs;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateDrainCharges/*'/>
+        [ParameterName("qgd"), ParameterInfo("Gate-drain charge storage", Units = "C")]
         public double Qgd => _qgd.Value;
 
-        [ParameterName("qgb"), ParameterInfo("Gate-Bulk charge storage")]
+        /// <include file='../common/docs.xml' path='docs/members/GateDrainCapacitance/*'/>
+        [ParameterName("cgd"), ParameterInfo("Gate-drain capacitance", Units = "F")]
+        public double Cgd => _charges.Cgd;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateBulkCharge/*'/>
+        [ParameterName("qgb"), ParameterInfo("Gate-bulk charge storage", Units = "C")]
         public double Qgb => _qgb.Value;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateBulkCapacitance/*'/>
+        [ParameterName("cgb"), ParameterInfo("Gate-bulk capacitance", Units = "F")]
+        public double Cgb => _charges.Cgb;
+
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceCharge/*'/>
+        [ParameterName("qbs"), ParameterInfo("Bulk-source charge storage", Units = "C")]
+        public double Qbs => _charges.Qbs;
+
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceCapacitance/*'/>
+        [ParameterName("cbs"), ParameterInfo("Bulk-source capacitance", Units = "F")]
+        public double Cbs => _charges.Cbs;
+
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainCharge/*'/>
+        [ParameterName("qbd"), ParameterInfo("Bulk-drain charge storage", Units = "C")]
+        public double Qbd => _charges.Qbd;
+
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainCapacitance/*'/>
+        [ParameterName("cbd"), ParameterInfo("Bulk-drain capacitance", Units = "F")]
+        public double Cbd => _charges.Cbd;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
