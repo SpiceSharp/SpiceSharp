@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.Mosfets
     [GeneratedParameters]
     public class Parameters : ParameterSet
     {
-        private double _parallelMultplier = 1.0;
+        private double _parallelMultiplier = 1.0;
         private double _drainSquares = 1;
         private double _sourceSquares = 1;
         private double _drainPerimeter;
@@ -205,7 +205,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial bulk-source voltage.
         /// </value>
         [ParameterName("icvbs"), ParameterInfo("Initial B-S voltage", Units = "V")]
-        public double InitialVoltageBs { get; set; }
+        public double InitialVbs { get; set; }
 
         /// <summary>
         /// Gets or sets the initial drain-source voltage.
@@ -214,7 +214,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial drain-source voltage.
         /// </value>
         [ParameterName("icvds"), ParameterInfo("Initial D-S voltage", Units = "V")]
-        public double InitialVoltageDs { get; set; }
+        public double InitialVds { get; set; }
 
         /// <summary>
         /// Gets or sets the initial gate-source voltage.
@@ -223,7 +223,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial gate-source voltage.
         /// </value>
         [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
-        public double InitialVoltageGs { get; set; }
+        public double InitialVgs { get; set; }
 
         /// <summary>
         /// Gets or sets the parallel multplier (the number of transistors in parallel).
@@ -232,13 +232,13 @@ namespace SpiceSharp.Components.Mosfets
         /// The parallel multplier.
         /// </value>
         [GreaterThan(0)]
-        public double ParallelMultplier
+        public double ParallelMultiplier
         {
-            get => _parallelMultplier;
+            get => _parallelMultiplier;
             set
             {
-                Utility.GreaterThan(value, nameof(ParallelMultplier), 0);
-                _parallelMultplier = value;
+                Utility.GreaterThan(value, nameof(ParallelMultiplier), 0);
+                _parallelMultiplier = value;
             }
         }
 
@@ -252,13 +252,13 @@ namespace SpiceSharp.Components.Mosfets
             switch (ic.Length)
             {
                 case 3:
-                    InitialVoltageBs = ic[2];
+                    InitialVbs = ic[2];
                     goto case 2;
                 case 2:
-                    InitialVoltageGs = ic[1];
+                    InitialVgs = ic[1];
                     goto case 1;
                 case 1:
-                    InitialVoltageDs = ic[0];
+                    InitialVds = ic[0];
                     break;
             }
         }

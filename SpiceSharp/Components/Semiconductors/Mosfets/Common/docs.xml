@@ -143,4 +143,13 @@
       <value>The flicker noise source for the drain-source current.</value>
     </FlickerNoise>
   </members>
+  <methods>
+    <UpdateTime>
+      <summary>Updates the contributions for transient simulations.</summary>
+      <param name="vgs">This iteration's gate-source voltage.</param>
+      <param name="vds">This iteration's drain-source voltage.</param>
+      <param name="vbs">This iteration's bulk-source voltage.</param>
+      <param name="c">The contributions.</param>
+    </UpdateTime>
+  </methods>
 </docs>

@@ -433,9 +433,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				 */
                 if (_iteration.Mode == IterationModes.Junction && !Parameters.Off)
                 {
-                    vds = ModelParameters.MosfetType * Parameters.InitialVoltageDs;
-                    vgs = ModelParameters.MosfetType * Parameters.InitialVoltageGs;
-                    vbs = ModelParameters.MosfetType * Parameters.InitialVoltageBs;
+                    vds = ModelParameters.MosfetType * Parameters.InitialVds;
+                    vgs = ModelParameters.MosfetType * Parameters.InitialVgs;
+                    vbs = ModelParameters.MosfetType * Parameters.InitialVbs;
 
                     // TODO: At some point, check what this is supposed to do
                     if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))

@@ -78,31 +78,31 @@ namespace SpiceSharp.Components.Mosfets
                     (p.SourceArea == 0))
             {
                 SourceVCritical = DrainVCritical =
-                       TempVt * Math.Log(TempVt / (Constants.Root2 * p.ParallelMultplier * TempSaturationCurrent));
+                       TempVt * Math.Log(TempVt / (Constants.Root2 * p.ParallelMultiplier * TempSaturationCurrent));
             }
             else
             {
                 DrainVCritical =
                         TempVt * Math.Log(TempVt / (Constants.Root2 *
-                        p.ParallelMultplier *
+                        p.ParallelMultiplier *
                         TempSaturationCurrentDensity * p.DrainArea));
                 SourceVCritical =
                         TempVt * Math.Log(TempVt / (Constants.Root2 *
-                        p.ParallelMultplier *
+                        p.ParallelMultiplier *
                         TempSaturationCurrentDensity * p.SourceArea));
             }
 
             if (mp.DrainResistance.Given)
             {
                 if (mp.DrainResistance != 0)
-                    DrainConductance = p.ParallelMultplier / mp.DrainResistance;
+                    DrainConductance = p.ParallelMultiplier / mp.DrainResistance;
                 else
                     DrainConductance = 0;
             }
             else if (mp.SheetResistance.Given)
             {
                 if (mp.SheetResistance != 0)
-                    DrainConductance = p.ParallelMultplier / (mp.SheetResistance * p.DrainSquares);
+                    DrainConductance = p.ParallelMultiplier / (mp.SheetResistance * p.DrainSquares);
                 else
                     DrainConductance = 0;
             }
@@ -112,14 +112,14 @@ namespace SpiceSharp.Components.Mosfets
             if (mp.SourceResistance.Given)
             {
                 if (mp.SourceResistance != 0)
-                    SourceConductance = p.ParallelMultplier / mp.SourceResistance;
+                    SourceConductance = p.ParallelMultiplier / mp.SourceResistance;
                 else
                     SourceConductance = 0;
             }
             else if (mp.SheetResistance.Given)
             {
                 if ((mp.SheetResistance != 0) && (p.SourceSquares != 0))
-                    SourceConductance = p.ParallelMultplier / (mp.SheetResistance * p.SourceSquares);
+                    SourceConductance = p.ParallelMultiplier / (mp.SheetResistance * p.SourceSquares);
                 else
                     SourceConductance = 0;
             }
@@ -151,16 +151,16 @@ namespace SpiceSharp.Components.Mosfets
 
             double czbd, czbdsw;
             if (mp.CapBd.Given)
-                czbd = TempCbd * p.ParallelMultplier;
+                czbd = TempCbd * p.ParallelMultiplier;
             else
             {
                 if (mp.BulkCapFactor.Given)
-                    czbd = TempJctCap * p.ParallelMultplier * p.DrainArea;
+                    czbd = TempJctCap * p.ParallelMultiplier * p.DrainArea;
                 else
                     czbd = 0;
             }
             if (mp.SidewallCapFactor.Given)
-                czbdsw = TempJctCapSidewall * p.DrainPerimeter * p.ParallelMultplier;
+                czbdsw = TempJctCapSidewall * p.DrainPerimeter * p.ParallelMultiplier;
             else
                 czbdsw = 0;
             arg = 1 - mp.ForwardCapDepletionCoefficient;
@@ -187,16 +187,16 @@ namespace SpiceSharp.Components.Mosfets
 
             double czbs, czbssw;
             if (mp.CapBs.Given)
-                czbs = TempCbs * p.ParallelMultplier;
+                czbs = TempCbs * p.ParallelMultiplier;
             else
             {
                 if (mp.BulkCapFactor.Given)
-                    czbs = TempJctCap * p.SourceArea * p.ParallelMultplier;
+                    czbs = TempJctCap * p.SourceArea * p.ParallelMultiplier;
                 else
                     czbs = 0;
             }
             if (mp.SidewallCapFactor.Given)
-                czbssw = TempJctCapSidewall * p.SourcePerimeter * p.ParallelMultplier;
+                czbssw = TempJctCapSidewall * p.SourcePerimeter * p.ParallelMultiplier;
             else
                 czbssw = 0;
             arg = 1 - mp.ForwardCapDepletionCoefficient;

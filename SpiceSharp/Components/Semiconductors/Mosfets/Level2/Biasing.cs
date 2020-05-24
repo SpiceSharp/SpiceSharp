@@ -14,18 +14,15 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     public class Biasing : Temperature, 
-        IBiasingBehavior, 
+        IBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly IIntegrationMethod _method;
         private readonly ITimeSimulationState _time;
         private readonly IIterationSimulationState _iteration;
-        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
         private readonly ElementSet<double> _elements;
-
-        /// <summary>
-        /// Signs used in the model
-        /// </summary>
+        private readonly MosfetVariables<double> _variables;
+        private readonly BiasingParameters _config;
         private static readonly double[] _sig1 = { 1.0, -1.0, 1.0, -1.0 };
         private static readonly double[] _sig2 = { 1.0, 1.0, -1.0, -1.0 };
 
@@ -39,168 +36,64 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// </summary>
         protected const double MaximumExponentArgument = 709.0;
 
-        /// <summary>
-        /// Gets the base configuration.
-        /// </summary>
-        protected readonly BiasingParameters BaseConfiguration;
-
-        /// <summary>
-        /// Gets the internal drain node.
-        /// </summary>
-        /// <value>
-        /// The internal drain node.
-        /// </value>
-        protected IVariable<double> DrainPrime { get; }
-
-        /// <summary>
-        /// Gets the internal source node.
-        /// </summary>
-        /// <value>
-        /// The internal source node.
-        /// </value>
-        protected IVariable<double> SourcePrime { get; }
-
-        /// <summary>
-        /// Gets the drain current.
-        /// </summary>
-        /// <value>
-        /// The drain current.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainCurrent/*'/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
-        public double DrainCurrent { get; private set; }
+        public double Id { get; private set; }
 
-        /// <summary>
-        /// Gets the bulk-source current.
-        /// </summary>
-        /// <value>
-        /// The bulk-source current.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceCurrent/*'/>
         [ParameterName("ibs"), ParameterInfo("B-S junction current")]
-        public double BsCurrent { get; private set; }
+        public double Ibs { get; private set; }
 
-        /// <summary>
-        /// Gets the bulk-drain current.
-        /// </summary>
-        /// <value>
-        /// The bulk-drain current.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainCurrent/*'/>
         [ParameterName("ibd"), ParameterInfo("B-D junction current")]
-        public double BdCurrent { get; private set; }
+        public double Ibd { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal transconductance.
-        /// </summary>
-        /// <value>
-        /// The transconductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/Transconductance/*'/>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
-        public double Transconductance { get; private set; }
+        public double Gm { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal bulk transconductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal bulk transconductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceTransconductance/*'/>
         [ParameterName("gmb"), ParameterName("gmbs"), ParameterInfo("Bulk-Source transconductance")]
-        public double TransconductanceBs { get; private set; }
+        public double Gmbs { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal drain-source conductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal drain-source conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainSourceConductance/*'/>
         [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
-        public double CondDs { get; private set; }
+        public double Gds { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal bulk-source conductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal bulk-source conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceConductance/*'/>
         [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
-        public double CondBs { get; private set; }
+        public double Gbs { get; private set; }
 
-        /// <summary>
-        /// Gets the small-signal bulk-drain conductance.
-        /// </summary>
-        /// <value>
-        /// The small-signal bulk-drain conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainConductance/*'/>
         [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
-        public double CondBd { get; private set; }
+        public double Gbd { get; private set; }
 
-        /// <summary>
-        /// Gets the turn-on voltage.
-        /// </summary>
-        /// <value>
-        /// The turn-on voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/von/*'/>
         [ParameterName("von"), ParameterInfo("Turn-on voltage")]
         public double Von { get; private set; }
 
-        /// <summary>
-        /// Gets the saturation voltage.
-        /// </summary>
-        /// <value>
-        /// The saturation voltage.
-        /// </value>
-        [ParameterName("vdsat"), ParameterInfo("Saturation DrainNode voltage")]
-        public double SaturationVoltageDs { get; private set; }
+        /// <include file='../common/docs.xml' path='docs/members/SaturationVoltage/*'/>
+        [ParameterName("vdsat"), ParameterInfo("Saturation drain-source voltage")]
+        public double Vdsat { get; private set; }
 
-        /// <summary>
-        /// Gets the current mode of operation. +1.0 if vds is positive, -1 if it is negative.
-        /// </summary>
-        /// <value>
-        /// The current operation mode.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/Mode/*'/>
         public double Mode { get; private set; }
 
-        /// <summary>
-        /// Gets the gate-source voltage.
-        /// </summary>
-        /// <value>
-        /// The gate-source voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/GateSourceVoltage/*'/>
         [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
-        public virtual double VoltageGs { get; protected set; }
+        public double Vgs { get; protected set; }
 
-        /// <summary>
-        /// Gets the drain-source voltage.
-        /// </summary>
-        /// <value>
-        /// The drain-source voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainSourceVoltage/*'/>
         [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
-        public virtual double VoltageDs { get; protected set; }
+        public double Vds { get; protected set; }
 
-        /// <summary>
-        /// Gets the bulk-source voltage.
-        /// </summary>
-        /// <value>
-        /// The bulk-source voltage
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkSourceVoltage/*'/>
         [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
-        public virtual double VoltageBs { get; protected set; }
+        public virtual double Vbs { get; protected set; }
 
-        /// <summary>
-        /// Gets the bulk-drain voltage.
-        /// </summary>
-        /// <value>
-        /// The bulk-drain voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/BulkDrainVoltage/*'/>
         [ParameterName("vbd"), ParameterInfo("Bulk-Drain voltage")]
-        public virtual double VoltageBd { get; protected set; }
-
-        /// <summary>
-        /// Gets the state of the biasing.
-        /// </summary>
-        /// <value>
-        /// The state of the biasing.
-        /// </value>
-        protected IBiasingSimulationState BiasingState { get; }
+        public virtual double Vbd { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
@@ -210,53 +103,23 @@ namespace SpiceSharp.Components.Mosfets.Level2
         public Biasing(string name, ComponentBindingContext context) 
             : base(name, context)
         {
-            context.Nodes.CheckNodes(4);
-            BiasingState = context.GetState<IBiasingSimulationState>();
-            BaseConfiguration = context.GetSimulationParameterSet<BiasingParameters>();
+            var state = context.GetState<IBiasingSimulationState>();
+            _config = context.GetSimulationParameterSet<BiasingParameters>();
             context.TryGetState(out _time);
             context.TryGetState(out _method);
             _iteration = context.GetState<IIterationSimulationState>();
-            SaturationVoltageDs = 0;
+            Vdsat = 0;
             Von = 0;
             Mode = 1;
 
-            DrainPrime = BiasingState.GetSharedVariable(context.Nodes[0]);
-            _drainNode = BiasingState.Map[DrainPrime];
-            _gateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
-            SourcePrime = BiasingState.GetSharedVariable(context.Nodes[2]);
-            _sourceNode = BiasingState.Map[SourcePrime];
-            _bulkNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
-
-            // Add series drain node if necessary
-            if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
-                DrainPrime = BiasingState.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
-            _drainNodePrime = BiasingState.Map[DrainPrime];
-
-            // Add series source node if necessary
-            if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
-                SourcePrime = BiasingState.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
-            _sourceNodePrime = BiasingState.Map[SourcePrime];
+            _variables = new MosfetVariables<double>(name, state, context.Nodes,
+                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
+                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
 
             // Get matrix pointers
-            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
-                new MatrixLocation(_drainNode, _drainNode),
-                new MatrixLocation(_sourceNode, _sourceNode),
-                new MatrixLocation(_bulkNode, _bulkNode),
-                new MatrixLocation(_drainNodePrime, _drainNodePrime),
-                new MatrixLocation(_sourceNodePrime, _sourceNodePrime),
-                new MatrixLocation(_drainNode, _drainNodePrime),
-                new MatrixLocation(_sourceNode, _sourceNodePrime),
-                new MatrixLocation(_bulkNode, _drainNodePrime),
-                new MatrixLocation(_bulkNode, _sourceNodePrime),
-                new MatrixLocation(_drainNodePrime, _drainNode),
-                new MatrixLocation(_drainNodePrime, _gateNode),
-                new MatrixLocation(_drainNodePrime, _bulkNode),
-                new MatrixLocation(_drainNodePrime, _sourceNodePrime),
-                new MatrixLocation(_sourceNodePrime, _gateNode),
-                new MatrixLocation(_sourceNodePrime, _sourceNode),
-                new MatrixLocation(_sourceNodePrime, _bulkNode),
-                new MatrixLocation(_sourceNodePrime, _drainNodePrime)
-            }, new[] { _bulkNode, _drainNodePrime, _sourceNodePrime });
+            _elements = new ElementSet<double>(state.Solver,
+                _variables.GetMatrixLocations(state.Map),
+                _variables.GetRhsIndices(state.Map));
         }
 
         /// <summary>
@@ -264,113 +127,112 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// </summary>
         protected virtual void Load()
         {
+            Contributions<double> con = new Contributions<double>();
+
             // Get the current voltages
             Initialize(out var vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
 
-            /*
-			 * bulk - source and bulk - drain diodes
-			 * here we just evaluate the ideal diode current and the
-			 * corresponding derivative (conductance).
-			 */
-            if (vbs <= 0)
+            if (vbs <= -3 * Properties.TempVt)
             {
-                CondBs = SourceSatCurrent / Vt;
-                BsCurrent = CondBs * vbs;
-                CondBs += BaseConfiguration.Gmin;
+                con.Bs.G = _config.Gmin;
+                con.Bs.C = con.Bs.G * vbs - Properties.SourceSatCurrent;
             }
             else
             {
-                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Vt));
-                CondBs = SourceSatCurrent * evbs / Vt + BaseConfiguration.Gmin;
-                BsCurrent = SourceSatCurrent * (evbs - 1);
+                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Properties.TempVt));
+                con.Bs.G = Properties.SourceSatCurrent * evbs / Properties.TempVt + _config.Gmin;
+                con.Bs.C = Properties.SourceSatCurrent * (evbs - 1) + _config.Gmin * vbs;
             }
-            if (vbd <= 0)
+            if (vbd <= -3 * Properties.TempVt)
             {
-                CondBd = DrainSatCurrent / Vt;
-                BdCurrent = CondBd * vbd;
-                CondBd += BaseConfiguration.Gmin;
+                con.Bd.G = _config.Gmin;
+                con.Bd.C = con.Bd.G * vbd - Properties.DrainSatCurrent;
             }
             else
             {
-                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Vt));
-                CondBd = DrainSatCurrent * evbd / Vt + BaseConfiguration.Gmin;
-                BdCurrent = DrainSatCurrent * (evbd - 1);
+                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Properties.TempVt));
+                con.Bd.G = Properties.DrainSatCurrent * evbd / Properties.TempVt + _config.Gmin;
+                con.Bd.C = Properties.DrainSatCurrent * (evbd - 1) + _config.Gmin * vbd;
             }
 
-            /*
-             * Now to determine whether the user was able to correctly
-			 * identify the source and drain of his device
-			 */
             if (vds >= 0)
-            {
-                // normal mode
                 Mode = 1;
-            }
             else
-            {
-                // inverse mode
                 Mode = -1;
-            }
 
-            // Update
-            VoltageBs = vbs;
-            VoltageBd = vbd;
-            VoltageGs = vgs;
-            VoltageDs = vds;
+            // Evaluate drain current
+            Evaluate(vgs, vds, vbs, ref con);
 
-            // Evaluate the currents and derivatives
-            var cdrain = Mode > 0 ? Evaluate(vgs, vds, vbs) : Evaluate(vgd, -vds, vbd);
-            DrainCurrent = Mode * cdrain - BdCurrent;
+            // Give the option to add contributions for time analysis
+            UpdateTime(vgs, vds, vbs, ref con);
 
             // Check convergence
-            if (!Parameters.Off || _iteration.Mode != IterationModes.Fix)
+            if (!Parameters.Off || (_iteration.Mode != IterationModes.Fix))
             {
                 if (check)
                     _iteration.IsConvergent = false;
             }
 
-            // Load current vector
-            double xnrm, xrev, cdreq;
-            var ceqbs = ModelParameters.MosfetType * (BsCurrent - (CondBs - BaseConfiguration.Gmin) * vbs);
-            var ceqbd = ModelParameters.MosfetType * (BdCurrent - (CondBd - BaseConfiguration.Gmin) * vbd);
+            Vbs = vbs;
+            Vbd = vbd;
+            Vgs = vgs;
+            Vds = vds;
+            Gds = con.Ds.G;
+            Gbs = con.Bs.G;
+            Gbd = con.Bd.G;
+
+            // Calculate right hand side vector contributions
+            double xnrm, xrev;
+            Ibs = con.Bs.C;
+            Ibd = con.Bd.C;
+            con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
+            con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
                 xrev = 0;
-                cdreq = ModelParameters.MosfetType * (cdrain - CondDs * vds - Transconductance * vgs - TransconductanceBs * vbs);
+                con.Ds.C = ModelParameters.MosfetType * (con.Ds.C - con.Ds.G * vds - Gm * vgs - Gmbs * vbs);
             }
             else
             {
                 xnrm = 0;
                 xrev = 1;
-                cdreq = -ModelParameters.MosfetType * (cdrain - CondDs * -vds - Transconductance * vgd - TransconductanceBs * vbd);
+                con.Ds.C = -(ModelParameters.MosfetType) * (con.Ds.C - con.Ds.G * (-vds) - Gm * vgd - Gmbs * vbd);
             }
 
             _elements.Add(
                 // Y-matrix
-                DrainConductance,
-                SourceConductance,
-                CondBd + CondBs,
-                DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs),
-                SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs),
-                -DrainConductance,
-                -SourceConductance,
-                -CondBd,
-                -CondBs,
-                -DrainConductance,
-                (xnrm - xrev) * Transconductance,
-                -CondBd + (xnrm - xrev) * TransconductanceBs,
-                -CondDs - xnrm * (Transconductance + TransconductanceBs),
-                -(xnrm - xrev) * Transconductance,
-                -SourceConductance,
-                -CondBs - (xnrm - xrev) * TransconductanceBs,
-                -CondDs - xrev * (Transconductance + TransconductanceBs),
-                // RHS vector
-                -(ceqbs + ceqbd), 
-                ceqbd - cdreq, 
-                cdreq + ceqbs);
+                Properties.DrainConductance,
+                con.Gd.G + con.Gs.G + con.Gb.G,
+                Properties.SourceConductance,
+                con.Bd.G + con.Bs.G + con.Gb.G,
+                Properties.DrainConductance + con.Ds.G + con.Bd.G + xrev * (Gm + Gmbs) + con.Gd.G,
+                Properties.SourceConductance + con.Ds.G + con.Bs.G + xnrm * (Gm + Gmbs) + con.Gs.G,
+                -Properties.DrainConductance,
+                -con.Gb.G,
+                -con.Gd.G,
+                -con.Gs.G,
+                -Properties.SourceConductance,
+                -con.Gb.G,
+                -con.Bd.G,
+                -con.Bs.G,
+                -Properties.DrainConductance,
+                (xnrm - xrev) * Gm - con.Gd.G,
+                -con.Bd.G + (xnrm - xrev) * Gmbs,
+                -con.Ds.G - xnrm * (Gm + Gmbs),
+                -(xnrm - xrev) * Gm - con.Gs.G,
+                -Properties.SourceConductance,
+                -con.Bs.G - (xnrm - xrev) * Gmbs,
+                -con.Ds.G - xrev * (Gm + Gmbs),
+
+                // Right hand side vector
+                -ModelParameters.MosfetType * (con.Gs.C + con.Gb.C + con.Gd.C),
+                -(con.Bs.C + con.Bd.C - ModelParameters.MosfetType * con.Gb.C),
+                con.Bd.C - con.Ds.C + ModelParameters.MosfetType * con.Gd.C,
+                con.Ds.C + con.Bs.C + ModelParameters.MosfetType * con.Gs.C
+                );
         }
 
         void IBiasingBehavior.Load() => Load();
@@ -384,21 +246,21 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <param name="check">If set to <c>true</c>, the current voltage was limited and another iteration should be calculated.</param>
         protected void Initialize(out double vgs, out double vds, out double vbs, out bool check)
         {
-            var state = BiasingState;
             check = true;
 
             if (_iteration.Mode == IterationModes.Float || (_method != null && _method.BaseTime.Equals(0.0)) ||
                 _iteration.Mode == IterationModes.Fix && !Parameters.Off)
             {
                 // General iteration
-                vbs = ModelParameters.MosfetType * (state.Solution[_bulkNode] - state.Solution[_sourceNodePrime]);
-                vgs = ModelParameters.MosfetType * (state.Solution[_gateNode] - state.Solution[_sourceNodePrime]);
-                vds = ModelParameters.MosfetType * (state.Solution[_drainNodePrime] - state.Solution[_sourceNodePrime]);
+                var s = _variables.SourcePrime.Value;
+                vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - s);
+                vgs = ModelParameters.MosfetType * (_variables.Gate.Value - s);
+                vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - s);
 
                 // now some common crunching for some more useful quantities
                 var vbd = vbs - vds;
                 var vgd = vgs - vds;
-                var vgdo = VoltageGs - VoltageDs;
+                var vgdo = Vgs - Vds;
                 var von = ModelParameters.MosfetType * Von;
 
                 /*
@@ -408,26 +270,26 @@ namespace SpiceSharp.Components.Mosfets.Level2
 				 * and similar rudeness
 				 */
                 // NOTE: Spice 3f5 does not write out Vgs during DC analysis, so DEVfetlim may give different results in Spice 3f5
-                if (VoltageDs >= 0)
+                if (Vds >= 0)
                 {
-                    vgs = Transistor.LimitFet(vgs, VoltageGs, von);
+                    vgs = Transistor.LimitFet(vgs, Vgs, von);
                     vds = vgs - vgd;
-                    vds = Transistor.LimitVds(vds, VoltageDs);
+                    vds = Transistor.LimitVds(vds, Vds);
                 }
                 else
                 {
                     vgd = Transistor.LimitFet(vgd, vgdo, von);
                     vds = vgs - vgd;
-                    vds = -Transistor.LimitVds(-vds, -VoltageDs);
+                    vds = -Transistor.LimitVds(-vds, -Vds);
                     vgs = vgd + vds;
                 }
 
                 check = false;
                 if (vds >= 0)
-                    vbs = Semiconductor.LimitJunction(vbs, VoltageBs, Vt, SourceVCritical, ref check);
+                    vbs = Semiconductor.LimitJunction(vbs, Vbs, Properties.TempVt, SourceVCritical, ref check);
                 else
                 {
-                    vbd = Semiconductor.LimitJunction(vbd, VoltageBd, Vt, DrainVCritical, ref check);
+                    vbd = Semiconductor.LimitJunction(vbd, Vbd, Properties.TempVt, DrainVCritical, ref check);
                     vbs = vbd + vds;
                 }
             }
@@ -439,15 +301,15 @@ namespace SpiceSharp.Components.Mosfets.Level2
 				 */
                 if (_iteration.Mode == IterationModes.Junction && !Parameters.Off)
                 {
-                    vds = ModelParameters.MosfetType * Parameters.InitialVoltageDs;
-                    vgs = ModelParameters.MosfetType * Parameters.InitialVoltageGs;
-                    vbs = ModelParameters.MosfetType * Parameters.InitialVoltageBs;
+                    vds = ModelParameters.MosfetType * Parameters.InitialVds;
+                    vgs = ModelParameters.MosfetType * Parameters.InitialVgs;
+                    vbs = ModelParameters.MosfetType * Parameters.InitialVbs;
 
                     // TODO: At some point, check what this is supposed to do
                     if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))
                     {
                         vbs = -1;
-                        vgs = ModelParameters.MosfetType * TempVt0;
+                        vgs = ModelParameters.MosfetType * Properties.TempVt0;
                         vds = 0;
                     }
                 }
@@ -458,120 +320,201 @@ namespace SpiceSharp.Components.Mosfets.Level2
             }
         }
 
-        /// <summary>
-        /// Evaluate drain-source current quantities.
-        /// </summary>
-        protected double Evaluate(double vgs, double vds, double vbs)
+        /// <include file='../common/docs.xml' path='docs/methods/UpdateTime/*'/>
+        protected virtual void UpdateTime(double vgs, double vds, double vbs, ref Contributions<double> c)
         {
-            double von;
-            double vdsat, cdrain = 0.0;
+            // No time-dependent stuff when we're just biasing, so let's save some time
+            // by not calculating these quantities.
+        }
 
-            var Vt = Constants.KOverQ * Parameters.Temperature;
-            var effectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion;
-            var beta = TempTransconductance * Parameters.Width / effectiveLength;
-            var oxideCap = ModelParameters.OxideCapFactor * effectiveLength * Parameters.Width;
+        // note: Probably one of the worst spaghetti code examples I've seen. Not touching that...
+        // Some things needed change though: some labels were not visible to some goto statements, so a small amount
+        // of refactoring was necessary.
+        private void Evaluate(double vgs, double vds, double vbs, ref Contributions<double> con)
+        {
+            var beta = Properties.TempTransconductance * Parameters.Width * Parameters.ParallelMultiplier / Properties.EffectiveLength;
 
-            /*
-            * this routine evaluates the drain current, its derivatives and
-            * the charges associated with the gate, channel and bulk
-            * for mosfets
-            *
-            */
-
+            // note:  cgdb, cgsb, cbdb, cbsb never used
+            // This routine evaluates the drain current and its derivatives
             double arg;
             double sarg;
-            double[] a4 = new double[4], b4 = new double[4], x4 = new double[8], poly4 = new double[8];
-            double dsrgdb, d2Sdb2;
-            var sphi = 0.0; /* square root of phi */
-            var sphi3 = 0.0; /* square root of phi cubed */
-            double barg,
-                d2Bdb2,
-                dbrgdb,
-                argd = 0.0,
-                args = 0.0;
-            double argxs = 0.0, argxd = 0.0;
-            double dgddb2, dgddvb, dgdvds, gamasd;
-            double xn = 0.0,
-                argg = 0.0,
-                vgst,
-                dodvds = 0.0,
-                dxndvd = 0.0,
-                dxndvb = 0.0,
-                dudvgs,
-                dudvds,
-                dudvbs;
-            double argv,
-                ufact,
-                ueff,
-                dsdvgs,
-                dsdvbs;
-            double xvalid = 0.0, bsarg = 0.0;
-            double bodys = 0.0, gdbdvs = 0.0;
-            double dldvgs = 0.0, dldvds = 0.0, dldvbs = 0.0;
+            double[] a4 = new double[4],
+                b4 = new double[4],
+                x4 = new double[8],
+                poly4 = new double[8];
+            double beta1;
+            double dsrgdb;
+            double d2sdb2;
+            double barg;
+            double d2bdb2;
+            double factor;
+            double dbrgdb;
+            double eta;
+            double vbin;
+            double argd = 0.0;
+            double args = 0.0;
+            double argss;
+            double argsd;
+            double argxs = 0.0;
+            double argxd = 0.0;
+            double daddb2;
+            double dasdb2;
+            double dbargd;
+            double dbargs;
+            double dbxwd;
+            double dbxws;
+            double dgddb2;
+            double dgddvb;
+            double dgdvds;
+            double gamasd;
+            double xwd;
+            double xws;
+            double ddxwd;
+            double gammad;
+            double vth;
+            double cfs;
+            double cdonco;
+            double xn = 0.0;
+            double argg = 0.0;
+            double vgst;
+            double sarg3;
+            double sbiarg;
+            double dgdvbs;
+            double body;
+            double gdbdv;
+            double dodvbs;
+            double dodvds = 0.0;
+            double dxndvd = 0.0;
+            double dxndvb = 0.0;
+            double udenom;
+            double dudvgs;
+            double dudvds;
+            double dudvbs;
+            double gammd2;
+            double argv;
+            double vgsx;
+            double ufact;
+            double ueff;
+            double dsdvgs;
+            double dsdvbs;
+            double a1;
+            double a3;
+            double a;
+            double b1;
+            double b3;
+            double b;
+            double c1;
+            double c;
+            double d1;
+            double fi;
+            double p0;
+            double p2;
+            double p3;
+            double p4;
+            double p;
+            double r3;
+            double r;
+            double ro;
+            double s2;
+            double s;
+            double v1;
+            double v2;
+            double xv;
+            double y3;
+            double delta4;
+            double xvalid = 0;
+            double bsarg = 0;
+            double bodys = 0;
+            double gdbdvs = 0;
+            double sargv;
+            double xlfact;
+            double dldsat;
+            double xdv;
+            double xlv;
+            double vqchan;
+            double dqdsat;
+            double vl;
+            double dfundg;
+            double dfunds;
+            double dfundb;
+            double xls;
+            double dldvgs;
+            double dldvds;
+            double dldvbs;
+            double dfact;
+            double clfact;
+            double xleff;
+            double deltal;
+            double xwb;
+            double vdson;
+            double cdson;
+            double didvds;
+            double gdson;
+            double gmw;
+            double gbson;
+            double expg;
+            double xld;
             double xlamda = ModelParameters.Lambda;
-            /* 'local' variables - these switch d & s around appropriately
-               * so that we don't have to worry about vds < 0
-               */
-            var lvbs = vbs;
-            var lvds = vds;
-            var lvgs = vgs;
-            var phiMinVbs = TempPhi - lvbs;
-            double tmp; /* a temporary variable, not used for more than */
-            /* about 10 lines at a time */
+            // 'local' variables - these switch d & s around appropriately so that we don't have to worry about vds < 0
+            double lvbs = Mode == 1 ? vbs : vbs - vds;
+            double lvds = Mode * vds;
+            double lvgs = Mode == 1 ? vgs : vgs - vds;
+            double phiMinVbs = Properties.TempPhi - lvbs;
+            double tmp; // a temporary variable, not used for more than about 10 lines at a time
+            int iknt;
+            int jknt;
+            int i;
+            int j;
 
             // Compute some useful quantities
             if (lvbs <= 0.0)
             {
                 sarg = Math.Sqrt(phiMinVbs);
                 dsrgdb = -0.5 / sarg;
-                d2Sdb2 = 0.5 * dsrgdb / phiMinVbs;
+                d2sdb2 = 0.5 * dsrgdb / phiMinVbs;
             }
             else
             {
-                sphi = Math.Sqrt(TempPhi);
-                sphi3 = TempPhi * sphi;
-                sarg = sphi / (1.0 + 0.5 * lvbs / TempPhi);
+                var sphi = Math.Sqrt(Properties.TempPhi);
+                var sphi3 = Properties.TempPhi * sphi;
+                sarg = sphi / (1.0 + 0.5 * lvbs / Properties.TempPhi);
                 tmp = sarg / sphi3;
                 dsrgdb = -0.5 * sarg * tmp;
-                d2Sdb2 = -dsrgdb * tmp;
+                d2sdb2 = -dsrgdb * tmp;
             }
-
-            if (lvds - lvbs >= 0)
+            if ((lvbs - lvds) <= 0)
             {
                 barg = Math.Sqrt(phiMinVbs + lvds);
                 dbrgdb = -0.5 / barg;
-                d2Bdb2 = 0.5 * dbrgdb / (phiMinVbs + lvds);
+                d2bdb2 = 0.5 * dbrgdb / (phiMinVbs + lvds);
             }
             else
             {
-                barg = sphi / (1.0 + 0.5 * (lvbs - lvds) / TempPhi);
+                var sphi = Math.Sqrt(Properties.TempPhi);/* added by HT 050523 */
+                var sphi3 = Properties.TempPhi * sphi;/* added by HT 050523 */
+                barg = sphi / (1.0 + 0.5 * (lvbs - lvds) / Properties.TempPhi);
                 tmp = barg / sphi3;
                 dbrgdb = -0.5 * barg * tmp;
-                d2Bdb2 = -dbrgdb * tmp;
+                d2bdb2 = -dbrgdb * tmp;
             }
-            /*
-            * calculate threshold voltage (von)
-            * narrow - channel effect
-            */
 
+            // Calculate threshold voltage (von) narrow-channel effect
             // XXX constant per device
-            var factor = 0.125 * ModelParameters.NarrowFactor * 2.0 * Math.PI * EpsilonSilicon / oxideCap * effectiveLength;
-            /* XXX constant per device */
-            var eta = 1.0 + factor;
-            var vbin = TempVoltageBi * ModelParameters.MosfetType + factor * phiMinVbs;
-            if (ModelParameters.Gamma > 0.0 || ModelParameters.SubstrateDoping > 0.0)
+            factor = 0.125 * ModelParameters.NarrowFactor * 2.0 * Math.PI * EpsilonSilicon /
+                Properties.OxideCap * Properties.EffectiveLength;
+            // XXX constant per device
+            eta = 1.0 + factor;
+            vbin = Properties.TempVbi * ModelParameters.MosfetType + factor * phiMinVbs;
+            if (ModelParameters.Gamma > 0.0 || ModelParameters.SubstrateDoping > 0)
             {
-                var xwd = ModelTemperature.Xd * barg;
-                var xws = ModelTemperature.Xd * sarg;
+                xwd = ModelTemperature.Xd * barg;
+                xws = ModelTemperature.Xd * sarg;
 
-                /*
-                * short - channel effect with vds .ne. 0.0
-                */
-
-                var argss = 0.0;
-                var argsd = 0.0;
-                var dbargs = 0.0;
-                var dbargd = 0.0;
+                // Short-channel effect with vds .ne. 0.0
+                argss = 0.0;
+                argsd = 0.0;
+                dbargs = 0.0;
+                dbargd = 0.0;
                 dgdvds = 0.0;
                 dgddb2 = 0.0;
                 if (ModelParameters.JunctionDepth > 0)
@@ -581,35 +524,31 @@ namespace SpiceSharp.Components.Mosfets.Level2
                     argxd = 1.0 + xwd * tmp;
                     args = Math.Sqrt(argxs);
                     argd = Math.Sqrt(argxd);
-                    tmp = .5 * ModelParameters.JunctionDepth / effectiveLength;
+                    tmp = .5 * ModelParameters.JunctionDepth / Properties.EffectiveLength;
                     argss = tmp * (args - 1.0);
                     argsd = tmp * (argd - 1.0);
                 }
-
                 gamasd = ModelParameters.Gamma * (1.0 - argss - argsd);
-                var dbxwd = ModelTemperature.Xd * dbrgdb;
-                var dbxws = ModelTemperature.Xd * dsrgdb;
+                dbxwd = ModelTemperature.Xd * dbrgdb;
+                dbxws = ModelTemperature.Xd * dsrgdb;
                 if (ModelParameters.JunctionDepth > 0)
                 {
-                    tmp = 0.5 / effectiveLength;
+                    tmp = 0.5 / Properties.EffectiveLength;
                     dbargs = tmp * dbxws / args;
                     dbargd = tmp * dbxwd / argd;
-                    var dasdb2 = -ModelTemperature.Xd *
-                                 (d2Sdb2 + dsrgdb * dsrgdb * ModelTemperature.Xd / (ModelParameters.JunctionDepth * argxs)) /
-                                 (effectiveLength *
-                                  args);
-                    var daddb2 = -ModelTemperature.Xd *
-                                 (d2Bdb2 + dbrgdb * dbrgdb * ModelTemperature.Xd / (ModelParameters.JunctionDepth * argxd)) /
-                                 (effectiveLength *
-                                  argd);
+                    dasdb2 = -ModelTemperature.Xd * (d2sdb2 + dsrgdb * dsrgdb *
+                        ModelTemperature.Xd / (ModelParameters.JunctionDepth * argxs)) /
+                        (Properties.EffectiveLength * args);
+                    daddb2 = -ModelTemperature.Xd * (d2bdb2 + dbrgdb * dbrgdb *
+                        ModelTemperature.Xd / (ModelParameters.JunctionDepth * argxd)) /
+                        (Properties.EffectiveLength * argd);
                     dgddb2 = -0.5 * ModelParameters.Gamma * (dasdb2 + daddb2);
                 }
-
                 dgddvb = -ModelParameters.Gamma * (dbargs + dbargd);
                 if (ModelParameters.JunctionDepth > 0)
                 {
-                    var ddxwd = -dbxwd;
-                    dgdvds = -ModelParameters.Gamma * 0.5 * ddxwd / (effectiveLength * argd);
+                    ddxwd = -dbxwd;
+                    dgdvds = -ModelParameters.Gamma * 0.5 * ddxwd / (Properties.EffectiveLength * argd);
                 }
             }
             else
@@ -620,16 +559,18 @@ namespace SpiceSharp.Components.Mosfets.Level2
                 dgddb2 = 0.0;
             }
 
-            von = vbin + gamasd * sarg;
-            var vth = von;
-            vdsat = 0.0;
-            if (!ModelParameters.FastSurfaceStateDensity.Value.Equals(0.0) && !oxideCap.Equals(0.0))
+            var von = vbin + gamasd * sarg;
+            vth = von;
+            double vdsat = 0;
+            if (ModelParameters.FastSurfaceStateDensity != 0.0 && Properties.OxideCap != 0.0)
             {
                 // XXX constant per model
-                var cfs = Constants.Charge * ModelParameters.FastSurfaceStateDensity * 1e4;
-                var cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
-                xn = 1.0 + cfs / oxideCap * Parameters.Width * effectiveLength + cdonco;
-                tmp = Vt * xn;
+                cfs = Constants.Charge * ModelParameters.FastSurfaceStateDensity * 1e4 /* (cm**2/m**2) */;
+                cdonco = -(gamasd * dsrgdb + dgddvb * sarg) + factor;
+
+                xn = 1.0 + cfs / Properties.OxideCap * Parameters.ParallelMultiplier * Parameters.Width * Properties.EffectiveLength + cdonco;
+
+                tmp = Properties.TempVt * xn;
                 von += tmp;
                 argg = 1.0 / tmp;
                 vgst = lvgs - von;
@@ -637,67 +578,68 @@ namespace SpiceSharp.Components.Mosfets.Level2
             else
             {
                 vgst = lvgs - von;
-                if (lvgs <= von)
+                if (lvgs <= vbin)
                 {
                     // Cutoff region
-                    CondDs = 0.0;
+                    con.Ds.G = 0;
                     goto line1050;
                 }
             }
 
             // Compute some more useful quantities
-            var sarg3 = sarg * sarg * sarg;
-
+            sarg3 = sarg * sarg * sarg;
             // XXX constant per model
-            var sbiarg = Math.Sqrt(TempBulkPotential);
-            var gammad = gamasd;
-            var dgdvbs = dgddvb;
-            var body = barg * barg * barg - sarg3;
-            var gdbdv = 2.0 * gammad * (barg * barg * dbrgdb - sarg * sarg * dsrgdb);
-            var dodvbs = -factor + dgdvbs * sarg + gammad * dsrgdb;
-            if (ModelParameters.FastSurfaceStateDensity.Value.Equals(0.0))
+            sbiarg = Math.Sqrt(Properties.TempBulkPotential);
+            gammad = gamasd;
+            dgdvbs = dgddvb;
+            body = barg * barg * barg - sarg3;
+            gdbdv = 2.0 * gammad * (barg * barg * dbrgdb - sarg * sarg * dsrgdb);
+            dodvbs = -factor + dgdvbs * sarg + gammad * dsrgdb;
+            if (ModelParameters.FastSurfaceStateDensity == 0.0)
                 goto line400;
-            if (oxideCap.Equals(0.0))
+            if (Properties.OxideCap == 0.0)
                 goto line410;
-            dxndvb = 2.0 * dgdvbs * dsrgdb + gammad * d2Sdb2 + dgddb2 * sarg;
-            dodvbs += Vt * dxndvb;
+            dxndvb = 2.0 * dgdvbs * dsrgdb + gammad * d2sdb2 + dgddb2 * sarg;
+            dodvbs += Properties.TempVt * dxndvb;
             dxndvd = dgdvds * dsrgdb;
-            dodvds = dgdvds * sarg + Vt * dxndvd;
+            dodvds = dgdvds * sarg + Properties.TempVt * dxndvd;
 
-            // Evaluate effective mobility and its derivatives
-            line400:
-            if (oxideCap <= 0.0) goto line410;
-            var udenom = vgst;
-            tmp = ModelParameters.CriticalField * 100 /*cm/m*/ * EpsilonSilicon / ModelParameters.OxideCapFactor;
-            if (udenom <= tmp) goto line410;
-            ufact = Math.Exp(ModelParameters.CriticalFieldExp * Math.Log(tmp / udenom));
-            ueff = ModelParameters.SurfaceMobility * 1e-4 /* (m^2/cm^2) */ * ufact;
-            dudvgs = -ufact * ModelParameters.CriticalFieldExp / udenom;
-            dudvds = 0.0;
-            dudvbs = ModelParameters.CriticalFieldExp * ufact * dodvbs / vgst;
-            goto line500;
-            line410:
+        // Evaluate effective mobility and its derivatives
+        line400:
+            if (Properties.OxideCap > 0)
+            {
+                udenom = vgst;
+                tmp = ModelParameters.CriticalField * 100 /* cm/m */ * EpsilonSilicon /
+                    ModelParameters.OxideCapFactor;
+                if (udenom <= tmp) goto line410;
+                ufact = Math.Exp(ModelParameters.CriticalFieldExp * Math.Log(tmp / udenom));
+                ueff = ModelParameters.SurfaceMobility * 1e-4 /* (m**2/cm**2) */ * ufact;
+                dudvgs = -ufact * ModelParameters.CriticalFieldExp / udenom;
+                dudvds = 0.0;
+                dudvbs = ModelParameters.CriticalFieldExp * ufact * dodvbs / vgst;
+                goto line500;
+            }
+
+        line410:
             ufact = 1.0;
-            ueff = ModelParameters.SurfaceMobility * 1e-4; /* (m^2/cm^2) */
+            ueff = ModelParameters.SurfaceMobility * 1e-4 /* (m**2/cm**2) */;
             dudvgs = 0.0;
             dudvds = 0.0;
             dudvbs = 0.0;
-            /*
-               * Evaluate saturation voltage and its derivatives according to
-               * grove - frohman equation
-               */
-            line500:
-            var vgsx = lvgs;
+
+        /*
+         *     Evaluate saturation voltage and its derivatives according to
+         *     grove-frohman equation
+         */
+        line500:
+            vgsx = lvgs;
             gammad = gamasd / eta;
             dgdvbs = dgddvb;
-            if (!ModelParameters.FastSurfaceStateDensity.Value.Equals(0.0) && !oxideCap.Equals(0.0))
-            {
+            if (ModelParameters.FastSurfaceStateDensity != 0 && Properties.OxideCap != 0)
                 vgsx = Math.Max(lvgs, von);
-            }
-
             if (gammad > 0)
             {
-                var gammd2 = gammad * gammad;
+                gammd2 = gammad * gammad;
                 argv = (vgsx - vbin) / eta + phiMinVbs;
                 if (argv <= 0.0)
                 {
@@ -711,8 +653,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
                     vdsat = (vgsx - vbin) / eta + gammd2 * (1.0 - arg) / 2.0;
                     vdsat = Math.Max(vdsat, 0.0);
                     dsdvgs = (1.0 - 1.0 / arg) / eta;
-                    dsdvbs = (gammad * (1.0 - arg) + 2.0 * argv / (gammad * arg)) / eta * dgdvbs + 1.0 / arg +
-                             factor * dsdvgs;
+                    dsdvbs = (gammad * (1.0 - arg) + 2.0 * argv / (gammad * arg)) /
+                        eta * dgdvbs + 1.0 / arg + factor * dsdvgs;
                 }
             }
             else
@@ -722,57 +664,54 @@ namespace SpiceSharp.Components.Mosfets.Level2
                 dsdvgs = 1.0;
                 dsdvbs = 0.0;
             }
-
             if (ModelParameters.MaxDriftVelocity > 0)
             {
-                /*
-                   * evaluate saturation voltage and its derivatives
-                   * according to baum's theory of scattering velocity
-                   * saturation
-                   */
-                var v1 = (vgsx - vbin) / eta + phiMinVbs;
-                var v2 = phiMinVbs;
-                var xv = ModelParameters.MaxDriftVelocity * effectiveLength / ueff;
-                var a1 = gammad / 0.75;
-                var b1 = -2.0 * (v1 + xv);
-                var c1 = -2.0 * gammad * xv;
-                var d1 = 2.0 * v1 * (v2 + xv) - v2 * v2 - 4.0 / 3.0 * gammad * sarg3;
-                var a = -b1;
-                var b = a1 * c1 - 4.0 * d1;
-                var c = -d1 * (a1 * a1 - 4.0 * b1) - c1 * c1;
-                var r = -a * a / 3.0 + b;
-                var s = 2.0 * a * a * a / 27.0 - a * b / 3.0 + c;
-                var r3 = r * r * r;
-                var s2 = s * s;
-                var p = s2 / 4.0 + r3 / 27.0;
-                var p0 = Math.Abs(p);
-                var p2 = Math.Sqrt(p0);
-                double y3;
+                /* 
+                 *     Evaluate saturation voltage and its derivatives 
+                 *     according to baum's theory of scattering velocity 
+                 *     saturation
+                 */
+                v1 = (vgsx - vbin) / eta + phiMinVbs;
+                v2 = phiMinVbs;
+                xv = ModelParameters.MaxDriftVelocity * Properties.EffectiveLength / ueff;
+                a1 = gammad / 0.75;
+                b1 = -2.0 * (v1 + xv);
+                c1 = -2.0 * gammad * xv;
+                d1 = 2.0 * v1 * (v2 + xv) - v2 * v2 - 4.0 / 3.0 * gammad * sarg3;
+                a = -b1;
+                b = a1 * c1 - 4.0 * d1;
+                c = -d1 * (a1 * a1 - 4.0 * b1) - c1 * c1;
+                r = -a * a / 3.0 + b;
+                s = 2.0 * a * a * a / 27.0 - a * b / 3.0 + c;
+                r3 = r * r * r;
+                s2 = s * s;
+                p = s2 / 4.0 + r3 / 27.0;
+                p0 = Math.Abs(p);
+                p2 = Math.Sqrt(p0);
                 if (p < 0)
                 {
-                    var ro = Math.Sqrt(s2 / 4.0 + p0);
+                    ro = Math.Sqrt(s2 / 4.0 + p0);
                     ro = Math.Log(ro) / 3.0;
                     ro = Math.Exp(ro);
-                    var fi = Math.Atan(-2.0 * p2 / s);
+                    fi = Math.Atan(-2.0 * p2 / s);
                     y3 = 2.0 * ro * Math.Cos(fi / 3.0) - a / 3.0;
                 }
                 else
                 {
-                    var p3 = -s / 2.0 + p2;
+                    p3 = (-s / 2.0 + p2);
                     p3 = Math.Exp(Math.Log(Math.Abs(p3)) / 3.0);
-                    var p4 = -s / 2.0 - p2;
+                    p4 = (-s / 2.0 - p2);
                     p4 = Math.Exp(Math.Log(Math.Abs(p4)) / 3.0);
                     y3 = p3 + p4 - a / 3.0;
                 }
-
-                var iknt = 0;
-                var a3 = Math.Sqrt(a1 * a1 / 4.0 - b1 + y3);
-                var b3 = Math.Sqrt(y3 * y3 / 4.0 - d1);
-                for (var i = 1; i <= 4; i++)
+                iknt = 0;
+                a3 = Math.Sqrt(a1 * a1 / 4.0 - b1 + y3);
+                b3 = Math.Sqrt(y3 * y3 / 4.0 - d1);
+                for (i = 1; i <= 4; i++)
                 {
                     a4[i - 1] = a1 / 2.0 + _sig1[i - 1] * a3;
                     b4[i - 1] = y3 / 2.0 + _sig2[i - 1] * b3;
-                    var delta4 = a4[i - 1] * a4[i - 1] / 4.0 - b4[i - 1];
+                    delta4 = a4[i - 1] * a4[i - 1] / 4.0 - b4[i - 1];
                     if (delta4 < 0)
                         continue;
                     iknt += 1;
@@ -781,150 +720,166 @@ namespace SpiceSharp.Components.Mosfets.Level2
                     iknt += 1;
                     x4[iknt - 1] = -a4[i - 1] / 2.0 - tmp;
                 }
-
-                var jknt = 0;
-                for (var j = 1; j <= iknt; j++)
+                jknt = 0;
+                for (j = 1; j <= iknt; j++)
                 {
-                    if (x4[j - 1] <= 0) continue;
+                    if (x4[j - 1] <= 0)
+                        continue;
+
                     // XXX implement this sanely
-                    poly4[j - 1] = x4[j - 1] * x4[j - 1] * x4[j - 1] * x4[j - 1] +
-                                   a1 * x4[j - 1] * x4[j - 1] * x4[j - 1];
+                    poly4[j - 1] = x4[j - 1] * x4[j - 1] * x4[j - 1] * x4[j - 1] + a1 * x4[j - 1] *
+                        x4[j - 1] * x4[j - 1];
                     poly4[j - 1] = poly4[j - 1] + b1 * x4[j - 1] * x4[j - 1] + c1 * x4[j - 1] + d1;
                     if (Math.Abs(poly4[j - 1]) > 1.0e-6)
                         continue;
                     jknt += 1;
                     if (jknt <= 1)
-                    {
                         xvalid = x4[j - 1];
-                    }
-
                     if (x4[j - 1] > xvalid)
                         continue;
                     xvalid = x4[j - 1];
                 }
-
                 if (jknt > 0)
-                {
                     vdsat = xvalid * xvalid - phiMinVbs;
-                }
             }
 
             // Evaluate effective channel length and its derivatives
-            if (!lvds.Equals(0.0))
+            if (lvds != 0.0)
             {
                 gammad = gamasd;
                 double dbsrdb;
-                if (lvbs - vdsat <= 0)
+                if ((lvbs - vdsat) <= 0)
                 {
                     bsarg = Math.Sqrt(vdsat + phiMinVbs);
                     dbsrdb = -0.5 / bsarg;
                 }
                 else
                 {
-                    bsarg = sphi / (1.0 + 0.5 * (lvbs - vdsat) / TempPhi);
+                    var sphi = Math.Sqrt(Properties.TempPhi); /* added by HT 050523 */
+                    var sphi3 = Properties.TempPhi * sphi; /* added by HT 050523 */
+                    bsarg = sphi / (1.0 + 0.5 * (lvbs - vdsat) / Properties.TempPhi);
                     dbsrdb = -0.5 * bsarg * bsarg / sphi3;
                 }
-
                 bodys = bsarg * bsarg * bsarg - sarg3;
                 gdbdvs = 2.0 * gammad * (bsarg * bsarg * dbsrdb - sarg * sarg * dsrgdb);
-                double xlfact;
-                double dldsat;
+
                 if (ModelParameters.MaxDriftVelocity <= 0)
                 {
-                    if (ModelParameters.SubstrateDoping.Value.Equals(0.0))
-                        goto line610;
-                    if (xlamda > 0.0)
-                        goto line610;
-                    argv = (lvds - vdsat) / 4.0;
-                    var sargv = Math.Sqrt(1.0 + argv * argv);
-                    arg = Math.Sqrt(argv + sargv);
-                    xlfact = ModelTemperature.Xd / (effectiveLength * lvds);
-                    xlamda = xlfact * arg;
-                    dldsat = lvds * xlamda / (8.0 * sargv);
+                    if (!(ModelParameters.SubstrateDoping == 0.0 || xlamda > 0.0))
+                    {
+                        argv = (lvds - vdsat) / 4.0;
+                        sargv = Math.Sqrt(1.0 + argv * argv);
+                        arg = Math.Sqrt(argv + sargv);
+                        xlfact = ModelTemperature.Xd / (Properties.EffectiveLength * lvds);
+                        xlamda = xlfact * arg;
+                        dldsat = lvds * xlamda / (8.0 * sargv);
+                        dldvgs = dldsat * dsdvgs;
+                        dldvds = -xlamda + dldsat;
+                        dldvbs = dldsat * dsdvbs;
+                    }
+                    else
+                    {
+                        dldvgs = 0.0;
+                        dldvds = 0.0;
+                        dldvbs = 0.0;
+                    }
                 }
                 else
                 {
                     argv = (vgsx - vbin) / eta - vdsat;
-                    var xdv = ModelTemperature.Xd / Math.Sqrt(ModelParameters.ChannelCharge);
-                    var xlv = ModelParameters.MaxDriftVelocity * xdv / (2.0 * ueff);
-                    var vqchan = argv - gammad * bsarg;
-                    var dqdsat = -1.0 + gammad * dbsrdb;
-                    var vl = ModelParameters.MaxDriftVelocity * effectiveLength;
-                    var dfunds = vl * dqdsat - ueff * vqchan;
-                    var dfundg = (vl - ueff * vdsat) / eta;
-                    var dfundb = -vl * (1.0 + dqdsat - factor / eta) + ueff * (gdbdvs - dgdvbs * bodys / 1.5) / eta;
+                    xdv = ModelTemperature.Xd / Math.Sqrt(ModelParameters.ChannelCharge);
+                    xlv = ModelParameters.MaxDriftVelocity * xdv / (2.0 * ueff);
+                    vqchan = argv - gammad * bsarg;
+                    dqdsat = -1.0 + gammad * dbsrdb;
+                    vl = ModelParameters.MaxDriftVelocity * Properties.EffectiveLength;
+                    dfunds = vl * dqdsat - ueff * vqchan;
+                    dfundg = (vl - ueff * vdsat) / eta;
+                    dfundb = -vl * (1.0 + dqdsat - factor / eta) + ueff *
+                        (gdbdvs - dgdvbs * bodys / 1.5) / eta;
                     dsdvgs = -dfundg / dfunds;
                     dsdvbs = -dfundb / dfunds;
-                    if (ModelParameters.SubstrateDoping.Value.Equals(0.0))
-                        goto line610;
-                    if (xlamda > 0.0)
-                        goto line610;
-                    argv = lvds - vdsat;
-                    argv = Math.Max(argv, 0.0);
-                    var xls = Math.Sqrt(xlv * xlv + argv);
-                    dldsat = xdv / (2.0 * xls);
-                    xlfact = xdv / (effectiveLength * lvds);
-                    xlamda = xlfact * (xls - xlv);
-                    dldsat /= effectiveLength;
+                    if (!(ModelParameters.SubstrateDoping == 0.0 || xlamda > 0.0))
+                    {
+                        argv = lvds - vdsat;
+                        argv = Math.Max(argv, 0.0);
+                        xls = Math.Sqrt(xlv * xlv + argv);
+                        dldsat = xdv / (2.0 * xls);
+                        xlfact = xdv / (Properties.EffectiveLength * lvds);
+                        xlamda = xlfact * (xls - xlv);
+                        dldsat /= Properties.EffectiveLength;
+                        dldvgs = dldsat * dsdvgs;
+                        dldvds = -xlamda + dldsat;
+                        dldvbs = dldsat * dsdvbs;
+                    }
+                    else
+                    {
+                        dldvgs = 0.0;
+                        dldvds = 0.0;
+                        dldvbs = 0.0;
+                    }
                 }
-
-                dldvgs = dldsat * dsdvgs;
-                dldvds = -xlamda + dldsat;
-                dldvbs = dldsat * dsdvbs;
             }
-
-            // Edited to work
-            goto line610_finish;
-            line610:
-            dldvgs = 0.0;
-            dldvds = 0.0;
-            dldvbs = 0.0;
-            line610_finish:
-
-            // Limit channel shortening at punch - through
-            var xwb = ModelTemperature.Xd * sbiarg;
-            var xld = effectiveLength - xwb;
-            var clfact = 1.0 - xlamda * lvds;
+            else
+            {
+                dldvgs = 0.0;
+                dldvds = 0.0;
+                dldvbs = 0.0;
+            }
+            // Limit channel shortening at punch-through
+            xwb = ModelTemperature.Xd * sbiarg;
+            xld = Properties.EffectiveLength - xwb;
+            clfact = 1.0 - xlamda * lvds;
             dldvds = -xlamda - dldvds;
-            var xleff = effectiveLength * clfact;
-            var deltal = xlamda * lvds * effectiveLength;
-            if (ModelParameters.SubstrateDoping.Value.Equals(0.0))
+            xleff = Properties.EffectiveLength * clfact;
+            deltal = xlamda * lvds * Properties.EffectiveLength;
+            if (ModelParameters.SubstrateDoping == 0.0)
                 xwb = 0.25e-6;
             if (xleff < xwb)
             {
                 xleff = xwb / (1.0 + (deltal - xld) / xwb);
-                clfact = xleff / effectiveLength;
-                var dfact = xleff * xleff / (xwb * xwb);
+                clfact = xleff / Properties.EffectiveLength;
+                dfact = xleff * xleff / (xwb * xwb);
                 dldvgs = dfact * dldvgs;
                 dldvds = dfact * dldvds;
                 dldvbs = dfact * dldvbs;
             }
 
-            /*
-               * evaluate effective beta (effective kp)
-               */
-            var beta1 = beta * ufact / clfact;
-            /*
-               * test for mode of operation and branch appropriately
-               */
+            // Evaluate effective beta (effective kp)
+            beta1 = beta * ufact / clfact;
+
+            // Test for mode of operation and branch appropriately
             gammad = gamasd;
             dgdvbs = dgddvb;
             if (lvds <= 1.0e-10)
             {
                 if (lvgs <= von)
                 {
-                    if (ModelParameters.FastSurfaceStateDensity.Value.Equals(0.0) || oxideCap.Equals(0.0))
+                    if ((ModelParameters.FastSurfaceStateDensity == 0.0) ||
+                            (Properties.OxideCap == 0.0))
                     {
-                        CondDs = 0.0;
+                        con.Ds.G = 0.0;
                         goto line1050;
                     }
 
-                    CondDs = beta1 * (von - vbin - gammad * sarg) * Math.Exp(argg * (lvgs - von));
+                    con.Ds.G = beta1 * (von - vbin - gammad * sarg) * Math.Exp(argg * (lvgs - von));
                     goto line1050;
                 }
 
-                CondDs = beta1 * (lvgs - vbin - gammad * sarg);
+
+                con.Ds.G = beta1 * (lvgs - vbin - gammad * sarg);
                 goto line1050;
+            }
+
+            if (ModelParameters.FastSurfaceStateDensity != 0 && Properties.OxideCap != 0)
+            {
+                if (lvgs > von)
+                    goto line900;
+            }
+            else
+            {
+                if (lvgs > vbin)
+                    goto line900;
+                goto doneval;
             }
 
             if (lvgs > von)
@@ -933,123 +888,119 @@ namespace SpiceSharp.Components.Mosfets.Level2
             // Subthreshold region
             if (vdsat <= 0)
             {
-                CondDs = 0.0;
+                con.Ds.G = 0.0;
                 if (lvgs > vth)
                     goto doneval;
                 goto line1050;
             }
-
-            var vdson = Math.Min(vdsat, lvds);
+            vdson = Math.Min(vdsat, lvds);
             if (lvds > vdsat)
             {
                 barg = bsarg;
                 body = bodys;
                 gdbdv = gdbdvs;
             }
-
-            var cdson = beta1 * ((von - vbin - eta * vdson * 0.5) * vdson - gammad * body / 1.5);
-            var didvds = beta1 * (von - vbin - eta * vdson - gammad * barg);
-            var gdson = -cdson * dldvds / clfact - beta1 * dgdvds * body / 1.5;
+            cdson = beta1 * ((von - vbin - eta * vdson * 0.5) * vdson - gammad * body / 1.5);
+            didvds = beta1 * (von - vbin - eta * vdson - gammad * barg);
+            gdson = -cdson * dldvds / clfact - beta1 * dgdvds * body / 1.5;
             if (lvds < vdsat)
                 gdson += didvds;
-            var gbson = -cdson * dldvbs / clfact +
-                        beta1 * (dodvbs * vdson + factor * vdson - dgdvbs * body / 1.5 - gdbdv);
+            gbson = -cdson * dldvbs / clfact + beta1 * (dodvbs * vdson + factor * vdson - dgdvbs * body / 1.5 - gdbdv);
             if (lvds > vdsat)
                 gbson += didvds * dsdvbs;
-            var expg = Math.Exp(argg * (lvgs - von));
-            cdrain = cdson * expg;
-            var gmw = cdrain * argg;
-            Transconductance = gmw;
+            expg = Math.Exp(argg * (lvgs - von));
+            con.Ds.C = cdson * expg;
+            gmw = con.Ds.C * argg;
+            Gm = gmw;
             if (lvds > vdsat)
-                Transconductance = gmw + didvds * dsdvgs * expg;
+                Gm = gmw + didvds * dsdvgs * expg;
             tmp = gmw * (lvgs - von) / xn;
-            CondDs = gdson * expg - Transconductance * dodvds - tmp * dxndvd;
-            TransconductanceBs = gbson * expg - Transconductance * dodvbs - tmp * dxndvb;
+            con.Ds.G = gdson * expg - Gm * dodvds - tmp * dxndvd;
+            Gmbs = gbson * expg - Gm * dodvbs - tmp * dxndvb;
             goto doneval;
 
-            line900:
+        line900:
             if (lvds <= vdsat)
             {
                 // Linear region
-                cdrain = beta1 * ((lvgs - vbin - eta * lvds / 2.0) * lvds - gammad * body / 1.5);
-                arg = cdrain * (dudvgs / ufact - dldvgs / clfact);
-                Transconductance = arg + beta1 * lvds;
-                arg = cdrain * (dudvds / ufact - dldvds / clfact);
-                CondDs = arg + beta1 * (lvgs - vbin - eta * lvds - gammad * barg - dgdvds * body / 1.5);
-                arg = cdrain * (dudvbs / ufact - dldvbs / clfact);
-                TransconductanceBs = arg - beta1 * (gdbdv + dgdvbs * body / 1.5 - factor * lvds);
+                con.Ds.C = beta1 * ((lvgs - vbin - eta * lvds / 2.0) * lvds - gammad * body / 1.5);
+                arg = con.Ds.C * (dudvgs / ufact - dldvgs / clfact);
+                Gm = arg + beta1 * lvds;
+                arg = con.Ds.C * (dudvds / ufact - dldvds / clfact);
+                con.Ds.G = arg + beta1 * (lvgs - vbin - eta * lvds - gammad * barg - dgdvds * body / 1.5);
+                arg = con.Ds.C * (dudvbs / ufact - dldvbs / clfact);
+                Gmbs = arg - beta1 * (gdbdv + dgdvbs * body / 1.5 - factor * lvds);
             }
             else
             {
                 // Saturation region
-                cdrain = beta1 * ((lvgs - vbin - eta * vdsat / 2.0) * vdsat - gammad * bodys / 1.5);
-                arg = cdrain * (dudvgs / ufact - dldvgs / clfact);
-                Transconductance = arg + beta1 * vdsat + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvgs;
-                CondDs = -cdrain * dldvds / clfact - beta1 * dgdvds * bodys / 1.5;
-                arg = cdrain * (dudvbs / ufact - dldvbs / clfact);
-                TransconductanceBs = arg - beta1 * (gdbdvs + dgdvbs * bodys / 1.5 - factor * vdsat) + beta1 *
-                                     (lvgs - vbin - eta * vdsat - gammad *
-                                      bsarg) * dsdvbs;
+                con.Ds.C = beta1 * ((lvgs - vbin - eta * vdsat / 2.0) * vdsat - gammad * bodys / 1.5);
+                arg = con.Ds.C * (dudvgs / ufact - dldvgs / clfact);
+                Gm = arg + beta1 * vdsat + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvgs;
+                con.Ds.G = -con.Ds.C * dldvds / clfact - beta1 * dgdvds * bodys / 1.5;
+                arg = con.Ds.C * (dudvbs / ufact - dldvbs / clfact);
+                Gmbs = arg - beta1 * (gdbdvs + dgdvbs * bodys / 1.5 - factor * vdsat) + beta1 * (lvgs - vbin - eta * vdsat - gammad * bsarg) * dsdvbs;
             }
 
             // Compute charges for "on" region
             goto doneval;
 
-            // Finish special cases
-            line1050:
-            cdrain = 0.0;
-            Transconductance = 0.0;
-            TransconductanceBs = 0.0;
-            // Finished
+        // Finish special cases
+        line1050:
+            con.Ds.C = 0.0;
+            Gm = 0.0;
+            Gmbs = 0.0;
 
-            doneval:
+        doneval:
             Von = ModelParameters.MosfetType * von;
-            SaturationVoltageDs = ModelParameters.MosfetType * vdsat;
-            return cdrain;
+            Vdsat = ModelParameters.MosfetType * vdsat;
+            Id = Mode * con.Ds.C - con.Bd.C;
         }
 
+        /// <inheritdoc/>
         bool IConvergenceBehavior.IsConvergent()
         {
             double cdhat;
 
-            var vbs = ModelParameters.MosfetType * (BiasingState.Solution[_bulkNode] - BiasingState.Solution[_sourceNodePrime]);
-            var vgs = ModelParameters.MosfetType * (BiasingState.Solution[_gateNode] - BiasingState.Solution[_sourceNodePrime]);
-            var vds = ModelParameters.MosfetType * (BiasingState.Solution[_drainNodePrime] - BiasingState.Solution[_sourceNodePrime]);
+            var s = _variables.SourcePrime.Value;
+            var vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - s);
+            var vgs = ModelParameters.MosfetType * (_variables.Gate.Value - s);
+            var vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - s);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
-            var vgdo = VoltageGs - VoltageDs;
-            var delvbs = vbs - VoltageBs;
-            var delvbd = vbd - VoltageBd;
-            var delvgs = vgs - VoltageGs;
-            var delvds = vds - VoltageDs;
+            var vgdo = Vgs - Vds;
+            var delvbs = vbs - Vbs;
+            var delvbd = vbd - Vbd;
+            var delvgs = vgs - Vgs;
+            var delvds = vds - Vds;
             var delvgd = vgd - vgdo;
 
             // these are needed for convergence testing
             // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
             if (Mode >= 0)
             {
-                cdhat = DrainCurrent - CondBd * delvbd + TransconductanceBs * delvbs +
-                    Transconductance * delvgs + CondDs * delvds;
+                cdhat = Id - Gbd * delvbd + Gmbs * delvbs +
+                    Gm * delvgs + Gds * delvds;
             }
             else
             {
-                cdhat = DrainCurrent - (CondBd - TransconductanceBs) * delvbd -
-                    Transconductance * delvgd + CondDs * delvds;
+                cdhat = Id - (Gbd - Gmbs) * delvbd -
+                    Gm * delvgd + Gds * delvds;
             }
-            var cbhat = BsCurrent + BdCurrent + CondBd * delvbd + CondBs * delvbs;
+            var cbhat = Ibs + Ibd + Gbd * delvbd + Gbs * delvbs;
 
             /*
              *  check convergence
              */
-            var tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(DrainCurrent)) + BaseConfiguration.AbsoluteTolerance;
-            if (Math.Abs(cdhat - DrainCurrent) >= tol)
+            var tol = _config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Id)) + _config.AbsoluteTolerance;
+            if (Math.Abs(cdhat - Id) >= tol)
             {
                 _iteration.IsConvergent = false;
                 return false;
             }
 
-            tol = BaseConfiguration.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(BsCurrent + BdCurrent)) + BaseConfiguration.AbsoluteTolerance;
-            if (Math.Abs(cbhat - (BsCurrent + BdCurrent)) > tol)
+            tol = _config.RelativeTolerance * Math.Max(Math.Abs(cbhat), Math.Abs(Ibs + Ibd)) + _config.AbsoluteTolerance;
+            if (Math.Abs(cbhat - (Ibs + Ibd)) > tol)
             {
                 _iteration.IsConvergent = false;
                 return false;

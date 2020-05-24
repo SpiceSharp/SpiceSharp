@@ -20,17 +20,17 @@ namespace SpiceSharp.Components.Mosfets.Level1
         public Parameters Parameters { get; }
 
         /// <summary>
-        /// Gets the common temperature-dependent properties.
+        /// The common temperature-dependent properties.
         /// </summary>
         protected readonly TemperatureProperties Properties = new TemperatureProperties();
 
         /// <summary>
-        /// Gets the model parameters.
+        /// The model parameters.
         /// </summary>
         protected readonly ModelParameters ModelParameters;
 
         /// <summary>
-        /// Gets the model temperature behavior.
+        /// The model temperature behavior.
         /// </summary>
         protected readonly ModelTemperature ModelTemperature;
 

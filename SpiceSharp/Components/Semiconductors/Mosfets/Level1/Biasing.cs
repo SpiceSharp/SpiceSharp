@@ -123,7 +123,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             Initialize(out double vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
-            var beta = Properties.TempTransconductance * Parameters.ParallelMultplier *
+            var beta = Properties.TempTransconductance * Parameters.ParallelMultiplier *
                     Parameters.Width / Properties.EffectiveLength;
 
             /*
@@ -253,7 +253,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             // Calculate right hand side vector contributions
             double xnrm, xrev;
             Ibs = con.Bs.C;
-            Ibd = -con.Bd.C;
+            Ibd = con.Bd.C;
             con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
             con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
             if (Mode >= 0)
@@ -302,13 +302,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 );
         }
 
-        /// <summary>
-        /// Updates the contributions for transient simulations.
-        /// </summary>
-        /// <param name="vgs">The current gate-source voltage.</param>
-        /// <param name="vds">The current drain-source voltage.</param>
-        /// <param name="vbs">The current bulk-source voltage.</param>
-        /// <param name="c">The contributions.</param>
+        /// <include file='../common/docs.xml' path='docs/methods/UpdateTime/*'/>
         protected virtual void UpdateTime(double vgs, double vds, double vbs, ref Contributions<double> c)
         {
             // No time-dependent stuff when we're just biasing, so let's save some time
@@ -378,9 +372,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
 				 */
                 if (_iteration.Mode == IterationModes.Junction && !Parameters.Off)
                 {
-                    vds = ModelParameters.MosfetType * Parameters.InitialVoltageDs;
-                    vgs = ModelParameters.MosfetType * Parameters.InitialVoltageGs;
-                    vbs = ModelParameters.MosfetType * Parameters.InitialVoltageBs;
+                    vds = ModelParameters.MosfetType * Parameters.InitialVds;
+                    vgs = ModelParameters.MosfetType * Parameters.InitialVgs;
+                    vbs = ModelParameters.MosfetType * Parameters.InitialVbs;
 
                     // TODO: At some point, check what this is supposed to do
                     if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))
