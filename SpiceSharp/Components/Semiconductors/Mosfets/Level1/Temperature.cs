@@ -74,12 +74,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         }
 
         /// <inheritdoc/>
-        void ITemperatureBehavior.Temperature() => CalculateTemperature();
-
-        /// <summary>
-        /// Do temperature-dependent calculations.
-        /// </summary>
-        protected virtual void CalculateTemperature()
+        void ITemperatureBehavior.Temperature()
         {
             // Update the width and length if they are not given and if the model specifies them
             if (!Parameters.Width.Given && ModelParameters.Width.Given)

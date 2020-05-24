@@ -74,6 +74,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             Parameters = context.GetParameterSet<Parameters>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             // Update the width and length if they are not given and if the model specifies them
