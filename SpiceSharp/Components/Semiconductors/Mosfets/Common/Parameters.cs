@@ -53,6 +53,15 @@ namespace SpiceSharp.Components.Mosfets
         }
 
         /// <summary>
+        /// Gets or sets the instance temperature difference.
+        /// </summary>
+        /// <value>
+        /// The temperature difference.
+        /// </value>
+        [ParameterName("dtemp"), ParameterInfo("The instance temperature difference", Units = "\u00b0C")]
+        public double DeltaTemperature { get; set; }
+
+        /// <summary>
         /// Gets or sets the mosfet width.
         /// </summary>
         /// <value>

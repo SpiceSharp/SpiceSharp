@@ -49,44 +49,60 @@ namespace SpiceSharp.Components.Mosfets.Level1
             if (!Parameters.NominalTemperature.Given)
                 Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
 
-            // Update common properties
-            Properties.Update(Parameters);
+            Properties.Factor1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
+            Properties.Vtnom = Parameters.NominalTemperature * Constants.KOverQ;
+            Properties.Kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
+            Properties.EgFet1 = 1.16 - (7.02e-4 * Parameters.NominalTemperature * Parameters.NominalTemperature) / (Parameters.NominalTemperature + 1108);
+            var arg1 = -Properties.EgFet1 / (Properties.Kt1 + Properties.Kt1) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
+            Properties.PbFactor1 = -2 * Properties.Vtnom * (1.5 * Math.Log(Properties.Factor1) + Constants.Charge * arg1);
 
-            // Some temperature-dependent parameter changes
-            if (Parameters.OxideThickness.Given)
+            // Now model parameter preprocessing
+            if (Parameters.Phi <= 0.0)
+                throw new SpiceSharpException("{0}: Phi is not positive.".FormatString(Name));
+            if (!Parameters.OxideThickness.Given || Parameters.OxideThickness == 0)
+                Properties.OxideCapFactor = 0;
+            else
             {
+                Properties.OxideCapFactor = 3.9 * 8.854214871e-12 / Parameters.OxideThickness;
+                if (!Parameters.Transconductance.Given)
+                {
+                    if (!Parameters.SurfaceMobility.Given)
+                        Parameters.SurfaceMobility = 600;
+                    Parameters.Transconductance = Parameters.SurfaceMobility * Properties.OxideCapFactor * 1e-4 /*(m**2/cm**2)*/;
+                }
                 if (Parameters.SubstrateDoping.Given)
                 {
-                    if (!Parameters.Phi.Given)
+                    if (Parameters.SubstrateDoping * 1e6 /*(cm**3/m**3)*/ > 1.45e16)
                     {
-                        var phi = new GivenParameter<double>(2 * Properties.Vtnom * Math.Log(Parameters.SubstrateDoping * 1e6 / 1.45e16), false);
-                        Parameters.Phi = new GivenParameter<double>(Math.Max(.1, phi), false);
+                        if (!Parameters.Phi.Given)
+                        {
+                            Parameters.Phi = 2 * Properties.Vtnom * Math.Log(Parameters.SubstrateDoping * 1e6 /*(cm**3/m**3)*/ / 1.45e16);
+                            Parameters.Phi = Math.Max(0.1, Parameters.Phi);
+                        }
+                        var fermis = Parameters.MosfetType * .5 * Parameters.Phi;
+                        var wkfng = 3.2;
+                        if (!Parameters.GateType.Given)
+                            Parameters.GateType = 1;
+                        if (Parameters.GateType != 0)
+                        {
+                            var fermig = Parameters.MosfetType * Parameters.GateType * .5 * Properties.EgFet1;
+                            wkfng = 3.25 + .5 * Properties.EgFet1 - fermig;
+                        }
+                        var wkfngs = wkfng - (3.25 + .5 * Properties.EgFet1 + fermis);
+                        if (!Parameters.Gamma.Given)
+                            Parameters.Gamma = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6 /*(cm**3/m**3)*/) / Properties.OxideCapFactor;
+                        if (!Parameters.Vt0.Given)
+                        {
+                            if (!Parameters.SurfaceStateDensity.Given)
+                                Parameters.SurfaceStateDensity = 0;
+                            var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 /*(cm**2/m**2)*/ * Constants.Charge / Properties.OxideCapFactor;
+                            Parameters.Vt0 = vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi);
+                        }
                     }
-
-                    var fermis = Parameters.MosfetType * .5 * Parameters.Phi;
-                    var wkfng = 3.2;
-                    if (!Parameters.GateType.Given)
-                        Parameters.GateType = new GivenParameter<double>(1, false);
-                    if (!Parameters.GateType.Value.Equals(0))
+                    else
                     {
-                        var fermig = Parameters.MosfetType * Parameters.GateType * .5 * Properties.EgFet1;
-                        wkfng = 3.25 + .5 * Properties.EgFet1 - fermig;
-                    }
-
-                    var wkfngs = wkfng - (3.25 + .5 * Properties.EgFet1 + fermis);
-                    if (!Parameters.Gamma.Given)
-                    {
-                        Parameters.Gamma = new GivenParameter<double>(
-                            Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6) /
-                            Parameters.OxideCapFactor, false);
-                    }
-
-                    if (!Parameters.Vt0.Given)
-                    {
-                        if (!Parameters.SurfaceStateDensity.Given)
-                            Parameters.SurfaceStateDensity = new GivenParameter<double>(0, false);
-                        var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 * Constants.Charge / Parameters.OxideCapFactor;
-                        Parameters.Vt0 = new GivenParameter<double>(vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi), false);
+                        Parameters.SubstrateDoping = 0;
+                        throw new SpiceSharpException("{0}: Nsub < Ni.".FormatString(Name));
                     }
                 }
             }

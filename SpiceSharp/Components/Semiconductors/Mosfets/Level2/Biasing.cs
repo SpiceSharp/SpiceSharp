@@ -609,9 +609,9 @@ namespace SpiceSharp.Components.Mosfets.Level2
             if (Properties.OxideCap > 0)
             {
                 udenom = vgst;
-                tmp = ModelParameters.CriticalField * 100 /* cm/m */ * EpsilonSilicon /
-                    ModelParameters.OxideCapFactor;
-                if (udenom <= tmp) goto line410;
+                tmp = ModelParameters.CriticalField * 100 /* cm/m */ * EpsilonSilicon / ModelTemperature.Properties.OxideCapFactor;
+                if (udenom <= tmp)
+                    goto line410;
                 ufact = Math.Exp(ModelParameters.CriticalFieldExp * Math.Log(tmp / udenom));
                 ueff = ModelParameters.SurfaceMobility * 1e-4 /* (m**2/cm**2) */ * ufact;
                 dudvgs = -ufact * ModelParameters.CriticalFieldExp / udenom;

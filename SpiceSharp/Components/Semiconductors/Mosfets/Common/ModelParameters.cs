@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.Mosfets
         private GivenParameter<double> _surfaceStateDensity;
         private GivenParameter<double> _substrateDoping = new GivenParameter<double>(2e10, false); // Value isn't used...
         private double _forwardCapDepletionCoefficient = 0.5;
-        private double _surfaceMobility = 600;
+        private GivenParameter<double> _surfaceMobility = new GivenParameter<double>(600, false);
         private double _lateralDiffusion;
         private GivenParameter<double> _oxideThickness = new GivenParameter<double>(1e-7, false);
         private double _junctionSatCurDensity;
@@ -465,7 +465,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility", Units = "V/cm")]
         [GreaterThan(0)]
-        public double SurfaceMobility
+        public GivenParameter<double> SurfaceMobility
         {
             get => _surfaceMobility;
             set
@@ -603,14 +603,6 @@ namespace SpiceSharp.Components.Mosfets
         }
 
         /// <summary>
-        /// Gets the oxide capacitance density.
-        /// </summary>
-        /// <value>
-        /// The oxide capacitance factor.
-        /// </value>
-        public double OxideCapFactor { get; protected set; }
-
-        /// <summary>
         /// Gets or sets the flicker-noise coefficient parameter.
         /// </summary>
         /// <value>
@@ -629,22 +621,6 @@ namespace SpiceSharp.Components.Mosfets
         public double FlickerNoiseExponent { get; set; } = 1;
 
         /// <summary>
-        /// Method for calculating the default values of derived parameters.
-        /// </summary>
-        /// <remarks>
-        /// These calculations should be run whenever a parameter has been changed.
-        /// </remarks>
-        public virtual void CalculateDefaults()
-        {
-            // Calculate the oxide capacitance
-            OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
-
-            // Calculate the default transconductance
-            if (!Transconductance.Given)
-                Transconductance = new GivenParameter<double>(SurfaceMobility * 1e-4 * OxideCapFactor, false); // m^2/cm^2
-        }
-
-        /// <summary>
         /// Creates a deep clone of the parameter set.
         /// </summary>
         /// <returns>
@@ -657,7 +633,6 @@ namespace SpiceSharp.Components.Mosfets
 
             // Copy the (private/protected) parameters
             result.MosfetType = MosfetType;
-            result.OxideCapFactor = OxideCapFactor;
 
             return result;
         }

@@ -119,43 +119,54 @@ namespace SpiceSharp.Components.Mosfets.Level1
         {
             Contributions<double> con = new Contributions<double>();
 
+            var vt = Constants.KOverQ * Parameters.Temperature;
+            double DrainSatCur, SourceSatCur;
+
+            if ((Properties.TempSatCurDensity == 0) || (Parameters.DrainArea == 0) || (Parameters.SourceArea == 0))
+            {
+                DrainSatCur = Parameters.ParallelMultiplier * Properties.TempSatCur;
+                SourceSatCur = Parameters.ParallelMultiplier * Properties.TempSatCur;
+            }
+            else
+            {
+                DrainSatCur = Properties.TempSatCurDensity * Parameters.ParallelMultiplier * Parameters.DrainArea;
+                SourceSatCur = Properties.TempSatCurDensity * Parameters.ParallelMultiplier * Parameters.SourceArea;
+            }
+            var Beta = Properties.TempTransconductance * Parameters.ParallelMultiplier * Parameters.Width / Properties.EffectiveLength;
+            
             // Get the current voltages
             Initialize(out double vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;
             var vgd = vgs - vds;
-            var beta = Properties.TempTransconductance * Parameters.ParallelMultiplier *
-                    Parameters.Width / Properties.EffectiveLength;
 
             /*
-             * bulk-source and bulk-drain diodes
+             * Bulk-source and bulk-drain diodes
              *   here we just evaluate the ideal diode current and the
              *   corresponding derivative (conductance).
              */
-            if (vbs <= -3 * Properties.TempVt)
+            if (vbs <= -3 * vt)
             {
                 con.Bs.G = _config.Gmin;
-                con.Bs.C = con.Bs.G * vbs - Properties.SourceSatCurrent;
+                con.Bs.C = con.Bs.G * vbs - SourceSatCur;
             }
             else
             {
-                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Properties.TempVt));
-                con.Bs.G = Properties.SourceSatCurrent * evbs / Properties.TempVt + _config.Gmin;
-                con.Bs.C = Properties.SourceSatCurrent * (evbs - 1) + _config.Gmin * vbs;
+                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / vt));
+                con.Bs.G = SourceSatCur * evbs / vt + _config.Gmin;
+                con.Bs.C = SourceSatCur * (evbs - 1) + _config.Gmin * vbs;
             }
-            if (vbd <= -3 * Properties.TempVt)
+            if (vbd <= -3 * vt)
             {
                 con.Bd.G = _config.Gmin;
-                con.Bd.C = con.Bd.G * vbd - Properties.DrainSatCurrent;
+                con.Bd.C = con.Bd.G * vbd - DrainSatCur;
             }
             else
             {
-                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Properties.TempVt));
-                con.Bd.G = Properties.DrainSatCurrent * evbd / Properties.TempVt + _config.Gmin;
-                con.Bd.C = Properties.DrainSatCurrent * (evbd - 1) + _config.Gmin * vbd;
+                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / vt));
+                con.Bd.G = DrainSatCur * evbd / vt + _config.Gmin;
+                con.Bd.C = DrainSatCur * (evbd - 1) + _config.Gmin * vbd;
             }
-
-            // Now to determine whether the user was able to correctly
-            // identify the source and drain of his device
+            // Now to determine whether the user was able to correctly identify the source and drain of his device
             if (vds >= 0)
                 Mode = 1;
             else
@@ -178,18 +189,18 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 double sarg;
                 double vgst;
 
-                if ((Mode == 1 ? vbs : vbd) <= 0)
+                if ((Mode > 0 ? vbs : vbd) <= 0)
                 {
-                    sarg = Math.Sqrt(Properties.TempPhi - (Mode == 1 ? vbs : vbd));
+                    sarg = Math.Sqrt(Properties.TempPhi - (Mode > 0 ? vbs : vbd));
                 }
                 else
                 {
                     sarg = Math.Sqrt(Properties.TempPhi);
-                    sarg -= (Mode == 1 ? vbs : vbd) / (sarg + sarg);
+                    sarg -= (Mode > 0 ? vbs : vbd) / (sarg + sarg);
                     sarg = Math.Max(0, sarg);
                 }
                 var von = (Properties.TempVbi * ModelParameters.MosfetType) + ModelParameters.Gamma * sarg;
-                vgst = (Mode == 1 ? vgs : vgd) - von;
+                vgst = (Mode > 0 ? vgs : vgd) - von;
                 var vdsat = Math.Max(vgst, 0);
                 if (sarg <= 0)
                     arg = 0;
@@ -206,56 +217,55 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 else
                 {
                     // Saturation region
-                    betap = beta * (1 + ModelParameters.Lambda * (vds * Mode));
+                    betap = Beta * (1 + ModelParameters.Lambda * (vds * Mode));
                     if (vgst <= (vds * Mode))
                     {
                         con.Ds.C = betap * vgst * vgst * .5;
                         Gm = betap * vgst;
-                        con.Ds.G = ModelParameters.Lambda * beta * vgst * vgst * .5;
+                        con.Ds.G = ModelParameters.Lambda * Beta * vgst * vgst * .5;
                         Gmbs = Gm * arg;
                     }
                     else
                     {
-                        // Linear region / triode region
-                        con.Ds.C = betap * (vds * Mode) * (vgst - .5 * (vds * Mode));
+                        // Linear region
+                        con.Ds.C = betap * (vds * Mode) *
+                            (vgst - .5 * (vds * Mode));
                         Gm = betap * (vds * Mode);
-                        con.Ds.G = betap * (vgst - (vds * Mode)) + ModelParameters.Lambda * beta * (vds * Mode) * (vgst - .5 * (vds * Mode));
+                        con.Ds.G = betap * (vgst - (vds * Mode)) +
+                                ModelParameters.Lambda * Beta *
+                                (vds * Mode) *
+                                (vgst - .5 * (vds * Mode));
                         Gmbs = Gm * arg;
                     }
                 }
 
-                // Export some useful quantities (vth, vdsat and ids).
+                // now deal with n vs p polarity
                 Von = ModelParameters.MosfetType * von;
                 Vdsat = ModelParameters.MosfetType * vdsat;
-                Id = Mode * con.Ds.C - con.Bd.C;
             }
+            
+            // COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
+            Id = Mode * con.Ds.C - con.Bd.C;
 
-            // Give the option to add contributions for time analysis
+            // Update with time-dependent calculations
             UpdateTime(vgs, vds, vbs, ref con);
 
             // Check convergence
-            if (!Parameters.Off || (_iteration.Mode != IterationModes.Fix))
+            if (!Parameters.Off && _iteration.Mode != IterationModes.Fix)
             {
                 if (check)
                     _iteration.IsConvergent = false;
             }
 
-            // Save things away for next time
             Vbs = vbs;
             Vbd = vbd;
             Vgs = vgs;
             Vds = vds;
 
-            Gds = con.Ds.G;
-            Gbs = con.Bs.G;
-            Gbd = con.Bd.G;
-
-            // Calculate right hand side vector contributions
+            // Right hand side vector contributions
+            con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - (con.Bs.G) * vbs);
+            con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - (con.Bd.G) * vbd);
             double xnrm, xrev;
-            Ibs = con.Bs.C;
-            Ibd = con.Bd.C;
-            con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
-            con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
             if (Mode >= 0)
             {
                 xnrm = 1;
@@ -266,7 +276,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             {
                 xnrm = 0;
                 xrev = 1;
-                con.Ds.C = -(ModelParameters.MosfetType) * (con.Ds.C - con.Ds.G * (-vds) - Gm * vgd - Gmbs * vbd);
+                con.Ds.C = -ModelParameters.MosfetType * (con.Ds.C - con.Ds.G * (-vds) - Gm * vgd - Gmbs * vbd);
             }
 
             _elements.Add(

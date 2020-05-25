@@ -80,8 +80,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
         void INoiseBehavior.Compute()
         {
             double coxSquared;
-            if (ModelParameters.OxideCapFactor > 0.0)
-                coxSquared = ModelParameters.OxideCapFactor;
+            if (ModelTemperature.Properties.OxideCapFactor > 0.0)
+                coxSquared = ModelTemperature.Properties.OxideCapFactor;
             else
                 coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
             coxSquared *= coxSquared;

@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
-        private readonly MosfetCharges _charges = new MosfetCharges();
+        private readonly Charges _charges = new Charges();
 
         /// <summary>
         /// The variables used by the transistor.
@@ -54,11 +54,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         void IFrequencyBehavior.InitializeParameters()
         {
             // Update the small-signal parameters
-            _charges.Update(Mode, Vgs, Vds, Vbs,
-                ModelParameters.MosfetType * Von,
-                ModelParameters.MosfetType * Vdsat,
-                ModelParameters,
-                Properties);
+            _charges.Calculate(Mode, Vgs, Vds, Vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
         }
 
         /// <inheritdoc/>

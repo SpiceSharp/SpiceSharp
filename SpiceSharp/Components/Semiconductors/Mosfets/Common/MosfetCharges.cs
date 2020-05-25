@@ -8,25 +8,25 @@ namespace SpiceSharp.Components.Mosfets
     public class MosfetCharges
     {
         /// <include file='docs.xml' path='docs/members/BulkSourceCharge/*'/>
-        public double Qbs { get; private set; }
+        public double Qbs { get; set; }
 
         /// <include file='docs.xml' path='docs/members/BulkDrainCharge/*'/>
-        public double Qbd { get; private set; }
+        public double Qbd { get; set; }
 
         /// <include file='docs.xml' path='docs/members/BulkSourceCapacitance/*'/>
-        public double Cbs { get; private set; }
+        public double Cbs { get; set; }
 
         /// <include file='docs.xml' path='docs/members/BulkDrainCapacitance/*'/>
-        public double Cbd { get; private set; }
+        public double Cbd { get; set; }
 
         /// <include file='docs.xml' path='docs/members/GateSourceCapacitance/*'/>
-        public double Cgs { get; private set; }
+        public double Cgs { get; set; }
 
         /// <include file='docs.xml' path='docs/members/GateDrainCapacitance/*'/>
-        public double Cgd { get; private set; }
+        public double Cgd { get; set; }
 
         /// <include file='docs.xml' path='docs/members/GateBulkCapacitance/*'/>
-        public double Cgb { get; private set; }
+        public double Cgb { get; set; }
 
         /// <summary>
         /// Updates the charges and capacitances..

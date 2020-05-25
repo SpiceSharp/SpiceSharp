@@ -87,12 +87,12 @@ namespace SpiceSharp.Components.Mosfets.Level2
                 }
                 var wkfngs = wkfng - (3.25 + .5 * Properties.EgFet1 + fermis);
                 if (!Parameters.Gamma.Given)
-                    Parameters.Gamma = new GivenParameter<double>(Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6) / Parameters.OxideCapFactor, false);
+                    Parameters.Gamma = new GivenParameter<double>(Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6) / Properties.OxideCapFactor, false);
                 if (!Parameters.Vt0.Given)
                 {
                     if (!Parameters.SurfaceStateDensity.Given)
                         Parameters.SurfaceStateDensity = new GivenParameter<double>(0, false);
-                    var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 * Constants.Charge / Parameters.OxideCapFactor;
+                    var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 * Constants.Charge / Properties.OxideCapFactor;
                     Parameters.Vt0 = new GivenParameter<double>(vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi), false);
                 }
 

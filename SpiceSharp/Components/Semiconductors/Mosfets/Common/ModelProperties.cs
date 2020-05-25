@@ -8,11 +8,12 @@ namespace SpiceSharp.Components.Mosfets
     public class ModelProperties
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public double Factor1 { get; private set; }
-        public double Vtnom { get; private set; }
-        public double Kt1 { get; private set; }
-        public double EgFet1 { get; private set; }
-        public double PbFactor1 { get; private set; }
+        public double Factor1 { get; set; }
+        public double Vtnom { get; set; }
+        public double Kt1 { get; set; }
+        public double EgFet1 { get; set; }
+        public double PbFactor1 { get; set; }
+        public double OxideCapFactor { get; set; }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <param name="mp">The model parameters.</param>
         public void Update(ModelParameters mp)
         {
+            OxideCapFactor = 3.9 * 8.854214871e-12 / mp.OxideThickness;
             Vtnom = mp.NominalTemperature * Constants.KOverQ;
             Factor1 = mp.NominalTemperature / Constants.ReferenceTemperature;
             Kt1 = Constants.Boltzmann * mp.NominalTemperature;

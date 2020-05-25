@@ -28,18 +28,5 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 _lambda = value;
             }
         }
-
-        /// <inheritdoc/>
-        public override void CalculateDefaults()
-        {
-            if (!OxideThickness.Given)
-                OxideCapFactor = 0.0;
-            else
-            {
-                OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
-                if (!Transconductance.Given)
-                    Transconductance = new GivenParameter<double>(SurfaceMobility * OxideCapFactor * 1e-4, false); // m^2/cm^2
-            }
-        }
     }
 }

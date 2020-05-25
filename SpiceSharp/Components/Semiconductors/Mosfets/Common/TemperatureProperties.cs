@@ -8,36 +8,38 @@ namespace SpiceSharp.Components.Mosfets
     public class TemperatureProperties
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-        public double TempSurfaceMobility { get; private set; }
-        public double TempPhi { get; private set; }
-        public double TempVbi { get; private set; }
-        public double TempBulkPotential { get; private set; }
-        public double TempTransconductance { get; private set; }
-        public double TempVt0 { get; private set; }
-        public double TempVt { get; private set; }
-        public double DrainSatCurrent { get; private set; }
-        public double SourceSatCurrent { get; private set; }
-        public double DrainVCritical { get; private set; }
-        public double SourceVCritical { get; private set; }
-        public double DrainConductance { get; private set; }
-        public double SourceConductance { get; private set; }
-        public double Cbs { get; private set; }
-        public double CbsSidewall { get; private set; }
-        public double Cbd { get; private set; }
-        public double CbdSidewall { get; private set; }
-        public double TempCbs { get; private set; }
-        public double TempCbd { get; private set; }
-        public double TempJctCap { get; private set; }
-        public double TempJctCapSidewall { get; private set; }
-        public double TempDepCap { get; private set; }
-        public double F2d { get; private set; }
-        public double F3d { get; private set; }
-        public double F4d { get; private set; }
-        public double F2s { get; private set; }
-        public double F3s { get; private set; }
-        public double F4s { get; private set; }
-        public double EffectiveLength { get; private set; }
-        public double OxideCap { get; private set; }
+        public double TempSurfaceMobility { get; set; }
+        public double TempPhi { get; set; }
+        public double TempVbi { get; set; }
+        public double TempBulkPotential { get; set; }
+        public double TempTransconductance { get; set; }
+        public double TempVt0 { get; set; }
+        public double TempVt { get; set; }
+        public double DrainSatCurrent { get; set; }
+        public double SourceSatCurrent { get; set; }
+        public double DrainVCritical { get; set; }
+        public double SourceVCritical { get; set; }
+        public double DrainConductance { get; set; }
+        public double SourceConductance { get; set; }
+        public double Cbs { get; set; }
+        public double CbsSidewall { get; set; }
+        public double Cbd { get; set; }
+        public double CbdSidewall { get; set; }
+        public double TempCbs { get; set; }
+        public double TempCbd { get; set; }
+        public double TempCj { get; set; }
+        public double TempCjsw { get; set; }
+        public double TempDepCap { get; set; }
+        public double F2d { get; set; }
+        public double F3d { get; set; }
+        public double F4d { get; set; }
+        public double F2s { get; set; }
+        public double F3s { get; set; }
+        public double F4s { get; set; }
+        public double EffectiveLength { get; set; }
+        public double OxideCap { get; set; }
+        public double TempSatCurDensity { get; set; }
+        public double TempSatCur { get; set; }
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
@@ -49,6 +51,8 @@ namespace SpiceSharp.Components.Mosfets
         /// <param name="mprp">The model properties.</param>
         public void Update(string name, Parameters p, ModelParameters mp, ModelProperties mprp)
         {
+            if (!mp.Transconductance.Given)
+                mp.Transconductance = new GivenParameter<double>(mp.SurfaceMobility * mprp.OxideCapFactor * 1e-4, false);
             TempVt = p.Temperature * Constants.KOverQ;
             var ratio = p.Temperature / mp.NominalTemperature;
             var fact2 = p.Temperature / Constants.ReferenceTemperature;
@@ -57,6 +61,7 @@ namespace SpiceSharp.Components.Mosfets
                     (p.Temperature + 1108);
             var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
             var pbfact = -2 * TempVt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
+            OxideCap = mprp.OxideCapFactor * EffectiveLength * p.ParallelMultiplier * p.Width;
 
             if (p.Length - 2 * mp.LateralDiffusion <= 0)
                 SpiceSharpWarning.Warning(this, "{0}: effective channel length less than zero".FormatString(name));
@@ -133,20 +138,20 @@ namespace SpiceSharp.Components.Mosfets
                     ((4e-4 * (mp.NominalTemperature - Constants.ReferenceTemperature)) - gmaold)));
             TempCbd = mp.CapBd * capfact;
             TempCbs = mp.CapBs * capfact;
-            TempJctCap = mp.BulkCapFactor * capfact;
+            TempCj = mp.BulkCapFactor * capfact;
             capfact = 1 / (1 + (mp.BulkJunctionSideGradingCoefficient *
                         ((4e-4 * (mp.NominalTemperature - Constants.ReferenceTemperature)) - gmaold)));
-            TempJctCapSidewall = mp.SidewallCapFactor * capfact;
+            TempCjsw = mp.SidewallCapFactor * capfact;
             TempBulkPotential = (fact2 * pbo) + pbfact;
             var gmanew = (TempBulkPotential - pbo) / pbo;
             capfact = 1 + (mp.BulkJunctionBotGradingCoefficient *
                         ((4e-4 * (p.Temperature - Constants.ReferenceTemperature)) - gmanew));
             TempCbd *= capfact;
             TempCbs *= capfact;
-            TempJctCap *= capfact;
+            TempCj *= capfact;
             capfact = 1 + (mp.BulkJunctionSideGradingCoefficient *
                     ((4e-4 * (p.Temperature - Constants.ReferenceTemperature)) - gmanew));
-            TempJctCapSidewall *= capfact;
+            TempCjsw *= capfact;
             TempDepCap = mp.ForwardCapDepletionCoefficient * TempBulkPotential;
 
             double czbd, czbdsw;
@@ -155,12 +160,12 @@ namespace SpiceSharp.Components.Mosfets
             else
             {
                 if (mp.BulkCapFactor.Given)
-                    czbd = TempJctCap * p.ParallelMultiplier * p.DrainArea;
+                    czbd = TempCj * p.ParallelMultiplier * p.DrainArea;
                 else
                     czbd = 0;
             }
             if (mp.SidewallCapFactor.Given)
-                czbdsw = TempJctCapSidewall * p.DrainPerimeter * p.ParallelMultiplier;
+                czbdsw = TempCjsw * p.DrainPerimeter * p.ParallelMultiplier;
             else
                 czbdsw = 0;
             arg = 1 - mp.ForwardCapDepletionCoefficient;
@@ -191,12 +196,12 @@ namespace SpiceSharp.Components.Mosfets
             else
             {
                 if (mp.BulkCapFactor.Given)
-                    czbs = TempJctCap * p.SourceArea * p.ParallelMultiplier;
+                    czbs = TempCj * p.SourceArea * p.ParallelMultiplier;
                 else
                     czbs = 0;
             }
             if (mp.SidewallCapFactor.Given)
-                czbssw = TempJctCapSidewall * p.SourcePerimeter * p.ParallelMultiplier;
+                czbssw = TempCjsw * p.SourcePerimeter * p.ParallelMultiplier;
             else
                 czbssw = 0;
             arg = 1 - mp.ForwardCapDepletionCoefficient;
@@ -220,7 +225,6 @@ namespace SpiceSharp.Components.Mosfets
                     - (F3s / 2 *
                         (TempDepCap * TempDepCap))
                     - (TempDepCap * F2s);
-            OxideCap = mp.OxideCapFactor * EffectiveLength * p.Width;
         }
     }
 }

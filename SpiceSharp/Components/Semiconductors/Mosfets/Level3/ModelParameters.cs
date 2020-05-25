@@ -117,6 +117,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         [ParameterName("input_delta"), ParameterInfo("")]
         public double Delta { get; protected set; }
 
+        public double OxideCapFactor { get; private set; }
+
         /// <summary>
         /// Gets or sets the narrowing factor.
         /// </summary>
@@ -126,12 +128,10 @@ namespace SpiceSharp.Components.Mosfets.Level3
         public double NarrowFactor { get; set; }
 
         /// <inheritdoc/>
-        public override void CalculateDefaults()
+        public void CalculateDefaults()
         {
-            // Calculate base defaults
-            base.CalculateDefaults();
-
             // Calculate the narrowing factor
+            OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
             NarrowFactor = Delta * 0.5 * Math.PI * _epsilonSilicon / OxideCapFactor;
         }
 
