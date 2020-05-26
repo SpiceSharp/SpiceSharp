@@ -81,8 +81,6 @@ namespace SpiceSharp.Components.Mosfets.Level1
                         }
                         var fermis = Parameters.MosfetType * .5 * Parameters.Phi;
                         var wkfng = 3.2;
-                        if (!Parameters.GateType.Given)
-                            Parameters.GateType = 1;
                         if (Parameters.GateType != 0)
                         {
                             var fermig = Parameters.MosfetType * Parameters.GateType * .5 * Properties.EgFet1;

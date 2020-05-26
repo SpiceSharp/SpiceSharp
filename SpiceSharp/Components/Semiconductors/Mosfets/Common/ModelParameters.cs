@@ -500,7 +500,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The type of the gate.
         /// </value>
         [ParameterName("tpg"), ParameterInfo("Gate type")]
-        public GivenParameter<double> GateType { get; set; }
+        public GivenParameter<double> GateType { get; set; } = new GivenParameter<double>(1, false);
 
         /// <summary>
         /// Gets or sets the substrate doping level.

@@ -257,6 +257,26 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
+        [Test]
+        public void When_ResistorNoise_Expect_Reference()
+        {
+            var ckt = new Circuit(
+                new CurrentSource("I1", "in", "0", 1).SetParameter("acmag", 1.0),
+                new Resistor("R1", "in", "0", 1e3).SetParameter("temp", 20.0));
+            var temp = 20 + Constants.CelsiusKelvin;
+
+            var noise = new SpiceSharp.Simulations.Noise("noise", "in", new DecadeSweep(10, 10e9, 10));
+            var onoise = new OutputNoiseDensityExport(noise);
+            var inoise = new InputNoiseDensityExport(noise);
+            noise.ExportSimulationData += (sender, args) =>
+            {
+                // We expect 4*k*T*R noise variance
+                Assert.AreEqual(4 * Constants.Boltzmann * temp * 1e3, onoise.Value, 1e-20);
+                Assert.AreEqual(4 * Constants.Boltzmann * temp / 1e3, inoise.Value, 1e-20);
+            };
+            noise.Run(ckt);
+        }
+
         /*
         [TestCaseSource(nameof(Temperature))]
         public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double conductance)

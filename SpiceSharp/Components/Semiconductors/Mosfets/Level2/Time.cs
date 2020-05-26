@@ -6,7 +6,7 @@ using SpiceSharp.Simulations.IntegrationMethods;
 namespace SpiceSharp.Components.Mosfets.Level2
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Mosfet1" />.
+    /// Transient behavior for a <see cref="Mosfet2" />.
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         private readonly ITimeSimulationState _time;
         private readonly IDerivative _qbs, _qbd, _qgs, _qgd, _qgb;
         private readonly StateValue<double> _cgs, _cgd, _cgb, _vgs, _vbs, _vds;
-        private readonly MosfetCharges _charges = new MosfetCharges();
+        private readonly Charges _charges = new Charges();
 
         /// <include file='../common/docs.xml' path='docs/members/GateSourceCharge/*'/>
         [ParameterName("qgs"), ParameterInfo("Gate-source charge storage", Units = "C")]
@@ -89,19 +89,15 @@ namespace SpiceSharp.Components.Mosfets.Level2
             var vgd = vgs - vds;
             var vgb = vgs - vbs;
 
-            _charges.Update(Mode, vgs, vds, vbs,
-                ModelParameters.MosfetType * Von,
-                ModelParameters.MosfetType * Vdsat,
-                ModelParameters,
-                Properties);
+            _charges.Calculate(Mode, vgs, vds, vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
 
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
-            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Properties.EffectiveLength;
+            var GateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
+            var GateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
+            var GateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Parameters.ParallelMultiplier * Properties.EffectiveLength;
 
-            var capgs = 2 * _charges.Cgs + gateSourceOverlapCap;
-            var capgd = 2 * _charges.Cgs + gateDrainOverlapCap;
-            var capgb = 2 * _charges.Cgb + gateBulkOverlapCap;
+            var capgs = 2 * _charges.Cgs + GateSourceOverlapCap;
+            var capgd = 2 * _charges.Cgs + GateDrainOverlapCap;
+            var capgb = 2 * _charges.Cgb + GateBulkOverlapCap;
 
             _qgs.Value = capgs * vgs;
             _qgd.Value = capgd * vgd;
@@ -120,11 +116,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             var vgb = vgs - vbs;
 
             // Update the charges and capacitances
-            _charges.Update(Mode, vgs, vds, vbs,
-                ModelParameters.MosfetType * Von,
-                ModelParameters.MosfetType * Vdsat,
-                ModelParameters,
-                Properties);
+            _charges.Calculate(Mode, vgs, vds, vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
 
             // Bulk junction capacitances
             _qbd.Value = _charges.Qbd;
@@ -139,23 +131,22 @@ namespace SpiceSharp.Components.Mosfets.Level2
             c.Bs.C += _qbs.Derivative;
 
             // Gate capacitances
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
-            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Properties.EffectiveLength;
+            var GateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
+            var GateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
+            var GateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Parameters.ParallelMultiplier * Properties.EffectiveLength;
 
             var vgs1 = _vgs.GetPreviousValue(1);
             var vgd1 = vgs1 - _vds.GetPreviousValue(1);
             var vgb1 = vgs1 - _vbs.GetPreviousValue(1);
             _cgs.Value = _charges.Cgs;
-            var capgs = _cgs.GetPreviousValue(0) + _cgs.GetPreviousValue(1) + gateSourceOverlapCap;
+            var capgs = _charges.Cgs + _cgs.GetPreviousValue(1) + GateSourceOverlapCap;
             _cgd.Value = _charges.Cgd;
-            var capgd = _cgd.GetPreviousValue(0) + _cgd.GetPreviousValue(1) + gateDrainOverlapCap;
+            var capgd = _charges.Cgd + _cgd.GetPreviousValue(1) + GateDrainOverlapCap;
             _cgb.Value = _charges.Cgb;
-            var capgb = _cgb.GetPreviousValue(0) + _cgb.GetPreviousValue(1) + gateBulkOverlapCap;
+            var capgb = _charges.Cgb + _cgb.GetPreviousValue(1) + GateBulkOverlapCap;
             _vgs.Value = vgs;
             _vds.Value = vds;
             _vbs.Value = vbs;
-
             _qgs.Value = (vgs - vgs1) * capgs + _qgs.GetPreviousValue(1);
             _qgd.Value = (vgd - vgd1) * capgd + _qgd.GetPreviousValue(1);
             _qgb.Value = (vgb1 - vgb1) * capgb + _qgb.GetPreviousValue(1);

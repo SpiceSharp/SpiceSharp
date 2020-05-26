@@ -7,7 +7,7 @@ using SpiceSharp.ParameterSets;
 namespace SpiceSharp.Components.Mosfets.Level2
 {
     /// <summary>
-    /// Small-signal behavior for a <see cref="Mosfet1" />.
+    /// Small-signal behavior for a <see cref="Mosfet2" />.
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
-        private readonly MosfetCharges _charges = new MosfetCharges();
+        private readonly Charges _charges = new Charges();
 
         /// <summary>
         /// The variables used by the transistor.
@@ -54,11 +54,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         void IFrequencyBehavior.InitializeParameters()
         {
             // Update the small-signal parameters
-            _charges.Update(Mode, Vgs, Vds, Vbs,
-                ModelParameters.MosfetType * Von,
-                ModelParameters.MosfetType * Vdsat,
-                ModelParameters,
-                Properties);
+            _charges.Calculate(Mode, Vgs, Vds, Vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
         }
 
         /// <inheritdoc/>

@@ -121,7 +121,6 @@ namespace SpiceSharp.Components.Mosfets.Level1
 
             var vt = Constants.KOverQ * Parameters.Temperature;
             double DrainSatCur, SourceSatCur;
-
             if ((Properties.TempSatCurDensity == 0) || (Parameters.DrainArea == 0) || (Parameters.SourceArea == 0))
             {
                 DrainSatCur = Parameters.ParallelMultiplier * Properties.TempSatCur;
@@ -261,10 +260,14 @@ namespace SpiceSharp.Components.Mosfets.Level1
             Vbd = vbd;
             Vgs = vgs;
             Vds = vds;
+            Gbs = con.Bs.G;
+            Ibs = con.Bs.C;
+            Gbd = con.Bd.G;
+            Ibd = con.Bd.C;
 
             // Right hand side vector contributions
-            con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - (con.Bs.G) * vbs);
-            con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - (con.Bd.G) * vbd);
+            con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
+            con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
             double xnrm, xrev;
             if (Mode >= 0)
             {
@@ -387,7 +390,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                     vbs = ModelParameters.MosfetType * Parameters.InitialVbs;
 
                     // TODO: At some point, check what this is supposed to do
-                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || (_time.UseDc || !_time.UseIc)))
+                    if (vds.Equals(0) && vgs.Equals(0) && vbs.Equals(0) && (_time == null || _time.UseDc || !_time.UseIc))
                     {
                         vbs = -1;
                         vgs = ModelParameters.MosfetType * Properties.TempVt0;

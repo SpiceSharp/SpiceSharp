@@ -80,19 +80,20 @@ namespace SpiceSharp.Components.Mosfets.Level1
         void INoiseBehavior.Compute()
         {
             double coxSquared;
-            if (ModelTemperature.Properties.OxideCapFactor > 0.0)
-                coxSquared = ModelTemperature.Properties.OxideCapFactor;
-            else
+            if (ModelTemperature.Properties.OxideCapFactor == 0.0)
                 coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
+            else
+                coxSquared = ModelTemperature.Properties.OxideCapFactor;
             coxSquared *= coxSquared;
 
             _rd.Compute(Properties.DrainConductance, Parameters.Temperature);
             _rs.Compute(Properties.SourceConductance, Parameters.Temperature);
             _id.Compute(2.0 / 3.0 * Math.Abs(Gm));
             _flicker.Compute(ModelParameters.FlickerNoiseCoefficient *
-                Math.Exp(ModelParameters.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(Id), 1e-38))) /
-                (Parameters.Width * (Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
-                 coxSquared) / _state.Point.Value.Frequency);
+                 Math.Exp(ModelParameters.FlickerNoiseExponent *
+                 Math.Log(Math.Max(Math.Abs(Id), 1e-38))) /
+                 (_state.Point.Value.Frequency * Parameters.Width * Parameters.ParallelMultiplier *
+                 (Parameters.Length - 2 * ModelParameters.LateralDiffusion) * coxSquared));
         }
     }
 }
