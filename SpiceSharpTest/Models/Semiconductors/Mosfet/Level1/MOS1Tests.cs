@@ -293,15 +293,12 @@ namespace SpiceSharpTest.Models
         {
             // Create circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
-                CreateMOS1("M1", "out", "g", "0", "0", "MM")
-                    .SetParameter("w", 100e-6)
-                    .SetParameter("l", 100e-6),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM").SetParameter("w", 100e-6).SetParameter("l", 100e-6),
                 CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
 

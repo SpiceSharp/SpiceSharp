@@ -15,8 +15,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         INoiseBehavior
     {
         private readonly INoiseSimulationState _state;
-        private readonly NoiseThermal _rd, _rs;
-        private readonly NoiseShot _id;
+        private readonly NoiseThermal _rd, _rs, _id;
         private readonly NoiseGain _flicker;
 
         /// <inheritdoc/>
@@ -63,7 +62,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
 
             _rd = new NoiseThermal("rd", d, dp);
             _rs = new NoiseThermal("rs", s, sp);
-            _id = new NoiseShot("id", dp, sp);
+            _id = new NoiseThermal("id", dp, sp);
             _flicker = new NoiseGain("flicker", dp, sp);
         }
 
@@ -88,7 +87,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
 
             _rd.Compute(Properties.DrainConductance, Parameters.Temperature);
             _rs.Compute(Properties.SourceConductance, Parameters.Temperature);
-            _id.Compute(2.0 / 3.0 * Math.Abs(Gm));
+            _id.Compute(2.0 / 3.0 * Math.Abs(Gm), Parameters.Temperature);
             _flicker.Compute(ModelParameters.FlickerNoiseCoefficient *
                  Math.Exp(ModelParameters.FlickerNoiseExponent *
                  Math.Log(Math.Max(Math.Abs(Id), 1e-38))) /
