@@ -14,9 +14,12 @@ namespace SpiceSharp.Components.Mosfets.Level3
         private GivenParameter<double> _fastSurfaceStateDensity;
 
         /// <summary>
-        /// The permittivity of silicon
+        /// Gets or sets a flag that uses legacy model for MOS3 if <c>true</c>.
         /// </summary>
-        private const double _epsilonSilicon = 11.7 * 8.854214871e-12;
+        /// <value>
+        /// Flag indicating whether or not the legacy model needs to be used.
+        /// </value>
+        public bool BadMos { get; set; }
 
         /// <summary>
         /// Gets or sets the drain-source voltage dependence of the threshold voltage.
@@ -96,56 +99,59 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <value>
         /// The width effect on the threshold voltage.
         /// </value>
-        /// <remarks>
-        /// When setting the parameter, spice 3f5 would change the delta parameter, but when asking
-        /// for it, Spice 3f5 would return the narrow factor instead. This behavior is copied here
-        /// for compatibility.
-        /// </remarks>
-        [ParameterName("delta"), ParameterInfo("Width effect on the threshold voltage")]
-        public double DeltaWidth
-        {
-            get => NarrowFactor;
-            set => Delta = value;
-        }
+        [ParameterName("delta"), ParameterInfo("Width effect on threshold")]
+        public double Delta { get; set; }
 
         /// <summary>
-        /// Gets or sets the width effect on the threshold voltage.
+        /// Gets or sets the length mask adjustment.
         /// </summary>
         /// <value>
-        /// The width effect on the threshold voltage.
+        /// The length mask adjustment.
         /// </value>
-        [ParameterName("input_delta"), ParameterInfo("")]
-        public double Delta { get; protected set; }
-
-        public double OxideCapFactor { get; private set; }
+        [ParameterName("xl"), ParameterInfo("Length mask adjustment", Units = "m")]
+        public double LengthAdjust { get; set; }
 
         /// <summary>
-        /// Gets or sets the narrowing factor.
+        /// Gets or sets the width narrowing due to diffusion.
         /// </summary>
         /// <value>
-        /// The narrowing factor.
+        /// The width narrowing.
         /// </value>
-        public double NarrowFactor { get; set; }
+        [ParameterName("wd"), ParameterInfo("Width narrowing due to diffusion", Units = "m")]
+        public double WidthNarrow { get; set; }
 
-        /// <inheritdoc/>
-        public void CalculateDefaults()
-        {
-            // Calculate the narrowing factor
-            OxideCapFactor = 3.9 * 8.854214871e-12 / OxideThickness;
-            NarrowFactor = Delta * 0.5 * Math.PI * _epsilonSilicon / OxideCapFactor;
-        }
+        /// <summary>
+        /// Gets or sets the width mask adjustment.
+        /// </summary>
+        /// <value>
+        /// The width mask adjustment.
+        /// </value>
+        [ParameterName("xw"), ParameterInfo("Width mask adjustment", Units = "m")]
+        public double WidthAdjust { get; set; }
+
+        /// <summary>
+        /// Gets or sets the threshold voltage adjustment.
+        /// </summary>
+        /// <value>
+        /// The threshold voltage adjustment.
+        /// </value>
+        [ParameterName("delvt0"), ParameterInfo("Threshold voltage adjust")]
+        public double DelVt0 { get; set; }
 
         /// <inheritdoc/>
         protected override ICloneable Clone()
         {
             // We have some private/protected properties that need to be set manually.
             var result = (ModelParameters)base.Clone();
-
-            // Set properties
             result.Delta = Delta;
-            result.NarrowFactor = NarrowFactor; // Just to be sure, given the special nature of "delta"
-
             return result;
+        }
+
+        /// <inheritdoc/>
+        protected override void CopyFrom(ICloneable source)
+        {
+            base.CopyFrom(source);
+            Delta = ((ModelParameters)source).Delta;
         }
     }
 }

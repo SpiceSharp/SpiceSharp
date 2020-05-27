@@ -147,8 +147,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
             var gmaold = (ModelParameters.BulkJunctionPotential - pbo) / pbo;
             var capfact = 1 / (1 + ModelParameters.BulkJunctionBotGradingCoefficient *
                     (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
-            Properties.Cbd = ModelParameters.CapBd * capfact;
-            Properties.Cbs = ModelParameters.CapBs * capfact;
+            Properties.TempCbd = ModelParameters.CapBd * capfact;
+            Properties.TempCbs = ModelParameters.CapBs * capfact;
             Properties.TempCj = ModelParameters.BulkCapFactor * capfact;
             capfact = 1 / (1 + ModelParameters.BulkJunctionSideGradingCoefficient *
                     (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
@@ -180,7 +180,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
 
             double czbd, czbdsw;
             if (ModelParameters.CapBd.Given)
-                czbd = Properties.Cbd * Parameters.ParallelMultiplier;
+                czbd = Properties.TempCbd * Parameters.ParallelMultiplier;
             else
             {
                 if (ModelParameters.BulkCapFactor.Given)
@@ -215,7 +215,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
 
             double czbs, czbssw;
             if (ModelParameters.CapBs.Given)
-                czbs = Properties.Cbs * Parameters.ParallelMultiplier;
+                czbs = Properties.TempCbs * Parameters.ParallelMultiplier;
             else
             {
                 if (ModelParameters.BulkCapFactor.Given)

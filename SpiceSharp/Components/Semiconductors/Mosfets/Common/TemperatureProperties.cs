@@ -70,8 +70,7 @@ namespace SpiceSharp.Components.Mosfets
             TempSurfaceMobility = mp.SurfaceMobility / ratio4;
             var phio = (mp.Phi - mprp.PbFactor1) / mprp.Factor1;
             TempPhi = fact2 * phio + pbfact;
-            TempVbi = mp.Vt0 - mp.MosfetType * (mp.Gamma * Math.Sqrt(mp.Phi))
-                    + .5 * (mprp.EgFet1 - egfet) + mp.MosfetType * .5 * (TempPhi - mp.Phi);
+            TempVbi = mp.Vt0 - mp.MosfetType * (mp.Gamma * Math.Sqrt(mp.Phi)) + .5 * (mprp.EgFet1 - egfet) + mp.MosfetType * .5 * (TempPhi - mp.Phi);
             TempVt0 = TempVbi + mp.MosfetType * mp.Gamma * Math.Sqrt(TempPhi);
             var TempSaturationCurrent = mp.JunctionSatCur * Math.Exp(-egfet / TempVt + mprp.EgFet1 / mprp.Vtnom);
             var TempSaturationCurrentDensity = mp.JunctionSatCurDensity * Math.Exp(-egfet / TempVt + mprp.EgFet1 / mprp.Vtnom);

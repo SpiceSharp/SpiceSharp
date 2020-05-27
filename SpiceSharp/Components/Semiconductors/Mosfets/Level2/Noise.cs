@@ -7,7 +7,7 @@ using SpiceSharp.Simulations;
 namespace SpiceSharp.Components.Mosfets.Level2
 {
     /// <summary>
-    /// Noise behavior for a <see cref="Mosfet1"/>.
+    /// Noise behavior for a <see cref="Mosfet2"/>.
     /// </summary>
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>

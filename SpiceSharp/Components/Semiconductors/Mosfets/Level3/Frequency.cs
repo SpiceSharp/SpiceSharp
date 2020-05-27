@@ -2,95 +2,62 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Mosfets.Level3
 {
     /// <summary>
     /// Small-signal behavior for a <see cref="Mosfet3" />.
     /// </summary>
-    /// <seealso cref="Dynamic"/>
+    /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    public class Frequency : Dynamic,
+    public class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
-        private readonly int _drainNode, _gateNode, _sourceNode, _bulkNode, _drainNodePrime, _sourceNodePrime;
+        private readonly Charges _charges = new Charges();
 
         /// <summary>
-        /// Gets the internal drain node.
+        /// The variables used by the transistor.
         /// </summary>
-        /// <value>
-        /// The internal drain node.
-        /// </value>
-        protected new IVariable<Complex> DrainPrime { get; }
+        protected MosfetVariables<Complex> Variables;
 
-        /// <summary>
-        /// Gets the internal source node.
-        /// </summary>
-        /// <value>
-        /// The internal source node.
-        /// </value>
-        protected new IVariable<Complex> SourcePrime { get; }
+        /// <include file='../common/docs.xml' path='docs/members/GateSourceCapacitance/*'/>
+        [ParameterName("cgs"), ParameterInfo("Gate-source capacitance", Units = "F")]
+        public double Cgs => _charges.Cgs;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateDrainCapacitance/*'/>
+        [ParameterName("cgd"), ParameterInfo("Gate-drain capacitance", Units = "F")]
+        public double Cgd => _charges.Cgd;
+
+        /// <include file='../common/docs.xml' path='docs/members/GateBulkCapacitance/*'/>
+        [ParameterName("cgb"), ParameterInfo("Gate-bulk capacitance", Units = "F")]
+        public double Cgb => _charges.Cgb;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="context">The context.</param>
-        public Frequency(string name, ComponentBindingContext context) : base(name, context)
+        /// <param name="name">Name.</param>
+        /// <param name="context">The binding context.</param>
+        public Frequency(string name, ComponentBindingContext context)
+            : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-
-            DrainPrime = _complex.GetSharedVariable(context.Nodes[0]);
-            _drainNode = _complex.Map[DrainPrime];
-            _gateNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
-            SourcePrime = _complex.GetSharedVariable(context.Nodes[2]);
-            _sourceNode = _complex.Map[SourcePrime];
-            _bulkNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[3])];
-
-            // Add series drain node if necessary
-            if (!ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0)
-                DrainPrime = _complex.CreatePrivateVariable(Name.Combine("drain"), Units.Volt);
-            _drainNodePrime = _complex.Map[DrainPrime];
-
-            // Add series source node if necessary
-            if (!ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0)
-                SourcePrime = _complex.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
-            _sourceNodePrime = _complex.Map[SourcePrime];
-
-            _elements = new ElementSet<Complex>(_complex.Solver,
-                new MatrixLocation(_gateNode, _gateNode),
-                new MatrixLocation(_bulkNode, _bulkNode),
-                new MatrixLocation(_drainNodePrime, _drainNodePrime),
-                new MatrixLocation(_sourceNodePrime, _sourceNodePrime),
-                new MatrixLocation(_gateNode, _bulkNode),
-                new MatrixLocation(_gateNode, _drainNodePrime),
-                new MatrixLocation(_gateNode, _sourceNodePrime),
-                new MatrixLocation(_bulkNode, _gateNode),
-                new MatrixLocation(_bulkNode, _drainNodePrime),
-                new MatrixLocation(_bulkNode, _sourceNodePrime),
-                new MatrixLocation(_drainNodePrime, _gateNode),
-                new MatrixLocation(_drainNodePrime, _bulkNode),
-                new MatrixLocation(_sourceNodePrime, _gateNode),
-                new MatrixLocation(_sourceNodePrime, _bulkNode),
-                new MatrixLocation(_drainNode, _drainNode),
-                new MatrixLocation(_sourceNode, _sourceNode),
-                new MatrixLocation(_drainNode, _drainNodePrime),
-                new MatrixLocation(_sourceNode, _sourceNodePrime),
-                new MatrixLocation(_drainNodePrime, _drainNode),
-                new MatrixLocation(_drainNodePrime, _sourceNodePrime),
-                new MatrixLocation(_sourceNodePrime, _sourceNode),
-                new MatrixLocation(_sourceNodePrime, _drainNodePrime));
+            Variables = new MosfetVariables<Complex>(name, _complex, context.Nodes,
+                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
+                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
+            _elements = new ElementSet<Complex>(_complex.Solver, Variables.GetMatrixLocations(_complex.Map));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
-            CalculateBaseCapacitances();
-            CalculateCapacitances(VoltageDs, VoltageBs);
-            CalculateMeyerCharges(VoltageGs, VoltageGs - VoltageDs);
+            // Update the small-signal parameters
+            _charges.Calculate(Mode, Vgs, Vds, Vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             int xnrm, xrev;
@@ -107,45 +74,50 @@ namespace SpiceSharp.Components.Mosfets.Level3
             }
 
             // Charge oriented model parameters
-            var effectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion;
             var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
             var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
-            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * effectiveLength;
+            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Properties.EffectiveLength;
 
             // Meyer"s model parameters
-            var capgs = CapGs + CapGs + gateSourceOverlapCap;
-            var capgd = CapGd + CapGd + gateDrainOverlapCap;
-            var capgb = CapGb + CapGb + gateBulkOverlapCap;
+            var capgs = _charges.Cgs * 2 + gateSourceOverlapCap;
+            var capgd = _charges.Cgd * 2 + gateDrainOverlapCap;
+            var capgb = _charges.Cgb * 2 + gateBulkOverlapCap;
             var xgs = capgs * _complex.Laplace.Imaginary;
             var xgd = capgd * _complex.Laplace.Imaginary;
             var xgb = capgb * _complex.Laplace.Imaginary;
-            var xbd = CapBd * _complex.Laplace.Imaginary;
-            var xbs = CapBs * _complex.Laplace.Imaginary;
+            var xbd = _charges.Cbd * _complex.Laplace.Imaginary;
+            var xbs = _charges.Cbs * _complex.Laplace.Imaginary;
 
             // Load Y-matrix
             _elements.Add(
+                Properties.DrainConductance,
                 new Complex(0.0, xgd + xgs + xgb),
-                new Complex(CondBd + CondBs, xgb + xbd + xbs),
-                new Complex(DrainConductance + CondDs + CondBd + xrev * (Transconductance + TransconductanceBs), xgd + xbd),
-                new Complex(SourceConductance + CondDs + CondBs + xnrm * (Transconductance + TransconductanceBs), xgs + xbs),
+                Properties.SourceConductance,
+                new Complex(Gbd + Gbs, xgb + xbd + xbs),
+                new Complex(Properties.DrainConductance + Gds + Gbd + xrev * (Gm + Gmbs), xgd + xbd),
+                new Complex(Properties.SourceConductance + Gds + Gbs + xnrm * (Gm + Gmbs), xgs + xbs),
+
+                -Properties.DrainConductance,
+
                 -new Complex(0.0, xgb),
                 -new Complex(0.0, xgd),
                 -new Complex(0.0, xgs),
+
+                -Properties.SourceConductance,
+
                 -new Complex(0.0, xgb),
-                -new Complex(CondBd, xbd),
-                -new Complex(CondBs, xbs),
-                new Complex((xnrm - xrev) * Transconductance, -xgd),
-                new Complex(-CondBd + (xnrm - xrev) * TransconductanceBs, -xbd),
-                -new Complex((xnrm - xrev) * Transconductance, xgs),
-                -new Complex(CondBs + (xnrm - xrev) * TransconductanceBs, xbs),
-                DrainConductance,
-                SourceConductance,
-                -DrainConductance,
-                -SourceConductance,
-                -DrainConductance,
-                -CondDs - xnrm * (Transconductance + TransconductanceBs),
-                -SourceConductance,
-                -CondDs - xrev * (Transconductance + TransconductanceBs));
+                -new Complex(Gbd, xbd),
+                -new Complex(Gbs, xbs),
+
+                -Properties.DrainConductance,
+                new Complex((xnrm - xrev) * Gm, -xgd),
+                new Complex(-Gbd + (xnrm - xrev) * Gmbs, -xbd),
+                -Gds - xnrm * (Gm + Gmbs),
+
+                -new Complex((xnrm - xrev) * Gm, xgs),
+                -Properties.SourceConductance,
+                -new Complex(Gbs + (xnrm - xrev) * Gmbs, xbs),
+                -Gds - xrev * (Gm + Gmbs));
         }
     }
 }

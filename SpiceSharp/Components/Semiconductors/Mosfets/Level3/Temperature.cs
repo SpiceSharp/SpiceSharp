@@ -31,146 +31,33 @@ namespace SpiceSharp.Components.Mosfets.Level3
         protected readonly ModelTemperature ModelTemperature;
 
         /// <summary>
-        /// Gets the small source conductance.
+        /// Temperature-dependent properties.
         /// </summary>
-        /// <value>
-        /// The source conductance.
-        /// </value>
+        protected readonly TemperatureProperties Properties = new TemperatureProperties();
+
+        /// <include file='../common/docs.xml' path='docs/members/SourceConductance/*'/>
         [ParameterName("sourceconductance"), ParameterInfo("Conductance at the source")]
-        public double SourceConductance { get; private set; }
+        public double SourceConductance => Properties.SourceConductance.Equals(0.0) ? double.PositiveInfinity : Properties.SourceConductance;
 
-        /// <summary>
-        /// Gets the drain conductance.
-        /// </summary>
-        /// <value>
-        /// The drain conductance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainConductance/*'/>
         [ParameterName("drainconductance"), ParameterInfo("Conductance at the drain")]
-        public double DrainConductance { get; private set; }
+        public double DrainConductance => Properties.DrainConductance.Equals(0.0) ? double.PositiveInfinity : Properties.DrainConductance;
 
-        /// <summary>
-        /// Gets the source resistance.
-        /// </summary>
-        /// <value>
-        /// The source resistance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/SourceResistance/*'/>
         [ParameterName("rs"), ParameterInfo("Source resistance")]
-        public double SourceResistance
-        {
-            get
-            {
-                if (SourceConductance > 0.0)
-                    return 1.0 / SourceConductance;
-                return 0.0;
-            }
-        }
+        public double SourceResistance => Properties.SourceConductance.Equals(0.0) ? 0 : 1.0 / Properties.SourceConductance;
 
-        /// <summary>
-        /// Gets the drain resistance.
-        /// </summary>
-        /// <value>
-        /// The drain resistance.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/DrainResistance/*'/>
         [ParameterName("rd"), ParameterInfo("Drain conductance")]
-        public double DrainResistance
-        {
-            get
-            {
-                if (DrainConductance > 0.0)
-                    return 1.0 / DrainConductance;
-                return 0.0;
-            }
-        }
+        public double DrainResistance => Properties.DrainConductance.Equals(0.0) ? 0 : 1.0 / Properties.DrainConductance;
 
-        /// <summary>
-        /// Gets or sets the critical source voltage.
-        /// </summary>
-        /// <value>
-        /// The critical source voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/CriticalSourceVoltage/*'/>
         [ParameterName("sourcevcrit"), ParameterInfo("Critical source voltage")]
-        public double SourceVCritical { get; protected set; }
+        public double SourceVCritical => Properties.SourceVCritical;
 
-        /// <summary>
-        /// Gets or sets the critical drain voltage.
-        /// </summary>
-        /// <value>
-        /// The critical drain voltage.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/CriticalDrainVoltage/*'/>
         [ParameterName("drainvcrit"), ParameterInfo("Critical drain voltage")]
-        public double DrainVCritical { get; protected set; }
-
-        /// <summary>
-        /// Gets the temperature-modified surface mobility.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified surface mobility.
-        /// </value>
-        protected double TempSurfaceMobility { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified phi.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified phi.
-        /// </value>
-        protected double TempPhi { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified Vbi.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified Vbi.
-        /// </value>
-        protected double TempVoltageBi { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified bulk potential.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified bulk potential.
-        /// </value>
-        protected double TempBulkPotential { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified transconductance.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified transconductance.
-        /// </value>
-        protected double TempTransconductance { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified threshold voltage.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified thermal voltage.
-        /// </value>
-        protected double TempVt0 { get; private set; }
-
-        /// <summary>
-        /// Gets the thermal voltage.
-        /// </summary>
-        /// <value>
-        /// The thermal voltage.
-        /// </value>
-        protected double Vt { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified drain saturation current.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified drain saturation current.
-        /// </value>
-        protected double DrainSatCurrent { get; private set; }
-
-        /// <summary>
-        /// Gets the temperature-modified source saturation current.
-        /// </summary>
-        /// <value>
-        /// The temperature-modified source saturation current.
-        /// </value>
-        protected double SourceSatCurrent { get; private set; }
+        public double DrainVCritical => Properties.DrainVCritical;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Temperature"/> class.
@@ -186,72 +73,178 @@ namespace SpiceSharp.Components.Mosfets.Level3
             Parameters = context.GetParameterSet<Parameters>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
-            // Update the width and length if they are not given and if the model specifies them
-            if (!Parameters.Width.Given && ModelParameters.Width.Given)
-                Parameters.Width = new GivenParameter<double>(ModelParameters.Width.Value, false);
-            if (!Parameters.Length.Given && ModelParameters.Length.Given)
-                Parameters.Length = new GivenParameter<double>(ModelParameters.Length.Value, false);
-
             if (!Parameters.Temperature.Given)
-                Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
-            Vt = Parameters.Temperature * Constants.KOverQ;
+                Parameters.Temperature = _temperature.Temperature + Parameters.DeltaTemperature;
+            Properties.TempVt = Parameters.Temperature * Constants.KOverQ;
             var ratio = Parameters.Temperature / ModelParameters.NominalTemperature;
             var fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
             var kt = Parameters.Temperature * Constants.Boltzmann;
-            var egfet = 1.16 - 7.02e-4 * Parameters.Temperature * Parameters.Temperature / (Parameters.Temperature + 1108);
+            var egfet = 1.16 - (7.02e-4 * Parameters.Temperature * Parameters.Temperature) / (Parameters.Temperature + 1108);
             var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
-            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
+            var pbfact = -2 * Properties.TempVt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
-            if (!ModelParameters.DrainResistance.Equals(0.0))
-                DrainConductance = 1 / ModelParameters.DrainResistance;
-            else if (!ModelParameters.SheetResistance.Equals(0.0))
-                DrainConductance = 1 / (ModelParameters.SheetResistance * Parameters.DrainSquares);
+            if (ModelParameters.DrainResistance.Given)
+            {
+                if (ModelParameters.DrainResistance != 0)
+                    Properties.DrainConductance = Parameters.ParallelMultiplier / ModelParameters.DrainResistance;
+                else
+                    Properties.DrainConductance = 0;
+            }
+            else if (ModelParameters.SheetResistance.Given)
+            {
+                if ((ModelParameters.SheetResistance != 0) && (Parameters.DrainSquares != 0))
+                    Properties.DrainConductance = Parameters.ParallelMultiplier / (ModelParameters.SheetResistance * Parameters.DrainSquares);
+                else
+                    Properties.DrainConductance = 0;
+            }
             else
-                DrainConductance = 0;
-            if (!ModelParameters.SourceResistance.Equals(0.0))
-                SourceConductance = 1 / ModelParameters.SourceResistance;
-            else if (!ModelParameters.SheetResistance.Equals(0.0))
-                SourceConductance = 1 / (ModelParameters.SheetResistance * Parameters.SourceSquares);
-            else
-                SourceConductance = 0;
+                Properties.DrainConductance = 0;
 
-            if (Parameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
-                SpiceSharpWarning.Warning(this, Properties.Resources.Mosfets_EffectiveChannelTooSmall.FormatString(Name));
+            if (ModelParameters.SourceResistance.Given)
+            {
+                if (ModelParameters.SourceResistance != 0)
+                    Properties.SourceConductance = Parameters.ParallelMultiplier / ModelParameters.SourceResistance;
+                else
+                    Properties.SourceConductance = 0;
+            }
+            else if (ModelParameters.SheetResistance.Given)
+            {
+                if ((ModelParameters.SheetResistance != 0) && (Parameters.SourceSquares != 0))
+                    Properties.SourceConductance = Parameters.ParallelMultiplier / (ModelParameters.SheetResistance * Parameters.SourceSquares);
+                else
+                    Properties.SourceConductance = 0;
+            }
+            else
+                Properties.SourceConductance = 0;
+
+            if (Parameters.Length - 2 * ModelParameters.LateralDiffusion + ModelParameters.LengthAdjust <= 0)
+                throw new SpiceSharpException("{0}, {1}: Effective channel length less than zero.".FormatString(ModelTemperature.Name, Name));
+
+            if (Parameters.Width - 2 * ModelParameters.WidthNarrow + ModelParameters.WidthAdjust <= 0)
+                throw new SpiceSharpException("{0}, {1}: Effective channel width less than zero.".FormatString(ModelTemperature.Name, Name));
+
             var ratio4 = ratio * Math.Sqrt(ratio);
-            TempTransconductance = ModelParameters.Transconductance / ratio4;
-            TempSurfaceMobility = ModelParameters.SurfaceMobility / ratio4;
-            var phio = (ModelParameters.Phi - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
-            TempPhi = fact2 * phio + pbfact;
-            TempVoltageBi = ModelParameters.Vt0 - ModelParameters.MosfetType * (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi)) + .5 * (ModelTemperature.EgFet1 - egfet) +
-                ModelParameters.MosfetType * .5 * (TempPhi - ModelParameters.Phi);
-            TempVt0 = TempVoltageBi + ModelParameters.MosfetType * ModelParameters.Gamma * Math.Sqrt(TempPhi);
-            var tempSaturationCurrent = ModelParameters.JunctionSatCur * Math.Exp(-egfet / Vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
-            var tempSaturationCurrentDensity = ModelParameters.JunctionSatCurDensity * Math.Exp(-egfet / Vt + ModelTemperature.EgFet1 / ModelTemperature.VtNominal);
-            var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.PbFactor1) / ModelTemperature.Factor1;
-            TempBulkPotential = fact2 * pbo + pbfact;
+            Properties.TempTransconductance = ModelParameters.Transconductance / ratio4;
+            Properties.TempSurfaceMobility = ModelParameters.SurfaceMobility / ratio4;
+            var phio = (ModelParameters.Phi - ModelTemperature.Properties.PbFactor1) / ModelTemperature.Properties.Factor1;
+            Properties.TempPhi = fact2 * phio + pbfact;
+            Properties.TempVbi = ModelParameters.DelVt0 + ModelParameters.Vt0 - ModelParameters.MosfetType *
+                    (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi)) + .5 * (ModelTemperature.Properties.EgFet1 - egfet)
+                    + ModelParameters.MosfetType * .5 * (Properties.TempPhi - ModelParameters.Phi);
+            Properties.TempVt0 = Properties.TempVbi + ModelParameters.MosfetType * ModelParameters.Gamma * Math.Sqrt(Properties.TempPhi);
+            Properties.TempSatCur = ModelParameters.JunctionSatCur * Math.Exp(-egfet / Properties.TempVt + ModelTemperature.Properties.EgFet1 / ModelTemperature.Properties.Vtnom);
+            Properties.TempSatCurDensity = ModelParameters.JunctionSatCurDensity * Math.Exp(-egfet / Properties.TempVt + ModelTemperature.Properties.EgFet1 / ModelTemperature.Properties.Vtnom);
+            var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.Properties.PbFactor1) / ModelTemperature.Properties.Factor1;
+            var gmaold = (ModelParameters.BulkJunctionPotential - pbo) / pbo;
+            var capfact = 1 / (1 + ModelParameters.BulkJunctionBotGradingCoefficient * (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
+            Properties.TempCbd = ModelParameters.CapBd * capfact;
+            Properties.TempCbs = ModelParameters.CapBs * capfact;
+            Properties.TempCj = ModelParameters.BulkCapFactor * capfact;
+            capfact = 1 / (1 + ModelParameters.BulkJunctionSideGradingCoefficient * (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
+            Properties.TempCjsw = ModelParameters.SidewallCapFactor * capfact;
+            Properties.TempBulkPotential = fact2 * pbo + pbfact;
+            var gmanew = (Properties.TempBulkPotential - pbo) / pbo;
+            capfact = (1 + ModelParameters.BulkJunctionBotGradingCoefficient * (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew));
+            Properties.TempCbd *= capfact;
+            Properties.TempCbs *= capfact;
+            Properties.TempCj *= capfact;
+            capfact = (1 + ModelParameters.BulkJunctionSideGradingCoefficient * (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew));
+            Properties.TempCjsw *= capfact;
+            Properties.TempDepCap = ModelParameters.ForwardCapDepletionCoefficient * Properties.TempBulkPotential;
 
-            if (ModelParameters.JunctionSatCurDensity <= 0 || Parameters.DrainArea <= 0 || Parameters.SourceArea <= 0)
+            if ((ModelParameters.JunctionSatCurDensity == 0) || (Parameters.DrainArea == 0) || (Parameters.SourceArea == 0))
             {
-                SourceVCritical = DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * ModelParameters.JunctionSatCur));
+                Properties.SourceVCritical = Properties.DrainVCritical =
+                       Properties.TempVt * Math.Log(Properties.TempVt / (Constants.Root2 * Parameters.ParallelMultiplier * Properties.TempSatCur));
             }
             else
             {
-                DrainVCritical = Vt * Math.Log(Vt / (Constants.Root2 * ModelParameters.JunctionSatCurDensity * Parameters.DrainArea));
-                SourceVCritical = Vt * Math.Log(Vt / (Constants.Root2 * ModelParameters.JunctionSatCurDensity * Parameters.SourceArea));
+                Properties.DrainVCritical =
+                        Properties.TempVt * Math.Log(Properties.TempVt / (Constants.Root2 * Parameters.ParallelMultiplier *
+                        Properties.TempSatCurDensity * Parameters.DrainArea));
+                Properties.SourceVCritical =
+                        Properties.TempVt * Math.Log(Properties.TempVt / (Constants.Root2 * Parameters.ParallelMultiplier *
+                        Properties.TempSatCurDensity * Parameters.SourceArea));
             }
 
-            if (tempSaturationCurrentDensity.Equals(0.0) || Parameters.DrainArea <= 0 || Parameters.SourceArea <= 0)
-            {
-                DrainSatCurrent = tempSaturationCurrent;
-                SourceSatCurrent = tempSaturationCurrent;
-            }
+            double czbd, czbdsw;
+            if (ModelParameters.CapBd.Given)
+                czbd = Properties.TempCbd * Parameters.ParallelMultiplier;
             else
             {
-                DrainSatCurrent = tempSaturationCurrentDensity * Parameters.DrainArea;
-                SourceSatCurrent = tempSaturationCurrentDensity * Parameters.SourceArea;
+                if (ModelParameters.BulkCapFactor.Given)
+                    czbd = Properties.TempCj * Parameters.DrainArea * Parameters.ParallelMultiplier;
+                else
+                    czbd = 0;
             }
+            if (ModelParameters.SidewallCapFactor.Given)
+                czbdsw = Properties.TempCjsw * Parameters.DrainPerimeter * Parameters.ParallelMultiplier;
+            else
+                czbdsw = 0;
+            arg = 1 - ModelParameters.ForwardCapDepletionCoefficient;
+            var sarg = Math.Exp((-ModelParameters.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
+            var sargsw = Math.Exp((-ModelParameters.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
+            Properties.Cbd = czbd;
+            Properties.CbdSidewall = czbdsw;
+            Properties.F2d = czbd * (1 - ModelParameters.ForwardCapDepletionCoefficient *
+                        (1 + ModelParameters.BulkJunctionBotGradingCoefficient)) * sarg / arg
+                    + czbdsw * (1 - ModelParameters.ForwardCapDepletionCoefficient *
+                        (1 + ModelParameters.BulkJunctionSideGradingCoefficient)) *
+                        sargsw / arg;
+            Properties.F3d = czbd * ModelParameters.BulkJunctionBotGradingCoefficient * sarg / arg /
+                        Properties.TempBulkPotential
+                    + czbdsw * ModelParameters.BulkJunctionSideGradingCoefficient * sargsw / arg /
+                        Properties.TempBulkPotential;
+            Properties.F4d = czbd * Properties.TempBulkPotential * (1 - arg * sarg) /
+                        (1 - ModelParameters.BulkJunctionBotGradingCoefficient)
+                    + czbdsw * Properties.TempBulkPotential * (1 - arg * sargsw) /
+                        (1 - ModelParameters.BulkJunctionSideGradingCoefficient)
+                    - Properties.F3d / 2 *
+                        (Properties.TempDepCap * Properties.TempDepCap)
+                    - Properties.TempDepCap * Properties.F2d;
+
+            double czbs, czbssw;
+            if (ModelParameters.CapBs.Given)
+                czbs = Properties.TempCbs * Parameters.ParallelMultiplier;
+            else
+            {
+                if (ModelParameters.BulkCapFactor.Given)
+                    czbs = Properties.TempCj * Parameters.SourceArea * Parameters.ParallelMultiplier;
+                else
+                    czbs = 0;
+            }
+            if (ModelParameters.SidewallCapFactor.Given)
+                czbssw = Properties.TempCjsw * Parameters.SourcePerimeter * Parameters.ParallelMultiplier;
+            else
+                czbssw = 0;
+            arg = 1 - ModelParameters.ForwardCapDepletionCoefficient;
+            sarg = Math.Exp((-ModelParameters.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
+            sargsw = Math.Exp((-ModelParameters.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
+            Properties.Cbs = czbs;
+            Properties.CbsSidewall = czbssw;
+            Properties.F2s = czbs * (1 - ModelParameters.ForwardCapDepletionCoefficient *
+                        (1 + ModelParameters.BulkJunctionBotGradingCoefficient)) * sarg / arg
+                    + czbssw * (1 - ModelParameters.ForwardCapDepletionCoefficient *
+                        (1 + ModelParameters.BulkJunctionSideGradingCoefficient)) *
+                        sargsw / arg;
+            Properties.F3s = czbs * ModelParameters.BulkJunctionBotGradingCoefficient * sarg / arg /
+                       Properties.TempBulkPotential
+                    + czbssw * ModelParameters.BulkJunctionSideGradingCoefficient * sargsw / arg /
+                        Properties.TempBulkPotential;
+            Properties.F4s = czbs * Properties.TempBulkPotential * (1 - arg * sarg) /
+                        (1 - ModelParameters.BulkJunctionBotGradingCoefficient)
+                    + czbssw * Properties.TempBulkPotential * (1 - arg * sargsw) /
+                        (1 - ModelParameters.BulkJunctionSideGradingCoefficient)
+                    - Properties.F3s / 2 *
+                      (Properties.TempDepCap * Properties.TempDepCap)
+                    - Properties.TempDepCap * Properties.F2s;
+
+            Properties.EffectiveWidth = Parameters.Width - 2 * ModelParameters.WidthNarrow + ModelParameters.WidthAdjust;
+            Properties.EffectiveLength = Parameters.Length - 2 * ModelParameters.LateralDiffusion + ModelParameters.LengthAdjust;
+            Properties.OxideCap = ModelTemperature.Properties.OxideCapFactor * Properties.EffectiveLength * Parameters.ParallelMultiplier * Properties.EffectiveWidth;
         }
     }
 }

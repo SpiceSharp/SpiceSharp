@@ -15,52 +15,34 @@ namespace SpiceSharp.Components.Mosfets.Level3
         INoiseBehavior
     {
         private readonly INoiseSimulationState _state;
-        private readonly NoiseThermal _rd, _rs;
-        private readonly NoiseShot _id;
+        private readonly NoiseThermal _rd, _rs, _id;
         private readonly NoiseGain _flicker;
 
         /// <inheritdoc/>
+        [ParameterName("noise"), ParameterInfo("The total output noise density")]
         public double OutputNoiseDensity => _rd.OutputNoiseDensity + _rs.OutputNoiseDensity + _id.OutputNoiseDensity + _flicker.OutputNoiseDensity;
 
         /// <inheritdoc/>
+        [ParameterName("onoise"), ParameterInfo("The total integrated output noise")]
         public double TotalOutputNoise => _rd.TotalOutputNoise + _rs.TotalOutputNoise + _id.TotalOutputNoise + _flicker.TotalOutputNoise;
 
         /// <inheritdoc/>
+        [ParameterName("inoise"), ParameterInfo("The total integrated input noise")]
         public double TotalInputNoise => _rd.TotalInputNoise + _rs.TotalInputNoise + _id.TotalInputNoise + _flicker.TotalInputNoise;
 
-        /// <summary>
-        /// Gets the thermal noise of the drain series resistance.
-        /// </summary>
-        /// <value>
-        /// The thermal noise source.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/ThermalDrain/*'/>
         [ParameterName("rd"), ParameterInfo("The thermal noise of the drain resistor")]
         public INoiseSource ThermalDrain => _rd;
 
-        /// <summary>
-        /// Gets the thermal noise of the source series resistance.
-        /// </summary>
-        /// <value>
-        /// The thermal noise source.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/ThermalSource/*'/>
         [ParameterName("rs"), ParameterInfo("The thermal noise of the source resistor")]
         public INoiseSource ThermalSource => _rs;
 
-        /// <summary>
-        /// Gets the shot noise of the drain current.
-        /// </summary>
-        /// <value>
-        /// The shot noise source.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/ShotNoise/*'/>
         [ParameterName("id"), ParameterInfo("The shot noise of the drain current")]
         public INoiseSource ShotDrainCurrent => _id;
 
-        /// <summary>
-        /// Gets the flicker noise.
-        /// </summary>
-        /// <value>
-        /// The flicker noise source.
-        /// </value>
+        /// <include file='../common/docs.xml' path='docs/members/FlickerNoise/*'/>
         [ParameterName("flicker"), ParameterInfo("The flicker noise")]
         public INoiseSource Flicker => _flicker;
 
@@ -73,18 +55,14 @@ namespace SpiceSharp.Components.Mosfets.Level3
             : base(name, context)
         {
             _state = context.GetState<INoiseSimulationState>();
-            var complex = context.GetState<IComplexSimulationState>();
-
-            var d = complex.GetSharedVariable(context.Nodes[0]);
-            // var g = complex.GetSharedVariable(context.Nodes[1]);
-            var s = complex.GetSharedVariable(context.Nodes[2]);
-            // var b = complex.GetSharedVariable(context.Nodes[3]);
-            var dp = DrainPrime;
-            var sp = SourcePrime;
+            var d = Variables.Drain;
+            var s = Variables.Source;
+            var dp = Variables.DrainPrime;
+            var sp = Variables.SourcePrime;
 
             _rd = new NoiseThermal("rd", d, dp);
             _rs = new NoiseThermal("rs", s, sp);
-            _id = new NoiseShot("id", dp, sp);
+            _id = new NoiseThermal("id", dp, sp);
             _flicker = new NoiseGain("flicker", dp, sp);
         }
 
@@ -100,20 +78,16 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {
-            double coxSquared;
-            if (ModelParameters.OxideCapFactor > 0.0)
-                coxSquared = ModelParameters.OxideCapFactor;
-            else
-                coxSquared = 3.9 * 8.854214871e-12 / 1e-7;
-            coxSquared *= coxSquared;
-
-            _rd.Compute(DrainConductance, Parameters.Temperature);
-            _rs.Compute(SourceConductance, Parameters.Temperature);
-            _id.Compute(2.0 / 3.0 * Math.Abs(Transconductance));
+            _rd.Compute(Properties.DrainConductance, Parameters.Temperature);
+            _rs.Compute(Properties.SourceConductance, Parameters.Temperature);
+            _id.Compute(2.0 / 3.0 * Math.Abs(Gm), Parameters.Temperature);
             _flicker.Compute(ModelParameters.FlickerNoiseCoefficient *
-                Math.Exp(ModelParameters.FlickerNoiseExponent * Math.Log(Math.Max(Math.Abs(DrainCurrent), 1e-38))) /
-                (Parameters.Width * (Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
-                 coxSquared) / _state.Point.Value.Frequency);
+                 Math.Exp(ModelParameters.FlickerNoiseExponent *
+                 Math.Log(Math.Max(Math.Abs(Id), 1e-38))) /
+                 (_state.Point.Value.Frequency * Parameters.Width *
+                 Parameters.ParallelMultiplier *
+                 (Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
+                 ModelTemperature.Properties.OxideCapFactor * ModelTemperature.Properties.OxideCapFactor));
         }
     }
 }
