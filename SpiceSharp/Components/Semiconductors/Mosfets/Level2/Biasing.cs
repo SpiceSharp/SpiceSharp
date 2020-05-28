@@ -815,6 +815,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             }
 
             // COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
+            Gds = con.Ds.G;
             Id = Mode * con.Ds.C - con.Bd.C;
 
             // Update with time-dependent calculations

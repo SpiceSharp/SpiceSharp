@@ -599,6 +599,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
 			}
 
 			// COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
+			Gds = con.Ds.G;
 			Id = Mode * con.Ds.C - con.Bd.C;
 
 			// Update with time-dependent calculations
@@ -780,7 +781,6 @@ namespace SpiceSharp.Components.Mosfets.Level3
             var delvgd = vgd - vgdo;
 
             // these are needed for convergence testing
-            // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
             if (Mode >= 0)
             {
                 cdhat = Id - Gbd * delvbd + Gmbs * delvbs +

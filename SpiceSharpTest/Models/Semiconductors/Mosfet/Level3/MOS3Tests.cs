@@ -43,7 +43,7 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "d", "g", "0", "0", "DMOS")
                     .SetParameter("w", 1e-6)
                     .SetParameter("l", 1e-6),
-                CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
+                CreateMOS3Model("DMOS", false, "VTO=-0.7 KP=3.8E+1 THETA=0.25 VMAX=3.5E5")
             );
 
             // Create simulation
@@ -154,7 +154,7 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "out", "in", "vdd", "vdd", "DMOS")
                     .SetParameter("w", 1e-6)
                     .SetParameter("l", 1e-6),
-                CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
+                CreateMOS3Model("DMOS", false, "VTO=-0.7 KP=3.8E+1 THETA=0.25 VMAX=3.5E5")
                 );
 
             // Create simulation

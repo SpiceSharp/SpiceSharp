@@ -242,8 +242,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 Von = ModelParameters.MosfetType * von;
                 Vdsat = ModelParameters.MosfetType * vdsat;
             }
-            
+
             // COMPUTE EQUIVALENT DRAIN CURRENT SOURCE
+            Gds = con.Ds.G;
             Id = Mode * con.Ds.C - con.Bd.C;
 
             // Update with time-dependent calculations
