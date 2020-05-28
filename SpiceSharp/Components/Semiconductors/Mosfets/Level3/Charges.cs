@@ -145,20 +145,14 @@ namespace SpiceSharp.Components.Mosfets.Level3
                  * you must add in the other half from previous time
                  * and the constant part
                  */
+                double cgs, cgd, cgb;
                 if (mode > 0)
-                {
-                    Transistor.MeyerCharges(vgs, vgs - vds, von, mp.MosfetType * vdsat, out var cgs, out var cgd, out var cgb, tp.TempPhi, tp.OxideCap);
-                    Cgs = cgs;
-                    Cgd = cgd;
-                    Cgb = cgb;
-                }
+                    Transistor.MeyerCharges(vgs, vgs - vds, von, vdsat, out cgs, out cgd, out cgb, tp.TempPhi, tp.OxideCap);
                 else
-                {
-                    Transistor.MeyerCharges(vgs - vds, vgs, von, vdsat, out var cgd, out var cgs, out var cgb, tp.TempPhi, tp.OxideCap);
-                    Cgs = cgs;
-                    Cgd = cgd;
-                    Cgb = cgb;
-                }
+                    Transistor.MeyerCharges(vgs - vds, vgs, von, vdsat, out cgd, out cgs, out cgb, tp.TempPhi, tp.OxideCap);
+                Cgs = cgs;
+                Cgd = cgd;
+                Cgb = cgb;
             }
         }
     }

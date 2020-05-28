@@ -116,7 +116,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
             var vgb = vgs - vbs;
 
             // Update the charges and capacitances
-            _charges.Calculate(Mode, vgs, vds, vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
+            _charges.Calculate(Mode, vgs, vds, vbs, 
+                ModelParameters.MosfetType * Von, 
+                ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
 
             // Bulk junction capacitances
             _qbd.Value = _charges.Qbd;

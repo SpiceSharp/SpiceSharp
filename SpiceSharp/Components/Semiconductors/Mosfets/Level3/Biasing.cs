@@ -145,6 +145,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
             var vbd = vbs - vds;
             var vgd = vgs - vds;
 
+			/*
 			if (vbs <= -3 * Properties.TempVt)
 			{
 				var arg = 3 * Properties.TempVt / (vbs * Math.E);
@@ -170,6 +171,31 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Properties.TempVt));
 				con.Bd.G = DrainSatCur * evbd / Properties.TempVt + _config.Gmin;
 				con.Bd.C = DrainSatCur * (evbd - 1) + _config.Gmin * vbd;
+			}
+			*/
+			if (vbs <= 0)
+			{
+				con.Bs.G = SourceSatCur / Properties.TempVt;
+				con.Bs.C = con.Bs.G * vbs;
+				con.Bs.G += _config.Gmin;
+			}
+			else
+			{
+				var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / Properties.TempVt));
+				con.Bs.G = SourceSatCur * evbs / Properties.TempVt + _config.Gmin;
+				con.Bs.C = SourceSatCur * (evbs - 1);
+			}
+			if (vbd <= 0)
+			{
+				con.Bd.G = DrainSatCur / Properties.TempVt;
+				con.Bd.C = con.Bd.G * vbd;
+				con.Bd.G += _config.Gmin;
+			}
+			else
+			{
+				var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / Properties.TempVt));
+				con.Bd.G = DrainSatCur * evbd / Properties.TempVt + _config.Gmin;
+				con.Bd.C = DrainSatCur * (evbd - 1);
 			}
 
 			// Now to determine whether the user was able to correctly identify the source and drain of his device.
@@ -418,10 +444,12 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				// Normalized drain current
 				cdnorm = cdo * vdsx;
 				Gm = vdsx;
-				if ((Mode * vds) > vdsat)
+
+				// TODO: ngSpice updated this
+				/* if ((Mode * vds) > vdsat)
 					con.Ds.G = -dvtdvd * vdsx;
-				else
-					con.Ds.G = vgsx - vth - (1.0 + fbody + dvtdvd) * vdsx;
+				else */
+				con.Ds.G = vgsx - vth - (1.0 + fbody + dvtdvd) * vdsx;
 				Gmbs = dcodvb * vdsx;
 
 				// Drain current without velocity saturation effect
@@ -430,7 +458,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				con.Ds.C = Beta * cdnorm;
 				Gm = Beta * Gm + dfgdvg * cd1;
 				con.Ds.G = Beta * con.Ds.G + dfgdvd * cd1;
-				Gmbs = Beta * Gmbs + dfgdvb * cd1;
+				// TODO: ngSpice updated this
+				// Gmbs = Beta * Gmbs + dfgdvb * cd1;
+				Gmbs *= Beta;
 				
 				// Celocity saturation factor
 				if (ModelParameters.MaxDriftVelocity > 0.0)
@@ -439,10 +469,12 @@ namespace SpiceSharp.Components.Mosfets.Level3
 					fd2 = fdrain * fdrain;
 					arga = fd2 * vdsx * onvdsc * onfg;
 					dfddvg = -dfgdvg * arga;
+					// TODO: ngSpice updated this
+					/*
 					if ((Mode * vds) > vdsat)
 						dfddvd = -dfgdvd * arga;
-					else
-						dfddvd = -dfgdvd * arga - fd2 * onvdsc;
+					else */
+					dfddvd = -dfgdvd * arga - fd2 * onvdsc;
 					dfddvb = -dfgdvb * arga;
 					
 					// Drain current
@@ -454,11 +486,12 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				}
 
 				// Channel length modulation
+				// TODO: ngSpice update this
 				if ((Mode * vds) <= vdsat)
-				{
-					if ((ModelParameters.MaxDriftVelocity > 0.0) || (ModelTemperature.Properties.Alpha == 0.0) || ModelParameters.BadMos)
-						goto line700;
-					else
+				/* {
+					if ((ModelParameters.MaxDriftVelocity > 0.0) || (ModelTemperature.Properties.Alpha == 0.0) || ModelParameters.BadMos) */
+					goto line700;
+					/* else
 					{
 						arga = Mode * vds / vdsat;
 						delxl = Math.Sqrt(ModelParameters.Kappa * ModelTemperature.Properties.Alpha * vdsat / 8);
@@ -471,7 +504,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
 						ddldvb = 0.0;
 						goto line520;
 					}
-				}
+				} */
 
 				if (ModelParameters.MaxDriftVelocity <= 0.0)
 					goto line510;
@@ -501,31 +534,34 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				argc = ModelParameters.Kappa * ModelTemperature.Properties.Alpha;
 				argb = Math.Sqrt(arga * arga + argc * ((Mode * vds) - vdsat));
 				delxl = argb - arga;
-				if (argb != 0.0)
-				{
+				
+				// TODO: ngSpice updated this
+				/* if (argb != 0.0)
+				{ */
 					dldvd = argc / (argb + argb);
 					dldem = 0.5 * (arga / argb - 1.0) * ModelTemperature.Properties.Alpha;
-				}
+				/* }
 				else
 				{
 					dldvd = 0.0;
 					dldem = 0.0;
-				}
+				} */
 				ddldvg = dldem * demdvg;
 				ddldvd = dldem * demdvd - dldvd;
 				ddldvb = dldem * demdvb;
 				goto line520;
 			line510:
-				if (ModelParameters.BadMos)
-				{
-					delxl = Math.Sqrt(ModelParameters.Kappa * ((Mode * vds) - vdsat) * ModelTemperature.Properties.Alpha);
-					dldvd = 0.5 * delxl / ((Mode * vds) - vdsat);
-				}
+				// TODO: ngSpice update this
+				/* if (ModelParameters.BadMos)
+				{ */
+				delxl = Math.Sqrt(ModelParameters.Kappa * ((Mode * vds) - vdsat) * ModelTemperature.Properties.Alpha);
+				dldvd = 0.5 * delxl / ((Mode * vds) - vdsat);
+				/* }
 				else
 				{
 					delxl = Math.Sqrt(ModelParameters.Kappa * ModelTemperature.Properties.Alpha * ((Mode * vds) - vdsat + (vdsat / 8)));
 					dldvd = 0.5 * delxl / ((Mode * vds) - vdsat + (vdsat / 8));
-				}
+				} */
 				ddldvg = 0.0;
 				ddldvd = -dldvd;
 				ddldvb = 0.0;
@@ -546,14 +582,17 @@ namespace SpiceSharp.Components.Mosfets.Level3
 				dlonxl = delxl * oneoverxl;
 				xlfact = 1.0 / (1.0 - dlonxl);
 
+				// TODO: ngSpice updated this
 				con.Ds.C *= xlfact;
 				diddl = con.Ds.C / (Properties.EffectiveLength - delxl);
 				Gm = Gm * xlfact + diddl * ddldvg;
+				gds0 = con.Ds.G * xlfact + diddl * ddldvd;
 				Gmbs = Gmbs * xlfact + diddl * ddldvb;
-				gds0 = diddl * ddldvd;
+				// gds0 = diddl * ddldvd;
 				Gm += gds0 * dvsdvg;
 				Gmbs += gds0 * dvsdvb;
-				con.Ds.G = con.Ds.G * xlfact + diddl * dldvd + gds0 * dvsdvd;
+				con.Ds.G = gds0 * dvsdvd + diddl * dldvd;
+				// con.Ds.G = con.Ds.G * xlfact + diddl * dldvd + gds0 * dvsdvd;
 			/*              con.Ds.G = (con.Ds.G*xlfact)+gds0*dvsdvd-
 						   (cd1*ddldvd/(Properties.EffectiveLength*(1-2*dlonxl+dlonxl*dlonxl)));*/
 
@@ -624,8 +663,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
 
 			// Right hand side contributions
 			double xnrm, xrev;
-			con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - con.Bs.G * vbs);
-			con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - con.Bd.G * vbd);
+			con.Bs.C = ModelParameters.MosfetType * (con.Bs.C - (con.Bs.G - _config.Gmin) * vbs);
+			con.Bd.C = ModelParameters.MosfetType * (con.Bd.C - (con.Bd.G - _config.Gmin) * vbd);
 			if (Mode >= 0)
 			{
 				xnrm = 1;
