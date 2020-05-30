@@ -4,19 +4,29 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Algebra;
 using SpiceSharp.ParameterSets;
 
-namespace SpiceSharp.Components.Mosfets.Level1
+namespace SpiceSharp.Components.Mosfets
 {
     /// <summary>
     /// Small-signal behavior for a <see cref="Mosfet1" />.
     /// </summary>
-    /// <seealso cref="Biasing"/>
+    /// <seealso cref="Behavior"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    public class Frequency : Biasing,
+    public class Frequency : Behavior,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
         private readonly Charges _charges = new Charges();
+
+        /// <summary>
+        /// The model parameters.
+        /// </summary>
+        protected readonly ModelParameters ModelParameters;
+
+        /// <summary>
+        /// The behavior that biased the mosfet.
+        /// </summary>
+        protected readonly IMosfetBiasingBehavior Behavior;
 
         /// <summary>
         /// The variables used by the transistor.
@@ -41,12 +51,14 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
         public Frequency(string name, ComponentBindingContext context)
-            : base(name, context) 
+            : base(name) 
         {
+            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            Behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();
             _complex = context.GetState<IComplexSimulationState>();
             Variables = new MosfetVariables<Complex>(name, _complex, context.Nodes,
-                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
-                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
+                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Behavior.Parameters.DrainSquares > 0,
+                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Behavior.Parameters.SourceSquares > 0);
             _elements = new ElementSet<Complex>(_complex.Solver, Variables.GetMatrixLocations(_complex.Map));
         }
 
@@ -54,7 +66,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
         void IFrequencyBehavior.InitializeParameters()
         {
             // Update the small-signal parameters
-            _charges.Calculate(Mode, Vgs, Vds, Vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
+            _charges.Calculate(Behavior.Mode, 
+                Behavior.Vgs, Behavior.Vds, Behavior.Vbs, ModelParameters.MosfetType * Behavior.Von, ModelParameters.MosfetType * Behavior.Vdsat, Behavior.Properties, ModelParameters);
         }
 
         /// <inheritdoc/>
@@ -62,7 +75,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         {
             int xnrm, xrev;
 
-            if (Mode < 0)
+            if (Behavior.Mode < 0)
             {
                 xnrm = 0;
                 xrev = 1;
@@ -74,9 +87,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
             }
 
             // Charge oriented model parameters
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.Width;
-            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Properties.EffectiveLength;
+            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Behavior.Parameters.Width;
+            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Behavior.Parameters.Width;
+            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Behavior.Properties.EffectiveLength;
 
             // Meyer"s model parameters
             var capgs = _charges.Cgs * 2 + gateSourceOverlapCap;
@@ -90,34 +103,34 @@ namespace SpiceSharp.Components.Mosfets.Level1
 
             // Load Y-matrix
             _elements.Add(
-                Properties.DrainConductance,
+                Behavior.Properties.DrainConductance,
                 new Complex(0.0, xgd + xgs + xgb),
-                Properties.SourceConductance,
-                new Complex(Gbd + Gbs, xgb + xbd + xbs),
-                new Complex(Properties.DrainConductance + Gds + Gbd + xrev * (Gm + Gmbs), xgd + xbd),
-                new Complex(Properties.SourceConductance + Gds + Gbs + xnrm * (Gm + Gmbs), xgs + xbs),
+                Behavior.Properties.SourceConductance,
+                new Complex(Behavior.Gbd + Behavior.Gbs, xgb + xbd + xbs),
+                new Complex(Behavior.Properties.DrainConductance + Behavior.Gds + Behavior.Gbd + xrev * (Behavior.Gm + Behavior.Gmbs), xgd + xbd),
+                new Complex(Behavior.Properties.SourceConductance + Behavior.Gds + Behavior.Gbs + xnrm * (Behavior.Gm + Behavior.Gmbs), xgs + xbs),
 
-                -Properties.DrainConductance,
+                -Behavior.Properties.DrainConductance,
 
                 -new Complex(0.0, xgb),
                 -new Complex(0.0, xgd),
                 -new Complex(0.0, xgs),
 
-                -Properties.SourceConductance,
+                -Behavior.Properties.SourceConductance,
 
                 -new Complex(0.0, xgb),
-                -new Complex(Gbd, xbd),
-                -new Complex(Gbs, xbs),
+                -new Complex(Behavior.Gbd, xbd),
+                -new Complex(Behavior.Gbs, xbs),
 
-                -Properties.DrainConductance,
-                new Complex((xnrm - xrev) * Gm, -xgd),
-                new Complex(-Gbd + (xnrm - xrev) * Gmbs, -xbd),
-                -Gds - xnrm * (Gm + Gmbs),
+                -Behavior.Properties.DrainConductance,
+                new Complex((xnrm - xrev) * Behavior.Gm, -xgd),
+                new Complex(-Behavior.Gbd + (xnrm - xrev) * Behavior.Gmbs, -xbd),
+                -Behavior.Gds - xnrm * (Behavior.Gm + Behavior.Gmbs),
 
-                -new Complex((xnrm - xrev) * Gm, xgs),
-                -Properties.SourceConductance,
-                -new Complex(Gbs + (xnrm - xrev) * Gmbs, xbs),
-                -Gds - xrev * (Gm + Gmbs));
+                -new Complex((xnrm - xrev) * Behavior.Gm, xgs),
+                -Behavior.Properties.SourceConductance,
+                -new Complex(Behavior.Gbs + (xnrm - xrev) * Behavior.Gmbs, xbs),
+                -Behavior.Gds - xrev * (Behavior.Gm + Behavior.Gmbs));
         }
     }
 }

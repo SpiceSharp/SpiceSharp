@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     public class Biasing : Temperature,
-        IBiasingBehavior,
+        IMosfetBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly IIntegrationMethod _method;
@@ -34,62 +34,65 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// </summary>
         protected const double MaximumExponentArgument = 709.0;
 
-        /// <include file='../common/docs.xml' path='docs/members/DrainCurrent/*'/>
+		/// <inheritdoc/>
+		Mosfets.TemperatureProperties IMosfetBiasingBehavior.Properties => Properties;
+
+        /// <inheritdoc/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
         public double Id { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkSourceCurrent/*'/>
+        /// <inheritdoc/>
         [ParameterName("ibs"), ParameterInfo("B-S junction current")]
         public double Ibs { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkDrainCurrent/*'/>
+        /// <inheritdoc/>
         [ParameterName("ibd"), ParameterInfo("B-D junction current")]
         public double Ibd { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/Transconductance/*'/>
+        /// <inheritdoc/>
         [ParameterName("gm"), ParameterInfo("Transconductance")]
         public double Gm { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkSourceTransconductance/*'/>
+        /// <inheritdoc/>
         [ParameterName("gmb"), ParameterName("gmbs"), ParameterInfo("Bulk-Source transconductance")]
         public double Gmbs { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/DrainSourceConductance/*'/>
+        /// <inheritdoc/>
         [ParameterName("gds"), ParameterInfo("Drain-Source conductance")]
         public double Gds { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkSourceConductance/*'/>
+        /// <inheritdoc/>
         [ParameterName("gbs"), ParameterInfo("Bulk-Source conductance")]
         public double Gbs { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkDrainConductance/*'/>
+        /// <inheritdoc/>
         [ParameterName("gbd"), ParameterInfo("Bulk-Drain conductance")]
         public double Gbd { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/von/*'/>
+        /// <inheritdoc/>
         [ParameterName("von"), ParameterInfo("Turn-on voltage")]
         public double Von { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/SaturationVoltage/*'/>
+        /// <inheritdoc/>
         [ParameterName("vdsat"), ParameterInfo("Saturation drain-source voltage")]
         public double Vdsat { get; private set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/Mode/*'/>
+        /// <inheritdoc/>
         public double Mode { get; private set; } = 1;
 
-        /// <include file='../common/docs.xml' path='docs/members/GateSourceVoltage/*'/>
+        /// <inheritdoc/>
         [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
         public double Vgs { get; protected set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/DrainSourceVoltage/*'/>
+        /// <inheritdoc/>
         [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
         public double Vds { get; protected set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkSourceVoltage/*'/>
+        /// <inheritdoc/>
         [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
         public virtual double Vbs { get; protected set; }
 
-        /// <include file='../common/docs.xml' path='docs/members/BulkDrainVoltage/*'/>
+        /// <inheritdoc/>
         [ParameterName("vbd"), ParameterInfo("Bulk-Drain voltage")]
         public virtual double Vbd { get; protected set; }
 

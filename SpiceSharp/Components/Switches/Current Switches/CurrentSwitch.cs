@@ -65,7 +65,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            var context = new CurrentControlledBindingContext(this, simulation, ControllingName, LinkParameters);
+            var context = new CurrentControlledBindingContext(this, simulation, behaviors, ControllingName, LinkParameters);
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(CurrentSwitchModel));
             behaviors

@@ -17,9 +17,10 @@ namespace SpiceSharp.Components
         /// <param name="entity">The entity creating the behavior.</param>
         /// <param name="simulation">The simulation for which a behavior is created.</param>
         /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public ModelBindingContext(IEntity entity, ISimulation simulation, bool linkParameters)
-            : base(entity, simulation, linkParameters)
+        /// <param name="behaviors">The created behaviors.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/>, <paramref name="simulation"/> is <c>null</c>.</exception>
+        public ModelBindingContext(IEntity entity, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
+            : base(entity, simulation, behaviors, linkParameters)
         {
         }
     }

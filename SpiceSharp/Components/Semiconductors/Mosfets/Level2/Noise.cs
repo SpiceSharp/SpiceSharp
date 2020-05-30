@@ -17,6 +17,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         private readonly INoiseSimulationState _state;
         private readonly NoiseThermal _rd, _rs, _id;
         private readonly NoiseGain _flicker;
+        private readonly ModelProperties _properties;
 
         /// <inheritdoc/>
         [ParameterName("noise"), ParameterInfo("The total output noise density")]
@@ -55,6 +56,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             : base(name, context)
         {
             _state = context.GetState<INoiseSimulationState>();
+            _properties = context.ModelBehaviors.GetValue<ModelTemperature>().Properties;
             var d = Variables.Drain;
             var s = Variables.Source;
             var dp = Variables.DrainPrime;
@@ -78,16 +80,16 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {
-            _rd.Compute(Properties.DrainConductance, Parameters.Temperature);
-            _rs.Compute(Properties.SourceConductance, Parameters.Temperature);
-            _id.Compute(2.0 / 3.0 * Math.Abs(Gm), Parameters.Temperature);
+            _rd.Compute(Behavior.Properties.DrainConductance, Behavior.Parameters.Temperature);
+            _rs.Compute(Behavior.Properties.SourceConductance, Behavior.Parameters.Temperature);
+            _id.Compute(2.0 / 3.0 * Math.Abs(Behavior.Gm), Behavior.Parameters.Temperature);
             _flicker.Compute(ModelParameters.FlickerNoiseCoefficient *
                  Math.Exp(ModelParameters.FlickerNoiseExponent *
-                 Math.Log(Math.Max(Math.Abs(Id), 1e-38))) /
-                 (_state.Point.Value.Frequency * Parameters.Width *
-                 Parameters.ParallelMultiplier *
-                 (Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
-                 ModelTemperature.Properties.OxideCapFactor * ModelTemperature.Properties.OxideCapFactor));
+                 Math.Log(Math.Max(Math.Abs(Behavior.Id), 1e-38))) /
+                 (_state.Point.Value.Frequency * Behavior.Parameters.Width *
+                 Behavior.Parameters.ParallelMultiplier *
+                 (Behavior.Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
+                 _properties.OxideCapFactor * _properties.OxideCapFactor));
         }
     }
 }

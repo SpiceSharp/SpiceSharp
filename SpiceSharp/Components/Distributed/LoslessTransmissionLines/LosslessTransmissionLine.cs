@@ -74,7 +74,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(this, simulation, LinkParameters);
+            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
             behaviors
                 .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))

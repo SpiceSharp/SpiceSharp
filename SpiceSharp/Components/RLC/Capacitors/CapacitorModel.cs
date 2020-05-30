@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         {
             var container = new BehaviorContainer(Name)
             {
-                new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, LinkParameters))
+                new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters))
             };
             simulation.EntityBehaviors.Add(container);
         }

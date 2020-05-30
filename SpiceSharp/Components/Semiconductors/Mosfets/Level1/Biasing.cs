@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     public class Biasing : Temperature, 
-        IBiasingBehavior, 
+        IMosfetBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly ITimeSimulationState _time;
@@ -23,6 +23,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
         private readonly MosfetVariables<double> _variables;
         private readonly ElementSet<double> _elements;
         private readonly BiasingParameters _config;
+
+        /// <inheritdoc/>
+        TemperatureProperties IMosfetBiasingBehavior.Properties => Properties;
 
         /// <summary>
         /// The maximum exponent argument

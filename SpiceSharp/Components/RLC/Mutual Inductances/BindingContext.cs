@@ -31,10 +31,11 @@ namespace SpiceSharp.Components.MutualInductances
         /// </summary>
         /// <param name="component">The component that creates the behavior.</param>
         /// <param name="simulation">The simulation for which the behavior is created.</param>
+        /// <param name="behaviors">The created behaviors.</param>
         /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public BindingContext(MutualInductance component, ISimulation simulation, bool linkParameters)
-            : base(component, simulation, linkParameters)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/>, <paramref name="simulation"/> or <paramref name="behaviors"/> is <c>null</c>.</exception>
+        public BindingContext(MutualInductance component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
+            : base(component, simulation, behaviors, linkParameters)
         {
             Inductor1Behaviors = simulation.EntityBehaviors[component.InductorName1.ThrowIfNull(nameof(component.InductorName1))];
             Inductor2Behaviors = simulation.EntityBehaviors[component.InductorName2.ThrowIfNull(nameof(component.InductorName2))];

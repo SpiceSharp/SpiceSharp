@@ -67,7 +67,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            var context = new MutualInductances.BindingContext(this, simulation, LinkParameters);
+            var context = new MutualInductances.BindingContext(this, simulation, behaviors, LinkParameters);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
                 .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))

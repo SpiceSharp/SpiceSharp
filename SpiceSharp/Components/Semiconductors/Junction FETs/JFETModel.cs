@@ -31,7 +31,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             Parameters.CalculateDefaults();
-            var context = new ModelBindingContext(this, simulation, LinkParameters);
+            var context = new ModelBindingContext(this, simulation, behaviors, LinkParameters);
             behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }

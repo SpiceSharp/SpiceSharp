@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     public class Biasing : Temperature, 
-        IBiasingBehavior,
+        IMosfetBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly IIntegrationMethod _method;
@@ -35,6 +35,9 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The maximum exponent argument.
         /// </summary>
         protected const double MaximumExponentArgument = 709.0;
+
+        /// <inheritdoc/>
+        TemperatureProperties IMosfetBiasingBehavior.Properties => Properties;
 
         /// <include file='../common/docs.xml' path='docs/members/DrainCurrent/*'/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]

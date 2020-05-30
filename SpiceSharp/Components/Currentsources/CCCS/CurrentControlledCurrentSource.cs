@@ -71,7 +71,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            var context = new CurrentControlledBindingContext(this, simulation, ControllingSource, LinkParameters);
+            var context = new CurrentControlledBindingContext(this, simulation, behaviors, ControllingSource, LinkParameters);
             behaviors
                 .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
                 .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));

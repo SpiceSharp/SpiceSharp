@@ -56,7 +56,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, LinkParameters);
+            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
             if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsKey(typeof(ModelTemperature)))
                 throw new NoModelException(Name, typeof(DiodeModel));
             behaviors
