@@ -58,8 +58,4 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-
-  <Target Name="OuterPreBuild" BeforeTargets="DispatchToInnerBuilds">
-    <Exec Command="&quot;$(SolutionDir)SpiceSharp.CodeGeneration\bin\Debug\SpiceSharp.CodeGeneration.exe&quot; &quot;$(SolutionDir)SpiceSharp&quot;" />
-  </Target>
 </Project>
