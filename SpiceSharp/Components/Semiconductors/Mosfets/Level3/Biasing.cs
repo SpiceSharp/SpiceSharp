@@ -23,6 +23,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         private readonly ElementSet<double> _elements;
         private readonly MosfetVariables<double> _variables;
         private readonly BiasingParameters _config;
+		private readonly Contributions<double> _contributions = new Contributions<double>();
+		private readonly MosfetContributionEventArgs _args;
 
         /// <summary>
         /// The permittivity of silicon
@@ -36,6 +38,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
 
 		/// <inheritdoc/>
 		Mosfets.TemperatureProperties IMosfetBiasingBehavior.Properties => Properties;
+
+		/// <inheritdoc/>
+		public event EventHandler<MosfetContributionEventArgs> UpdateContributions;
 
         /// <inheritdoc/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
@@ -107,6 +112,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
             var state = context.GetState<IBiasingSimulationState>();
             _config = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
+			_args = new MosfetContributionEventArgs(_contributions);
             context.TryGetState(out _time);
             context.TryGetState(out _method);
 
@@ -123,7 +129,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
-            Contributions<double> con = new Contributions<double>();
+			var con = _contributions;
+			con.Reset();
 
             /* first, we compute a few useful values - these could be
              * pre-computed, but for historical reasons are still done
@@ -644,8 +651,13 @@ namespace SpiceSharp.Components.Mosfets.Level3
 			Gds = con.Ds.G;
 			Id = Mode * con.Ds.C - con.Bd.C;
 
+			Vbs = vbs;
+			Vbd = vbd;
+			Vgs = vgs;
+			Vds = vds;
+
 			// Update with time-dependent calculations
-			UpdateTime(vgs, vds, vbs, ref con);
+			UpdateContributions?.Invoke(this, _args);
 
 			// Check convergence
 			if (!Parameters.Off || _iteration.Mode != IterationModes.Fix)
@@ -655,10 +667,6 @@ namespace SpiceSharp.Components.Mosfets.Level3
 			}
 
 			// Save things away for next time
-			Vbs = vbs;
-			Vbd = vbd;
-			Vgs = vgs;
-			Vds = vds;
 			Gbd = con.Bd.G;
 			Ibd = con.Bd.C;
 			Gbs = con.Bs.G;
@@ -713,13 +721,6 @@ namespace SpiceSharp.Components.Mosfets.Level3
                 con.Ds.C + con.Bs.C + ModelParameters.MosfetType * con.Gs.C
                 );
         }
-
-		/// <include file='../common/docs.xml' path='docs/methods/UpdateTime/*'/>
-		protected virtual void UpdateTime(double vgs, double vds, double vbs, ref Contributions<double> c)
-		{
-			// No time-dependent stuff when we're just biasing, so let's save some time
-			// by not calculating these quantities.
-		}
 
 		/// <summary>
 		/// Initializes the voltages to be used for calculating the current iteration.

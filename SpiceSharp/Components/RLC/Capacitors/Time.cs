@@ -12,6 +12,7 @@ namespace SpiceSharp.Components.Capacitors
     /// <seealso cref="Temperature" />
     /// <seealso cref="ITimeBehavior" />
     public class Time : Temperature,
+        IBiasingBehavior,
         ITimeBehavior
     {
         private readonly IBiasingSimulationState _biasing;
@@ -50,6 +51,7 @@ namespace SpiceSharp.Components.Capacitors
             _qcap = method.CreateDerivative();
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
             // Calculate the state for DC
@@ -59,6 +61,7 @@ namespace SpiceSharp.Components.Capacitors
                 _qcap.Value = Capacitance * (_variables.Positive.Value - _variables.Negative.Value);
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             // Don't matter for DC analysis

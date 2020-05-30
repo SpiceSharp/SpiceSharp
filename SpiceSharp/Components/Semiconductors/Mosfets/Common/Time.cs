@@ -1,22 +1,25 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using System;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 
-namespace SpiceSharp.Components.Mosfets.Level3
+namespace SpiceSharp.Components.Mosfets
 {
     /// <summary>
-    /// Transient behavior for a <see cref="Mosfet3" />.
+    /// Transient behavior for a mosfet.
     /// </summary>
-    /// <seealso cref="Biasing"/>
+    /// <seealso cref="Behavior"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Biasing,
+    public class Time : Behavior, 
         ITimeBehavior
     {
         private readonly ITimeSimulationState _time;
         private readonly IDerivative _qbs, _qbd, _qgs, _qgd, _qgb;
         private readonly StateValue<double> _cgs, _cgd, _cgb, _vgs, _vbs, _vds;
         private readonly Charges _charges = new Charges();
+        private readonly IMosfetBiasingBehavior _behavior;
+        private readonly ModelParameters _mp;
 
         /// <include file='../common/docs.xml' path='docs/members/GateSourceCharge/*'/>
         [ParameterName("qgs"), ParameterInfo("Gate-source charge storage", Units = "C")]
@@ -63,10 +66,14 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="context"/> is <c>null</c>.</exception>
         public Time(string name, ComponentBindingContext context)
-            : base(name, context)
+            : base(name)
         {
+            context.ThrowIfNull(nameof(context));
             _time = context.GetState<ITimeSimulationState>();
+            _behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();
+            _mp = context.ModelBehaviors.GetParameterSet<ModelParameters>();
             var method = context.GetState<IIntegrationMethod>();
             _vgs = new StateValue<double>(2); method.RegisterState(_vgs);
             _vds = new StateValue<double>(2); method.RegisterState(_vds);
@@ -79,21 +86,23 @@ namespace SpiceSharp.Components.Mosfets.Level3
             _qgb = method.CreateDerivative();
             _qbd = method.CreateDerivative();
             _qbs = method.CreateDerivative();
+            _behavior.UpdateContributions += UpdateTime;
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
-            var vgs = Vgs;
-            var vds = Vds;
-            var vbs = Vbs;
+            var vgs = _behavior.Vgs;
+            var vds = _behavior.Vds;
+            var vbs = _behavior.Vbs;
             var vgd = vgs - vds;
             var vgb = vgs - vbs;
 
-            _charges.Calculate(Mode, vgs, vds, vbs, ModelParameters.MosfetType * Von, ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
+            _charges.Calculate(_behavior, _mp);
 
-            var GateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
-            var GateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
-            var GateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Parameters.ParallelMultiplier * Properties.EffectiveLength;
+            var GateSourceOverlapCap = _mp.GateSourceOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Parameters.Width;
+            var GateDrainOverlapCap = _mp.GateDrainOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Parameters.Width;
+            var GateBulkOverlapCap = _mp.GateBulkOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Properties.EffectiveLength;
 
             var capgs = 2 * _charges.Cgs + GateSourceOverlapCap;
             var capgd = 2 * _charges.Cgs + GateDrainOverlapCap;
@@ -108,17 +117,19 @@ namespace SpiceSharp.Components.Mosfets.Level3
         }
 
         /// <inheritdoc/>
-        protected override void UpdateTime(double vgs, double vds, double vbs, ref Contributions<double> c)
+        protected void UpdateTime(object sender, MosfetContributionEventArgs args)
         {
             if (_time.UseDc)
                 return;
+            var c = args.Contributions;
+            var vgs = _behavior.Vgs;
+            var vds = _behavior.Vds;
+            var vbs = _behavior.Vbs;
             var vgd = vgs - vds;
             var vgb = vgs - vbs;
 
             // Update the charges and capacitances
-            _charges.Calculate(Mode, vgs, vds, vbs, 
-                ModelParameters.MosfetType * Von, 
-                ModelParameters.MosfetType * Vdsat, Properties, ModelParameters);
+            _charges.Calculate(_behavior, _mp);
 
             // Bulk junction capacitances
             _qbd.Value = _charges.Qbd;
@@ -133,9 +144,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
             c.Bs.C += _qbs.Derivative;
 
             // Gate capacitances
-            var GateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
-            var GateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Parameters.ParallelMultiplier * Parameters.Width;
-            var GateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Parameters.ParallelMultiplier * Properties.EffectiveLength;
+            var GateSourceOverlapCap = _mp.GateSourceOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Parameters.Width;
+            var GateDrainOverlapCap = _mp.GateDrainOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Parameters.Width;
+            var GateBulkOverlapCap = _mp.GateBulkOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Properties.EffectiveLength;
 
             var vgs1 = _vgs.GetPreviousValue(1);
             var vgd1 = vgs1 - _vds.GetPreviousValue(1);
@@ -162,7 +173,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
             info = _qgd.GetContributions(capgd, vgd);
             c.Gd.G += info.Jacobian;
             c.Gd.C += info.Rhs;
-
+            
             _qgb.Integrate();
             info = _qgb.GetContributions(capgb, vgb);
             c.Gb.G += info.Jacobian;

@@ -11,6 +11,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
     public class Time : Biasing,
+        IBiasingBehavior,
         ITimeBehavior
     {
         private readonly int _pos1, _neg1, _pos2, _neg2, _br1, _br2;
@@ -44,6 +45,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
             Signals = new DelayedSignal(2, Parameters.Delay);
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
             var sol = BiasingState.Solution;
@@ -54,6 +56,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
             Signals.SetProbedValues(input1, input2);
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             var y = Parameters.Admittance;

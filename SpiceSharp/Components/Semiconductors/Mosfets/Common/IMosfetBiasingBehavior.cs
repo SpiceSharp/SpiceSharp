@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
+using System;
 
 namespace SpiceSharp.Components.Mosfets
 {
@@ -16,6 +17,11 @@ namespace SpiceSharp.Components.Mosfets
         /// The temperature-dependent properties.
         /// </value>
         TemperatureProperties Properties { get; }
+
+        /// <summary>
+        /// Occurs when the contributions can be updated.
+        /// </summary>
+        event EventHandler<MosfetContributionEventArgs> UpdateContributions;
 
         /// <include file='docs.xml' path='docs/members/DrainCurrent/*'/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]

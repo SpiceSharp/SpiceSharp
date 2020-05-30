@@ -10,7 +10,9 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Biasing, ITimeBehavior
+    public class Time : Biasing, 
+        IBiasingBehavior,
+        ITimeBehavior
     {
         private readonly int _contPosNode, _contNegNode, _branchEq;
         private readonly ElementSet<double> _elements;
@@ -42,6 +44,7 @@ namespace SpiceSharp.Components.VoltageDelays
             Signal = new DelayedSignal(1, Parameters.Delay);
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
             var sol = _biasing.Solution;
@@ -49,6 +52,7 @@ namespace SpiceSharp.Components.VoltageDelays
             Signal.SetProbedValues(input);
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             var sol = _biasing.Solution;

@@ -23,6 +23,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
         private readonly MosfetVariables<double> _variables;
         private readonly ElementSet<double> _elements;
         private readonly BiasingParameters _config;
+        private readonly Contributions<double> _contributions = new Contributions<double>();
+        private readonly MosfetContributionEventArgs _args;
 
         /// <inheritdoc/>
         TemperatureProperties IMosfetBiasingBehavior.Properties => Properties;
@@ -31,6 +33,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// The maximum exponent argument
         /// </summary>
         protected const double MaximumExponentArgument = 709.0;
+
+        /// <inheritdoc/>
+        public event EventHandler<MosfetContributionEventArgs> UpdateContributions;
 
         /// <include file='../common/docs.xml' path='docs/members/DrainCurrent/*'/>
         [ParameterName("id"), ParameterName("cd"), ParameterInfo("Drain current")]
@@ -101,6 +106,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
             var state = context.GetState<IBiasingSimulationState>();
             _config = context.GetSimulationParameterSet<BiasingParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
+            _args = new MosfetContributionEventArgs(_contributions);
             context.TryGetState(out _time);
             context.TryGetState(out _method);
             Vdsat = 0;
@@ -120,7 +126,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
-            Contributions<double> con = new Contributions<double>();
+            var con = _contributions;
+            con.Reset();
 
             var vt = Constants.KOverQ * Parameters.Temperature;
             double DrainSatCur, SourceSatCur;
@@ -250,8 +257,13 @@ namespace SpiceSharp.Components.Mosfets.Level1
             Gds = con.Ds.G;
             Id = Mode * con.Ds.C - con.Bd.C;
 
+            Vbs = vbs;
+            Vbd = vbd;
+            Vgs = vgs;
+            Vds = vds;
+
             // Update with time-dependent calculations
-            UpdateTime(vgs, vds, vbs, ref con);
+            UpdateContributions?.Invoke(this, _args);
 
             // Check convergence
             if (!Parameters.Off && _iteration.Mode != IterationModes.Fix)
@@ -260,10 +272,6 @@ namespace SpiceSharp.Components.Mosfets.Level1
                     _iteration.IsConvergent = false;
             }
 
-            Vbs = vbs;
-            Vbd = vbd;
-            Vgs = vgs;
-            Vds = vds;
             Gbs = con.Bs.G;
             Ibs = con.Bs.C;
             Gbd = con.Bd.G;
@@ -317,13 +325,6 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 con.Bd.C - con.Ds.C + ModelParameters.MosfetType * con.Gd.C,
                 con.Ds.C + con.Bs.C + ModelParameters.MosfetType * con.Gs.C
                 );
-        }
-
-        /// <include file='../common/docs.xml' path='docs/methods/UpdateTime/*'/>
-        protected virtual void UpdateTime(double vgs, double vds, double vbs, ref Contributions<double> c)
-        {
-            // No time-dependent stuff when we're just biasing, so let's save some time
-            // by not calculating these quantities.
         }
 
         /// <summary>

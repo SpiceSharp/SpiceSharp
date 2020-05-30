@@ -10,6 +10,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// <seealso cref="Temperature"/>
     /// <seealso cref="ITimeBehavior"/>
     public class Time : Temperature,
+        IBiasingBehavior,
         ITimeBehavior
     {
         private readonly ElementSet<double> _elements;
@@ -63,10 +64,12 @@ namespace SpiceSharp.Components.MutualInductances
             args.Flux.Value += Factor * _branch2.Value;
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             if (_time.UseDc)

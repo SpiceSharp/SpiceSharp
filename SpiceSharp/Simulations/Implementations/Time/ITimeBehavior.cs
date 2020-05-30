@@ -6,7 +6,7 @@ namespace SpiceSharp.Behaviors
     /// An interface for time-dependent behaviors.
     /// </summary>
     /// <seealso cref="IBehavior" />
-    public interface ITimeBehavior : IBiasingBehavior
+    public interface ITimeBehavior : IBehavior
     {
         /// <summary>
         /// Initialize the state values from the current DC solution.

@@ -66,8 +66,7 @@ namespace SpiceSharp.Components.Mosfets
         void IFrequencyBehavior.InitializeParameters()
         {
             // Update the small-signal parameters
-            _charges.Calculate(Behavior.Mode, 
-                Behavior.Vgs, Behavior.Vds, Behavior.Vbs, ModelParameters.MosfetType * Behavior.Von, ModelParameters.MosfetType * Behavior.Vdsat, Behavior.Properties, ModelParameters);
+            _charges.Calculate(Behavior, ModelParameters);
         }
 
         /// <inheritdoc/>

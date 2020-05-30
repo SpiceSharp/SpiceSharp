@@ -11,16 +11,15 @@ namespace SpiceSharp.Components.Mosfets
         /// <summary>
         /// Calculates the charges and capacitances for the specified voltages.
         /// </summary>
-        /// <param name="mode">The current mode.</param>
-        /// <param name="vgs">The gate-source voltage.</param>
-        /// <param name="vds">The drain-source voltage.</param>
-        /// <param name="vbs">The bulk-source voltage.</param>
-        /// <param name="von">The threshold voltage.</param>
-        /// <param name="vdsat">The saturation voltage.</param>
-        /// <param name="tp">The temperature properties.</param>
+        /// <param name="behavior">The biasing behavior.</param>
         /// <param name="mp">The model parameters.</param>
-        public void Calculate(double mode, double vgs, double vds, double vbs, double von, double vdsat, TemperatureProperties tp, ModelParameters mp)
+        public void Calculate(IMosfetBiasingBehavior behavior, ModelParameters mp)
         {
+            var tp = behavior.Properties;
+            var vgs = behavior.Vgs;
+            var vds = behavior.Vds;
+            var vbs = behavior.Vbs;
+
             /*
              * Now we do the hard part of the bulk-drain and bulk-source
              * diode - we evaluate the non-linear capacitance and
@@ -146,10 +145,10 @@ namespace SpiceSharp.Components.Mosfets
                  * and the constant part
                  */
                 double cgs, cgd, cgb;
-                if (mode > 0)
-                    Transistor.MeyerCharges(vgs, vgs - vds, von, vdsat, out cgs, out cgd, out cgb, tp.TempPhi, tp.OxideCap);
+                if (behavior.Mode > 0)
+                    Transistor.MeyerCharges(vgs, vgs - vds, mp.MosfetType * behavior.Von, mp.MosfetType * behavior.Vdsat, out cgs, out cgd, out cgb, tp.TempPhi, tp.OxideCap);
                 else
-                    Transistor.MeyerCharges(vgs - vds, vgs, von, vdsat, out cgd, out cgs, out cgb, tp.TempPhi, tp.OxideCap);
+                    Transistor.MeyerCharges(vgs - vds, vgs, mp.MosfetType * behavior.Von, mp.MosfetType * behavior.Vdsat, out cgd, out cgs, out cgb, tp.TempPhi, tp.OxideCap);
                 Cgs = cgs;
                 Cgd = cgd;
                 Cgb = cgb;
