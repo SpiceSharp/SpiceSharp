@@ -327,13 +327,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 );
         }
 
-        /// <summary>
-        /// Initializes the voltages to be used for calculating the current iteration.
-        /// </summary>
-        /// <param name="vgs">The gate-source voltage.</param>
-        /// <param name="vds">The drain-source voltage.</param>
-        /// <param name="vbs">The bulk-source voltage.</param>
-        /// <param name="check">If set to <c>true</c>, the current voltage was limited and another iteration should be calculated.</param>
+        /// <include file='../common/docs.xml' path='docs/methods/Initialize/*'/>
         protected void Initialize(out double vgs, out double vds, out double vbs, out bool check)
         {
             check = true;

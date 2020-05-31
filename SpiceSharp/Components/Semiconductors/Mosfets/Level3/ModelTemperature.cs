@@ -57,8 +57,13 @@ namespace SpiceSharp.Components.Mosfets.Level3
                     (Parameters.NominalTemperature + 1108);
             var arg1 = -Properties.EgFet1 / (Properties.Kt1 + Properties.Kt1) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
             Properties.PbFactor1 = -2 * Properties.Vtnom * (1.5 * Math.Log(Properties.Factor1) + Constants.Charge * arg1);
-            var nifact = (Parameters.NominalTemperature / 300) * Math.Sqrt(Parameters.NominalTemperature / 300);
-            nifact *= Math.Exp(0.5 * Properties.EgFet1 * ((1 / (double)300) - (1 / Parameters.NominalTemperature)) / Constants.KOverQ);
+
+            var nifact = 1.0;
+            if (Parameters.Version == ModelParameters.Versions.NgSpice)
+            {
+                nifact = (Parameters.NominalTemperature / 300) * Math.Sqrt(Parameters.NominalTemperature / 300);
+                nifact *= Math.Exp(0.5 * Properties.EgFet1 * ((1 / (double)300) - (1 / Parameters.NominalTemperature)) / Constants.KOverQ);
+            }
             var ni_temp = 1.45e16 * nifact;
 
             if (Parameters.Phi <= 0.0)

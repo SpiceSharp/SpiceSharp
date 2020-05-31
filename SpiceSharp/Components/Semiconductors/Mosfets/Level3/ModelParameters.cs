@@ -14,6 +14,35 @@ namespace SpiceSharp.Components.Mosfets.Level3
         private GivenParameter<double> _fastSurfaceStateDensity;
 
         /// <summary>
+        /// The possible versions used for the implementation.
+        /// </summary>
+        public enum Versions
+        {
+            /// <summary>
+            /// The version as implemented by Spice 3f5.
+            /// </summary>
+            /// <remarks>
+            /// Some small changes still apply vs Spice 3f5. Some small bugs were fixed, and
+            /// some extra parameters will still apply (like <see cref="Parameters.ParallelMultiplier"/>),
+            /// but the underlying model equations remain unchanged.
+            /// </remarks>
+            Spice3f5,
+
+            /// <summary>
+            /// The version as implemented by ngSpice.
+            /// </summary>
+            NgSpice
+        }
+
+        /// <summary>
+        /// Gets or sets the version that needs to be used.
+        /// </summary>
+        /// <value>
+        /// The version.
+        /// </value>
+        public Versions Version { get; set; } = Versions.Spice3f5;
+
+        /// <summary>
         /// Gets or sets a flag that uses legacy model for MOS3 if <c>true</c>.
         /// </summary>
         /// <value>

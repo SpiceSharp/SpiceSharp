@@ -59,6 +59,7 @@ namespace SpiceSharp.Components
             simulation.EntityBehaviors.Add(behaviors);
         }
 
+        /// <inheritdoc/>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

@@ -144,12 +144,13 @@
     </FlickerNoise>
   </members>
   <methods>
-    <UpdateTime>
-      <summary>Updates the contributions for transient simulations.</summary>
-      <param name="vgs">This iteration's gate-source voltage.</param>
-      <param name="vds">This iteration's drain-source voltage.</param>
-      <param name="vbs">This iteration's bulk-source voltage.</param>
-      <param name="c">The contributions.</param>
-    </UpdateTime>
+	  <Initialize>
+		  <summary>Initializes the voltages that need to be used for calculating the current iteration.</summary>
+		  <param name="vgs">The gate-source voltage.</param>
+		  <param name="vds">The drain-source voltage.</param>
+		  <param name="vbs">The bulk-source voltage.</param>
+		  <param name="check">If set to <c>true</c>, the voltages have been limited to help convergence. If this is the case, then
+		  a new iteration should be calculated.</param>
+	  </Initialize>
   </methods>
 </docs>
