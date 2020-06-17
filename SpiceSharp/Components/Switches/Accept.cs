@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Switches
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         /// <param name="controller">The controller.</param>
-        public Accept(string name, ComponentBindingContext context, Controller controller) 
+        public Accept(string name, IComponentBindingContext context, Controller controller) 
             : base(name, context, controller)
         {
         }

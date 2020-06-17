@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.Resistors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, ComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, IComponentBindingContext context) : base(name, context) 
         {
             var state = context.GetState<IComplexSimulationState>();
             _variables = new OnePort<Complex>(state, context);

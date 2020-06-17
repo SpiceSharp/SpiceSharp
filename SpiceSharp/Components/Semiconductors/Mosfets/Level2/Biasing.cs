@@ -89,26 +89,26 @@ namespace SpiceSharp.Components.Mosfets.Level2
 
         /// <include file='../common/docs.xml' path='docs/members/GateSourceVoltage/*'/>
         [ParameterName("vgs"), ParameterInfo("Gate-Source voltage")]
-        public double Vgs { get; protected set; }
+        public double Vgs { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/DrainSourceVoltage/*'/>
         [ParameterName("vds"), ParameterInfo("Drain-Source voltage")]
-        public double Vds { get; protected set; }
+        public double Vds { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkSourceVoltage/*'/>
         [ParameterName("vbs"), ParameterInfo("Bulk-Source voltage")]
-        public virtual double Vbs { get; protected set; }
+        public double Vbs { get; private set; }
 
         /// <include file='../common/docs.xml' path='docs/members/BulkDrainVoltage/*'/>
         [ParameterName("vbd"), ParameterInfo("Bulk-Drain voltage")]
-        public virtual double Vbd { get; protected set; }
+        public double Vbd { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, ComponentBindingContext context) 
+        public Biasing(string name, IComponentBindingContext context) 
             : base(name, context)
         {
             var state = context.GetState<IBiasingSimulationState>();

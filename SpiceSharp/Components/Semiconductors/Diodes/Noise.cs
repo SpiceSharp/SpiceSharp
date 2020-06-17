@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.Diodes
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Noise(string name, ComponentBindingContext context) 
+        public Noise(string name, IComponentBindingContext context) 
             : base(name, context) 
         {
             _state = context.GetState<INoiseSimulationState>();

@@ -43,7 +43,7 @@ namespace SpiceSharp.Components.CurrentSources
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
-        public Frequency(string name, ComponentBindingContext context)
+        public Frequency(string name, IComponentBindingContext context)
             : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();

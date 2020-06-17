@@ -54,7 +54,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, ComponentBindingContext context)
+        public Frequency(string name, IComponentBindingContext context)
             : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();

@@ -9,7 +9,8 @@ namespace SpiceSharp.Components
     /// A template for a binding context to bind component behaviors to simulations.
     /// </summary>
     /// <seealso cref="IBindingContext" />
-    public interface IComponentBindingContext : IBindingContext
+    public interface IComponentBindingContext :
+        IBindingContext
     {
         /// <summary>
         /// Gets the model behaviors.

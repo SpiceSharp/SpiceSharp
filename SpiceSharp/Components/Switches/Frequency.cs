@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.Switches
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         /// <param name="controller">The controller.</param>
-        public Frequency(string name, ComponentBindingContext context, Controller controller) : base(name, context, controller)
+        public Frequency(string name, IComponentBindingContext context, Controller controller) : base(name, context, controller)
         {
             var state = context.GetState<IComplexSimulationState>();
             _variables = new OnePort<Complex>(state.GetSharedVariable(context.Nodes[0]), state.GetSharedVariable(context.Nodes[1]));

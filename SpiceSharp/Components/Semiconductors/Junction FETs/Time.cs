@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.JFETs
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, ComponentBindingContext context) : base(name, context)
+        public Time(string name, IComponentBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
             var method = context.GetState<IIntegrationMethod>();

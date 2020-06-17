@@ -94,7 +94,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        protected Dynamic(string name, ComponentBindingContext context) : base(name, context)
+        protected Dynamic(string name, IComponentBindingContext context) : base(name, context)
         {
         }
 

@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.Common
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ParameterBehavior(string name, BindingContext context)
+        public ParameterBehavior(string name, IBindingContext context)
             : base(name)
         {
             Parameters = context.GetParameterSet<P>();

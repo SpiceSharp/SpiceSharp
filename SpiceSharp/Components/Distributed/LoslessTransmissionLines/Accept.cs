@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Accept(string name, ComponentBindingContext context)
+        public Accept(string name, IComponentBindingContext context)
             : base(name, context)
         {
             _method = context.GetState<IIntegrationMethod>();

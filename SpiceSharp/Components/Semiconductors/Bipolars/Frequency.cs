@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, ComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, IComponentBindingContext context) : base(name, context) 
         {
             _complex = context.GetState<IComplexSimulationState>();
 

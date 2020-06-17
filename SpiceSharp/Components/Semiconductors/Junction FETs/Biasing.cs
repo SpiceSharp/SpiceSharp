@@ -132,7 +132,7 @@ namespace SpiceSharp.Components.JFETs
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, ComponentBindingContext context) : base(name, context)
+        public Biasing(string name, IComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(3);
 

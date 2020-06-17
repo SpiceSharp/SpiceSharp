@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.VoltageDelays
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, ComponentBindingContext context)
+        public Biasing(string name, IComponentBindingContext context)
             : base(name)
         {
             context.ThrowIfNull(nameof(context));

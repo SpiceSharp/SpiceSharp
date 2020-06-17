@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.Resistors
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
-        public Noise(string name, ComponentBindingContext context) : base(name, context) 
+        public Noise(string name, IComponentBindingContext context) : base(name, context) 
         {
             var state = context.GetState<IComplexSimulationState>();
             _thermal = new NoiseThermal("r",

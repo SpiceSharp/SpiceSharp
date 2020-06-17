@@ -34,12 +34,7 @@ namespace SpiceSharp.Entities
         /// </value>
         protected IEntity Entity { get; }
 
-        /// <summary>
-        /// Gets the behaviors that have been created by the entity already.
-        /// </summary>
-        /// <value>
-        /// The created behaviors.
-        /// </value>
+        /// <inheritdoc/>
         public IBehaviorContainer Behaviors { get; }
 
         /// <inheritdoc/>

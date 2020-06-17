@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="context"/> is <c>null</c>.</exception>
-        public Time(string name, ComponentBindingContext context)
+        public Time(string name, IComponentBindingContext context)
             : base(name)
         {
             context.ThrowIfNull(nameof(context));

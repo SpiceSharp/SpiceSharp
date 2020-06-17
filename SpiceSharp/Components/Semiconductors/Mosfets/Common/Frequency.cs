@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </summary>
         /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
-        public Frequency(string name, ComponentBindingContext context)
+        public Frequency(string name, IComponentBindingContext context)
             : base(name) 
         {
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();

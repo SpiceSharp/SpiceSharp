@@ -92,7 +92,7 @@ namespace SpiceSharp.Components.Switches
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         /// <param name="controller">The controller.</param>
-        public Biasing(string name, ComponentBindingContext context, Controller controller) : base(name)
+        public Biasing(string name, IComponentBindingContext context, Controller controller) : base(name)
         {
             context.ThrowIfNull(nameof(context));
 

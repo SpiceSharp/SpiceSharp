@@ -17,13 +17,6 @@ namespace SpiceSharp.Components.Mosfets
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ModelProperties"/> struct.
-        /// </summary>
-        public ModelProperties()
-        {
-        }
-
-        /// <summary>
         /// Updates the model properties.
         /// </summary>
         /// <param name="mp">The model parameters.</param>

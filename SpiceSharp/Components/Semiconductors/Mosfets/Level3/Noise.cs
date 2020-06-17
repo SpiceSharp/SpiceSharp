@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
-        public Noise(string name, ComponentBindingContext context)
+        public Noise(string name, IComponentBindingContext context)
             : base(name, context)
         {
             _state = context.GetState<INoiseSimulationState>();

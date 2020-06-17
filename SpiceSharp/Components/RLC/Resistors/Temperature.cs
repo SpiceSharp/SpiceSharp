@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.Resistors
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Temperature(string name, ComponentBindingContext context) : base(name)
+        public Temperature(string name, IComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();

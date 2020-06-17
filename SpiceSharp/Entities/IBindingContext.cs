@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Simulations;
 using SpiceSharp.ParameterSets;
 using System;
+using SpiceSharp.Behaviors;
 
 namespace SpiceSharp.Entities
 {
@@ -9,6 +10,14 @@ namespace SpiceSharp.Entities
     /// </summary>
     public interface IBindingContext
     {
+        /// <summary>
+        /// Gets the previously created behaviors.
+        /// </summary>
+        /// <value>
+        /// The previously created behaviors.
+        /// </value>
+        IBehaviorContainer Behaviors { get; }
+
         /// <summary>
         /// Gets a simulation state.
         /// </summary>

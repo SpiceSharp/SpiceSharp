@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, ComponentBindingContext context)
+        public Time(string name, IComponentBindingContext context)
             : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();

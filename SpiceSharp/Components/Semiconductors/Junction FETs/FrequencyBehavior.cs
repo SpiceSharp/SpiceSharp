@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.JFETs
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, ComponentBindingContext context) : base(name, context)
+        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context)
         {
             ComplexState = context.GetState<IComplexSimulationState>();
 
