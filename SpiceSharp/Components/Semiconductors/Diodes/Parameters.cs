@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.Diodes
         /// The initial voltage.
         /// </value>
         [ParameterName("ic"), ParameterInfo("Initial device voltage", Units = "V")]
-        public double InitCond { get; set; }
+        public GivenParameter<double> InitCond { get; set; }
 
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
@@ -59,10 +59,10 @@ namespace SpiceSharp.Components.Diodes
         /// </value>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature", Units = "\u00b0C")]
         [GreaterThan(Constants.CelsiusKelvin)]
-        public double TemperatureCelsius
+        public GivenParameter<double> TemperatureCelsius
         {
-            get => Temperature - Constants.CelsiusKelvin;
-            set => Temperature = value + Constants.CelsiusKelvin;
+            get => new GivenParameter<double>(Temperature - Constants.CelsiusKelvin, Temperature.Given);
+            set => Temperature = new GivenParameter<double>(value + Constants.CelsiusKelvin, value.Given);
         }
 
         /// <summary>

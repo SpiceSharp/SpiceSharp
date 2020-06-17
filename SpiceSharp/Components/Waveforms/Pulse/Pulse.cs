@@ -144,5 +144,11 @@ namespace SpiceSharp.Components
             PulseWidth = pulseWidth;
             Period = period;
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "pulse({0} {1} {2} {3} {4} {5} {6})".FormatString(InitialValue, PulsedValue, Delay, RiseTime, FallTime, PulseWidth, Period);
+        }
     }
 }

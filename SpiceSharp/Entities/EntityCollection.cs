@@ -165,11 +165,14 @@ namespace SpiceSharp.Entities
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+        /// <inheritdoc/>
         ICloneable ICloneable.Clone() => Clone();
+
+        /// <inheritdoc/>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <summary>
-        /// Clones the instance.
+        /// Clones the entity collection.
         /// </summary>
         /// <returns>
         /// The cloned instance.
@@ -199,6 +202,7 @@ namespace SpiceSharp.Entities
                 Add(entity);
         }
 
+        /// <inheritdoc/>
         void ICollection<IEntity>.CopyTo(IEntity[] array, int arrayIndex)
         {
             array.ThrowIfNull(nameof(array));

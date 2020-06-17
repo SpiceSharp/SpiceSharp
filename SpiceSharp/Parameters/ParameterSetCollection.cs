@@ -1,5 +1,4 @@
-﻿using SpiceSharp.ParameterSets;
-using SpiceSharp.General;
+﻿using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;

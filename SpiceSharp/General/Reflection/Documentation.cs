@@ -5,6 +5,8 @@ using System.Reflection;
 using SpiceSharp.Components;
 using SpiceSharp.ParameterSets;
 using System.Linq;
+using System.Text;
+using System.Collections.ObjectModel;
 
 namespace SpiceSharp.Reflection
 {
@@ -63,7 +65,7 @@ namespace SpiceSharp.Reflection
         /// <param name="component">The component.</param>
         /// <returns>The pin names.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> is <c>null</c>.</exception>
-        public static IEnumerable<string> Pins(IComponent component) 
+        public static IEnumerable<string> Pins(this IComponent component) 
             => Pins(component.ThrowIfNull(nameof(component)).GetType());
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace SpiceSharp.Reflection
         /// <returns>
         /// The named parameters.
         /// </returns>
-        public static IEnumerable<MemberDescription> Parameters(IParameterSetCollection parameterized)
+        public static IEnumerable<MemberDescription> Parameters(this IParameterSetCollection parameterized)
         {
             foreach (var ps in parameterized.ParameterSets)
             {
@@ -98,7 +100,7 @@ namespace SpiceSharp.Reflection
         /// All the named parameters.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameters"/> is <c>null</c>.</exception>
-        public static IEnumerable<MemberDescription> Parameters(IParameterSet parameters)
+        public static IEnumerable<MemberDescription> Parameters(this IParameterSet parameters)
             => Parameters(parameters.ThrowIfNull(nameof(parameters)).GetType());
 
         /// <summary>
@@ -111,5 +113,84 @@ namespace SpiceSharp.Reflection
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
         public static IEnumerable<MemberDescription> Parameters(Type type)
             => ReflectionHelper.GetParameterMap(type.ThrowIfNull(nameof(type))).Members.Where(p => p.Names.Count > 0);
+
+        /// <summary>
+        /// Creates a dictionary of all properties and their values on a parameter set.
+        /// </summary>
+        /// <typeparam name="T">The parameter value type.</typeparam>
+        /// <param name="parameterSetCollection">The parameter set.</param>
+        /// <param name="givenOnly">If <c>true</c>, only parameters that were set/given are returned and parameters that are left to their default/nonsense value are skipped. <c>true</c> by default.</param>
+        /// <returns>
+        /// A read-only dictionary for all members and their values.
+        /// </returns>
+        public static IReadOnlyDictionary<MemberDescription, T> ParameterValues<T>(this IParameterSetCollection parameterSetCollection, bool givenOnly = true)
+        {
+            var result = new Dictionary<MemberDescription, T>();
+            foreach (var ps in parameterSetCollection.ParameterSets)
+            {
+                var n = ParameterValues<T>(ps, givenOnly);
+                foreach (var pair in n)
+                    result.Add(pair.Key, pair.Value);
+            }
+            return new ReadOnlyDictionary<MemberDescription, T>(result);
+        }
+
+        /// <summary>
+        /// Creates a dictionary of all properties and their values on a parameter set.
+        /// </summary>
+        /// <typeparam name="T">The parameter value type.</typeparam>
+        /// <param name="parameterSet">The parameter set.</param>
+        /// <param name="givenOnly">If <c>true</c>, only parameters that were set/given are returned and parameters that are left to their default/nonsense value are skipped. <c>true</c> by default.</param>
+        /// <returns>
+        /// A read-only dictionary for all members and their values.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameterSet"/> is <c>null</c>.</exception>
+        public static IReadOnlyDictionary<MemberDescription, T> ParameterValues<T>(this IParameterSet parameterSet, bool givenOnly = true)
+        {
+            parameterSet.ThrowIfNull(nameof(parameterSet));
+            var result = new Dictionary<MemberDescription, T>();
+            foreach (var member in Parameters(parameterSet.GetType()))
+            {
+                if (member.Names == null || member.Names.Count == 0)
+                    continue;
+                if (givenOnly)
+                {
+                    if (member.TryGet<GivenParameter<T>>(parameterSet, out var gp))
+                    {
+                        if (gp.Given)
+                            result.Add(member, gp.Value);
+                        continue;
+                    }
+                }
+                if (parameterSet.TryGetProperty<T>(member.Names.First(), out var value))
+                    result.Add(member, value);
+            }
+            return new ReadOnlyDictionary<MemberDescription, T>(result);
+        }
+
+        /// <summary>
+        /// Creates a (long) string of NAME=VALUE segments separated by a space. The first name of each parameter is used.
+        /// </summary>
+        /// <typeparam name="T">The base value type.</typeparam>
+        /// <param name="parameterValues">The parameter values.</param>
+        /// <returns>
+        /// The string representation for all parameters and their values.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameterValues"/> is <c>null</c>.</exception>
+        public static string AsString<T>(this IReadOnlyDictionary<MemberDescription, T> parameterValues)
+        {
+            parameterValues.ThrowIfNull(nameof(parameterValues));
+            StringBuilder sb = new StringBuilder(parameterValues.Count * 10);
+            bool first = true;
+            foreach (var value in parameterValues)
+            {
+                if (first)
+                    first = false;
+                else
+                    sb.Append(' ');
+                sb.Append("{0}={1}".FormatString(value.Key.Names.FirstOrDefault() ?? "?", value.Value));
+            }
+            return sb.ToString();
+        }
     }
 }

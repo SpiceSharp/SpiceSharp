@@ -172,5 +172,11 @@ namespace SpiceSharp.Components
             Amplitude = amplitude;
             Frequency = frequency;
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "sine({0} {1} {2} {3} {4} {5})".FormatString(Offset, Amplitude, Frequency, Delay, Theta, Phase);
+        }
     }
 }

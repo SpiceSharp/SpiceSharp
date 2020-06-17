@@ -43,5 +43,13 @@ namespace SpiceSharp.Components
         {
             return new Instance(Points, method);
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            if (Points != null)
+                return "pwl({0})".FormatString(string.Join(", ", Points));
+            return "pwl(null)";
+        }
     }
 }

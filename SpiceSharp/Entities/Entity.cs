@@ -15,7 +15,7 @@ namespace SpiceSharp.Entities
         /// If the parameters are not referenced, then the parameters are cloned instead.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if parameters are referenced; otherwise, <c>false</c>.
+        ///   <c>true</c> if parameters are referenced instead of cloned; otherwise, <c>false</c>.
         /// </value>
         public bool LinkParameters { get; set; } = true;
 
@@ -59,6 +59,12 @@ namespace SpiceSharp.Entities
             var clone = (Entity)Activator.CreateInstance(GetType(), Name);
             clone.CopyFrom(this);
             return clone;
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "{0} ({1})".FormatString(Name, GetType().Name);
         }
     }
 }

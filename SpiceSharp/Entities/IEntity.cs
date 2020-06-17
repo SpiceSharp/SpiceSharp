@@ -1,7 +1,6 @@
 ﻿using System;
 using SpiceSharp.Simulations;
 using SpiceSharp.General;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Entities

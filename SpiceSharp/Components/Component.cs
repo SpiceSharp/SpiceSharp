@@ -76,6 +76,7 @@ namespace SpiceSharp.Components
                 _connections[i] = c._connections[i];
         }
 
+        /// <inheritdoc/>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
@@ -90,6 +91,14 @@ namespace SpiceSharp.Components
                 foreach (var rule in rules.GetRules<IConductiveRule>())
                     rule.AddPath(this, variables);
             }
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            if (_connections != null && _connections.Length > 0)
+                return "{0} {1} {2}".FormatString(Name, string.Join(", ", _connections), Model ?? "");
+            return "{0} {1}".FormatString(Name, Model ?? "");
         }
     }
 }

@@ -84,5 +84,11 @@
         {
             return !(left == right);
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return "({0}, {1})".FormatString(Time, Value);
+        }
     }
 }

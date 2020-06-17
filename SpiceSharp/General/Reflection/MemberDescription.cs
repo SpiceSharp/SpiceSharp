@@ -308,5 +308,13 @@ namespace SpiceSharp.Reflection
             }
             return null;
         }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            if (Names.Count > 0)
+                return "{0} (\"{1}\" {2})".FormatString(Member.Name, string.Join("\",\"", Names), PropertyType?.Name ?? ParameterType?.Name ?? "void");
+            return "{0} ({1})".FormatString(Member.Name, PropertyType?.Name ?? ParameterType?.Name ?? "void");
+        }
     }
 }

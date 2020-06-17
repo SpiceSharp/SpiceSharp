@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -38,9 +39,9 @@ namespace SpiceSharp.Reflection
         {
             get
             {
-                foreach (var map in _memberMaps.Values)
+                foreach (var map in _memberMaps.Values.Distinct())
                 {
-                    foreach (var member in map.Members)
+                    foreach (var member in map.Members.Distinct())
                         yield return member;
                 }
             }
