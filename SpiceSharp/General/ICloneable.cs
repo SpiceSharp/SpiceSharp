@@ -1,19 +1,21 @@
-﻿namespace SpiceSharp
+﻿using System;
+
+namespace SpiceSharp
 {
     /// <summary>
     /// A template for a parameter that can be cloned and copied.
     /// </summary>
     /// <remarks>
     /// This class can be used to ensure that parameter sets are cloned correctly. This is to avoid issues when running
-    /// multiple simulations in parallel where shared memory may be undesirable.
+    /// multiple simulations in parallel where shared resources may be undesirable.
     /// </remarks>
     public interface ICloneable
     {
         /// <summary>
-        /// Clones the parameter.
+        /// Clones the instance.
         /// </summary>
         /// <returns>
-        /// The cloned parameter.
+        /// The cloned instance.
         /// </returns>
         ICloneable Clone();
 
@@ -21,30 +23,8 @@
         /// Copies the contents of one interface to this one.
         /// </summary>
         /// <param name="source">The source parameter.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="source"/> does not have the same type.</exception>
         void CopyFrom(ICloneable source);
-    }
-
-    /// <summary>
-    /// A template for a parameter that can be cloned and copied (typed version).
-    /// </summary>
-    /// <remarks>
-    /// This class can be used to ensure that parameter sets are cloned correctly. This is to avoid issues when running
-    /// multiple simulations in parallel where shared memory may be undesirable.
-    /// </remarks>
-    public interface ICloneable<T>
-    {
-        /// <summary>
-        /// Clones the parameter.
-        /// </summary>
-        /// <returns>
-        /// The cloned parameter.
-        /// </returns>
-        T Clone();
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        void CopyFrom(T source);
     }
 }

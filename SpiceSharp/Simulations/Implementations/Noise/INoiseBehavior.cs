@@ -1,19 +1,16 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Simulations;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// A behavior that is used by <see cref="Noise" />.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.IBehavior" />
-    public interface INoiseBehavior : IBehavior
+    /// <seealso cref="IBehavior" />
+    public interface INoiseBehavior : INoiseSource, IBehavior
     {
         /// <summary>
-        /// Connects the noise generators in the circuit.
+        /// Computes the noise contributions.
         /// </summary>
-        void ConnectNoise();
-
-        /// <summary>
-        /// Calculate the noise contributions.
-        /// </summary>
-        void Noise();
+        void Compute();
     }
 }

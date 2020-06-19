@@ -1,15 +1,16 @@
-﻿using System;
+﻿using SpiceSharp.Components;
+using System;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// This class can export real currents.
     /// </summary>
-    /// <seealso cref="Export{T}" />
-    public class RealCurrentExport : Export<double>
+    /// <seealso cref="Export{S, T}" />
+    public class RealCurrentExport : Export<IBiasingSimulation, double>
     {
         /// <summary>
-        /// Gets the identifier of the voltage source.
+        /// Gets the name of the voltage source.
         /// </summary>
         public string Source { get; }
 
@@ -19,18 +20,11 @@ namespace SpiceSharp.Simulations
         public int Index { get; private set; }
 
         /// <summary>
-        /// Check if the simulation is a base simulation.
-        /// </summary>
-        /// <param name="simulation"></param>
-        /// <returns></returns>
-        protected override bool IsValidSimulation(Simulation simulation) => simulation is BaseSimulation;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="source">The source identifier.</param>
-        public RealCurrentExport(BaseSimulation simulation, string source)
+        /// <param name="source">The source name.</param>
+        public RealCurrentExport(IBiasingSimulation simulation, string source)
             : base(simulation)
         {
             Source = source.ThrowIfNull(nameof(source));
@@ -44,14 +38,12 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            // Create our extractor!
-            var state = ((BaseSimulation) Simulation).RealState.ThrowIfNull("real state");
             if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
             {
-                if (ebd.TryGetValue(typeof(Components.VoltageSourceBehaviors.BiasingBehavior), out var behavior))
+                if (ebd.TryGetValue<IBranchedBehavior<double>>(out var behavior))
                 {
-                    Index = ((Components.VoltageSourceBehaviors.BiasingBehavior) behavior).BranchEq;
-                    Extractor = () => state.Solution[Index];
+                    var branch = behavior.Branch;
+                    Extractor = () => branch.Value;
                 }
             }
         }

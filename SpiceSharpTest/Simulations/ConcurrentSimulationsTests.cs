@@ -1,49 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SpiceSharpTest.Simulations
 {
     [TestFixture]
     public class ConcurrentSimulationsTests : Framework
-    {        
+    {
         [Test]
         public void When_DCSweepResistorParameter_Expect_Reference()
         {
-            // Create the circuit
+            // Note: We specify LinkParameters = false for entities that should not share data across different threads.
+            // The voltage source and resistor R2 are swept for different instances so they should be completely independent.
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V1", "in", "0", 0) { LinkParameters = false },
                 new Resistor("R1", "in", "out", 1.0e4),
-                new Resistor("R2", "out", "0", 1.0e4)
+                new Resistor("R2", "out", "0", 1.0e4) { LinkParameters = false }
                 );
 
             // Do a DC sweep where one of the sweeps is a parameter
-            var cconfig = new CollectionConfiguration() {CloneParameters = true};
             var dcSimulations = new List<DC>();
             var n = 4;
             for (var i = 0; i < n; i++)
             {
                 var dc = new DC("DC " + i);
-                dc.Configurations.Add(cconfig);
-                var config = dc.Configurations.Get<DCConfiguration>();
-                config.Sweeps.Add(new SweepConfiguration("R2", 0.0, 1e4, 1e3)); // Sweep R2 from 0 to 10k per 1k
-                config.Sweeps.Add(new SweepConfiguration("V1", 1, 5, 0.1)); // Sweep V1 from 1V to 5V per 100mV
-                dc.OnParameterSearch += (sender, args) =>
+                dc.DCParameters.Sweeps.Add(new ParameterSweep("R2", "resistance", new LinearSweep(0.0, 1e4, 1e3), container =>
                 {
-                    if (args.Name.Equals("R2"))
-                    {
-                        args.Result = dc.EntityParameters["R2"].GetParameter<Parameter<double>>("resistance");
-                        args.TemperatureNeeded = true;
-                    }
-                };
+                    container.GetValue<ITemperatureBehavior>().Temperature();
+                })); // Sweep R2 from 0 to 10k per 1k
+                dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
                 dc.ExportSimulationData += (sender, args) =>
                 {
-                    var resistance = dc.Sweeps[0].CurrentValue;
-                    var voltage = dc.Sweeps[1].CurrentValue;
+                    var resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
+                    var voltage = dc.GetCurrentSweepValue()[1];
                     var expected = voltage * resistance / (resistance + 1.0e4);
                     Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
                 };
@@ -52,9 +47,9 @@ namespace SpiceSharpTest.Simulations
             }
             var maxConcurrentSimulations = 2;
 
-            Parallel.ForEach(
+            System.Threading.Tasks.Parallel.ForEach(
                 dcSimulations,
-                new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations }, 
+                new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
                 (simulation) => simulation.Run(ckt));
         }
 
@@ -68,7 +63,7 @@ namespace SpiceSharpTest.Simulations
             );
 
             var transientSimulations = new List<Transient>();
-            var n = 10000;
+            var n = 1000;
 
             for (var i = 0; i < n; i++)
             {
@@ -83,7 +78,7 @@ namespace SpiceSharpTest.Simulations
             }
 
             var maxConcurrentSimulations = 8;
-            Parallel.ForEach(
+            System.Threading.Tasks.Parallel.ForEach(
                 transientSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
                 (simulation) => simulation.Run(ckt));

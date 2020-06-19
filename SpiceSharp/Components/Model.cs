@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -14,6 +16,16 @@ namespace SpiceSharp.Components
         protected Model(string name)
             : base(name)
         {
+        }
+
+        /// <summary>
+        /// Creates the behaviors for the specified simulation and registers them with the simulation.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        public override void CreateBehaviors(ISimulation simulation)
+        {
+            var behaviors = new BehaviorContainer(Name);
+            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

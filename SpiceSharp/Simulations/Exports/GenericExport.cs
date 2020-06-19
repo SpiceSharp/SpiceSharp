@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// This class allows any function to be specified.
     /// </summary>
     /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="Export{T}" />
-    public class GenericExport<T> : Export<T>
+    /// <seealso cref="Export{S, T}" />
+    public class GenericExport<T> : Export<IEventfulSimulation, T>
     {
         /// <summary>
         /// Private extractor
@@ -19,7 +19,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="extractor">The function for extracting information.</param>
-        public GenericExport(Simulation simulation, Func<T> extractor)
+        public GenericExport(IEventfulSimulation simulation, Func<T> extractor)
             : base(simulation)
         {
             _myExtractor = extractor.ThrowIfNull(nameof(extractor));
@@ -29,7 +29,7 @@ namespace SpiceSharp.Simulations
         /// Initializes the export.
         /// </summary>
         /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             Extractor = _myExtractor;

@@ -1,19 +1,29 @@
-﻿using SpiceSharp.Circuits;
+﻿using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Class that implements a DC sweep analysis.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Simulations.BaseSimulation" />
-    public class DC : BaseSimulation
+    /// <seealso cref="BiasingSimulation" />
+    public class DC : BiasingSimulation,
+        IParameterized<DCParameters>
     {
+        private IEnumerator<double>[] _sweepEnumerators;
+
         /// <summary>
-        /// Gets the currently active sweeps.
+        /// Gets the dc parameters.
         /// </summary>
-        public NestedSweeps Sweeps { get; protected set; }
+        /// <value>
+        /// The dc parameters.
+        /// </value>
+        public DCParameters DCParameters { get; } = new DCParameters();
+
+        /// <inheritdoc/>
+        DCParameters IParameterized<DCParameters>.Parameters => DCParameters;
 
         /// <summary>
         /// Occurs when iterating to a solution has failed.
@@ -21,66 +31,45 @@ namespace SpiceSharp.Simulations
         public event EventHandler<EventArgs> IterationFailed;
 
         /// <summary>
-        /// Occurs when a parameter for sweeping is searched.
-        /// </summary>
-        public event EventHandler<DCParameterSearchEventArgs> OnParameterSearch;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        public DC(string name) : base(name)
+        /// <param name="name">The name of the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public DC(string name)
+            : base(name)
         {
-            Configurations.Add(new DCConfiguration());
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
-        /// <param name="source">The source identifier.</param>
+        /// <param name="name">The name of the simulation.</param>
+        /// <param name="source">The source name.</param>
         /// <param name="start">The starting value.</param>
         /// <param name="stop">The stop value.</param>
         /// <param name="step">The step value.</param>
-        public DC(string name, string source, double start, double stop, double step) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="source"/> is <c>null</c>.</exception>
+        public DC(string name, string source, double start, double stop, double step)
+            : this(name)
         {
-            var config = new DCConfiguration();
-            var s = new SweepConfiguration(source, start, stop, step);
-            config.Sweeps.Add(s);
-            Configurations.Add(config);
+            DCParameters.Sweeps.Add(new ParameterSweep(source, new LinearSweep(start, stop, step)));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DC"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
-        public DC(string name, IEnumerable<SweepConfiguration> sweeps) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="sweeps"/> is <c>null</c>.</exception>
+        public DC(string name, IEnumerable<ISweep> sweeps)
+            : this(name)
         {
             sweeps.ThrowIfNull(nameof(sweeps));
-
-            var dcconfig = new DCConfiguration();
             foreach (var sweep in sweeps)
-                dcconfig.Sweeps.Add(sweep);
-            Configurations.Add(dcconfig);
+                DCParameters.Sweeps.Add(sweep);
         }
 
-        /// <summary>
-        /// Set up the simulation.
-        /// </summary>
-        /// <param name="entities">The circuit that will be used.</param>
-        protected override void Setup(EntityCollection entities)
-        {
-            // Get sweeps
-            var config = Configurations.Get<DCConfiguration>();
-            Sweeps = new NestedSweeps(config.Sweeps);
-
-            base.Setup(entities);
-        }
-
-        /// <summary>
-        /// Executes the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void Execute()
         {
             // Base
@@ -89,113 +78,63 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Setup the state
-            var state = RealState;
-            var dcconfig = Configurations.Get<DCConfiguration>().ThrowIfNull("dc configuration");
-            state.Init = InitializationModes.Junction;
-            state.UseIc = false; // UseIC is only used in transient simulations
-            state.UseDc = true;
+            Iteration.Mode = IterationModes.Junction;
 
             // Initialize
-            Sweeps = new NestedSweeps(dcconfig.Sweeps);
-            var swept = new Parameter<double>[Sweeps.Count];
-            var original = new Parameter<double>[Sweeps.Count];
-            var levelNeedsTemperature = -1;
-
-            // Initialize first time
-            for (var i = 0; i < dcconfig.Sweeps.Count; i++)
+            var sweeps = DCParameters.Sweeps.ToArray();
+            _sweepEnumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];
+            for (var i = 0; i < sweeps.Length; i++)
             {
-                // Get the component to be swept
-                var sweep = Sweeps[i];
-
-                // Try finding the parameter to sweep
-                var args = new DCParameterSearchEventArgs(sweep.Parameter, i);
-                OnParameterSearch?.Invoke(this, args);
-
-                if (args.Result != null)
-                {
-                    swept[i] = args.Result;
-
-                    // Keep track of the highest level that needs to recalculate temperature
-                    if (args.TemperatureNeeded)
-                        levelNeedsTemperature = Math.Max(levelNeedsTemperature, i);
-                }
-                else
-                {
-                    // Get entity parameters
-                    if (!EntityBehaviors.ContainsKey(sweep.Parameter))
-                        throw new CircuitException("Could not find source {0}".FormatString(sweep.Parameter));
-                    var eb = EntityParameters[sweep.Parameter];
-
-                    // Check for a Voltage source or Current source parameters
-                    if (eb.TryGet<Components.CommonBehaviors.IndependentSourceParameters>(out var ibp))
-                        swept[i] = ibp.DcValue;
-                    else
-                        throw new CircuitException("Invalid sweep object");
-                }
-
-                original[i] = (Parameter<double>) swept[i].Clone();
-                swept[i].Value = sweep.Initial;
+                _sweepEnumerators[i] = sweeps[i].CreatePoints(this);
+                if (!_sweepEnumerators[i].MoveNext())
+                    throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[i].Name));
             }
 
-            // Execute temperature behaviors if necessary the first time
-            if (levelNeedsTemperature >= 0)
-                Temperature();
-
             // Execute the sweeps
-            var level = Sweeps.Count - 1;
+            var level = sweeps.Length - 1;
             while (level >= 0)
             {
-                // Fill the values with start values
-                while (level < Sweeps.Count - 1)
+                // Fill the values up again by resetting
+                while (level < sweeps.Length - 1)
                 {
                     level++;
-                    Sweeps[level].Reset();
-                    swept[level].Value = Sweeps[level].CurrentValue;
-                    state.Init = InitializationModes.Junction;
+                    _sweepEnumerators[level] = sweeps[level].CreatePoints(this);
+                    if (!_sweepEnumerators[level].MoveNext())
+                        throw new SpiceSharpException(Properties.Resources.Simulations_DC_NoSweepPoints.FormatString(sweeps[level].Name));
+                    Iteration.Mode = IterationModes.Junction;
                 }
 
                 // Calculate the solution
-                if (!Iterate(dcconfig.SweepMaxIterations))
+                if (!Iterate(DCParameters.SweepMaxIterations))
                 {
                     IterationFailed?.Invoke(this, EventArgs.Empty);
-                    Op(DcMaxIterations);
+                    Op(BiasingParameters.DcMaxIterations);
                 }
 
                 // Export data
                 OnExport(exportargs);
 
                 // Remove all values that are greater or equal to the maximum value
-                while (level >= 0 && Sweeps[level].CurrentStep >= Sweeps[level].Limit)
+                while (level >= 0 && !_sweepEnumerators[level].MoveNext())
                     level--;
-
-                // Go to the next step for the top level
-                if (level >= 0)
-                {
-                    Sweeps[level].Increment();
-                    swept[level].Value = Sweeps[level].CurrentValue;
-
-                    // If temperature behavior is needed for this level or higher, run behaviors
-                    if (levelNeedsTemperature >= level)
-                        Temperature();
-                }
+                if (level < 0)
+                    break;
             }
-
-            // Restore all the parameters of the swept components
-            for (var i = 0; i < Sweeps.Count; i++)
-                swept[i].CopyFrom(original[i]);
         }
 
         /// <summary>
-        /// Destroys the simulation.
+        /// Gets the current sweep values.
+        /// The last element indicates the inner-most sweep value.
         /// </summary>
-        protected override void Unsetup()
+        /// <returns>The sweep values, or <c>null</c> if there are no sweeps active.</returns>
+        public double[] GetCurrentSweepValue()
         {
-            // Clear sweeps
-            Sweeps?.Clear();
-            Sweeps = null;
-
-            // Clear configuration
-            base.Unsetup();
+            if (_sweepEnumerators == null)
+                return null;
+            var result = new double[_sweepEnumerators.Length];
+            for (var i = 0; i < _sweepEnumerators.Length; i++)
+                result[i] = _sweepEnumerators[i].Current;
+            return result;
         }
     }
 }

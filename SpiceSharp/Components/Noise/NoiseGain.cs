@@ -1,48 +1,37 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharp.Components.NoiseSources
 {
     /// <summary>
-    /// Noise generator with fixed gain
+    /// Noise generator with fixed gain.
     /// </summary>
-    public class NoiseGain : NoiseGenerator
+    public class NoiseGain : NoiseSource
     {
-        /// <summary>
-        /// Gets or sets the gain for the noise generator
-        /// </summary>
-        public double Gain { get; set; }
+        private readonly OnePort<Complex> _variables;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="NoiseGain"/> class.
+        /// Initializes a new instance of the <see cref="NoiseGain" /> class.
         /// </summary>
-        /// <param name="name">Name of the noise source</param>
-        /// <param name="node1">Node 1</param>
-        /// <param name="node2">Node 2</param>
-        public NoiseGain(string name, int node1, int node2) : base(name, node1, node2) { }
-
-        /// <summary>
-        /// Set the values for the noise source
-        /// </summary>
-        /// <param name="coefficients">Values</param>
-        public override void SetCoefficients(params double[] coefficients)
+        /// <param name="name">Name of the noise source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        public NoiseGain(string name, IVariable<Complex> pos, IVariable<Complex> neg)
+            : base(name)
         {
-            coefficients.ThrowIfNot(nameof(coefficients), 1);
-            Gain = coefficients[0];
+            _variables = new OnePort<Complex>(pos, neg);
         }
 
         /// <summary>
-        /// Calculate noise coefficient
+        /// Computes the noise density specified gain.
         /// </summary>
-        /// <param name="simulation">Noise simulation</param>
-        /// <returns></returns>
-        protected override double CalculateNoise(Noise simulation)
+        /// <param name="gain">The gain.</param>
+        public void Compute(double gain)
         {
-            simulation.ThrowIfNull(nameof(simulation));
-
-            var state = simulation.ComplexState;
-            var val = state.Solution[Nodes[0]] - state.Solution[Nodes[1]];
-            var gain = val.Real * val.Real + val.Imaginary * val.Imaginary;
-            return gain * Gain;
+            var val = _variables.Positive.Value - _variables.Negative.Value;
+            var vgain = val.Real * val.Real + val.Imaginary * val.Imaginary;
+            OutputNoiseDensity = vgain * gain;
         }
     }
 }

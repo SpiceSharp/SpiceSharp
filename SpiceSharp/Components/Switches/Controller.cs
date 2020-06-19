@@ -1,7 +1,4 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Components.SwitchBehaviors
+﻿namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// This class can calculate the controlling input of a switch.
@@ -9,17 +6,11 @@ namespace SpiceSharp.Components.SwitchBehaviors
     public abstract class Controller
     {
         /// <summary>
-        /// Bind the behavior. for the specified simulation.
+        /// Gets the value of the controlling value.
         /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="context">The context.</param>
-        public abstract void Bind(Simulation simulation, BindingContext context);
-
-        /// <summary>
-        /// Gets the value that is controlling the switch.
-        /// </summary>
-        /// <param name="state">The state.</param>
-        /// <returns></returns>
-        public abstract double GetValue(BaseSimulationState state);
+        /// <value>
+        /// The value.
+        /// </value>
+        public abstract double Value { get; }
     }
 }

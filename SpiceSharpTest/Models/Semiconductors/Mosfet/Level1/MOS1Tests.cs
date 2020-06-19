@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -11,7 +11,7 @@ namespace SpiceSharpTest.Models
     {
         private Mosfet1 CreateMOS1(string name, string d, string g, string s, string b, string model)
         {
-            var mos = new Mosfet1(name) {Model = model};
+            var mos = new Mosfet1(name) { Model = model };
             mos.Connect(d, g, s, b);
             return mos;
         }
@@ -24,7 +24,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1DC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * Mosfet biased by voltage sources
@@ -42,12 +42,12 @@ namespace SpiceSharpTest.Models
 
             // Create simulation
             var dc = new DC("dc", new[] {
-                new SweepConfiguration("V2", -5, 5, 0.5),
-                new SweepConfiguration("V1", -5, 5, 0.5)
+                new ParameterSweep("V2", new LinearSweep(-5, 5, 0.5)),
+                new ParameterSweep("V1", new LinearSweep(-5, 5, 0.5))
             });
 
             // Create exports
-            Export<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
+            IExport<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
 
             // Create references
             var references = new double[1][];
@@ -171,7 +171,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * Simple common source amplifier
@@ -193,7 +193,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref =
@@ -233,7 +233,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1SwitchTransient_Expect_Spice3f5Reference()
+        public void When_SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -248,7 +248,7 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Export<double>[] exports = { new RealVoltageExport(tran, "out") };
+            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
 
             // Create references
             var references = new double[1][];
@@ -289,25 +289,22 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0.0)
-                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0),
                 new VoltageSource("V2", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10e3),
                 new Resistor("R2", "out", "g", 10e3),
                 new Capacitor("Cin", "in", "g", 1e-6),
-                CreateMOS1("M1", "out", "g", "0", "0", "MM")
-                    .SetParameter("w", 100e-6)
-                    .SetParameter("l", 100e-6),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM").SetParameter("w", 100e-6).SetParameter("l", 100e-6),
                 CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
                 );
 
             // Create simulation, exports and references
-            var noise = new Noise("noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
-            Export<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+            var noise = new Noise("noise", "out", new DecadeSweep(10, 10e9, 10));
+            IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             var references = new double[2][];
             references[0] = new[]
             {
@@ -368,7 +365,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1OPExample_Expect_Convergence()
+        public void When_OPExample_Expect_Convergence()
         {
             // Found by Marcin Golebiowski
             var ckt = new Circuit(
@@ -391,7 +388,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS1PMOSDifferentialPair_Expect_Reference()
+        public void When_PMOSDifferentialPair_Expect_Reference()
         {
             var model = new Mosfet1Model("Model")
                 .SetParameter("pmos", true)
@@ -420,13 +417,11 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                var v = op.RealState.Solution;
+                var v = op.GetState<IBiasingSimulationState>().Solution;
             };
 
             // Disable source stepping and see if it converges
-            var config = op.Configurations.Get<BaseConfiguration>();
-            // config.SourceSteps = 0;
-
+            // op.BiasingParameters.SourceSteps = 0;
             op.Run(ckt);
         }
     }

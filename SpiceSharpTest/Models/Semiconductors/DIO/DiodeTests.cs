@@ -1,8 +1,8 @@
-﻿using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeDC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * DC voltage shunted by a diode
@@ -35,18 +35,18 @@ namespace SpiceSharpTest.Models
              */
 
             // Build circuit
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 CreateDiode("D1", "OUT", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 0.0)
-                );
+            };
 
             // Create simulation
             var dc = new DC("DC", "V1", -1.0, 1.0, 10e-3);
 
             // Create exports
-            Export<double>[] exports = { new RealPropertyExport(dc, "V1", "i") };
+            IExport<double>[] exports = { new RealPropertyExport(dc, "V1", "i") };
 
             // Create reference
             double[][] references =
@@ -60,26 +60,26 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeSmallSignal_Expect_Spice3f5Reference()
+        public void When_SimpleSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * DC voltage source shunted by a diode
              * Current is expected to behave like the reference
              */
             // Build circuit
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 CreateDiode("D1", "0", "OUT", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
                 new VoltageSource("V1", "OUT", "0", 1.0)
                     .SetParameter("acmag", 1.0)
-                );
+            };
 
             // Create simulation
             var ac = new AC("ac", new DecadeSweep(1e3, 10e6, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexPropertyExport(ac, "V1", "i") };
+            IExport<Complex>[] exports = { new ComplexPropertyExport(ac, "V1", "i") };
 
             // Create references
             double[] riRef = { -1.945791742986885e-12, -1.904705637099517e-08, -1.946103289747125e-12, -3.018754997881332e-08, -1.946885859826953e-12, -4.784404245850086e-08, -1.948851586992178e-12, -7.582769719229839e-08, -1.953789270386556e-12, -1.201788010800761e-07, -1.966192170307985e-12, -1.904705637099495e-07, -1.997346846331992e-12, -3.018754997881245e-07, -2.075603854314768e-12, -4.784404245849736e-07, -2.272176570837208e-12, -7.582769719228451e-07, -2.765944910274710e-12, -1.201788010800207e-06, -4.006234902415568e-12, -1.904705637097290e-06, -7.121702504803603e-12, -3.018754997872460e-06, -1.494740330300116e-11, -4.784404245814758e-06, -3.460467495474045e-11, -7.582769719089195e-06, -8.398150889530617e-11, -1.201788010744768e-05, -2.080105080892987e-10, -1.904705636876583e-05, -5.195572682013223e-10, -3.018754996993812e-05, -1.302127347221150e-09, -4.784404242316795e-05, -3.267854507347871e-09, -7.582769705163549e-05, -8.205537869558709e-09, -1.201788005200868e-04, -2.060843758802494e-08, -1.904705614805916e-04 };
@@ -96,28 +96,28 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeRectifier_Expect_Spice3f5Reference()
+        public void When_RectifierTransient_Expect_Spice3f5Reference()
         {
             /*
              * Pulsed voltage source towards a resistive voltage divider between 0V and 5V
              * Output voltage is expected to behavior like the reference
              */
             // Build circuit
-            var ckt = new Circuit();
-            ckt.Add(
+            var ckt = new Circuit
+            {
                 new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
                 new VoltageSource("Vsupply", "vdd", "0", 5.0),
                 new Resistor("R1", "vdd", "out", 10.0e3),
                 new Resistor("R2", "out", "0", 10.0e3),
                 CreateDiode("D1", "in", "out", "1N914"),
                 CreateDiodeModel("1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9")
-            );
+            };
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Export<double>[] exports = { new RealVoltageExport(tran, "out") };
+            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
 
             // Create references
             double[][] references =
@@ -131,7 +131,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DiodeNoise_Expect_Spice3f5Reference()
+        public void When_SimpleNoise_Expect_Spice3f5Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -143,8 +143,8 @@ namespace SpiceSharpTest.Models
             );
 
             // Create the noise, exports and reference values
-            var noise = new Noise("Noise", "out", "V1", new DecadeSweep(10, 10e9, 10));
-            Export<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+            var noise = new Noise("Noise", "out", new DecadeSweep(10, 10e9, 10));
+            IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {
                 new[]
@@ -203,5 +203,571 @@ namespace SpiceSharpTest.Models
             AnalyzeNoise(noise, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_MultipliersDC_Expect_Reference()
+        {
+            var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0), model);
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "0", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0), model,
+                new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            var dc = new DC("dc", "V1", -1, 1, 0.1);
+            var exports = new IExport<double>[] { new RealCurrentExport(dc, "V1") };
+
+            Compare(dc, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_MultipliersSmallSignal_Expect_Reference()
+        {
+            var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0), model);
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "0", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0).SetParameter("acmag", 1.0), model,
+                new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 5));
+            var exports = new IExport<Complex>[] { new ComplexCurrentExport(ac, "V1") };
+
+            Compare(ac, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_MultipliersNoise_Expect_Reference()
+        {
+            var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=5680 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-10 Af=0.9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", 3).SetParameter("acmag", 1.0),
+                new Resistor("R1", "in", "out", 10e3),
+                model);
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "out", "0", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", 3).SetParameter("acmag", 1.0),
+                new Resistor("R1", "in", "out", 10e3), model,
+                new Diode("D1", "out", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            var noise = new Noise("noise", "out", new DecadeSweep(0.1, 1e6, 5));
+            var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+
+            Compare(noise, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_MultipliersTransient_Expect_Reference()
+        {
+            /*
+             * Pulsed voltage source towards a resistive voltage divider between 0V and 5V
+             * Output voltage is expected to behavior like the reference
+             */
+            // Build circuit
+            var model = CreateDiodeModel("1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9");
+            var cktReference = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "out", "0", 10.0e3),
+                model
+            );
+            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "out", 3, 2);
+            var cktActual = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "out", "0", 10.0e3),
+                model,
+                new Diode("D1", "in", "out", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+
+            // Create simulation
+            var tran = new Transient("tran", 1e-9, 10e-6);
+            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
+            Compare(tran, cktReference, cktActual, exports);
+            DestroyExports(exports);
+        }
+
+        /*
+        [TestCaseSource(nameof(ModelTemperature))]
+        public void When_ModelTemperatureBehavior_Expect_Reference(Proxy<IBindingContext> context, IDictionary<string, double> expected)
+        {
+            var behavior = new ModelTemperatureBehavior("model", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            Check.Properties(behavior, expected);
+        }
+        [TestCaseSource(nameof(Temperature))]
+        public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, IDictionary<string, double> expected)
+        {
+            var behavior = new TemperatureBehavior("entity", context.Value);
+            ((ITemperatureBehavior)behavior).Temperature();
+            Check.Properties(behavior, expected);
+        }
+        [TestCaseSource(nameof(Biasing))]
+        public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new BiasingBehavior("entity", context.Value);
+            behavior.DoBias(context.Value);
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Frequency))]
+        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
+        {
+            var behavior = new FrequencyBehavior("entity", context.Value);
+            behavior.DoBias(context.Value);
+            ((IFrequencyBehavior)behavior).InitializeParameters();
+            ((IFrequencyBehavior)behavior).Load();
+            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
+        }
+        [TestCaseSource(nameof(Transient))]
+        public void When_TimeBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        {
+            var behavior = new TimeBehavior("entity", context.Value);
+            behavior.DoTransient(context.Value);
+            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+        }
+
+        private static IDictionary<string, double> ExpectedModelTemperature(
+            double conductance, double vtNominal, double xfc, double f2, double f3)
+        {
+            return new Dictionary<string, double>
+            {
+                { nameof(ModelTemperatureBehavior.Conductance), conductance },
+                { nameof(ModelTemperatureBehavior.VtNominal), vtNominal },
+                { nameof(ModelTemperatureBehavior.Xfc), xfc },
+                { nameof(ModelTemperatureBehavior.F2), f2 },
+                { nameof(ModelTemperatureBehavior.F3), f3 }
+            };
+        }
+        private static IDictionary<string, double> ExpectedTemperature(
+            double tempJunctionCap, double tempJunctionPot, double tempSaturationCurrent,
+            double tempFactor1, double tempDepletionCap, double tempVCritical, double tempBreakdownVoltage,
+            double vt, double vte)
+        {
+            return new Dictionary<string, double>
+            {
+                { nameof(TemperatureBehavior.TempJunctionCap), tempJunctionCap },
+                { nameof(TemperatureBehavior.TempJunctionPot), tempJunctionPot },
+                { nameof(TemperatureBehavior.TempSaturationCurrent), tempSaturationCurrent },
+                { nameof(TemperatureBehavior.TempFactor1), tempFactor1 },
+                { nameof(TemperatureBehavior.TempDepletionCap), tempDepletionCap },
+                { nameof(TemperatureBehavior.TempVCritical), tempVCritical },
+                { nameof(TemperatureBehavior.TempBreakdownVoltage), tempBreakdownVoltage },
+                { "Vt", vt },
+                { "Vte", vte }
+            };
+        }
+        public static IEnumerable<TestCaseData> ModelTemperature
+        {
+            get
+            {
+                IBindingContext context;
+
+                /// 1N914 Is= 2.52n Rs = .568 N= 1.752 Cjo= 4p M = .4 tt= 20n
+                context = Substitute.For<IBindingContext>()
+                    .Temperature().Parameter(new ModelBaseParameters
+                    {
+                        SaturationCurrent = 2.52e-9,
+                        Resistance = 0.568,
+                        EmissionCoefficient = 1.752,
+                        TransitTime = 20e-9,
+                        GradingCoefficient = 0.4,
+                        JunctionCap = 4e-12
+                    });
+                yield return new TestCaseData(context.AsProxy(), ExpectedModelTemperature(
+                    conductance: 1.7605633802816902,
+                    vtNominal: 0.025864186384551461, 
+                    xfc: -0.69314718055994529, 
+                    f2: 0.37892914162759955, 
+                    f3: 0.3)).SetName("{m}(1N914)");
+
+                // Check default values and non-default temperature
+                context = Substitute.For<IBindingContext>()
+                    .Temperature(360).Parameter(new ModelBaseParameters());
+                yield return new TestCaseData(context.AsProxy(), ExpectedModelTemperature(
+                    conductance: 0,
+                    vtNominal: 0.025864186384551461,
+                    xfc: -0.69314718055994529,
+                    f2: 0.35355339059327379,
+                    f3: 0.25)).SetName("{m}(default)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Temperature
+        {
+            get
+            {
+                IComponentBindingContext context;
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Temperature(300.0)
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("1N914", bc))
+                    .Parameter(new BaseParameters());
+                yield return new TestCaseData(context.AsProxy(), ExpectedTemperature(
+                    tempJunctionCap: 9.9962771890637727E-13,
+                    tempJunctionPot: 0.60033628105424341,
+                    tempSaturationCurrent: 9.817043778553681E-10,
+                    tempFactor1: 1.048023829997228,
+                    tempDepletionCap: 0.57031946700153124,
+                    tempVCritical: 0.52494861470597376,
+                    tempBreakdownVoltage: 0,
+                    vt: 0.025851260754174377,
+                    vte: 0.031021512905009249
+                    )).SetName("{m}(regular)");
+
+                context = Substitute.For<IComponentBindingContext>()
+                    .Temperature(350).SimulationParameter(new BiasingParameters())
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        BreakdownVoltage = 5,
+                        BreakdownCurrent = 1e-3
+                    }, bc => new ModelTemperatureBehavior("breakdown", bc))
+                    .Parameter(new BaseParameters());
+                yield return new TestCaseData(context.AsProxy(), ExpectedTemperature(
+                    tempJunctionCap: 0,
+                    tempJunctionPot: 0.9529143523274588,
+                    tempSaturationCurrent: 7.1586116556187464E-12,
+                    tempFactor1: 0.55820430381345143,
+                    tempDepletionCap: 0.4764571761637294,
+                    tempVCritical: 0.6579326978972041,
+                    tempBreakdownVoltage: 4.434354418206393,
+                    vt: 0.030159804213203439,
+                    vte: 0.030159804213203439
+                    )).SetName("{m}(breakdown)");
+            }
+        }
+        public static IEnumerable<TestCaseData> Biasing
+        {
+            get
+            {
+                // Init Junction - use initial condition that allows us to
+                // converge quickly to wherever. Automatically biases to V=n*Ut
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Temperature(300.0).Bias()
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("model", bc))
+                    .Parameter(new BaseParameters());
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                    0.707106781187548, -0.707106781187548, 0.349259204076985,
+                    -0.707106781187548, 0.707106781187548, -0.349259204076985
+                    }).SetName("{m}(V=Vcrit)");
+                }
+
+                // Init Float regular forward bias
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b")
+                        .Temperature(300.0).Bias(
+                            state => state.Solution[1] = 0.7, 
+                            state => state.Mode.Returns(IterationModes.Float))
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            EmissionCoefficient = 1.2,
+                            GradingCoefficient = 0.6,
+                            SaturationCurrentExp = 1.4,
+                            SaturationCurrent = 1e-9,
+                            DepletionCapCoefficient = 1.2,
+                            JunctionCap = 1e-12,
+                            JunctionPotential = 0.6
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters());
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                    199.602784638856, -199.602784638856, 133.52996888863,
+                    -199.602784638856, 199.602784638856, -133.52996888863
+                    }).SetName("{m}(V=0.7)");
+                }
+
+                // Init Float with extra node and series/parallel multiplier
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b").CreateVariable(new Variable("posprime", Units.Volt))
+                        .Temperature(450.0).Bias(state =>
+                        {
+                            state.Solution[1] = 0.6;
+                            state.Solution[3] = 0.6;
+                        }, state => state.Mode.Returns(IterationModes.Float))
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            Resistance = 2.0,
+                            SaturationCurrent = 1e-9
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters
+                        {
+                            SeriesMultiplier = 2,
+                            ParallelMultiplier = 3,
+                        });
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        0.75, double.NaN, -0.75, double.NaN,
+                        double.NaN, 480.478402405751, -480.478402405751, -251.040391835992,
+                        -0.75, -480.478402405751, 481.228402405751, 251.040391835992
+                    }).SetName("{m}(Rs, n=2, m=3)");
+                }
+
+                // Init Float in reverse bias with breakdown and area of 2
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b")
+                        .Bias(state => state.Solution[1] = -4.05,
+                            state => state.Mode.Returns(IterationModes.Float))
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            BreakdownCurrent = 1e-3,
+                            BreakdownVoltage = 4
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters { Area = 2.0 });
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        0.534439358280788, -0.534439358280788, -2.15065656185935,
+                        -0.534439358280788, 0.534439358280788, 2.15065656185935
+                    }).SetName("{m}(V=-4.06, Vz=4, A=2)");
+                }
+            }
+        }
+        public static IEnumerable<TestCaseData> Frequency
+        {
+            get
+            {
+                // Init Junction - use initial condition that allows us to
+                // converge quickly to wherever. Automatically biases to V=n*Ut
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Temperature(300.0).Frequency(1e6)
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("model", bc))
+                    .Parameter(new BaseParameters());
+                    var gr = new Complex(0.707106781187548, 2.18621908461587E-05);
+                    yield return new TestCaseData(context.AsProxy(), new Complex[]
+                    {
+                        gr, -gr, double.NaN,
+                        -gr, gr, double.NaN
+                    }).SetName("{m}(V=Vcrit, f=1MHz)");
+                }
+
+                // Init Float regular forward bias
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b")
+                        .Temperature(300.0).Bias(
+                            state => state.Solution[1] = 0.7,
+                            state => state.Mode.Returns(IterationModes.Float))
+                        .Frequency(50e6)
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            EmissionCoefficient = 1.2,
+                            GradingCoefficient = 0.6,
+                            SaturationCurrentExp = 1.4,
+                            SaturationCurrent = 1e-9,
+                            DepletionCapCoefficient = 1.2,
+                            JunctionCap = 1e-12,
+                            JunctionPotential = 0.6,
+                            TransitTime = 1e-9
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters());
+                    var g = new Complex(199.602784638856, 62.7138861377778);
+                    yield return new TestCaseData(context.AsProxy(), new Complex[]
+                    {
+                        g, -g, double.NaN,
+                        -g, g, double.NaN
+                    }).SetName("{m}(V=0.7, f=50MHz)");
+                }
+
+                // Init Float with extra node and series/parallel multiplier
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b").CreateVariable(new Variable("posprime", Units.Volt))
+                        .Temperature(450.0).Bias(state =>
+                        {
+                            state.Solution[1] = 0.6;
+                            state.Solution[3] = 0.6;
+                        }, state => state.Mode.Returns(IterationModes.Float))
+                        .Frequency(20e6)
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            Resistance = 2.0,
+                            SaturationCurrent = 1e-9,
+                            JunctionCap = 1e-10,
+                            DepletionCapCoefficient = 1.5
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters
+                        {
+                            SeriesMultiplier = 2,
+                            ParallelMultiplier = 3,
+                        });
+                    var g = new Complex(480.478402405751, 0.0249045599396782);
+                    yield return new TestCaseData(context.AsProxy(), new Complex[]
+                    {
+                        0.75, double.NaN, -0.75, double.NaN,
+                        double.NaN, g, -g, double.NaN,
+                        -0.75, -g, g + 0.75, double.NaN
+                    }).SetName("{m}(Rs, n=2, m=3)");
+                }
+
+                // Init Float in reverse bias with breakdown and area of 2
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b")
+                        .Bias(state => state.Solution[1] = -4.05,
+                            state => state.Mode.Returns(IterationModes.Float))
+                        .Frequency(100e6)
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            BreakdownCurrent = 1e-3,
+                            BreakdownVoltage = 4,
+                            JunctionCap = 10e-9,
+                            GradingCoefficient = 0.6,
+                            DepletionCapCoefficient = 1.5
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters { Area = 2.0 });
+                    var g = new Complex(0.534439358280788, 4.75592543681738);
+                    yield return new TestCaseData(context.AsProxy(), new Complex[]
+                    {
+                        g, -g, double.NaN,
+                        -g, g, double.NaN
+                    }).SetName("{m}(V=-4.06, Vz=4, A=2)");
+                }
+            }
+        }
+        public static IEnumerable<TestCaseData> Transient
+        {
+            get
+            {
+                // Init Junction - use initial condition that allows us to
+                // converge quickly to wherever. Automatically biases to V=n*Ut
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                    .Nodes("a", "b").Temperature(300.0).Transient(0.5, 1e-6)
+                    .ModelTemperature(new ModelBaseParameters
+                    {
+                        EmissionCoefficient = 1.2,
+                        GradingCoefficient = 0.6,
+                        SaturationCurrentExp = 1.4,
+                        SaturationCurrent = 1e-9,
+                        DepletionCapCoefficient = 1.2,
+                        JunctionCap = 1e-12,
+                        JunctionPotential = 0.6
+                    }, bc => new ModelTemperatureBehavior("model", bc))
+                    .Parameter(new BaseParameters());
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        0.707107780815267, -0.707107780815267, -0.650740795923015,
+                        -0.707107780815267, 0.707107780815267, 0.650740795923015
+                    }).SetName("{m}(V=Vcrit, f=1MHz)");
+                }
+
+                // Init Float regular forward bias
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b")
+                        .Temperature(300.0).Bias(
+                            state => state.Solution[1] = 0.7,
+                            state => state.Mode.Returns(IterationModes.Float))
+                        .Transient(0.5, 1.0 / 50e6)
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            EmissionCoefficient = 1.2,
+                            GradingCoefficient = 0.6,
+                            SaturationCurrentExp = 1.4,
+                            SaturationCurrent = 1e-9,
+                            DepletionCapCoefficient = 1.2,
+                            JunctionCap = 1e-12,
+                            JunctionPotential = 0.6,
+                            TransitTime = 1e-9
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters());
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        209.584009618186, -209.584009618186, 139.516826374161,
+                        -209.584009618186, 209.584009618186, -139.516826374161
+                    }).SetName("{m}(V=0.7, f=50MHz)");
+                }
+
+                // Init Float with extra node and series/parallel multiplier
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b").CreateVariable(new Variable("posprime", Units.Volt))
+                        .Temperature(450.0).Bias(state =>
+                        {
+                            state.Solution[1] = 0.6;
+                            state.Solution[3] = 0.6;
+                        }, state => state.Mode.Returns(IterationModes.Float))
+                        .Transient(0.5, 1.0 / 20e6)
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            Resistance = 2.0,
+                            SaturationCurrent = 1e-9,
+                            JunctionCap = 1e-10,
+                            DepletionCapCoefficient = 1.5
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters
+                        {
+                            SeriesMultiplier = 2,
+                            ParallelMultiplier = 3,
+                        });
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        0.75, double.NaN, -0.75, double.NaN,
+                        double.NaN, 480.48236608957, -480.48236608957, -248.042770046284,
+                        -0.75, -480.48236608957, 481.23236608957, 248.042770046284
+                    }).SetName("{m}(Rs, n=2, m=3)");
+                }
+
+                // Init Float in reverse bias with breakdown and area of 2
+                {
+                    var context = Substitute.For<IComponentBindingContext>()
+                        .Nodes("a", "b")
+                        .Bias(state => state.Solution[1] = -4.05,
+                            state => state.Mode.Returns(IterationModes.Float))
+                        .Transient(0.5, 1.0 / 100e6)
+                        .ModelTemperature(new ModelBaseParameters
+                        {
+                            BreakdownCurrent = 1e-3,
+                            BreakdownVoltage = 4,
+                            JunctionCap = 10e-9,
+                            GradingCoefficient = 0.6,
+                            DepletionCapCoefficient = 1.5
+                        }, bc => new ModelTemperatureBehavior("model", bc))
+                        .Parameter(new BaseParameters { Area = 2.0 });
+                    yield return new TestCaseData(context.AsProxy(), new double[]
+                    {
+                        1.29136840052676, -1.29136840052676, -6.21621918295552,
+                        -1.29136840052676, 1.29136840052676, 6.21621918295552
+                    }).SetName("{m}(V=-4.06, Vz=4, A=2)");
+                }
+            }
+        }
+        */
     }
 }

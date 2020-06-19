@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -17,7 +17,7 @@ namespace SpiceSharpTest.Models
         private Mosfet3 CreateMOS3(string name, string d, string g, string s, string b, string model)
         {
             // Create transistor
-            var mos = new Mosfet3(name) {Model = model};
+            var mos = new Mosfet3(name) { Model = model };
             mos.Connect(d, g, s, b);
             return mos;
         }
@@ -30,7 +30,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS3DC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * MOS3 driven by voltage sources
@@ -43,17 +43,17 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "d", "g", "0", "0", "DMOS")
                     .SetParameter("w", 1e-6)
                     .SetParameter("l", 1e-6),
-                CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
+                CreateMOS3Model("DMOS", false, "VTO=-0.7 KP=3.8E+1 THETA=0.25 VMAX=3.5E5")
             );
 
             // Create simulation
             var dc = new DC("dc", new[] {
-                new SweepConfiguration("V2", 0, 1.8, 0.3),
-                new SweepConfiguration("V1", 0, 1.8, 0.3)
+                new ParameterSweep("V2", new LinearSweep(0, 1.8, 0.3)),
+                new ParameterSweep("V1", new LinearSweep(0, 1.8, 0.3))
             });
 
             // Create exports
-            Export<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
+            IExport<double>[] exports = { new RealPropertyExport(dc, "V2", "i") };
 
             // Create references
             var references = new double[1][];
@@ -80,7 +80,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS3CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierSmallSignal_Expect_Spice3f5Reference()
         {
             /*
              * Common-source amplifier biased as a diode-connected transistor
@@ -104,7 +104,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref =
@@ -144,7 +144,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_MOS3SwitchTransient_Expect_Spice3f5Reference()
+        public void When_SwitchTransient_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -154,14 +154,14 @@ namespace SpiceSharpTest.Models
                 CreateMOS3("M1", "out", "in", "vdd", "vdd", "DMOS")
                     .SetParameter("w", 1e-6)
                     .SetParameter("l", 1e-6),
-                CreateMOS3Model("DMOS", false, "VTO = -0.7 KP = 3.8E+1 THETA = .25 VMAX = 3.5E5")
+                CreateMOS3Model("DMOS", false, "VTO=-0.7 KP=3.8E+1 THETA=0.25 VMAX=3.5E5")
                 );
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Export<double>[] exports = { new GenericExport<double>(tran, () => tran.Method.Time), new RealVoltageExport(tran, "out") };
+            IExport<double>[] exports = { new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time), new RealVoltageExport(tran, "out") };
 
             // Create references
             var references = new double[2][];
@@ -230,9 +230,9 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }
-        
+
         [Test]
-        public void When_MOS3CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
+        public void When_CommonSourceAmplifierNoise_Expect_Spice3f5Reference()
         {
             // Create circuit
             var ckt = new Circuit(
@@ -249,8 +249,8 @@ namespace SpiceSharpTest.Models
                 );
 
             // Make simulation, exports and references
-            var noise = new Noise("Noise", "out", "V1", new DecadeSweep(10.0, 10.0e9, 10));
-            Export<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+            var noise = new Noise("Noise", "out", new DecadeSweep(10.0, 10.0e9, 10));
+            IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {
                 new[]

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<docs>
+  <members>
+    <DrainCurrent>
+      <summary>Gets the drain current.</summary>
+      <value>The drain current.</value>
+    </DrainCurrent>
+    <BulkSourceCurrent>
+      <summary>Gets the bulk-source current.</summary>
+      <value>The bulk-source current.</value>
+    </BulkSourceCurrent>
+    <BulkDrainCurrent>
+      <summary>Gets the bulk-drain current.</summary>
+      <value>The bulk-drain current.</value>
+    </BulkDrainCurrent>
+    <Transconductance>
+      <summary>Gets the small-signal transconductance (gm).</summary>
+      <value>The small-signal transconductance.</value>
+    </Transconductance>
+    <BulkSourceTransconductance>
+      <summary>Gets the small-signal bulk-source transconductance (gmb).</summary>
+      <value>The small-signal bulk-source transconductance.</value>
+    </BulkSourceTransconductance>
+    <DrainSourceConductance>
+      <summary>Gets the small-signal drain-source conductance (gds).</summary>
+      <value>The small-signal drain-source conductance.</value>
+    </DrainSourceConductance>
+    <BulkSourceConductance>
+      <summary>Gets the small-signal bulk-source conductance (gbs).</summary>
+      <value>The small-signal bulk-source conductance.</value>
+    </BulkSourceConductance>
+    <BulkDrainConductance>
+      <summary>Gets the small-signal bulk-drain conductance (gbd).</summary>
+      <value>The small-signal bulk-drain conductance.</value>
+    </BulkDrainConductance>
+    <Von>
+      <summary>Gets the turn-on or threshold voltage (von or vth).</summary>
+      <value>The turn-on/threshold voltage.</value>
+    </Von>
+    <SaturationVoltage>
+      <summary>Gets the saturation voltage (vdsat).</summary>
+      <remarks>If vds is larger than vdsat, then the transistor can be considered to be in the saturation region.</remarks>
+      <value>The saturation voltage.</value>
+    </SaturationVoltage>
+    <Mode>
+      <summary>Gets the current mode of operation. A value of -1.0 means that the source and drain have switched.</summary>
+      <value>The current mode of operation.</value>
+    </Mode>
+    <GateSourceVoltage>
+      <summary>Gets the gate-source voltage (vgs).</summary>
+      <value>The gate-source voltage.</value>
+    </GateSourceVoltage>
+    <DrainSourceVoltage>
+      <summary>Gets the drain-source voltage (vds).</summary>
+      <value>The drain-source voltage.</value>
+    </DrainSourceVoltage>
+    <BulkSourceVoltage>
+      <summary>Gets the bulk-source voltage (vbs).</summary>
+      <value>The bulk-source voltage.</value>
+    </BulkSourceVoltage>
+    <BulkDrainVoltage>
+      <summary>Gets the bulk-drain voltage (vbd).</summary>
+      <value>The bulk-drain voltage.</value>
+    </BulkDrainVoltage>
+    <GateSourceCharge>
+      <summary>Gets the charge on the gate-source capacitance (qgs).</summary>
+      <value>The gate-source charge.</value>
+    </GateSourceCharge>
+    <GateSourceCapacitance>
+      <summary>Gets the gate-source capacitance (cgs).</summary>
+      <value>The gate-source capacitance.</value>
+    </GateSourceCapacitance>
+    <GateDrainCharge>
+      <summary>Gets the charge on the gate-drain capacitance (qgd).</summary>
+      <value>The gate-drain charge.</value>
+    </GateDrainCharge>
+    <GateDrainCapacitance>
+      <summary>Gets the gate-drain capacitance (cgd).</summary>
+      <value>The gate-drain capacitance.</value>
+    </GateDrainCapacitance>
+    <GateBulkCharge>
+      <summary>Gets the charge on the gate-bulk capacitance (cgb).</summary>
+      <value>The gate-bulk charge.</value>
+    </GateBulkCharge>
+    <GateBulkCapacitance>
+      <summary>Gets the gate-bulk capacitance (cgb).</summary>
+      <value>The gate-bulk capacitance.</value>
+    </GateBulkCapacitance>
+    <BulkSourceCharge>
+      <summary>Gets the charge on the bulk-source capacitance (qbs).</summary>
+      <value>The bulk-source charge.</value>
+    </BulkSourceCharge>
+    <BulkSourceCapacitance>
+      <summary>Gets the bulk-source capacitance (cbs).</summary>
+      <value>The bulk-source capacitance.</value>
+    </BulkSourceCapacitance>
+    <BulkDrainCharge>
+      <summary>Gets the charge on the bulk-drain capacitance (qbd).</summary>
+      <value>The bulk-drain charge.</value>
+    </BulkDrainCharge>
+    <BulkDrainCapacitance>
+      <summary>Gets the bulk-drain capacitance (cbd).</summary>
+      <value>The bulk-drain capacitance.</value>
+    </BulkDrainCapacitance>
+    <SourceConductance>
+      <summary>Gets the conductance of the source diffusion region.</summary>
+      <value>The conductance of the source diffusion region.</value>
+    </SourceConductance>
+    <SourceResistance>
+      <summary>Gets the resistance of the source diffusion region.</summary>
+      <value>The resistance of the source diffusion region.</value>
+    </SourceResistance>
+    <DrainConductance>
+      <summary>Gets the conductance of the drain diffusion region.</summary>
+      <value>The conductance of the drain diffusion region.</value>
+    </DrainConductance>
+    <DrainResistance>
+      <summary>Gets the resistance of the drain diffusion region.</summary>
+      <value>The resistance of the drain diffusion region.</value>
+    </DrainResistance>
+    <CriticalSourceVoltage>
+      <summary>Gets the critical voltage of the source junction.</summary>
+      <value>The critical voltage.</value>
+    </CriticalSourceVoltage>
+    <CriticalDrainVoltage>
+      <summary>Gets the critical voltage of the drain junction.</summary>
+      <value>The critical voltage.</value>
+    </CriticalDrainVoltage>
+    <ThermalDrain>
+      <summary>Gets the noise source that represents the thermal noise of the drain resistance.</summary>
+      <value>The thermal noise source for the drain.</value>
+    </ThermalDrain>
+    <ThermalSource>
+      <summary>Gets the noise source that represents the thermal noise of the source resistance.</summary>
+      <value>The thermal noise source for the source.</value>
+    </ThermalSource>
+    <ShotNoise>
+      <summary>Gets the noise source that represents the shot noise of the drain-source current.</summary>
+      <value>The shot noise source for the drain-source current.</value>
+    </ShotNoise>
+    <FlickerNoise>
+      <summary>Gets the noise source that represents the flicker noise of the drain-source current.</summary>
+      <value>The flicker noise source for the drain-source current.</value>
+    </FlickerNoise>
+  </members>
+  <methods>
+	  <Initialize>
+		  <summary>Initializes the voltages that need to be used for calculating the current iteration.</summary>
+		  <param name="vgs">The gate-source voltage.</param>
+		  <param name="vds">The drain-source voltage.</param>
+		  <param name="vbs">The bulk-source voltage.</param>
+		  <param name="check">If set to <c>true</c>, the voltages have been limited to help convergence. If this is the case, then
+		  a new iteration should be calculated.</param>
+	  </Initialize>
+  </methods>
+</docs>

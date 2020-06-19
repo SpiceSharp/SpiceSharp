@@ -1,8 +1,8 @@
-﻿using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -14,7 +14,7 @@ namespace SpiceSharpTest.Models
         /// </summary>
         private JFET CreateJFET(string name, string d, string g, string s, string model)
         {
-            var fet = new JFET(name) {Model = model};
+            var fet = new JFET(name) { Model = model };
             fet.Connect(d, g, s);
             return fet;
         }
@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_JFETDC_Expect_Reference()
+        public void When_SimpleDC_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -38,13 +38,13 @@ namespace SpiceSharpTest.Models
             );
 
             // Build the simulation
-            var dc = new DC("dc", new [] {
-                new SweepConfiguration("V1", 0, 0.8, 0.1),
-                new SweepConfiguration("V2", 0.0, 5.0, 0.1)
+            var dc = new DC("dc", new[] {
+                new ParameterSweep("V1", new LinearSweep(0, 0.8, 0.1)),
+                new ParameterSweep("V2", new LinearSweep(0.0, 5.0, 0.1))
             });
 
             // Create exports
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
                 new RealPropertyExport(dc, "V1", "i"),
                 new RealPropertyExport(dc, "V2", "i"),
@@ -297,7 +297,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_JFETSmallSignal_Expect_Reference()
+        public void When_SimpleSmallSignal_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -312,7 +312,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 10e9, 10));
 
             // Create exports
-            var exports = new Export<Complex>[]
+            var exports = new IExport<Complex>[]
             {
                 new ComplexPropertyExport(ac, "V1", "i"),
                 new ComplexPropertyExport(ac, "V2", "i"),
@@ -454,7 +454,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_JFETTransient_Expect_Reference()
+        public void When_SimpleTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -468,9 +468,9 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-6, 10e-6);
 
             // Build the exports
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.Method.Time),
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealPropertyExport(tran, "V1", "i"),
                 new RealPropertyExport(tran, "V2", "i")
             };
