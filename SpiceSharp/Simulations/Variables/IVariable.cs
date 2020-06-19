@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Simulations.Variables;
-using System;
 
 namespace SpiceSharp.Simulations
 {

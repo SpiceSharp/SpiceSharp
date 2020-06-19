@@ -1,6 +1,6 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 
 namespace SpiceSharp.Components.MutualInductances
 {

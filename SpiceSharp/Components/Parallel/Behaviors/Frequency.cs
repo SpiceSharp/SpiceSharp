@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IFrequencyBehavior" />
-    public partial class Frequency : Behavior, 
+    public partial class Frequency : Behavior,
         IFrequencyBehavior
     {
         /// <summary>

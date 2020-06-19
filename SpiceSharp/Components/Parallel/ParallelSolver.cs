@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
@@ -87,11 +87,11 @@ namespace SpiceSharp.Components.ParallelComponents
         }
 
         /// <inheritdoc/>
-        bool ISolver<T>.Factor() 
+        bool ISolver<T>.Factor()
             => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.Factor)));
 
         /// <inheritdoc/>
-        int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor() 
+        int IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor()
             => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor)));
 
         /// <inheritdoc/>
@@ -201,7 +201,7 @@ namespace SpiceSharp.Components.ParallelComponents
 
         /// <inheritdoc/>
         public P GetProperty<P>(string name) => _parent.GetProperty<P>(name);
-        
+
         /// <inheritdoc/>
         public bool TryGetProperty<P>(string name, out P value) => _parent.TryGetProperty(name, out value);
 

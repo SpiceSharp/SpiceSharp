@@ -10,8 +10,8 @@ namespace SpiceSharp.Components.Subcircuits.Simple
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IBiasingBehavior" />
     /// <seealso cref="IConvergenceBehavior"/>
-    public partial class Biasing : SubcircuitBehavior<IBiasingBehavior>, 
-        IBiasingBehavior, 
+    public partial class Biasing : SubcircuitBehavior<IBiasingBehavior>,
+        IBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly BehaviorList<IConvergenceBehavior> _convergenceBehaviors;

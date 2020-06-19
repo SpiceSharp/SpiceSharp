@@ -93,12 +93,12 @@ namespace SpiceSharp.Simulations
             {
                 if (sim.Solved.TryGetValue(PosNode, out var _node))
                 {
-                    var posNode = (IVariable<Complex>)_node;
+                    var posNode = _node;
                     if (NegNode == null)
                         Extractor = () => posNode.Value;
                     else if (sim.Solved.TryGetValue(NegNode, out _node))
                     {
-                        var negNode = (IVariable<Complex>)_node;
+                        var negNode = _node;
                         Extractor = () => posNode.Value - negNode.Value;
                     }
                 }

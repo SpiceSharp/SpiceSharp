@@ -1,10 +1,10 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.ParallelComponents;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {

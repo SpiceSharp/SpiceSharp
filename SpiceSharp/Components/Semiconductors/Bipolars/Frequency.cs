@@ -1,7 +1,7 @@
-﻿using System.Numerics;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System.Numerics;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    public class Frequency : Dynamic, 
+    public class Frequency : Dynamic,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, IComponentBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
 

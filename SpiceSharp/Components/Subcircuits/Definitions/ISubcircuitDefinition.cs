@@ -1,9 +1,9 @@
-﻿using SpiceSharp.Entities;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Validation;
 using System;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {

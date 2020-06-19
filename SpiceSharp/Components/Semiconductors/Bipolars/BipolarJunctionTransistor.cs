@@ -1,9 +1,9 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Bipolars;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -24,13 +24,13 @@ namespace SpiceSharp.Components
         /// The pin count for a bipolar junction transistor.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 4;
+        public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BipolarJunctionTransistor"/> class.
         /// </summary>
         /// <param name="name">The name of the device.</param>
-        public BipolarJunctionTransistor(string name) 
+        public BipolarJunctionTransistor(string name)
             : base(name, PinCount)
         {
         }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SpiceSharp.Simulations
+﻿namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A simulation state for a <see cref="Noise"/> analysis.

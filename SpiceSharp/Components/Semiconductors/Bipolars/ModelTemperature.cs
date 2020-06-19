@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.Bipolars
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    public class ModelTemperature : Behavior, 
+    public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>
     {
@@ -142,7 +142,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperature(string name, ModelBindingContext context) : base(name) 
+        public ModelTemperature(string name, ModelBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();

@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations.Histories
                 throw new ArgumentOutOfRangeException(nameof(index));
             return _history[index];
         }
-        
+
         /// <summary>
         /// Sets all values in the history to the same value.
         /// </summary>

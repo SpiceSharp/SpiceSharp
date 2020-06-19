@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IStateful{S}"/>
     /// <seealso cref="IComplexSimulationState"/>
-    public interface IFrequencySimulation : 
+    public interface IFrequencySimulation :
         IBiasingSimulation,
         ISimulation<IVariable<Complex>>,
         IBehavioral<IFrequencyBehavior>,

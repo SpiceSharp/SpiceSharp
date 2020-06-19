@@ -1,13 +1,4 @@
-﻿using NSubstitute;
-using NUnit.Framework;
-using SpiceSharp;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Components;
-using SpiceSharp.Entities;
-using SpiceSharp.Simulations;
-using System;
-
-namespace SpiceSharpTest.Models
+﻿namespace SpiceSharpTest.Models
 {
     public static class ComponentHelper
     {

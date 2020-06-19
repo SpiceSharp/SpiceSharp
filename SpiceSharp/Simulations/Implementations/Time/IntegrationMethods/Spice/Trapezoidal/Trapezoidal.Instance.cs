@@ -18,7 +18,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// The integration coefficients.
             /// </summary>
             protected readonly double[] Coefficients = new double[_trapezoidalOrder];
-            
+
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance"/> class.
             /// </summary>

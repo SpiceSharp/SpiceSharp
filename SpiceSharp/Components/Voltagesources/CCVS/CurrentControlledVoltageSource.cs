@@ -1,12 +1,12 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CurrentControlledVoltageSources;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Components.CurrentControlledVoltageSources;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using System.Linq;
 using System;
-using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -38,14 +38,14 @@ namespace SpiceSharp.Components
         /// The pin count for current-controlled voltage sources.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 2;
-        
+        public const int PinCount = 2;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the current-controlled current source.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public CurrentControlledVoltageSource(string name) 
+        public CurrentControlledVoltageSource(string name)
             : base(name, PinCount)
         {
         }
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components
         /// <param name="controllingSource">The controlling voltage source name.</param>
         /// <param name="gain">The transresistance (gain).</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain) 
+        public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain)
             : this(name)
         {
             Parameters.Coefficient = gain;

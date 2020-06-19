@@ -29,7 +29,7 @@ namespace SpiceSharp
         /// <summary>
         /// Initializes a new instance of the <see cref="NoEquivalentSubcircuitException"/> class.
         /// </summary>
-        public NoEquivalentSubcircuitException() 
+        public NoEquivalentSubcircuitException()
             : base(Properties.Resources.Subcircuits_NoEquivalent)
         {
         }
@@ -38,7 +38,7 @@ namespace SpiceSharp
         /// Initializes a new instance of the <see cref="NoEquivalentSubcircuitException"/> class.
         /// </summary>
         /// <param name="innerException">The inner exception.</param>
-        public NoEquivalentSubcircuitException(Exception innerException) 
+        public NoEquivalentSubcircuitException(Exception innerException)
             : base(Properties.Resources.Subcircuits_NoEquivalent, innerException)
         {
         }

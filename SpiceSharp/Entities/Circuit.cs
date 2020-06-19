@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using SpiceSharp.Entities;
+﻿using SpiceSharp.Entities;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SpiceSharp
 {

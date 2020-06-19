@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Simulations.Histories;
 using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {

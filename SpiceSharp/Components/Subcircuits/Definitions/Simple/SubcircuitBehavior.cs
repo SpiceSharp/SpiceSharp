@@ -1,5 +1,5 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
+using System;
 
 namespace SpiceSharp.Components.Subcircuits.Simple
 {
@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
     /// </summary>
     /// <typeparam name="B">The behavior type.</typeparam>
     /// <seealso cref="Behavior" />
-    public abstract class SubcircuitBehavior<B> : Behavior 
+    public abstract class SubcircuitBehavior<B> : Behavior
         where B : IBehavior
     {
         /// <summary>

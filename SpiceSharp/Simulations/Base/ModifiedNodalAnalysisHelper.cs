@@ -1,5 +1,5 @@
-﻿using System;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Simulations
 {
@@ -104,7 +104,7 @@ namespace SpiceSharp.Simulations
                 return;
 
             if (matrix is ISparseMatrix<double> m)
-            { 
+            {
                 // Add to the diagonal
                 for (var i = 1; i <= matrix.Size; i++)
                 {

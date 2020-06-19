@@ -1,9 +1,9 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.General;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using SpiceSharp.Diagnostics;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Behaviors
 {

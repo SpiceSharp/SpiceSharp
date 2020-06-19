@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IBiasingUpdateBehavior" />
-    public class BiasingUpdate : Behavior, 
+    public class BiasingUpdate : Behavior,
         IBiasingUpdateBehavior
     {
         private readonly Workload _updateWorkload;

@@ -2,8 +2,8 @@
 using SpiceSharp.Components.Common;
 using SpiceSharp.Components.Switches;
 using SpiceSharp.Entities;
-using SpiceSharp.Simulations;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {

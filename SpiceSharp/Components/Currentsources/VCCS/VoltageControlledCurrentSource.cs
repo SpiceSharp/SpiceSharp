@@ -1,11 +1,11 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.VoltageControlledCurrentSources;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using System.Linq;
-using SpiceSharp.Components.VoltageControlledCurrentSources;
 using System;
-using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {

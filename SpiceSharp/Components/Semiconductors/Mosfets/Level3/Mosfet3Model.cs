@@ -1,8 +1,8 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets.Level3;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the device.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Mosfet3Model(string name) 
+        public Mosfet3Model(string name)
             : base(name)
         {
         }
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components
         /// <param name="name">Name.</param>
         /// <param name="nmos">True for NMOS transistors, false for PMOS transistors.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Mosfet3Model(string name, bool nmos) 
+        public Mosfet3Model(string name, bool nmos)
             : base(name)
         {
             if (nmos)

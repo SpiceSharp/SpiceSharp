@@ -1,8 +1,8 @@
 ﻿// using System;
 
-using System;
 using NUnit.Framework;
 using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharpTest.Algebra
 {

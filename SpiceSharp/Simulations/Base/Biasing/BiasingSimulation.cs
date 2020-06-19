@@ -1,12 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
-using SpiceSharp.Simulations.Biasing;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations.Biasing;
+
+/* Unmerged change from project 'SpiceSharp (net45)'
+Before:
+using SpiceSharp.ParameterSets;
+After:
+using System;
+using System.Collections.Generic;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netstandard2.0)'
+Before:
+using SpiceSharp.ParameterSets;
+After:
+using System;
+using System.Collections.Generic;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netcoreapp2.0)'
+Before:
+using SpiceSharp.ParameterSets;
+After:
+using System;
+using System.Collections.Generic;
+*/
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace SpiceSharp.Simulations
 {
@@ -323,7 +346,7 @@ namespace SpiceSharp.Simulations
             // We could've ended up with some crazy value, so let's reset it
             for (var i = 0; i <= _state.Solution.Length; i++)
                 _state.Solution[i] = 0.0;
-                
+
             // Let's make it a bit easier for our iterations to converge
             for (var i = 0; i < steps; i++)
                 diagonalGmin *= 10.0;

@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Simulations
 {

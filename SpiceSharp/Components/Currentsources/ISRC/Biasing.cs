@@ -1,9 +1,9 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
-using IndependentSourceParameters = SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using IndependentSourceParameters = SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters;
 
 namespace SpiceSharp.Components.CurrentSources
 {

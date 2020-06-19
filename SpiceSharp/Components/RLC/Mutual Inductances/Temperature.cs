@@ -1,6 +1,6 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
+using System;
 
 namespace SpiceSharp.Components.MutualInductances
 {

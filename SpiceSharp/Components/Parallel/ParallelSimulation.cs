@@ -1,8 +1,8 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Common;
 using SpiceSharp.General;
-using SpiceSharp.Simulations;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ParallelComponents
 {

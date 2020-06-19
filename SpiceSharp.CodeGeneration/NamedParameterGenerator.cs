@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace SpiceSharp.CodeGeneration
@@ -79,13 +78,13 @@ namespace SpiceSharp.CodeGeneration
         /// <inheritdoc/>
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            if (node.Modifiers.Any(SyntaxKind.PartialKeyword) && 
+            if (node.Modifiers.Any(SyntaxKind.PartialKeyword) &&
                 node.AttributeLists.Any(
                     list => list.Attributes.Any(
-                        attr =>  attr.ArgumentList != null &&
+                        attr => attr.ArgumentList != null &&
                             attr.ArgumentList.Arguments.Any(
-                                arg => arg.NameEquals != null && 
-                                arg.NameEquals.Name.ToString().Equals("AddNames") && 
+                                arg => arg.NameEquals != null &&
+                                arg.NameEquals.Name.ToString().Equals("AddNames") &&
                                 arg.Expression.ToString().Equals("true")))))
             {
                 _baseDefinitions.Clear();
@@ -109,11 +108,11 @@ namespace SpiceSharp.CodeGeneration
                     cl = cl.WithBaseList(BaseList(SeparatedList(_baseDefinitions)));
 
                 // Replace the first member with our generated class
-                if (Result.Members.Count == 0 || !(Result.Members.Last() is NamespaceDeclarationSyntax))
+                if (Result.Members.Count == 0 || !(Result.Members.Last() is NamespaceDeclarationSyntax syntax))
                     Result = Result.AddMembers(cl);
                 else
                 {
-                    var insertion = (NamespaceDeclarationSyntax)Result.Members.Last();
+                    var insertion = syntax;
                     while (insertion.Members.Count > 0 && insertion.Members.Last() is NamespaceDeclarationSyntax newInsertion)
                         insertion = newInsertion;
                     Result = Result.ReplaceNode(insertion, insertion.AddMembers(cl));
@@ -268,7 +267,7 @@ namespace SpiceSharp.CodeGeneration
                         )));
                     var declaration = (MethodDeclarationSyntax)ParseMemberDeclaration($"void IImportParameterSet<{type}>.SetParameter(string name, {type} value) {{}}");
                     declaration = declaration.ReplaceNode(declaration.Body, Break(Block(
-                        Break(statements), 
+                        Break(statements),
                         BreakAfter(ParseStatement($"throw new ParameterNotFoundException(this, name, typeof({type}));")))));
                     result.Add(BreakAfter(declaration.WithLeadingTrivia(doc)));
 

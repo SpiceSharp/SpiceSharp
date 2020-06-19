@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.CurrentSources
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IAcceptBehavior"/>
-    public class Accept : Biasing, 
+    public class Accept : Biasing,
         IAcceptBehavior
     {
         /// <summary>

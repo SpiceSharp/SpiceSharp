@@ -1,8 +1,8 @@
-﻿using System.Numerics;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System.Numerics;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    public class Frequency : Dynamic, 
+    public class Frequency : Dynamic,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.Diodes
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context) : base(name, context) 
+        public Frequency(string name, IComponentBindingContext context) : base(name, context)
         {
             _complex = context.GetState<IComplexSimulationState>();
             ComplexVariables = new DiodeVariables<Complex>(name, _complex, context);

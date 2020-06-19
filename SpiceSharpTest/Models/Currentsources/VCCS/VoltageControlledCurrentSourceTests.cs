@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using System;
+using System.Linq;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using SpiceSharp.Attributes;
-using System.Reflection;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components;
 using SpiceSharp.ParameterSets;
-using System.Linq;
-using System.Text;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace SpiceSharp.Reflection
 {
@@ -65,7 +65,7 @@ namespace SpiceSharp.Reflection
         /// <param name="component">The component.</param>
         /// <returns>The pin names.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> is <c>null</c>.</exception>
-        public static IEnumerable<string> Pins(this IComponent component) 
+        public static IEnumerable<string> Pins(this IComponent component)
             => Pins(component.ThrowIfNull(nameof(component)).GetType());
 
         /// <summary>

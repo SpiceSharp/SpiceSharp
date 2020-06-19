@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="INoiseBehavior" />
-    public class Noise : SubcircuitBehavior<INoiseBehavior>, 
+    public class Noise : SubcircuitBehavior<INoiseBehavior>,
         INoiseBehavior
     {
         /// <inheritdoc/>

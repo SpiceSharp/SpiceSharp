@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SpiceSharp.Components.Mosfets.Level3
+﻿namespace SpiceSharp.Components.Mosfets.Level3
 {
     /// <summary>
     /// Model properties for a <see cref="Mosfet3Model"/>.

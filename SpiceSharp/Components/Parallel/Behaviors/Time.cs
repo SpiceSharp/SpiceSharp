@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Convergence" />
     /// <seealso cref="ITimeBehavior" />
-    public class Time : Convergence, 
+    public class Time : Convergence,
         ITimeBehavior
     {
         private readonly Workload _initWorkload;

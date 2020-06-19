@@ -1,12 +1,12 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Components.VoltageSources;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using System.Linq;
 using System;
-using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -29,14 +29,14 @@ namespace SpiceSharp.Components
         /// The pin count for a voltage source.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 2;
+        public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public VoltageSource(string name) 
+        public VoltageSource(string name)
             : base(name, PinCount)
         {
         }
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The waveform</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public VoltageSource(string name, string pos, string neg, IWaveformDescription waveform) 
+        public VoltageSource(string name, string pos, string neg, IWaveformDescription waveform)
             : this(name)
         {
             Parameters.Waveform = waveform;

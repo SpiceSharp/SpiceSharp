@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="INoiseBehavior" />
-    public partial class Noise : Behavior, 
+    public partial class Noise : Behavior,
         INoiseBehavior
     {
         /// <summary>

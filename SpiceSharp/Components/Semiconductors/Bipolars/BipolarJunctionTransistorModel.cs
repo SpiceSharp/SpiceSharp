@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Bipolars;
-using SpiceSharp.Simulations;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="BipolarJunctionTransistorModel"/> class.
         /// </summary>
         /// <param name="name">The name of the device.</param>
-        public BipolarJunctionTransistorModel(string name) 
+        public BipolarJunctionTransistorModel(string name)
             : base(name)
         {
         }

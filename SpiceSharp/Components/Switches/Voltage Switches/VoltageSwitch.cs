@@ -1,11 +1,11 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Switches;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -21,7 +21,7 @@ namespace SpiceSharp.Components
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int VoltageSwitchPinCount = 4;
+        public const int VoltageSwitchPinCount = 4;
 
         /// <summary>
         /// Gets the parameter set.
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="VoltageSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage-controlled switch</param>
-        public VoltageSwitch(string name) 
+        public VoltageSwitch(string name)
             : base(name, VoltageSwitchPinCount)
         {
         }
@@ -49,7 +49,7 @@ namespace SpiceSharp.Components
         /// <param name="controlPos">The positive controlling node</param>
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="model">The model.</param>
-        public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg, string model) 
+        public VoltageSwitch(string name, string pos, string neg, string controlPos, string controlNeg, string model)
             : this(name)
         {
             Model = model;

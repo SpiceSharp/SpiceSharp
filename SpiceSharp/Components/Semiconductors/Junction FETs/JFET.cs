@@ -1,10 +1,10 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.JFETs;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {

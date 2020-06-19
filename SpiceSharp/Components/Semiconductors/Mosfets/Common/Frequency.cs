@@ -1,8 +1,8 @@
-﻿using System.Numerics;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharp.Components.Mosfets
 {
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
         public Frequency(string name, IComponentBindingContext context)
-            : base(name) 
+            : base(name)
         {
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
             Behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();

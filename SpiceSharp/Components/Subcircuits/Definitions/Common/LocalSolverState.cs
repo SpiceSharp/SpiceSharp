@@ -109,8 +109,8 @@ namespace SpiceSharp.Components.Subcircuits
             // Get the elements that need to be shared
             Solver.Precondition((m, v) =>
             {
-                var matrix = (ISparseMatrix<T>)m;
-                var vector = (ISparseVector<T>)v;
+                var matrix = m;
+                var vector = v;
                 foreach (var row in _indices)
                 {
                     LinkElement(vector, row);

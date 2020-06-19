@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
@@ -20,7 +19,7 @@ namespace SpiceSharp.Components.NoiseSources
         /// <param name="name">Name of the noise source.</param>
         /// <param name="pos">The positive node.</param>
         /// <param name="neg">The negative node.</param>
-        public NoiseShot(string name, IVariable<Complex> pos, IVariable<Complex> neg) 
+        public NoiseShot(string name, IVariable<Complex> pos, IVariable<Complex> neg)
             : base(name)
         {
             _variables = new OnePort<Complex>(pos, neg);

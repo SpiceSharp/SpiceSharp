@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SpiceSharp.Algebra;
+using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using System.IO;
-using SpiceSharp.Algebra;
+using System.Text.RegularExpressions;
 
 namespace SpiceSharpTest.Algebra
 {

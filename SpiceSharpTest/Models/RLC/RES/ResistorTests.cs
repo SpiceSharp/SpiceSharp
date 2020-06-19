@@ -1,13 +1,9 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using System.Collections.Generic;
-using SpiceSharp.Components.Resistors;
-using SpiceSharp.Behaviors;
-using NSubstitute;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -41,7 +37,7 @@ namespace SpiceSharpTest.Models
 
             resistor.Parameters.ParallelMultiplier = 1.0;
 
-            Assert.AreEqual((double)clone.Parameters.Resistance, 1.0e3, 1e-20);
+            Assert.AreEqual(clone.Parameters.Resistance, 1.0e3, 1e-20);
             Assert.AreEqual((double)clone.Parameters.SeriesMultiplier, 2.0, 1e-20);
             Assert.AreEqual((double)clone.Parameters.ParallelMultiplier, 3.0, 1e-20);
         }

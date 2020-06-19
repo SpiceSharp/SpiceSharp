@@ -1,9 +1,9 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Components.Mosfets.Level1
 {
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
-    public class Biasing : Temperature, 
+    public class Biasing : Temperature,
         IMosfetBiasingBehavior,
         IConvergenceBehavior
     {
@@ -101,7 +101,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context) 
+        public Biasing(string name, IComponentBindingContext context) : base(name, context)
         {
             var state = context.GetState<IBiasingSimulationState>();
             _config = context.GetSimulationParameterSet<BiasingParameters>();
@@ -118,8 +118,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
 
             // Get matrix pointers
-            _elements = new ElementSet<double>(state.Solver, 
-                _variables.GetMatrixLocations(state.Map), 
+            _elements = new ElementSet<double>(state.Solver,
+                _variables.GetMatrixLocations(state.Map),
                 _variables.GetRhsIndices(state.Map));
         }
 
@@ -142,7 +142,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
                 SourceSatCur = Properties.TempSatCurDensity * Parameters.ParallelMultiplier * Parameters.SourceArea;
             }
             var Beta = Properties.TempTransconductance * Parameters.ParallelMultiplier * Parameters.Width / Properties.EffectiveLength;
-            
+
             // Get the current voltages
             Initialize(out double vgs, out var vds, out var vbs, out var check);
             var vbd = vbs - vds;

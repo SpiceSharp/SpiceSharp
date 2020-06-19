@@ -134,7 +134,7 @@ namespace SpiceSharp.Reflection
                 {
                     if (importer.TrySet(source, name, value))
                         return true;
-                }    
+                }
             }
 
             // Fall back to a given parameter

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Algebra;
-using SpiceSharp.Algebra.Solve;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;
+using System;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -54,9 +51,9 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
-            tran.ExportSimulationData += (sender, args) => 
+            tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10); 
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10);
             };
             tran.Run(ckt);
 
@@ -106,7 +103,7 @@ namespace SpiceSharpTest.Simulations
                 if (args.Time > 5.0)
                 {
                     if (export == null)
-                        export = new RealPropertyExport((Simulation) sender, "R1", "i");
+                        export = new RealPropertyExport((Simulation)sender, "R1", "i");
                     Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
                 }
             };

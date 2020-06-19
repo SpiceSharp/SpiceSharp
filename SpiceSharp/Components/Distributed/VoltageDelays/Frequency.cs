@@ -1,7 +1,7 @@
-﻿using System.Numerics;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharp.Components.VoltageDelays
 {
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.VoltageDelays
             Branch = _complex.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
             _branchEq = _complex.Map[Branch];
 
-            _elements = new ElementSet<Complex>(this._complex.Solver, new[] {
+            _elements = new ElementSet<Complex>(_complex.Solver, new[] {
                         new MatrixLocation(_posNode, _branchEq),
                         new MatrixLocation(_negNode, _branchEq),
                         new MatrixLocation(_branchEq, _posNode),

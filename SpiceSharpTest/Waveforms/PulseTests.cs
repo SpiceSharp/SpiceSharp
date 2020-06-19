@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using NUnit.Framework;
+using System;
 
 namespace SpiceSharpTest.Waveforms
 {

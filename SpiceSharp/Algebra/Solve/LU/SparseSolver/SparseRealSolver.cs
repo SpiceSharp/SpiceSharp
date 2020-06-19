@@ -1,5 +1,5 @@
-﻿using System;
-using SpiceSharp.Algebra.Solve;
+﻿using SpiceSharp.Algebra.Solve;
+using System;
 
 namespace SpiceSharp.Algebra
 {

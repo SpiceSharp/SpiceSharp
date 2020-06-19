@@ -1,5 +1,5 @@
-﻿using System;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Diagnostics;
+using System;
 
 namespace SpiceSharp.ParameterSets
 {

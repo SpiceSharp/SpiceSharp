@@ -10,7 +10,7 @@
         /// Called when a new timepoint is being tested.
         /// </summary>
         void Probe();
-        
+
         /// <summary>
         /// Accepts the current timepoint.
         /// </summary>

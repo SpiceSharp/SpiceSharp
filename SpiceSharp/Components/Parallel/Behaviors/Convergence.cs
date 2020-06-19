@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Biasing" />
     /// <seealso cref="IConvergenceBehavior" />
-    public partial class Convergence : Biasing, 
+    public partial class Convergence : Biasing,
         IConvergenceBehavior
     {
         /// <summary>

@@ -55,7 +55,7 @@ namespace SpiceSharp.Components.Common
         /// <param name="behaviors">The behaviors.</param>
         /// <param name="states">The simulation states.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/>, <paramref name="behaviors"/> or <paramref name="states"/> is <c>null</c>.</exception>
-        public SimulationWrapper(ISimulation parent, 
+        public SimulationWrapper(ISimulation parent,
             IBehaviorContainerCollection behaviors,
             ITypeDictionary<ISimulationState> states)
         {

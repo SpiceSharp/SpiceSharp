@@ -1,9 +1,9 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
 using Transistor = SpiceSharp.Components.Mosfets.Transistor;
 
 namespace SpiceSharp.Components.JFETs
@@ -154,7 +154,7 @@ namespace SpiceSharp.Components.JFETs
             if (ModelParameters.SourceResistance > 0)
                 SourcePrime = BiasingState.CreatePrivateVariable(Name.Combine("source"), Units.Volt);
             _sourcePrimeNode = BiasingState.Map[SourcePrime];
-            
+
             _elements = new ElementSet<double>(BiasingState.Solver, new[] {
                 new MatrixLocation(_drainNode, _drainPrimeNode),
                 new MatrixLocation(_gateNode, _drainPrimeNode),
@@ -340,7 +340,7 @@ namespace SpiceSharp.Components.JFETs
                 gdpr + gds + ggd,
                 gspr + gds + gm + ggs,
                 // RHS
-                -ceqgs - ceqgd, 
+                -ceqgs - ceqgd,
                 -cdreq + ceqgd,
                 cdreq + ceqgs
                 );

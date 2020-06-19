@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SpiceSharp.Algebra.Solve;
+using System;
 using System.Numerics;
-using SpiceSharp.Algebra.Solve;
 
 namespace SpiceSharp.Algebra
 {

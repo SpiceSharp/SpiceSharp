@@ -1,7 +1,7 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Components.Bipolars
@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Dynamic, 
+    public class Time : Dynamic,
         ITimeBehavior
     {
         private readonly IDerivative _biasingStateChargeBe, _biasingStateChargeBc, _biasingStateChargeCs, _biasingStateChargeBx;
@@ -99,10 +99,10 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, IComponentBindingContext context) : base(name, context) 
+        public Time(string name, IComponentBindingContext context) : base(name, context)
         {
             _time = context.GetState<ITimeSimulationState>();
-            
+
             _baseNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
             _substrateNode = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
             _collectorPrimeNode = BiasingState.Map[CollectorPrime];
@@ -203,10 +203,10 @@ namespace SpiceSharp.Components.Bipolars
                 -geqbx,
                 -geqbx,
                 // RHS vector
-                -ceqbx, 
+                -ceqbx,
                 -ceqcs,
                 ceqcs + ceqbx + ceqbc,
-                -ceqbe - ceqbc, 
+                -ceqbe - ceqbc,
                 ceqbe);
         }
 
@@ -232,7 +232,7 @@ namespace SpiceSharp.Components.Bipolars
                 _biasingStateExcessPhaseCurrentBc.Value = cex;
                 return;
             }
-            
+
             /* 
              * weil's approx. for excess phase applied with backward - 
              * euler integration
@@ -254,7 +254,7 @@ namespace SpiceSharp.Components.Bipolars
                 state.States[2][State + Cexbc] = state.States[1][State + Cexbc];
             } */
 
-            cc = (_biasingStateExcessPhaseCurrentBc.GetPreviousValue(1) * (1 + delta / prevdelta + arg2) 
+            cc = (_biasingStateExcessPhaseCurrentBc.GetPreviousValue(1) * (1 + delta / prevdelta + arg2)
                 - _biasingStateExcessPhaseCurrentBc.GetPreviousValue(2) * delta / prevdelta) / denom;
             cex = cbe * arg3;
             gex = gbe * arg3;

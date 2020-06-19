@@ -1,13 +1,13 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets;
 using SpiceSharp.Components.Mosfets.Level2;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using System.Linq;
 using System;
-using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the device.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Mosfet2(string name) 
+        public Mosfet2(string name)
             : base(name, PinCount)
         {
         }

@@ -1,10 +1,10 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Switches;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Components.Switches;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int CurrentSwitchPinCount = 2;
+        public const int CurrentSwitchPinCount = 2;
 
         /// <summary>
         /// Gets the parameter set.
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="CurrentSwitch"/> class.
         /// </summary>
         /// <param name="name">The name of the current-controlled switch.</param>
-        public CurrentSwitch(string name) 
+        public CurrentSwitch(string name)
             : base(name, CurrentSwitchPinCount)
         {
         }

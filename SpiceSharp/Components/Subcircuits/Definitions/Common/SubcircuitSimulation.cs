@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Common;
 using SpiceSharp.General;
 using SpiceSharp.Simulations;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components.Subcircuits
 {

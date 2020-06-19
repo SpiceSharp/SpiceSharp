@@ -152,7 +152,7 @@ namespace SpiceSharp.Algebra
             => column.GreaterThanOrEquals(nameof(column), 0) > Size ? null : _columns[column].FirstInColumn;
 
         /// <inheritdoc/>
-        public ISparseMatrixElement<T> GetLastInColumn(int column) 
+        public ISparseMatrixElement<T> GetLastInColumn(int column)
             => column.GreaterThanOrEquals(nameof(column), 0) > Size ? null : _columns[column].LastInColumn;
 
         /// <inheritdoc/>

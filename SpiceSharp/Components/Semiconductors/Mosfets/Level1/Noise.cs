@@ -1,8 +1,8 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Mosfets.Level1
 {
@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
     /// </summary>
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>
-    public class Noise : Frequency, 
+    public class Noise : Frequency,
         INoiseBehavior
     {
         private readonly INoiseSimulationState _state;
@@ -52,7 +52,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
-        public Noise(string name, IComponentBindingContext context) 
+        public Noise(string name, IComponentBindingContext context)
             : base(name, context)
         {
             _state = context.GetState<INoiseSimulationState>();

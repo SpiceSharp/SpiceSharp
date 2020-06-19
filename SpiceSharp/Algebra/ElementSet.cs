@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace SpiceSharp.Algebra
 {
@@ -26,7 +25,7 @@ namespace SpiceSharp.Algebra
             int length = (rhsPins?.Length ?? 0) + (matrixPins?.Length ?? 0);
             _elements = new Element<T>[length];
             int offset = 0;
-            
+
             if (matrixPins != null)
             {
                 for (var i = 0; i < matrixPins.Length; i++)

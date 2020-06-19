@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
 using SpiceSharp.Algebra.Solve;
 using SpiceSharp.Simulations;
+using System;
+using System.IO;
+using System.Numerics;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -55,7 +55,7 @@ namespace SpiceSharpTest.Algebra
                 new double[] { 0, 0, 0, 1 },
                 new double[] { 1, 0, 0, 0 }
             };
-            double[] rhs = { 0, 1, 0, 0};
+            double[] rhs = { 0, 1, 0, 0 };
             for (var r = 0; r < matrix.Length; r++)
             {
                 for (var c = 0; c < matrix[r].Length; c++)
@@ -76,7 +76,7 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Parameters;
+            var strategy = solver.Parameters;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzQuickDiagonal<double>());
 
@@ -109,7 +109,7 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Parameters;
+            var strategy = solver.Parameters;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzDiagonal<double>());
 
@@ -142,7 +142,7 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the solver with only the quick diagonal pivoting
             var solver = new SparseRealSolver();
-            var strategy = (Markowitz<double>)solver.Parameters;
+            var strategy = solver.Parameters;
             strategy.Strategies.Clear();
             strategy.Strategies.Add(new MarkowitzEntireMatrix<double>());
 

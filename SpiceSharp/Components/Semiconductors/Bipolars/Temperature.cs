@@ -1,7 +1,7 @@
-﻿using System;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -161,13 +161,13 @@ namespace SpiceSharp.Components.Bipolars
         /// Gets the state.
         /// </summary>
         protected IBiasingSimulationState BiasingState { get; private set; }
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Temperature(string name, IComponentBindingContext context) : base(name) 
+        public Temperature(string name, IComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();

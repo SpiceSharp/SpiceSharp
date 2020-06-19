@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Resistors
 {

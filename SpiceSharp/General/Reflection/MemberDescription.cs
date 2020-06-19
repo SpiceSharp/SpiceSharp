@@ -87,7 +87,7 @@ namespace SpiceSharp.Reflection
         /// <value>
         ///   <c>true</c> if this instance is principal; otherwise, <c>false</c>.
         /// </value>
-        public bool IsPrincipal 
+        public bool IsPrincipal
         {
             get
             {
@@ -131,9 +131,9 @@ namespace SpiceSharp.Reflection
                 case PropertyInfo pi:
                     ParameterType = pi.PropertyType;
                     PropertyType = pi.PropertyType;
-                    IsStatic = 
-                        pi.GetGetMethod()?.IsStatic ?? 
-                        pi.GetSetMethod()?.IsStatic ?? 
+                    IsStatic =
+                        pi.GetGetMethod()?.IsStatic ??
+                        pi.GetSetMethod()?.IsStatic ??
                         throw new ArgumentException();
                     break;
                 case MethodInfo mi:
@@ -240,13 +240,13 @@ namespace SpiceSharp.Reflection
         public bool TryGet<P>(object source, out P value)
         {
             if (typeof(P) != PropertyType ||
-                IsStatic && source != null || 
+                IsStatic && source != null ||
                 !IsStatic && source == null)
             {
                 value = default;
                 return false;
             }
-            
+
             switch (Member)
             {
                 case MethodInfo mi:

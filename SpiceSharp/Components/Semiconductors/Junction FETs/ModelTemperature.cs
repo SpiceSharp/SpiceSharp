@@ -1,7 +1,7 @@
-﻿using System;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.JFETs
 {
@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.JFETs
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    public class ModelTemperature : Behavior, 
+    public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>
     {

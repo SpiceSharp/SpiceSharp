@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.Variables;
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace SpiceSharp.Simulations
 {

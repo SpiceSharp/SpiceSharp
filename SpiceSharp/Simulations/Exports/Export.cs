@@ -33,7 +33,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         public S Simulation
         {
-            get => _simulation; 
+            get => _simulation;
             set
             {
                 if (_simulation != null)

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SpiceSharp.ParameterSets;
+using System;
 using System.Diagnostics;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations.Time
 {

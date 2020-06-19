@@ -1,5 +1,5 @@
-﻿using SpiceSharp.ParameterSets;
-using SpiceSharp.Entities;
+﻿using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.ParallelComponents
 {

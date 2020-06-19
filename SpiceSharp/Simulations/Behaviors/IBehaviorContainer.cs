@@ -9,7 +9,7 @@ namespace SpiceSharp.Behaviors
     /// </summary>
     /// <seealso cref="ITypeDictionary{T}" />
     /// <seealso cref="IParameterSetCollection"/>
-    public interface IBehaviorContainer : 
+    public interface IBehaviorContainer :
         ITypeDictionary<IBehavior>,
         IParameterSetCollection
     {

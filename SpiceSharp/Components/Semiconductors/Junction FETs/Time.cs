@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Components.JFETs
 {
@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.JFETs
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Biasing, 
+    public class Time : Biasing,
         ITimeBehavior
     {
         private readonly int _gateNode, _drainPrimeNode, _sourcePrimeNode;
@@ -104,8 +104,8 @@ namespace SpiceSharp.Components.JFETs
                 ggd,
                 ggs,
                 // RHS vector
-                -ceqgs - ceqgd, 
-                -cdreq + ceqgd, 
+                -ceqgs - ceqgd,
+                -cdreq + ceqgd,
                 cdreq + ceqgs);
         }
 

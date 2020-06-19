@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -309,7 +309,7 @@ namespace SpiceSharpTest.Models
             // Parameters
             double rsource = 100.0, rload = 25.0;
             double impedance = 50.0, delay = 1.0e-6;
-            
+
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
@@ -323,7 +323,7 @@ namespace SpiceSharpTest.Models
             var exports = new IExport<Complex>[]
             {
                 new ComplexVoltageExport(ac, "a"),
-                new ComplexVoltageExport(ac, "b"), 
+                new ComplexVoltageExport(ac, "b"),
             };
 
             double rsnorm = rsource / impedance, rlnorm = rload / impedance;

@@ -1,8 +1,8 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.Switches
 {

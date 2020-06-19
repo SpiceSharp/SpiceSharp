@@ -1,12 +1,12 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.General;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
-using SpiceSharp.General;
-using SpiceSharp.Validation;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {

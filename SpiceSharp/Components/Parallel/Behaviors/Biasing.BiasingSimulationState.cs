@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ParallelComponents
         /// </summary>
         /// <seealso cref="ParallelSolverState{T, S}"/>
         /// <seealso cref="IBiasingSimulationState" />
-        protected class BiasingSimulationState : ParallelSolverState<double, IBiasingSimulationState>, 
+        protected class BiasingSimulationState : ParallelSolverState<double, IBiasingSimulationState>,
             IBiasingSimulationState
         {
             /// <inheritdoc/>

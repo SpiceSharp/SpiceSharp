@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
-using SpiceSharp.Simulations;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components

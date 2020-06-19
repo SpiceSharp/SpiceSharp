@@ -1,9 +1,9 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Variables;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
 namespace SpiceSharp.Components.ParallelComponents
 {

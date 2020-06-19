@@ -1,9 +1,9 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.MutualInductances;
+using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the mutual inductance specification.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public MutualInductance(string name) 
+        public MutualInductance(string name)
             : base(name)
         {
         }

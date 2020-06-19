@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
@@ -8,13 +7,13 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IBiasingBehavior" />
-    public partial class Biasing : Behavior, 
+    public partial class Biasing : Behavior,
         IBiasingBehavior
     {
         private readonly BiasingSimulationState _state;
         private readonly Workload _loadWorkload;
         private readonly BehaviorList<IBiasingBehavior> _biasingBehaviors;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>

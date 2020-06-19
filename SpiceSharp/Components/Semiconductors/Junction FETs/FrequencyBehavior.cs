@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
+using System.Numerics;
 
 namespace SpiceSharp.Components.JFETs
 {

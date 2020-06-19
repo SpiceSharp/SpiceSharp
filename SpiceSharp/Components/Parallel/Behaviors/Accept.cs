@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IAcceptBehavior" />
-    public class Accept : Behavior, 
+    public class Accept : Behavior,
         IAcceptBehavior
     {
         private readonly Workload _probeWorkload, _acceptWorkload;
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.ParallelComponents
             if (parameters.AcceptDistributor != null)
                 _acceptWorkload = new Workload(parameters.AcceptDistributor, simulation.EntityBehaviors.Count);
             if (_probeWorkload != null || _acceptWorkload != null)
-            {   
+            {
                 foreach (var behavior in simulation.EntityBehaviors)
                 {
                     if (behavior.TryGetValue(out IAcceptBehavior accept))

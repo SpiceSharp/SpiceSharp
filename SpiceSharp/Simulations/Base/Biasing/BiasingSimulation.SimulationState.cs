@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations.Variables;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {

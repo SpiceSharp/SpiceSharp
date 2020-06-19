@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
-using SpiceSharp.Behaviors;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -49,7 +49,7 @@ namespace SpiceSharpTest.Simulations
 
             System.Threading.Tasks.Parallel.ForEach(
                 dcSimulations,
-                new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations }, 
+                new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
                 (simulation) => simulation.Run(ckt));
         }
 

@@ -1,10 +1,10 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using SpiceSharp.Reflection;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using SpiceSharp.Reflection;
+using System;
 
 namespace SpiceSharpTest
 {
@@ -139,7 +139,7 @@ namespace SpiceSharpTest
         {
             // <example_DC>
             // Make the bipolar junction transistor
-            var nmos = new Mosfet1("M1") {Model = "example"};
+            var nmos = new Mosfet1("M1") { Model = "example" };
             nmos.Connect("d", "g", "0", "0");
             var nmosmodel = new Mosfet1Model("example");
             nmosmodel.SetParameter("kp", 150.0e-3);
@@ -158,7 +158,7 @@ namespace SpiceSharpTest
                 new ParameterSweep("Vgs", new LinearSweep(0, 3, 0.2)),
                 new ParameterSweep("Vds", new LinearSweep(0, 5, 0.1)),
             });
-            
+
             // Export the collector current
             var currentExport = new RealPropertyExport(dc, "M1", "id");
 
@@ -237,10 +237,10 @@ namespace SpiceSharpTest
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
                 new Resistor("R1", "in", "0", 1.0e3));
-            
+
             // Create the simulation
             var op = new OP("Op 1");
-            
+
             // Attach events to apply stochastic variation
             var rndGenerator = new Random();
             var counter = 0;
@@ -248,7 +248,7 @@ namespace SpiceSharpTest
             {
                 // Apply a random value of 1kOhm with 5% tolerance
                 var value = 950 + 100 * rndGenerator.NextDouble();
-                var sim = (Simulation) sender;
+                var sim = (Simulation)sender;
                 sim.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.Resistors.Parameters>().Resistance = value;
             };
             op.AfterExecute += (sender, args) =>
@@ -260,7 +260,7 @@ namespace SpiceSharpTest
 
             // Make the exports
             var current = new RealPropertyExport(op, "R1", "i");
-            
+
             // Simulate
             op.ExportSimulationData += (sender, args) =>
             {

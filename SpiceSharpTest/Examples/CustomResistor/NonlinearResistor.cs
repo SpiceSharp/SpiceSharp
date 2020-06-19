@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NonlinearResistorBehaviors;
-using SpiceSharp.Simulations;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {

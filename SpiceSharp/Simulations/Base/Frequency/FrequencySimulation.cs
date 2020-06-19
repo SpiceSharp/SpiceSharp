@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
-using SpiceSharp.Simulations.Frequency;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations.Frequency;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -77,7 +77,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        protected FrequencySimulation(string name) 
+        protected FrequencySimulation(string name)
             : base(name)
         {
             ModifiedNodalAnalysisHelper<Complex>.Magnitude = ComplexMagnitude;
@@ -90,7 +90,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        protected FrequencySimulation(string name, IEnumerable<double> frequencySweep) 
+        protected FrequencySimulation(string name, IEnumerable<double> frequencySweep)
             : this(name)
         {
             FrequencyParameters.Frequencies = frequencySweep;
@@ -157,7 +157,7 @@ namespace SpiceSharp.Simulations
         {
             var solver = _state.Solver;
 
-            retry:
+        retry:
 
             // Load AC
             FrequencyLoad();

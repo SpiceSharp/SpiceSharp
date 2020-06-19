@@ -1,4 +1,30 @@
+
+/* Unmerged change from project 'SpiceSharp (net45)'
+Before:
 using System;
+using SpiceSharp.ParameterSets;
+After:
+using SpiceSharp.ParameterSets;
+using System;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netstandard2.0)'
+Before:
+using System;
+using SpiceSharp.ParameterSets;
+After:
+using SpiceSharp.ParameterSets;
+using System;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netcoreapp2.0)'
+Before:
+using System;
+using SpiceSharp.ParameterSets;
+After:
+using SpiceSharp.ParameterSets;
+using System;
+*/
 using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.Mosfets.Level3

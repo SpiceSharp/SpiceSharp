@@ -115,11 +115,11 @@ namespace SpiceSharpTest.Models
                 new Subcircuit("X1", subckt, "in", "out"));
 
             var op = new OP("op");
-            IExport<double>[] exports = new[] 
-            { 
-                new RealVoltageExport(op, "out"), 
+            IExport<double>[] exports = new[]
+            {
+                new RealVoltageExport(op, "out"),
                 new RealVoltageExport(op, "X1".Combine("b")),
-                new RealVoltageExport(op, "X1".Combine("c")) 
+                new RealVoltageExport(op, "X1".Combine("c"))
             };
             IEnumerable<double> references = new double[] { 0.5, 0.5, 0.5 };
             AnalyzeOp(op, ckt, exports, references);

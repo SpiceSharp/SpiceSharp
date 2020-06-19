@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharp.Simulations.Time;
 using SpiceSharp.Validation;
-using SpiceSharp.ParameterSets;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -52,7 +52,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Transient"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
-        public Transient(string name) 
+        public Transient(string name)
             : base(name)
         {
             TimeParameters = new Trapezoidal();

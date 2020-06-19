@@ -1,6 +1,6 @@
+using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.ObjectModel;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Algebra.Solve
 {

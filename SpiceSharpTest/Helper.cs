@@ -1,5 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using System;
 
 namespace SpiceSharpTest
 {
@@ -37,7 +37,7 @@ namespace SpiceSharpTest
         /// <param name="absTol">The absolute tolerance.</param>
         public static void AreEqual(double reference, double actual, double relTol = DefaultRelativeTolerance, double absTol = DefaultAbsoluteTolerance)
         {
-            Assert.AreEqual(reference, actual, Tolerance(reference, actual));
+            Assert.AreEqual(reference, actual, Tolerance(reference, actual, relTol, absTol));
         }
     }
 }

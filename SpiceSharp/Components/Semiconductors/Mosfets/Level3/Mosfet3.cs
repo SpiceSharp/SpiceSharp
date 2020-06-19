@@ -1,13 +1,13 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets;
 using SpiceSharp.Components.Mosfets.Level3;
 using SpiceSharp.Diagnostics;
-using SpiceSharp.Validation;
-using System.Linq;
-using System;
-using SpiceSharp.Attributes;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
+using System;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -27,14 +27,14 @@ namespace SpiceSharp.Components
         /// The pin count for mosfets.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 4;
+        public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Mosfet3"/> class.
         /// </summary>
         /// <param name="name">The name of the device.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Mosfet3(string name) 
+        public Mosfet3(string name)
             : base(name, PinCount)
         {
         }

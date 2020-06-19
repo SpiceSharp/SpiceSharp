@@ -56,7 +56,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="rules">The rule provider.</param>
-        public ValidationFailedException(ISimulation simulation, IRules rules) 
+        public ValidationFailedException(ISimulation simulation, IRules rules)
             : base(Properties.Resources.Simulations_ValidationFailed.FormatString(simulation?.Name, rules?.ViolationCount))
         {
             Rules = rules;

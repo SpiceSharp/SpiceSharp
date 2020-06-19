@@ -1,6 +1,6 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
-using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.VoltageDelays
@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Biasing, 
+    public class Time : Biasing,
         IBiasingBehavior,
         ITimeBehavior
     {

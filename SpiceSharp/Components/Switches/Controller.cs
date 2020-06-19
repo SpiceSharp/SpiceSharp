@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Simulations;
-
-namespace SpiceSharp.Components.Switches
+﻿namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// This class can calculate the controlling input of a switch.

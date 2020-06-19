@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Simulations;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {

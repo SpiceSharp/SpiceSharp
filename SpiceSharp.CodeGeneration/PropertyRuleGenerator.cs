@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Linq;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace SpiceSharp.CodeGeneration
@@ -155,7 +155,7 @@ namespace SpiceSharp.CodeGeneration
                     List<AttributeListSyntax>(),
                     TokenList(),
                     Token(SyntaxKind.GetKeyword),
-                    ArrowExpressionClause(ParseExpression(privateVariable)), 
+                    ArrowExpressionClause(ParseExpression(privateVariable)),
                     Token(SyntaxKind.SemicolonToken));
                 result = result.ReplaceNode(Getter(result), getter);
 

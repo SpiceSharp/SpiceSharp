@@ -1,8 +1,8 @@
-﻿using System;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Mosfets.Level1
 {
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    public class ModelTemperature : Behavior, 
+    public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>
     {

@@ -1,9 +1,9 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Diodes
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     public class Biasing : Temperature,
-        IBiasingBehavior, 
+        IBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly IIterationSimulationState _iteration;
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components.Diodes
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context) 
+        public Biasing(string name, IComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(2);
 

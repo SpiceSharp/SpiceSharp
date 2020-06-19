@@ -1,9 +1,9 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Components.Mosfets.Level2
 {
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
-    public class Biasing : Temperature, 
+    public class Biasing : Temperature,
         IMosfetBiasingBehavior,
         IConvergenceBehavior
     {
@@ -108,7 +108,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) 
+        public Biasing(string name, IComponentBindingContext context)
             : base(name, context)
         {
             var state = context.GetState<IBiasingSimulationState>();

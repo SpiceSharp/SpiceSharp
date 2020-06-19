@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// <typeparam name="T">The base value type.</typeparam>
     /// <typeparam name="S">The parent simulation state type.</typeparam>
     /// <seealso cref="ISolverSimulationState{T}" />
-    public abstract class SubcircuitSolverState<T, S> : ISolverSimulationState<T> 
+    public abstract class SubcircuitSolverState<T, S> : ISolverSimulationState<T>
         where S : ISolverSimulationState<T>
     {
         /// <summary>

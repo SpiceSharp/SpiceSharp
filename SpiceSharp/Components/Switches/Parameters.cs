@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Switches
         public void SetZeroStateOn(bool flag)
         {
             if (flag)
-                ZeroState = true; 
+                ZeroState = true;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.Switches
         /// </summary>
         /// <param name="flag">If <c>true</c>, the switch will be initially off.</param>
         [ParameterName("off"), ParameterInfo("Initially open")]
-        public void SetZeroStateOff(bool flag) 
+        public void SetZeroStateOff(bool flag)
         {
             if (flag)
                 ZeroState = false;

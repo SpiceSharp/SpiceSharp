@@ -247,7 +247,7 @@ namespace SpiceSharp.Components.Distributed
                 distance = Math.Abs(r.Time - time);
                 hasMoved = true;
             }
-            
+
             // Move backward if not already moved forward
             if (!hasMoved)
             {
@@ -255,7 +255,7 @@ namespace SpiceSharp.Components.Distributed
                 {
                     r = r.Older;
                     distance = Math.Abs(r.Time - time);
-               }
+                }
             }
 
             // Update

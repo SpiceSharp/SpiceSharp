@@ -10,7 +10,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IVariableFactory{V}"/>
     /// <seealso cref="IVariableDictionary{V}"/>
     /// <seealso cref="IVariable{T}"/>
-    public interface ISolverSimulationState<T> : 
+    public interface ISolverSimulationState<T> :
         ISimulationState,
         IVariableFactory<IVariable<T>>,
         IVariableDictionary<IVariable<T>>

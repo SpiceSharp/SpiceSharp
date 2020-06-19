@@ -1,9 +1,9 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using System.Numerics;
-using SpiceSharp.Algebra;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharp.Components.Inductors
 {

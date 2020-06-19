@@ -1,8 +1,8 @@
-﻿using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Subcircuits;
 using SpiceSharp.Components.Subcircuits.Simple;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
@@ -16,7 +16,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="ISubcircuitDefinition" />
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Subcircuits.Simple.Parameters"/>
-    public class SubcircuitDefinition : ParameterSetCollection, 
+    public class SubcircuitDefinition : ParameterSetCollection,
         ISubcircuitDefinition,
         IParameterized<Parameters>
     {

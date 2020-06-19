@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public AC(string name) 
+        public AC(string name)
             : base(name)
         {
         }
@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public AC(string name, IEnumerable<double> frequencySweep) 
+        public AC(string name, IEnumerable<double> frequencySweep)
             : base(name, frequencySweep)
         {
         }
@@ -38,7 +38,7 @@ namespace SpiceSharp.Simulations
             base.Execute();
 
             var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
-            
+
             // Calculate the operating point
             cstate.Laplace = 0.0;
             Op(BiasingParameters.DcMaxIterations);

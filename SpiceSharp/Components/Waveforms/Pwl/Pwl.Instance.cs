@@ -66,7 +66,7 @@ namespace SpiceSharp.Components
                 _points = points.ThrowIfNull(nameof(points)).ToArray();
                 if (_points.Length == 0)
                     throw new ArgumentException(Properties.Resources.Waveforms_Pwl_Empty);
-                
+
                 // Check monotonically increasing timepoints
                 for (var i = 1; i < _points.Length; i++)
                 {

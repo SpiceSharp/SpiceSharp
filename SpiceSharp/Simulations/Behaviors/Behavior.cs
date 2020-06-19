@@ -12,7 +12,7 @@ namespace SpiceSharp.Behaviors
     /// </remarks>
     /// <seealso cref="ParameterSetCollection"/>
     /// <seealso cref="IBehavior"/>
-    public abstract class Behavior : ParameterSetCollection, 
+    public abstract class Behavior : ParameterSetCollection,
         IBehavior
     {
         /// <inheritdoc/>

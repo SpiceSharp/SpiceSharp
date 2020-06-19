@@ -1,9 +1,9 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.Bipolars
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
-    public class Biasing : Temperature, 
-        IBiasingBehavior, 
+    public class Biasing : Temperature,
+        IBiasingBehavior,
         IConvergenceBehavior
     {
         private readonly int _collectorNode, _baseNode, _emitterNode, _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode;
@@ -212,7 +212,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context) 
+        public Biasing(string name, IComponentBindingContext context) : base(name, context)
         {
             context.Nodes.CheckNodes(4);
 
@@ -407,7 +407,7 @@ namespace SpiceSharp.Components.Bipolars
             _elements.Add(
                 // Y-matrix
                 gcpr, gx, gepr, gmu + go + gcpr, gx + gpi + gmu, gpi + gepr + gm + go,
-                -gcpr, -gx, -gepr, -gcpr, -gmu + gm, -gm - go, -gx, -gmu, -gpi, -gepr, -go, 
+                -gcpr, -gx, -gepr, -gcpr, -gmu + gm, -gm - go, -gx, -gmu, -gpi, -gepr, -go,
                 -gpi - gm,
                 // RHS vector
                 ceqbc, -ceqbe - ceqbc, ceqbe);

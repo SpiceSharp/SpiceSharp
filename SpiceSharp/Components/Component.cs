@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using SpiceSharp.Entities;
+﻿using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SpiceSharp.Components
 {
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Entity"/>
     /// <seealso cref="IComponent"/>
     /// <seealso cref="IRuleSubject"/>
-    public abstract class Component : Entity, 
+    public abstract class Component : Entity,
         IComponent,
         IRuleSubject
     {

@@ -1,8 +1,8 @@
-﻿using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -14,7 +14,7 @@ namespace SpiceSharpTest.Models
         /// </summary>
         private JFET CreateJFET(string name, string d, string g, string s, string model)
         {
-            var fet = new JFET(name) {Model = model};
+            var fet = new JFET(name) { Model = model };
             fet.Connect(d, g, s);
             return fet;
         }
@@ -38,7 +38,7 @@ namespace SpiceSharpTest.Models
             );
 
             // Build the simulation
-            var dc = new DC("dc", new [] {
+            var dc = new DC("dc", new[] {
                 new ParameterSweep("V1", new LinearSweep(0, 0.8, 0.1)),
                 new ParameterSweep("V2", new LinearSweep(0.0, 5.0, 0.1))
             });

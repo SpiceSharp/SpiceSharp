@@ -1,8 +1,8 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Noise(string name, IComponentBindingContext context) : base(name, context) 
+        public Noise(string name, IComponentBindingContext context) : base(name, context)
         {
             var complex = context.GetState<IComplexSimulationState>();
             _noise = context.GetState<INoiseSimulationState>();

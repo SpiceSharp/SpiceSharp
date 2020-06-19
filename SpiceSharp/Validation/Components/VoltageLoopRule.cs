@@ -1,7 +1,33 @@
 ﻿using SpiceSharp.Simulations;
-using System.Collections.Generic;
+using SpiceSharp.Validation.Components;
+
+/* Unmerged change from project 'SpiceSharp (net45)'
+Before:
 using System.Linq;
 using SpiceSharp.Validation.Components;
+After:
+using System.Collections.Generic;
+using System.Linq;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netstandard2.0)'
+Before:
+using System.Linq;
+using SpiceSharp.Validation.Components;
+After:
+using System.Collections.Generic;
+using System.Linq;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netcoreapp2.0)'
+Before:
+using System.Linq;
+using SpiceSharp.Validation.Components;
+After:
+using System.Collections.Generic;
+using System.Linq;
+*/
+using System.Collections.Generic;
 
 namespace SpiceSharp.Validation
 {

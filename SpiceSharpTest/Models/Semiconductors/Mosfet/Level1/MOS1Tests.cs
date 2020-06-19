@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using System.Numerics;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -11,7 +11,7 @@ namespace SpiceSharpTest.Models
     {
         private Mosfet1 CreateMOS1(string name, string d, string g, string s, string b, string model)
         {
-            var mos = new Mosfet1(name) {Model = model};
+            var mos = new Mosfet1(name) { Model = model };
             mos.Connect(d, g, s, b);
             return mos;
         }

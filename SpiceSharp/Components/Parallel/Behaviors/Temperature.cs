@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="ITemperatureBehavior" />
-    public class Temperature : Behavior, 
+    public class Temperature : Behavior,
         ITemperatureBehavior
     {
         private readonly Workload _workload;

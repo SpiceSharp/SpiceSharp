@@ -1,8 +1,8 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Mosfets.Level3
 {
@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
         public ModelTemperature(string name, IBindingContext context)
-            : base(name) 
+            : base(name)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -51,7 +51,7 @@ namespace SpiceSharpTest.Models
             var invtau1 = (-b + discriminant) / (2.0 * a);
             var invtau2 = (-b - discriminant) / (2.0 * a);
             var factor = mut * r2 / a / (invtau1 - invtau2);
-            Func<double, double>[] references = {  t => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
+            Func<double, double>[] references = { t => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
 
             // Increase the allowed threshold
             // It should also be verfied that the error decreases if the maximum timestep is decreased

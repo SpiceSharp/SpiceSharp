@@ -1,8 +1,8 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets.Level1;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {
@@ -23,7 +23,7 @@ namespace SpiceSharp.Components
         /// </summary>
         /// <param name="name">The name of the device.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Mosfet1Model(string name) 
+        public Mosfet1Model(string name)
             : base(name)
         {
         }

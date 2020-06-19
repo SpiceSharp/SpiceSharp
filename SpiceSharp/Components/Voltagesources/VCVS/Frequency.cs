@@ -1,9 +1,9 @@
-﻿using System.Numerics;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharp.Components.VoltageControlledVoltageSources
 {
@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
-    public class Frequency : Biasing, 
+    public class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
     {

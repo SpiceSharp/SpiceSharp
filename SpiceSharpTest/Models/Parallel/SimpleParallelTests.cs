@@ -17,8 +17,8 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new Parallel("PC1", 
-                    new Resistor("R1", "in", "out", 1e3), 
+                new Parallel("PC1",
+                    new Resistor("R1", "in", "out", 1e3),
                     new Resistor("R2", "out", "0", 1e3))
                     .SetParameter("biasing.load", workDistributor));
 
@@ -51,8 +51,8 @@ namespace SpiceSharpTest.Models
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
-                new Parallel("PC1", 
-                    new Resistor("R1", "in", "out", 1e3), 
+                new Parallel("PC1",
+                    new Resistor("R1", "in", "out", 1e3),
                     new Capacitor("C1", "out", "0", 1e-6))
                     .SetParameter("frequency.load", workDistributor));
 
@@ -75,7 +75,7 @@ namespace SpiceSharpTest.Models
 
             var tran = new Transient("tran", 1e-7, 10e-6);
             var exports = new IExport<double>[] { new RealVoltageExport(tran, "out") };
-            var references = new Func<double, double>[] { time => 1.0  };
+            var references = new Func<double, double>[] { time => 1.0 };
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }

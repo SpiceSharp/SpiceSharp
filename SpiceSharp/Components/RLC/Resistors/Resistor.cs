@@ -1,8 +1,8 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Resistors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -27,13 +27,13 @@ namespace SpiceSharp.Components
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int ResistorPinCount = 2;
+        public const int ResistorPinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Resistor"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
-        public Resistor(string name) 
+        public Resistor(string name)
             : base(name, ResistorPinCount)
         {
         }
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="res">The resistance</param>
-        public Resistor(string name, string pos, string neg, double res) 
+        public Resistor(string name, string pos, string neg, double res)
             : this(name)
         {
             Parameters.Resistance = res;

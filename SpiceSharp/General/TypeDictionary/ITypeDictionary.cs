@@ -1,7 +1,45 @@
-﻿using System;
+﻿
+/* Unmerged change from project 'SpiceSharp (net45)'
+Before:
+using System;
 using System.Collections.Generic;
 using SpiceSharp.General;
 using SpiceSharp.Diagnostics;
+After:
+using SpiceSharp.Diagnostics;
+using SpiceSharp.General;
+using System;
+using System.Collections.Diagnostics;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netstandard2.0)'
+Before:
+using System;
+using System.Collections.Generic;
+using SpiceSharp.General;
+using SpiceSharp.Diagnostics;
+After:
+using SpiceSharp.Diagnostics;
+using SpiceSharp.General;
+using System;
+using System.Collections.Diagnostics;
+*/
+
+/* Unmerged change from project 'SpiceSharp (netcoreapp2.0)'
+Before:
+using System;
+using System.Collections.Generic;
+using SpiceSharp.General;
+using SpiceSharp.Diagnostics;
+After:
+using SpiceSharp.Diagnostics;
+using SpiceSharp.General;
+using System;
+using System.Collections.Diagnostics;
+*/
+using SpiceSharp.General;
+using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp
 {
@@ -80,7 +118,7 @@ namespace SpiceSharp
         /// <exception cref="TypeNotFoundException">Thrown if a value of type <typeparamref name="TResult"/> could not be found.</exception>
         /// <exception cref="AmbiguousTypeException">If there are multiple values of type <typeparamref name="TResult"/>.</exception>
         TResult GetValue<TResult>() where TResult : T;
-        
+
         /// <summary>
         /// Gets all strongly typed values from the dictionary.
         /// </summary>

@@ -12,7 +12,7 @@ namespace SpiceSharpTest.Models
     {
         private CurrentSwitch CreateCurrentSwitch(string name, string pos, string neg, string contSource, string model)
         {
-            var vsw = new CurrentSwitch(name, pos, neg, contSource) {Model = model};
+            var vsw = new CurrentSwitch(name, pos, neg, contSource) { Model = model };
             return vsw;
         }
 

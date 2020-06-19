@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Validation;
+using System;
 using System.Collections.Generic;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations.Biasing
 {

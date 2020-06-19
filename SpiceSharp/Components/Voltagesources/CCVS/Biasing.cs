@@ -1,8 +1,8 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
-using SpiceSharp.Algebra;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.CurrentControlledVoltageSources
 {
@@ -14,8 +14,8 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSources
     /// <seealso cref="IBranchedBehavior{T}"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="CurrentControlledVoltageSources.Parameters"/>
-    public class Biasing : Behavior, 
-        IBiasingBehavior, 
+    public class Biasing : Behavior,
+        IBiasingBehavior,
         IBranchedBehavior<double>,
         IParameterized<Parameters>
     {
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSources
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, ICurrentControlledBindingContext context) 
+        public Biasing(string name, ICurrentControlledBindingContext context)
             : base(name)
         {
             context.ThrowIfNull(nameof(context));

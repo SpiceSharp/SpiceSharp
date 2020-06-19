@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components.Subcircuits.Simple
 {
@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
         /// </summary>
         /// <seealso cref="SubcircuitSolverState{T, S}" />
         /// <seealso cref="IBiasingSimulationState" />
-        protected class FlatSimulationState : FlatSolverState<double, IBiasingSimulationState>, 
+        protected class FlatSimulationState : FlatSolverState<double, IBiasingSimulationState>,
             IBiasingSimulationState
         {
             /// <inheritdoc/>

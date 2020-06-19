@@ -1,15 +1,15 @@
-﻿using System;
-using System.Numerics;
+﻿using NUnit.Framework;
+using SpiceSharp;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using System.Text.RegularExpressions;
-using SpiceSharp;
-using SpiceSharp.Simulations;
-using SpiceSharp.Entities;
-using NUnit.Framework;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Components;
 
 namespace SpiceSharpTest.Models
 {

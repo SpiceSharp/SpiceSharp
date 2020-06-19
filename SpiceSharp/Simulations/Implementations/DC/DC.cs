@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SpiceSharp.ParameterSets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Simulations
 {
@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         /// <param name="stop">The stop value.</param>
         /// <param name="step">The step value.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="source"/> is <c>null</c>.</exception>
-        public DC(string name, string source, double start, double stop, double step) 
+        public DC(string name, string source, double start, double stop, double step)
             : this(name)
         {
             DCParameters.Sweeps.Add(new ParameterSweep(source, new LinearSweep(start, stop, step)));
@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
         /// <param name="name">The name of the simulation.</param>
         /// <param name="sweeps">The sweeps.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="sweeps"/> is <c>null</c>.</exception>
-        public DC(string name, IEnumerable<ISweep> sweeps) 
+        public DC(string name, IEnumerable<ISweep> sweeps)
             : this(name)
         {
             sweeps.ThrowIfNull(nameof(sweeps));
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
 
             // Setup the state
             Iteration.Mode = IterationModes.Junction;
-            
+
             // Initialize
             var sweeps = DCParameters.Sweeps.ToArray();
             _sweepEnumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];

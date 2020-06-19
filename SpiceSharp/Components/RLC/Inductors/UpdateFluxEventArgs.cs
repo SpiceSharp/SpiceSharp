@@ -1,5 +1,5 @@
-﻿using System;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Inductors
 {

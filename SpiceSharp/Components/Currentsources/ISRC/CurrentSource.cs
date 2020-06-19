@@ -1,12 +1,12 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Components.CurrentSources;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using System.Linq;
 using System;
-using SpiceSharp.Components.CurrentSources;
-using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -29,7 +29,7 @@ namespace SpiceSharp.Components
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 2;
+        public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentSource"/> class.

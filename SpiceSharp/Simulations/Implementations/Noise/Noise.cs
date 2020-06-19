@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace SpiceSharp.Simulations
 {
@@ -37,7 +37,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Noise(string name) 
+        public Noise(string name)
             : base(name)
         {
         }
@@ -49,7 +49,7 @@ namespace SpiceSharp.Simulations
         /// <param name="output">The output node name.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Noise(string name, string output, IEnumerable<double> frequencySweep) 
+        public Noise(string name, string output, IEnumerable<double> frequencySweep)
             : base(name, frequencySweep)
         {
             NoiseParameters.Output = output;
@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
         /// <param name="reference">The reference output node name.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Noise(string name, string output, string reference, IEnumerable<double> frequencySweep) 
+        public Noise(string name, string output, string reference, IEnumerable<double> frequencySweep)
             : base(name, frequencySweep)
         {
             NoiseParameters.Output = output;
@@ -162,7 +162,8 @@ namespace SpiceSharp.Simulations
             var solver = cstate.Solver;
 
             // Clear out the right hand side vector
-            solver.Precondition((matrix, rhs) => {
+            solver.Precondition((matrix, rhs) =>
+            {
                 rhs.Reset();
             });
 

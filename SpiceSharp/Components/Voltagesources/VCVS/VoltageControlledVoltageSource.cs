@@ -1,11 +1,11 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageControlledVoltageSources;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using System.Linq;
 using System;
-using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -29,14 +29,14 @@ namespace SpiceSharp.Components
         /// The pin count for voltage-controlled voltage sources.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 4;
+        public const int PinCount = 4;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VoltageControlledVoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the entity.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public VoltageControlledVoltageSource(string name) 
+        public VoltageControlledVoltageSource(string name)
             : base(name, PinCount)
         {
         }
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
         /// <param name="controlNeg">The negative controlling node</param>
         /// <param name="gain">The voltage gain</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain) 
+        public VoltageControlledVoltageSource(string name, string pos, string neg, string controlPos, string controlNeg, double gain)
             : this(name)
         {
             Parameters.Coefficient = gain;

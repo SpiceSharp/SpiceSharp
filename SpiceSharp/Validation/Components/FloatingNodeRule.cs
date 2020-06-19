@@ -1,7 +1,7 @@
 ﻿using SpiceSharp.Simulations;
+using SpiceSharp.Validation.Components;
 using System;
 using System.Collections.Generic;
-using SpiceSharp.Validation.Components;
 
 namespace SpiceSharp.Validation
 {

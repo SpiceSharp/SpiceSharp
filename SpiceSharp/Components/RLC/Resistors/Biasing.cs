@@ -1,8 +1,8 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Algebra;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.Resistors
 {
@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
-    public class Biasing : Temperature, 
+    public class Biasing : Temperature,
         IBiasingBehavior
     {
         private readonly ElementSet<double> _elements;

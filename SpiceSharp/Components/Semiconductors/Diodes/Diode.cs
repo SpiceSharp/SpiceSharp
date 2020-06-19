@@ -1,10 +1,10 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Diodes;
 using SpiceSharp.Diagnostics;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -25,14 +25,14 @@ namespace SpiceSharp.Components
         /// The pin count for diodes.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int PinCount = 2;
+        public const int PinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Diode"/> class.
         /// </summary>
         /// <param name="name">The name of the device.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Diode(string name) 
+        public Diode(string name)
             : base(name, PinCount)
         {
         }

@@ -1,5 +1,5 @@
-﻿using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components.Diodes
@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Dynamic, 
+    public class Time : Dynamic,
         ITimeBehavior
     {
         private readonly IDerivative _capCharge;

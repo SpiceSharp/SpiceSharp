@@ -1,7 +1,7 @@
-﻿using System;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.Diodes
         protected ModelParameters ModelParameters { get; }
 
         /// <inheritdoc/>
-        public Parameters Parameters { get;  }
+        public Parameters Parameters { get; }
 
         /// <summary>
         /// Gets the model temperature behavior.
@@ -118,7 +118,7 @@ namespace SpiceSharp.Components.Diodes
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Temperature(string name, IComponentBindingContext context) : base(name) 
+        public Temperature(string name, IComponentBindingContext context) : base(name)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
@@ -176,7 +176,7 @@ namespace SpiceSharp.Components.Diodes
                 if (cbv < TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt)
                 {
                     cbv = TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt;
-                    SpiceSharpWarning.Warning(this, 
+                    SpiceSharpWarning.Warning(this,
                         Properties.Resources.Diodes_BreakdownCurrentIncreased.FormatString(Name, cbv));
                     xbv = ModelParameters.BreakdownVoltage;
                 }
@@ -193,7 +193,7 @@ namespace SpiceSharp.Components.Diodes
                             break;
                     }
                     if (iter >= 25)
-                        SpiceSharpWarning.Warning(this, 
+                        SpiceSharpWarning.Warning(this,
                             Properties.Resources.Diodes_ImpossibleFwdRevMatch.FormatString(Name, xbv, xcbv));
                 }
                 TempBreakdownVoltage = xbv;

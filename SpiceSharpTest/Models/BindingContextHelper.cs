@@ -1,15 +1,4 @@
-﻿using NSubstitute;
-using SpiceSharp;
-using SpiceSharp.Algebra;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Components;
-using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Entities;
-using SpiceSharp.Simulations;
-using SpiceSharp.Simulations.Variables;
-using System;
-using System.Collections.Generic;
-using System.Numerics;
+﻿using SpiceSharp.Simulations;
 
 namespace SpiceSharpTest.Models
 {
@@ -42,7 +31,7 @@ namespace SpiceSharpTest.Models
             {
             }
         }
-        
+
         /*
         /// <summary>
         /// The context should return the following variables.

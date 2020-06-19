@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components;
+using SpiceSharp.Simulations;
+using System.Collections.Generic;
 
 namespace SpiceSharpTest.Models
 {

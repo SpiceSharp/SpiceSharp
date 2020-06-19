@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace SpiceSharp.Entities
@@ -205,7 +205,7 @@ namespace SpiceSharp.Entities
         {
             _lock.EnterReadLock();
             try
-            {   
+            {
                 return _entities.ContainsKey(name);
             }
             finally
@@ -242,7 +242,7 @@ namespace SpiceSharp.Entities
         {
             _lock.EnterReadLock();
             try
-            {   
+            {
                 return _entities.TryGetValue(name, out entity);
             }
             finally
@@ -256,7 +256,7 @@ namespace SpiceSharp.Entities
         {
             _lock.EnterReadLock();
             try
-            {   
+            {
                 foreach (var entity in _entities.Values)
                 {
                     if (entity is E e)

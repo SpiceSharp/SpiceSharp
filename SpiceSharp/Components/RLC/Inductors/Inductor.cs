@@ -1,11 +1,11 @@
-﻿using System;
-using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Inductors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
-using SpiceSharp.Components.Inductors;
+using System;
 using System.Linq;
-using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int InductorPinCount = 2;
+        public const int InductorPinCount = 2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Inductor"/> class.
@@ -53,7 +53,7 @@ namespace SpiceSharp.Components
         /// <param name="neg">The negative node.</param>
         /// <param name="inductance">The inductance.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Inductor(string name, string pos, string neg, double inductance) 
+        public Inductor(string name, string pos, string neg, double inductance)
             : this(name)
         {
             Parameters.Inductance = inductance;

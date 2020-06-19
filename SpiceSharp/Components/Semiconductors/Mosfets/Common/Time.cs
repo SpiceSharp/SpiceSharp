@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
+using System;
 
 namespace SpiceSharp.Components.Mosfets
 {
@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     /// <seealso cref="Behavior"/>
     /// <seealso cref="ITimeBehavior"/>
-    public class Time : Behavior, 
+    public class Time : Behavior,
         ITimeBehavior
     {
         private readonly ITimeSimulationState _time;
@@ -173,7 +173,7 @@ namespace SpiceSharp.Components.Mosfets
             info = _qgd.GetContributions(capgd, vgd);
             c.Gd.G += info.Jacobian;
             c.Gd.C += info.Rhs;
-            
+
             _qgb.Integrate();
             info = _qgb.GetContributions(capgb, vgb);
             c.Gb.G += info.Jacobian;

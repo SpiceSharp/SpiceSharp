@@ -1,7 +1,7 @@
-﻿using System;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
+using System;
 
 namespace SpiceSharp.Components.LosslessTransmissionLines
 {

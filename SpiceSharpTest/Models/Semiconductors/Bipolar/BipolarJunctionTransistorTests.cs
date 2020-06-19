@@ -1,23 +1,23 @@
-﻿using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components;
+using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
     [TestFixture]
     public class BipolarJunctionTransistorTests : Framework
     {
-        BipolarJunctionTransistor CreateBJT(string name, 
-            string c, string b, string e, string subst, 
+        BipolarJunctionTransistor CreateBJT(string name,
+            string c, string b, string e, string subst,
             string model)
         {
             // Create the transistor
             var bjt = new BipolarJunctionTransistor(name, c, b, e, subst, model);
             return bjt;
         }
-        
+
         BipolarJunctionTransistorModel CreateBJTModel(string name, string parameters)
         {
             var bjtmodel = new BipolarJunctionTransistorModel(name);
@@ -150,7 +150,7 @@ namespace SpiceSharpTest.Models
             // Create exports
             IExport<double>[] exports =
             {
-                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time), 
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "out")
             };
 
@@ -222,7 +222,7 @@ namespace SpiceSharpTest.Models
                     5.739702363159462e-02
                 }
             };
-            
+
             // Run simulation
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);

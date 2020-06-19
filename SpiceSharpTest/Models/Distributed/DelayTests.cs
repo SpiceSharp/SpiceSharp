@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -23,9 +23,9 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-7, 10e-5);
             var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time), 
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "in"),
-                new RealVoltageExport(tran, "out"), 
+                new RealVoltageExport(tran, "out"),
             };
             var references = new[]
             {
@@ -115,9 +115,9 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-7, 10e-5);
             var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time), 
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "in"),
-                new RealVoltageExport(tran, "out"), 
+                new RealVoltageExport(tran, "out"),
             };
             var references = new[]
             {
