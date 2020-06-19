@@ -22,15 +22,15 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSources
         private readonly OnePort<Complex> _variables;
         private readonly IVariable<Complex> _control;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => Branch.Value;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 

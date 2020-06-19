@@ -21,15 +21,15 @@ namespace SpiceSharp.Components.Capacitors
         private readonly ITimeSimulationState _time;
         private readonly OnePort<double> _variables;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("The instantaneous current")]
         public double Current => _qcap.Derivative;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("The instantaneous dissipated power")]
         public double Power => -Current * Voltage;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("The instantaneous voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 

@@ -67,15 +67,15 @@ namespace SpiceSharp.Components.Switches
         /// </value>
         public double Conductance { get; private set; }
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        /// <include file='../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Switch voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        /// <include file='../Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Switch current")]
         public double Current => Voltage * Conductance;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        /// <include file='../Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Instantaneous power")]
         public double Power
         {

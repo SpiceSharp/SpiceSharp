@@ -15,11 +15,11 @@ namespace SpiceSharp.Components.Switches
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="Frequency"]/Voltage/*'/>
+        /// <include file='../Common/docs.xml' path='docs/members[@name="Frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("The complex voltage")]
         public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="Frequency"]/Current/*'/>
+        /// <include file='../Common/docs.xml' path='docs/members[@name="Frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("The complex current")]
         public Complex ComplexCurrent
         {
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.Switches
             }
         }
 
-        /// <include file='Components/Common/docs.xml' path='docs/members[@name="Frequency"]/Power/*'/>
+        /// <include file='../Common/docs.xml' path='docs/members[@name="Frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("The complex power")]
         public Complex ComplexPower => ComplexPower * Complex.Conjugate(ComplexCurrent);
 
