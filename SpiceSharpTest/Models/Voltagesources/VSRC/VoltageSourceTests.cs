@@ -79,7 +79,6 @@ namespace SpiceSharpTest.Models
                 Assert.AreEqual(violations[index++], violation.GetType());
         }
 
-
         public static IEnumerable<TestCaseData> Biasing
         {
             get

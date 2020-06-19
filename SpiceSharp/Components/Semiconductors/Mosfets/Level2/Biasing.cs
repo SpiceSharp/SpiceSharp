@@ -736,7 +736,6 @@ namespace SpiceSharp.Components.Mosfets.Level2
                         goto line1050;
                     }
 
-
                     con.Ds.G = beta1 * (lvgs - vbin - gammad * sarg);
                     goto line1050;
                 }

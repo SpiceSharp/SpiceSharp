@@ -65,7 +65,6 @@ namespace SpiceSharp.Simulations
                 TotalInputNoise = 0;
             }
 
-
             /// <summary>
             /// Adds the contributions of the specified noise source.
             /// </summary>

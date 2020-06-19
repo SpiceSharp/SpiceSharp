@@ -165,7 +165,6 @@ namespace SpiceSharp.Components.Mosfets.Level2
             Properties.TempCjsw *= capfact;
             Properties.TempDepCap = ModelParameters.ForwardCapDepletionCoefficient * Properties.TempBulkPotential;
 
-
             if ((Properties.TempSatCurDensity == 0) || (Parameters.DrainArea == 0) || (Parameters.SourceArea == 0))
                 Properties.SourceVCritical = Properties.DrainVCritical = Properties.TempVt * Math.Log(Properties.TempVt / (Constants.Root2 * Parameters.ParallelMultiplier * Properties.TempSatCur));
             else

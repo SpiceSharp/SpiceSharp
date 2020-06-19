@@ -211,7 +211,6 @@ namespace SpiceSharp.Components.Mosfets.Level1
                         (Properties.TempDepCap * Properties.TempDepCap)
                     - Properties.TempDepCap * Properties.F2s;
 
-
             if (ModelParameters.DrainResistance.Given)
             {
                 if (ModelParameters.DrainResistance != 0)

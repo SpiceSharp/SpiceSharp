@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Diagnostics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations

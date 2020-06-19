@@ -62,7 +62,6 @@ namespace SpiceSharp.Components.Mosfets
              *.. bulk-drain and bulk-source depletion capacitances
              */
 
-
             // Can't bypass the diode capacitance calculations
             if (!tp.Cbs.Equals(0.0) || !tp.CbsSidewall.Equals(0.0))
             {

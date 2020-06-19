@@ -42,8 +42,6 @@ namespace SpiceSharp.Algebra.Solve
                 _parent = parent.ThrowIfNull(nameof(parent));
             }
 
-
-
             /// <inheritdoc/>
             public ISparseVectorElement<T> GetFirstInVector() => _parent.Vector.GetFirstInVector();
 

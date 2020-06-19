@@ -28,7 +28,6 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     set => _states.Value[_index] = value;
                 }
 
-
                 /// <summary>
                 /// Gets the current derivative.
                 /// </summary>

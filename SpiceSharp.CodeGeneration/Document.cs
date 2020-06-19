@@ -76,7 +76,7 @@ namespace SpiceSharp.CodeGeneration
                     var namedFile = Path.Combine(Path.GetDirectoryName(filename), $"{Path.GetFileNameWithoutExtension(filename)}.Named.cs");
                     if (File.Exists(namedFile))
                     {
-                        using StreamReader sr = new StreamReader(namedFile);
+                        using var sr = new StreamReader(namedFile);
                         original = sr.ReadToEnd();
                     }
                     if (string.CompareOrdinal(result.ToFullString(), original) != 0)

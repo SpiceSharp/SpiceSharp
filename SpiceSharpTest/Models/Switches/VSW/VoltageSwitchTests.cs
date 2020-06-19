@@ -25,7 +25,6 @@ namespace SpiceSharpTest.Models
             return model;
         }
 
-
         [Test]
         public void When_SimpleSwitchDC_Expect_Spice3f5Reference()
         {
