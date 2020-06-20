@@ -5,6 +5,7 @@ using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharp.Simulations.Time;
 using SpiceSharp.Validation;
+using System;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
@@ -16,6 +17,7 @@ namespace SpiceSharp.Simulations
     public partial class Transient : BiasingSimulation,
         ITimeSimulation,
         IBehavioral<IAcceptBehavior>,
+        IBehavioral<ITruncatingBehavior>,
         IParameterized<TimeParameters>
     {
         /// <summary>
@@ -23,6 +25,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         private BehaviorList<ITimeBehavior> _transientBehaviors;
         private BehaviorList<IAcceptBehavior> _acceptBehaviors;
+        private BehaviorList<ITruncatingBehavior> _truncatingBehaviors;
         private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
         private bool _shouldReorder = true;
         private IIntegrationMethod _method;
@@ -44,8 +47,13 @@ namespace SpiceSharp.Simulations
         /// </value>
         public new TimeSimulationStatistics Statistics { get; }
 
+        /// <inheritdoc/>
         TimeParameters IParameterized<TimeParameters>.Parameters => TimeParameters;
+
+        /// <inheritdoc/>
         ITimeSimulationState IStateful<ITimeSimulationState>.State => _time;
+
+        /// <inheritdoc/>
         IIntegrationMethod IStateful<IIntegrationMethod>.State => _method;
 
         /// <summary>
@@ -115,6 +123,7 @@ namespace SpiceSharp.Simulations
             base.CreateBehaviors(entities);
             _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
             _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
+            _truncatingBehaviors = EntityBehaviors.GetBehaviorList<ITruncatingBehavior>();
             _method.Initialize();
 
             // Set up initial conditions
@@ -149,7 +158,6 @@ namespace SpiceSharp.Simulations
         /// <inheritdoc/>
         protected override void Execute()
         {
-
             base.Execute();
 
             // Apply initial conditions if they are not set for the devices (UseIc).
@@ -199,6 +207,8 @@ namespace SpiceSharp.Simulations
                     }
 
                     // Continue integration
+                    foreach (var behavior in _truncatingBehaviors)
+                        _method.Truncate(behavior.Prepare());
                     _method.Prepare();
 
                     // Find a valid time point
@@ -220,7 +230,10 @@ namespace SpiceSharp.Simulations
                         else
                         {
                             // If our integration method approves of our solution, continue to the next timepoint
-                            if (_method.Evaluate())
+                            var max = double.PositiveInfinity;
+                            foreach (var behavior in _truncatingBehaviors)
+                                max = Math.Min(behavior.Evaluate(), max);
+                            if (_method.Evaluate(max))
                                 break;
                             Statistics.Rejected++;
                         }

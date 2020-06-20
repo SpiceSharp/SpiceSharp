@@ -129,5 +129,3 @@ We then calculate the contributions to the *RHS-vector*:
 <img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;RHS_A&=&space;f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_A\pmb&space;x^{(k)}\\&space;&=&space;I_S\left(e^\frac{v_A-v_B}{nV_T}-1\right)-g_D(v_A-v_B)\\&space;&=&space;&plus;c_D\\&space;RHS_B&=&space;f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_B\pmb&space;x^{(k)}\\&space;&=&space;-\left(I_S\left(e^\frac{v_A-v_B}{nV_T}-1\right)-g_D(v_A-v_B)\right)\\&space;&=&space;-c_D&space;\end{align*}" />
 
 We note that this time the *RHS-vector* contributions are *not* 0 for the current equations. This is again typical for *nonlinear* components. The solution will need to be found in multiple iterations.
-
-<div class="pull-left">[Previous: Custom Models](custom_models.md)</div> <div class="pull-right">[Next: Base Behaviors](base_behaviors.md)</div>

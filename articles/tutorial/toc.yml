@@ -1,9 +1,9 @@
-- name: Analysis
+- name: Analysis examples
   href: analysis.md
   items:
-  - name: DC analysis
+  - name: DC analysis example
     href: dcanalysis.md
-  - name: AC analysis
+  - name: AC analysis example
     href: acanalysis.md
-  - name: Transient analysis
+  - name: Transient analysis example
     href: transientanalysis.md

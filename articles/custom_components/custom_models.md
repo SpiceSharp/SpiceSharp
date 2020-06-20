@@ -11,5 +11,3 @@ I recommend the following prior knowledge:
   - Knowledge of *Kirchoff's Current Law* will help.
   - Knowledge of *Nodal Analysis* will help.
   - Knowledge of basic electrical components will help.
-
-<div class="pull-left">[Previous: Parameters](../structure/parameters.md)</div> <div class="pull-right">[Next: Modified Nodal Analysis](modified_nodal_analysis.md)</p>

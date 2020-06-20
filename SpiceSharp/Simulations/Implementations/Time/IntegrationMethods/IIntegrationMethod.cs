@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using System;
 
 namespace SpiceSharp.Simulations
 {
@@ -108,11 +109,18 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// <c>true</c> if the current solution is a valid solution; otherwise, <c>false</c>.
         /// </returns>
-        bool Evaluate();
+        /// <exception cref="ArgumentException">Thrown if <paramref name="maxTimestep"/> is not positive.</exception>
+        bool Evaluate(double maxTimestep);
 
         /// <summary>
         /// Rejects the last probed timepoint as a valid solution. This method can be called if no solution could be found (eg. due to non-convergence).
         /// </summary>
         void Reject();
+
+        /// <summary>
+        /// Truncate the current timestep.
+        /// </summary>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="maxTimestep"/> is not positive.</exception>
+        void Truncate(double maxTimestep);
     }
 }

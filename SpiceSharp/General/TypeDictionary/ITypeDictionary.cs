@@ -1,43 +1,4 @@
-﻿
-/* Unmerged change from project 'SpiceSharp (net45)'
-Before:
-using System;
-using System.Collections.Generic;
-using SpiceSharp.General;
-using SpiceSharp.Diagnostics;
-After:
-using SpiceSharp.Diagnostics;
-using SpiceSharp.General;
-using System;
-using System.Collections.Diagnostics;
-*/
-
-/* Unmerged change from project 'SpiceSharp (netstandard2.0)'
-Before:
-using System;
-using System.Collections.Generic;
-using SpiceSharp.General;
-using SpiceSharp.Diagnostics;
-After:
-using SpiceSharp.Diagnostics;
-using SpiceSharp.General;
-using System;
-using System.Collections.Diagnostics;
-*/
-
-/* Unmerged change from project 'SpiceSharp (netcoreapp2.0)'
-Before:
-using System;
-using System.Collections.Generic;
-using SpiceSharp.General;
-using SpiceSharp.Diagnostics;
-After:
-using SpiceSharp.Diagnostics;
-using SpiceSharp.General;
-using System;
-using System.Collections.Diagnostics;
-*/
-using SpiceSharp.General;
+﻿using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 

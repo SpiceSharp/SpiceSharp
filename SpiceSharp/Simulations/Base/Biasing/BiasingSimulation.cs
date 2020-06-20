@@ -3,30 +3,6 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations.Biasing;
-
-/* Unmerged change from project 'SpiceSharp (net45)'
-Before:
-using SpiceSharp.ParameterSets;
-After:
-using System;
-using System.Collections.Generic;
-*/
-
-/* Unmerged change from project 'SpiceSharp (netstandard2.0)'
-Before:
-using SpiceSharp.ParameterSets;
-After:
-using System;
-using System.Collections.Generic;
-*/
-
-/* Unmerged change from project 'SpiceSharp (netcoreapp2.0)'
-Before:
-using SpiceSharp.ParameterSets;
-After:
-using System;
-using System.Collections.Generic;
-*/
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -247,7 +223,7 @@ namespace SpiceSharp.Simulations
             Iteration.Mode = IterationModes.Junction;
 
             // First, let's try finding an operating point by using normal iterations
-            if (!BiasingParameters.NoOperatingPointIterations)
+            if (!BiasingParameters.NoOperatingPointIterate)
             {
                 if (Iterate(maxIterations))
                     return;

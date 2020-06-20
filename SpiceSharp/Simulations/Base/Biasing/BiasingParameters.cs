@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations
         ///   <c>true</c> if gmin steping should be skipped; otherwise, <c>false</c>.
         /// </value>
         [ParameterName("noopiter"), ParameterInfo("Skip immediately to gmin stepping.")]
-        public bool NoOperatingPointIterations { get; set; } = false;
+        public bool NoOperatingPointIterate { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the minimum conductance.

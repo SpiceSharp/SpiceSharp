@@ -1,38 +1,41 @@
 # Getting started
-In this section we will quickly go over everything needed to create a simple circuit and simulate it.
+In this section we will try to quickly go over everything you need to create a simple circuit and simulate it using Spice#.
 
 ## Installation
 
-The easiest way to install the NuGet package here:
+The easiest way to install Spice# is by installing the NuGet package Spice#.
 
 [![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/)
 
 You can also clone the repository directly. However, while you get the latest features and bug fixes, the documentation might not be up to date!
 
-AppVeyor CI (Windows) build status: [![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master)
+| Platform | Status |
+|:---------|-------:|
+| AppVeyor CI (Windows) build status | [![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master) |
+| Travis CI (Linux/Mono) build status | [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp) |
 
-Travis CI (Linux/Mono) build status: [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp)
+## Building a circuit
+Let's start with a very simple circuit known as a *resistive voltage divider*. The schematic looks as follows.
 
-## Building the circuit
-Let's start with a very simple circuit called a *resistive voltage divider*. The schematic looks as follows.
-
-<p align="center"><img src="images/example01.svg" /></p>
+<p align="center"><img src="images/example01.svg" width="256px" /></p>
 
 The output voltage of this circuit is 2/3 times the input voltage.
 
-Creating this circuit is done using the **[Circuit](xref:SpiceSharp.Circuit)**-class. This is a container of multiple entities, such as voltage sources and resistors. The **[Circuit](xref:SpiceSharp.Circuit)**-class is defined in the namespace *@SpiceSharp*, while all default components are in the namespace *@SpiceSharp.Components*.
+Creating this circuit is done using the **[Circuit](xref:SpiceSharp.Circuit)**-class. This is a container of multiple so-called entities (**[IEntity](xref:SpiceSharp.Entities.IEntity)**), such as voltage sources and resistors. The **[Circuit](xref:SpiceSharp.Circuit)**-class is defined in the namespace *@SpiceSharp*, while all default components are typically specified in the namespace *@SpiceSharp.Components*.
 
 [!code-csharp[Circuit](../../SpiceSharpTest/BasicExampleTests.cs#example01_build)]
 
-## Running a DC analysis
+## Running a DC analysis on the circuit
 
-A **[DC](xref:SpiceSharp.Simulations.DC)** simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.
+A **[DC](xref:SpiceSharp.Simulations.DC)** simulation will (by default) sweep a voltage or current source value and it will assume a "quiet" circuit. The result is a DC transfer curve in function of the swept parameter.
 
 We will sweep the input voltage source from -1V to 1V in steps of 200mV.
 
 [!code-csharp[Simulation](../../SpiceSharpTest/BasicExampleTests.cs#example01_simulate)]
 
-The output will yield as expected:
+By default, access to simulation output data can be achieved by registering to the *[](xref:SpiceSharp.Simulations.IEventfulSimulation.ExportSimulationData)* event. This event is automatically fired by the simulation when the data is ready to be read.
+
+The output will show:
 
 ```
 -1 V : -0.667 V
@@ -50,11 +53,11 @@ The output will yield as expected:
 
 ## Using exports
 
-Using **[Export<T>](xref:SpiceSharp.Simulations.Export`1)** gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:
+Using **[Export<T>](xref:SpiceSharp.Simulations.Export`1)** gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can define some exports:
 
 [!code-csharp[Simulation](../../SpiceSharpTest/BasicExampleTests.cs#example01_simulate2)]
 
-Yielding the output:
+This will lead to the result:
 
 ```
 -1 V : -0.667 V. 3.33E-05 A
@@ -70,4 +73,4 @@ Yielding the output:
 1 V : 0.667 V. -3.33E-05 A
 ```
 
-<div class="pull-right">[Next: Analysis](analysis.md)</div>
+These export classes can setup automatically. During setup, these classes build a method that allow extracting the data more efficiently during the *[ExportSimulationData](xref:SpiceSharp.Simulations.IEventfulSimulation.ExportSimulationData)* event than using the event arguments.

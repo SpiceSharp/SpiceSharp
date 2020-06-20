@@ -15,12 +15,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         {
             private double _saveDelta;
 
-            /// <summary>
-            /// Gets the timestep.
-            /// </summary>
-            /// <value>
-            /// The timestep.
-            /// </value>
+            /// <inheritdoc/>
             public double Delta { get; protected set; }
 
             /// <summary>
@@ -55,57 +50,25 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// </value>
             protected List<ITruncatable> TruncatableStates { get; } = new List<ITruncatable>();
 
-            /// <summary>
-            /// Gets the breakpoint system.
-            /// </summary>
+            /// <inheritdoc/>
             public Breakpoints Breakpoints { get; } = new Breakpoints();
 
-            /// <summary>
-            /// Gets or sets whether a breakpoint has been reached.
-            /// </summary>
-            /// <value>
-            ///   <c>true</c> if a breakpoint was reached; otherwise, <c>false</c>.
-            /// </value>
+            /// <inheritdoc/>
             public bool Break { get; private set; }
 
-            /// <summary>
-            /// Gets the maximum order of the integration method.
-            /// </summary>
-            /// <value>
-            /// The maximum order.
-            /// </value>
+            /// <inheritdoc/>
             public int MaxOrder { get; }
 
-            /// <summary>
-            /// Gets or sets the current order of the integration method.
-            /// </summary>
-            /// <value>
-            /// The current order.
-            /// </value>
+            /// <inheritdoc/>
             public int Order { get; set; }
 
-            /// <summary>
-            /// Gets or sets the base time.
-            /// </summary>
-            /// <value>
-            /// The base time.
-            /// </value>
+            /// <inheritdoc/>
             public double BaseTime { get; protected set; }
 
-            /// <summary>
-            /// Gets or sets the time.
-            /// </summary>
-            /// <value>
-            /// The time.
-            /// </value>
+            /// <inheritdoc/>
             public double Time { get; protected set; }
 
-            /// <summary>
-            /// Gets or sets the slope.
-            /// </summary>
-            /// <value>
-            /// The slope.
-            /// </value>
+            /// <inheritdoc/>
             public double Slope { get; protected set; }
 
             /// <summary>
@@ -138,39 +101,18 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 States = new NodeHistory<SpiceIntegrationState>(maxOrder + 2);
             }
 
-            /// <summary>
-            /// Creates a derivative.
-            /// </summary>
-            /// <param name="track">If set to <c>true</c>, the integration method will use this state to limit truncation errors.</param>
-            /// <returns>
-            /// The derivative.
-            /// </returns>
+            /// <inheritdoc/>
             public abstract IDerivative CreateDerivative(bool track);
 
-            /// <summary>
-            /// Gets a previous solution used by the integration method. An index of 0 indicates the last accepted solution.
-            /// </summary>
-            /// <param name="index">The number of points.</param>
-            /// <returns>
-            /// The previous solution.
-            /// </returns>
+            /// <inheritdoc/>
             public IVector<double> GetPreviousSolution(int index)
                 => States.GetPreviousValue(index).Solution;
 
-            /// <summary>
-            /// Gets a previous timestep. An index of 0 indicates the current timestep.
-            /// </summary>
-            /// <param name="index">The number of points to go back.</param>
-            /// <returns>
-            /// The previous timestep.
-            /// </returns>
+            /// <inheritdoc/>
             public double GetPreviousTimestep(int index)
                 => States.GetPreviousValue(index).Delta;
 
-            /// <summary>
-            /// Registers an integration state with the integration method.
-            /// </summary>
-            /// <param name="state">The integration state.</param>
+            /// <inheritdoc/>
             public void RegisterState(IIntegrationState state)
             {
                 RegisteredStates.Add(state);
@@ -178,10 +120,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     TruncatableStates.Add(truncatable);
             }
 
-            /// <summary>
-            /// Initializes the integration method using the allocated biasing state.
-            /// At this point, all entities should have received the chance to allocate and register integration states.
-            /// </summary>
+            /// <inheritdoc/>
             public virtual void Initialize()
             {
                 Time = 0.0;
@@ -204,9 +143,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Delta = Math.Min(Parameters.StopTime / 50.0, Parameters.InitialStep) / 10.0;
             }
 
-            /// <summary>
-            /// Prepares the integration method for calculating the next timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public virtual void Prepare()
             {
                 var delta = Math.Min(Delta, Parameters.MaxStep);
@@ -242,9 +179,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Delta = delta;
             }
 
-            /// <summary>
-            /// Probes a new timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public virtual void Probe()
             {
                 Time = BaseTime + Delta;
@@ -311,22 +246,20 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Order = 1;
             }
 
-            /// <summary>
-            /// Evaluates the current solution at the probed timepoint. If the solution is invalid,
-            /// the analysis should roll back and try again.
-            /// </summary>
-            /// <returns>
-            ///   <c>true</c> if the current solution is a valid solution; otherwise, <c>false</c>.
-            /// </returns>
+            /// <inheritdoc/>
             /// <exception cref="TimestepTooSmallException">Thrown when the timestep is too small.</exception>
-            public virtual bool Evaluate()
+            public virtual bool Evaluate(double maxTimestep)
             {
                 double newDelta;
+                maxTimestep.GreaterThan(nameof(maxTimestep), 0);
 
                 // Ignore checks on the first timepoint
                 if (BaseTime.Equals(0.0))
                 {
-                    Delta = States.Value.Delta;
+                    if (maxTimestep < States.Value.Delta)
+                        Delta = maxTimestep;
+                    else
+                        Delta = States.Value.Delta;
                     return true;
                 }
                 else
@@ -360,7 +293,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     }
                     else
                     {
-                        Delta = newDelta;
+                        Delta = Math.Min(newDelta, maxTimestep);
                         return false;
                     }
                 }
@@ -371,6 +304,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 // Limit the maximum timestep
                 if (newDelta > Parameters.MaxStep)
                     newDelta = Parameters.MaxStep;
+                if (newDelta > maxTimestep)
+                    newDelta = maxTimestep;
 
                 // Check for timesteps that became too small
                 if (newDelta <= Parameters.MinStep)
@@ -386,6 +321,14 @@ namespace SpiceSharp.Simulations.IntegrationMethods
 
                 Delta = newDelta;
                 return true;
+            }
+
+            /// <inheritdoc/>
+            public void Truncate(double maxTimestep)
+            {
+                maxTimestep.GreaterThan(nameof(maxTimestep), 0);
+                if (maxTimestep < Delta)
+                    Delta = maxTimestep;
             }
         }
     }

@@ -35,5 +35,3 @@ C1 out 0 1u
 Plotting the output amplitude in decibels gives the following low-pass filter characteristic:
 
 <p align="center"><img src="images/example_ACgraph.svg" /></p>
-
-<div class="pull-left">[Previous: DC analysis](dcanalysis.md)</div> <div class="pull-right">[Next: Transient analysis](transientanalysis.md)</div>

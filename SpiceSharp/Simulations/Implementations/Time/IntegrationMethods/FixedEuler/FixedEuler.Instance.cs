@@ -17,45 +17,19 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(2);
             private readonly List<IIntegrationState> _registeredStates = new List<IIntegrationState>();
 
-            /// <summary>
-            /// Gets the maximum order of the integration method.
-            /// </summary>
-            /// <value>
-            /// The maximum order.
-            /// </value>
+            /// <inheritdoc/>
             public int MaxOrder => 1;
 
-            /// <summary>
-            /// Gets the order.
-            /// </summary>
-            /// <value>
-            /// The order.
-            /// </value>
+            /// <inheritdoc/>
             public int Order { get; set; }
 
-            /// <summary>
-            /// Gets the base timepoint in seconds from which the current timepoint is being probed.
-            /// </summary>
-            /// <value>
-            /// The base time.
-            /// </value>
+            /// <inheritdoc/>
             public double BaseTime { get; private set; }
 
-            /// <summary>
-            /// Gets the currently probed timepoint in seconds.
-            /// </summary>
-            /// <value>
-            /// The current time.
-            /// </value>
+            /// <inheritdoc/>
             public double Time { get; private set; }
 
-            /// <summary>
-            /// Gets the derivative factor of any quantity that is being derived
-            /// by the integration method.
-            /// </summary>
-            /// <value>
-            /// The slope.
-            /// </value>
+            /// <inheritdoc/>
             public double Slope { get; }
 
             /// <summary>
@@ -69,22 +43,13 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Order = 1;
             }
 
-            /// <summary>
-            /// Registers an integration state with the integration method.
-            /// </summary>
-            /// <param name="state">The integration state.</param>
+            /// <inheritdoc/>
             public void RegisterState(IIntegrationState state)
             {
                 _registeredStates.Add(state);
             }
 
-            /// <summary>
-            /// Creates a derivative.
-            /// </summary>
-            /// <param name="track">If set to <c>true</c>, the integration method will use this state to limit truncation errors.</param>
-            /// <returns>
-            /// The derivative.
-            /// </returns>
+            /// <inheritdoc/>
             public IDerivative CreateDerivative(bool track = true)
             {
                 var result = new DerivativeInstance(this, _stateValues + 1);
@@ -92,27 +57,13 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 return result;
             }
 
-            /// <summary>
-            /// Gets a previous solution used by the integration method. An index of 0 indicates the last accepted solution.
-            /// </summary>
-            /// <param name="index">The number of points to go back.</param>
-            /// <returns>
-            /// The previous solution.
-            /// </returns>
+            /// <inheritdoc/>
             public IVector<double> GetPreviousSolution(int index) => null;
 
-            /// <summary>
-            /// Gets a previous timestep. An index of 0 indicates the current timestep.
-            /// </summary>
-            /// <param name="index">The number of points to go back.</param>
-            /// <returns>
-            /// The previous timestep.
-            /// </returns>
+            /// <inheritdoc/>
             public double GetPreviousTimestep(int index) => _parameters.Step;
 
-            /// <summary>
-            /// Initializes the integration method using the allocated biasing state.
-            /// </summary>
+            /// <inheritdoc/>
             public void Initialize()
             {
                 Time = 0.0;
@@ -122,39 +73,29 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 _states.Set(i => new DenseVector<double>(_stateValues));
             }
 
-            /// <summary>
-            /// Prepares the integration method for calculating the next timepoint.
-            /// The integration method may change the suggested timestep if needed.
-            /// </summary>
+            /// <inheritdoc/>
             public void Prepare()
             {
                 _states.Accept();
                 BaseTime = Time;
             }
 
-            /// <summary>
-            /// Probes a new timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Probe()
             {
                 Time = BaseTime + _parameters.Step;
             }
 
-            /// <summary>
-            /// Evaluates the solution at the probed timepoint. If the solution is invalid,
-            /// the analysis should roll back and try a smaller timestep.
-            /// </summary>
-            /// <returns>
-            ///   <c>true</c> if the solution is a valid solution; otherwise, <c>false</c>.
-            /// </returns>
-            public bool Evaluate()
+            /// <inheritdoc/>
+            /// <remarks>
+            /// This method ignores any timesteps!
+            /// </remarks>
+            public bool Evaluate(double maxTimestep)
             {
                 return true;
             }
 
-            /// <summary>
-            /// Accepts the last probed timepoint.
-            /// </summary>
+            /// <inheritdoc/>
             public void Accept()
             {
                 if (BaseTime.Equals(0.0))
@@ -166,13 +107,18 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     state.Accept();
             }
 
-            /// <summary>
-            /// Rejects the last probed timepoint. This method can be called if no
-            /// solution could be found.
-            /// </summary>
+            /// <inheritdoc/>
             public void Reject()
             {
                 throw new TimestepTooSmallException(0.0, BaseTime);
+            }
+
+            /// <inheritdoc/>
+            /// <remarks>
+            /// This method ignores any timesteps!
+            /// </remarks>
+            public void Truncate(double maxTimestep)
+            {
             }
         }
     }

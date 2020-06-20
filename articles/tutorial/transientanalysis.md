@@ -31,5 +31,3 @@ C1 out 0 1u
 
 .END
 ```
-
-<div class="pull-left">[Previous: AC anslysis](acanalysis.md)</div> <div class="pull-right">[Next: Spice# Structure](../structure/structure.md)</p>
