@@ -28,6 +28,7 @@ namespace SpiceSharpTest
             // Using the ParameterNameAttribute
             ckt["R1"].SetParameter("resistance", 2.0e3);
             ckt["R1"].GetParameterSet<SpiceSharp.Components.Resistors.Parameters>().SetParameter("resistance", 2.0e3);
+            ((Resistor)ckt["R1"]).Parameters.Resistance = 2.0e3;
             // </example_structure_resistor_2>
         }
 
