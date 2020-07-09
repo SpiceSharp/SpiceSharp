@@ -59,7 +59,7 @@ namespace SpiceSharpTest
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model
             var tnomGetter = parameters.CreatePropertyGetter<double>("tnom");
-            double temperature = tnomGetter(); // In degrees Celsius
+            var temperature = tnomGetter(); // In degrees Celsius
             // </example_parameters_mos1_creategetter>
 
             // <example_parameters_mos1_createsetter>
@@ -138,7 +138,7 @@ namespace SpiceSharpTest
         public void When_NMOSIVCharacteristic_Expect_NoException()
         {
             // <example_DC>
-            // Make the bipolar junction transistor
+            // Create the mosfet and its model
             var nmos = new Mosfet1("M1", "d", "g", "0", "0", "example");
             var nmosmodel = new Mosfet1Model("example");
             nmosmodel.SetParameter("kp", 150.0e-3);

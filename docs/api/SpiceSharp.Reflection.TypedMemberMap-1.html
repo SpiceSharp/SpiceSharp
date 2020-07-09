@@ -1,0 +1,578 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TypedMemberMap&lt;T&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TypedMemberMap&lt;T&gt;
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Reflection.TypedMemberMap`1">
+  
+  
+  <h1 id="SpiceSharp_Reflection_TypedMemberMap_1" data-uid="SpiceSharp.Reflection.TypedMemberMap`1" class="text-break">Class TypedMemberMap&lt;T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>A class that contains the members of a certain type.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">TypedMemberMap&lt;T&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Reflection.IParameterImporter-1.html">IParameterImporter</a>&lt;T&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Reflection.IPropertyExporter-1.html">IPropertyExporter</a>&lt;T&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Reflection.IMemberMap.html">IMemberMap</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Reflection.html">SpiceSharp.Reflection</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Reflection_TypedMemberMap_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TypedMemberMap&lt;T&gt; : IParameterImporter&lt;T&gt;, IPropertyExporter&lt;T&gt;, IMemberMap</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The base type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1__ctor_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.#ctor*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1__ctor_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.#ctor(System.Collections.Generic.IEqualityComparer{System.String})">TypedMemberMap(IEqualityComparer&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Reflection.TypedMemberMap-1.html">TypedMemberMap&lt;T&gt;</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TypedMemberMap(IEqualityComparer&lt;string&gt; comparer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The comparer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_Comparer_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.Comparer*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_Comparer" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"><p>Gets the comparer used to compare member names.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEqualityComparer&lt;string&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>The comparer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_Members_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.Members*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_Members" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.Members">Members</h4>
+  <div class="markdown level1 summary"><p>Gets the members.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;MemberDescription&gt; Members { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Reflection.MemberDescription.html">MemberDescription</a>&gt;</td>
+        <td><p>The members.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_Add_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.Add*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_Add_SpiceSharp_Reflection_MemberDescription_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.Add(SpiceSharp.Reflection.MemberDescription)">Add(MemberDescription)</h4>
+  <div class="markdown level1 summary"><p>Adds a member description to the map.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(MemberDescription member)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Reflection.MemberDescription.html">MemberDescription</a></td>
+        <td><span class="parametername">member</span></td>
+        <td><p>The member to add.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if a member with the same name is already defined.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_CreateGetter_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.CreateGetter*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_CreateGetter_System_Object_System_String_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.CreateGetter(System.Object,System.String)">CreateGetter(Object, String)</h4>
+  <div class="markdown level1 summary"><p>Creates a getter for parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Func&lt;T&gt; CreateGetter(object source, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The source object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;T&gt;</td>
+        <td><p>The function that returns the parameter; or <code>null</code> if the parameter doesn&apos;t exist.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_CreateSetter_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.CreateSetter*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_CreateSetter_System_Object_System_String_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.CreateSetter(System.Object,System.String)">CreateSetter(Object, String)</h4>
+  <div class="markdown level1 summary"><p>Creates a setter for the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Action&lt;T&gt; CreateSetter(object source, string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The source object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;T&gt;</td>
+        <td><p>The action that sets the parameter; or <code>null</code> if the parameter does not exist.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_TryGet_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.TryGet*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_TryGet_System_Object_System_String_System_Boolean__" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.TryGet(System.Object,System.String,System.Boolean@)">TryGet(Object, String, out Boolean)</h4>
+  <div class="markdown level1 summary"><p>Tries getting the value of a parameter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T TryGet(object source, string name, out bool isValid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The source object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isValid</span></td>
+        <td><p>If set to <code>true</code>, the parameter was returned succesfully.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The parameter value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SpiceSharp_Reflection_TypedMemberMap_1_TryGet_System_Object_System_String_System_Boolean___remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method does not follow the regular TryGet convention due to the interface
+being covariant.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>value</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Reflection_TypedMemberMap_1_TrySet_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.TrySet*"></a>
+  <h4 id="SpiceSharp_Reflection_TypedMemberMap_1_TrySet_System_Object_System_String__0_" data-uid="SpiceSharp.Reflection.TypedMemberMap`1.TrySet(System.Object,System.String,`0)">TrySet(Object, String, T)</h4>
+  <div class="markdown level1 summary"><p>Tries setting a parameter value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TrySet(object source, string name, T value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The source object.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The parameter name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The parameter value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the parameter was set succesfully; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if the value is invalid for the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.IParameterImporter-1.html">IParameterImporter&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.IPropertyExporter-1.html">IPropertyExporter&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.IMemberMap.html">IMemberMap</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Reflection.IParameterImporter-1.html">IParameterImporter</a>&lt;T&gt;</div>
+      <div><a class="xref" href="SpiceSharp.Reflection.IPropertyExporter-1.html">IPropertyExporter</a>&lt;T&gt;</div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,10 +1,12 @@
-# Operating point analysis
+# DC / Operating point analysis
+
+## Operating point calculations
 
 The operating point of a circuit is the static solution to a a circuit, ie. all voltages and currents are assumed to be constant over time.
 
 <p align="center"><img src="images/operatingpoint.svg" /></p>
 
-Calculating the operating point is often the first step in any simulation. First the temperature-dependent properties are calculated. Then the analysis will iteratively find a solution. Iterative solutions do not always guarantee convergence, so multiple schemes are provided to help convergence if the first attempt fails.
+Calculating the operating point is often the first step in any simulation. First the temperature-dependent properties are calculated. Then the analysis will **[iterate](iterate.md)** to find a solution. Iterative solutions do not always guarantee convergence, so multiple schemes are provided to help convergence if the first attempt fails.
 
 ## Gmin stepping
 

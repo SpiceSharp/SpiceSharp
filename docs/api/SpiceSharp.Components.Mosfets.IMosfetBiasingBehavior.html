@@ -1,0 +1,633 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IMosfetBiasingBehavior
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IMosfetBiasingBehavior
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior">
+  
+  
+  <h1 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior" class="text-break">Interface IMosfetBiasingBehavior
+  </h1>
+  <div class="markdown level0 summary"><p>A biasing behavior for a mosfet.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html#SpiceSharp_Behaviors_IBehavior_Name">IBehavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_GetParameterSet__1">IParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_TryGetParameterSet__1___0__">IParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_ParameterSets">IParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_SetParameter__1_System_String___0_">IParameterSet.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_TrySetParameter__1_System_String___0_">IParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_GetProperty__1_System_String_">IParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_TryGetProperty__1_System_String___0__">IParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_CreateParameterSetter__1_System_String_">IParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_CreatePropertyGetter__1_System_String_">IParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_Clone">ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html#SpiceSharp_ParameterSets_IParameterized_1_Parameters">IParameterized&lt;Parameters&gt;.Parameters</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.Mosfets.html">SpiceSharp.Components.Mosfets</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IMosfetBiasingBehavior : IBehavior, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gbd_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gbd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gbd" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gbd">Gbd</h4>
+  <div class="markdown level1 summary"><p>Gets the small-signal bulk-drain conductance (gbd).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gbd&quot;)]
+[ParameterInfo(&quot;Bulk-Drain conductance&quot;)]
+double Gbd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The small-signal bulk-drain conductance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gbs_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gbs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gbs" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gbs">Gbs</h4>
+  <div class="markdown level1 summary"><p>Gets the small-signal bulk-source conductance (gbs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gbs&quot;)]
+[ParameterInfo(&quot;Bulk-Source conductance&quot;)]
+double Gbs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The small-signal bulk-source conductance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gds_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gds*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gds" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gds">Gds</h4>
+  <div class="markdown level1 summary"><p>Gets the small-signal drain-source conductance (gds).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gds&quot;)]
+[ParameterInfo(&quot;Drain-Source conductance&quot;)]
+double Gds { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The small-signal drain-source conductance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gm_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gm*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gm" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gm">Gm</h4>
+  <div class="markdown level1 summary"><p>Gets the small-signal transconductance (gm).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gm&quot;)]
+[ParameterInfo(&quot;Transconductance&quot;)]
+double Gm { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The small-signal transconductance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gmbs_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gmbs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Gmbs" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Gmbs">Gmbs</h4>
+  <div class="markdown level1 summary"><p>Gets the small-signal bulk-source transconductance (gmb).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;gmb&quot;)]
+[ParameterName(&quot;gmbs&quot;)]
+[ParameterInfo(&quot;Bulk-Source transconductance&quot;)]
+double Gmbs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The small-signal bulk-source transconductance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Ibd_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Ibd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Ibd" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Ibd">Ibd</h4>
+  <div class="markdown level1 summary"><p>Gets the bulk-drain current.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ibd&quot;)]
+[ParameterInfo(&quot;B-D junction current&quot;)]
+double Ibd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-drain current.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Ibs_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Ibs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Ibs" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Ibs">Ibs</h4>
+  <div class="markdown level1 summary"><p>Gets the bulk-source current.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ibs&quot;)]
+[ParameterInfo(&quot;B-S junction current&quot;)]
+double Ibs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-source current.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Id_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Id*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Id" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Id">Id</h4>
+  <div class="markdown level1 summary"><p>Gets the drain current.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;id&quot;)]
+[ParameterName(&quot;cd&quot;)]
+[ParameterInfo(&quot;Drain current&quot;)]
+double Id { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The drain current.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Mode_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Mode*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Mode" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Mode">Mode</h4>
+  <div class="markdown level1 summary"><p>Gets the current mode of operation. A value of -1.0 means that the source and drain have switched.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double Mode { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The current mode of operation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Properties_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Properties*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Properties" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Properties">Properties</h4>
+  <div class="markdown level1 summary"><p>Gets the temperature-dependent properties.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">TemperatureProperties Properties { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.Mosfets.TemperatureProperties.html">TemperatureProperties</a></td>
+        <td><p>The temperature-dependent properties.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vbd_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vbd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vbd" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vbd">Vbd</h4>
+  <div class="markdown level1 summary"><p>Gets the bulk-drain voltage (vbd).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vbd&quot;)]
+[ParameterInfo(&quot;Bulk-Drain voltage&quot;)]
+double Vbd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-drain voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vbs_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vbs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vbs" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vbs">Vbs</h4>
+  <div class="markdown level1 summary"><p>Gets the bulk-source voltage (vbs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vbs&quot;)]
+[ParameterInfo(&quot;Bulk-Source voltage&quot;)]
+double Vbs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-source voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vds_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vds*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vds" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vds">Vds</h4>
+  <div class="markdown level1 summary"><p>Gets the drain-source voltage (vds).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vds&quot;)]
+[ParameterInfo(&quot;Drain-Source voltage&quot;)]
+double Vds { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The drain-source voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vdsat_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vdsat*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vdsat" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vdsat">Vdsat</h4>
+  <div class="markdown level1 summary"><p>Gets the saturation voltage (vdsat).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vdsat&quot;)]
+[ParameterInfo(&quot;Saturation drain-source voltage&quot;)]
+double Vdsat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The saturation voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vdsat_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If vds is larger than vdsat, then the transistor can be considered to be in the saturation region.</p>
+</div>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vgs_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vgs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Vgs" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Vgs">Vgs</h4>
+  <div class="markdown level1 summary"><p>Gets the gate-source voltage (vgs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vgs&quot;)]
+[ParameterInfo(&quot;Gate-Source voltage&quot;)]
+double Vgs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The gate-source voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Von_" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Von*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_Von" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.Von">Von</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;von&quot;)]
+[ParameterInfo(&quot;Turn-on voltage&quot;)]
+double Von { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="SpiceSharp_Components_Mosfets_IMosfetBiasingBehavior_UpdateContributions" data-uid="SpiceSharp.Components.Mosfets.IMosfetBiasingBehavior.UpdateContributions">UpdateContributions</h4>
+  <div class="markdown level1 summary"><p>Occurs when the contributions can be updated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">event EventHandler&lt;MosfetContributionEventArgs&gt; UpdateContributions</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Components.Mosfets.MosfetContributionEventArgs.html">MosfetContributionEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SingularException
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -80,8 +81,9 @@
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">System.Exception</span></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Algebra.SparseException.html">SparseException</a></div>
-    <div class="level3"><span class="xref">SingularException</span></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.SpiceSharpException.html">SpiceSharpException</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></div>
+    <div class="level4"><span class="xref">SingularException</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -95,9 +97,6 @@
     </div>
     <div>
       <span class="xref">System.Exception.ToString()</span>
-    </div>
-    <div>
-      <span class="xref">System.Exception.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)</span>
     </div>
     <div>
       <span class="xref">System.Exception.GetType()</span>
@@ -149,7 +148,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_SingularException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SingularException : SparseException, ISerializable, _Exception</code></pre>
+    <pre><code class="lang-csharp hljs">public class SingularException : AlgebraException, ISerializable, _Exception</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -184,19 +183,19 @@
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>The index where the exception occurred.</p>
+        <td><p>The row/column index where the exception occurred.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Algebra_SingularException__ctor_" data-uid="SpiceSharp.Algebra.SingularException.#ctor*"></a>
-  <h4 id="SpiceSharp_Algebra_SingularException__ctor_System_Int32_System_String_" data-uid="SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String)">SingularException(Int32, String)</h4>
+  <h4 id="SpiceSharp_Algebra_SingularException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="SpiceSharp.Algebra.SingularException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">SingularException(SerializationInfo, StreamingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.SingularException.html">SingularException</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SingularException(int index, string message)</code></pre>
+    <pre><code class="lang-csharp hljs">protected SingularException(SerializationInfo info, StreamingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -209,54 +208,15 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">index</span></td>
-        <td><p>The index where the exception occurred.</p>
+        <td><span class="xref">System.Runtime.Serialization.SerializationInfo</span></td>
+        <td><span class="parametername">info</span></td>
+        <td><p>The serialization info.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">message</span></td>
-        <td><p>The error message that explains the reason for the exception.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Algebra_SingularException__ctor_" data-uid="SpiceSharp.Algebra.SingularException.#ctor*"></a>
-  <h4 id="SpiceSharp_Algebra_SingularException__ctor_System_Int32_System_String_System_Exception_" data-uid="SpiceSharp.Algebra.SingularException.#ctor(System.Int32,System.String,System.Exception)">SingularException(Int32, String, Exception)</h4>
-  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.SingularException.html">SingularException</a> class.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SingularException(int index, string message, Exception innerException)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">index</span></td>
-        <td><p>The index where the exception occurred.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">message</span></td>
-        <td><p>The error message that explains the reason for the exception.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Exception</span></td>
-        <td><span class="parametername">innerException</span></td>
-        <td><p>The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</p>
+        <td><span class="xref">System.Runtime.Serialization.StreamingContext</span></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The streaming context.</p>
 </td>
       </tr>
     </tbody>
@@ -330,7 +290,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Index { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual int Index { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -347,6 +307,43 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Algebra_SingularException_GetObjectData_" data-uid="SpiceSharp.Algebra.SingularException.GetObjectData*"></a>
+  <h4 id="SpiceSharp_Algebra_SingularException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_" data-uid="SpiceSharp.Algebra.SingularException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">GetObjectData(SerializationInfo, StreamingContext)</h4>
+  <div class="markdown level1 summary"><p>Populates a SerializationInfo with the data needed to serialize the target object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void GetObjectData(SerializationInfo info, StreamingContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Runtime.Serialization.SerializationInfo</span></td>
+        <td><span class="parametername">info</span></td>
+        <td><p>The serialization info</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Runtime.Serialization.StreamingContext</span></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The streaming context</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Exception.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)</span></div>
   <h3 id="implements">Implements</h3>
   <div>
       <span class="xref">System.Runtime.Serialization.ISerializable</span>
@@ -358,54 +355,9 @@
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.SparseException.html">SparseException</a></div>
+      <div><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></div>
   </div>
 </article>
           </div>

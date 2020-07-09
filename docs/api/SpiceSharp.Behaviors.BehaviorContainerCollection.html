@@ -1,0 +1,675 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BehaviorContainerCollection
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BehaviorContainerCollection
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection">
+  
+  
+  <h1 id="SpiceSharp_Behaviors_BehaviorContainerCollection" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection" class="text-break">Class BehaviorContainerCollection
+  </h1>
+  <div class="markdown level0 summary"><p>A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">BehaviorContainerCollection</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IBehaviorContainerCollection</a></div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Behaviors.html">SpiceSharp.Behaviors</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Behaviors_BehaviorContainerCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class BehaviorContainerCollection : IBehaviorContainerCollection, IEnumerable&lt;IBehaviorContainer&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection__ctor_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.#ctor*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection__ctor" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.#ctor">BehaviorContainerCollection()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Behaviors.BehaviorContainerCollection.html">BehaviorContainerCollection</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BehaviorContainerCollection()</code></pre>
+  </div>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection__ctor_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.#ctor*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection__ctor_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.#ctor(System.Collections.Generic.IEqualityComparer{System.String})">BehaviorContainerCollection(IEqualityComparer&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Behaviors.BehaviorContainerCollection.html">BehaviorContainerCollection</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BehaviorContainerCollection(IEqualityComparer&lt;string&gt; comparer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The comparer for behaviors.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Comparer_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Comparer*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Comparer" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"><p>Gets the comparer used to identify elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEqualityComparer&lt;string&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>The comparer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Count_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Count*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Count" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Gets the number of behavior containers in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of behavior containers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Item_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Item*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Item_System_String_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Item(System.String)">Item[String]</h4>
+  <div class="markdown level1 summary"><p>Gets the <a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a> with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IBehaviorContainer this[string name] { get; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><p>The <a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.BehaviorsNotFoundException.html">BehaviorsNotFoundException</a></td>
+        <td><p>Thrown if the behavior container of the specified name could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Keys_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Keys*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Keys" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Keys">Keys</h4>
+  <div class="markdown level1 summary"><p>Gets the behavior container names.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;string&gt; Keys { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>An <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span> object that contains the name of each <a class="xref" href="SpiceSharp.Behaviors.BehaviorContainer.html">BehaviorContainer</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Add_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Add*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Add_SpiceSharp_Behaviors_IBehaviorContainer_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Add(SpiceSharp.Behaviors.IBehaviorContainer)">Add(IBehaviorContainer)</h4>
+  <div class="markdown level1 summary"><p>Adds the <a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a> with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(IBehaviorContainer behaviors)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><span class="parametername">behaviors</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">container</code> if <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if a behavior container already exists with the same name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Clear_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Clear*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Clear" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all containers in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_Contains_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Contains*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_Contains_System_String_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.Contains(System.String)">Contains(String)</h4>
+  <div class="markdown level1 summary"><p>Determines whether this instance contains a container by the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Contains(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the collection contains the container; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_GetBehaviorList_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.GetBehaviorList*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_GetBehaviorList__1" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.GetBehaviorList``1">GetBehaviorList&lt;T&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets a list of behaviors of a specific behavior type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual BehaviorList&lt;T&gt; GetBehaviorList&lt;T&gt;()
+    where T : IBehavior</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.BehaviorList-1.html">BehaviorList</a>&lt;T&gt;</td>
+        <td><p>A <a class="xref" href="SpiceSharp.Behaviors.BehaviorList-1.html">BehaviorList&lt;T&gt;</a> with all behaviors of the specified type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_GetEnumerator_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_GetEnumerator" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;IBehaviorContainer&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a>&gt;</td>
+        <td><p>An enumerator that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_OnBehaviorsNotFound_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.OnBehaviorsNotFound*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_OnBehaviorsNotFound_SpiceSharp_Behaviors_BehaviorsNotFoundEventArgs_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.OnBehaviorsNotFound(SpiceSharp.Behaviors.BehaviorsNotFoundEventArgs)">OnBehaviorsNotFound(BehaviorsNotFoundEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Behaviors.BehaviorContainerCollection.html#SpiceSharp_Behaviors_BehaviorContainerCollection_BehaviorsNotFound">BehaviorsNotFound</a> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnBehaviorsNotFound(BehaviorsNotFoundEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.BehaviorsNotFoundEventArgs.html">BehaviorsNotFoundEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td><p>The <a class="xref" href="SpiceSharp.Behaviors.BehaviorsNotFoundEventArgs.html">BehaviorsNotFoundEventArgs</a> instance containing the event data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_TryGetBehaviors_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.TryGetBehaviors*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_TryGetBehaviors_System_String_SpiceSharp_Behaviors_IBehaviorContainer__" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.TryGetBehaviors(System.String,SpiceSharp.Behaviors.IBehaviorContainer@)">TryGetBehaviors(String, out IBehaviorContainer)</h4>
+  <div class="markdown level1 summary"><p>Tries to get the behavior container associated with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool TryGetBehaviors(string name, out IBehaviorContainer ebd)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><span class="parametername">ebd</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the behavior was found; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_BehaviorsNotFound" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.BehaviorsNotFound">BehaviorsNotFound</h4>
+  <div class="markdown level1 summary"><p>Occurs when a behavior has not been found.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BehaviorsNotFoundEventArgs&gt; BehaviorsNotFound</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Behaviors.BehaviorsNotFoundEventArgs.html">BehaviorsNotFoundEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Behaviors_BehaviorContainerCollection_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Behaviors_BehaviorContainerCollection_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.Behaviors.BehaviorContainerCollection.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through a collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td><p>An <span class="xref">System.Collections.IEnumerator</span> object that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IBehaviorContainerCollection</a>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IBehaviorContainerCollection</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

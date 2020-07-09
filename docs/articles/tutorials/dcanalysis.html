@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>DC analysis </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="DC analysis ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="dc-analysis">DC analysis</h1>
+
+<p>A DC analysis makes it possible to sweep over one or more independent sources, assuming the circuit is static (not changing in time, anywhere in the circuit). You can for example construct the input-output relation of an amplifier using this type of analysis, or find out how a resistor influences other parts of the circuit. It is run using the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DC.html">DC</a></strong> class.</p>
+<p>Let&#39;s consider the following circuit:</p>
+<p align="center"><img src="images/example_DC.svg"></p>
+
+<p>We wish to find the (i_{DS}-v_{DS}) curve for multiple (v_{GS}) voltages. This can be achieved by passing multiple <strong><a class="xref" href="../../api/SpiceSharp.Simulations.ISweep.html">ISweep</a></strong> instances to the simulation&#39;s constructor (or you can add them in the simulation&#39;s parameters).</p>
+<p>The code will look like this:</p>
+<pre><code class="lang-csharp" name="Circuit">// Create the mosfet and its model
+var nmos = new Mosfet1(&quot;M1&quot;, &quot;d&quot;, &quot;g&quot;, &quot;0&quot;, &quot;0&quot;, &quot;example&quot;);
+var nmosmodel = new Mosfet1Model(&quot;example&quot;);
+nmosmodel.SetParameter(&quot;kp&quot;, 150.0e-3);
+
+// Build the circuit
+var ckt = new Circuit(
+    new VoltageSource(&quot;Vgs&quot;, &quot;g&quot;, &quot;0&quot;, 0),
+    new VoltageSource(&quot;Vds&quot;, &quot;d&quot;, &quot;0&quot;, 0),
+    nmosmodel,
+    nmos
+    );
+
+// Sweep the base current and vce voltage
+var dc = new DC(&quot;DC 1&quot;, new[]
+{
+    new ParameterSweep(&quot;Vgs&quot;, new LinearSweep(0, 3, 0.2)),
+    new ParameterSweep(&quot;Vds&quot;, new LinearSweep(0, 5, 0.1)),
+});
+
+// Export the collector current
+var currentExport = new RealPropertyExport(dc, &quot;M1&quot;, &quot;id&quot;);
+
+// Run the simulation
+dc.ExportSimulationData += (sender, args) =&gt;
+{
+    var vgsVoltage = dc.GetCurrentSweepValue()[0];
+    var vdsVoltage = dc.GetCurrentSweepValue()[1];
+    var current = currentExport.Value;
+};
+dc.Run(ckt);
+</code></pre><p>First we build our NMOS transistor <em>M1</em>. For this we need an <strong><a class="xref" href="../../api/SpiceSharp.Components.IComponent.html">IComponent</a></strong> implementation for a mosfet, which we can connect to nodes in the circuit. Most components also need a reference to a model (another <strong><a class="xref" href="../../api/SpiceSharp.Entities.IEntity.html">IEntity</a></strong> in the same circuit) to function properly. Models typically describe general common properties (eg. threshold voltage, transconducance gain, etc.) while components will typically describe behavior on a device-by-device basis (eg. transistor width and length, device temperature, etc.).</p>
+<p>In our case, Spice# provides us with a component that implements the model equations of a transistor, called <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfet1.html">Mosfet1</a></strong>, which also needs a model of the type <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></strong>. This model is identical to Spice&#39;s mosfet LEVEL=1 model.</p>
+<p>Every entity can have one or more parameters, which our stored in parameter sets. The parameters can be accessed directly, or using their given name in conjunction with the <strong><a class="xref" href="../../api/SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_SetParameter__1_System_String___0_">SetParameter</a></strong> method. The mosfet&#39;s <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfets.Parameters.html">Parameters</a></strong> and <strong><a class="xref" href="../../api/SpiceSharp.Components.Mosfets.Level1.ModelParameters.html">ModelParameters</a></strong> contain all the available parameters, including their given names which are defined by a <strong><a class="xref" href="../../api/SpiceSharp.ParameterSets.ParameterNameAttribute.html">ParameterName</a></strong> attribute. Do keep in mind that parameter sets can extend other parameter sets that also contain parameters! Use the API and the GitHub repository to your advantage to find out which parameters you can change.</p>
+<p>After running and plotting the data (plotting is not supported by the core package) we get:</p>
+<p align="center"><img src="images/example_DCgraph.svg"></p>
+
+<p>If we wanted to implement the same simulation in the original Spice simulator, we would provide the following netlist:</p>
+<pre><code>NMOS biasing example
+
+.MODEL example NMOS(Kp=150m)
+M1 d g 0 0
+Vgs g 0 0
+Vds d 0 0
+
+.DC Vds 0 5 0.1 Vgs 0 3 0.2
+
+* Export voltages/currents/...
+
+.END
+</code></pre><p>This netlist would be parsed, executed, and the results are then written to a file which can then be processed. Spice# is a <em>library</em>, and you have access to the data during execution. For example, you could change parts of the simulation during runtime, you could automate designs, and you can freely choose during the simulation which data you want to use and ignore.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

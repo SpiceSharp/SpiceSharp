@@ -1,7 +1,7 @@
 - name: Home
   href: index.md
 - name: Tutorial
-  href: articles/tutorial/gettingstarted.md
+  href: articles/tutorials/gettingstarted.md
 - name: API
   href: SpiceSharp/obj/api/
   topicHref: api/index.md

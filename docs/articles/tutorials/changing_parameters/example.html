@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Example </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Example ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="example">Example</h1>
+
+<p>In this section we will take a look at one way of changing a parameter <em>during</em> a transient simulation. For this, we&#39;ll use the following circuit.</p>
+<p align="center"><img width="250px" src="images/example_lpf_resdiv.svg"></p>
+
+<pre><code class="lang-csharp" name="Circuit">// Build a circuit
+var ckt = new Circuit(
+    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e3),
+    new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 1.0e3),
+    new Capacitor(&quot;C1&quot;, &quot;out&quot;, &quot;0&quot;, 0.5e-9),
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, new Pulse(0, 5, 1e-6, 1e-6, 1e-6, 1e-5, 2e-5))
+);
+</code></pre><p>We also create our transient simulation as we normally would.</p>
+<pre><code class="lang-csharp" name="Circuit">// Create the transient analysis and exports
+var tran = new Transient(&quot;tran&quot;, 1e-6, 10e-5);
+var outputExport = new RealVoltageExport(tran, &quot;out&quot;);
+tran.ExportSimulationData += (sender, args) =&gt;
+{
+    var time = args.Time;
+    var output = outputExport.Value;
+};
+</code></pre><p>So far so good. Nothing has really changed from before. We will now subscribe to the necessary events to modify the value of <em>R2</em>. We want it to change linearly with time from (1k\Omega) to (11k\Omega).</p>
+<h2 id="the-biasing-behavior-of-a-resistor">The biasing behavior of a resistor</h2>
+<p>The resistance of a resistor can be changed using the <strong><a class="xref" href="../../../api/SpiceSharp.Components.Resistors.Parameters.html">Parameters</a></strong> of that resistor. But we cannot change the parameters directly from the entity! In other words, the following will fail to change the resistance for the simulation.</p>
+<pre><code class="lang-csharp">ckt.Object[&quot;R1&quot;].SetParameter(newResistance);
+</code></pre><p>This is because the entity is only in charge of creating behaviors for the simulation. After these behaviors are created, the entity has no say anymore in what happens.</p>
+<p>The reason why it won&#39;t work, is that the resistor&#39;s <strong><a class="xref" href="../../../api/SpiceSharp.Components.Resistors.Temperature.html">Temperature</a></strong> behavior will derive a conductance property that is used by the biasing behavior. So to have any effect, we:</p>
+<ol>
+<li>change the resistance property in the <strong><a class="xref" href="../../../api/SpiceSharp.Components.Resistors.Parameters.html">Parameters</a></strong>.</li>
+<li>call the <em>Temperature</em> method of the <strong><a class="xref" href="../../../api/SpiceSharp.Components.Resistors.Temperature.html">Temperature</a></strong> behavior.</li>
+</ol>
+<p>If you need to do something similar to other components, it is recommended to take a look at the source code to find out where the parameter is being used.</p>
+<h3 id="requesting-the-necessary-parameters-and-behaviors">Requesting the necessary parameters and behaviors</h3>
+<p>Parameters can potentially be cloned to make them independent of behaviors running in other simulations, so we prefer to ask our simulation for the parameters instead of the original entity. All behaviors will be created during setup, so we can use the <strong><a class="xref" href="../../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_AfterSetup">AfterSetup</a></strong> event to retrieve our parameters.</p>
+<pre><code class="lang-csharp" name="Extract parameters and behaviors">// Now we need to make sure we have a reference to both the base parameters and temperature behavior
+// of the resistor
+SpiceSharp.Components.Resistors.Parameters bp = null;
+SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
+tran.AfterSetup += (sender, args) =&gt;
+{
+    var eb = tran.EntityBehaviors[&quot;R2&quot;];
+    eb.TryGetValue(out tb);
+    eb.TryGetParameterSet(out bp);
+};
+</code></pre><h3 id="updating-the-parameters">Updating the parameters</h3>
+<p>We need to update the resistance every time the simulation is getting ready to load the Y-matrix and RHS-vector. In other words, by registering to the <strong><a class="xref" href="../../../api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BeforeLoad">BeforeLoad</a></strong> event, we can be sure that the resistance is always updated with the latest value.</p>
+<pre><code class="lang-csharp" name="Change parameter">// Before loading the resistor, let&#39;s change its value first!
+tran.BeforeLoad += (sender, args) =&gt;
+{
+    // First we need to figure out the timepoint that will be loaded
+    var time = tran.GetState&lt;IIntegrationMethod&gt;().Time;
+
+    // Then we need to calculate the resistance for &quot;R2&quot;
+    var resistance = 1.0e3 * (1 + time * 1.0e5);
+
+    // Now let&#39;s update the parameter
+    bp.Resistance = resistance;
+    tb.Temperature();
+};
+
+// Run the simulation
+tran.Run(ckt);
+</code></pre><p>Combining all these code snippets finally results in the following simulation output.</p>
+<p align="center"><img src="images/example_lpf_resdiv_graph.svg"></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

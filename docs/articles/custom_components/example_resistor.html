@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Example of MNA - Resistors </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Example of MNA - Resistors ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="example-of-mna---resistors">Example of MNA - Resistors</h1>
+
+<p>A resistor follows Ohm&#39;s law. Let us assume that the resistor is connected between two nodes A and B.</p>
+<p align="center"><img src="images/example_circuit_mna_res.svg" width="100px" alt="Resistor definition"></p>
+
+<p>Then Ohm&#39;s law dictates that</p>
+<p>$$\frac{v_A - v_B}{R} = i_R$$</p>
+<p>The resistor current (i_R) will flow <em>out</em> of node A, and <em>into</em> node B, so we have contributions to row A and row B:</p>
+<p>$$
+\begin{aligned}
+f_A(...,v_A,...,v_B,...) = +i_R &amp;=&amp; \frac{1}{R}v_A &amp;-\frac{1}{R}v_B\
+f_B(...,v_A,...,v_B,...) = -i_R &amp;=&amp; -\frac{1}{R}v_A &amp;+\frac{1}{R}v_B 
+\end{aligned}$$</p>
+<p>Our convention is that a current flowing <em>out</em> of a node is <em>positive</em>. Now we can compute the contributions to the <em>Y-matrix</em>:</p>
+<p>$$\begin{aligned}
+Y_{A,A} &amp;= \frac{\partial f_A}{\partial v_A} = \frac{1}{R}\
+Y_{A,B} &amp;= \frac{\partial f_A}{\partial v_B} = -\frac{1}{R}\
+Y_{B,A} &amp;= \frac{\partial f_B}{\partial v_A} = -\frac{1}{R}\
+Y_{B,B} &amp;= \frac{\partial f_B}{\partial v_B} = \frac{1}{R}
+\end{aligned}$$</p>
+<p>All other <em>Y-matrix</em> contributions are 0. Similarly, we calculate the contributions to the <em>RHS vector</em>:</p>
+<p>$$\begin{aligned}
+RHS_A &amp;= f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_A\pmb x^{(k)}\
+&amp;=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right )\
+&amp;=0\
+RHS_B &amp;= f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_B\pmb x^{(k)}\
+&amp;=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right )\
+&amp;=0
+\end{aligned}$$</p>
+<p>The first and second terms for the RHS vector cancel each other out. This turns out to be a <em>general property of linear components</em>. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need <em>one</em> iteration to find the right solution <em>if we only have linear components</em>. Once a nonlinear component is introduced, a single iteration will not be sufficient anymore.</p>
+<p>To summarize:</p>
+<ul>
+<li>During the creation of the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> for a resistor, 4 Y-matrix elements are allocated: (Y_{A,A}, Y_{A,B}, Y_{B,A}, Y_{B,B}). It does not need RHS vector elements because they are always 0.</li>
+<li>When loading the Y-matrix, the behavior will add the following values to these matrix elements.</li>
+</ul>
+<p>$$\begin{aligned}
+Y_{A,A} &amp;+= \frac{1}{R} \
+Y_{A,B} &amp;-= \frac{1}{R} \
+Y_{B,A} &amp;-= \frac{1}{R} \
+Y_{B,B} &amp;+= \frac{1}{R}
+\end{aligned}$$</p>
+<ul>
+<li>The simulator will give all other components in the circuit a chance to load the matrix with their contributions.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -16,7 +16,7 @@
   "build": {
     "content": [
       {
-        "files": [ "api/*.yml" ],
+        "files": [ "api/*.yml", "*.yml" ],
         "src": "SpiceSharp/bin"
       },
       {
@@ -40,14 +40,14 @@
         "exclude": [ "docs/**" ]
       }
     ],
-	"globalMetadata" : {
-      "_appFaviconPath": "api/images/favicon.ico",
-      "_appLogoPath": "api/images/favicon.svg",
-      "_disableContribution": "true"
-	},
+    "globalMetadata" : {
+        "_appFaviconPath": "api/images/favicon.ico",
+        "_appLogoPath": "api/images/favicon.svg",
+        "_disableContribution": "true"
+    },
     "dest": "docs",
     "maxParallelism": 4,
-    "template": [ "default", "material/material" ],
-	"force": true
+    "template": [ "default", "templates/material" ],
+    "force": true
   }
 }

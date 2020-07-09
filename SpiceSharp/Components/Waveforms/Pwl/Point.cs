@@ -85,7 +85,12 @@
             return !(left == right);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string that represents the current point.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
         public override string ToString()
         {
             return "({0}, {1})".FormatString(Time, Value);

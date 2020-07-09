@@ -1,0 +1,588 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SubcircuitRules
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SubcircuitRules
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules">
+  
+  
+  <h1 id="SpiceSharp_Components_Subcircuits_SubcircuitRules" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules" class="text-break">Class SubcircuitRules
+  </h1>
+  <div class="markdown level0 summary"><p>A wrapper for handling rules with subcircuits.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><span class="xref">SubcircuitRules</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Validation.IRule.html">IRule</a>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.Subcircuits.html">SpiceSharp.Components.Subcircuits</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class SubcircuitRules : ParameterSetCollection, IRules, IParameterSetCollection, IParameterSet, ICloneable, IEnumerable&lt;IRule&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules__ctor_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules__ctor_SpiceSharp_Validation_IRules_SpiceSharp_Validation_ComponentRuleParameters_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.#ctor(SpiceSharp.Validation.IRules,SpiceSharp.Validation.ComponentRuleParameters)">SubcircuitRules(IRules, ComponentRuleParameters)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitRules.html">SubcircuitRules</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SubcircuitRules(IRules parent, ComponentRuleParameters parameters)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></td>
+        <td><span class="parametername">parent</span></td>
+        <td><p>The parent.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Validation.ComponentRuleParameters.html">ComponentRuleParameters</a></td>
+        <td><span class="parametername">parameters</span></td>
+        <td><p>The parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">parent</code> or <code data-dev-comment-type="paramref" class="paramref">parameters</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">parent</code> does not define a <a class="xref" href="SpiceSharp.Validation.ComponentRuleParameters.html">ComponentRuleParameters</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_ParameterSets_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.ParameterSets*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_ParameterSets" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.ParameterSets">ParameterSets</h4>
+  <div class="markdown level1 summary"><p>Gets all the parameter sets of this instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;IParameterSet&gt; ParameterSets { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>&gt;</td>
+        <td><p>The parameter sets.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a></div>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_ViolationCount_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.ViolationCount*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_ViolationCount" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.ViolationCount">ViolationCount</h4>
+  <div class="markdown level1 summary"><p>Gets the number of rule violations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ViolationCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of rule violations.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_Violations_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.Violations*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_Violations" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.Violations">Violations</h4>
+  <div class="markdown level1 summary"><p>Gets the violated rules.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;IRuleViolation&gt; Violations { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Validation.IRuleViolation.html">IRuleViolation</a>&gt;</td>
+        <td><p>The violated rules.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_GetEnumerator_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_GetEnumerator" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;IRule&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="SpiceSharp.Validation.IRule.html">IRule</a>&gt;</td>
+        <td><p>An enumerator that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_GetParameterSet_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.GetParameterSet*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_GetParameterSet__1" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.GetParameterSet``1">GetParameterSet&lt;P&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets the parameter set of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override P GetParameterSet&lt;P&gt;()
+    where P : IParameterSet</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">P</span></td>
+        <td><p>The parameter set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">P</span></td>
+        <td><p>The parameter set type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
+        <td><p>Thrown if the parameter set could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_GetRules_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.GetRules*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_GetRules__1" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.GetRules``1">GetRules&lt;R&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets all rules of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;R&gt; GetRules&lt;R&gt;()
+    where R : IRule</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;R&gt;</td>
+        <td><p>The rules of the specified type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">R</span></td>
+        <td><p>The rule type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_Reset_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.Reset*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_Reset" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Resets all the rules.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_TryGetParameterSet_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.TryGetParameterSet*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_TryGetParameterSet__1___0__" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.TryGetParameterSet``1(``0@)">TryGetParameterSet&lt;P&gt;(out P)</h4>
+  <div class="markdown level1 summary"><p>Tries to get the parameter set of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool TryGetParameterSet&lt;P&gt;(out P value)
+    where P : IParameterSet</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">P</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The parameter set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the parameter set was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">P</span></td>
+        <td><p>The parameter set type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.ParameterSets.ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</span></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_SubcircuitRules_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_SubcircuitRules_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.Components.Subcircuits.SubcircuitRules.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through a collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td><p>An <span class="xref">System.Collections.IEnumerator</span> object that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

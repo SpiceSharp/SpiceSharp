@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Biasing.LocalSimulationState
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Biasing.LocalSimulationState
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState">
+  
+  
+  <h1 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState" class="text-break">Class Biasing.LocalSimulationState
+  </h1>
+  <div class="markdown level0 summary"><p>An <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a> that can be used with a local solver and solution.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html">SubcircuitSolverState</a>&lt;<span class="xref">System.Double</span>, <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a>&gt;</div>
+    <div class="level2"><a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html">LocalSolverState</a>&lt;<span class="xref">System.Double</span>, <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a>&gt;</div>
+    <div class="level3"><span class="xref">Biasing.LocalSimulationState</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISolverSimulationState-1.html">ISolverSimulationState</a>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IVariableFactory-1.html">IVariableFactory</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IVariableDictionary-1.html">IVariableDictionary</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyDictionary</span>&lt;<span class="xref">System.String</span>, <a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IReadOnlyCollection</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.String</span>, <a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Double</span>&gt;&gt;&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.String</span>, <a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Double</span>&gt;&gt;&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_LocalSolution">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.LocalSolution</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Initialize_System_Collections_Generic_IReadOnlyList_SpiceSharp_Components_Subcircuits_Bridge_System_String___">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Initialize(IReadOnlyList&lt;Bridge&lt;String&gt;&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Apply">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Apply()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Update">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Update()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_GetSharedVariable_System_String_">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.GetSharedVariable(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_CreatePrivateVariable_System_String_SpiceSharp_Simulations_Variables_IUnit_">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.CreatePrivateVariable(String, IUnit)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Solver">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Solver</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Solution">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Solution</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Map">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Map</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Updated">LocalSolverState&lt;Double, IBiasingSimulationState&gt;.Updated</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Name">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Parent">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Parent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Add_System_String_SpiceSharp_Simulations_IVariable__0__">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Add(String, IVariable&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_ContainsKey_System_String_">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.ContainsKey(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_TryGetValue_System_String_SpiceSharp_Simulations_IVariable__0___">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.TryGetValue(String, IVariable&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_GetEnumerator">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.GetEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_System_Collections_IEnumerable_GetEnumerator">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.IEnumerable.GetEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Comparer">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Comparer</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Item_System_String_">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Item[String]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Keys">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Keys</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Values">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Values</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitSolverState-2.html#SpiceSharp_Components_Subcircuits_SubcircuitSolverState_2_Count">SubcircuitSolverState&lt;Double, IBiasingSimulationState&gt;.Count</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.Subcircuits.Simple.html">SpiceSharp.Components.Subcircuits.Simple</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected class LocalSimulationState : LocalSolverState&lt;double, IBiasingSimulationState&gt;, IBiasingSimulationState, ISolverSimulationState&lt;double&gt;, ISimulationState, IVariableFactory&lt;IVariable&lt;double&gt;&gt;, IVariableDictionary&lt;IVariable&lt;double&gt;&gt;, IReadOnlyDictionary&lt;string, IVariable&lt;double&gt;&gt;, IReadOnlyCollection&lt;KeyValuePair&lt;string, IVariable&lt;double&gt;&gt;&gt;, IEnumerable&lt;KeyValuePair&lt;string, IVariable&lt;double&gt;&gt;&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState__ctor_" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState__ctor_System_String_SpiceSharp_Simulations_IBiasingSimulationState_SpiceSharp_Algebra_ISparsePivotingSolver_System_Double__" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.#ctor(System.String,SpiceSharp.Simulations.IBiasingSimulationState,SpiceSharp.Algebra.ISparsePivotingSolver{System.Double})">LocalSimulationState(String, IBiasingSimulationState, ISparsePivotingSolver&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.html">Biasing.LocalSimulationState</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LocalSimulationState(string name, IBiasingSimulationState parent, ISparsePivotingSolver&lt;double&gt; solver)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the subcircuit instance.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></td>
+        <td><span class="parametername">parent</span></td>
+        <td><p>The parent simulation state.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparsePivotingSolver-1.html">ISparsePivotingSolver</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">solver</span></td>
+        <td><p>The solver.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code>, <code data-dev-comment-type="paramref" class="paramref">parent</code> or <code data-dev-comment-type="paramref" class="paramref">solver</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_OldSolution_" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.OldSolution*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_OldSolution" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.OldSolution">OldSolution</h4>
+  <div class="markdown level1 summary"><p>Gets the solution vector of the last computed iteration.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IVector&lt;double&gt; OldSolution { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>The solution to the last iteration.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_OldSolution_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This vector is needed for determining convergence.</p>
+</div>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_Initialize_" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.Initialize*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_Initialize_System_Collections_Generic_IReadOnlyList_SpiceSharp_Components_Subcircuits_Bridge_System_String___" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.Initialize(System.Collections.Generic.IReadOnlyList{SpiceSharp.Components.Subcircuits.Bridge{System.String}})">Initialize(IReadOnlyList&lt;Bridge&lt;String&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes the specified shared.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Initialize(IReadOnlyList&lt;Bridge&lt;string&gt;&gt; nodes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<a class="xref" href="SpiceSharp.Components.Subcircuits.Bridge-1.html">Bridge</a>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td><span class="parametername">nodes</span></td>
+        <td><p>The node map.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.Components.Subcircuits.LocalSolverState&lt;System.Double, SpiceSharp.Simulations.IBiasingSimulationState&gt;.Initialize(System.Collections.Generic.IReadOnlyList&lt;SpiceSharp.Components.Subcircuits.Bridge&lt;System.String&gt;&gt;)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">nodes</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_Update_" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.Update*"></a>
+  <h4 id="SpiceSharp_Components_Subcircuits_Simple_Biasing_LocalSimulationState_Update" data-uid="SpiceSharp.Components.Subcircuits.Simple.Biasing.LocalSimulationState.Update">Update()</h4>
+  <div class="markdown level1 summary"><p>Updates the state with the new solution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Update()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.Components.Subcircuits.LocalSolverState&lt;System.Double, SpiceSharp.Simulations.IBiasingSimulationState&gt;.Update()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISolverSimulationState-1.html">ISolverSimulationState&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IVariableFactory-1.html">IVariableFactory&lt;V&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IVariableDictionary-1.html">IVariableDictionary&lt;V&gt;</a>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyDictionary&lt;TKey, TValue&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IReadOnlyCollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Components.Subcircuits.LocalSolverState-2.html">LocalSolverState</a>&lt;T, S&gt;</div>
+      <div><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

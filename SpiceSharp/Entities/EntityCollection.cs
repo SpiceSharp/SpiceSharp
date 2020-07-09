@@ -202,7 +202,11 @@ namespace SpiceSharp.Entities
                 Add(entity);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Copies the elements of the collection to an array, starting at a particular array index.
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="arrayIndex">The array index.</param>
         void ICollection<IEntity>.CopyTo(IEntity[] array, int arrayIndex)
         {
             array.ThrowIfNull(nameof(array));

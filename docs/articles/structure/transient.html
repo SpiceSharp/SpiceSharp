@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Transient analysis </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Transient analysis ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="transient-analysis">Transient analysis</h1>
+
+<p>A transient analysis a pretty complex type of simulation that tries to model all effects in time. It does so by <em>discretizing</em> the timepoints. Like many other simulations, it starts out by calculating the operating point, possibly including <strong>initial conditions</strong>. It then keeps trying to advance in time by calculating the solution at incremental timesteps.</p>
+<p align="center"><img src="images/transient.svg"></p>
+
+<h2 id="integration-methods-and-timestep-control">Integration methods and timestep control</h2>
+<p>Time-dependent calculations often involve integrating or differentiating quantities. This is handled by an <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IIntegrationMethod.html">IIntegrationMethod</a></strong> provided by the transient simulation to behaviors as a simulation state.</p>
+<p>The integration method often tries to make the timesteps longer to reduce the number of data points and save on computation time. However, the integration method can still reduce the timestep for a number of reasons:</p>
+<ul>
+<li>The local truncation error (error made by using discrete timepoints) might become too large if the timestep is not controlled.</li>
+<li>A solution cannot be found (<strong><a href="iterate.html">iterating</a></strong> doesn&#39;t converge to a solution).</li>
+<li>Some entities in the circuit have set a <strong>breakpoint</strong> indicating a harshly changing voltage/current. This is the case for example in pulsed sources where the value changes abruptly at the rising and falling edges.</li>
+</ul>
+<h2 id="frequently-encountered-issues">Frequently encountered issues</h2>
+<h3 id="the-analysis-throws-a-timesteptoosmallexceptionxrefspicesharptimesteptoosmallexception">The analysis throws a <strong><a class="xref" href="../../api/SpiceSharp.TimestepTooSmallException.html">TimestepTooSmallException</a></strong></h3>
+<p>The circuit is unable to converge or the solution is varying too abruptly at some timepoint. Check for any harshly nonlinear components and try avoiding these situations. Switching elements are known to lead to problems.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -173,7 +173,12 @@ namespace SpiceSharp.Components
             Frequency = frequency;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string that represents the current sine waveform.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current sine waveform.
+        /// </returns>
         public override string ToString()
         {
             return "sine({0} {1} {2} {3} {4} {5})".FormatString(Offset, Amplitude, Frequency, Delay, Theta, Phase);

@@ -53,8 +53,6 @@ namespace SpiceSharpTest.Examples
                 var resistance = 1.0e3 * (1 + time * 1.0e5);
 
                 // Now let's update the parameter
-                if (bp == null || tb == null)
-                    return;
                 bp.Resistance = resistance;
                 tb.Temperature();
             };

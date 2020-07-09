@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Transient analysis </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Transient analysis ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="transient-analysis">Transient analysis</h1>
+
+<p>A transient analysis will attempt to include as many effects possible. The unfortunate consequence is that this type of simulation is also by far the slowest. Luckily, it is relatively straightforward to use.</p>
+<p>Let&#39;s use our low-pass RC filter from before and apply a <em>pulsed</em> voltage source.</p>
+<p align="center"><img src="images/example_Transient.svg"></p>
+
+<pre><code class="lang-csharp" name="Circuit">// Build the circuit
+var ckt = new Circuit(
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, new Pulse(0.0, 5.0, 0.01, 1e-3, 1e-3, 0.02, 0.04)),
+    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 10.0e3),
+    new Capacitor(&quot;C1&quot;, &quot;out&quot;, &quot;0&quot;, 1e-6)
+);
+
+// Create the simulation
+var tran = new Transient(&quot;Tran 1&quot;, 1e-3, 0.1);
+
+// Make the exports
+var inputExport = new RealVoltageExport(tran, &quot;in&quot;);
+var outputExport = new RealVoltageExport(tran, &quot;out&quot;);
+
+// Simulate
+tran.ExportSimulationData += (sender, args) =&gt;
+{
+    var input = inputExport.Value;
+    var output = outputExport.Value;
+};
+tran.Run(ckt);
+</code></pre><p>The voltage source now is passed a <strong><a class="xref" href="../../api/SpiceSharp.Components.Pulse.html">Pulse</a></strong> object that will calculate the voltage in time for us.</p>
+<p>The <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Transient.html">Transient</a></strong> simulation expects a <em>timestep</em> that will be used to calculate the initial timestep for the simulation, and a <em>final time</em> that tells the analysis the last time point to simulate.</p>
+<p>The resulting waveforms look as follows:</p>
+<p align="center"><img src="images/example_TransientGraph.svg"></p>
+
+<p>Note that Spice 3f5 will simulate the same thing if you feed it the following netlist.</p>
+<pre><code>Transient example
+
+V1 in 0 PULSE(0 5 10m 1m 1m 20m 40m)
+R1 in out 10k
+C1 out 0 1u
+
+.TRAN 1m 0.1
+
+* Export voltages/currents/etc.
+
+.END
+</code></pre></article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

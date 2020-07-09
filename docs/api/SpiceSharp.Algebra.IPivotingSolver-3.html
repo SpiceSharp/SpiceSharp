@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IPivotingSolver&lt;M, V, T&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IPivotingSolver&lt;M, V, T&gt;
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Algebra.IPivotingSolver`3">
+  
+  
+  <h1 id="SpiceSharp_Algebra_IPivotingSolver_3" data-uid="SpiceSharp.Algebra.IPivotingSolver`3" class="text-break">Interface IPivotingSolver&lt;M, V, T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>An <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a> that implements mechanisms for pivoting. This means
+that the solver may reorder the internal matrix and right hand side vector.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Solve_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.Solve(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_SolveTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.SolveTransposed(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Factor">ISolver&lt;T&gt;.Factor()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Reset">ISolver&lt;T&gt;.Reset()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Clear">ISolver&lt;T&gt;.Clear()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Degeneracy">ISolver&lt;T&gt;.Degeneracy</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">ISolver&lt;T&gt;.Size</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_IsFactored">ISolver&lt;T&gt;.IsFactored</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Item_System_Int32_System_Int32_">ISolver&lt;T&gt;.Item[Int32, Int32]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Item_SpiceSharp_Algebra_MatrixLocation_">ISolver&lt;T&gt;.Item[MatrixLocation]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Item_System_Int32_">ISolver&lt;T&gt;.Item[Int32]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_GetParameterSet__1">IParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_TryGetParameterSet__1___0__">IParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_ParameterSets">IParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_SetParameter__1_System_String___0_">IParameterSet.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_TrySetParameter__1_System_String___0_">IParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_GetProperty__1_System_String_">IParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_TryGetProperty__1_System_String___0__">IParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_CreateParameterSetter__1_System_String_">IParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_CreatePropertyGetter__1_System_String_">IParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_Clone">ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Algebra.html">SpiceSharp.Algebra</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Algebra_IPivotingSolver_3_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IPivotingSolver&lt;M, V, T&gt; : ISolver&lt;T&gt;, IParameterSetCollection, IParameterSet, ICloneable where M : IMatrix&lt;T&gt; where V : IVector&lt;T&gt;</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">M</span></td>
+        <td><p>The matrix type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">V</span></td>
+        <td><p>The vector type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The base value type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Algebra_IPivotingSolver_3_NeedsReordering_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.NeedsReordering*"></a>
+  <h4 id="SpiceSharp_Algebra_IPivotingSolver_3_NeedsReordering" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.NeedsReordering">NeedsReordering</h4>
+  <div class="markdown level1 summary"><p>Gets or sets a value indicating whether the solver needs to be reordered all the way from the start.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool NeedsReordering { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the solver needs reordering; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SpiceSharp_Algebra_IPivotingSolver_3_NeedsReordering_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>If this flag is false, the solver will still reorder when using <a class="xref" href="SpiceSharp.Algebra.IPivotingSolver-3.html#SpiceSharp_Algebra_IPivotingSolver_3_OrderAndFactor">OrderAndFactor()</a>, but
+it will try to stay away from reordering as long as possible. This flag will force the solver to
+immediately start reordering.</p>
+</div>
+  <a id="SpiceSharp_Algebra_IPivotingSolver_3_PivotSearchReduction_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.PivotSearchReduction*"></a>
+  <h4 id="SpiceSharp_Algebra_IPivotingSolver_3_PivotSearchReduction" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.PivotSearchReduction">PivotSearchReduction</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the pivot search reduction. This makes sure that pivots cannot
+be chosen from the last N rows. The default, 0, lets the pivot strategy to
+choose from the whole matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int PivotSearchReduction { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The pivot search reduction.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the value is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Algebra_IPivotingSolver_3_ExternalToInternal_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.ExternalToInternal*"></a>
+  <h4 id="SpiceSharp_Algebra_IPivotingSolver_3_ExternalToInternal_SpiceSharp_Algebra_MatrixLocation_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.ExternalToInternal(SpiceSharp.Algebra.MatrixLocation)">ExternalToInternal(MatrixLocation)</h4>
+  <div class="markdown level1 summary"><p>Maps an external matrix location to an internal one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">MatrixLocation ExternalToInternal(MatrixLocation indices)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><span class="parametername">indices</span></td>
+        <td><p>The external matrix location.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><p>The internal matrix location.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_IPivotingSolver_3_InternalToExternal_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.InternalToExternal*"></a>
+  <h4 id="SpiceSharp_Algebra_IPivotingSolver_3_InternalToExternal_SpiceSharp_Algebra_MatrixLocation_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.InternalToExternal(SpiceSharp.Algebra.MatrixLocation)">InternalToExternal(MatrixLocation)</h4>
+  <div class="markdown level1 summary"><p>Maps an internal matrix location to an external one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">MatrixLocation InternalToExternal(MatrixLocation indices)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><span class="parametername">indices</span></td>
+        <td><p>The internal matrix location.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><p>The external matrix location.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_IPivotingSolver_3_OrderAndFactor_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.OrderAndFactor*"></a>
+  <h4 id="SpiceSharp_Algebra_IPivotingSolver_3_OrderAndFactor" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.OrderAndFactor">OrderAndFactor()</h4>
+  <div class="markdown level1 summary"><p>Order and factor the equation matrix and right hand side vector.
+This method will reorder the matrix as it sees fit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int OrderAndFactor()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of rows that were successfully eliminated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_IPivotingSolver_3_Precondition_" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.Precondition*"></a>
+  <h4 id="SpiceSharp_Algebra_IPivotingSolver_3_Precondition_SpiceSharp_Algebra_PreconditioningMethod__0__1__2__" data-uid="SpiceSharp.Algebra.IPivotingSolver`3.Precondition(SpiceSharp.Algebra.PreconditioningMethod{`0,`1,`2})">Precondition(PreconditioningMethod&lt;M, V, T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Preconditions the solver matrix and right hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Precondition(PreconditioningMethod&lt;M, V, T&gt; method)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.PreconditioningMethod-3.html">PreconditioningMethod</a>&lt;M, V, T&gt;</td>
+        <td><span class="parametername">method</span></td>
+        <td><p>The method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

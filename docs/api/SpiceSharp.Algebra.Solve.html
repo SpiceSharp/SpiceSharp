@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Algebra.Solve
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -77,6 +78,16 @@
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
   </h3>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html">DenseLUSolver&lt;T&gt;</a></h4>
+      <section><p>An base class for dense linear systems that can be solved using LU decomposition.
+Pivoting is controlled by the </p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.ReorderedMatrix.html">DenseLUSolver&lt;T&gt;.ReorderedMatrix</a></h4>
+      <section><p>A matrix that keeps everything synchronized for our solver.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.ReorderedVector.html">DenseLUSolver&lt;T&gt;.ReorderedVector</a></h4>
+      <section><p>A vector that keeps everything synchronized for our solver.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Algebra.Solve.Markowitz-1.html">Markowitz&lt;T&gt;</a></h4>
       <section><p>A search strategy based on methods outlined by Markowitz.</p>
 </section>
@@ -97,11 +108,32 @@ used for implementing the strategy outlined by Markowitz.</p>
       <section><p>Markowitz-count based strategy for finding a pivot. This strategy will search for 
 singletons (rows or columns with only one element), these can be found rather cheaply.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.PivotStrategy-1.html">PivotStrategy&lt;T&gt;</a></h4>
-      <section><p>A pivot strategy used by a <a class="xref" href="SpiceSharp.Algebra.Solver-1.html">Solver&lt;T&gt;</a></p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html">PivotingSolver&lt;M, V, T&gt;</a></h4>
+      <section><p>A standard implementation for pivoting solvers.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.SparseLUSolver-1.html">SparseLUSolver&lt;T&gt;</a></h4>
+      <section><p>A base class for sparse linear systems that can be solved using LU decomposition.
+Pivoting is controlled by the <a class="xref" href="SpiceSharp.Algebra.Solve.SparseLUSolver-1.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_Parameters">Parameters</a> property. The implementation
+is optimized for sparse matrices through the <a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix&lt;T&gt;</a> interface.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedMatrix.html">SparseLUSolver&lt;T&gt;.ReorderedMatrix</a></h4>
+      <section><p>A sparse matrix that keeps both the matrix and right hand side vector synchronized for our solver.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedVector.html">SparseLUSolver&lt;T&gt;.ReorderedVector</a></h4>
+      <section><p>A sparse vector that keeps both the matrix and right hand side vector synchronized for our solver.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.Solve.Translation.html">Translation</a></h4>
       <section><p>This class can map external to internal indices and vice-versa.</p>
+</section>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.Pivot-1.html">Pivot&lt;P&gt;</a></h4>
+      <section><p>Describes a pivot for reordering solvers.</p>
+</section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Solve.PivotInfo.html">PivotInfo</a></h4>
+      <section><p>Kinds of pivots.</p>
 </section>
 </article>
           </div>

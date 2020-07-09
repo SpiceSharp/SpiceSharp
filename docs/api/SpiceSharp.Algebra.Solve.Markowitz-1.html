@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Markowitz&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,16 +80,45 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Algebra.Solve.PivotStrategy-1.html">PivotStrategy</a>&lt;T&gt;</div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
     <div class="level2"><span class="xref">Markowitz&lt;T&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotStrategy-1.html#SpiceSharp_Algebra_Solve_PivotStrategy_1_RelativePivotThreshold">PivotStrategy&lt;T&gt;.RelativePivotThreshold</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotStrategy-1.html#SpiceSharp_Algebra_Solve_PivotStrategy_1_AbsolutePivotThreshold">PivotStrategy&lt;T&gt;.AbsolutePivotThreshold</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SetParameter__1_System_String___0_">ParameterSet.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TrySetParameter__1_System_String___0_">ParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_GetProperty__1_System_String_">ParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TryGetProperty__1_System_String___0__">ParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreateParameterSetter__1_System_String_">ParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreatePropertyGetter__1_System_String_">ParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -116,7 +146,8 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_Solve_Markowitz_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Markowitz&lt;T&gt; : PivotStrategy&lt;T&gt; where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">[GeneratedParameters]
+public class Markowitz&lt;T&gt; : ParameterSet, IParameterSet, ICloneable</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -137,19 +168,97 @@
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1__ctor_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.#ctor*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1__ctor" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.#ctor">Markowitz()</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1__ctor_System_Func__0_System_Double__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.#ctor(System.Func{`0,System.Double})">Markowitz(Func&lt;T, Double&gt;)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.Solve.Markowitz-1.html">Markowitz&lt;T&gt;</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Markowitz()</code></pre>
+    <pre><code class="lang-csharp hljs">public Markowitz(Func&lt;T, double&gt; magnitude)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;T, <span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">magnitude</span></td>
+        <td><p>The function for turning elements into a scalar.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">magnitude</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
+  <a id="SpiceSharp_Algebra_Solve_Markowitz_1_AbsolutePivotThreshold_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.AbsolutePivotThreshold*"></a>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_AbsolutePivotThreshold" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.AbsolutePivotThreshold">AbsolutePivotThreshold</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the absolute threshold for choosing a pivot.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pivtol&quot;)]
+[ParameterInfo(&quot;The absolute threshold for validating pivots&quot;)]
+[GreaterThanOrEquals(0)]
+public double AbsolutePivotThreshold { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The absolute pivot threshold.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the value is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Magnitude_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Magnitude*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Magnitude" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Magnitude">Magnitude</h4>
-  <div class="markdown level1 summary"><p>Gets the magnitude method.</p>
+  <div class="markdown level1 summary"><p>Gets the magnitude.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -167,7 +276,52 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Func</span>&lt;T, <span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><p>The magnitude.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_Solve_Markowitz_1_RelativePivotThreshold_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.RelativePivotThreshold*"></a>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_RelativePivotThreshold" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.RelativePivotThreshold">RelativePivotThreshold</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the relative threshold for choosing a pivot.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pivrel&quot;)]
+[ParameterInfo(&quot;The relative threshold for validating pivots&quot;)]
+[GreaterThan(0)]
+public double RelativePivotThreshold { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The relative pivot threshold.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the value is not greater than 0.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -215,12 +369,22 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Collections.ObjectModel.Collection</span>&lt;<a class="xref" href="SpiceSharp.Algebra.Solve.MarkowitzSearchStrategy-1.html">MarkowitzSearchStrategy</a>&lt;T&gt;&gt;</td>
-        <td></td>
+        <td><p>The strategies.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Clear_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Clear" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears the pivot strategy.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_ColumnCount_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.ColumnCount*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_ColumnCount_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.ColumnCount(System.Int32)">ColumnCount(Int32)</h4>
   <div class="markdown level1 summary"><p>Gets the Markowitz column counts.</p>
@@ -262,14 +426,30 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IndexOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">column</code> is negative or greater than the number of Markowitz columns.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_CreateFillin_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.CreateFillin*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_CreateFillin_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_MatrixElement__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.CreateFillin(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.MatrixElement{`0})">CreateFillin(SparseMatrix&lt;T&gt;, MatrixElement&lt;T&gt;)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_CreateFillin_SpiceSharp_Algebra_ISparseMatrix__0__SpiceSharp_Algebra_ISparseMatrixElement__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.CreateFillin(SpiceSharp.Algebra.ISparseMatrix{`0},SpiceSharp.Algebra.ISparseMatrixElement{`0})">CreateFillin(ISparseMatrix&lt;T&gt;, ISparseMatrixElement&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Notifies the strategy that a fill-in has been created</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateFillin(SparseMatrix&lt;T&gt; matrix, MatrixElement&lt;T&gt; fillin)</code></pre>
+    <pre><code class="lang-csharp hljs">public void CreateFillin(ISparseMatrix&lt;T&gt; matrix, ISparseMatrixElement&lt;T&gt; fillin)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -282,29 +462,43 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
         <td><p>The matrix.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement</a>&lt;T&gt;</td>
         <td><span class="parametername">fillin</span></td>
         <td><p>The fill-in.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.CreateFillin(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.MatrixElement&lt;T&gt;)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> or <code data-dev-comment-type="paramref" class="paramref">fillin</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.FindPivot*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_SpiceSharp_Algebra_SparseMatrix__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.FindPivot(SpiceSharp.Algebra.SparseMatrix{`0},System.Int32)">FindPivot(SparseMatrix&lt;T&gt;, Int32)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_SpiceSharp_Algebra_ISparseMatrix__0__System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.FindPivot(SpiceSharp.Algebra.ISparseMatrix{`0},System.Int32,System.Int32)">FindPivot(ISparseMatrix&lt;T&gt;, Int32, Int32)</h4>
   <div class="markdown level1 summary"><p>Find a pivot in the matrix.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override MatrixElement&lt;T&gt; FindPivot(SparseMatrix&lt;T&gt; matrix, int eliminationStep)</code></pre>
+    <pre><code class="lang-csharp hljs">public Pivot&lt;ISparseMatrixElement&lt;T&gt;&gt; FindPivot(ISparseMatrix&lt;T&gt; matrix, int eliminationStep, int max)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -317,7 +511,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
         <td><p>The matrix.</p>
 </td>
@@ -326,6 +520,12 @@
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">eliminationStep</span></td>
         <td><p>The current elimination step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td><p>The maximum row/column index of any pivot.</p>
 </td>
       </tr>
     </tbody>
@@ -340,26 +540,47 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Algebra.Solve.Pivot-1.html">Pivot</a>&lt;<a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement</a>&lt;T&gt;&gt;</td>
+        <td><p>The pivot information.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.FindPivot(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, System.Int32)</span></div>
-  <h5 id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_SpiceSharp_Algebra_SparseMatrix__0__System_Int32__remarks">Remarks</h5>
+  <h5 id="SpiceSharp_Algebra_Solve_Markowitz_1_FindPivot_SpiceSharp_Algebra_ISparseMatrix__0__System_Int32_System_Int32__remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>The pivot should be searched for in the submatrix towards the right and down of the
 current diagonal at row/column <code data-dev-comment-type="paramref" class="paramref">eliminationStep</code>. This pivot element
 will be moved to the diagonal for this elimination step.</p>
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">eliminationStep</code> or <code data-dev-comment-type="paramref" class="paramref">max</code> not 1 or higher, 
+or <code data-dev-comment-type="paramref" class="paramref">eliminationStep</code> is higher than <code data-dev-comment-type="paramref" class="paramref">max</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Initialize_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Initialize*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Initialize_SpiceSharp_Algebra_Matrix__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Initialize(SpiceSharp.Algebra.Matrix{`0})">Initialize(Matrix&lt;T&gt;)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Initialize_SpiceSharp_Algebra_IMatrix__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Initialize(SpiceSharp.Algebra.IMatrix{`0})">Initialize(IMatrix&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Initializes the pivot searching algorithm.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Initialize(Matrix&lt;T&gt; matrix)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Initialize(IMatrix&lt;T&gt; matrix)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -372,22 +593,38 @@ will be moved to the diagonal for this elimination step.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Matrix-1.html">Matrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
-        <td><p>The matrix.</p>
+        <td><p>The matrix to use for initialization.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_IsValidPivot_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.IsValidPivot*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_IsValidPivot_SpiceSharp_Algebra_MatrixElement__0__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.IsValidPivot(SpiceSharp.Algebra.MatrixElement{`0})">IsValidPivot(MatrixElement&lt;T&gt;)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_IsValidPivot_SpiceSharp_Algebra_ISparseMatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.IsValidPivot(SpiceSharp.Algebra.ISparseMatrixElement{`0},System.Int32)">IsValidPivot(ISparseMatrixElement&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>This method will check whether or not a pivot element is valid or not.
 It checks for the submatrix right/below of the pivot.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override bool IsValidPivot(MatrixElement&lt;T&gt; pivot)</code></pre>
+    <pre><code class="lang-csharp hljs">public bool IsValidPivot(ISparseMatrixElement&lt;T&gt; pivot, int max)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -400,9 +637,15 @@ It checks for the submatrix right/below of the pivot.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement</a>&lt;T&gt;</td>
         <td><span class="parametername">pivot</span></td>
         <td><p>The pivot candidate.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td><p>The maximum index that a pivot can have.</p>
 </td>
       </tr>
     </tbody>
@@ -423,16 +666,30 @@ It checks for the submatrix right/below of the pivot.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.IsValidPivot(SpiceSharp.Algebra.MatrixElement&lt;T&gt;)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">pivot</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.MovePivot*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__SpiceSharp_Algebra_MatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.MovePivot(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},SpiceSharp.Algebra.MatrixElement{`0},System.Int32)">MovePivot(SparseMatrix&lt;T&gt;, SparseVector&lt;T&gt;, MatrixElement&lt;T&gt;, Int32)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_SpiceSharp_Algebra_ISparseMatrix__0__SpiceSharp_Algebra_ISparseVector__0__SpiceSharp_Algebra_ISparseMatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.MovePivot(SpiceSharp.Algebra.ISparseMatrix{`0},SpiceSharp.Algebra.ISparseVector{`0},SpiceSharp.Algebra.ISparseMatrixElement{`0},System.Int32)">MovePivot(ISparseMatrix&lt;T&gt;, ISparseVector&lt;T&gt;, ISparseMatrixElement&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>Move the pivot to the diagonal for this elimination step.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void MovePivot(SparseMatrix&lt;T&gt; matrix, SparseVector&lt;T&gt; rhs, MatrixElement&lt;T&gt; pivot, int eliminationStep)</code></pre>
+    <pre><code class="lang-csharp hljs">public void MovePivot(ISparseMatrix&lt;T&gt; matrix, ISparseVector&lt;T&gt; rhs, ISparseMatrixElement&lt;T&gt; pivot, int eliminationStep)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -445,19 +702,19 @@ It checks for the submatrix right/below of the pivot.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
         <td><p>The matrix.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseVector-1.html">SparseVector</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector</a>&lt;T&gt;</td>
         <td><span class="parametername">rhs</span></td>
         <td><p>The right-hand side vector.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement</a>&lt;T&gt;</td>
         <td><span class="parametername">pivot</span></td>
         <td><p>The pivot element.</p>
 </td>
@@ -470,11 +727,25 @@ It checks for the submatrix right/below of the pivot.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.MovePivot(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.SparseVector&lt;T&gt;, SpiceSharp.Algebra.MatrixElement&lt;T&gt;, System.Int32)</span></div>
-  <h5 id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__SpiceSharp_Algebra_MatrixElement__0__System_Int32__remarks">Remarks</h5>
+  <h5 id="SpiceSharp_Algebra_Solve_Markowitz_1_MovePivot_SpiceSharp_Algebra_ISparseMatrix__0__SpiceSharp_Algebra_ISparseVector__0__SpiceSharp_Algebra_ISparseMatrixElement__0__System_Int32__remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>This is done by swapping the rows and columns of the diagonal and that of the pivot.</p>
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code>, <code data-dev-comment-type="paramref" class="paramref">rhs</code> or <code data-dev-comment-type="paramref" class="paramref">pivot</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Product_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Product*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Product_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Product(System.Int32)">Product(Int32)</h4>
   <div class="markdown level1 summary"><p>Gets the Markowitz products.</p>
@@ -513,6 +784,22 @@ It checks for the submatrix right/below of the pivot.</p>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IndexOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative or greater than the number of Markowitz size.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -557,14 +844,30 @@ It checks for the submatrix right/below of the pivot.</p>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IndexOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">row</code> is negative or greater than the number of Markowitz rows.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Setup_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Setup*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Setup_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_SparseVector__0__System_Int32_System_Func__0_System_Double__" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Setup(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.SparseVector{`0},System.Int32,System.Func{`0,System.Double})">Setup(SparseMatrix&lt;T&gt;, SparseVector&lt;T&gt;, Int32, Func&lt;T, Double&gt;)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Setup_SpiceSharp_Algebra_ISparseMatrix__0__SpiceSharp_Algebra_ISparseVector__0__System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Setup(SpiceSharp.Algebra.ISparseMatrix{`0},SpiceSharp.Algebra.ISparseVector{`0},System.Int32,System.Int32)">Setup(ISparseMatrix&lt;T&gt;, ISparseVector&lt;T&gt;, Int32, Int32)</h4>
   <div class="markdown level1 summary"><p>Setup the pivot strategy.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup(SparseMatrix&lt;T&gt; matrix, SparseVector&lt;T&gt; rhs, int eliminationStep, Func&lt;T, double&gt; magnitude)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Setup(ISparseMatrix&lt;T&gt; matrix, ISparseVector&lt;T&gt; rhs, int eliminationStep, int max)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -577,13 +880,13 @@ It checks for the submatrix right/below of the pivot.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
         <td><p>The matrix.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseVector-1.html">SparseVector</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector</a>&lt;T&gt;</td>
         <td><span class="parametername">rhs</span></td>
         <td><p>The right-hand side vector.</p>
 </td>
@@ -595,23 +898,37 @@ It checks for the submatrix right/below of the pivot.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Func</span>&lt;T, <span class="xref">System.Double</span>&gt;</td>
-        <td><span class="parametername">magnitude</span></td>
-        <td><p>The method used to determine the magnitude of an element.</p>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td><p>The maximum row/column index.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.Setup(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.SparseVector&lt;T&gt;, System.Int32, System.Func&lt;T, System.Double&gt;)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> or <code data-dev-comment-type="paramref" class="paramref">rhs</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Markowitz_1_Update_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Update*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Update_SpiceSharp_Algebra_SparseMatrix__0__SpiceSharp_Algebra_MatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Update(SpiceSharp.Algebra.SparseMatrix{`0},SpiceSharp.Algebra.MatrixElement{`0},System.Int32)">Update(SparseMatrix&lt;T&gt;, MatrixElement&lt;T&gt;, Int32)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Markowitz_1_Update_SpiceSharp_Algebra_ISparseMatrix__0__SpiceSharp_Algebra_ISparseMatrixElement__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Markowitz`1.Update(SpiceSharp.Algebra.ISparseMatrix{`0},SpiceSharp.Algebra.ISparseMatrixElement{`0},System.Int32)">Update(ISparseMatrix&lt;T&gt;, ISparseMatrixElement&lt;T&gt;, Int32)</h4>
   <div class="markdown level1 summary"><p>Update the strategy after the pivot was moved.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Update(SparseMatrix&lt;T&gt; matrix, MatrixElement&lt;T&gt; pivot, int eliminationStep)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Update(ISparseMatrix&lt;T&gt; matrix, ISparseMatrixElement&lt;T&gt; pivot, int limit)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -624,79 +941,57 @@ It checks for the submatrix right/below of the pivot.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
         <td><p>The matrix.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement</a>&lt;T&gt;</td>
         <td><span class="parametername">pivot</span></td>
         <td><p>The pivot element.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">eliminationStep</span></td>
-        <td><p>The elimination step.</p>
+        <td><span class="parametername">limit</span></td>
+        <td><p>The maximum row/column for pivots.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotStrategy&lt;T&gt;.Update(SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, SpiceSharp.Algebra.MatrixElement&lt;T&gt;, System.Int32)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> or <code data-dev-comment-type="paramref" class="paramref">pivot</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <h3 id="seealso">See Also</h3>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.Solve.PivotStrategy-1.html">PivotStrategy</a>&lt;T&gt;</div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
 </article>
           </div>

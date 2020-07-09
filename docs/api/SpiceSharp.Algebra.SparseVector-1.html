@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SparseVector&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,27 +74,21 @@
   
   <h1 id="SpiceSharp_Algebra_SparseVector_1" data-uid="SpiceSharp.Algebra.SparseVector`1" class="text-break">Class SparseVector&lt;T&gt;
   </h1>
-  <div class="markdown level0 summary"><p>Sparse vector</p>
+  <div class="markdown level0 summary"><p>A vector that uses sparse storage methods with doubly-linked elements.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</div>
-    <div class="level2"><span class="xref">SparseVector&lt;T&gt;</span></div>
+    <div class="level1"><span class="xref">SparseVector&lt;T&gt;</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><span class="xref">System.IFormattable</span></div>
+    <div><a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector</a>&lt;T&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="SpiceSharp.Algebra.Vector-1.html#SpiceSharp_Algebra_Vector_1_Length">Vector&lt;T&gt;.Length</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Algebra.Vector-1.html#SpiceSharp_Algebra_Vector_1_CopyTo_SpiceSharp_Algebra_Vector__0__">Vector&lt;T&gt;.CopyTo(Vector&lt;T&gt;)</a>
-    </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
@@ -117,7 +112,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_SparseVector_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SparseVector&lt;T&gt; : Vector&lt;T&gt;, IFormattable where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class SparseVector&lt;T&gt; : ISparseVector&lt;T&gt;, IVector&lt;T&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -137,8 +132,8 @@
   </table>
   <h5 id="SpiceSharp_Algebra_SparseVector_1_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks"><p>The element at index 0 is considered a &quot;trashcan&quot; element under the hood, consistent to <a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix&lt;T&gt;</a>.
-This doesn&apos;t really make a difference for indexing the vector, but it does give different meanings to the length of
-the vector.</p>
+This doesn&apos;t really make a difference for indexing the vector though.
+</p>
 <p>This vector automatically expands size if necessary.</p>
 </div>
   <h3 id="constructors">Constructors
@@ -179,16 +174,32 @@ the vector.</p>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">length</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Algebra_SparseVector_1_First_" data-uid="SpiceSharp.Algebra.SparseVector`1.First*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseVector_1_First" data-uid="SpiceSharp.Algebra.SparseVector`1.First">First</h4>
-  <div class="markdown level1 summary"><p>Gets the first element in the vector.</p>
+  <a id="SpiceSharp_Algebra_SparseVector_1_ElementCount_" data-uid="SpiceSharp.Algebra.SparseVector`1.ElementCount*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_ElementCount" data-uid="SpiceSharp.Algebra.SparseVector`1.ElementCount">ElementCount</h4>
+  <div class="markdown level1 summary"><p>Gets the number of elements in the vector.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VectorElement&lt;T&gt; First { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int ElementCount { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -200,8 +211,9 @@ the vector.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;T&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The element count.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -212,7 +224,7 @@ the vector.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override T this[int index] { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public T this[int index] { get; set; }</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -227,7 +239,7 @@ the vector.</p>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>The index in the vector.</p>
+        <td><p>The index.</p>
 </td>
       </tr>
     </tbody>
@@ -243,24 +255,35 @@ the vector.</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>The value at the specified index.</p>
+        <td><p>The value.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Vector&lt;T&gt;.Item[System.Int32]</span></div>
-  <h5 id="SpiceSharp_Algebra_SparseVector_1_Item_System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.</p>
-</div>
-  <a id="SpiceSharp_Algebra_SparseVector_1_Last_" data-uid="SpiceSharp.Algebra.SparseVector`1.Last*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseVector_1_Last" data-uid="SpiceSharp.Algebra.SparseVector`1.Last">Last</h4>
-  <div class="markdown level1 summary"><p>Gets the last element in the vector.</p>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_SparseVector_1_Length_" data-uid="SpiceSharp.Algebra.SparseVector`1.Length*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_Length" data-uid="SpiceSharp.Algebra.SparseVector`1.Length">Length</h4>
+  <div class="markdown level1 summary"><p>Gets the length of the vector.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VectorElement&lt;T&gt; Last { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int Length { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -272,21 +295,78 @@ the vector.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;T&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The length.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Algebra_SparseVector_1_FindElement_" data-uid="SpiceSharp.Algebra.SparseVector`1.FindElement*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseVector_1_FindElement_System_Int32_" data-uid="SpiceSharp.Algebra.SparseVector`1.FindElement(System.Int32)">FindElement(Int32)</h4>
-  <div class="markdown level1 summary"><p>Find an element in the vector without creating it.</p>
+  <a id="SpiceSharp_Algebra_SparseVector_1_Clear_" data-uid="SpiceSharp.Algebra.SparseVector`1.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_Clear" data-uid="SpiceSharp.Algebra.SparseVector`1.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all elements in the vector. The size of the vector becomes 0.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VectorElement&lt;T&gt; FindElement(int index)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_SparseVector_1_CopyTo_" data-uid="SpiceSharp.Algebra.SparseVector`1.CopyTo*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_CopyTo_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.SparseVector`1.CopyTo(SpiceSharp.Algebra.IVector{`0})">CopyTo(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Copies the contents of the vector to another one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(IVector&lt;T&gt; target)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">target</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">target</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">target</code> does not have the same length as this vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_SparseVector_1_FindElement_" data-uid="SpiceSharp.Algebra.SparseVector`1.FindElement*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_FindElement_System_Int32_" data-uid="SpiceSharp.Algebra.SparseVector`1.FindElement(System.Int32)">FindElement(Int32)</h4>
+  <div class="markdown level1 summary"><p>Finds a vector element at the specified index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Element&lt;T&gt; FindElement(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -301,7 +381,7 @@ the vector.</p>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>The index in the vector.</p>
+        <td><p>The index.</p>
 </td>
       </tr>
     </tbody>
@@ -316,20 +396,37 @@ the vector.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;T&gt;</td>
-        <td><p>The element at the specified index, or null if the element does not exist.</p>
+        <td><a class="xref" href="SpiceSharp.Algebra.Element-1.html">Element</a>&lt;T&gt;</td>
+        <td><p>The vector element; otherwise <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Algebra_SparseVector_1_GetElement_" data-uid="SpiceSharp.Algebra.SparseVector`1.GetElement*"></a>
   <h4 id="SpiceSharp_Algebra_SparseVector_1_GetElement_System_Int32_" data-uid="SpiceSharp.Algebra.SparseVector`1.GetElement(System.Int32)">GetElement(Int32)</h4>
-  <div class="markdown level1 summary"><p>Create or get an element in the vector.</p>
+  <div class="markdown level1 summary"><p>Gets a vector element at the specified index. If
+it doesn&apos;t exist, a new one is created.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VectorElement&lt;T&gt; GetElement(int index)</code></pre>
+    <pre><code class="lang-csharp hljs">public Element&lt;T&gt; GetElement(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -344,7 +441,7 @@ the vector.</p>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>Index in the vector</p>
+        <td><p>The index.</p>
 </td>
       </tr>
     </tbody>
@@ -359,20 +456,95 @@ the vector.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;T&gt;</td>
-        <td><p>The vector element at the specified index</p>
+        <td><a class="xref" href="SpiceSharp.Algebra.Element-1.html">Element</a>&lt;T&gt;</td>
+        <td><p>The vector element.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Algebra_SparseVector_1_Swap_" data-uid="SpiceSharp.Algebra.SparseVector`1.Swap*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseVector_1_Swap_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.SparseVector`1.Swap(System.Int32,System.Int32)">Swap(Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Swap two elements.</p>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_SparseVector_1_GetFirstInVector_" data-uid="SpiceSharp.Algebra.SparseVector`1.GetFirstInVector*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_GetFirstInVector" data-uid="SpiceSharp.Algebra.SparseVector`1.GetFirstInVector">GetFirstInVector()</h4>
+  <div class="markdown level1 summary"><p>Gets the first <a class="xref" href="SpiceSharp.Algebra.ISparseVectorElement-1.html">ISparseVectorElement&lt;T&gt;</a> in the vector.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Swap(int index1, int index2)</code></pre>
+    <pre><code class="lang-csharp hljs">public ISparseVectorElement&lt;T&gt; GetFirstInVector()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseVectorElement-1.html">ISparseVectorElement</a>&lt;T&gt;</td>
+        <td><p>The first element in the vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_SparseVector_1_GetLastInVector_" data-uid="SpiceSharp.Algebra.SparseVector`1.GetLastInVector*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_GetLastInVector" data-uid="SpiceSharp.Algebra.SparseVector`1.GetLastInVector">GetLastInVector()</h4>
+  <div class="markdown level1 summary"><p>Gets the last <a class="xref" href="SpiceSharp.Algebra.ISparseVectorElement-1.html">ISparseVectorElement&lt;T&gt;</a> in the vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ISparseVectorElement&lt;T&gt; GetLastInVector()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseVectorElement-1.html">ISparseVectorElement</a>&lt;T&gt;</td>
+        <td><p>The last element in the vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_SparseVector_1_Reset_" data-uid="SpiceSharp.Algebra.SparseVector`1.Reset*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_Reset" data-uid="SpiceSharp.Algebra.SparseVector`1.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Resets all elements in the vector to their default value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_SparseVector_1_SwapElements_" data-uid="SpiceSharp.Algebra.SparseVector`1.SwapElements*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseVector_1_SwapElements_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.SparseVector`1.SwapElements(System.Int32,System.Int32)">SwapElements(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Swaps two elements in the vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SwapElements(int index1, int index2)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -387,13 +559,29 @@ the vector.</p>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index1</span></td>
-        <td><p>The index of the first element.</p>
+        <td><p>The first index.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index2</span></td>
-        <td><p>The index of the second element.</p>
+        <td><p>The second index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index1</code> or <code data-dev-comment-type="paramref" class="paramref">index2</code> is negative.</p>
 </td>
       </tr>
     </tbody>
@@ -425,112 +613,20 @@ the vector.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">System.Object.ToString()</span></div>
-  <a id="SpiceSharp_Algebra_SparseVector_1_ToString_" data-uid="SpiceSharp.Algebra.SparseVector`1.ToString*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseVector_1_ToString_System_String_System_IFormatProvider_" data-uid="SpiceSharp.Algebra.SparseVector`1.ToString(System.String,System.IFormatProvider)">ToString(String, IFormatProvider)</h4>
-  <div class="markdown level1 summary"><p>Returns a <span class="xref">System.String</span> that represents this instance.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ToString(string format, IFormatProvider formatProvider)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">format</span></td>
-        <td><p>The format.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IFormatProvider</span></td>
-        <td><span class="parametername">formatProvider</span></td>
-        <td><p>The format provider.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><p>A <span class="xref">System.String</span> that represents this instance.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">System.IFormattable</span>
+      <a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</div>
-      <div><span class="xref">System.IFormattable</span></div>
+      <div><a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector</a>&lt;T&gt;</div>
   </div>
 </article>
           </div>

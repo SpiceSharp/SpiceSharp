@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SimulationStatistics
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,8 +80,7 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Statistics.html">Statistics</a></div>
-    <div class="level2"><span class="xref">SimulationStatistics</span></div>
+    <div class="level1"><span class="xref">SimulationStatistics</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -110,7 +110,17 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_SimulationStatistics_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SimulationStatistics : Statistics</code></pre>
+    <pre><code class="lang-csharp hljs">public class SimulationStatistics</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Simulations_SimulationStatistics__ctor_" data-uid="SpiceSharp.Simulations.SimulationStatistics.#ctor*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationStatistics__ctor" data-uid="SpiceSharp.Simulations.SimulationStatistics.#ctor">SimulationStatistics()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimulationStatistics()</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
@@ -136,7 +146,8 @@ public Stopwatch BehaviorCreationTime { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Diagnostics.Stopwatch</span></td>
-        <td></td>
+        <td><p>The behavior creation time.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -163,7 +174,8 @@ public Stopwatch ExecutionTime { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Diagnostics.Stopwatch</span></td>
-        <td></td>
+        <td><p>The execution time.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -189,7 +201,8 @@ public Stopwatch SetupTime { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Diagnostics.Stopwatch</span></td>
-        <td></td>
+        <td><p>The setup time.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -215,7 +228,35 @@ public Stopwatch UnsetupTime { get; }</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Diagnostics.Stopwatch</span></td>
-        <td></td>
+        <td><p>The unsetup time.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationStatistics_ValidationTime_" data-uid="SpiceSharp.Simulations.SimulationStatistics.ValidationTime*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationStatistics_ValidationTime" data-uid="SpiceSharp.Simulations.SimulationStatistics.ValidationTime">ValidationTime</h4>
+  <div class="markdown level1 summary"><p>Gets the time spent during validation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;tvalidation&quot;)]
+[ParameterInfo(&quot;The time spent validating the input&quot;)]
+public Stopwatch ValidationTime { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Diagnostics.Stopwatch</span></td>
+        <td><p>The validation time.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -228,58 +269,11 @@ public Stopwatch UnsetupTime { get; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Reset()</code></pre>
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
   </div>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Simulations.Statistics.html#SpiceSharp_Simulations_Statistics_Reset">Statistics.Reset()</a></div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

@@ -1,0 +1,524 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class RookPivoting&lt;T&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class RookPivoting&lt;T&gt;
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Algebra.RookPivoting`1">
+  
+  
+  <h1 id="SpiceSharp_Algebra_RookPivoting_1" data-uid="SpiceSharp.Algebra.RookPivoting`1" class="text-break">Class RookPivoting&lt;T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>Rook pivoting strategy.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><span class="xref">RookPivoting&lt;T&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SetParameter__1_System_String___0_">ParameterSet.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TrySetParameter__1_System_String___0_">ParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_GetProperty__1_System_String_">ParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TryGetProperty__1_System_String___0__">ParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreateParameterSetter__1_System_String_">ParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreatePropertyGetter__1_System_String_">ParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Algebra.html">SpiceSharp.Algebra</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Algebra_RookPivoting_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[GeneratedParameters]
+public class RookPivoting&lt;T&gt; : ParameterSet, IParameterSet, ICloneable</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The base value type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Algebra_RookPivoting_1__ctor_" data-uid="SpiceSharp.Algebra.RookPivoting`1.#ctor*"></a>
+  <h4 id="SpiceSharp_Algebra_RookPivoting_1__ctor_System_Func__0_System_Double__" data-uid="SpiceSharp.Algebra.RookPivoting`1.#ctor(System.Func{`0,System.Double})">RookPivoting(Func&lt;T, Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.RookPivoting-1.html">RookPivoting&lt;T&gt;</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RookPivoting(Func&lt;T, double&gt; magnitude)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;T, <span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">magnitude</span></td>
+        <td><p>The function for turning elements into a scalar.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">magnitude</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Algebra_RookPivoting_1_AbsolutePivotThreshold_" data-uid="SpiceSharp.Algebra.RookPivoting`1.AbsolutePivotThreshold*"></a>
+  <h4 id="SpiceSharp_Algebra_RookPivoting_1_AbsolutePivotThreshold" data-uid="SpiceSharp.Algebra.RookPivoting`1.AbsolutePivotThreshold">AbsolutePivotThreshold</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the absolute pivot threshold.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pivtol&quot;)]
+[ParameterInfo(&quot;The absolute threshold for validating pivots&quot;)]
+[GreaterThanOrEquals(0)]
+public double AbsolutePivotThreshold { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The absolute pivot threshold.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the value is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_RookPivoting_1_Magnitude_" data-uid="SpiceSharp.Algebra.RookPivoting`1.Magnitude*"></a>
+  <h4 id="SpiceSharp_Algebra_RookPivoting_1_Magnitude" data-uid="SpiceSharp.Algebra.RookPivoting`1.Magnitude">Magnitude</h4>
+  <div class="markdown level1 summary"><p>Gets the magnitude.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Func&lt;T, double&gt; Magnitude { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;T, <span class="xref">System.Double</span>&gt;</td>
+        <td><p>The magnitude.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_RookPivoting_1_RelativePivotThreshold_" data-uid="SpiceSharp.Algebra.RookPivoting`1.RelativePivotThreshold*"></a>
+  <h4 id="SpiceSharp_Algebra_RookPivoting_1_RelativePivotThreshold" data-uid="SpiceSharp.Algebra.RookPivoting`1.RelativePivotThreshold">RelativePivotThreshold</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the relative pivot threshold.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;pivrel&quot;)]
+[ParameterInfo(&quot;The relative threshold for validating pivots&quot;)]
+[GreaterThan(0)]
+public double RelativePivotThreshold { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The relative pivot threshold.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the value is not greater than 0.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Algebra_RookPivoting_1_FindPivot_" data-uid="SpiceSharp.Algebra.RookPivoting`1.FindPivot*"></a>
+  <h4 id="SpiceSharp_Algebra_RookPivoting_1_FindPivot_SpiceSharp_Algebra_IMatrix__0__System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.RookPivoting`1.FindPivot(SpiceSharp.Algebra.IMatrix{`0},System.Int32,System.Int32)">FindPivot(IMatrix&lt;T&gt;, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Finds a pivot in the matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Pivot&lt;MatrixLocation&gt; FindPivot(IMatrix&lt;T&gt; matrix, int eliminationStep, int max)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;T&gt;</td>
+        <td><span class="parametername">matrix</span></td>
+        <td><p>The matrix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">eliminationStep</span></td>
+        <td><p>The elimination step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td><p>The maximum row/column index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.Solve.Pivot-1.html">Pivot</a>&lt;<a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a>&gt;</td>
+        <td><p>The pivot.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_RookPivoting_1_IsValidPivot_" data-uid="SpiceSharp.Algebra.RookPivoting`1.IsValidPivot*"></a>
+  <h4 id="SpiceSharp_Algebra_RookPivoting_1_IsValidPivot_SpiceSharp_Algebra_IMatrix__0__System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.RookPivoting`1.IsValidPivot(SpiceSharp.Algebra.IMatrix{`0},System.Int32,System.Int32)">IsValidPivot(IMatrix&lt;T&gt;, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the current pivot is valid.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsValidPivot(IMatrix&lt;T&gt; matrix, int eliminationStep, int max)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;T&gt;</td>
+        <td><span class="parametername">matrix</span></td>
+        <td><p>The matrix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">eliminationStep</span></td>
+        <td><p>The elimination step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td><p>The maximum row/column index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the pivot is valid; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">matrix</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

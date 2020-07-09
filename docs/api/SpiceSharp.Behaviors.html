@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Behaviors
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -78,22 +79,19 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></h4>
-      <section><p>Template for a behavior.</p>
+      <section><p>A base template for an <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorFactoryDictionary.html">BehaviorFactoryDictionary</a></h4>
-      <section><p>Factory for behaviors</p>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorContainer.html">BehaviorContainer</a></h4>
+      <section><p>A dictionary of <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a>. Only on instance of each type is allowed.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorContainerCollection.html">BehaviorContainerCollection</a></h4>
+      <section><p>A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorList-1.html">BehaviorList&lt;T&gt;</a></h4>
       <section><p>Class representing an ordered list of behaviors.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorPool.html">BehaviorPool</a></h4>
-      <section><p>A pool of all behaviors. This class will keep track which behavior belongs to which entity. Only behaviors can be requested from the collection.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></h4>
-      <section><p>Class that can be used for binding a <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a> to a simulation.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.EntityBehaviorDictionary.html">EntityBehaviorDictionary</a></h4>
-      <section><p>A dictionary of <a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a>. Only on instance of each type is allowed.</p>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorsNotFoundEventArgs.html">BehaviorsNotFoundEventArgs</a></h4>
+      <section><p>Event arguments</p>
 </section>
     <h3 id="interfaces">Interfaces
   </h3>
@@ -103,18 +101,30 @@
       <h4><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></h4>
       <section><p>Contract for a behavior.</p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></h4>
+      <section><p>A container for behaviors</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IBehaviorContainerCollection</a></h4>
+      <section><p>An interface that describes a collection of <a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a> instances.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></h4>
-      <section><p>An interface that describes behaviors for biasing in a <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a>.
+      <section><p>An interface that describes behaviors for biasing in a <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a>.
 This behavior is responsible for calculating the DC equivalent behavior of an entity, ie. for biasing the circuit.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.IBiasingUpdateBehavior.html">IBiasingUpdateBehavior</a></h4>
+      <section><p>A <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a> that can update after solving an iteration of a <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a></h4>
+      <section><p>Interface for an <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a> that can check for convergence.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></h4>
       <section><p>Interface that describes frequency-dependent behaviors.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.IInitialConditionBehavior.html">IInitialConditionBehavior</a></h4>
-      <section><p>This interface describes behavior for initial conditions.</p>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.IFrequencyUpdateBehavior.html">IFrequencyUpdateBehavior</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a> that can update after solving an iteration of a <a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></h4>
-      <section><p>A behavior that is used by <a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html#SpiceSharp_Behaviors_INoiseBehavior_Noise">Noise()</a>.</p>
+      <section><p>A behavior that is used by <a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></h4>
       <section><p>An interface that describes temperature-dependent behaviors.</p>
@@ -122,10 +132,8 @@ This behavior is responsible for calculating the DC equivalent behavior of an en
       <h4><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></h4>
       <section><p>An interface for time-dependent behaviors.</p>
 </section>
-    <h3 id="delegates">Delegates
-  </h3>
-      <h4><a class="xref" href="SpiceSharp.Behaviors.BehaviorFactoryMethod.html">BehaviorFactoryMethod</a></h4>
-      <section><p>Create a behavior for an entity</p>
+      <h4><a class="xref" href="SpiceSharp.Behaviors.ITruncatingBehavior.html">ITruncatingBehavior</a></h4>
+      <section><p>Describes a class that is capable of truncating a timestep.</p>
 </section>
 </article>
           </div>

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class OctaveSweep
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,23 +80,15 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Sweep-1.html">Sweep</a>&lt;<span class="xref">System.Double</span>&gt;</div>
-    <div class="level2"><span class="xref">OctaveSweep</span></div>
+    <div class="level1"><span class="xref">OctaveSweep</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Sweep-1.html#SpiceSharp_Simulations_Sweep_1_Current">Sweep&lt;Double&gt;.Current</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Sweep-1.html#SpiceSharp_Simulations_Sweep_1_Initial">Sweep&lt;Double&gt;.Initial</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Sweep-1.html#SpiceSharp_Simulations_Sweep_1_Final">Sweep&lt;Double&gt;.Final</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Sweep-1.html#SpiceSharp_Simulations_Sweep_1_Count">Sweep&lt;Double&gt;.Count</a>
-    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -122,7 +115,8 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_OctaveSweep_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class OctaveSweep : Sweep&lt;double&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">[GeneratedParameters]
+public class OctaveSweep : IEnumerable&lt;double&gt;, IEnumerable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -133,7 +127,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public OctaveSweep(double initial, double final, int steps)</code></pre>
+    <pre><code class="lang-csharp hljs">public OctaveSweep(double initial, double final, int pointsPerOctave)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -159,7 +153,7 @@
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">steps</span></td>
+        <td><span class="parametername">pointsPerOctave</span></td>
         <td><p>The number of points per octave.</p>
 </td>
       </tr>
@@ -167,14 +161,17 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Simulations_OctaveSweep_Points_" data-uid="SpiceSharp.Simulations.OctaveSweep.Points*"></a>
-  <h4 id="SpiceSharp_Simulations_OctaveSweep_Points" data-uid="SpiceSharp.Simulations.OctaveSweep.Points">Points</h4>
-  <div class="markdown level1 summary"><p>Gets an enumeration of the points in the sweep.</p>
+  <a id="SpiceSharp_Simulations_OctaveSweep_Final_" data-uid="SpiceSharp.Simulations.OctaveSweep.Final*"></a>
+  <h4 id="SpiceSharp_Simulations_OctaveSweep_Final" data-uid="SpiceSharp.Simulations.OctaveSweep.Final">Final</h4>
+  <div class="markdown level1 summary"><p>The final frequency of the sweep.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override IEnumerable&lt;double&gt; Points { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;stop&quot;)]
+[ParameterName(&quot;final&quot;)]
+[ParameterInfo(&quot;The final frequency of the sweep.&quot;)]
+public double Final { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -186,65 +183,134 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The final frequency value.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Simulations.Sweep&lt;System.Double&gt;.Points</span></div>
+  <a id="SpiceSharp_Simulations_OctaveSweep_Initial_" data-uid="SpiceSharp.Simulations.OctaveSweep.Initial*"></a>
+  <h4 id="SpiceSharp_Simulations_OctaveSweep_Initial" data-uid="SpiceSharp.Simulations.OctaveSweep.Initial">Initial</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the initial.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;start&quot;)]
+[ParameterName(&quot;initial&quot;)]
+[ParameterInfo(&quot;The initial frequency of the sweep.&quot;)]
+public double Initial { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The initial frequency value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_OctaveSweep_PointsPerOctave_" data-uid="SpiceSharp.Simulations.OctaveSweep.PointsPerOctave*"></a>
+  <h4 id="SpiceSharp_Simulations_OctaveSweep_PointsPerOctave" data-uid="SpiceSharp.Simulations.OctaveSweep.PointsPerOctave">PointsPerOctave</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the points per decade.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[GreaterThan(0)]
+public int PointsPerOctave { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The points per decade.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Simulations_OctaveSweep_GetEnumerator_" data-uid="SpiceSharp.Simulations.OctaveSweep.GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Simulations_OctaveSweep_GetEnumerator" data-uid="SpiceSharp.Simulations.OctaveSweep.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;double&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>An enumerator that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Simulations_OctaveSweep_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.Simulations.OctaveSweep.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Simulations_OctaveSweep_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.Simulations.OctaveSweep.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through a collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td><p>An <span class="xref">System.Collections.IEnumerator</span> object that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Simulations.Sweep-1.html">Sweep</a>&lt;T&gt;</div>
+      <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</div>
   </div>
 </article>
           </div>

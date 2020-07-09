@@ -44,7 +44,12 @@ namespace SpiceSharp.Components
             return new Instance(Points, method);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string that represents the current piece-wise linear waveform.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current piece-wise linear waveform.
+        /// </returns>
         public override string ToString()
         {
             if (Points != null)

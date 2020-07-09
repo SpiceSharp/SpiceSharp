@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Constants
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,7 +74,7 @@
   
   <h1 id="SpiceSharp_Constants" data-uid="SpiceSharp.Constants" class="text-break">Class Constants
   </h1>
-  <div class="markdown level0 summary"><p>Helpful electronics-related constants</p>
+  <div class="markdown level0 summary"><p>Helpful (electronics-related) constants used throughout Spice#.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -114,7 +115,7 @@
   <h3 id="fields">Fields
   </h3>
   <h4 id="SpiceSharp_Constants_Boltzmann" data-uid="SpiceSharp.Constants.Boltzmann">Boltzmann</h4>
-  <div class="markdown level1 summary"><p>Boltzman constant (J/K)</p>
+  <div class="markdown level1 summary"><p>Boltzman constant (in Joules per Kelvin - J/K).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -137,7 +138,7 @@
     </tbody>
   </table>
   <h4 id="SpiceSharp_Constants_CelsiusKelvin" data-uid="SpiceSharp.Constants.CelsiusKelvin">CelsiusKelvin</h4>
-  <div class="markdown level1 summary"><p>The conversion constant for converting between Kelvin and Celsius.</p>
+  <div class="markdown level1 summary"><p>The conversion constant for converting between Kelvin and Celsius (in Kelvin or degrees Celsius).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -160,7 +161,7 @@
     </tbody>
   </table>
   <h4 id="SpiceSharp_Constants_Charge" data-uid="SpiceSharp.Constants.Charge">Charge</h4>
-  <div class="markdown level1 summary"><p>Charge of an electron (C)</p>
+  <div class="markdown level1 summary"><p>Charge of an electron (in Coulomb - C).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -182,8 +183,42 @@
       </tr>
     </tbody>
   </table>
+  <h4 id="SpiceSharp_Constants_Ground" data-uid="SpiceSharp.Constants.Ground">Ground</h4>
+  <div class="markdown level1 summary"><p>The fixed name of the ground node.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string Ground = &quot;0&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="SpiceSharp_Constants_Ground_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>
+The ground node is the reference node at 0V, and any simulation that
+wants to solve for voltages will need one.
+</p>
+<p>
+If you want to use other names for ground, you can make an
+<span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> that
+maps these extra node names to the ground node.
+</p>
+</div>
   <h4 id="SpiceSharp_Constants_KOverQ" data-uid="SpiceSharp.Constants.KOverQ">KOverQ</h4>
-  <div class="markdown level1 summary"><p>Normalized thermal voltage (V/K)</p>
+  <div class="markdown level1 summary"><p>Normalized thermal voltage (in Volts per Kelvin - V/K).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -206,7 +241,7 @@
     </tbody>
   </table>
   <h4 id="SpiceSharp_Constants_ReferenceTemperature" data-uid="SpiceSharp.Constants.ReferenceTemperature">ReferenceTemperature</h4>
-  <div class="markdown level1 summary"><p>The default reference temperature in Kelvin (27degC)</p>
+  <div class="markdown level1 summary"><p>The default reference temperature in Kelvin (equal to 27 degrees Celsius).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -229,7 +264,7 @@
     </tbody>
   </table>
   <h4 id="SpiceSharp_Constants_Root2" data-uid="SpiceSharp.Constants.Root2">Root2</h4>
-  <div class="markdown level1 summary"><p>The square root of 2</p>
+  <div class="markdown level1 summary"><p>The square root of 2.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -252,7 +287,7 @@
     </tbody>
   </table>
   <h4 id="SpiceSharp_Constants_Vt0" data-uid="SpiceSharp.Constants.Vt0">Vt0</h4>
-  <div class="markdown level1 summary"><p>The thermal voltage at the default reference temperature (V)</p>
+  <div class="markdown level1 summary"><p>The thermal voltage at the default reference temperature (in Volt - V).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>

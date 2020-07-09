@@ -1,0 +1,647 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DenseRealSolver
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DenseRealSolver
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Algebra.DenseRealSolver">
+  
+  
+  <h1 id="SpiceSharp_Algebra_DenseRealSolver" data-uid="SpiceSharp.Algebra.DenseRealSolver" class="text-break">Class DenseRealSolver
+  </h1>
+  <div class="markdown level0 summary"><p>Class for solving dense sets of equations with real numbers.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html">PivotingSolver</a>&lt;<a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;<span class="xref">System.Double</span>&gt;, <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;, <span class="xref">System.Double</span>&gt;</div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html">DenseLUSolver</a>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div class="level5"><span class="xref">DenseRealSolver</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Algebra.IPivotingSolver-3.html">IPivotingSolver</a>&lt;<a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;<span class="xref">System.Double</span>&gt;, <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;, <span class="xref">System.Double</span>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Algebra.RookPivoting-1.html">RookPivoting</a>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html#SpiceSharp_Algebra_Solve_DenseLUSolver_1_Precondition_SpiceSharp_Algebra_PreconditioningMethod_SpiceSharp_Algebra_IMatrix__0__SpiceSharp_Algebra_IVector__0___0__">DenseLUSolver&lt;Double&gt;.Precondition(PreconditioningMethod&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html#SpiceSharp_Algebra_Solve_DenseLUSolver_1_Factor">DenseLUSolver&lt;Double&gt;.Factor()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html#SpiceSharp_Algebra_Solve_DenseLUSolver_1_Factor_System_Int32_">DenseLUSolver&lt;Double&gt;.Factor(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html#SpiceSharp_Algebra_Solve_DenseLUSolver_1_OrderAndFactor">DenseLUSolver&lt;Double&gt;.OrderAndFactor()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html#SpiceSharp_Algebra_Solve_DenseLUSolver_1_Clear">DenseLUSolver&lt;Double&gt;.Clear()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html#SpiceSharp_Algebra_Solve_DenseLUSolver_1_Parameters">DenseLUSolver&lt;Double&gt;.Parameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Precondition_SpiceSharp_Algebra_PreconditioningMethod__0__1__2__">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Precondition(PreconditioningMethod&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SwapRows_System_Int32_System_Int32_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.SwapRows(Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SwapColumns_System_Int32_System_Int32_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.SwapColumns(Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Reset">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Reset()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Clear">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Clear()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ExternalToInternal_SpiceSharp_Algebra_MatrixLocation_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.ExternalToInternal(MatrixLocation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_InternalToExternal_SpiceSharp_Algebra_MatrixLocation_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.InternalToExternal(MatrixLocation)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ToString">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Solve_SpiceSharp_Algebra_IVector__2__">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Solve(IVector&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SolveTransposed_SpiceSharp_Algebra_IVector__2__">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.SolveTransposed(IVector&lt;Double&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Factor">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Factor()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_OrderAndFactor">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.OrderAndFactor()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SetParameter__1_System_String___0_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Degeneracy">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Degeneracy</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_PivotSearchReduction">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.PivotSearchReduction</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_IsFactored">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.IsFactored</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_NeedsReordering">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.NeedsReordering</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Size">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Size</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Item_System_Int32_System_Int32_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Item[Int32, Int32]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Item_SpiceSharp_Algebra_MatrixLocation_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Item[MatrixLocation]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Item_System_Int32_">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Item[Int32]</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Row">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Row</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Column">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Column</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Matrix">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Matrix</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Vector">PivotingSolver&lt;IMatrix&lt;Double&gt;, IVector&lt;Double&gt;, Double&gt;.Vector</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Algebra.html">SpiceSharp.Algebra</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Algebra_DenseRealSolver_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DenseRealSolver : DenseLUSolver&lt;double&gt;, IPivotingSolver&lt;IMatrix&lt;double&gt;, IVector&lt;double&gt;, double&gt;, ISolver&lt;double&gt;, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;RookPivoting&lt;double&gt;&gt;</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Algebra_DenseRealSolver__ctor_" data-uid="SpiceSharp.Algebra.DenseRealSolver.#ctor*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver__ctor" data-uid="SpiceSharp.Algebra.DenseRealSolver.#ctor">DenseRealSolver()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.DenseRealSolver.html">DenseRealSolver</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DenseRealSolver()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_DenseRealSolver__ctor_" data-uid="SpiceSharp.Algebra.DenseRealSolver.#ctor*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver__ctor_System_Int32_" data-uid="SpiceSharp.Algebra.DenseRealSolver.#ctor(System.Int32)">DenseRealSolver(Int32)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.DenseRealSolver.html">DenseRealSolver</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DenseRealSolver(int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td><p>The size.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Algebra_DenseRealSolver_Eliminate_" data-uid="SpiceSharp.Algebra.DenseRealSolver.Eliminate*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver_Eliminate_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.DenseRealSolver.Eliminate(System.Int32,System.Int32)">Eliminate(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Eliminates the submatrix right and below the pivot.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Eliminate(int step, int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">step</span></td>
+        <td><p>The current elimination step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td><p>The maximum row/column to be eliminated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.Algebra.Solve.DenseLUSolver&lt;System.Double&gt;.Eliminate(System.Int32, System.Int32)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the pivot has a magnitude of zero.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseRealSolver_Solve_" data-uid="SpiceSharp.Algebra.DenseRealSolver.Solve*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver_Solve_SpiceSharp_Algebra_IVector_System_Double__" data-uid="SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double})">Solve(IVector&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Solves the equations using the factored matrix and right hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Solve(IVector&lt;double&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotingSolver&lt;SpiceSharp.Algebra.IMatrix&lt;System.Double&gt;, SpiceSharp.Algebra.IVector&lt;System.Double&gt;, System.Double&gt;.Solve(SpiceSharp.Algebra.IVector&lt;System.Double&gt;)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseRealSolver_Solve_" data-uid="SpiceSharp.Algebra.DenseRealSolver.Solve*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver_Solve_SpiceSharp_Algebra_IVector_System_Double__System_Int32_" data-uid="SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double},System.Int32)">Solve(IVector&lt;Double&gt;, Int32)</h4>
+  <div class="markdown level1 summary"><p>Solves the system of equations with a matrix that was factored for a number of steps.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Solve(IVector&lt;double&gt; solution, int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td><p>The size of the submatrix to be solved.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_" data-uid="SpiceSharp.Algebra.DenseRealSolver.SolveTransposed*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_SpiceSharp_Algebra_IVector_System_Double__" data-uid="SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double})">SolveTransposed(IVector&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Solves the equations using the transposed factored matrix and right hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SolveTransposed(IVector&lt;double&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">SpiceSharp.Algebra.Solve.PivotingSolver&lt;SpiceSharp.Algebra.IMatrix&lt;System.Double&gt;, SpiceSharp.Algebra.IVector&lt;System.Double&gt;, System.Double&gt;.SolveTransposed(SpiceSharp.Algebra.IVector&lt;System.Double&gt;)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_" data-uid="SpiceSharp.Algebra.DenseRealSolver.SolveTransposed*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_SpiceSharp_Algebra_IVector_System_Double__System_Int32_" data-uid="SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)">SolveTransposed(IVector&lt;Double&gt;, Int32)</h4>
+  <div class="markdown level1 summary"><p>Solves the transposed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SolveTransposed(IVector&lt;double&gt; solution, int steps)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">steps</span></td>
+        <td><p>The steps.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Algebra.IPivotingSolver-3.html">IPivotingSolver&lt;M, V, T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Algebra.Solve.DenseLUSolver-1.html">DenseLUSolver</a>&lt;T&gt;</div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

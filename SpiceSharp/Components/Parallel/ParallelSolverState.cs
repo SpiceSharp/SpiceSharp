@@ -24,7 +24,11 @@ namespace SpiceSharp.Components.ParallelComponents
         /// </summary>
         protected readonly S Parent;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets the variable with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the variable.</param>
+        /// <returns>The variable.</returns>
         public IVariable<T> this[string name] => Parent[name];
 
         /// <summary>

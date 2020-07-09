@@ -61,7 +61,12 @@ namespace SpiceSharp.Entities
             return clone;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string that represents the current entity.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
         public override string ToString()
         {
             return "{0} ({1})".FormatString(Name, GetType().Name);

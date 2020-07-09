@@ -1,4 +1,6 @@
 - name: Modified Nodal Analysis
   href: modified_nodal_analysis.md
-- name: Base behaviors
-  href: base_behaviors.md
+- name: Example of MNA - Resistors
+  href: example_resistor.md
+- name: Example of MNA - Diodes
+  href: example_diode.md

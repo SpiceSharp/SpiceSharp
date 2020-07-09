@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class OP
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,140 +80,152 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></div>
-    <div class="level3"><span class="xref">OP</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a></div>
+    <div class="level5"><span class="xref">OP</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISimulation-1.html">ISimulation</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Double</span>&gt;&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulation.html">ITemperatureSimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful</a>&lt;<a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulationState.html">ITemperatureSimulationState</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful</a>&lt;<a class="xref" href="SpiceSharp.Simulations.Biasing.TemperatureSimulationState.html">TemperatureSimulationState</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IIterationSimulationState.html">IIterationSimulationState</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.IBiasingUpdateBehavior.html">IBiasingUpdateBehavior</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Simulations.BiasingParameters.html">BiasingParameters</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_RealState">BaseSimulation.RealState</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_CreateStates">BiasingSimulation.CreateStates()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_ProblemVariable">BaseSimulation.ProblemVariable</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_CreateBehaviors_SpiceSharp_Entities_IEntityCollection_">BiasingSimulation.CreateBehaviors(IEntityCollection)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_BeforeLoad">BaseSimulation.BeforeLoad</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Validate_SpiceSharp_Entities_IEntityCollection_">BiasingSimulation.Validate(IEntityCollection)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_AfterLoad">BaseSimulation.AfterLoad</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Temperature">BiasingSimulation.Temperature()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_BeforeTemperature">BaseSimulation.BeforeTemperature</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Unsetup">BiasingSimulation.Unsetup()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_AfterTemperature">BaseSimulation.AfterTemperature</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Op_System_Int32_">BiasingSimulation.Op(Int32)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_DcMaxIterations">BaseSimulation.DcMaxIterations</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_IterateGminStepping_System_Int32_System_Int32_">BiasingSimulation.IterateGminStepping(Int32, Int32)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_AbsTol">BaseSimulation.AbsTol</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_IterateDiagonalGminStepping_System_Int32_System_Int32_">BiasingSimulation.IterateDiagonalGminStepping(Int32, Int32)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_RelTol">BaseSimulation.RelTol</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_IterateSourceStepping_System_Int32_System_Int32_">BiasingSimulation.IterateSourceStepping(Int32, Int32)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_BaseSimulationStatistics">BaseSimulation.BaseSimulationStatistics</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Iterate_System_Int32_">BiasingSimulation.Iterate(Int32)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Setup_SpiceSharp_Circuits_EntityCollection_">BaseSimulation.Setup(EntityCollection)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_StoreSolution">BiasingSimulation.StoreSolution()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Temperature">BaseSimulation.Temperature()</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Load">BiasingSimulation.Load()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Unsetup">BaseSimulation.Unsetup()</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_LoadNodeSets_System_Object_SpiceSharp_Simulations_LoadStateEventArgs_">BiasingSimulation.LoadNodeSets(Object, LoadStateEventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Op_System_Int32_">BaseSimulation.Op(Int32)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_IsConvergent">BiasingSimulation.IsConvergent()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_IterateGminStepping_System_Int32_System_Int32_">BaseSimulation.IterateGminStepping(Int32, Int32)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnBeforeLoad_SpiceSharp_Simulations_LoadStateEventArgs_">BiasingSimulation.OnBeforeLoad(LoadStateEventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_IterateDiagonalGminStepping_System_Int32_System_Int32_">BaseSimulation.IterateDiagonalGminStepping(Int32, Int32)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnAfterLoad_SpiceSharp_Simulations_LoadStateEventArgs_">BiasingSimulation.OnAfterLoad(LoadStateEventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_IterateSourceStepping_System_Int32_System_Int32_">BaseSimulation.IterateSourceStepping(Int32, Int32)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnBeforeTemperature_SpiceSharp_Simulations_LoadStateEventArgs_">BiasingSimulation.OnBeforeTemperature(LoadStateEventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Iterate_System_Int32_">BaseSimulation.Iterate(Int32)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnAfterTemperature_SpiceSharp_Simulations_LoadStateEventArgs_">BiasingSimulation.OnAfterTemperature(LoadStateEventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Load">BaseSimulation.Load()</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_PrintSolver">BiasingSimulation.PrintSolver()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_LoadBehaviors">BaseSimulation.LoadBehaviors()</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_ProblemVariable">BiasingSimulation.ProblemVariable</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_LoadNodeSets_System_Object_SpiceSharp_Simulations_LoadStateEventArgs_">BaseSimulation.LoadNodeSets(Object, LoadStateEventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BiasingParameters">BiasingSimulation.BiasingParameters</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_IsConvergent">BaseSimulation.IsConvergent()</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Iteration">BiasingSimulation.Iteration</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_OnBeforeLoad_SpiceSharp_Simulations_LoadStateEventArgs_">BaseSimulation.OnBeforeLoad(LoadStateEventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_SpiceSharp_Simulations_IStateful_SpiceSharp_Simulations_IIterationSimulationState__State">BiasingSimulation.IStateful&lt;IIterationSimulationState&gt;.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_OnAfterLoad_SpiceSharp_Simulations_LoadStateEventArgs_">BaseSimulation.OnAfterLoad(LoadStateEventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_SpiceSharp_Simulations_IStateful_SpiceSharp_Simulations_ITemperatureSimulationState__State">BiasingSimulation.IStateful&lt;ITemperatureSimulationState&gt;.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_OnBeforeTemperature_SpiceSharp_Simulations_LoadStateEventArgs_">BaseSimulation.OnBeforeTemperature(LoadStateEventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_SpiceSharp_Simulations_IStateful_SpiceSharp_Simulations_IBiasingSimulationState__State">BiasingSimulation.IStateful&lt;IBiasingSimulationState&gt;.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_OnAfterTemperature_SpiceSharp_Simulations_LoadStateEventArgs_">BaseSimulation.OnAfterTemperature(LoadStateEventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_SpiceSharp_Simulations_IStateful_SpiceSharp_Simulations_Biasing_TemperatureSimulationState__State">BiasingSimulation.IStateful&lt;TemperatureSimulationState&gt;.State</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Status">Simulation.Status</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_SpiceSharp_ParameterSets_IParameterized_SpiceSharp_Simulations_BiasingParameters__Parameters">BiasingSimulation.IParameterized&lt;BiasingParameters&gt;.Parameters</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Configurations">Simulation.Configurations</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_IVariable_System_Double___Solved">BiasingSimulation.ISimulation&lt;IVariable&lt;Double&gt;&gt;.Solved</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Statistics">Simulation.Statistics</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Statistics">BiasingSimulation.Statistics</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Variables">Simulation.Variables</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BeforeLoad">BiasingSimulation.BeforeLoad</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData">Simulation.ExportSimulationData</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_AfterLoad">BiasingSimulation.AfterLoad</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeSetup">Simulation.BeforeSetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BeforeTemperature">BiasingSimulation.BeforeTemperature</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">Simulation.AfterSetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_AfterTemperature">BiasingSimulation.AfterTemperature</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeExecute">Simulation.BeforeExecute</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_">Simulation.Run(IEntityCollection)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterExecute">Simulation.AfterExecute</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Validate_SpiceSharp_Validation_IRules_SpiceSharp_Entities_IEntityCollection_">Simulation.Validate(IRules, IEntityCollection)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeUnsetup">Simulation.BeforeUnsetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_UsesBehaviors__1">Simulation.UsesBehaviors&lt;B&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterUnsetup">Simulation.AfterUnsetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_GetState__1">Simulation.GetState&lt;S&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Name">Simulation.Name</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_TryGetState__1___0__">Simulation.TryGetState&lt;S&gt;(S)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityBehaviors">Simulation.EntityBehaviors</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityParameters">Simulation.EntityParameters</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_SimulationStatistics">Simulation.SimulationStatistics</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BehaviorTypes">Simulation.BehaviorTypes</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Circuits_EntityCollection_">Simulation.Run(EntityCollection)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_UsesState__1">Simulation.UsesState&lt;S&gt;()</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnExport_SpiceSharp_Simulations_ExportDataEventArgs_">Simulation.OnExport(ExportDataEventArgs)</a>
@@ -227,6 +240,12 @@
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_">Simulation.OnAfterSetup(EventArgs)</a>
     </div>
     <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeValidation_System_EventArgs_">Simulation.OnBeforeValidation(EventArgs)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterValidation_System_EventArgs_">Simulation.OnAfterValidation(EventArgs)</a>
+    </div>
+    <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_">Simulation.OnAfterExecute(AfterExecuteEventArgs)</a>
     </div>
     <div>
@@ -234,6 +253,87 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterUnsetup_System_EventArgs_">Simulation.OnAfterUnsetup(EventArgs)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Status">Simulation.Status</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_States">Simulation.States</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Behaviors">Simulation.Behaviors</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Name">Simulation.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityBehaviors">Simulation.EntityBehaviors</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData">Simulation.ExportSimulationData</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeSetup">Simulation.BeforeSetup</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">Simulation.AfterSetup</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeValidation">Simulation.BeforeValidation</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterValidation">Simulation.AfterValidation</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeExecute">Simulation.BeforeExecute</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterExecute">Simulation.AfterExecute</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeUnsetup">Simulation.BeforeUnsetup</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterUnsetup">Simulation.AfterUnsetup</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -261,7 +361,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_OP_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class OP : BaseSimulation</code></pre>
+    <pre><code class="lang-csharp hljs">public class OP : BiasingSimulation, IBiasingSimulation, ISimulation&lt;IVariable&lt;double&gt;&gt;, ITemperatureSimulation, IEventfulSimulation, ISimulation, IParameterSetCollection, IParameterSet, ICloneable, IStateful&lt;ITemperatureSimulationState&gt;, IBehavioral&lt;ITemperatureBehavior&gt;, IBehavioral&lt;IBiasingBehavior&gt;, IBehavioral&lt;IConvergenceBehavior&gt;, IStateful&lt;IBiasingSimulationState&gt;, IStateful&lt;TemperatureSimulationState&gt;, IStateful&lt;IIterationSimulationState&gt;, IStateful, IBehavioral&lt;IBiasingUpdateBehavior&gt;, IBehavioral, IParameterized&lt;BiasingParameters&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -287,7 +387,23 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
-        <td><p>The identifier of the simulation.</p>
+        <td><p>The name of the simulation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -304,59 +420,100 @@
     <pre><code class="lang-csharp hljs">protected override void Execute()</code></pre>
   </div>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html#SpiceSharp_Simulations_BaseSimulation_Execute">BaseSimulation.Execute()</a></div>
+  <div><a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Execute">BiasingSimulation.Execute()</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.SpiceSharpException.html">SpiceSharpException</a></td>
+        <td><p>Thrown if the simulation can&apos;t continue.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISimulation-1.html">ISimulation&lt;V&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulation.html">ITemperatureSimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful&lt;S&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral&lt;B&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral&lt;B&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral&lt;B&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful&lt;S&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful&lt;S&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful&lt;S&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral&lt;B&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></div>
+      <div><a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a></div>
   </div>
 </article>
           </div>

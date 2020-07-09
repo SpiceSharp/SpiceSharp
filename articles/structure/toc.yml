@@ -2,13 +2,9 @@
   href: flow.md
 - name: Iterating to a solution
   href: iterate.md
-- name: Operating point analysis
-  href: operatingpoint.svg
-- name: Small Signal analysis
+- name: DC / Operating point analysis
+  href: operatingpoint.md
+- name: AC / Small Signal analysis
   href: frequency.md
 - name: Transient analysis
   href: transient.md
-- name: Entities, components and models
-  href: entities.md
-- name: Parameters
-  href: parameters.md

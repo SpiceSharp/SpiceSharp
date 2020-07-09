@@ -1,0 +1,608 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ISolver&lt;T&gt;
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ISolver&lt;T&gt;
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Algebra.ISolver`1">
+  
+  
+  <h1 id="SpiceSharp_Algebra_ISolver_1" data-uid="SpiceSharp.Algebra.ISolver`1" class="text-break">Interface ISolver&lt;T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>Describes a linear system of equations. It tracks permutations of
+the equations and the variables.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_GetParameterSet__1">IParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_TryGetParameterSet__1___0__">IParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html#SpiceSharp_ParameterSets_IParameterSetCollection_ParameterSets">IParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_SetParameter__1_System_String___0_">IParameterSet.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_TrySetParameter__1_System_String___0_">IParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_GetProperty__1_System_String_">IParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_TryGetProperty__1_System_String___0__">IParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_CreateParameterSetter__1_System_String_">IParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html#SpiceSharp_ParameterSets_IParameterSet_CreatePropertyGetter__1_System_String_">IParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_Clone">ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html#SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Algebra.html">SpiceSharp.Algebra</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Algebra_ISolver_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ISolver&lt;T&gt; : IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td><p>The base type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Algebra_ISolver_1_Degeneracy_" data-uid="SpiceSharp.Algebra.ISolver`1.Degeneracy*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Degeneracy" data-uid="SpiceSharp.Algebra.ISolver`1.Degeneracy">Degeneracy</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the degeneracy of the matrix. For example, specifying 1 will let the solver know that one equation is
+expected to be linearly dependent on the others.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int Degeneracy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The degeneracy.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if the value is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_IsFactored_" data-uid="SpiceSharp.Algebra.ISolver`1.IsFactored*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_IsFactored" data-uid="SpiceSharp.Algebra.ISolver`1.IsFactored">IsFactored</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this solver has been factored.
+A solver needs to be factored becore it can solve for a solution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsFactored { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this solver is factored; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_Item_" data-uid="SpiceSharp.Algebra.ISolver`1.Item*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Item_SpiceSharp_Algebra_MatrixLocation_" data-uid="SpiceSharp.Algebra.ISolver`1.Item(SpiceSharp.Algebra.MatrixLocation)">Item[MatrixLocation]</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the value of the matrix at the specified location.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T this[MatrixLocation location] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>The location.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The value of the matrix element.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_Item_" data-uid="SpiceSharp.Algebra.ISolver`1.Item*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Item_System_Int32_" data-uid="SpiceSharp.Algebra.ISolver`1.Item(System.Int32)">Item[Int32]</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the value of the right hand side vector at the specified row.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T this[int row] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row</span></td>
+        <td><p>The row.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The value of the right hand side vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">row</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_Item_" data-uid="SpiceSharp.Algebra.ISolver`1.Item*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Item_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.ISolver`1.Item(System.Int32,System.Int32)">Item[Int32, Int32]</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the value of the matrix at the specified row and column.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T this[int row, int column] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row</span></td>
+        <td><p>The row.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">column</span></td>
+        <td><p>The column.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">row</code> or <code data-dev-comment-type="paramref" class="paramref">column</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_Size_" data-uid="SpiceSharp.Algebra.ISolver`1.Size*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Size" data-uid="SpiceSharp.Algebra.ISolver`1.Size">Size</h4>
+  <div class="markdown level1 summary"><p>Gets the size of the solver. This is the total number of equations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">int Size { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The size.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Algebra_ISolver_1_Clear_" data-uid="SpiceSharp.Algebra.ISolver`1.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Clear" data-uid="SpiceSharp.Algebra.ISolver`1.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears the solver of any elements. The size of the solver becomes 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Clear()</code></pre>
+  </div>
+  <h5 id="SpiceSharp_Algebra_ISolver_1_Clear_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The method is only redefined here to avoid ambiguity issues between
+<a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&lt;T&gt;</a> and <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a>.</p>
+</div>
+  <a id="SpiceSharp_Algebra_ISolver_1_Factor_" data-uid="SpiceSharp.Algebra.ISolver`1.Factor*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Factor" data-uid="SpiceSharp.Algebra.ISolver`1.Factor">Factor()</h4>
+  <div class="markdown level1 summary"><p>Factor the equation matrix and right hand side vector.
+This method can save time when factoring similar matrices in succession.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool Factor()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the factoring was successful; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_Reset_" data-uid="SpiceSharp.Algebra.ISolver`1.Reset*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Reset" data-uid="SpiceSharp.Algebra.ISolver`1.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Clears all matrix and vector elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Reset()</code></pre>
+  </div>
+  <h5 id="SpiceSharp_Algebra_ISolver_1_Reset_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>This method is only redefined here to avoid ambiguity
+issues between <a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&lt;T&gt;</a> and <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a>.</p>
+</div>
+  <a id="SpiceSharp_Algebra_ISolver_1_Solve_" data-uid="SpiceSharp.Algebra.ISolver`1.Solve*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_Solve_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.Solve(SpiceSharp.Algebra.IVector{`0})">Solve(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Solves the equations using the factored matrix and right hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Solve(IVector&lt;T&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_SolveTransposed_" data-uid="SpiceSharp.Algebra.ISolver`1.SolveTransposed*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_SolveTransposed_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.SolveTransposed(SpiceSharp.Algebra.IVector{`0})">SolveTransposed(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Solves the equations using the transposed factored matrix and right hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void SolveTransposed(IVector&lt;T&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

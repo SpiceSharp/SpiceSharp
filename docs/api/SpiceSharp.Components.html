@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Components
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -78,10 +79,10 @@
     <h3 id="classes">Classes
   </h3>
       <h4><a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistor.html">BipolarJunctionTransistor</a></h4>
-      <section><p>A bipolar junction transistor (BJT)</p>
+      <section><p>A bipolar junction transistor (BJT).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistorModel.html">BipolarJunctionTransistorModel</a></h4>
-      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistor.html">BipolarJunctionTransistor</a></p>
+      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistor.html">BipolarJunctionTransistor</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Capacitor.html">Capacitor</a></h4>
       <section><p>A capacitor</p>
@@ -93,22 +94,16 @@
       <section><p>A class that represents a (Spice) component/device.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.ComponentBindingContext.html">ComponentBindingContext</a></h4>
-      <section><p>A binding context for a <a class="xref" href="SpiceSharp.Components.Component.html">Component</a>.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Components.ComponentInstanceData.html">ComponentInstanceData</a></h4>
-      <section><p>Instance data for using in combination with components.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Components.ComponentNoise.html">ComponentNoise</a></h4>
-      <section><p>Noise variables</p>
+      <section><p>Context for binding an <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a> created by an <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a> to an <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSource.html">CurrentControlledCurrentSource</a></h4>
       <section><p>A current-controlled current source.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSource.html">CurrentControlledVoltageSource</a></h4>
-      <section><p>A current-controlled voltage source</p>
+      <section><p>A current-controlled voltage source.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.CurrentSource.html">CurrentSource</a></h4>
-      <section><p>An independent current source</p>
+      <section><p>An independent current source.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.CurrentSwitch.html">CurrentSwitch</a></h4>
       <section><p>A current-controlled switch</p>
@@ -117,13 +112,13 @@
       <section><p>A model for a <a class="xref" href="SpiceSharp.Components.CurrentSwitch.html">CurrentSwitch</a></p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Diode.html">Diode</a></h4>
-      <section><p>A diode</p>
+      <section><p>A diode.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.DiodeModel.html">DiodeModel</a></h4>
-      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Diode.html">Diode</a></p>
+      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Diode.html">Diode</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a></h4>
-      <section><p>An inductor</p>
+      <section><p>An inductor.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.JFET.html">JFET</a></h4>
       <section><p>A junction field-effect transistor.</p>
@@ -137,35 +132,50 @@
       <h4><a class="xref" href="SpiceSharp.Components.Model.html">Model</a></h4>
       <section><p>This class represents a (Spice) model.</p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Components.ModelBindingContext.html">ModelBindingContext</a></h4>
+      <section><p>Context for binding an <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a> created by a <a class="xref" href="SpiceSharp.Components.Model.html">Model</a> to an <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Components.Mosfet1.html">Mosfet1</a></h4>
-      <section><p>A Mosfet.
-Level 1, Shichman-Hodges.</p>
+      <section><p>A Level 1 Mosfet using the Shichman-Hodges model.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Mosfet1Model.html">Mosfet1Model</a></h4>
-      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Mosfet1.html">Mosfet1</a></p>
+      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Mosfet1.html">Mosfet1</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Mosfet2.html">Mosfet2</a></h4>
-      <section><p>A MOS2 Mosfet.
-Level 2, A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.</p>
+      <section><p>A Level 2 Mosfet using models by A. Vladimirescu and S. Liu, The Simulation of MOS Integrated Circuits Using SPICE2, ERL Memo No. M80/7, Electronics Research Laboratory University of California, Berkeley, October 1980.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Mosfet2Model.html">Mosfet2Model</a></h4>
-      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Mosfet2.html">Mosfet2</a></p>
+      <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Mosfet2.html">Mosfet2</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a></h4>
-      <section><p>A MOS3 Mosfet
-Level 3, a semi-empirical model(see reference for level 3).</p>
+      <section><p>A Level 3, semi-empirical model (see reference for level 3).</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Mosfet3Model.html">Mosfet3Model</a></h4>
       <section><p>A model for a <a class="xref" href="SpiceSharp.Components.Mosfet3.html">Mosfet3</a></p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.MutualInductance.html">MutualInductance</a></h4>
-      <section><p>A mutual inductance</p>
+      <section><p>A mutual inductance between two inductors.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Parallel.html">Parallel</a></h4>
+      <section><p>A component that can execute multiple behaviors created by <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a> instances in parallel.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.Pulse.html">Pulse</a></h4>
       <section><p>This class implements a pulse waveform.</p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Components.Pulse.Instance.html">Pulse.Instance</a></h4>
+      <section><p>The instance for a pulsed waveform.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Pwl.html">Pwl</a></h4>
+      <section><p>Piecewise linear waveform.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Pwl.Instance.html">Pwl.Instance</a></h4>
+      <section><p>An instance of the <a class="xref" href="SpiceSharp.Components.IWaveform.html">IWaveform</a> interface for a <a class="xref" href="SpiceSharp.Components.Pwl.html">Pwl</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Pwl.Instance.Line.html">Pwl.Instance.Line</a></h4>
+      <section><p>A description of a line segment.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Components.Resistor.html">Resistor</a></h4>
-      <section><p>A resistor</p>
+      <section><p>A resistor.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.ResistorModel.html">ResistorModel</a></h4>
       <section><p>A model for semiconductor <a class="xref" href="SpiceSharp.Components.Resistor.html">Resistor</a></p>
@@ -173,17 +183,26 @@ Level 3, a semi-empirical model(see reference for level 3).</p>
       <h4><a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a></h4>
       <section><p>This class describes a sine wave.</p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Components.Sine.Instance.html">Sine.Instance</a></h4>
+      <section><p>An instance of a <a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a> waveform.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a></h4>
+      <section><p>A subcircuit that can contain a collection of entities.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.SubcircuitDefinition.html">SubcircuitDefinition</a></h4>
+      <section><p>A standard implementation of a <a class="xref" href="SpiceSharp.Components.ISubcircuitDefinition.html">ISubcircuitDefinition</a>.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSource.html">VoltageControlledCurrentSource</a></h4>
-      <section><p>A voltage-controlled current source</p>
+      <section><p>A voltage-controlled current source.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSource.html">VoltageControlledVoltageSource</a></h4>
-      <section><p>A voltage-controlled current-source</p>
+      <section><p>A voltage-controlled current-source.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.VoltageDelay.html">VoltageDelay</a></h4>
       <section><p>A component that will drive an output to a delayed input voltage.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.VoltageSource.html">VoltageSource</a></h4>
-      <section><p>An independent voltage source</p>
+      <section><p>An independent voltage source.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.VoltageSwitch.html">VoltageSwitch</a></h4>
       <section><p>A voltage-controlled switch</p>
@@ -191,8 +210,36 @@ Level 3, a semi-empirical model(see reference for level 3).</p>
       <h4><a class="xref" href="SpiceSharp.Components.VoltageSwitchModel.html">VoltageSwitchModel</a></h4>
       <section><p>A model for a <a class="xref" href="SpiceSharp.Components.VoltageSwitch.html">VoltageSwitch</a></p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></h4>
-      <section><p>Template for a waveform that can change value over time.</p>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Components.Point.html">Point</a></h4>
+      <section><p>Represents a point for a <a class="xref" href="SpiceSharp.Components.Pwl.html">Pwl</a>.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Components.IBranchedBehavior-1.html">IBranchedBehavior&lt;T&gt;</a></h4>
+      <section><p>An interface describing a behavior with a branch equation.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></h4>
+      <section><p>An interface that describes a component that can be connected in a circuit.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></h4>
+      <section><p>A template for a binding context to bind component behaviors to simulations.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.ISubcircuitDefinition.html">ISubcircuitDefinition</a></h4>
+      <section><p>Interface that describes an entity collection for a <a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.IWaveform.html">IWaveform</a></h4>
+      <section><p>An instance of a waveform that can be used to sample datapoints.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></h4>
+      <section><p>A waveform description.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></h4>
+      <section><p>A distributor of work that can be done in parallel.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.IWorkDistributor-1.html">IWorkDistributor&lt;R&gt;</a></h4>
+      <section><p>A distributor of work that can be done in parallel while needing to return a value.</p>
 </section>
 </article>
           </div>

@@ -1,0 +1,605 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Parallel
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Parallel
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.Parallel">
+  
+  
+  <h1 id="SpiceSharp_Components_Parallel" data-uid="SpiceSharp.Components.Parallel" class="text-break">Class Parallel
+  </h1>
+  <div class="markdown level0 summary"><p>A component that can execute multiple behaviors created by <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a> instances in parallel.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
+    <div class="level4"><span class="xref">Parallel</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></div>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.ParallelComponents.Parameters.html">Parameters</a>&gt;</div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_SetParameter__1_System_String___0_">Entity.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_Clone">Entity.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_ToString">Entity.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_LinkParameters">Entity.LinkParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_Name">Entity.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.html">SpiceSharp.Components</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_Parallel_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Parallel : Entity, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
+  </div>
+  <h5 id="SpiceSharp_Components_Parallel_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Running entity behaviors in parallel requires shared resources to be locked. Running entities
+in parallel are not a good idea if the entities spend a lot of time accessing these
+shared resources compared to the time they spend actually computing. Especially since
+there is also some overhead in setting up these resources and structures for executing
+behaviors in parallel.</p>
+<p>It is possible to combine entities into a <a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a> first, and giving them
+a local solver. This keeps the shared resources very limited, allowing each subcircuit to do
+its work without interference from read-write locking. This option is very advantageous if the
+subcircuits are large, but have only a few voltage nodes common with the outside.</p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Components_Parallel__ctor_" data-uid="SpiceSharp.Components.Parallel.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Parallel__ctor_System_String_" data-uid="SpiceSharp.Components.Parallel.#ctor(System.String)">Parallel(String)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.ParallelComponents.html">SpiceSharp.Components.ParallelComponents</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Parallel(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the component.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Parallel__ctor_" data-uid="SpiceSharp.Components.Parallel.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Parallel__ctor_System_String_SpiceSharp_Entities_IEntity___" data-uid="SpiceSharp.Components.Parallel.#ctor(System.String,SpiceSharp.Entities.IEntity[])">Parallel(String, IEntity[])</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.ParallelComponents.html">SpiceSharp.Components.ParallelComponents</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Parallel(string name, params IEntity[] entities)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the component.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>[]</td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The components that can be executed in parallel.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Parallel__ctor_" data-uid="SpiceSharp.Components.Parallel.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Parallel__ctor_System_String_System_Collections_Generic_IEnumerable_SpiceSharp_Entities_IEntity__" data-uid="SpiceSharp.Components.Parallel.#ctor(System.String,System.Collections.Generic.IEnumerable{SpiceSharp.Entities.IEntity})">Parallel(String, IEnumerable&lt;IEntity&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.ParallelComponents.html">SpiceSharp.Components.ParallelComponents</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Parallel(string name, IEnumerable&lt;IEntity&gt; entities)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the component.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>&gt;</td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The components that can be executed in parallel.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_Parallel_Model_" data-uid="SpiceSharp.Components.Parallel.Model*"></a>
+  <h4 id="SpiceSharp_Components_Parallel_Model" data-uid="SpiceSharp.Components.Parallel.Model">Model</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the name of the component model.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Model { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The name of the component model.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Parallel_Nodes_" data-uid="SpiceSharp.Components.Parallel.Nodes*"></a>
+  <h4 id="SpiceSharp_Components_Parallel_Nodes" data-uid="SpiceSharp.Components.Parallel.Nodes">Nodes</h4>
+  <div class="markdown level1 summary"><p>Gets a list of all the nodes that the component is connected to.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; Nodes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>The nodes.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Parallel_Parameters_" data-uid="SpiceSharp.Components.Parallel.Parameters*"></a>
+  <h4 id="SpiceSharp_Components_Parallel_Parameters" data-uid="SpiceSharp.Components.Parallel.Parameters">Parameters</h4>
+  <div class="markdown level1 summary"><p>Gets the parameter set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Parameters Parameters { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.ParallelComponents.Parameters.html">Parameters</a></td>
+        <td><p>The parameter set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_Parallel_Connect_" data-uid="SpiceSharp.Components.Parallel.Connect*"></a>
+  <h4 id="SpiceSharp_Components_Parallel_Connect_System_String___" data-uid="SpiceSharp.Components.Parallel.Connect(System.String[])">Connect(String[])</h4>
+  <div class="markdown level1 summary"><p>Connects the component in the circuit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IComponent Connect(params string[] nodes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">nodes</span></td>
+        <td><p>The node indices.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></td>
+        <td><p>The instance calling the method for chaining.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">nodes</code> or any of the nodes is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.NodeMismatchException.html">NodeMismatchException</a></td>
+        <td><p>Thrown if the number of nodes does not match the pin count of the component.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Parallel_CreateBehaviors_" data-uid="SpiceSharp.Components.Parallel.CreateBehaviors*"></a>
+  <h4 id="SpiceSharp_Components_Parallel_CreateBehaviors_SpiceSharp_Simulations_ISimulation_" data-uid="SpiceSharp.Components.Parallel.CreateBehaviors(SpiceSharp.Simulations.ISimulation)">CreateBehaviors(ISimulation)</h4>
+  <div class="markdown level1 summary"><p>Creates the behaviors and stores them in the specified container.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void CreateBehaviors(ISimulation simulation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Entity.CreateBehaviors(ISimulation)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">simulation</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if the simulation does not use an <a class="xref" href="SpiceSharp.Simulations.IComplexSimulationState.html">IComplexSimulationState</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
+        <td><p>Thrown if a required behavior or parameter set could not be found.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.General.AmbiguousTypeException.html">AmbiguousTypeException</a></td>
+        <td><p>Thrown if a behavior or parameter set could not be resolved unambiguously.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Pins_SpiceSharp_Components_IComponent_">Documentation.Pins(IComponent)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
+      <div><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></div>
+      <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;P&gt;</div>
+      <div><a class="xref" href="SpiceSharp.Components.ParallelComponents.Parameters.html">Parameters</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

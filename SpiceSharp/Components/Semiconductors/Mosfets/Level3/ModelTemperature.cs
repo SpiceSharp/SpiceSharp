@@ -48,6 +48,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
             Parameters = context.GetParameterSet<ModelParameters>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             if (!Parameters.NominalTemperature.Given)

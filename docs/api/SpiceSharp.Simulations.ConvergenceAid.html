@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ConvergenceAid
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -119,13 +120,13 @@ solution, then convergence can be achieved much faster.</p>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Simulations_ConvergenceAid__ctor_" data-uid="SpiceSharp.Simulations.ConvergenceAid.#ctor*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid__ctor_System_String_System_Double_" data-uid="SpiceSharp.Simulations.ConvergenceAid.#ctor(System.String,System.Double)">ConvergenceAid(String, Double)</h4>
+  <h4 id="SpiceSharp_Simulations_ConvergenceAid__ctor_SpiceSharp_Simulations_IVariable_SpiceSharp_Simulations_IBiasingSimulationState_System_Double_" data-uid="SpiceSharp.Simulations.ConvergenceAid.#ctor(SpiceSharp.Simulations.IVariable,SpiceSharp.Simulations.IBiasingSimulationState,System.Double)">ConvergenceAid(IVariable, IBiasingSimulationState, Double)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Simulations.ConvergenceAid.html">ConvergenceAid</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ConvergenceAid(string name, double value)</code></pre>
+    <pre><code class="lang-csharp hljs">public ConvergenceAid(IVariable variable, IBiasingSimulationState state, double value)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -138,9 +139,15 @@ solution, then convergence can be achieved much faster.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name of the variable.</p>
+        <td><a class="xref" href="SpiceSharp.Simulations.IVariable.html">IVariable</a></td>
+        <td><span class="parametername">variable</span></td>
+        <td><p>The variable.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td><p>The biasing simulation state.</p>
 </td>
       </tr>
       <tr>
@@ -151,128 +158,29 @@ solution, then convergence can be achieved much faster.</p>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">variable</code> or <code data-dev-comment-type="paramref" class="paramref">state</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.SpiceSharpException.html">SpiceSharpException</a></td>
+        <td><p>Thrown if the variable for the convergence aid was not found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Diagonal_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Diagonal*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Diagonal" data-uid="SpiceSharp.Simulations.ConvergenceAid.Diagonal">Diagonal</h4>
-  <div class="markdown level1 summary"><p>Gets the diagonal element.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected MatrixElement&lt;double&gt; Diagonal { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Name_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Name*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Name" data-uid="SpiceSharp.Simulations.ConvergenceAid.Name">Name</h4>
-  <div class="markdown level1 summary"><p>Gets the name of the variable.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Node_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Node*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Node" data-uid="SpiceSharp.Simulations.ConvergenceAid.Node">Node</h4>
-  <div class="markdown level1 summary"><p>Gets the node for which the aid is meant.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Variable Node { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Variable.html">Variable</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Rhs_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Rhs*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Rhs" data-uid="SpiceSharp.Simulations.ConvergenceAid.Rhs">Rhs</h4>
-  <div class="markdown level1 summary"><p>Gets the right-hand side element.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected VectorElement&lt;double&gt; Rhs { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Solver_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Solver*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Solver" data-uid="SpiceSharp.Simulations.ConvergenceAid.Solver">Solver</h4>
-  <div class="markdown level1 summary"><p>Gets the solver of the system of equations.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Solver&lt;double&gt; Solver { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Solver-1.html">Solver</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Simulations_ConvergenceAid_Value_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Value*"></a>
   <h4 id="SpiceSharp_Simulations_ConvergenceAid_Value" data-uid="SpiceSharp.Simulations.ConvergenceAid.Value">Value</h4>
   <div class="markdown level1 summary"><p>Gets the value for the convergence aid.</p>
@@ -297,14 +205,14 @@ solution, then convergence can be achieved much faster.</p>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Variables_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Variables*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Variables" data-uid="SpiceSharp.Simulations.ConvergenceAid.Variables">Variables</h4>
-  <div class="markdown level1 summary"><p>Gets the unknown variables.</p>
+  <a id="SpiceSharp_Simulations_ConvergenceAid_Variable_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Variable*"></a>
+  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Variable" data-uid="SpiceSharp.Simulations.ConvergenceAid.Variable">Variable</h4>
+  <div class="markdown level1 summary"><p>Gets the variable.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected VariableSet Variables { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IVariable Variable { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -316,8 +224,9 @@ solution, then convergence can be achieved much faster.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.VariableSet.html">VariableSet</a></td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.IVariable.html">IVariable</a></td>
+        <td><p>The variable.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -332,90 +241,9 @@ solution, then convergence can be achieved much faster.</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual void Aid()</code></pre>
   </div>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Initialize_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Initialize*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Initialize_SpiceSharp_Simulations_BaseSimulation_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Initialize(SpiceSharp.Simulations.BaseSimulation)">Initialize(BaseSimulation)</h4>
-  <div class="markdown level1 summary"><p>Sets up the convergence aid for a specific simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Initialize(BaseSimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_ConvergenceAid_Unsetup_" data-uid="SpiceSharp.Simulations.ConvergenceAid.Unsetup*"></a>
-  <h4 id="SpiceSharp_Simulations_ConvergenceAid_Unsetup" data-uid="SpiceSharp.Simulations.ConvergenceAid.Unsetup">Unsetup()</h4>
-  <div class="markdown level1 summary"><p>Destroys the convergence aid.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Unsetup()</code></pre>
-  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

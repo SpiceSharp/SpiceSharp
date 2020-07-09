@@ -1,0 +1,604 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Time
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Time
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.Mosfets.Time">
+  
+  
+  <h1 id="SpiceSharp_Components_Mosfets_Time" data-uid="SpiceSharp.Components.Mosfets.Time" class="text-break">Class Time
+  </h1>
+  <div class="markdown level0 summary"><p>Transient behavior for a mosfet.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+    <div class="level4"><span class="xref">Time</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.Mosfets.html">SpiceSharp.Components.Mosfets</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_Mosfets_Time_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Time : Behavior, ITimeBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Components_Mosfets_Time__ctor_" data-uid="SpiceSharp.Components.Mosfets.Time.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time__ctor_System_String_SpiceSharp_Components_IComponentBindingContext_" data-uid="SpiceSharp.Components.Mosfets.Time.#ctor(System.String,SpiceSharp.Components.IComponentBindingContext)">Time(String, IComponentBindingContext)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Mosfets.Time.html">Time</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Time(string name, IComponentBindingContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the behavior.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The binding context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_Mosfets_Time_Cbd_" data-uid="SpiceSharp.Components.Mosfets.Time.Cbd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Cbd" data-uid="SpiceSharp.Components.Mosfets.Time.Cbd">Cbd</h4>
+  <div class="markdown level1 summary"><p>Gets the bulk-drain capacitance (cbd).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cbd&quot;)]
+[ParameterInfo(&quot;Bulk-drain capacitance&quot;, Units = &quot;F&quot;)]
+public double Cbd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-drain capacitance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Cbs_" data-uid="SpiceSharp.Components.Mosfets.Time.Cbs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Cbs" data-uid="SpiceSharp.Components.Mosfets.Time.Cbs">Cbs</h4>
+  <div class="markdown level1 summary"><p>Gets the bulk-source capacitance (cbs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cbs&quot;)]
+[ParameterInfo(&quot;Bulk-source capacitance&quot;, Units = &quot;F&quot;)]
+public double Cbs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-source capacitance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Cgb_" data-uid="SpiceSharp.Components.Mosfets.Time.Cgb*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Cgb" data-uid="SpiceSharp.Components.Mosfets.Time.Cgb">Cgb</h4>
+  <div class="markdown level1 summary"><p>Gets the gate-bulk capacitance (cgb).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cgb&quot;)]
+[ParameterInfo(&quot;Gate-bulk capacitance&quot;, Units = &quot;F&quot;)]
+public double Cgb { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The gate-bulk capacitance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Cgd_" data-uid="SpiceSharp.Components.Mosfets.Time.Cgd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Cgd" data-uid="SpiceSharp.Components.Mosfets.Time.Cgd">Cgd</h4>
+  <div class="markdown level1 summary"><p>Gets the gate-drain capacitance (cgd).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cgd&quot;)]
+[ParameterInfo(&quot;Gate-drain capacitance&quot;, Units = &quot;F&quot;)]
+public double Cgd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The gate-drain capacitance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Cgs_" data-uid="SpiceSharp.Components.Mosfets.Time.Cgs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Cgs" data-uid="SpiceSharp.Components.Mosfets.Time.Cgs">Cgs</h4>
+  <div class="markdown level1 summary"><p>Gets the gate-source capacitance (cgs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;cgs&quot;)]
+[ParameterInfo(&quot;Gate-source capacitance&quot;, Units = &quot;F&quot;)]
+public double Cgs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The gate-source capacitance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Qbd_" data-uid="SpiceSharp.Components.Mosfets.Time.Qbd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Qbd" data-uid="SpiceSharp.Components.Mosfets.Time.Qbd">Qbd</h4>
+  <div class="markdown level1 summary"><p>Gets the charge on the bulk-drain capacitance (qbd).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qbd&quot;)]
+[ParameterInfo(&quot;Bulk-drain charge storage&quot;, Units = &quot;C&quot;)]
+public double Qbd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-drain charge.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Qbs_" data-uid="SpiceSharp.Components.Mosfets.Time.Qbs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Qbs" data-uid="SpiceSharp.Components.Mosfets.Time.Qbs">Qbs</h4>
+  <div class="markdown level1 summary"><p>Gets the charge on the bulk-source capacitance (qbs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qbs&quot;)]
+[ParameterInfo(&quot;Bulk-source charge storage&quot;, Units = &quot;C&quot;)]
+public double Qbs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The bulk-source charge.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Qgb_" data-uid="SpiceSharp.Components.Mosfets.Time.Qgb*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Qgb" data-uid="SpiceSharp.Components.Mosfets.Time.Qgb">Qgb</h4>
+  <div class="markdown level1 summary"><p>Gets the charge on the gate-bulk capacitance (cgb).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qgb&quot;)]
+[ParameterInfo(&quot;Gate-bulk charge storage&quot;, Units = &quot;C&quot;)]
+public double Qgb { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The gate-bulk charge.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Qgd_" data-uid="SpiceSharp.Components.Mosfets.Time.Qgd*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Qgd" data-uid="SpiceSharp.Components.Mosfets.Time.Qgd">Qgd</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qgd&quot;)]
+[ParameterInfo(&quot;Gate-drain charge storage&quot;, Units = &quot;C&quot;)]
+public double Qgd { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Mosfets_Time_Qgs_" data-uid="SpiceSharp.Components.Mosfets.Time.Qgs*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_Qgs" data-uid="SpiceSharp.Components.Mosfets.Time.Qgs">Qgs</h4>
+  <div class="markdown level1 summary"><p>Gets the charge on the gate-source capacitance (qgs).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;qgs&quot;)]
+[ParameterInfo(&quot;Gate-source charge storage&quot;, Units = &quot;C&quot;)]
+public double Qgs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The gate-source charge.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_Mosfets_Time_UpdateTime_" data-uid="SpiceSharp.Components.Mosfets.Time.UpdateTime*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_UpdateTime_System_Object_SpiceSharp_Components_Mosfets_MosfetContributionEventArgs_" data-uid="SpiceSharp.Components.Mosfets.Time.UpdateTime(System.Object,SpiceSharp.Components.Mosfets.MosfetContributionEventArgs)">UpdateTime(Object, MosfetContributionEventArgs)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void UpdateTime(object sender, MosfetContributionEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">sender</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.Mosfets.MosfetContributionEventArgs.html">MosfetContributionEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_Mosfets_Time_SpiceSharp_Behaviors_ITimeBehavior_InitializeStates_" data-uid="SpiceSharp.Components.Mosfets.Time.SpiceSharp#Behaviors#ITimeBehavior#InitializeStates*"></a>
+  <h4 id="SpiceSharp_Components_Mosfets_Time_SpiceSharp_Behaviors_ITimeBehavior_InitializeStates" data-uid="SpiceSharp.Components.Mosfets.Time.SpiceSharp#Behaviors#ITimeBehavior#InitializeStates">ITimeBehavior.InitializeStates()</h4>
+  <div class="markdown level1 summary"><p>Initialize the state values from the current DC solution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ITimeBehavior.InitializeStates()</code></pre>
+  </div>
+  <h5 id="SpiceSharp_Components_Mosfets_Time_SpiceSharp_Behaviors_ITimeBehavior_InitializeStates_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>In this method, the initial value is calculated based on the operating point solution,
+and the result is stored in each respective <a class="xref" href="SpiceSharp.Simulations.IDerivative.html">IDerivative</a> or <a class="xref" href="SpiceSharp.Simulations.IIntegrationState.html">IIntegrationState</a>.</p>
+</div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+      <div><a class="xref" href="SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

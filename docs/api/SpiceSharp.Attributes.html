@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Attributes
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,26 +80,15 @@
   </h3>
       <h4><a class="xref" href="SpiceSharp.Attributes.ConnectedAttribute.html">ConnectedAttribute</a></h4>
       <section><p>Indicates that two pins are connected by a finite impedance at DC. This attribute can be
-applied to a <a class="xref" href="SpiceSharp.Components.Component.html">Component</a> to check for floating nodes using a <a class="xref" href="SpiceSharp.Circuits.Validator.html">Validator</a>.
-If this attribute is not applied, then all pins are assumed to be connected.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Attributes.DerivedPropertyAttribute.html">DerivedPropertyAttribute</a></h4>
-      <section><p>Indicates that a property is derived from other properties.</p>
+applied to an <a class="xref" href="SpiceSharp.Components.Component.html">Component</a> to check for floating nodes.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Attributes.IndependentSourceAttribute.html">IndependentSourceAttribute</a></h4>
       <section><p>Indicates that the circuit component is an independent source. This attribute can
 be applied to a <a class="xref" href="SpiceSharp.Components.Component.html">Component</a> to check for the existence of at
 least one independent source.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Attributes.ParameterInfoAttribute.html">ParameterInfoAttribute</a></h4>
-      <section><p>This attribute specifies a description and other metadata of a parameter. It can be applied to a field, property or method</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Attributes.ParameterNameAttribute.html">ParameterNameAttribute</a></h4>
-      <section><p>Specifies the name for a member. It can be applied to properties or method. Multiple names are allowed.
-This attribute is used to find members using reflection.</p>
-</section>
       <h4><a class="xref" href="SpiceSharp.Attributes.PinAttribute.html">PinAttribute</a></h4>
-      <section><p>Specifies the pins for a circuit component that extends <a class="xref" href="SpiceSharp.Components.Component.html">Component</a>.</p>
+      <section><p>Specifies the pins for a circuit component that extends <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Attributes.VoltageDriverAttribute.html">VoltageDriverAttribute</a></h4>
       <section><p>Indicates that two nodes are driven by a voltage source. This attribute can

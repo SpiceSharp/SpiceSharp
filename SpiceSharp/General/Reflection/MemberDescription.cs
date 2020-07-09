@@ -309,7 +309,12 @@ namespace SpiceSharp.Reflection
             return null;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string that represents the current member description.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current member description.
+        /// </returns>
         public override string ToString()
         {
             if (Names.Count > 0)

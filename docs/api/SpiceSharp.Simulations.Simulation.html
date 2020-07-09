@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Simulation
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,11 +80,62 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Simulation</span></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><span class="xref">Simulation</span></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -110,7 +162,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_Simulation_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class Simulation</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Simulation : ParameterSetCollection, IEventfulSimulation, ISimulation, IStateful, IBehavioral, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -136,21 +188,37 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
-        <td><p>The identifier of the simulation.</p>
+        <td><p>The name of the simulation.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Simulations_Simulation_BehaviorTypes_" data-uid="SpiceSharp.Simulations.Simulation.BehaviorTypes*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_BehaviorTypes" data-uid="SpiceSharp.Simulations.Simulation.BehaviorTypes">BehaviorTypes</h4>
-  <div class="markdown level1 summary"><p>Gets the behavior types in the order that they are called.</p>
+  <a id="SpiceSharp_Simulations_Simulation_Behaviors_" data-uid="SpiceSharp.Simulations.Simulation.Behaviors*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Behaviors" data-uid="SpiceSharp.Simulations.Simulation.Behaviors">Behaviors</h4>
+  <div class="markdown level1 summary"><p>Gets all behavior types that are used by the class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected List&lt;Type&gt; BehaviorTypes { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;Type&gt; Behaviors { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -162,47 +230,20 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.Type</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="SpiceSharp_Simulations_Simulation_BehaviorTypes_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>The order is important for establishing dependencies. A behavior that is called first should
-not depend on any other behaviors!</p>
-</div>
-  <a id="SpiceSharp_Simulations_Simulation_Configurations_" data-uid="SpiceSharp.Simulations.Simulation.Configurations*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Configurations" data-uid="SpiceSharp.Simulations.Simulation.Configurations">Configurations</h4>
-  <div class="markdown level1 summary"><p>Gets a set of <a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a> that hold the configurations for the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ParameterSetDictionary Configurations { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.ParameterSetDictionary.html">ParameterSetDictionary</a></td>
-        <td></td>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Type</span>&gt;</td>
+        <td><p>The behaviors.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_EntityBehaviors_" data-uid="SpiceSharp.Simulations.Simulation.EntityBehaviors*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_EntityBehaviors" data-uid="SpiceSharp.Simulations.Simulation.EntityBehaviors">EntityBehaviors</h4>
-  <div class="markdown level1 summary"><p>Gets a pool of all entity behaviors active in the simulation.</p>
+  <div class="markdown level1 summary"><p>Gets the entity behaviors.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BehaviorPool EntityBehaviors { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IBehaviorContainerCollection EntityBehaviors { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -214,38 +255,15 @@ not depend on any other behaviors!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.BehaviorPool.html">BehaviorPool</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_EntityParameters_" data-uid="SpiceSharp.Simulations.Simulation.EntityParameters*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_EntityParameters" data-uid="SpiceSharp.Simulations.Simulation.EntityParameters">EntityParameters</h4>
-  <div class="markdown level1 summary"><p>Gets a pool of all entity parameter sets active in the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ParameterPool EntityParameters { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.ParameterPool.html">ParameterPool</a></td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IBehaviorContainerCollection</a></td>
+        <td><p>The entity behaviors.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_Name_" data-uid="SpiceSharp.Simulations.Simulation.Name*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_Name" data-uid="SpiceSharp.Simulations.Simulation.Name">Name</h4>
-  <div class="markdown level1 summary"><p>Gets the identifier of the simulation.</p>
+  <div class="markdown level1 summary"><p>Gets the name of the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -263,18 +281,44 @@ not depend on any other behaviors!</p>
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td></td>
+        <td><p>The name.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Simulation_SimulationStatistics_" data-uid="SpiceSharp.Simulations.Simulation.SimulationStatistics*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_SimulationStatistics" data-uid="SpiceSharp.Simulations.Simulation.SimulationStatistics">SimulationStatistics</h4>
-  <div class="markdown level1 summary"><p>A reference to the regular simulation statistics (cached)</p>
+  <a id="SpiceSharp_Simulations_Simulation_States_" data-uid="SpiceSharp.Simulations.Simulation.States*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_States" data-uid="SpiceSharp.Simulations.Simulation.States">States</h4>
+  <div class="markdown level1 summary"><p>Gets all the states that the class uses.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected SimulationStatistics SimulationStatistics { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;Type&gt; States { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Type</span>&gt;</td>
+        <td><p>The states.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_Statistics_" data-uid="SpiceSharp.Simulations.Simulation.Statistics*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Statistics" data-uid="SpiceSharp.Simulations.Simulation.Statistics">Statistics</h4>
+  <div class="markdown level1 summary"><p>Gets the statistics.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimulationStatistics Statistics { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -287,42 +331,19 @@ not depend on any other behaviors!</p>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.SimulationStatistics.html">SimulationStatistics</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_Statistics_" data-uid="SpiceSharp.Simulations.Simulation.Statistics*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Statistics" data-uid="SpiceSharp.Simulations.Simulation.Statistics">Statistics</h4>
-  <div class="markdown level1 summary"><p>Gets a set of <a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a> that holds the statistics for the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TypeDictionary&lt;Statistics&gt; Statistics { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.TypeDictionary-1.html">TypeDictionary</a>&lt;<a class="xref" href="SpiceSharp.Simulations.Statistics.html">Statistics</a>&gt;</td>
-        <td></td>
+        <td><p>The statistics.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_Status_" data-uid="SpiceSharp.Simulations.Simulation.Status*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_Status" data-uid="SpiceSharp.Simulations.Simulation.Status">Status</h4>
-  <div class="markdown level1 summary"><p>Gets the current status of the simulation.</p>
+  <div class="markdown level1 summary"><p>Gets the current status of the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Simulation.Statuses Status { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public SimulationStatus Status { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -334,37 +355,66 @@ not depend on any other behaviors!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.Statuses.html">Simulation.Statuses</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_Variables_" data-uid="SpiceSharp.Simulations.Simulation.Variables*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Variables" data-uid="SpiceSharp.Simulations.Simulation.Variables">Variables</h4>
-  <div class="markdown level1 summary"><p>Gets the set of variables (unknowns).</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VariableSet Variables { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.VariableSet.html">VariableSet</a></td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.SimulationStatus.html">SimulationStatus</a></td>
+        <td><p>The current status.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="SpiceSharp_Simulations_Simulation_CreateBehaviors_" data-uid="SpiceSharp.Simulations.Simulation.CreateBehaviors*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_CreateBehaviors_SpiceSharp_Entities_IEntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.CreateBehaviors(SpiceSharp.Entities.IEntityCollection)">CreateBehaviors(IEntityCollection)</h4>
+  <div class="markdown level1 summary"><p>Creates all behaviors for the simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void CreateBehaviors(IEntityCollection entities)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">entities</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_CreateStates_" data-uid="SpiceSharp.Simulations.Simulation.CreateStates*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_CreateStates" data-uid="SpiceSharp.Simulations.Simulation.CreateStates">CreateStates()</h4>
+  <div class="markdown level1 summary"><p>Creates all the simulation states for the simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void CreateStates()</code></pre>
+  </div>
   <a id="SpiceSharp_Simulations_Simulation_Execute_" data-uid="SpiceSharp.Simulations.Simulation.Execute*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_Execute" data-uid="SpiceSharp.Simulations.Simulation.Execute">Execute()</h4>
   <div class="markdown level1 summary"><p>Executes the simulation.</p>
@@ -374,9 +424,83 @@ not depend on any other behaviors!</p>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected abstract void Execute()</code></pre>
   </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.SpiceSharpException.html">SpiceSharpException</a></td>
+        <td><p>Thrown if the simulation can&apos;t continue.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_GetState_" data-uid="SpiceSharp.Simulations.Simulation.GetState*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_GetState__1" data-uid="SpiceSharp.Simulations.Simulation.GetState``1">GetState&lt;S&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets the state of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual S GetState&lt;S&gt;()
+    where S : ISimulationState</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">S</span></td>
+        <td><p>The type, or <code>null</code> if the state isn&apos;t used.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">S</span></td>
+        <td><p>The simulation state type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
+        <td><p>Thrown if the simulation state is not defined on this instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_Simulation_OnAfterExecute_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterExecute*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)">OnAfterExecute(AfterExecuteEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">AfterSetup</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">AfterSetup</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -403,7 +527,7 @@ not depend on any other behaviors!</p>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_OnAfterSetup_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterSetup*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)">OnAfterSetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">AfterSetup</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">AfterSetup</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -430,7 +554,7 @@ not depend on any other behaviors!</p>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_OnAfterUnsetup_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterUnsetup*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnAfterUnsetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterUnsetup(System.EventArgs)">OnAfterUnsetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">AfterUnsetup</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterUnsetup">AfterUnsetup</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -455,9 +579,36 @@ not depend on any other behaviors!</p>
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Simulations_Simulation_OnAfterValidation_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterValidation*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_OnAfterValidation_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterValidation(System.EventArgs)">OnAfterValidation(EventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterValidation">AfterValidation</a> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnAfterValidation(EventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventArgs</span></td>
+        <td><span class="parametername">args</span></td>
+        <td><p>The <span class="xref">System.EventArgs</span> instance containing the event data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_Simulation_OnBeforeExecute_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeExecute*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeExecute_SpiceSharp_Simulations_BeforeExecuteEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)">OnBeforeExecute(BeforeExecuteEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">BeforeExecute</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeExecute">BeforeExecute</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -484,7 +635,7 @@ not depend on any other behaviors!</p>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_OnBeforeSetup_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeSetup*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeSetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeSetup(System.EventArgs)">OnBeforeSetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">BeforeSetup</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeSetup">BeforeSetup</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -511,7 +662,7 @@ not depend on any other behaviors!</p>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeUnsetup*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeUnsetup(System.EventArgs)">OnBeforeUnsetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">BeforeUnsetup</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeUnsetup">BeforeUnsetup</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -536,9 +687,36 @@ not depend on any other behaviors!</p>
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Simulations_Simulation_OnBeforeValidation_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeValidation*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeValidation_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeValidation(System.EventArgs)">OnBeforeValidation(EventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeValidation">BeforeValidation</a> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnBeforeValidation(EventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventArgs</span></td>
+        <td><span class="parametername">args</span></td>
+        <td><p>The <span class="xref">System.EventArgs</span> instance containing the event data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_Simulation_OnExport_" data-uid="SpiceSharp.Simulations.Simulation.OnExport*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_OnExport_SpiceSharp_Simulations_ExportDataEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnExport(SpiceSharp.Simulations.ExportDataEventArgs)">OnExport(ExportDataEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <span class="xref">ExportSimulationData</span> event.</p>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData">ExportSimulationData</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -564,13 +742,13 @@ not depend on any other behaviors!</p>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_Run_" data-uid="SpiceSharp.Simulations.Simulation.Run*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Circuits_EntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Circuits.EntityCollection)">Run(EntityCollection)</h4>
+  <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection)">Run(IEntityCollection)</h4>
   <div class="markdown level1 summary"><p>Runs the simulation on the specified circuit.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Run(EntityCollection entities)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual void Run(IEntityCollection entities)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -583,21 +761,22 @@ not depend on any other behaviors!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.EntityCollection.html">EntityCollection</a></td>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
         <td><span class="parametername">entities</span></td>
         <td><p>The entities to simulate.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Simulation_Setup_" data-uid="SpiceSharp.Simulations.Simulation.Setup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Setup_SpiceSharp_Circuits_EntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Setup(SpiceSharp.Circuits.EntityCollection)">Setup(EntityCollection)</h4>
-  <div class="markdown level1 summary"><p>Set up the simulation.</p>
+  <a id="SpiceSharp_Simulations_Simulation_TryGetState_" data-uid="SpiceSharp.Simulations.Simulation.TryGetState*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_TryGetState__1___0__" data-uid="SpiceSharp.Simulations.Simulation.TryGetState``1(``0@)">TryGetState&lt;S&gt;(out S)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a state of the specified type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void Setup(EntityCollection entities)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual bool TryGetState&lt;S&gt;(out S state)
+    where S : ISimulationState</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -610,22 +789,235 @@ not depend on any other behaviors!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Circuits.EntityCollection.html">EntityCollection</a></td>
-        <td><span class="parametername">entities</span></td>
-        <td><p>The entities that are included in the simulation.</p>
+        <td><span class="xref">S</span></td>
+        <td><span class="parametername">state</span></td>
+        <td><p>The state.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the state exists; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">S</span></td>
+        <td><p>The simulation state type.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_Simulation_Unsetup_" data-uid="SpiceSharp.Simulations.Simulation.Unsetup*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_Unsetup" data-uid="SpiceSharp.Simulations.Simulation.Unsetup">Unsetup()</h4>
-  <div class="markdown level1 summary"><p>Destroys the simulation.</p>
+  <div class="markdown level1 summary"><p>Free all objects used by the simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void Unsetup()</code></pre>
+    <pre><code class="lang-csharp hljs">protected abstract void Unsetup()</code></pre>
   </div>
+  <a id="SpiceSharp_Simulations_Simulation_UsesBehaviors_" data-uid="SpiceSharp.Simulations.Simulation.UsesBehaviors*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_UsesBehaviors__1" data-uid="SpiceSharp.Simulations.Simulation.UsesBehaviors``1">UsesBehaviors&lt;B&gt;()</h4>
+  <div class="markdown level1 summary"><p>Checks if the class uses the specified behaviors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UsesBehaviors&lt;B&gt;()
+    where B : IBehavior</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the class uses the behavior; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">B</span></td>
+        <td><p>The behavior type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_UsesState_" data-uid="SpiceSharp.Simulations.Simulation.UsesState*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_UsesState__1" data-uid="SpiceSharp.Simulations.Simulation.UsesState``1">UsesState&lt;S&gt;()</h4>
+  <div class="markdown level1 summary"><p>Checks if the class uses the specified state.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UsesState&lt;S&gt;()
+    where S : ISimulationState</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the class uses the state; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">S</span></td>
+        <td><p>The simulation state type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_Validate_" data-uid="SpiceSharp.Simulations.Simulation.Validate*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Validate_SpiceSharp_Entities_IEntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Validate(SpiceSharp.Entities.IEntityCollection)">Validate(IEntityCollection)</h4>
+  <div class="markdown level1 summary"><p>Validates the input.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void Validate(IEntityCollection entities)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">entities</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ValidationFailedException.html">ValidationFailedException</a></td>
+        <td><p>Thrown if the validation failed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_Validate_" data-uid="SpiceSharp.Simulations.Simulation.Validate*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Validate_SpiceSharp_Validation_IRules_SpiceSharp_Entities_IEntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Validate(SpiceSharp.Validation.IRules,SpiceSharp.Entities.IEntityCollection)">Validate(IRules, IEntityCollection)</h4>
+  <div class="markdown level1 summary"><p>A default implementation for validating entities and behaviors using the specified rules.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void Validate(IRules rules, IEntityCollection entities)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></td>
+        <td><span class="parametername">rules</span></td>
+        <td><p>The rules.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ValidationFailedException.html">ValidationFailedException</a></td>
+        <td><p>Thrown if the validation failed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="events">Events
   </h3>
   <h4 id="SpiceSharp_Simulations_Simulation_AfterExecute" data-uid="SpiceSharp.Simulations.Simulation.AfterExecute">AfterExecute</h4>
@@ -681,6 +1073,29 @@ not depend on any other behaviors!</p>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; AfterUnsetup</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<span class="xref">System.EventArgs</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_AfterValidation" data-uid="SpiceSharp.Simulations.Simulation.AfterValidation">AfterValidation</h4>
+  <div class="markdown level1 summary"><p>Occurs after the simulation has validated the input.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; AfterValidation</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -766,6 +1181,29 @@ not depend on any other behaviors!</p>
       </tr>
     </tbody>
   </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_BeforeValidation" data-uid="SpiceSharp.Simulations.Simulation.BeforeValidation">BeforeValidation</h4>
+  <div class="markdown level1 summary"><p>Occurs before the simulation starts validating the input.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; BeforeValidation</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<span class="xref">System.EventArgs</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h4 id="SpiceSharp_Simulations_Simulation_ExportSimulationData" data-uid="SpiceSharp.Simulations.Simulation.ExportSimulationData">ExportSimulationData</h4>
   <div class="markdown level1 summary"><p>Occurs when simulation data can be exported.</p>
 </div>
@@ -789,54 +1227,48 @@ not depend on any other behaviors!</p>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+      <div><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></div>
   </div>
 </article>
           </div>

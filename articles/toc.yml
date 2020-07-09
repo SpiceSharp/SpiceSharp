@@ -1,12 +1,9 @@
 - name: Getting started
-  href: tutorial/toc.yml
-  topicHref: tutorial/gettingstarted.md
+  href: tutorials/toc.yml
+  topicHref: tutorials/gettingstarted.md
 - name: Spice# structure
   href: structure/toc.yml
-  topicHref: structure/structure.md
+  topicHref: structure/flow.md
 - name: Custom components
   href: custom_components/toc.yml
   topicHref: custom_components/custom_models.md
-- name: Changing parameters during simulation
-  href: changing_parameters/toc.yml
-  topicHref: changing_parameters/changing_parameters_during_simulation.md

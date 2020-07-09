@@ -2,7 +2,7 @@
 
 Components implement **[IEntity](xref:SpiceSharp.Entities.IEntity)** and are used as a replacement for typical Spice "instances". A component is an entity that can be connected to nodes and can have a model (which is analogeous to Spice "models").
 
-Components can be connected to nodes using the *[Connect](xref:SpiceSharp.Components.IComponent.Connect)* method. The terminals or pins of the component can be given more information by using attributes, which in turn can be used (if they aren't overridden) for circuit validation.
+Components can be connected to nodes using the *[Connect](xref:SpiceSharp.Components.IComponent#SpiceSharp_Components_IComponent_Connect_System_String___)* method. The terminals or pins of the component can be given more information by using attributes, which in turn can be used (if they aren't overridden) for circuit validation.
 
 | Attribute | Description |
 |:----------|:------------|

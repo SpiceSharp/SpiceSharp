@@ -145,7 +145,12 @@ namespace SpiceSharp.Components
             Period = period;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Returns a string that represents the current pulse waveform.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current pulse waveform.
+        /// </returns>
         public override string ToString()
         {
             return "pulse({0} {1} {2} {3} {4} {5} {6})".FormatString(InitialValue, PulsedValue, Delay, RiseTime, FallTime, PulseWidth, Period);
