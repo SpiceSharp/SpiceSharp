@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "SpiceSharp.CodeGeneration": {
-      "commandName": "Project",
-      "commandLineArgs": "\"$(SolutionDir)SpiceSharp\""
-    }
-  }
-}
