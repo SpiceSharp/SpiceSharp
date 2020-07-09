@@ -17,13 +17,12 @@ branches:
     - master
 
 before_build:
-  - nuget restore
   - choco install opencover.portable
   - choco install codecov
 
 build_script:
-  - msbuild SpiceSharp\SpiceSharp.csproj -p:Configuration=Debug
-  - msbuild SpiceSharpTest\SpiceSharpTest.csproj -p:Configuration=Debug
+  - msbuild SpiceSharp\SpiceSharp.csproj -r -p:Configuration=Debug
+  - msbuild SpiceSharpTest\SpiceSharpTest.csproj -r -p:Configuration=Debug
   - OpenCover.Console.exe -register -oldStyle -target:"packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe" -targetargs:"SpiceSharpTest\SpiceSharpTest.csproj" -filter:"+[*]* -[SpiceSharpTest*]*" -output:"SpiceSharpCoverage.xml"
   - codecov -f "SpiceSharpCoverage.xml"
   - msbuild SpiceSharp\SpiceSharp.csproj -p:Configuration=Release
