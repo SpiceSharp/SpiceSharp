@@ -66,7 +66,7 @@ namespace SpiceSharpTest
             // <example_parameters_mos1_createsetter>
             // Create a setter for the gate-drain overlap capacitance of the mosfet1 model
             var cgdoSetter = parameters.CreateParameterSetter<double>("cgdo");
-            cgdoSetter(1e-15); // 1pF
+            cgdoSetter(1e-12); // 1pF
             // </example_parameters_mos1_createsetter>
 
             // <example_parameters_mos1_getparameter>
