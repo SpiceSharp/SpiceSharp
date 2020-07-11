@@ -56,7 +56,7 @@ Spice# is available as a **NuGet Package**.
 |    | Status |
 |:---|-------:|
 |AppVeyor CI (Windows)|[![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master)|
-|Travis CI (Linux/iOS/Mono)|[![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp)|
+|Travis CI (Linux/MacOS/Mono)|[![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp)|
 
 ## Aim of Spice#?
 
