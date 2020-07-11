@@ -225,6 +225,9 @@
   <data name="Reflection.NotMatchingType" xml:space="preserve">
     <value>The destination type does not match the source.</value>
   </data>
+  <data name="Reflection.SameName" xml:space="preserve">
+    <value>The parameter or property '{0}' points to both {1} and {2}.</value>
+  </data>
   <data name="Resistors.ZeroResistance" xml:space="preserve">
     <value>{0}: Model describes short-circuit, 1kOhm used.</value>
   </data>

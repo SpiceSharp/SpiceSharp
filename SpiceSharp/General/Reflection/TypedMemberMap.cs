@@ -34,7 +34,12 @@ namespace SpiceSharp.Reflection
             if (member.ParameterType == typeof(T) || member.PropertyType == typeof(T))
             {
                 foreach (var name in member.Names)
-                    _members.Add(name, member);
+                {
+                    if (!_members.TryGetValue(name, out var existing))
+                        _members.Add(name, member);
+                    else if (!ReferenceEquals(member, existing))
+                        throw new ArgumentException(Properties.Resources.Reflection_SameName.FormatString(name, member.Member.Name, existing.Member.Name));
+                }
             }
         }
 

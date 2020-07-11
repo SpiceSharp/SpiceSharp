@@ -386,6 +386,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter or property &apos;{0}&apos; points to both {1} and {2}..
+        /// </summary>
+        public static string Reflection_SameName {
+            get {
+                return ResourceManager.GetString("Reflection.SameName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: Model describes short-circuit, 1kOhm used..
         /// </summary>
         public static string Resistors_ZeroResistance {
