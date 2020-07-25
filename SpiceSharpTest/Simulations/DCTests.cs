@@ -5,6 +5,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -55,7 +56,7 @@ namespace SpiceSharpTest.Simulations
         }
 
         [Test]
-        public void When_DiodeDC_Expect_NoException()
+        public void When_DiodeDCTwice_Expect_NoException()
         {
             /*
              * Bug found by Marcin Golebiowski
@@ -91,6 +92,37 @@ namespace SpiceSharpTest.Simulations
             // Run DC and op
             dc.Run(ckt);
             dc.Run(ckt);
+        }
+
+        [Test]
+        public void When_DiodeDCRerun_Expect_Same()
+        {
+            var ckt = new Circuit
+            {
+                CreateDiode("D1", "OUT", "0", "1N914"),
+                CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9"),
+                new VoltageSource("V1", "OUT", "0", 0.0)
+            };
+
+            // Create simulations
+            var dc = new DC("DC 1", "V1", -1, 1, 10e-3);
+
+            // Create exports
+            var dcExportV1 = new RealPropertyExport(dc, "V1", "i");
+
+            // First run: build the reference
+            var r = new List<double>();
+            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(dcExportV1.Value);
+            dc.ExportSimulationData += BuildReference;
+            dc.Run(ckt);
+            dc.ExportSimulationData -= BuildReference;
+
+            // Rerun: check with reference
+            var index = 0;
+            void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(dcExportV1.Value, r[index++], 1e-20);
+            dc.ExportSimulationData += CheckReference;
+            dc.Rerun();
+            dc.ExportSimulationData -= CheckReference;
         }
 
         [Test]

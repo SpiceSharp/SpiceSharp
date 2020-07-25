@@ -98,11 +98,12 @@
     <Compile Include="ParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Algebra\SparseFactorTests.cs" />
+    <Compile Include="Simulations\ACTests.cs" />
     <Compile Include="Simulations\ConcurrentSimulationsTests.cs" />
     <Compile Include="Simulations\DCTests.cs" />
+    <Compile Include="Simulations\NoiseTests.cs" />
     <Compile Include="Simulations\TransientTests.cs" />
     <Compile Include="Models\WaveformTests.cs" />
-    <Compile Include="Simulations\UnitTests.cs" />
     <Compile Include="Waveforms\PulseTests.cs" />
     <Compile Include="Waveforms\PwlTests.cs" />
   </ItemGroup>
@@ -131,7 +132,7 @@
       <Version>3.11.1</Version>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
-      <Version>3.16.1</Version>
+      <Version>3.17.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

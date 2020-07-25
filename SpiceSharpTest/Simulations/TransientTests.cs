@@ -5,6 +5,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;
 using System;
+using System.Collections.Generic;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -340,7 +341,7 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("C2", "out", "0", 1e-6));
 
             var tran = new Transient("tran", 1e-9, 1e-6);
-            bool a = true;
+            var a = true;
             tran.ExportSimulationData += (sender, args) =>
             {
                 if (a)
@@ -352,6 +353,36 @@ namespace SpiceSharpTest.Simulations
             tran.Run(cktB);
             a = true; // Doing first circuit
             tran.Run(cktA);
+        }
+
+        [Test]
+        public void When_TransientRerun_Expect_Same()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10.0),
+                new Resistor("R1", "in", "out", 10),
+                new Capacitor("C1", "out", "0", 20)
+            );
+
+            // Create the transient analysis
+            var tran = new Transient("tran 1", 1.0, 10.0);
+            tran.TimeParameters.InitialConditions["out"] = 0;
+            var export = new RealVoltageExport(tran, "out");
+
+            // Run the simulation a first time for building the reference values
+            var r = new List<double>();
+            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(export.Value);
+            tran.ExportSimulationData += BuildReference;
+            tran.Run(ckt);
+            tran.ExportSimulationData -= BuildReference;
+
+            // Rerun the simulation for building the reference values
+            var index = 0;
+            void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(r[index++], export.Value, 1e-20);
+            tran.ExportSimulationData += CheckReference;
+            tran.Rerun();
+            tran.ExportSimulationData -= CheckReference;
         }
     }
 }

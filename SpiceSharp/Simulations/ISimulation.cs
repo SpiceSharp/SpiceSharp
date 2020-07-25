@@ -48,5 +48,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Run(IEntityCollection entities);
+
+        /// <summary>
+        /// Reruns the <see cref="ISimulation"/> with the previous behaviors.
+        /// </summary>
+        void Rerun();
     }
 }

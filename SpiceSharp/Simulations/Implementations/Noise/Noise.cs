@@ -85,14 +85,6 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Unsetup()
-        {
-            // Remove references
-            _noiseBehaviors = null;
-            base.Unsetup();
-        }
-
-        /// <inheritdoc/>
         protected override void Execute()
         {
             base.Execute();
