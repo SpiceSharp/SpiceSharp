@@ -41,8 +41,8 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The unsetup time.
         /// </value>
-        [ParameterName("tunsetup"), ParameterInfo("Time spent during unsetup")]
-        public Stopwatch UnsetupTime { get; } = new Stopwatch();
+        [ParameterName("tfinish"), ParameterInfo("Time spent finishing up")]
+        public Stopwatch FinishTime { get; } = new Stopwatch();
 
         /// <summary>
         /// Gets the time spent creating behaviors.
@@ -61,7 +61,7 @@ namespace SpiceSharp.Simulations
             SetupTime.Reset();
             ValidationTime.Reset();
             ExecutionTime.Reset();
-            UnsetupTime.Reset();
+            FinishTime.Reset();
             BehaviorCreationTime.Reset();
         }
     }

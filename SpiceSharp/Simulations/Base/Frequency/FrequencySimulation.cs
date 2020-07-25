@@ -138,16 +138,6 @@ namespace SpiceSharp.Simulations
             _shouldReorderAc = true;
         }
 
-        /// <inheritdoc/>
-        protected override void Unsetup()
-        {
-            // Remove references
-            _frequencyBehaviors = null;
-            _frequencyUpdateBehaviors = null;
-
-            base.Unsetup();
-        }
-
         /// <summary>
         /// Iterate small-signal matrix and vector.
         /// </summary>

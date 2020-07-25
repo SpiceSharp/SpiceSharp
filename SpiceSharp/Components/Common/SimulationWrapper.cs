@@ -96,6 +96,12 @@ namespace SpiceSharp.Components.Common
         }
 
         /// <inheritdoc/>
+        public void Rerun()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
         public virtual S GetState<S>() where S : ISimulationState
         {
             if (LocalStates.TryGetValue(out S result))

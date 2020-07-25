@@ -104,10 +104,7 @@ namespace SpiceSharp.Simulations
             Statistics = new SimulationStatistics();
         }
 
-        /// <summary>
-        /// Runs the simulation on the specified circuit.
-        /// </summary>
-        /// <param name="entities">The entities to simulate.</param>
+        /// <inheritdoc/>
         public virtual void Run(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
@@ -171,15 +168,64 @@ namespace SpiceSharp.Simulations
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
-            Statistics.UnsetupTime.Start();
+            Statistics.FinishTime.Start();
             try
             {
                 Status = SimulationStatus.Unsetup;
-                Unsetup();
+                Finish();
             }
             finally
             {
-                Statistics.UnsetupTime.Stop();
+                Statistics.FinishTime.Stop();
+            }
+            OnAfterUnsetup(EventArgs.Empty);
+
+            Status = SimulationStatus.None;
+        }
+
+        /// <inheritdoc/>
+        public virtual void Rerun()
+        {
+            // Execute the simulation
+            Status = SimulationStatus.Running;
+            var beforeArgs = new BeforeExecuteEventArgs(false);
+            var afterArgs = new AfterExecuteEventArgs();
+            do
+            {
+                // Before execution
+                OnBeforeExecute(beforeArgs);
+
+                // Execute simulation
+                Statistics.ExecutionTime.Start();
+                try
+                {
+                    Execute();
+                }
+                finally
+                {
+                    Statistics.ExecutionTime.Stop();
+                }
+
+                // Reset
+                afterArgs.Repeat = false;
+                OnAfterExecute(afterArgs);
+
+                // We're going to repeat the simulation, change the event arguments
+                if (afterArgs.Repeat)
+                    beforeArgs = new BeforeExecuteEventArgs(true);
+            } while (afterArgs.Repeat);
+
+            // Clean up the circuit
+            OnBeforeUnsetup(EventArgs.Empty);
+            Statistics.FinishTime.Start();
+            try
+            {
+                Status = SimulationStatus.Unsetup;
+                Finish();
+            }
+            finally
+            {
+                Statistics.FinishTime.Stop();
             }
             OnAfterUnsetup(EventArgs.Empty);
 
@@ -297,9 +343,9 @@ namespace SpiceSharp.Simulations
         protected abstract void Execute();
 
         /// <summary>
-        /// Free all objects used by the simulation.
+        /// Finish the simulation.
         /// </summary>
-        protected abstract void Unsetup();
+        protected abstract void Finish();
 
         /// <inheritdoc/>
         public virtual bool UsesBehaviors<B>() where B : IBehavior

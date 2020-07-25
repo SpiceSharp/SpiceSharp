@@ -128,6 +128,7 @@ namespace SpiceSharp.Simulations
 
             // Set up initial conditions
             var state = GetState<IBiasingSimulationState>();
+            _initialConditions.Clear();
             foreach (var ic in TimeParameters.InitialConditions)
             {
                 if (state.ContainsKey(ic.Key))
@@ -255,17 +256,11 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Destroys the simulation.
         /// </summary>
-        protected override void Unsetup()
+        protected override void Finish()
         {
-            // Remove references
-            _transientBehaviors = null;
-            _acceptBehaviors = null;
-
             // Destroy the initial conditions
             AfterLoad -= LoadInitialConditions;
-            _initialConditions.Clear();
-
-            base.Unsetup();
+            base.Finish();
         }
 
         /// <summary>

@@ -162,6 +162,7 @@ namespace SpiceSharp.Simulations
             _state.Setup();
 
             // Set up nodesets for nodes that were referenced by an entity
+            _nodesets.Clear();
             foreach (var ns in BiasingParameters.Nodesets)
             {
                 if (_state.TryGetValue(ns.Key, out var variable))
@@ -202,16 +203,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Unsetup()
+        protected override void Finish()
         {
             // Remove nodeset events
             AfterLoad -= LoadNodeSets;
-            _nodesets.Clear();
-
-            // Remove references
-            _realStateLoadArgs = null;
-            _loadBehaviors = null;
-            _temperatureBehaviors = null;
         }
 
         /// <summary>
