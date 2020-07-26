@@ -131,10 +131,13 @@ namespace SpiceSharp.General
         /// Removes the specified value from the type values.
         /// </summary>
         /// <param name="value">The value.</param>
-        public void Remove(T value)
+        public bool Remove(T value)
         {
             if (_first.Value.Equals(value))
+            {
                 _first = _first.Next;
+                return true;
+            }
             else
             {
                 var previous = _first;
@@ -144,12 +147,13 @@ namespace SpiceSharp.General
                     if (elt.Value.Equals(value))
                     {
                         previous.Next = elt.Next;
-                        break;
+                        return true;
                     }
                     previous = elt;
                     elt = elt.Next;
                 }
             }
+            return false;
         }
     }
 }

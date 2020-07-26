@@ -21,16 +21,16 @@ namespace SpiceSharp.Components.ParallelComponents
 
             if (simulation.UsesState<IBiasingSimulationState>())
             {
-                if (parameters.BiasLoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
+                if (parameters.BiasLoadDistributor != null && !simulation.LocalStates.ContainsType<IBiasingSimulationState>())
                 {
                     var state = simulation.GetParentState<IBiasingSimulationState>();
-                    simulation.LocalStates.Add(new Biasing.BiasingSimulationState(state));
+                    simulation.LocalStates.Add(new BiasingSimulationState(state));
                 }
             }
 
             if (simulation.UsesState<IIterationSimulationState>())
             {
-                if ((parameters.BiasConvergenceDistributor != null || parameters.BiasLoadDistributor != null) && !simulation.LocalStates.ContainsKey(typeof(IIterationSimulationState)))
+                if ((parameters.BiasConvergenceDistributor != null || parameters.BiasLoadDistributor != null) && !simulation.LocalStates.ContainsType<IIterationSimulationState>())
                 {
                     var state = simulation.GetParentState<IIterationSimulationState>();
                     simulation.LocalStates.Add(new IterationSimulationState(state));

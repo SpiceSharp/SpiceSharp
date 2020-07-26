@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.ParallelComponents
             if (!simulation.UsesState<IComplexSimulationState>())
                 return;
             var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
-            if (parameters.AcLoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
+            if (parameters.AcLoadDistributor != null && !simulation.LocalStates.ContainsType<IComplexSimulationState>())
             {
                 var state = simulation.GetParentState<IComplexSimulationState>();
                 simulation.LocalStates.Add(new ComplexSimulationState(state));

@@ -37,10 +37,8 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             Parameters.CalculateDefaults();
-            var container = new BehaviorContainer(Name)
-            {
-                new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters))
-            };
+            var container = new BehaviorContainer(Name);
+            container.Add(new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters)));
             simulation.EntityBehaviors.Add(container);
         }
     }

@@ -1,22 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SpiceSharp.General
 {
     /// <summary>
-    /// An <see cref="ITypeDictionary{T}"/> that tracks inheritance and interfaces.
+    /// An <see cref="ITypeDictionary{V}"/> that tracks both inheritance and implemented interfaces.
     /// </summary>
-    /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="ITypeDictionary{T}" />
-    public class InheritedTypeDictionary<T> : ITypeDictionary<T>
+    /// <typeparam name="V">The base value type.</typeparam>
+    /// <seealso cref="ITypeDictionary{V}" />
+    public class InheritedTypeDictionary<V> : ITypeDictionary<V>
     {
-        private readonly Dictionary<Type, TypeValues<T>> _dictionary;
-        private readonly HashSet<T> _values;
+        private readonly Dictionary<Type, TypeValues<V>> _dictionary;
+        private readonly HashSet<V> _values;
 
         /// <inheritdoc/>
-        public T this[Type key]
+        public V this[Type key]
         {
             get
             {
@@ -34,41 +33,41 @@ namespace SpiceSharp.General
         public IEnumerable<Type> Keys => _dictionary.Keys;
 
         /// <inheritdoc/>
-        public IEnumerable<T> Values => _values;
+        public IEnumerable<V> Values => _values;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InheritedTypeDictionary{T}"/> class.
+        /// Initializes a new instance of the <see cref="InheritedTypeDictionary{V}"/> class.
         /// </summary>
         public InheritedTypeDictionary()
         {
-            _dictionary = new Dictionary<Type, TypeValues<T>>();
-            _values = new HashSet<T>();
+            _dictionary = new Dictionary<Type, TypeValues<V>>();
+            _values = new HashSet<V>();
         }
 
         /// <inheritdoc/>
-        public void Add<V>(V value) where V : T
+        public void Add(Type key, V value)
         {
-            var ctype = value.ThrowIfNull(nameof(value)).GetType();
+            key.ThrowIfNull(nameof(key));
 
             // We should always be able to access the type by itself, so remove any ambiguous elements if necessary
-            if (_dictionary.TryGetValue(ctype, out var values))
+            if (_dictionary.TryGetValue(key, out var values))
             {
                 if (values.IsDirect)
-                    throw new ArgumentException(Properties.Resources.TypeAlreadyExists.FormatString(ctype.FullName));
+                    throw new ArgumentException(Properties.Resources.TypeAlreadyExists.FormatString(key.FullName));
             }
             else
             {
-                values = new TypeValues<T>();
-                _dictionary.Add(ctype, values);
+                values = new TypeValues<V>();
+                _dictionary.Add(key, values);
             }
             values.Add(value, true);
             _values.Add(value);
 
-            foreach (var type in InheritanceCache.Get(ctype).Union(InterfaceCache.Get(ctype)))
+            foreach (var type in InheritanceCache.Get(key).Union(InterfaceCache.Get(key)))
             {
                 if (!_dictionary.TryGetValue(type, out values))
                 {
-                    values = new TypeValues<T>();
+                    values = new TypeValues<V>();
                     _dictionary.Add(type, values);
                 }
                 values.Add(value);
@@ -76,16 +75,20 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
-        public bool Remove(T value)
+        public bool Remove(Type key, V value)
         {
-            if (!_values.Contains(value))
-                return false;
-            var ctype = value.GetType();
-            _dictionary[ctype].Remove(value);
-            _values.Remove(value);
-            foreach (var type in InheritanceCache.Get(ctype).Union(InterfaceCache.Get(ctype)))
-                _dictionary[type].Remove(value);
-            return true;
+            key.ThrowIfNull(nameof(key));
+            if (_dictionary.TryGetValue(key, out var values))
+            {
+                if (!values.IsDirect || !values.Value.Equals(value))
+                    return false;
+                _values.Remove(value);
+                foreach (var type in InheritanceCache.Get(key).Union(InterfaceCache.Get(key)))
+                    _dictionary[type].Remove(value);
+                _dictionary.Remove(key);
+                return true;
+            }
+            return false;
         }
 
         /// <inheritdoc/>
@@ -96,80 +99,53 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
-        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key);
+        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key.ThrowIfNull(nameof(key)));
 
         /// <inheritdoc/>
-        public bool ContainsValue(T value) => _values.Contains(value.ThrowIfNull(nameof(value)));
+        public bool Contains(V value) => _values.Contains(value.ThrowIfNull(nameof(value)));
 
+        /// <inheritdoc/>
         ICloneable ICloneable.Clone()
         {
-            var clone = new InheritedTypeDictionary<T>();
-            foreach (var v in Values)
+            var clone = new InheritedTypeDictionary<V>();
+            foreach (var pair in _dictionary)
             {
-                var cloneValue = v;
-                if (v is ICloneable cloneable)
-                    cloneValue = (T)cloneable.Clone();
-                clone.Add(cloneValue);
+                // Only add direct elements
+                if (pair.Value.IsDirect)
+                {
+                    var cloned = pair.Value.Value;
+                    if (cloned is ICloneable cloneable)
+                        cloned = (V)cloneable.Clone();
+                    clone.Add(pair.Key, cloned);
+                }
             }
             return clone;
         }
+
+        /// <inheritdoc/>
         void ICloneable.CopyFrom(ICloneable source)
         {
+            var src = (InheritedTypeDictionary<V>)source.ThrowIfNull(nameof(source));
             _dictionary.Clear();
             _values.Clear();
-            var src = (InheritedTypeDictionary<T>)source;
-            foreach (var value in src.Values)
-                Add(value);
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator()
-        {
-            foreach (var elt in _dictionary)
-                yield return new KeyValuePair<Type, T>(elt.Key, elt.Value.Value);
-        }
-
-        /// <inheritdoc/>
-        public TResult GetValue<TResult>() where TResult : T
-        {
-            if (_dictionary.TryGetValue(typeof(TResult), out var result))
+            foreach (var pair in src._dictionary)
             {
-                if (result.IsAmbiguous)
-                    throw new AmbiguousTypeException(typeof(TResult));
-                return (TResult)result.Value;
+                if (pair.Value.IsDirect)
+                    Add(pair.Key, pair.Value.Value);
             }
-            throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName));
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
+        public IEnumerable<V> GetAllValues(Type key)
         {
-            if (_dictionary.TryGetValue(typeof(TResult), out var result))
-                return result.Values.Cast<TResult>();
-            return Enumerable.Empty<TResult>();
+            key.ThrowIfNull(nameof(key));
+            if (_dictionary.TryGetValue(key, out var result))
+                return result.Values.Cast<V>();
+            return Enumerable.Empty<V>();
         }
 
         /// <inheritdoc/>
-        public bool TryGetValue<TResult>(out TResult value) where TResult : T
-        {
-            if (_dictionary.TryGetValue(typeof(TResult), out var result))
-            {
-                if (result.IsAmbiguous)
-                    throw new AmbiguousTypeException(typeof(TResult));
-                value = (TResult)result.Value;
-                return true;
-            }
-            value = default;
-            return false;
-        }
-
-        /// <inheritdoc/>
-        public bool TryGetValue(Type key, out T value)
+        public bool TryGetValue(Type key, out V value)
         {
             key.ThrowIfNull(nameof(key));
             if (_dictionary.TryGetValue(key, out var result))
@@ -182,13 +158,5 @@ namespace SpiceSharp.General
             value = default;
             return false;
         }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

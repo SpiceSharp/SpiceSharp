@@ -1,141 +1,113 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SpiceSharp.General
 {
     /// <summary>
-    /// An implementation of the <see cref="ITypeDictionary{T}"/> interface that
-    /// also allows retrieving information using interface types.
+    /// An implementation of the <see cref="ITypeDictionary{V}"/> interface that
+    /// allows retrieving information using interface types.
     /// </summary>
-    /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="ITypeDictionary{T}" />
-    public class InterfaceTypeDictionary<T> : ITypeDictionary<T>
+    /// <typeparam name="V">The value type.</typeparam>
+    /// <seealso cref="ITypeDictionary{V}" />
+    public class InterfaceTypeDictionary<V> : ITypeDictionary<V>
     {
-        private readonly Dictionary<Type, T> _dictionary;
-        private readonly Dictionary<Type, TypeValues<T>> _interfaces;
+        private readonly Dictionary<Type, V> _dictionary;
+        private readonly Dictionary<Type, TypeValues<V>> _interfaces;
 
         /// <inheritdoc/>
         public IEnumerable<Type> Keys => _interfaces.Keys;
 
         /// <inheritdoc/>
-        public IEnumerable<T> Values => _dictionary.Values;
+        public IEnumerable<V> Values => _dictionary.Values;
 
         /// <inheritdoc/>
         public int Count => _dictionary.Count;
 
         /// <inheritdoc/>
-        public T this[Type type]
+        public V this[Type key]
         {
             get
             {
-                if (_interfaces.TryGetValue(type, out var result))
+                key.ThrowIfNull(nameof(key));
+                if (_interfaces.TryGetValue(key, out var result))
                     return result.Value;
-                return _dictionary[type];
+                return _dictionary[key];
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InterfaceTypeDictionary{T}"/> class.
+        /// Initializes a new instance of the <see cref="InterfaceTypeDictionary{V}"/> class.
         /// </summary>
         public InterfaceTypeDictionary()
         {
-            _dictionary = new Dictionary<Type, T>();
-            _interfaces = new Dictionary<Type, TypeValues<T>>();
+            _dictionary = new Dictionary<Type, V>();
+            _interfaces = new Dictionary<Type, TypeValues<V>>();
         }
 
-        /// <inheritdoc/>
-        public void Add<V>(V value) where V : T
+        /// <summary>
+        /// Adds a value to the dictionary.
+        /// </summary>
+        /// <param name="key">The key type.</param>
+        /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        public void Add(Type key, V value)
         {
+            key.ThrowIfNull(nameof(key));
+
             // Add a regular class entry
-            var ctype = value.ThrowIfNull(nameof(value)).GetType();
             try
             {
-                _dictionary.Add(value.GetType(), value);
+                _dictionary.Add(key, value);
             }
             catch (ArgumentException)
             {
                 // This exception is thrown if the dictonary already contains the key
                 // Just make it bit more verbose.
-                throw new ArgumentException(Properties.Resources.TypeAlreadyExists.FormatString(value.GetType()));
+                throw new ArgumentException(Properties.Resources.TypeAlreadyExists.FormatString(key));
             }
 
             // Make references for the interfaces as well
-            foreach (var type in InterfaceCache.Get(ctype))
+            foreach (var ctype in InterfaceCache.Get(key))
             {
-                if (!_interfaces.TryGetValue(type, out var values))
+                if (!_interfaces.TryGetValue(ctype, out var values))
                 {
-                    values = new TypeValues<T>();
-                    _interfaces.Add(type, values);
+                    values = new TypeValues<V>();
+                    _interfaces.Add(ctype, values);
                 }
                 values.Add(value);
             }
         }
 
         /// <inheritdoc/>
-        public bool Remove(T value)
+        public bool Remove(Type key, V value)
         {
-            var ctype = value.GetType();
-            if (ContainsValue(value))
+            key.ThrowIfNull(nameof(key));
+            if (_dictionary.TryGetValue(key, out var existing))
             {
-                _dictionary.Remove(ctype);
-                foreach (var type in InterfaceCache.Get(ctype))
+                if (!existing.Equals(value))
+                    return false;
+                foreach (var type in InterfaceCache.Get(key))
                     _interfaces[type].Remove(value);
+                _dictionary.Remove(key);
                 return true;
             }
             return false;
         }
 
         /// <inheritdoc/>
-        public TResult GetValue<TResult>() where TResult : T
+        public IEnumerable<V> GetAllValues(Type key)
         {
-            if (_interfaces.TryGetValue(typeof(TResult), out var result))
-            {
-                if (result.IsAmbiguous)
-                    throw new AmbiguousTypeException(typeof(TResult));
-                return (TResult)result.Value;
-            }
-            try
-            {
-                return (TResult)_dictionary[typeof(TResult)];
-            }
-            catch (KeyNotFoundException ex)
-            {
-                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName), ex);
-            }
+            key.ThrowIfNull(nameof(key));
+            if (_interfaces.TryGetValue(key, out var result))
+                return result.Values;
+            return Enumerable.Empty<V>();
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
+        public bool TryGetValue(Type key, out V value)
         {
-            if (_interfaces.TryGetValue(typeof(TResult), out var result))
-                return result.Values.Cast<TResult>();
-            return Enumerable.Empty<TResult>();
-        }
-
-        /// <inheritdoc/>
-        public bool TryGetValue<TResult>(out TResult value) where TResult : T
-        {
-            if (_interfaces.TryGetValue(typeof(TResult), out var result))
-            {
-                if (result.IsAmbiguous)
-                    throw new AmbiguousTypeException(typeof(TResult));
-                value = (TResult)result.Value;
-                return true;
-            }
-            if (_dictionary.TryGetValue(typeof(TResult), out var direct))
-            {
-                value = (TResult)direct;
-                return true;
-            }
-            value = default;
-            return false;
-        }
-
-        /// <inheritdoc/>
-        public bool TryGetValue(Type key, out T value)
-        {
+            key.ThrowIfNull(nameof(key));
             if (_interfaces.TryGetValue(key, out var result))
             {
                 if (result.IsAmbiguous)
@@ -153,10 +125,10 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
-        public bool ContainsKey(Type key) => _interfaces.ContainsKey(key) || _dictionary.ContainsKey(key);
+        public bool ContainsKey(Type key) => _interfaces.ContainsKey(key.ThrowIfNull(nameof(key))) || _dictionary.ContainsKey(key);
 
         /// <inheritdoc/>
-        public bool ContainsValue(T value) => _dictionary.TryGetValue(value.GetType(), out var result) && result.Equals(value);
+        public bool Contains(V value) => _dictionary.ContainsValue(value);
 
         /// <inheritdoc/>
         public void Clear()
@@ -165,47 +137,28 @@ namespace SpiceSharp.General
             _dictionary.Clear();
         }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator()
-        {
-            foreach (var pair in _interfaces)
-                yield return new KeyValuePair<Type, T>(pair.Key, pair.Value.Value);
-            foreach (var pair in _dictionary)
-                yield return new KeyValuePair<Type, T>(pair.Key, pair.Value);
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
+        /// <inheritdoc/>
         ICloneable ICloneable.Clone()
         {
-            var clone = new InheritedTypeDictionary<T>();
-            foreach (var v in Values)
+            var clone = new InterfaceTypeDictionary<V>();
+            foreach (var pair in _dictionary)
             {
-                var cloneValue = v;
-                if (v is ICloneable cloneable)
-                    cloneValue = (T)cloneable.Clone();
-                clone.Add(cloneValue);
+                var cloneValue = pair.Value;
+                if (pair.Value is ICloneable cloneable)
+                    cloneValue = (V)cloneable.Clone();
+                clone.Add(pair.Key, cloneValue);
             }
             return clone;
         }
+
+        /// <inheritdoc/>
         void ICloneable.CopyFrom(ICloneable source)
         {
+            var src = (InterfaceTypeDictionary<V>)source.ThrowIfNull(nameof(source));
             _dictionary.Clear();
             _interfaces.Clear();
-            var src = (InterfaceTypeDictionary<T>)source;
-            foreach (var value in src.Values)
-                Add(value);
+            foreach (var pair in src._dictionary)
+                Add(pair.Key, pair.Value);
         }
     }
 }

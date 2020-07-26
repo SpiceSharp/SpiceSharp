@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.Subcircuits
         public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IReadOnlyList<Bridge<string>> nodes)
             : base(parent,
                   new BehaviorContainerCollection(),
-                  new InterfaceTypeDictionary<ISimulationState>())
+                  new InterfaceTypeSet<ISimulationState>())
         {
             Definition = definition.ThrowIfNull(nameof(definition));
             Nodes = nodes.ThrowIfNull(nameof(nodes));

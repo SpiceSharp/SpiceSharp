@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
             {
                 var parent = simulation.GetState<IComplexSimulationState>();
                 IComplexSimulationState state;
-                if (parameters.LocalComplexSolver && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
+                if (parameters.LocalComplexSolver && !simulation.LocalStates.ContainsType<IComplexSimulationState>())
                     state = new LocalSimulationState(simulation.InstanceName, parent, new SparseComplexSolver());
                 else
                     state = new FlatSimulationState(simulation.InstanceName, parent, simulation.Nodes);

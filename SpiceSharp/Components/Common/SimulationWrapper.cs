@@ -2,6 +2,7 @@
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 
@@ -28,7 +29,7 @@ namespace SpiceSharp.Components.Common
         /// <value>
         /// The local states.
         /// </value>
-        public ITypeDictionary<ISimulationState> LocalStates { get; }
+        public ITypeSet<ISimulationState> LocalStates { get; }
 
         /// <inheritdoc/>
         public IEnumerable<Type> States => Parent.States;
@@ -57,7 +58,7 @@ namespace SpiceSharp.Components.Common
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/>, <paramref name="behaviors"/> or <paramref name="states"/> is <c>null</c>.</exception>
         public SimulationWrapper(ISimulation parent,
             IBehaviorContainerCollection behaviors,
-            ITypeDictionary<ISimulationState> states)
+            ITypeSet<ISimulationState> states)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
             EntityBehaviors = behaviors.ThrowIfNull(nameof(behaviors));

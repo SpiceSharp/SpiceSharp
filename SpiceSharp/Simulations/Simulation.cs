@@ -325,7 +325,7 @@ namespace SpiceSharp.Simulations
                         subject.Apply(rules);
                 }
             }
-            foreach (var behavior in EntityBehaviors.SelectMany(p => p.Values))
+            foreach (var behavior in EntityBehaviors.SelectMany(p => p))
             {
                 if (behavior is IRuleSubject subject)
                     subject.Apply(rules);

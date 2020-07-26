@@ -16,16 +16,14 @@ namespace SpiceSharpTest.General
         {
             var a = new A();
             var b = new B();
-            var d = new InheritedTypeDictionary<IA>
-            {
-                a,
-                b
-            };
+            var d = new InheritedTypeDictionary<object>();
+            d.Add(typeof(A), a);
+            d.Add(typeof(B), b);
 
-            Assert.AreEqual(a, d.GetValue<A>());
-            Assert.AreEqual(b, d.GetValue<B>());
-            Assert.AreEqual(b, d.GetValue<IB>());
-            Assert.Throws<AmbiguousTypeException>(() => d.GetValue<IA>());
+            Assert.AreEqual(a, d[typeof(A)]);
+            Assert.AreEqual(b, d[typeof(B)]);
+            Assert.AreEqual(b, d[typeof(IB)]);
+            Assert.Throws<AmbiguousTypeException>(() => { var r = d[typeof(IA)]; });
         }
     }
 }
