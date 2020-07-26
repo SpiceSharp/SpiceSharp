@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.ParallelComponents
         public ParallelSimulation(ISimulation parent, IParameterSetCollection parameters)
             : base(parent,
                   new BehaviorContainerCollection(parent?.EntityBehaviors.Comparer),
-                  new InheritedTypeDictionary<ISimulationState>())
+                  new InheritedTypeSet<ISimulationState>())
         {
             LocalParameters = parameters.ThrowIfNull(nameof(parameters));
         }
@@ -36,8 +36,8 @@ namespace SpiceSharp.Components.ParallelComponents
         /// <inheritdoc/>
         public override S GetState<S>()
         {
-            if (LocalStates.TryGetValue(out S result))
-                return result;
+            if (LocalStates.TryGetValue<S>(out ISimulationState result))
+                return (S)result;
             return Parent.GetState<S>();
         }
     }

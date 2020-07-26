@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.Common
         /// <value>
         /// The local states.
         /// </value>
-        public ITypeDictionary<ISimulationState> LocalStates { get; }
+        public ITypeSet<ISimulationState> LocalStates { get; }
 
         /// <inheritdoc/>
         public IEnumerable<Type> States => Parent.States;
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.Common
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/>, <paramref name="behaviors"/> or <paramref name="states"/> is <c>null</c>.</exception>
         public SimulationWrapper(ISimulation parent,
             IBehaviorContainerCollection behaviors,
-            ITypeDictionary<ISimulationState> states)
+            ITypeSet<ISimulationState> states)
         {
             Parent = parent.ThrowIfNull(nameof(parent));
             EntityBehaviors = behaviors.ThrowIfNull(nameof(behaviors));
@@ -104,16 +104,19 @@ namespace SpiceSharp.Components.Common
         /// <inheritdoc/>
         public virtual S GetState<S>() where S : ISimulationState
         {
-            if (LocalStates.TryGetValue(out S result))
-                return result;
+            if (LocalStates.TryGetValue<S>(out ISimulationState result))
+                return (S)result;
             return default;
         }
 
         /// <inheritdoc/>
         public virtual bool TryGetState<S>(out S state) where S : ISimulationState
         {
-            if (LocalStates.TryGetValue(out state))
+            if (LocalStates.TryGetValue<S>(out ISimulationState result))
+            {
+                state = (S)result;
                 return true;
+            }
             state = default;
             return false;
         }

@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.ParallelComponents
                 if (simulation.UsesState<INoiseSimulationState>())
                 {
                     var state = simulation.GetParentState<INoiseSimulationState>();
-                    simulation.LocalStates.Add(new NoiseSimulationState(state));
+                    simulation.LocalStates.Add<NoiseSimulationState>(new NoiseSimulationState(state));
                 }
             }
         }

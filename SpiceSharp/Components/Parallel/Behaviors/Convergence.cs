@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.ParallelComponents
                 if (parameters.BiasLoadDistributor != null && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
                 {
                     var state = simulation.GetParentState<IBiasingSimulationState>();
-                    simulation.LocalStates.Add(new Biasing.BiasingSimulationState(state));
+                    simulation.LocalStates.Add<BiasingSimulationState>(new BiasingSimulationState(state));
                 }
             }
 
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.ParallelComponents
                 if ((parameters.BiasConvergenceDistributor != null || parameters.BiasLoadDistributor != null) && !simulation.LocalStates.ContainsKey(typeof(IIterationSimulationState)))
                 {
                     var state = simulation.GetParentState<IIterationSimulationState>();
-                    simulation.LocalStates.Add(new IterationSimulationState(state));
+                    simulation.LocalStates.Add<IterationSimulationState>(new IterationSimulationState(state));
                 }
             }
         }

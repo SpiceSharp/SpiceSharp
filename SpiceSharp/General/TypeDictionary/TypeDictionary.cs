@@ -5,14 +5,15 @@ using System.Collections.Generic;
 namespace SpiceSharp.General
 {
     /// <summary>
-    /// An implementation of the <see cref="ITypeDictionary{T}"/> interface.
+    /// An implementation of the <see cref="ITypeDictionary{K,V}"/> interface.
     /// This implementation supports multithreaded access.
     /// </summary>
-    /// <typeparam name="T">The base type.</typeparam>
-    /// <seealso cref="ITypeDictionary{T}" />
-    public class TypeDictionary<T> : ITypeDictionary<T>
+    /// <typeparam name="K">The base key type.</typeparam>
+    /// <typeparam name="V">The base value type.</typeparam>
+    /// <seealso cref="ITypeDictionary{K,V}" />
+    public class TypeDictionary<K, V> : ITypeDictionary<K, V>
     {
-        private readonly Dictionary<Type, T> _dictionary;
+        private readonly Dictionary<Type, V> _dictionary;
 
         /// <summary>
         /// Gets the keys.
@@ -28,35 +29,31 @@ namespace SpiceSharp.General
         /// <value>
         /// The values.
         /// </value>
-        public IEnumerable<T> Values => _dictionary.Values;
+        public IEnumerable<V> Values => _dictionary.Values;
 
         /// <inheritdoc/>
         public int Count => _dictionary.Count;
 
         /// <inheritdoc/>
-        public T this[Type key] => _dictionary[key];
+        public V this[Type key] => _dictionary[key];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeDictionary{T}" /> class.
+        /// Initializes a new instance of the <see cref="TypeDictionary{K,V}" /> class.
         /// </summary>
         public TypeDictionary()
         {
-            _dictionary = new Dictionary<Type, T>();
+            _dictionary = new Dictionary<Type, V>();
         }
 
         /// <inheritdoc/>
-        public void Add<V>(V value) where V : T
+        public void Add<Key>(V value) where Key : K
         {
             value.ThrowIfNull(nameof(value));
             _dictionary.Add(value.GetType(), value);
         }
 
         /// <inheritdoc/>
-        public bool Remove(T value)
-        {
-            value.ThrowIfNull(nameof(value));
-            return _dictionary.Remove(value.GetType());
-        }
+        public bool Remove<Key>() where Key : K => _dictionary.Remove(typeof(Key));
 
         /// <summary>
         /// Removes the value of the specified type from the dictionary.
@@ -66,36 +63,35 @@ namespace SpiceSharp.General
         ///   <c>true</c> if the value has been removed succesfully; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="key" /> is <c>null</c>.</exception>
-        public bool Remove(Type key)
-            => _dictionary.Remove(key);
+        public bool Remove(Type key) => _dictionary.Remove(key);
 
         /// <inheritdoc/>
-        public TResult GetValue<TResult>() where TResult : T
+        public V GetValue<Key>() where Key : K
         {
             try
             {
-                return (TResult)_dictionary[typeof(TResult)];
+                return _dictionary[typeof(Key)];
             }
             catch (KeyNotFoundException ex)
             {
-                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName), ex);
+                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(Key).FullName), ex);
             }
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TResult> GetAllValues<TResult>() where TResult : T
+        public IEnumerable<V> GetAllValues<Key>() where Key : K
         {
-            if (_dictionary.TryGetValue(typeof(TResult), out var result))
-                yield return (TResult)result;
+            if (_dictionary.TryGetValue(typeof(Key), out var result))
+                yield return result;
             yield break;
         }
 
         /// <inheritdoc/>
-        public bool TryGetValue<TResult>(out TResult value) where TResult : T
+        public bool TryGetValue<Key>(out V value) where Key : K
         {
-            if (_dictionary.TryGetValue(typeof(TResult), out var result))
+            if (_dictionary.TryGetValue(typeof(Key), out var result))
             {
-                value = (TResult)result;
+                value = result;
                 return true;
             }
             value = default;
@@ -103,20 +99,23 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
-        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key);
+        public bool ContainsKey<Key>() where Key : K => _dictionary.ContainsKey(typeof(Key));
 
         /// <inheritdoc/>
-        public bool ContainsValue(T value) => _dictionary.ContainsValue(value.ThrowIfNull(nameof(value)));
+        public bool ContainsKey(Type key) => _dictionary.ContainsKey(key.ThrowIfNull(nameof(key)));
 
         /// <inheritdoc/>
-        public bool TryGetValue(Type key, out T value)
+        public bool ContainsValue(V value) => _dictionary.ContainsValue(value.ThrowIfNull(nameof(value)));
+
+        /// <inheritdoc/>
+        public bool TryGetValue(Type key, out V value)
         {
             key.ThrowIfNull(nameof(key));
             return _dictionary.TryGetValue(key, out value);
         }
 
         /// <summary>
-        /// Removes all items from the <see cref="TypeDictionary{T}"/>.
+        /// Removes all items from the <see cref="TypeDictionary{K,V}"/>.
         /// </summary>
         public void Clear() => _dictionary.Clear();
 
@@ -126,7 +125,7 @@ namespace SpiceSharp.General
         /// <returns>
         /// An enumerator that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<KeyValuePair<Type, T>> GetEnumerator() => _dictionary.GetEnumerator();
+        public IEnumerator<KeyValuePair<Type, V>> GetEnumerator() => _dictionary.GetEnumerator();
 
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
@@ -136,7 +135,10 @@ namespace SpiceSharp.General
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => _dictionary.GetEnumerator();
 
+        /// <inheritdoc/>
         ICloneable ICloneable.Clone() => Clone();
+
+        /// <inheritdoc/>
         void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
 
         /// <summary>
@@ -147,11 +149,11 @@ namespace SpiceSharp.General
         /// </returns>
         protected virtual ICloneable Clone()
         {
-            var clone = new TypeDictionary<T>();
+            var clone = new TypeDictionary<K, V>();
             foreach (var pair in _dictionary)
             {
                 if (pair.Value is ICloneable cloneable)
-                    clone._dictionary.Add(pair.Key, (T)cloneable.Clone());
+                    clone._dictionary.Add(pair.Key, (V)cloneable.Clone());
                 else
                     clone._dictionary.Add(pair.Key, pair.Value);
             }
@@ -162,13 +164,13 @@ namespace SpiceSharp.General
         /// Copies the contents of one interface to this one.
         /// </summary>
         /// <param name="source">The source parameter.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
         protected virtual void CopyFrom(ICloneable source)
         {
+            var src = (TypeDictionary<K, V>)source.ThrowIfNull(nameof(source));
             _dictionary.Clear();
-            foreach (var pair in _dictionary)
-            {
+            foreach (var pair in src._dictionary)
                 _dictionary.Add(pair.Key, pair.Value);
-            }
         }
     }
 }

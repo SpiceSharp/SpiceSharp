@@ -42,8 +42,11 @@ namespace SpiceSharp.Components.Subcircuits.Simple
         public Frequency(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
-            if (simulation.LocalStates.TryGetValue(out _state))
+            if (simulation.LocalStates.TryGetValue<LocalSimulationState>(out ISimulationState state))
+            {
+                _state = (LocalSimulationState)state;
                 _state.Initialize(simulation.Nodes);
+            }
         }
 
         /// <inheritdoc/>

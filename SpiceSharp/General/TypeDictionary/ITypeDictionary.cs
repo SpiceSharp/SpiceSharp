@@ -7,11 +7,12 @@ namespace SpiceSharp
     /// <summary>
     /// A dictionary that can store objects, and indexes them by their type.
     /// </summary>
-    /// <typeparam name="T">The common base type of all objects.</typeparam>
-    public interface ITypeDictionary<T> : IEnumerable<KeyValuePair<Type, T>>, ICloneable
+    /// <typeparam name="K">The base type for keys in the type dictionary.</typeparam>
+    /// <typeparam name="V">The base type for values in the type dictionary.</typeparam>
+    public interface ITypeDictionary<K, V> : IEnumerable<KeyValuePair<Type, V>>, ICloneable
     {
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="ITypeDictionary{T}"/>.
+        /// Gets the number of elements contained in the <see cref="ITypeDictionary{K,V}"/>.
         /// </summary>
         /// <value>
         /// The count.
@@ -29,7 +30,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         /// <exception cref="KeyNotFoundException">Thrown if <paramref name="key"/> was not found.</exception>
         /// <exception cref="AmbiguousTypeException">If there are multiple values of type <paramref name="key"/>.</exception>
-        T this[Type key] { get; }
+        V this[Type key] { get; }
 
         /// <summary>
         /// Gets the keys.
@@ -45,26 +46,25 @@ namespace SpiceSharp
         /// <value>
         /// The values.
         /// </value>
-        IEnumerable<T> Values { get; }
+        IEnumerable<V> Values { get; }
 
         /// <summary>
         /// Adds the specified value to the dictionary.
         /// </summary>
-        /// <typeparam name="V">The value type.</typeparam>
+        /// <typeparam name="Key">The key type.</typeparam>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if a value of type <typeparamref name="V"/> was already added.</exception>
-        void Add<V>(V value) where V : T;
+        void Add<Key>(V value) where Key : K;
 
         /// <summary>
-        /// Removes the specified value.
+        /// Removes the value with the specified key.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <typeparam name="Key">The key type.</typeparam>
         /// <returns>
-        /// <c>true</c> if the value was removed; otherwise <c>false</c>.
+        ///     <c>true</c> if a value was removed; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
-        bool Remove(T value);
+        bool Remove<Key>() where Key : K;
 
         /// <summary>
         /// Clears all items in the dictionary.
@@ -74,29 +74,29 @@ namespace SpiceSharp
         /// <summary>
         /// Gets the strongly typed value from the dictionary.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <typeparam name="Key">The key.</typeparam>
         /// <returns>The result.</returns>
-        /// <exception cref="TypeNotFoundException">Thrown if a value of type <typeparamref name="TResult"/> could not be found.</exception>
-        /// <exception cref="AmbiguousTypeException">If there are multiple values of type <typeparamref name="TResult"/>.</exception>
-        TResult GetValue<TResult>() where TResult : T;
+        /// <exception cref="TypeNotFoundException">Thrown if a value of type <typeparamref name="Key"/> could not be found.</exception>
+        /// <exception cref="AmbiguousTypeException">Thrown if there are multiple values of type <typeparamref name="Key"/>.</exception>
+        V GetValue<Key>() where Key : K;
 
         /// <summary>
         /// Gets all strongly typed values from the dictionary.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <typeparam name="Key">The key type.</typeparam>
         /// <returns>The results.</returns>
-        IEnumerable<TResult> GetAllValues<TResult>() where TResult : T;
+        IEnumerable<V> GetAllValues<Key>() where Key : K;
 
         /// <summary>
         /// Tries to get a strongly typed value from the dictionary.
         /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <typeparam name="Key">The key type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if the specified key contains the type; otherwise <c>false</c>.
+        ///   <c>true</c> if a value was found for the specified type; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
-        bool TryGetValue<TResult>(out TResult value) where TResult : T;
+        bool TryGetValue<Key>(out V value) where Key : K;
 
         /// <summary>
         /// Tries to get a value from the dictionary.
@@ -107,7 +107,16 @@ namespace SpiceSharp
         ///   <c>true</c> if the value was resolved; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="AmbiguousTypeException">If there are multiple values of type <paramref name="key"/>.</exception>
-        bool TryGetValue(Type key, out T value);
+        bool TryGetValue(Type key, out V value);
+
+        /// <summary>
+        /// Determines whether the dictionary contains one or more values of the specified type.
+        /// </summary>
+        /// <typeparam name="Key">The key type.</typeparam>
+        /// <returns>
+        ///     <c>true</c> if the dictionary contains one or more values of the specified type; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsKey<Key>() where Key : K;
 
         /// <summary>
         /// Determines whether the dictionary contains one or more values of the specified type.
@@ -127,6 +136,6 @@ namespace SpiceSharp
         ///   <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
-        bool ContainsValue(T value);
+        bool ContainsValue(V value);
     }
 }
