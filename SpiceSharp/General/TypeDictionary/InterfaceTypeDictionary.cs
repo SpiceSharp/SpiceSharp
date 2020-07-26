@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SpiceSharp.General
 {
     /// <summary>
-    /// An implementation of the <see cref="ITypeDictionary{K,V}"/> interface that
+    /// An implementation of the <see cref="ITypeDictionary{V}"/> interface that
     /// allows retrieving information using interface types.
     /// </summary>
-    /// <typeparam name="K">The base type for keys.</typeparam>
-    /// <typeparam name="V">The base type for values.</typeparam>
-    /// <seealso cref="ITypeDictionary{K,V}" />
-    public class InterfaceTypeDictionary<K, V> : ITypeDictionary<K, V>
+    /// <typeparam name="V">The value type.</typeparam>
+    /// <seealso cref="ITypeDictionary{V}" />
+    public class InterfaceTypeDictionary<V> : ITypeDictionary<V>
     {
         private readonly Dictionary<Type, V> _dictionary;
         private readonly Dictionary<Type, TypeValues<V>> _interfaces;
@@ -27,18 +25,19 @@ namespace SpiceSharp.General
         public int Count => _dictionary.Count;
 
         /// <inheritdoc/>
-        public V this[Type type]
+        public V this[Type key]
         {
             get
             {
-                if (_interfaces.TryGetValue(type, out var result))
+                key.ThrowIfNull(nameof(key));
+                if (_interfaces.TryGetValue(key, out var result))
                     return result.Value;
-                return _dictionary[type];
+                return _dictionary[key];
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InterfaceTypeDictionary{K,V}"/> class.
+        /// Initializes a new instance of the <see cref="InterfaceTypeDictionary{V}"/> class.
         /// </summary>
         public InterfaceTypeDictionary()
         {
@@ -46,16 +45,13 @@ namespace SpiceSharp.General
             _interfaces = new Dictionary<Type, TypeValues<V>>();
         }
 
-        /// <inheritdoc/>
-        public void Add<Key>(V value) where Key : K => Add(typeof(Key), value);
-
         /// <summary>
         /// Adds a value to the dictionary.
         /// </summary>
         /// <param name="key">The key type.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
-        protected void Add(Type key, V value)
+        public void Add(Type key, V value)
         {
             key.ThrowIfNull(nameof(key));
 
@@ -84,67 +80,34 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
-        public bool Remove<Key>() where Key : K
+        public bool Remove(Type key, V value)
         {
-            if (_dictionary.TryGetValue(typeof(Key), out var value))
+            key.ThrowIfNull(nameof(key));
+            if (_dictionary.TryGetValue(key, out var existing))
             {
-                foreach (var type in InterfaceCache.Get(typeof(Key)))
+                if (!existing.Equals(value))
+                    return false;
+                foreach (var type in InterfaceCache.Get(key))
                     _interfaces[type].Remove(value);
-                _dictionary.Remove(typeof(Key));
+                _dictionary.Remove(key);
                 return true;
             }
             return false;
         }
 
         /// <inheritdoc/>
-        public V GetValue<Key>() where Key : K
+        public IEnumerable<V> GetAllValues(Type key)
         {
-            if (_interfaces.TryGetValue(typeof(Key), out var result))
-            {
-                if (result.IsAmbiguous)
-                    throw new AmbiguousTypeException(typeof(Key));
-                return result.Value;
-            }
-            try
-            {
-                return _dictionary[typeof(Key)];
-            }
-            catch (KeyNotFoundException ex)
-            {
-                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(Key).FullName), ex);
-            }
-        }
-
-        /// <inheritdoc/>
-        public IEnumerable<V> GetAllValues<Key>() where Key : K
-        {
-            if (_interfaces.TryGetValue(typeof(Key), out var result))
-                return result.Values.Cast<V>();
+            key.ThrowIfNull(nameof(key));
+            if (_interfaces.TryGetValue(key, out var result))
+                return result.Values;
             return Enumerable.Empty<V>();
-        }
-
-        /// <inheritdoc/>
-        public bool TryGetValue<Key>(out V value) where Key : K
-        {
-            if (_interfaces.TryGetValue(typeof(Key), out var result))
-            {
-                if (result.IsAmbiguous)
-                    throw new AmbiguousTypeException(typeof(Key));
-                value = result.Value;
-                return true;
-            }
-            if (_dictionary.TryGetValue(typeof(Key), out var direct))
-            {
-                value = direct;
-                return true;
-            }
-            value = default;
-            return false;
         }
 
         /// <inheritdoc/>
         public bool TryGetValue(Type key, out V value)
         {
+            key.ThrowIfNull(nameof(key));
             if (_interfaces.TryGetValue(key, out var result))
             {
                 if (result.IsAmbiguous)
@@ -162,13 +125,10 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
-        public bool ContainsKey<Key>() where Key : K => _interfaces.ContainsKey(typeof(Key)) || _dictionary.ContainsKey(typeof(Key));
+        public bool ContainsKey(Type key) => _interfaces.ContainsKey(key.ThrowIfNull(nameof(key))) || _dictionary.ContainsKey(key);
 
         /// <inheritdoc/>
-        public bool ContainsKey(Type key) => _interfaces.ContainsKey(key) || _dictionary.ContainsKey(key);
-
-        /// <inheritdoc/>
-        public bool ContainsValue(V value) => _dictionary.ContainsValue(value);
+        public bool Contains(V value) => _dictionary.ContainsValue(value);
 
         /// <inheritdoc/>
         public void Clear()
@@ -177,32 +137,10 @@ namespace SpiceSharp.General
             _dictionary.Clear();
         }
 
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<KeyValuePair<Type, V>> GetEnumerator()
-        {
-            foreach (var pair in _interfaces)
-                yield return new KeyValuePair<Type, V>(pair.Key, pair.Value.Value);
-            foreach (var pair in _dictionary)
-                yield return new KeyValuePair<Type, V>(pair.Key, pair.Value);
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
         /// <inheritdoc/>
         ICloneable ICloneable.Clone()
         {
-            var clone = new InterfaceTypeDictionary<K, V>();
+            var clone = new InterfaceTypeDictionary<V>();
             foreach (var pair in _dictionary)
             {
                 var cloneValue = pair.Value;
@@ -216,9 +154,9 @@ namespace SpiceSharp.General
         /// <inheritdoc/>
         void ICloneable.CopyFrom(ICloneable source)
         {
+            var src = (InterfaceTypeDictionary<V>)source.ThrowIfNull(nameof(source));
             _dictionary.Clear();
             _interfaces.Clear();
-            var src = (InterfaceTypeDictionary<K, V>)source.ThrowIfNull(nameof(source));
             foreach (var pair in src._dictionary)
                 Add(pair.Key, pair.Value);
         }

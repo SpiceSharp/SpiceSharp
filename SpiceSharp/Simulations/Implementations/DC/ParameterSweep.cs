@@ -96,7 +96,7 @@ namespace SpiceSharp.Simulations
         {
             var behaviors = simulation.EntityBehaviors[Name];
             Action<double> setter = null;
-            foreach (var behavior in behaviors.Values)
+            foreach (var behavior in behaviors)
             {
                 foreach (var ps in behavior.ParameterSets)
                 {

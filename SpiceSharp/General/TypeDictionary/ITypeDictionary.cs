@@ -1,141 +1,105 @@
-﻿using SpiceSharp.General;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp
+namespace SpiceSharp.General
 {
     /// <summary>
-    /// A dictionary that can store objects, and indexes them by their type.
+    /// A dictionary that can store instances, and indexes them by a type. This dictionary
+    /// distinguishes itself by supporting for example inheritance on the type.
     /// </summary>
-    /// <typeparam name="K">The base type for keys in the type dictionary.</typeparam>
     /// <typeparam name="V">The base type for values in the type dictionary.</typeparam>
-    public interface ITypeDictionary<K, V> : IEnumerable<KeyValuePair<Type, V>>, ICloneable
+    public interface ITypeDictionary<V> : ICloneable
     {
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="ITypeDictionary{K,V}"/>.
+        /// Gets all the keys in the dictionary.
         /// </summary>
         /// <value>
-        /// The count.
-        /// </value>
-        int Count { get; }
-
-        /// <summary>
-        /// Gets the value with the specified key.
-        /// </summary>
-        /// <value>
-        /// The key type.
-        /// </value>
-        /// <param name="key">The key.</param>
-        /// <returns>The value.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
-        /// <exception cref="KeyNotFoundException">Thrown if <paramref name="key"/> was not found.</exception>
-        /// <exception cref="AmbiguousTypeException">If there are multiple values of type <paramref name="key"/>.</exception>
-        V this[Type key] { get; }
-
-        /// <summary>
-        /// Gets the keys.
-        /// </summary>
-        /// <value>
-        /// The keys.
+        /// The keys in the dictionary.
         /// </value>
         IEnumerable<Type> Keys { get; }
 
         /// <summary>
-        /// Gets the values.
+        /// Gets all the values in the dictionary.
         /// </summary>
         /// <value>
-        /// The values.
+        /// The values in the dictionary.
         /// </value>
         IEnumerable<V> Values { get; }
 
         /// <summary>
-        /// Adds the specified value to the dictionary.
+        /// Gets the number of items in the dictionary.
         /// </summary>
-        /// <typeparam name="Key">The key type.</typeparam>
+        /// <value>
+        /// The number of items in the dictionary.
+        /// </value>
+        int Count { get; }
+
+        /// <summary>
+        /// Gets a value from the dictionary by its type.
+        /// </summary>
+        /// <param name="key">The type.</param>
+        /// <returns>The value.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        /// <exception cref="AmbiguousTypeException">Thrown if <paramref name="key"/> does not point to a single instance.</exception>
+        V this[Type key] { get; }
+
+        /// <summary>
+        /// Adds a value to the dictionary.
+        /// </summary>
+        /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if a value of type <typeparamref name="V"/> was already added.</exception>
-        void Add<Key>(V value) where Key : K;
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        void Add(Type key, V value);
 
         /// <summary>
-        /// Removes the value with the specified key.
-        /// </summary>
-        /// <typeparam name="Key">The key type.</typeparam>
-        /// <returns>
-        ///     <c>true</c> if a value was removed; otherwise, <c>false</c>.
-        /// </returns>
-        bool Remove<Key>() where Key : K;
-
-        /// <summary>
-        /// Clears all items in the dictionary.
+        /// Clears all values from the dictionary.
         /// </summary>
         void Clear();
 
         /// <summary>
-        /// Gets the strongly typed value from the dictionary.
+        /// Tries to get a value from the dictionary indexed by the specified type.
         /// </summary>
-        /// <typeparam name="Key">The key.</typeparam>
-        /// <returns>The result.</returns>
-        /// <exception cref="TypeNotFoundException">Thrown if a value of type <typeparamref name="Key"/> could not be found.</exception>
-        /// <exception cref="AmbiguousTypeException">Thrown if there are multiple values of type <typeparamref name="Key"/>.</exception>
-        V GetValue<Key>() where Key : K;
-
-        /// <summary>
-        /// Gets all strongly typed values from the dictionary.
-        /// </summary>
-        /// <typeparam name="Key">The key type.</typeparam>
-        /// <returns>The results.</returns>
-        IEnumerable<V> GetAllValues<Key>() where Key : K;
-
-        /// <summary>
-        /// Tries to get a strongly typed value from the dictionary.
-        /// </summary>
-        /// <typeparam name="Key">The key type.</typeparam>
+        /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if a value was found for the specified type; otherwise <c>false</c>.
+        ///     <c>true</c> if the value was found; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="AmbiguousTypeException">If the value could not be uniquely determined.</exception>
-        bool TryGetValue<Key>(out V value) where Key : K;
-
-        /// <summary>
-        /// Tries to get a value from the dictionary.
-        /// </summary>
-        /// <param name="key">The key type.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        ///   <c>true</c> if the value was resolved; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="AmbiguousTypeException">If there are multiple values of type <paramref name="key"/>.</exception>
         bool TryGetValue(Type key, out V value);
 
         /// <summary>
-        /// Determines whether the dictionary contains one or more values of the specified type.
-        /// </summary>
-        /// <typeparam name="Key">The key type.</typeparam>
-        /// <returns>
-        ///     <c>true</c> if the dictionary contains one or more values of the specified type; otherwise, <c>false</c>.
-        /// </returns>
-        bool ContainsKey<Key>() where Key : K;
-
-        /// <summary>
-        /// Determines whether the dictionary contains one or more values of the specified type.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>
-        ///   <c>true</c> if the dictionary contains one ore more values of the specified type; otherwise, <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
-        bool ContainsKey(Type key);
-
-        /// <summary>
-        /// Determines whether the dictionary contains the specified value.
+        /// Determines whether the dictionary contains the value.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>
-        ///   <c>true</c> if the dictionary contains the specified value; otherwise, <c>false</c>.
+        ///     <c>true</c> if the dictionary contains the value; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
-        bool ContainsValue(V value);
+        bool Contains(V value);
+
+        /// <summary>
+        /// Removes a value from the dictionary, but only if the value was added through
+        /// the same key originally to avoid inconsistencies.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///     <c>true</c> if the value was remove; otherwise, <c>false</c>.
+        /// </returns>
+        bool Remove(Type key, V value);
+
+        /// <summary>
+        /// Determines whether the dictionary contains a value with the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>
+        ///     <c>true</c> if the dictionary contains a value with the specified key; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsKey(Type key);
+
+        /// <summary>
+        /// Gets all values from the dictionary that the specified key can point to.
+        /// </summary>
+        /// <returns>The values.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        IEnumerable<V> GetAllValues(Type key);
     }
 }

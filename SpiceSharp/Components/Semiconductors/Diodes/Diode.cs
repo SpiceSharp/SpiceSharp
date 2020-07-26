@@ -57,7 +57,7 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null || !context.ModelBehaviors.Contains<ModelTemperature>())
+            if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsType<ModelTemperature>())
                 throw new NoModelException(Name, typeof(DiodeModel));
             behaviors
                 .AddIfNo<INoiseBehavior>(simulation, () => new Diodes.Noise(Name, context))

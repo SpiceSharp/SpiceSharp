@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
             {
                 var parent = simulation.GetState<IBiasingSimulationState>();
                 IBiasingSimulationState state;
-                if (parameters.LocalBiasingSolver && !simulation.LocalStates.ContainsKey(typeof(IBiasingSimulationState)))
+                if (parameters.LocalBiasingSolver && !simulation.LocalStates.ContainsType<IBiasingSimulationState>())
                     state = new LocalSimulationState(simulation.InstanceName, parent, new SparseRealSolver());
                 else
                     state = new FlatSimulationState(simulation.InstanceName, parent, simulation.Nodes);
@@ -44,11 +44,8 @@ namespace SpiceSharp.Components.Subcircuits.Simple
         public Biasing(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
-            if (simulation.LocalStates.TryGetValue<LocalSimulationState>(out ISimulationState state))
-            {
-                _state = (LocalSimulationState)state;
+            if (simulation.LocalStates.TryGetValue(out _state))
                 _state.Initialize(simulation.Nodes);
-            }
             _convergenceBehaviors = simulation.EntityBehaviors.GetBehaviorList<IConvergenceBehavior>();
         }
 

@@ -2,6 +2,7 @@
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using SpiceSharp.General;
 using System;
 using System.Collections.Generic;
 
@@ -104,19 +105,16 @@ namespace SpiceSharp.Components.Common
         /// <inheritdoc/>
         public virtual S GetState<S>() where S : ISimulationState
         {
-            if (LocalStates.TryGetValue<S>(out ISimulationState result))
-                return (S)result;
+            if (LocalStates.TryGetValue(out S result))
+                return result;
             return default;
         }
 
         /// <inheritdoc/>
         public virtual bool TryGetState<S>(out S state) where S : ISimulationState
         {
-            if (LocalStates.TryGetValue<S>(out ISimulationState result))
-            {
-                state = (S)result;
+            if (LocalStates.TryGetValue(out state))
                 return true;
-            }
             state = default;
             return false;
         }

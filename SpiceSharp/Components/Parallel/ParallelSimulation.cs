@@ -36,8 +36,8 @@ namespace SpiceSharp.Components.ParallelComponents
         /// <inheritdoc/>
         public override S GetState<S>()
         {
-            if (LocalStates.TryGetValue<S>(out ISimulationState result))
-                return (S)result;
+            if (LocalStates.TryGetValue(out S result))
+                return result;
             return Parent.GetState<S>();
         }
     }

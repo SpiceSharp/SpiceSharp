@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
             {
                 var parent = simulation.GetState<IComplexSimulationState>();
                 IComplexSimulationState state;
-                if (parameters.LocalComplexSolver && !simulation.LocalStates.ContainsKey(typeof(IComplexSimulationState)))
+                if (parameters.LocalComplexSolver && !simulation.LocalStates.ContainsType<IComplexSimulationState>())
                     state = new LocalSimulationState(simulation.InstanceName, parent, new SparseComplexSolver());
                 else
                     state = new FlatSimulationState(simulation.InstanceName, parent, simulation.Nodes);
@@ -42,11 +42,8 @@ namespace SpiceSharp.Components.Subcircuits.Simple
         public Frequency(string name, SubcircuitSimulation simulation)
             : base(name, simulation)
         {
-            if (simulation.LocalStates.TryGetValue<LocalSimulationState>(out ISimulationState state))
-            {
-                _state = (LocalSimulationState)state;
+            if (simulation.LocalStates.TryGetValue(out _state))
                 _state.Initialize(simulation.Nodes);
-            }
         }
 
         /// <inheritdoc/>
