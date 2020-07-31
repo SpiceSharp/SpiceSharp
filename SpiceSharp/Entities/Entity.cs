@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
@@ -8,7 +9,10 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Base class for any circuit object that can take part in simulations.
     /// </summary>
-    public abstract class Entity : ParameterSetCollection, IEntity
+    /// <seealso cref="ParameterSetCollection" />
+    /// <seealso cref="IEntity" />
+    public abstract class Entity : ParameterSetCollection,
+        IEntity
     {
         /// <summary>
         /// Gets or sets a value indicating whether the parameters should reference that of the entity.
@@ -70,6 +74,35 @@ namespace SpiceSharp.Entities
         public override string ToString()
         {
             return "{0} ({1})".FormatString(Name, GetType().Name);
+        }
+    }
+
+    /// <summary>
+    /// Base class for any circuit object that can take part in simulations.
+    /// This implementation will by default use dependency injection for resolving behaviors.
+    /// </summary>
+    /// <typeparam name="TContext">The type of the context.</typeparam>
+    /// <seealso cref="ParameterSetCollection" />
+    /// <seealso cref="IEntity" />
+    public abstract class Entity<TContext> : Entity,
+        IEntity<TContext>
+        where TContext : IBindingContext
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entity{TContext}"/> class.
+        /// </summary>
+        /// <param name="name">The name of the entity.</param>
+        protected Entity(string name) 
+            : base(name)
+        {
+        }
+
+        /// <inheritdoc />
+        public override void CreateBehaviors(ISimulation simulation)
+        {
+            var behaviors = new BehaviorContainer(Name);
+            DI.Resolve(simulation, this, behaviors, LinkParameters);
+            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

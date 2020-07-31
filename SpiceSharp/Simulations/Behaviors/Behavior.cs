@@ -1,4 +1,5 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Behaviors
@@ -29,6 +30,15 @@ namespace SpiceSharp.Behaviors
         protected Behavior(string name)
         {
             Name = name.ThrowIfNull(nameof(name));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Behavior"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        protected Behavior(IBindingContext context)
+        {
+            Name = context.ThrowIfNull(nameof(context)).Behaviors.Name;
         }
     }
 }

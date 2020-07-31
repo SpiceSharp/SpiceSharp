@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
@@ -12,6 +13,7 @@ namespace SpiceSharp.Components.Resistors
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
+    [BehaviorFor(typeof(Resistor), typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>
@@ -34,9 +36,9 @@ namespace SpiceSharp.Components.Resistors
         /// <summary>
         /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Temperature(string name, IComponentBindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Temperature(IComponentBindingContext context) : base(context)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
@@ -45,6 +47,7 @@ namespace SpiceSharp.Components.Resistors
                 _mbp = context.ModelBehaviors.GetParameterSet<ModelParameters>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             double factor;

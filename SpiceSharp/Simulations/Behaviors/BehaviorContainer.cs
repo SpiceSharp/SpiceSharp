@@ -1,11 +1,10 @@
 ﻿using SpiceSharp.Diagnostics;
+using SpiceSharp.Entities;
 using SpiceSharp.General;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace SpiceSharp.Behaviors
 {
@@ -18,6 +17,43 @@ namespace SpiceSharp.Behaviors
         IBehaviorContainer,
         IParameterSetCollection
     {
+        /// <summary>
+        /// Default implementation of the <see cref="IBehaviorContainerBuilder{TContext}"/>.
+        /// </summary>
+        /// <typeparam name="TContext">The type of binding context.</typeparam>
+        /// <seealso cref="IBehaviorContainerBuilder{TContext}" />
+        protected class BehaviorContainerBuilder<TContext> : IBehaviorContainerBuilder<TContext>
+            where TContext : IBindingContext
+        {
+            private readonly IBehaviorContainer _container;
+            private readonly ISimulation _simulation;
+            private readonly TContext _context;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="BehaviorContainerBuilder{TContext}"/> class.
+            /// </summary>
+            /// <param name="container">The container.</param>
+            /// <param name="simulation">The simulation.</param>
+            /// <param name="context">The context.</param>
+            public BehaviorContainerBuilder(IBehaviorContainer container, ISimulation simulation, TContext context)
+            {
+                _container = container.ThrowIfNull(nameof(container));
+                _simulation = simulation.ThrowIfNull(nameof(simulation));
+                _context = context;
+            }
+
+            /// <inheritdoc/>
+            public IBehaviorContainerBuilder<TContext> AddIfNo<TBehavior>(Func<TContext, IBehavior> factory) where TBehavior : IBehavior
+            {
+                factory.ThrowIfNull(nameof(factory));
+                if (!_simulation.UsesBehaviors<TBehavior>())
+                    return this;
+                if (!_container.ContainsType<TBehavior>())
+                    _container.Add(factory(_context));
+                return this;
+            }
+        }
+
         /// <inheritdoc/>
         public string Name { get; }
 
@@ -147,16 +183,10 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <inheritdoc/>
-        public IBehaviorContainer AddIfNo<Target>(ISimulation simulation, Func<IBehavior> factory) where Target : IBehavior
-        {
-            if (!simulation.UsesBehaviors<Target>())
-                return this;
-            if (!ContainsType<Target>())
-                Add(factory());
-            return this;
-        }
+        public override ICloneable Clone() => new BehaviorContainer(this);
 
         /// <inheritdoc/>
-        public override ICloneable Clone() => new BehaviorContainer(this);
+        public IBehaviorContainerBuilder<TContext> Build<TContext>(ISimulation simulation, TContext context) where TContext : IBindingContext
+            => new BehaviorContainerBuilder<TContext>(this, simulation, context);
     }
 }

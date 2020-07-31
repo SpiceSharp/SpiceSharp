@@ -1,9 +1,7 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Components.CurrentControlledCurrentSources;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -18,7 +16,8 @@ namespace SpiceSharp.Components
     /// <seealso cref="Parameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "F+"), Pin(1, "F-"), Connected(0, 0)]
-    public class CurrentControlledCurrentSource : Component,
+    public class CurrentControlledCurrentSource : Component<CurrentControlledBindingContext>,
+        ICurrentControllingComponent,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -68,16 +67,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new CurrentControlledBindingContext(this, simulation, behaviors, ControllingSource, LinkParameters);
-            behaviors
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

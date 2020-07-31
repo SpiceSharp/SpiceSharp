@@ -60,10 +60,10 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
+            behaviors.Build(simulation, context)
+                .AddIfNo<ITimeBehavior>(context => new Time(Name, context))
+                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
+                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

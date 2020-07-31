@@ -20,15 +20,14 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <param name="component">The component that creates the behavior.</param>
         /// <param name="simulation">The simulation for which the behavior is created.</param>
         /// <param name="behaviors">The created behaviors.</param>
-        /// <param name="control">The controlling source identifier.</param>
         /// <param name = "linkParameters" > Flag indicating that parameters should be linked.If false, only cloned parameters are returned by the context.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public CurrentControlledBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors, string control, bool linkParameters)
+        public CurrentControlledBindingContext(ICurrentControllingComponent component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
             : base(component, simulation, behaviors, linkParameters)
         {
             // Gets the current controlling behaviors
-            if (control != null)
-                ControlBehaviors = simulation.EntityBehaviors[control];
+            if (component.ControllingSource != null)
+                ControlBehaviors = simulation.EntityBehaviors[component.ControllingSource];
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 using IndependentSourceParameters = SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters;
 
 namespace SpiceSharp.Components.CurrentSources
@@ -18,6 +20,7 @@ namespace SpiceSharp.Components.CurrentSources
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="IndependentSourceParameters"/>
+    [BehaviorFor(typeof(CurrentSource), typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<IndependentSourceParameters>
@@ -54,9 +57,9 @@ namespace SpiceSharp.Components.CurrentSources
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context) : base(context)
         {
             context.ThrowIfNull(nameof(context));
 
@@ -81,6 +84,7 @@ namespace SpiceSharp.Components.CurrentSources
             _elements = new ElementSet<double>(_biasing.Solver, null, _variables.GetRhsIndices(_biasing.Map));
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             double value;

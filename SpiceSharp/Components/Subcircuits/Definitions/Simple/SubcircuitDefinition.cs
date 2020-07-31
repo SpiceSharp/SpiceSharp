@@ -75,15 +75,15 @@ namespace SpiceSharp.Components
             simulation.Run(Entities);
 
             // Create the behaviors necessary for the subcircuit
-            behaviors
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(subcircuit.Name, simulation))
-                .AddIfNo<IBiasingUpdateBehavior>(parentSimulation, () => new BiasingUpdate(subcircuit.Name, simulation))
-                .AddIfNo<ITimeBehavior>(parentSimulation, () => new Time(subcircuit.Name, simulation))
-                .AddIfNo<IBiasingBehavior>(parentSimulation, () => new Biasing(subcircuit.Name, simulation))
-                .AddIfNo<IAcceptBehavior>(parentSimulation, () => new Accept(subcircuit.Name, simulation))
-                .AddIfNo<IFrequencyUpdateBehavior>(parentSimulation, () => new FrequencyUpdate(subcircuit.Name, simulation))
-                .AddIfNo<IFrequencyBehavior>(parentSimulation, () => new Frequency(subcircuit.Name, simulation))
-                .AddIfNo<INoiseBehavior>(parentSimulation, () => new Subcircuits.Simple.Noise(subcircuit.Name, simulation));
+            behaviors.Build<IBindingContext>(parentSimulation, null)
+                .AddIfNo<ITemperatureBehavior>(context => new Temperature(subcircuit.Name, simulation))
+                .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(subcircuit.Name, simulation))
+                .AddIfNo<ITimeBehavior>(context => new Time(subcircuit.Name, simulation))
+                .AddIfNo<IBiasingBehavior>(context => new Biasing(subcircuit.Name, simulation))
+                .AddIfNo<IAcceptBehavior>(context => new Accept(subcircuit.Name, simulation))
+                .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(subcircuit.Name, simulation))
+                .AddIfNo<IFrequencyBehavior>(context => new Frequency(subcircuit.Name, simulation))
+                .AddIfNo<INoiseBehavior>(context => new Subcircuits.Simple.Noise(subcircuit.Name, simulation));
         }
 
         /// <inheritdoc/>

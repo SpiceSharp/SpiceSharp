@@ -58,11 +58,11 @@ namespace SpiceSharp.Components
             var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(JFETModel));
-            behaviors
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
+            behaviors.Build(simulation, context)
+                .AddIfNo<IFrequencyBehavior>(context => new FrequencyBehavior(Name, context))
+                .AddIfNo<ITimeBehavior>(context => new Time(Name, context))
+                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context))
+                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

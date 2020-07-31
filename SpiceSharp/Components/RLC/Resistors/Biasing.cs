@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Resistors
 {
@@ -11,11 +13,13 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
+    [BehaviorFor(typeof(Resistor), typeof(IBiasingBehavior), 1)]
     public class Biasing : Temperature,
         IBiasingBehavior
     {
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
+
 
         /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Voltage")]
@@ -39,9 +43,9 @@ namespace SpiceSharp.Components.Resistors
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context) : base(context)
         {
             context.Nodes.CheckNodes(2);
             var state = context.GetState<IBiasingSimulationState>();
@@ -49,6 +53,7 @@ namespace SpiceSharp.Components.Resistors
             _elements = new ElementSet<double>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             _elements.Add(Conductance, -Conductance, -Conductance, Conductance);

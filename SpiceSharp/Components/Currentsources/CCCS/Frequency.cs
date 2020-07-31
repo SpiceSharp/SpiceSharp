@@ -1,9 +1,11 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSources
 {
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(CurrentControlledCurrentSource), typeof(IFrequencyBehavior), 1)]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {
@@ -35,10 +38,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, CurrentControlledBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(ICurrentControlledBindingContext context)
+            : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
 

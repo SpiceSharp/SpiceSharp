@@ -11,15 +11,20 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A current-controlled switch
     /// </summary>
+    /// <seealso cref="Component" />
+    /// <seealso cref="ICurrentControllingComponent" />
+    /// <seealso cref="IParameterized{T}" />
+    /// <seealso cref="Parameters"/>
     [Pin(0, "W+"), Pin(1, "W-"), Connected(0, 1)]
     public class CurrentSwitch : Component,
+        ICurrentControllingComponent,
         IParameterized<Parameters>
     {
         /// <summary>
         /// Controlling source name
         /// </summary>
         [ParameterName("control"), ParameterInfo("Name of the controlling source")]
-        public string ControllingName { get; set; }
+        public string ControllingSource { get; set; }
 
         /// <summary>
         /// Constants
@@ -55,7 +60,7 @@ namespace SpiceSharp.Components
             : base(name, CurrentSwitchPinCount)
         {
             Connect(pos, neg);
-            ControllingName = controllingSource;
+            ControllingSource = controllingSource;
         }
 
         /// <summary>
@@ -65,13 +70,13 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            var context = new CurrentControlledBindingContext(this, simulation, behaviors, ControllingName, LinkParameters);
+            var context = new CurrentControlledBindingContext(this, simulation, behaviors, LinkParameters);
             if (context.ModelBehaviors == null)
                 throw new NoModelException(Name, typeof(CurrentSwitchModel));
-            behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context, new CurrentControlled(context)))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context, new CurrentControlled(context)))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context, new CurrentControlled(context)));
+            behaviors.Build(simulation, context)
+                .AddIfNo<IAcceptBehavior>(context => new Accept(Name, context, new CurrentControlled(context)))
+                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context, new CurrentControlled(context)))
+                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context, new CurrentControlled(context)));
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

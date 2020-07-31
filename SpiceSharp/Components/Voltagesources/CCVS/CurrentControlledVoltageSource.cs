@@ -14,11 +14,13 @@ namespace SpiceSharp.Components
     /// A current-controlled voltage source.
     /// </summary>
     /// <seealso cref="Component"/>
+    /// <seealso cref="ICurrentControllingComponent"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="CurrentControlledVoltageSources.Parameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "H+"), Pin(1, "H-"), VoltageDriver(0, 1)]
     public class CurrentControlledVoltageSource : Component,
+        ICurrentControllingComponent,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -32,7 +34,7 @@ namespace SpiceSharp.Components
         /// The name of the controlling entity.
         /// </value>
         [ParameterName("control"), ParameterInfo("Controlling voltage source")]
-        public string ControllingName { get; set; }
+        public string ControllingSource { get; set; }
 
         /// <summary>
         /// The pin count for current-controlled voltage sources.
@@ -64,17 +66,17 @@ namespace SpiceSharp.Components
         {
             Parameters.Coefficient = gain;
             Connect(pos, neg);
-            ControllingName = controllingSource;
+            ControllingSource = controllingSource;
         }
 
         /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            var context = new CurrentControlledBindingContext(this, simulation, behaviors, ControllingName, LinkParameters);
-            behaviors
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
+            var context = new CurrentControlledBindingContext(this, simulation, behaviors, LinkParameters);
+            behaviors.Build(simulation, context)
+                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
+                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

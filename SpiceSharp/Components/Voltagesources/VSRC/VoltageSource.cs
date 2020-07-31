@@ -76,10 +76,10 @@ namespace SpiceSharp.Components
         {
             var behaviors = new BehaviorContainer(Name);
             var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
+            behaviors.Build(simulation, context)
+                .AddIfNo<IAcceptBehavior>(context => new Accept(Name, context))
+                .AddIfNo<IFrequencyBehavior>(context => new FrequencyBehavior(Name, context))
+                .AddIfNo<IBiasingBehavior>(context => new BiasingBehavior(Name, context));
             simulation.EntityBehaviors.Add(behaviors);
         }
 

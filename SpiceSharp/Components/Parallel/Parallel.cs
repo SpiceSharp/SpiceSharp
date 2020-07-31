@@ -117,16 +117,16 @@ namespace SpiceSharp.Components
             psim.Run(Parameters.Entities);
 
             // Create the parallel behaviors
-            container
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, psim))
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, psim))
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, psim))
-                .AddIfNo<IConvergenceBehavior>(simulation, () => new Convergence(Name, psim))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, psim))
-                .AddIfNo<IBiasingUpdateBehavior>(simulation, () => new BiasingUpdate(Name, psim))
-                .AddIfNo<INoiseBehavior>(simulation, () => new ParallelComponents.Noise(Name, psim))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, psim))
-                .AddIfNo<IFrequencyUpdateBehavior>(simulation, () => new FrequencyUpdate(Name, psim));
+            container.Build<IBindingContext>(simulation, null)
+                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, psim))
+                .AddIfNo<IAcceptBehavior>(context => new Accept(Name, psim))
+                .AddIfNo<ITimeBehavior>(context => new Time(Name, psim))
+                .AddIfNo<IConvergenceBehavior>(context => new Convergence(Name, psim))
+                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, psim))
+                .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(Name, psim))
+                .AddIfNo<INoiseBehavior>(context => new ParallelComponents.Noise(Name, psim))
+                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, psim))
+                .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(Name, psim));
             simulation.EntityBehaviors.Add(container);
         }
     }
