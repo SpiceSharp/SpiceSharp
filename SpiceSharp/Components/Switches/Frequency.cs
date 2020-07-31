@@ -1,16 +1,23 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.Switches
 {
     /// <summary>
     /// Frequency behavior for switches.
     /// </summary>
-    public class Frequency : Biasing, IFrequencyBehavior
+    /// <seealso cref="Biasing" />
+    /// <seealso cref="IFrequencyBehavior" />
+    [BehaviorFor(typeof(CurrentSwitch), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(VoltageSwitch), typeof(IFrequencyBehavior), 1)]
+    public class Frequency : Biasing,
+        IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;
@@ -37,10 +44,10 @@ namespace SpiceSharp.Components.Switches
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        /// <param name="controller">The controller.</param>
-        public Frequency(string name, IComponentBindingContext context, Controller controller) : base(name, context, controller)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(ISwitchBindingContext context)
+            : base(context)
         {
             var state = context.GetState<IComplexSimulationState>();
             _variables = new OnePort<Complex>(state.GetSharedVariable(context.Nodes[0]), state.GetSharedVariable(context.Nodes[1]));

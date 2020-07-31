@@ -1,9 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Diodes;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -15,7 +12,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Diodes.Parameters"/>
     [Pin(0, "D+"), Pin(1, "D-")]
-    public class Diode : Component,
+    public class Diode : Component<ComponentBindingContext>,
         IParameterized<Parameters>
     {
         /// <inheritdoc/>
@@ -50,22 +47,6 @@ namespace SpiceSharp.Components
         {
             Connect(anode, cathode);
             Model = model;
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null || !context.ModelBehaviors.ContainsType<ModelTemperature>())
-                throw new NoModelException(Name, typeof(DiodeModel));
-            behaviors.Build(simulation, context)
-                .AddIfNo<INoiseBehavior>(context => new Diodes.Noise(Name, context))
-                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
-                .AddIfNo<ITimeBehavior>(context => new Time(Name, context))
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

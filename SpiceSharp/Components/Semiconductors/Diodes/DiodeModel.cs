@@ -1,7 +1,6 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Diodes;
+﻿using SpiceSharp.Components.Diodes;
+using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -12,7 +11,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Model"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    public class DiodeModel : Model,
+    public class DiodeModel : Entity<BindingContext>,
         IParameterized<ModelParameters>
     {
         /// <summary>
@@ -31,15 +30,6 @@ namespace SpiceSharp.Components
         public DiodeModel(string name)
             : base(name)
         {
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ModelBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors.Build(simulation, context).AddIfNo<ITemperatureBehavior>(context => new ModelTemperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

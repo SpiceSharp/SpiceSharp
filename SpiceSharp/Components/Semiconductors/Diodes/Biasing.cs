@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.ParameterSets;
@@ -13,6 +14,7 @@ namespace SpiceSharp.Components.Diodes
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
+    [BehaviorFor(typeof(Diode), typeof(IBiasingBehavior), 1)]
     public class Biasing : Temperature,
         IBiasingBehavior,
         IConvergenceBehavior
@@ -79,24 +81,23 @@ namespace SpiceSharp.Components.Diodes
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context)
+            : base(context)
         {
             context.Nodes.CheckNodes(2);
 
             var state = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
 
-            Variables = new DiodeVariables<double>(name, state, context);
+            Variables = new DiodeVariables<double>(Name, state, context);
             Elements = new ElementSet<double>(state.Solver,
                 Variables.GetMatrixLocations(state.Map),
                 Variables.GetRhsIndicies(state.Map));
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and right hand side vector.
-        /// </summary>
+        /// <inheritdoc/>
         protected virtual void Load()
         {
             double cd, gd;
@@ -160,6 +161,7 @@ namespace SpiceSharp.Components.Diodes
                 cdeq, -cdeq);
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load() => Load();
 
         /// <summary>
@@ -195,6 +197,7 @@ namespace SpiceSharp.Components.Diodes
             }
         }
 
+        /// <inheritdoc/>
         bool IConvergenceBehavior.IsConvergent()
         {
             var vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;

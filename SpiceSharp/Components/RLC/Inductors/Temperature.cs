@@ -1,5 +1,7 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
+using System;
 
 namespace SpiceSharp.Components.Inductors
 {
@@ -8,6 +10,7 @@ namespace SpiceSharp.Components.Inductors
     /// </summary>
     /// <seealso cref="Behavior"/>
     /// <seealso cref="ITemperatureBehavior"/>
+    [BehaviorFor(typeof(Inductor), typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior
     {
@@ -26,15 +29,16 @@ namespace SpiceSharp.Components.Inductors
         /// <summary>
         /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Temperature(string name, IComponentBindingContext context)
-            : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Temperature(IComponentBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             Parameters = context.GetParameterSet<Parameters>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             Inductance = Parameters.Inductance * Parameters.SeriesMultiplier / Parameters.ParallelMultiplier;

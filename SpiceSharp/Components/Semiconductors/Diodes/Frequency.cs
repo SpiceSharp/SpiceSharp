@@ -3,6 +3,8 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -11,6 +13,7 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(Diode), typeof(IFrequencyBehavior), 2)]
     public class Frequency : Dynamic,
         IFrequencyBehavior
     {
@@ -44,21 +47,23 @@ namespace SpiceSharp.Components.Diodes
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context) : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
-            ComplexVariables = new DiodeVariables<Complex>(name, _complex, context);
+            ComplexVariables = new DiodeVariables<Complex>(Name, _complex, context);
             _elements = new ElementSet<Complex>(_complex.Solver,
                 ComplexVariables.GetMatrixLocations(_complex.Map));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
             CalculateCapacitance(LocalVoltage);
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var state = _complex;

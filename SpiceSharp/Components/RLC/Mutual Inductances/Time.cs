@@ -1,6 +1,8 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.MutualInductances
 {
@@ -9,6 +11,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="ITimeBehavior"/>
+    [BehaviorFor(typeof(MutualInductance), typeof(ITimeBehavior), 1)]
     public class Time : Temperature,
         IBiasingBehavior,
         ITimeBehavior
@@ -21,9 +24,9 @@ namespace SpiceSharp.Components.MutualInductances
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
-        /// <param name="context"></param>
-        public Time(string name, BindingContext context) : base(name, context)
+        /// <param name="context">The binding context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Time(BindingContext context) : base(context)
         {
             _time = context.GetState<ITimeSimulationState>();
             var state = context.GetState<IBiasingSimulationState>();

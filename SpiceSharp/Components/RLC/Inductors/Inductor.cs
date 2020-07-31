@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Inductors;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -17,7 +15,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Inductors.Parameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "L+"), Pin(1, "L-"), VoltageDriver(0, 1)]
-    public class Inductor : Component,
+    public class Inductor : Component<ComponentBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -61,18 +59,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors.Build(simulation, context)
-                .AddIfNo<ITimeBehavior>(context => new Time(Name, context))
-                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-")]
     [VoltageDriver(0, 1), Connected(0, 1)]
-    public class VoltageControlledVoltageSource : Component,
+    public class VoltageControlledVoltageSource : Component<ComponentBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -56,17 +56,6 @@ namespace SpiceSharp.Components
         {
             Parameters.Coefficient = gain;
             Connect(pos, neg, controlPos, controlNeg);
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors.Build(simulation, context)
-                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
 
         /// <inheritdoc/>

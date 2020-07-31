@@ -1,9 +1,11 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.VoltageSources
 {
@@ -13,6 +15,7 @@ namespace SpiceSharp.Components.VoltageSources
     /// <seealso cref="BiasingBehavior"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
+    [BehaviorFor(typeof(VoltageSource), typeof(IFrequencyBehavior), 1)]
     public class FrequencyBehavior : BiasingBehavior,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
@@ -39,9 +42,10 @@ namespace SpiceSharp.Components.VoltageSources
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public FrequencyBehavior(IComponentBindingContext context)
+            : base(context)
         {
             // Connections
             _complex = context.GetState<IComplexSimulationState>();

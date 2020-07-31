@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Switches
 {
@@ -13,20 +15,17 @@ namespace SpiceSharp.Components.Switches
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Switches.Parameters"/>
+    [BehaviorFor(typeof(CurrentSwitch), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(VoltageSwitch), typeof(IBiasingBehavior))]
     public class Biasing : Behavior, IBiasingBehavior,
         IParameterized<Parameters>
     {
-        private readonly Controller _controller;
+        private readonly Func<double> _controller;
         private readonly IIterationSimulationState _iteration;
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
 
-        /// <summary>
-        /// Gets the parameter set.
-        /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
+        /// <inheritdoc/>
         public Parameters Parameters { get; }
 
         /// <summary>
@@ -87,17 +86,17 @@ namespace SpiceSharp.Components.Switches
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Biasing"/> class.
+        /// Initializes a new instance of the <see cref="Biasing" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        /// <param name="controller">The controller.</param>
-        public Biasing(string name, IComponentBindingContext context, Controller controller) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(ISwitchBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
 
             _iteration = context.GetState<IIterationSimulationState>();
-            _controller = controller.ThrowIfNull(nameof(controller));
+            _controller = context.ControlValue;
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
             Parameters = context.GetParameterSet<Parameters>();
 
@@ -106,6 +105,7 @@ namespace SpiceSharp.Components.Switches
             _elements = new ElementSet<double>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             bool currentState;
@@ -129,7 +129,7 @@ namespace SpiceSharp.Components.Switches
             else
             {
                 // Get the previous state
-                var ctrl = _controller.Value;
+                var ctrl = _controller();
                 if (UseOldState)
                 {
                     // Calculate the current state

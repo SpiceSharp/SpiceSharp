@@ -1,9 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.JFETs;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -15,7 +12,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="JFETs.Parameters"/>
     [Pin(0, "drain"), Pin(1, "gate"), Pin(2, "source")]
-    public class JFET : Component,
+    public class JFET : Component<ComponentBindingContext>,
         IParameterized<Parameters>
     {
         /// <inheritdoc/>
@@ -49,21 +46,6 @@ namespace SpiceSharp.Components
         {
             Model = model;
             Connect(drain, gate, source);
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name, typeof(JFETModel));
-            behaviors.Build(simulation, context)
-                .AddIfNo<IFrequencyBehavior>(context => new FrequencyBehavior(Name, context))
-                .AddIfNo<ITimeBehavior>(context => new Time(Name, context))
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

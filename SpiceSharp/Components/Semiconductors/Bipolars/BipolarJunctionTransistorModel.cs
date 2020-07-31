@@ -1,7 +1,6 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Bipolars;
+﻿using SpiceSharp.Components.Bipolars;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -11,7 +10,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Model"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    public class BipolarJunctionTransistorModel : Model,
+    public class BipolarJunctionTransistorModel : Model<ModelBindingContext>,
         IParameterized<ModelParameters>
     {
         /// <inheritdoc/>
@@ -21,19 +20,10 @@ namespace SpiceSharp.Components
         /// Initializes a new instance of the <see cref="BipolarJunctionTransistorModel"/> class.
         /// </summary>
         /// <param name="name">The name of the device.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public BipolarJunctionTransistorModel(string name)
             : base(name)
         {
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ModelBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors.Build(simulation, context)
-                .AddIfNo<ITemperatureBehavior>(context => new ModelTemperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

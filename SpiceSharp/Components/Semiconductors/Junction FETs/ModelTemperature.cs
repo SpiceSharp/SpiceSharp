@@ -1,4 +1,6 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.JFETs
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
+    [BehaviorFor(typeof(JFETModel), typeof(ITemperatureBehavior))]
     public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>
@@ -80,9 +83,9 @@ namespace SpiceSharp.Components.JFETs
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperature"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperature(string name, ModelBindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public ModelTemperature(IBindingContext context) : base(context)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
@@ -90,6 +93,7 @@ namespace SpiceSharp.Components.JFETs
             BiasingState = context.GetState<IBiasingSimulationState>();
         }
 
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             if (Parameters.NominalTemperature.Given)

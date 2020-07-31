@@ -80,11 +80,13 @@ namespace SpiceSharp.Entities
 #else
             // Import the entry assembly, and let the method recursively find other assemblies
             var todo = new Stack<Assembly>();
-            var done = new HashSet<AssemblyName>();
-            todo.Push(Assembly.GetEntryAssembly());
+            var done = new HashSet<string>();
+            var assembly = Assembly.GetEntryAssembly() ?? typeof(DI).GetTypeInfo().Assembly;
+            done.Add(assembly.FullName);
+            todo.Push(assembly);
             while (todo.Count > 0)
             {
-                var assembly = todo.Pop();
+                assembly = todo.Pop();
 
                 // Only search if the assembly is flagged as one
                 if (assembly.GetCustomAttributes<BehavioralAttribute>().Any())
@@ -94,9 +96,13 @@ namespace SpiceSharp.Entities
                 foreach (var assemblyName in assembly.GetReferencedAssemblies())
                 {
                     // Don't search assemblies that have been scheduled/searched already
-                    if (!done.Contains(assemblyName))
-                        todo.Push(Assembly.Load(assemblyName));
-                    done.Add(assemblyName);
+                    if (!done.Contains(assemblyName.FullName))
+                    {
+                        assembly = Assembly.Load(assemblyName);
+                        if (assembly != null)
+                            todo.Push(assembly);
+                    }
+                    done.Add(assemblyName.FullName);
                 }
             }
 #endif

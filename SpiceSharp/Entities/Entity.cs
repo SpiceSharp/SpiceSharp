@@ -91,7 +91,8 @@ namespace SpiceSharp.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="Entity{TContext}"/> class.
         /// </summary>
-        /// <param name="name">The name of the entity.</param>
+        /// <param name="name">The name.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected Entity(string name) 
             : base(name)
         {

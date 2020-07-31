@@ -2,6 +2,8 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.VoltageDelays
 {
@@ -11,6 +13,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
+    [BehaviorFor(typeof(VoltageDelay), typeof(IFrequencyBehavior), 1)]
     public class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
@@ -25,10 +28,10 @@ namespace SpiceSharp.Components.VoltageDelays
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context)
+            : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
 
@@ -49,10 +52,12 @@ namespace SpiceSharp.Components.VoltageDelays
                     });
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var laplace = _complex.Laplace;

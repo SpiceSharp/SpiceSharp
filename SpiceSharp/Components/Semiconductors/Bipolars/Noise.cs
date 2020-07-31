@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
@@ -9,6 +10,7 @@ namespace SpiceSharp.Components.Bipolars
     /// <summary>
     /// Noise behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
+    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(INoiseBehavior), 3)]
     public class Noise : Frequency, INoiseBehavior
     {
         private readonly INoiseSimulationState _noise;
@@ -84,9 +86,10 @@ namespace SpiceSharp.Components.Bipolars
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Noise(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Noise(IComponentBindingContext context)
+            : base(context)
         {
             var complex = context.GetState<IComplexSimulationState>();
             _noise = context.GetState<INoiseSimulationState>();

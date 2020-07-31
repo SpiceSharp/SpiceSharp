@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
 using System;
@@ -10,6 +11,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="Time"/>
     /// <seealso cref="IAcceptBehavior"/>
+    [BehaviorFor(typeof(VoltageDelay), typeof(IAcceptBehavior), 2)]
     public class Accept : Time,
         IAcceptBehavior
     {
@@ -20,15 +22,16 @@ namespace SpiceSharp.Components.VoltageDelays
         /// <summary>
         /// Initializes a new instance of the <see cref="Accept"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Accept(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Accept(IComponentBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             _method = context.GetState<IIntegrationMethod>();
         }
 
+        /// <inheritdoc/>
         void IAcceptBehavior.Probe()
         {
             // Force first order interpolation if we are close to a breakpoint
@@ -38,6 +41,7 @@ namespace SpiceSharp.Components.VoltageDelays
             Signal.Probe(_method.Time, breakpoint);
         }
 
+        /// <inheritdoc/>
         void IAcceptBehavior.Accept()
         {
             if (_method is IBreakpointMethod method)

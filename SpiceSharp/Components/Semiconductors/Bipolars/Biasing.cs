@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.ParameterSets;
@@ -13,6 +14,7 @@ namespace SpiceSharp.Components.Bipolars
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
+    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(IBiasingBehavior), 1)]
     public class Biasing : Temperature,
         IBiasingBehavior,
         IConvergenceBehavior
@@ -210,9 +212,10 @@ namespace SpiceSharp.Components.Bipolars
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context)
+            : base(context)
         {
             context.Nodes.CheckNodes(4);
 
@@ -266,9 +269,7 @@ namespace SpiceSharp.Components.Bipolars
             }, new[] { _collectorPrimeNode, _basePrimeNode, _emitterPrimeNode });
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and right hand side vector.
-        /// </summary>
+        /// <inheritdoc/>
         protected virtual void Load()
         {
             double gben;
@@ -413,6 +414,7 @@ namespace SpiceSharp.Components.Bipolars
                 ceqbc, -ceqbe - ceqbc, ceqbe);
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load() => Load();
 
         /// <summary>
@@ -462,6 +464,7 @@ namespace SpiceSharp.Components.Bipolars
         }
 
         // TODO: I believe this method of checking convergence can be improved. These calculations seem to be common for multiple behaviors.
+        /// <inheritdoc/>
         bool IConvergenceBehavior.IsConvergent()
         {
             var state = BiasingState;

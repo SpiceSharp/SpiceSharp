@@ -1,7 +1,9 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.LosslessTransmissionLines
 {
@@ -10,6 +12,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(LosslessTransmissionLine), typeof(IFrequencyBehavior), 1)]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {
@@ -52,10 +55,10 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency" /> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context)
+            : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
 
@@ -98,10 +101,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
                 new MatrixLocation(_int2, _pos2));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var laplace = _complex.Laplace;

@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.VoltageControlledVoltageSources
 {
@@ -14,6 +16,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
     /// <seealso cref="IBranchedBehavior{T}"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="VoltageControlledVoltageSources.Parameters"/>
+    [BehaviorFor(typeof(VoltageControlledVoltageSource), typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,
@@ -44,9 +47,10 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(4);

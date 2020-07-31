@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.LosslessTransmissionLines;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -12,9 +10,10 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Component" />
     /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="LosslessTransmissionLines.Parameters"/>
     [Pin(0, "Pos1"), Pin(1, "Neg1"), Pin(2, "Pos2"), Pin(3, "Neg2")]
     [Connected(0, 2), Connected(1, 3), VoltageDriver(0, 2), VoltageDriver(1, 3)]
-    public partial class LosslessTransmissionLine : Component,
+    public partial class LosslessTransmissionLine : Component<ComponentBindingContext>,
         IParameterized<Parameters>
     {
         /// <inheritdoc/>
@@ -67,20 +66,6 @@ namespace SpiceSharp.Components
             Connect(pos1, neg1, pos2, neg2);
             Parameters.Impedance = impedance;
             Parameters.Delay = delay;
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            Parameters.CalculateDefaults();
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors.Build(simulation, context)
-                .AddIfNo<IAcceptBehavior>(context => new Accept(Name, context))
-                .AddIfNo<ITimeBehavior>(context => new Time(Name, context))
-                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

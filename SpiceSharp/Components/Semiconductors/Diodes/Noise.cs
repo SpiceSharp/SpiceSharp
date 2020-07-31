@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
@@ -11,6 +12,7 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>
+    [BehaviorFor(typeof(Diode), typeof(INoiseBehavior), 3)]
     public class Noise : Frequency,
         INoiseBehavior
     {
@@ -58,10 +60,10 @@ namespace SpiceSharp.Components.Diodes
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Noise(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Noise(IComponentBindingContext context)
+            : base(context)
         {
             _state = context.GetState<INoiseSimulationState>();
             _rs = new NoiseThermal("rs", ComplexVariables.Positive, ComplexVariables.PosPrime);
