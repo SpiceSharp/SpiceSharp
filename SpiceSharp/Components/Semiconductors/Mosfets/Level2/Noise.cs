@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
@@ -11,6 +12,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// </summary>
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>
+    [BehaviorFor(typeof(Mosfet2), typeof(INoiseBehavior), 2)]
     public class Noise : Frequency,
         INoiseBehavior
     {
@@ -50,10 +52,10 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
-        public Noise(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Noise(IComponentBindingContext context)
+            : base(context)
         {
             _state = context.GetState<INoiseSimulationState>();
             _properties = context.ModelBehaviors.GetValue<ModelTemperature>().Properties;

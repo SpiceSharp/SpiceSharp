@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Semiconductors;
 using SpiceSharp.ParameterSets;
@@ -13,6 +14,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
+    [BehaviorFor(typeof(Mosfet2), typeof(IBiasingBehavior), 4)]
     public class Biasing : Temperature,
         IMosfetBiasingBehavior,
         IConvergenceBehavior
@@ -106,10 +108,10 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context)
+            : base(context)
         {
             var state = context.GetState<IBiasingSimulationState>();
             _config = context.GetSimulationParameterSet<BiasingParameters>();
@@ -121,7 +123,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             Von = 0;
             Mode = 1;
 
-            _variables = new MosfetVariables<double>(name, state, context.Nodes,
+            _variables = new MosfetVariables<double>(Name, state, context.Nodes,
                 !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
                 !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
 

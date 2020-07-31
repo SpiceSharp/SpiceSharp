@@ -1,24 +1,25 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Components.Subcircuits.Simple
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// An <see cref="ITemperatureBehavior"/> for a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="ITemperatureBehavior" />
+    [BehaviorFor(typeof(Subcircuit), typeof(ITemperatureBehavior))]
     public class Temperature : SubcircuitBehavior<ITemperatureBehavior>,
         ITemperatureBehavior
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Temperature"/> class.
+        /// Initializes a new instance of the <see cref="Temperature" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="simulation">The simulation.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public Temperature(string name, SubcircuitSimulation simulation)
-            : base(name, simulation)
+        /// <param name="context">The context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Temperature(SubcircuitBindingContext context)
+            : base(context)
         {
         }
 

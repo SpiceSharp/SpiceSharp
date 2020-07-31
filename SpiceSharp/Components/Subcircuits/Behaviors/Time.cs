@@ -1,28 +1,34 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Components.Subcircuits.Simple
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// An <see cref="ITimeBehavior"/> for a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="ITimeBehavior" />
+    [BehaviorFor(typeof(Subcircuit), typeof(ITimeBehavior), 1)]
     public class Time : Biasing,
         ITimeBehavior
     {
-        private readonly BehaviorList<ITimeBehavior> _behaviors;
+        private BehaviorList<ITimeBehavior> _behaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="simulation">The simulation.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public Time(string name, SubcircuitSimulation simulation)
-            : base(name, simulation)
+        /// <param name="context">The context.</param>
+        public Time(SubcircuitBindingContext context)
+            : base(context)
         {
-            _behaviors = Simulation.EntityBehaviors.GetBehaviorList<ITimeBehavior>();
+        }
+
+        /// <inheritdoc />
+        public override void FetchBehaviors(SubcircuitBindingContext context)
+        {
+            base.FetchBehaviors(context);
+            _behaviors = context.GetBehaviors<ITimeBehavior>();
         }
 
         /// <inheritdoc/>

@@ -1,14 +1,17 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Linq;
+using System;
 
-namespace SpiceSharp.Components.Subcircuits.Simple
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
     /// An <see cref="INoiseBehavior"/> for a <see cref="SubcircuitDefinition"/>.
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="INoiseBehavior" />
+    [BehaviorFor(typeof(Subcircuit), typeof(INoiseBehavior))]
     public class Noise : SubcircuitBehavior<INoiseBehavior>,
         INoiseBehavior
     {
@@ -22,12 +25,12 @@ namespace SpiceSharp.Components.Subcircuits.Simple
         public double TotalInputNoise => Behaviors.Sum(nb => nb.TotalInputNoise);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Noise"/> class.
+        /// Initializes a new instance of the <see cref="Noise" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="simulation">The simulation.</param>
-        public Noise(string name, SubcircuitSimulation simulation)
-            : base(name, simulation)
+        /// <param name="context">The context.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Noise(SubcircuitBindingContext context)
+            : base(context)
         {
         }
 

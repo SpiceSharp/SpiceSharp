@@ -18,7 +18,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The <see cref="IBehaviorResolver" /> for chaining.
         /// </returns>
-        public IBehaviorResolver RegisterAfter(Type behavior, Type behaviorImplementation);
+        IBehaviorResolver RegisterAfter(Type behavior, Type behaviorImplementation);
 
         /// <summary>
         /// Registers a behavior factory for the specified target behavior before any
@@ -29,7 +29,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The <see cref="IBehaviorResolver" /> for chaining.
         /// </returns>
-        public IBehaviorResolver RegisterBefore(Type behavior, Type behaviorImplementation);
+        IBehaviorResolver RegisterBefore(Type behavior, Type behaviorImplementation);
 
         /// <summary>
         /// Creates behaviors in the <paramref name="container"/> for the specified <paramref name="simulation"/> and <paramref name="entity"/>.
@@ -38,12 +38,12 @@ namespace SpiceSharp.Entities
         /// <param name="entity">The entity.</param>
         /// <param name="container">The behavior container.</param>
         /// <param name="linkParameters">if set to <c>true</c>, parameters are linked instead of cloned.</param>
-        public void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container, bool linkParameters);
+        void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container, bool linkParameters);
 
         /// <summary>
         /// Clears any strategies.
         /// </summary>
-        public void Clear();
+        void Clear();
     }
 
     /// <summary>
@@ -96,5 +96,13 @@ namespace SpiceSharp.Entities
         public IBehaviorResolver<TContext> RegisterBefore<TBehavior, TBehaviorImpl>()
             where TBehavior : IBehavior
             where TBehaviorImpl : TBehavior, IBehavior;
+
+        /// <summary>
+        /// Resolves behaviors in the <paramref name="container"/> for the specified simulation and context.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="container">The container.</param>
+        /// <param name="context">The context.</param>
+        void Resolve(ISimulation simulation, IBehaviorContainer container, TContext context);
     }
 }

@@ -1,22 +1,22 @@
-﻿using SpiceSharp.Algebra;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 
-namespace SpiceSharp.Components.Subcircuits.Simple
+namespace SpiceSharp.Components.Subcircuits
 {
-    public partial class Biasing
+    public partial class Frequency
     {
         /// <summary>
-        /// An <see cref="IBiasingSimulationState"/> that just maps nodes but uses the same solver.
+        /// An <see cref="IComplexSimulationState"/> that can be used with a local solver and solution.
         /// </summary>
-        /// <seealso cref="SubcircuitSolverState{T, S}" />
-        /// <seealso cref="IBiasingSimulationState" />
-        protected class FlatSimulationState : FlatSolverState<double, IBiasingSimulationState>,
-            IBiasingSimulationState
+        /// <seealso cref="LocalSolverState{T, S}" />
+        /// <seealso cref="IComplexSimulationState" />
+        protected class FlatSimulationState : FlatSolverState<Complex, IComplexSimulationState>,
+            IComplexSimulationState
         {
             /// <inheritdoc/>
-            public IVector<double> OldSolution => Parent.OldSolution;
+            public Complex Laplace => Parent.Laplace;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="FlatSimulationState"/> class.
@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.Subcircuits.Simple
             /// <param name="parent">The parent.</param>
             /// <param name="nodes">The nodes.</param>
             /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/> or <paramref name="nodes"/> is <c>null</c>.</exception>
-            public FlatSimulationState(string name, IBiasingSimulationState parent, IEnumerable<Bridge<string>> nodes)
+            public FlatSimulationState(string name, IComplexSimulationState parent, IEnumerable<Bridge<string>> nodes)
                 : base(name, parent, nodes)
             {
             }

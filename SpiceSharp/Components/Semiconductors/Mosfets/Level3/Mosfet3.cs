@@ -1,10 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets;
-using SpiceSharp.Components.Mosfets.Level3;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -16,7 +12,7 @@ namespace SpiceSharp.Components
     /// </summary>
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk")]
     [Connected(0, 2), Connected(0, 3)]
-    public class Mosfet3 : Component,
+    public class Mosfet3 : Component<ComponentBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -37,26 +33,6 @@ namespace SpiceSharp.Components
         public Mosfet3(string name)
             : base(name, PinCount)
         {
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name, typeof(Mosfet3Model));
-            behaviors.Build(simulation, context)
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, context))
-
-                // Small-signal behaviors are separate instances
-                .AddIfNo<INoiseBehavior>(context => new Mosfets.Level3.Noise(Name, context))
-                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, context))
-
-                // Time behaviors are separate instances
-                .AddIfNo<ITimeBehavior>(context => new Time(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
 
         /// <inheritdoc/>

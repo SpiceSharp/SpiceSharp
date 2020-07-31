@@ -3,7 +3,7 @@ using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
 
-namespace SpiceSharp.Components.Subcircuits.Simple
+namespace SpiceSharp.Components.Subcircuits
 {
     public partial class Frequency
     {

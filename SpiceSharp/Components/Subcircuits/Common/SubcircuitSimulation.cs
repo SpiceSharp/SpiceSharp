@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <value>
         /// The subcircuit.
         /// </value>
-        protected SubcircuitDefinition Definition { get; }
+        protected ISubcircuitDefinition Definition { get; }
 
         /// <summary>
         /// Gets the name of the subcircuit instance.
@@ -46,7 +46,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <param name="definition">The subcircuit definition.</param>
         /// <param name="nodes">The node bridges.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="parent"/>, <paramref name="definition"/> or <paramref name="nodes"/> is <c>null</c>.</exception>
-        public SubcircuitSimulation(string name, ISimulation parent, SubcircuitDefinition definition, IReadOnlyList<Bridge<string>> nodes)
+        public SubcircuitSimulation(string name, ISimulation parent, ISubcircuitDefinition definition, IReadOnlyList<Bridge<string>> nodes)
             : base(parent,
                   new BehaviorContainerCollection(),
                   new InterfaceTypeSet<ISimulationState>())
@@ -62,22 +62,6 @@ namespace SpiceSharp.Components.Subcircuits
             if (LocalStates.TryGetValue(out S result))
                 return result;
             return Parent.GetState<S>();
-        }
-
-        /// <inheritdoc/>
-        public override P GetParameterSet<P>()
-        {
-            if (Definition.TryGetParameterSet(out P result))
-                return result;
-            return base.GetParameterSet<P>();
-        }
-
-        /// <inheritdoc/>
-        public override bool TryGetParameterSet<P>(out P value)
-        {
-            if (Definition.TryGetParameterSet(out value))
-                return true;
-            return base.TryGetParameterSet(out value);
         }
     }
 }

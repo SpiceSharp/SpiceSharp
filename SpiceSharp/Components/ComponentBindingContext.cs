@@ -11,7 +11,8 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="BindingContext" />
     /// <seealso cref="IComponentBindingContext" />
-    public class ComponentBindingContext : BindingContext, IComponentBindingContext
+    public class ComponentBindingContext : BindingContext,
+        IComponentBindingContext
     {
         /// <summary>
         /// Gets the model behaviors.

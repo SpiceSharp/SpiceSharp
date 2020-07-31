@@ -192,6 +192,22 @@ namespace SpiceSharp.Entities
         }
 
         /// <summary>
+        /// Resolves behaviors for the specified simulation and entity.
+        /// </summary>
+        /// <typeparam name="TContext">The type of the context.</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entity">The entity.</param>
+        /// <param name="behaviors">The behaviors.</param>
+        /// <param name="context">The context.</param>
+        public static void Resolve<TContext>(ISimulation simulation, IEntity entity, IBehaviorContainer behaviors, TContext context)
+            where TContext : IBindingContext
+        {
+            Scan();
+            var resolver = (Cache<TContext>)_behaviorResolvers.GetOrAdd(entity.GetType(), CreateFactoriesFor);
+            resolver.Resolve(simulation, behaviors, context);
+        }
+
+        /// <summary>
         /// Gets the behavior resolver for the specified entity and binding context types.
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
@@ -13,6 +14,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
+    [BehaviorFor(typeof(Mosfet2Model), typeof(ITemperatureBehavior))]
     public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>
@@ -46,9 +48,10 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperature"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperature(string name, IBindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public ModelTemperature(IBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
@@ -58,7 +61,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
 
         /// <inheritdoc/>
         /// <exception cref="SpiceSharpException">
-        /// If Phi is not positive or if Nsub is smaller than Ni.
+        /// Thrown if Phi is not positive or if Nsub is smaller than Ni.
         /// </exception>
         void ITemperatureBehavior.Temperature()
         {

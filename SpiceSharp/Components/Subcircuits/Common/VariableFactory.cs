@@ -3,10 +3,10 @@ using SpiceSharp.Simulations.Variables;
 using System;
 using System.Collections.Generic;
 
-namespace SpiceSharp.Components.Subcircuits.Simple
+namespace SpiceSharp.Components.Subcircuits
 {
     /// <summary>
-    /// A factory for variables shielding
+    /// A factory for variables that will shield them from outside.
     /// </summary>
     /// <seealso cref="IVariableFactory{V}" />
     /// <seealso cref="IVariable"/>

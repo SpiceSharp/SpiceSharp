@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets.Level3;
+using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
@@ -9,7 +10,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Mosfet3"/>
     /// </summary>
-    public class Mosfet3Model : Model,
+    public class Mosfet3Model : Entity<BindingContext>,
         IParameterized<ModelParameters>
     {
         /// <summary>

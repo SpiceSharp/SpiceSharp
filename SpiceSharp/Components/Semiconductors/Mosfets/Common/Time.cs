@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.IntegrationMethods;
@@ -11,6 +12,9 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     /// <seealso cref="Behavior"/>
     /// <seealso cref="ITimeBehavior"/>
+    [BehaviorFor(typeof(Mosfet1), typeof(ITimeBehavior))]
+    [BehaviorFor(typeof(Mosfet2), typeof(ITimeBehavior))]
+    [BehaviorFor(typeof(Mosfet3), typeof(ITimeBehavior))]
     public class Time : Behavior,
         ITimeBehavior
     {
@@ -64,11 +68,10 @@ namespace SpiceSharp.Components.Mosfets
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The binding context.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="context"/> is <c>null</c>.</exception>
-        public Time(string name, IComponentBindingContext context)
-            : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Time(IComponentBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             _time = context.GetState<ITimeSimulationState>();

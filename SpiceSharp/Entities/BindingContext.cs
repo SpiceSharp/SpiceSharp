@@ -43,6 +43,9 @@ namespace SpiceSharp.Entities
         /// <inheritdoc/>
         public bool TryGetState<S>(out S state) where S : ISimulationState => Simulation.TryGetState(out state);
 
+        /// <inheritdoc/>
+        public bool UsesState<S>() where S : ISimulationState => Simulation.UsesState<S>();
+
         /// <summary>
         /// Gets a simulation parameter set of the specified type.
         /// </summary>

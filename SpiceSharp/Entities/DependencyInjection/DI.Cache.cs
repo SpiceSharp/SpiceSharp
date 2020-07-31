@@ -102,6 +102,14 @@ namespace SpiceSharp.Entities
             }
 
             /// <inheritdoc/>
+            public void Resolve(ISimulation simulation, IBehaviorContainer container, TContext context)
+            {
+                var builder = container.Build(simulation, context);
+                foreach (var action in _builders)
+                    action(builder);
+            }
+
+            /// <inheritdoc/>
             IBehaviorResolver IBehaviorResolver.RegisterAfter(Type behavior, Type behaviorImplementation)
             {
                 var factory = CreateFactory(behaviorImplementation);
