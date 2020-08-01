@@ -19,5 +19,13 @@ namespace SpiceSharp.Components.ParallelComponents
                 tasks[i] = Task.Run(methods[i]);
             Task.WaitAll(tasks);
         }
+
+        /// <inheritdoc/>
+        public R Execute<R>(IReadOnlyList<Func<R>> methods)
+        {
+            if (this is IWorkDistributor<R> wd)
+                return wd.Execute(methods);
+            throw new ArgumentException("Return type not supported.");
+        }
     }
 }

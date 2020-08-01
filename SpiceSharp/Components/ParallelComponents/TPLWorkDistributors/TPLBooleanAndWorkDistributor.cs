@@ -8,7 +8,8 @@ namespace SpiceSharp.Components.ParallelComponents
     /// An <see cref="IWorkDistributor{R}"/> that combines the results using the boolean And operator.
     /// </summary>
     /// <seealso cref="IWorkDistributor{R}" />
-    public class TPLBooleanAndWorkDistributor : IWorkDistributor<bool>
+    public class TPLBooleanAndWorkDistributor : TPLWorkDistributor,
+        IWorkDistributor<bool>
     {
         /// <inheritdoc/>
         public bool Execute(IReadOnlyList<Func<bool>> methods)

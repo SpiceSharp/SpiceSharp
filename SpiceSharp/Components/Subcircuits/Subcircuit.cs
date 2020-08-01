@@ -75,7 +75,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            if (Parameters.Definition != null)
+            if (Parameters.Definition != null && Parameters.Definition.Entities.Count > 0)
             {
                 // Create our local simulation and binding context to allow our behaviors to do stuff
                 var localSim = new SubcircuitSimulation(Name, simulation, Parameters.Definition, NodeMap);

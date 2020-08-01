@@ -10,7 +10,8 @@ namespace SpiceSharp.Components.ParallelComponents
         /// An <see cref="IComplexSimulationState"/> that will insert a custom solver that allows concurrent write access.
         /// </summary>
         /// <seealso cref="IComplexSimulationState" />
-        protected class ComplexSimulationState : ParallelSolverState<Complex, IComplexSimulationState>, IComplexSimulationState
+        protected class ComplexSimulationState : ParallelSolverState<Complex, IComplexSimulationState>,
+            IComplexSimulationState
         {
             /// <inheritdoc/>
             Complex IComplexSimulationState.Laplace => Parent.Laplace;

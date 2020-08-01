@@ -1,34 +1,27 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
-using System.Collections.Generic;
 
-namespace SpiceSharp.Components.Subcircuits
+namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
-    /// The binding context for a <see cref="Subcircuit"/>. 
+    /// The binding context for a <see cref="Parallel"/>.
     /// </summary>
-    /// <seealso cref="ComponentBindingContext" />
-    public class SubcircuitBindingContext : ComponentBindingContext
+    /// <seealso cref="BindingContext" />
+    public class ParallelBindingContext : BindingContext
     {
         /// <summary>
-        /// Gets the node bridges.
+        /// Initializes a new instance of the <see cref="ParallelBindingContext"/> class.
         /// </summary>
-        /// <value>
-        /// The bridges.
-        /// </value>
-        public IReadOnlyList<Bridge<string>> Bridges => ((SubcircuitSimulation)Simulation).Nodes;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubcircuitBindingContext"/> class.
-        /// </summary>
-        /// <param name="component">The component creating the behavior.</param>
+        /// <param name="entity">The entity.</param>
         /// <param name="simulation">The simulation for which behaviors are created.</param>
         /// <param name="behaviors">The behaviors created by the entity.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
-        public SubcircuitBindingContext(IComponent component, SubcircuitSimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
-            : base(component, simulation, behaviors, linkParameters)
+        /// <param name="linkParameters">If set to <c>true</c>, parameters are linked instead of cloned.</param>
+        public ParallelBindingContext(IEntity entity, ParallelSimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
+            : base(entity, simulation, behaviors, linkParameters)
         {
         }
+
 
         /// <summary>
         /// Sets the state of the local simulation to another one.
@@ -38,7 +31,7 @@ namespace SpiceSharp.Components.Subcircuits
         public void AddLocalState<TState>(TState state)
             where TState : ISimulationState
         {
-            var localSim = (SubcircuitSimulation)Simulation;
+            var localSim = (ParallelSimulation)Simulation;
             localSim.LocalStates.Add(state);
         }
 

@@ -33,80 +33,15 @@ namespace SpiceSharp.Entities
             public Type Implementation;
             public Type Target;
         }
-        private readonly static object _lock = new object();
         private readonly static Dictionary<Type, List<BehaviorDescription>> _behaviorDescriptions = new Dictionary<Type, List<BehaviorDescription>>();
+        private readonly static object _lock = new object();
         private readonly static ConcurrentDictionary<Type, IBehaviorResolver> _behaviorResolvers = new ConcurrentDictionary<Type, IBehaviorResolver>();
 
         /// <summary>
         /// If <c>true</c>, then all loaded assemblies are searched for behaviors the first time that behaviors are
         /// created.
         /// </summary>
-        public static bool ScanFirstTime { get; set; } = true;
-
-        /// <summary>
-        /// Scans all assemblies (thread-safe) if <see cref="ScanFirstTime"/> is <c>true</c>.
-        /// This method will then set <see cref="ScanFirstTime"/> to <c>false</c>.
-        /// </summary>
-        private static void Scan()
-        {
-            // If we still need to scan the assemblies, do it now
-            if (ScanFirstTime)
-            {
-                lock (_lock)
-                {
-                    if (ScanFirstTime)
-                    {
-                        ScanFirstTime = false;
-                        _behaviorDescriptions.Clear();
-                        ScanAssemblies();
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Imports all behaviors of all assemblies that are loaded. This action is only executed once.
-        /// </summary>
-        public static void ScanAssemblies()
-        {
-            _behaviorDescriptions.Clear();
-#if !NETSTANDARD1_5
-            // Import the behaviors from all assemblies.
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assembly.GetCustomAttributes<BehavioralAttribute>().Any())
-                    ScanAssembly(assembly);
-            }
-#else
-            // Import the entry assembly, and let the method recursively find other assemblies
-            var todo = new Stack<Assembly>();
-            var done = new HashSet<string>();
-            var assembly = Assembly.GetEntryAssembly() ?? typeof(DI).GetTypeInfo().Assembly;
-            done.Add(assembly.FullName);
-            todo.Push(assembly);
-            while (todo.Count > 0)
-            {
-                assembly = todo.Pop();
-
-                // Only search if the assembly is flagged as one
-                if (assembly.GetCustomAttributes<BehavioralAttribute>().Any())
-                    ScanAssembly(assembly);
-
-                // Load referenced assemblies
-                foreach (var assemblyName in assembly.GetReferencedAssemblies())
-                {
-                    // Don't search assemblies that have been scheduled/searched already
-                    if (!done.Contains(assemblyName.FullName))
-                    {
-                        assembly = Assembly.Load(assemblyName);
-                        if (assembly != null)
-                            todo.Push(assembly);
-                    }
-                    done.Add(assemblyName.FullName);
-                }
-            }
-#endif
-        }
+        public static bool ScanIfNotFound { get; set; } = true;
 
         /// <summary>
         /// Finds the behaviors in the specified assembly that are eligible.
@@ -167,7 +102,18 @@ namespace SpiceSharp.Entities
             var resolver = (IBehaviorResolver)Activator.CreateInstance(di);
 
             // See if we can use use our discovered behavior descriptions
-            if (_behaviorDescriptions.TryGetValue(entityType, out var behaviors))
+            if (!_behaviorDescriptions.TryGetValue(entityType, out var behaviors) && ScanIfNotFound)
+            {
+                lock (_lock)
+                {
+                    if (!_behaviorDescriptions.TryGetValue(entityType, out behaviors))
+                    {
+                        ScanAssembly(entityType.GetTypeInfo().Assembly);
+                        behaviors = _behaviorDescriptions[entityType];
+                    }
+                }
+            }
+            if (behaviors != null)
             {
                 behaviors.Sort(new Comparer());
                 foreach (var behaviorType in behaviors)
@@ -186,7 +132,6 @@ namespace SpiceSharp.Entities
         /// <param name="linkParameters">if set to <c>true</c> if parameters should be linked instead of cloned.</param>
         public static void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer behaviors, bool linkParameters)
         {
-            Scan();
             var resolver = _behaviorResolvers.GetOrAdd(entity.GetType(), CreateFactoriesFor);
             resolver.Resolve(simulation, entity, behaviors, linkParameters);
         }
@@ -202,7 +147,6 @@ namespace SpiceSharp.Entities
         public static void Resolve<TContext>(ISimulation simulation, IEntity entity, IBehaviorContainer behaviors, TContext context)
             where TContext : IBindingContext
         {
-            Scan();
             var resolver = (Cache<TContext>)_behaviorResolvers.GetOrAdd(entity.GetType(), CreateFactoriesFor);
             resolver.Resolve(simulation, behaviors, context);
         }
@@ -217,7 +161,6 @@ namespace SpiceSharp.Entities
             where TEntity : IEntity<TContext>
             where TContext : IBindingContext
         {
-            Scan();
             return (IBehaviorResolver<TContext>)_behaviorResolvers.GetOrAdd(typeof(TEntity), CreateFactoriesFor);
         }
     }

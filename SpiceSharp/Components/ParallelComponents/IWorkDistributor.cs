@@ -20,7 +20,7 @@ namespace SpiceSharp.Components
     /// A distributor of work that can be done in parallel while needing to return a value.
     /// </summary>
     /// <typeparam name="R">The return type.</typeparam>
-    public interface IWorkDistributor<R>
+    public interface IWorkDistributor<R> : IWorkDistributor
     {
         /// <summary>
         /// Executes the specified methods and accumulates the result.

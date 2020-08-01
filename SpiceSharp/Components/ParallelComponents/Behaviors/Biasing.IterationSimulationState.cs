@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
-    public partial class Convergence
+    public partial class Biasing
     {
         /// <summary>
         /// An <see cref="IIterationSimulationState"/> that allows concurrent access.

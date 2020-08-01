@@ -3,15 +3,16 @@
 namespace SpiceSharp.Components.ParallelComponents
 {
     /// <summary>
-    /// An <see cref="IBiasingUpdateBehavior"/> for a <see cref="ParallelComponents"/>.
+    /// An <see cref="IBiasingUpdateBehavior"/> for a <see cref="Parallel"/>.
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IBiasingUpdateBehavior" />
     public class BiasingUpdate : Behavior,
+        IParallelBehavior,
         IBiasingUpdateBehavior
     {
         private readonly Workload _updateWorkload;
-        private readonly BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
+        private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingUpdate"/> class.
@@ -22,18 +23,21 @@ namespace SpiceSharp.Components.ParallelComponents
             : base(name)
         {
             var parameters = simulation.LocalParameters.GetParameterSet<Parameters>();
-            if (parameters.BiasUpdateDistributor != null)
+            if (parameters.WorkDistributors.TryGetValue(typeof(IBiasingUpdateBehavior), out var dist) && dist != null)
             {
-                _updateWorkload = new Workload(parameters.BiasUpdateDistributor, simulation.EntityBehaviors.Count);
-                foreach (var behavior in simulation.EntityBehaviors)
-                {
-                    if (behavior.TryGetValue(out IBiasingUpdateBehavior update))
-                        _updateWorkload.Actions.Add(update.Update);
-                }
+                _updateWorkload = new Workload(dist, parameters.Entities.Count);
             }
+        }
 
-            // Get all behaviors
-            _updateBehaviors = simulation.EntityBehaviors.GetBehaviorList<IBiasingUpdateBehavior>();
+        /// <inheritdoc/>
+        public virtual void FetchBehaviors(ParallelBindingContext context)
+        {
+            _updateBehaviors = context.GetBehaviors<IBiasingUpdateBehavior>();
+            if (_updateWorkload != null)
+            {
+                foreach (var behavior in _updateBehaviors)
+                    _updateWorkload.Actions.Add(behavior.Update);
+            }
         }
 
         /// <inheritdoc/>

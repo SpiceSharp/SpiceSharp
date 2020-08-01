@@ -3,6 +3,7 @@ using SpiceSharp.Components.ParallelComponents;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +18,7 @@ namespace SpiceSharp.Components
     /// shared resources compared to the time they spend actually computing. Especially since
     /// there is also some overhead in setting up these resources and structures for executing
     /// behaviors in parallel.</para>
-    /// <para>It is possible to combine entities into a <see cref="Subcircuit"/> first, and giving them
+    /// <para>It is possible to combine entities into a <see cref="Subcircuit"/> first, and having them use
     /// a local solver. This keeps the shared resources very limited, allowing each subcircuit to do
     /// its work without interference from read-write locking. This option is very advantageous if the
     /// subcircuits are large, but have only a few voltage nodes common with the outside.</para>
@@ -26,9 +27,10 @@ namespace SpiceSharp.Components
     /// <seealso cref="IComponent" />
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ParallelComponents.Parameters"/>
-    public class Parallel : Entity,
+    public class Parallel : Entity<ParallelBindingContext>,
         IComponent,
-        IParameterized<Parameters>
+        IParameterized<Parameters>,
+        IRuleSubject
     {
         /// <inheritdoc/>
         public Parameters Parameters { get; } = new Parameters();
@@ -101,33 +103,35 @@ namespace SpiceSharp.Components
         /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
-            // Nothing to see here!
-            if (Parameters.Entities == null || Parameters.Entities.Count == 0)
-                return;
+            var behaviors = new BehaviorContainer(Name);
+            if (Parameters.Entities != null || Parameters.Entities.Count > 0)
+            {
+                // Create our local simulation and binding context to allow behaviors to do stuff
+                var localSim = new ParallelSimulation(simulation, this);
+                var context = new ParallelBindingContext(this, localSim, behaviors, LinkParameters);
+                DI.Resolve(simulation, this, behaviors, context);
 
-            var container = new BehaviorContainer(Name);
+                // Run the simulation
+                localSim.Run(Parameters.Entities);
 
-            // Create our parallel simulation
-            var psim = new ParallelSimulation(simulation, this);
-            Convergence.Prepare(psim);
-            Frequency.Prepare(psim);
-            ParallelComponents.Noise.Prepare(psim);
+                // Allow the behaviors to fetch the behaviors if they want
+                foreach (var behavior in behaviors)
+                {
+                    if (behavior is IParallelBehavior parallelBehavior)
+                        parallelBehavior.FetchBehaviors(context);
+                }
+            }
+            simulation.EntityBehaviors.Add(behaviors);
+        }
 
-            // Create the behaviors
-            psim.Run(Parameters.Entities);
-
-            // Create the parallel behaviors
-            container.Build<IBindingContext>(simulation, null)
-                .AddIfNo<ITemperatureBehavior>(context => new Temperature(Name, psim))
-                .AddIfNo<IAcceptBehavior>(context => new Accept(Name, psim))
-                .AddIfNo<ITimeBehavior>(context => new Time(Name, psim))
-                .AddIfNo<IConvergenceBehavior>(context => new Convergence(Name, psim))
-                .AddIfNo<IBiasingBehavior>(context => new Biasing(Name, psim))
-                .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(Name, psim))
-                .AddIfNo<INoiseBehavior>(context => new ParallelComponents.Noise(Name, psim))
-                .AddIfNo<IFrequencyBehavior>(context => new Frequency(Name, psim))
-                .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(Name, psim));
-            simulation.EntityBehaviors.Add(container);
+        /// <inheritdoc/>
+        public void Apply(IRules rules)
+        {
+            foreach (var entity in Parameters.Entities)
+            {
+                if (entity is IRuleSubject subject)
+                    subject.Apply(rules);
+            }
         }
     }
 }
