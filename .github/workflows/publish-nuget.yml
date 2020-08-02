@@ -35,4 +35,6 @@ jobs:
           KEY: ${{ secrets.NUGET_APIKEY }}
         run: |
           cd SpiceSharp\bin\Release
-          dotnet nuget push *.nupkg --api-key $KEY --source https://api.nuget.org/v3/index.json
+          dotnet nuget add source https://api.nuget.org/v3/index.json
+          dotnet nuget push SpiceSharp.*.nupkg -k $KEY
+      
