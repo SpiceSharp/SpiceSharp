@@ -3,24 +3,21 @@
     {
       "src": [
         {
-          "files": [ "**.csproj" ],
-          "src": "SpiceSharp",
-          "exclude": [ "obj/**", "bin/**" ]
+          "files": [ "SpiceSharp/bin/Debug/net45/*.dll" ]
         }
       ],
       "force": false,
-      "dest": "SpiceSharp/obj/api",
-      "properties":
-      {
-        "TargetFramework": "net45"
-      }
-	}
+      "dest": "SpiceSharp/bin/api",
+	    "properties": {
+		    "TargetFramework": "net45"
+	    }
+	  }
   ],
   "build": {
     "content": [
       {
-        "files": [ "api/*.yml" ],
-        "src": "SpiceSharp/obj"
+        "files": [ "api/*.yml", "*.yml" ],
+        "src": "SpiceSharp/bin"
       },
       {
         "files": [
@@ -43,14 +40,14 @@
         "exclude": [ "docs/**" ]
       }
     ],
-	"globalMetadata" : {
-      "_appFaviconPath": "api/images/favicon.ico",
-      "_appLogoPath": "api/images/favicon.svg",
-      "_disableContribution": "true"
-	},
+    "globalMetadata" : {
+        "_appFaviconPath": "api/images/favicon.ico",
+        "_appLogoPath": "api/images/favicon.svg",
+        "_disableContribution": "true"
+    },
     "dest": "docs",
     "maxParallelism": 4,
-    "template": [ "default", "material/material" ],
-	"force": true
+    "template": [ "default", "templates/material" ],
+    "force": true
   }
 }

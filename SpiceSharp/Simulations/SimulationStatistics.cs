@@ -1,45 +1,67 @@
-﻿using System.Diagnostics;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
+using System.Diagnostics;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// Statistics for a <see cref="Simulation" />.
     /// </summary>
-    public class SimulationStatistics : Statistics
+    public class SimulationStatistics
     {
         /// <summary>
         /// Gets the time spent during setup.
         /// </summary>
+        /// <value>
+        /// The setup time.
+        /// </value>
         [ParameterName("tsetup"), ParameterInfo("The time spent during setup")]
         public Stopwatch SetupTime { get; } = new Stopwatch();
 
         /// <summary>
+        /// Gets the time spent during validation.
+        /// </summary>
+        /// <value>
+        /// The validation time.
+        /// </value>
+        [ParameterName("tvalidation"), ParameterInfo("The time spent validating the input")]
+        public Stopwatch ValidationTime { get; } = new Stopwatch();
+
+        /// <summary>
         /// Gets the time spent during execution.
         /// </summary>
+        /// <value>
+        /// The execution time.
+        /// </value>
         [ParameterName("texecution"), ParameterName("texec"), ParameterInfo("Time spent during execution")]
         public Stopwatch ExecutionTime { get; } = new Stopwatch();
 
         /// <summary>
         /// Gets the time spent during unsetup.
         /// </summary>
-        [ParameterName("tunsetup"), ParameterInfo("Time spent during unsetup")]
-        public Stopwatch UnsetupTime { get; } = new Stopwatch();
+        /// <value>
+        /// The unsetup time.
+        /// </value>
+        [ParameterName("tfinish"), ParameterInfo("Time spent finishing up")]
+        public Stopwatch FinishTime { get; } = new Stopwatch();
 
         /// <summary>
         /// Gets the time spent creating behaviors.
         /// </summary>
+        /// <value>
+        /// The behavior creation time.
+        /// </value>
         [ParameterName("tbehavior"), ParameterInfo("Time spent creating behaviors")]
         public Stopwatch BehaviorCreationTime { get; } = new Stopwatch();
 
         /// <summary>
         /// Clear all statistics
         /// </summary>
-        public override void Reset()
+        public void Reset()
         {
             SetupTime.Reset();
+            ValidationTime.Reset();
             ExecutionTime.Reset();
-            UnsetupTime.Reset();
+            FinishTime.Reset();
             BehaviorCreationTime.Reset();
         }
     }

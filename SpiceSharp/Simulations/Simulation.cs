@@ -1,163 +1,144 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.General;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Validation;
+using System;
 using System.Collections.Generic;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
+using System.Linq;
+using System.Reflection;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A template for any simulation.
     /// </summary>
-    public abstract class Simulation
+    /// <seealso cref="ParameterSetCollection"/>
+    /// <seealso cref="IEventfulSimulation"/>
+    public abstract class Simulation : ParameterSetCollection,
+        IEventfulSimulation
     {
-        /// <summary>
-        /// Possible statuses for a simulation.
-        /// </summary>
-        public enum Statuses
+        /// <inheritdoc/>
+        public SimulationStatus Status { get; private set; }
+
+        /// <inheritdoc/>
+        public virtual IEnumerable<Type> States
         {
-            /// <summary>
-            /// Indicates that the simulation has not started.
-            /// </summary>
-            None,
-
-            /// <summary>
-            /// Indicates that the simulation is now in its setup phase.
-            /// </summary>
-            Setup,
-
-            /// <summary>
-            /// Indicates that the simulation is running.
-            /// </summary>
-            Running,
-
-            /// <summary>
-            /// Indicates that the simulation is cleaning up all its resources.
-            /// </summary>
-            Unsetup
+            get
+            {
+                foreach (var i in InterfaceCache.Get(GetType()))
+                {
+                    var info = i.GetTypeInfo();
+                    if (info.IsGenericType && info.GetGenericTypeDefinition() == typeof(IStateful<>))
+                        yield return info.GetGenericArguments()[0];
+                }
+            }
         }
 
-        /// <summary>
-        /// Gets the current status of the simulation.
-        /// </summary>
-        public Statuses Status { get; private set; } = Statuses.None;
-
-        /// <summary>
-        /// Gets a set of <see cref="ParameterSet" /> that hold the configurations for the simulation.
-        /// </summary>
-        public ParameterSetDictionary Configurations { get; } = new ParameterSetDictionary();
-
-        /// <summary>
-        /// Gets a set of <see cref="ParameterSet" /> that holds the statistics for the simulation.
-        /// </summary>
-        public TypeDictionary<Statistics> Statistics { get; } = new TypeDictionary<Statistics>();
-
-        /// <summary>
-        /// Gets the set of variables (unknowns).
-        /// </summary>
-        public VariableSet Variables { get; private set; }
+        /// <inheritdoc/>
+        public virtual IEnumerable<Type> Behaviors
+        {
+            get
+            {
+                var ifs = GetType().GetTypeInfo().GetInterfaces();
+                foreach (var i in ifs)
+                {
+                    var info = i.GetTypeInfo();
+                    if (info.IsGenericType && info.GetGenericTypeDefinition() == typeof(IBehavioral<>))
+                        yield return info.GetGenericArguments()[0];
+                }
+            }
+        }
 
         #region Events
-        /// <summary>
-        /// Occurs when simulation data can be exported.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<ExportDataEventArgs> ExportSimulationData;
 
-        /// <summary>
-        /// Occurs before the simulation is set up.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> BeforeSetup;
 
-        /// <summary>
-        /// Occurs after the simulation is set up.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> AfterSetup;
 
-        /// <summary>
-        /// Occurs before the simulation starts its execution.
-        /// </summary>
+        /// <inheritdoc/>
+        public event EventHandler<EventArgs> BeforeValidation;
+
+        /// <inheritdoc/>
+        public event EventHandler<EventArgs> AfterValidation;
+
+        /// <inheritdoc/>
         public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
 
-        /// <summary>
-        /// Occurs after the simulation has executed.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<AfterExecuteEventArgs> AfterExecute;
 
-        /// <summary>
-        /// Occurs before the simulation is destroyed.
-        /// </summary>
+        /// <inheritdoc/>
         public event EventHandler<EventArgs> BeforeUnsetup;
 
-        /// <summary>
-        /// Occurs after the simulation is destroyed.
-        /// </summary>
-        public event EventHandler<EventArgs> AfterUnsetup; 
+        /// <inheritdoc/>
+        public event EventHandler<EventArgs> AfterUnsetup;
         #endregion
 
-        /// <summary>
-        /// Gets the identifier of the simulation.
-        /// </summary>
+        /// <inheritdoc/>
         public string Name { get; }
 
-        /// <summary>
-        /// Gets a pool of all entity behaviors active in the simulation.
-        /// </summary>
-        public BehaviorPool EntityBehaviors { get; private set; }
+        /// <inheritdoc/>
+        public IBehaviorContainerCollection EntityBehaviors { get; private set; }
 
         /// <summary>
-        /// Gets a pool of all entity parameter sets active in the simulation.
+        /// Gets the statistics.
         /// </summary>
-        public ParameterPool EntityParameters { get; private set; }
-
-        // Private parameters
-        private bool _cloneParameters;
-        
-        /// <summary>
-        /// A reference to the regular simulation statistics (cached)
-        /// </summary>
-        protected SimulationStatistics SimulationStatistics { get; }
-
-        /// <summary>
-        /// Gets the behavior types in the order that they are called.
-        /// </summary>
-        /// <remarks>
-        /// The order is important for establishing dependencies. A behavior that is called first should
-        /// not depend on any other behaviors!
-        /// </remarks>
-        protected List<Type> BehaviorTypes { get; } = new List<Type>(6);
+        /// <value>
+        /// The statistics.
+        /// </value>
+        public SimulationStatistics Statistics { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Simulation"/> class.
         /// </summary>
-        /// <param name="name">The identifier of the simulation.</param>
+        /// <param name="name">The name of the simulation.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         protected Simulation(string name)
         {
-            Name = name;
-            SimulationStatistics = new SimulationStatistics();
-            Statistics.Add(typeof(SimulationStatistics), SimulationStatistics);
+            Name = name.ThrowIfNull(nameof(name));
+            Statistics = new SimulationStatistics();
         }
 
-        /// <summary>
-        /// Runs the simulation on the specified circuit.
-        /// </summary>
-        /// <param name="entities">The entities to simulate.</param>
-        public virtual void Run(EntityCollection entities)
+        /// <inheritdoc/>
+        public virtual void Run(IEntityCollection entities)
         {
             entities.ThrowIfNull(nameof(entities));
-            
+
             // Setup the simulation
             OnBeforeSetup(EventArgs.Empty);
-            SimulationStatistics.SetupTime.Start();
-            Status = Statuses.Setup;
-            Setup(entities);
-            SimulationStatistics.SetupTime.Stop();
+            Statistics.SetupTime.Start();
+            try
+            {
+                Status = SimulationStatus.Setup;
+                Setup(entities);
+            }
+            finally
+            {
+                Statistics.SetupTime.Stop();
+            }
             OnAfterSetup(EventArgs.Empty);
 
-            // Check that at least something is simulated
-            if (Variables.Count < 1)
-                throw new CircuitException("{0}: No circuit nodes for simulation".FormatString(Name));
+            // Validate the input
+            OnBeforeValidation(EventArgs.Empty);
+            Statistics.ValidationTime.Start();
+            try
+            {
+                Status = SimulationStatus.Validation;
+                Validate(entities);
+            }
+            finally
+            {
+                Statistics.ValidationTime.Stop();
+            }
+            OnAfterValidation(EventArgs.Empty);
 
             // Execute the simulation
-            Status = Statuses.Running;
+            Status = SimulationStatus.Running;
             var beforeArgs = new BeforeExecuteEventArgs(false);
             var afterArgs = new AfterExecuteEventArgs();
             do
@@ -166,9 +147,15 @@ namespace SpiceSharp.Simulations
                 OnBeforeExecute(beforeArgs);
 
                 // Execute simulation
-                SimulationStatistics.ExecutionTime.Start();
-                Execute();
-                SimulationStatistics.ExecutionTime.Stop();
+                Statistics.ExecutionTime.Start();
+                try
+                {
+                    Execute();
+                }
+                finally
+                {
+                    Statistics.ExecutionTime.Stop();
+                }
 
                 // Reset
                 afterArgs.Repeat = false;
@@ -181,146 +168,271 @@ namespace SpiceSharp.Simulations
 
             // Clean up the circuit
             OnBeforeUnsetup(EventArgs.Empty);
-            SimulationStatistics.UnsetupTime.Start();
-            Status = Statuses.Unsetup;
-            Unsetup();
-            SimulationStatistics.UnsetupTime.Stop();
+            Statistics.FinishTime.Start();
+            try
+            {
+                Status = SimulationStatus.Unsetup;
+                Finish();
+            }
+            finally
+            {
+                Statistics.FinishTime.Stop();
+            }
             OnAfterUnsetup(EventArgs.Empty);
 
-            Status = Statuses.None;
+            Status = SimulationStatus.None;
+        }
+
+        /// <inheritdoc/>
+        public virtual void Rerun()
+        {
+            // Execute the simulation
+            Status = SimulationStatus.Running;
+            var beforeArgs = new BeforeExecuteEventArgs(false);
+            var afterArgs = new AfterExecuteEventArgs();
+            do
+            {
+                // Before execution
+                OnBeforeExecute(beforeArgs);
+
+                // Execute simulation
+                Statistics.ExecutionTime.Start();
+                try
+                {
+                    Execute();
+                }
+                finally
+                {
+                    Statistics.ExecutionTime.Stop();
+                }
+
+                // Reset
+                afterArgs.Repeat = false;
+                OnAfterExecute(afterArgs);
+
+                // We're going to repeat the simulation, change the event arguments
+                if (afterArgs.Repeat)
+                    beforeArgs = new BeforeExecuteEventArgs(true);
+            } while (afterArgs.Repeat);
+
+            // Clean up the circuit
+            OnBeforeUnsetup(EventArgs.Empty);
+            Statistics.FinishTime.Start();
+            try
+            {
+                Status = SimulationStatus.Unsetup;
+                Finish();
+            }
+            finally
+            {
+                Statistics.FinishTime.Stop();
+            }
+            OnAfterUnsetup(EventArgs.Empty);
+
+            Status = SimulationStatus.None;
         }
 
         /// <summary>
         /// Set up the simulation.
         /// </summary>
         /// <param name="entities">The entities that are included in the simulation.</param>
-        protected virtual void Setup(EntityCollection entities)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
+        private void Setup(IEntityCollection entities)
         {
+            // Validate the entities
             entities.ThrowIfNull(nameof(entities));
             if (entities.Count == 0)
-                throw new CircuitException("{0}: No circuit objects for simulation".FormatString(Name));
-
-            // Use the same comparers as the circuit. This is crucial because they use the same identifiers!
-            EntityParameters = new ParameterPool(entities.Comparer);
-            EntityBehaviors = new BehaviorPool(entities.Comparer, BehaviorTypes.ToArray());
-
-            // Create the variables that will need solving
-            if (Configurations.TryGet(out CollectionConfiguration cconfig))
             {
-                Variables = new VariableSet(cconfig.VariableComparer ?? EqualityComparer<string>.Default);
-                _cloneParameters = cconfig.CloneParameters;
-            }
-            else
-            {
-                Variables = new VariableSet();
-                _cloneParameters = false;
+                // No entities! Don't stop here, but at least warn the user.
+                SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_NoEntities.FormatString(Name));
             }
 
-            // Setup all entity parameters and behaviors
-            SetupParameters(entities);
-            SetupBehaviors(entities);
+            // Create all simulation states
+            CreateStates();
+
+            // Create all entity behaviors (using the created simulation states)
+            CreateBehaviors(entities);
         }
 
         /// <summary>
-        /// Destroys the simulation.
+        /// Creates all the simulation states for the simulation.
         /// </summary>
-        protected virtual void Unsetup()
-        {
-            // Clear all parameters
-            EntityBehaviors.Clear();
-            EntityBehaviors = null;
-            EntityParameters.Clear();
-            EntityParameters = null;
+        protected abstract void CreateStates();
 
-            // Clear all nodes
-            Variables.Clear();
-            Variables = null;
+        /// <summary>
+        /// Creates all behaviors for the simulation.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
+        protected virtual void CreateBehaviors(IEntityCollection entities)
+        {
+            entities.ThrowIfNull(nameof(entities));
+            EntityBehaviors = new BehaviorContainerCollection(entities.Comparer);
+
+            // Automatically create the behaviors of entities that need priority
+            void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
+            {
+                if (entities.TryGetEntity(args.Name, out var entity))
+                {
+                    entity.CreateBehaviors(this);
+                    if (EntityBehaviors.TryGetBehaviors(entity.Name, out var container))
+                        args.Behaviors = container;
+                }
+            }
+            EntityBehaviors.BehaviorsNotFound += BehaviorsNotFound;
+
+            // Create the behaviors
+            Statistics.BehaviorCreationTime.Start();
+            try
+            {
+                foreach (var entity in entities)
+                {
+                    if (!EntityBehaviors.Contains(entity.Name))
+                        entity.CreateBehaviors(this);
+                }
+            }
+            finally
+            {
+                Statistics.BehaviorCreationTime.Stop();
+            }
+
+            EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
+        }
+
+        /// <summary>
+        /// Validates the input.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entities"/> is <c>null</c>.</exception>
+        /// <exception cref="ValidationFailedException">Thrown if the validation failed.</exception>
+        protected abstract void Validate(IEntityCollection entities);
+
+        /// <summary>
+        /// A default implementation for validating entities and behaviors using the specified rules.
+        /// </summary>
+        /// <param name="rules">The rules.</param>
+        /// <param name="entities">The entities.</param>
+        /// <exception cref="ValidationFailedException">Thrown if the validation failed.</exception>
+        protected void Validate(IRules rules, IEntityCollection entities)
+        {
+            if (rules == null)
+                return;
+            if (entities != null)
+            {
+                foreach (var entity in entities)
+                {
+                    if (entity is IRuleSubject subject)
+                        subject.Apply(rules);
+                }
+            }
+            foreach (var behavior in EntityBehaviors.SelectMany(p => p))
+            {
+                if (behavior is IRuleSubject subject)
+                    subject.Apply(rules);
+            }
+
+            // Are there still violated rules?
+            if (rules.ViolationCount > 0)
+                throw new ValidationFailedException(this, rules);
         }
 
         /// <summary>
         /// Executes the simulation.
         /// </summary>
+        /// <exception cref="SpiceSharpException">Thrown if the simulation can't continue.</exception>
         protected abstract void Execute();
+
+        /// <summary>
+        /// Finish the simulation.
+        /// </summary>
+        protected abstract void Finish();
+
+        /// <inheritdoc/>
+        public virtual bool UsesBehaviors<B>() where B : IBehavior
+        {
+            if (this is IBehavioral<B>)
+                return true;
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public virtual S GetState<S>() where S : ISimulationState
+        {
+            if (this is IStateful<S> stateful)
+                return stateful.State;
+            throw new TypeNotFoundException(typeof(S), Properties.Resources.Stateful_NotDefined.FormatString(typeof(S).FullName));
+        }
+
+        /// <inheritdoc/>
+        public virtual bool TryGetState<S>(out S state) where S : ISimulationState
+        {
+            if (this is IStateful<S> stateful)
+            {
+                state = stateful.State;
+                return true;
+            }
+            state = default;
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public virtual bool UsesState<S>() where S : ISimulationState
+            => this is IStateful<S>;
 
         #region Methods for raising events
         /// <summary>
-        /// Raises the <see cref="E:ExportSimulationData" /> event.
+        /// Raises the <see cref="ExportSimulationData" /> event.
         /// </summary>
         /// <param name="args">The <see cref="ExportDataEventArgs"/> instance containing the event data.</param>
         protected virtual void OnExport(ExportDataEventArgs args) => ExportSimulationData?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeSetup" /> event.
+        /// Raises the <see cref="BeforeSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeExecute" /> event.
+        /// Raises the <see cref="BeforeExecute" /> event.
         /// </summary>
         /// <param name="args">The <see cref="BeforeExecuteEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeExecute(BeforeExecuteEventArgs args) => BeforeExecute?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterSetup" /> event.
+        /// Raises the <see cref="AfterSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterSetup" /> event.
+        /// Raises the <see cref="BeforeValidation" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnBeforeValidation(EventArgs args) => BeforeValidation?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="AfterValidation" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnAfterValidation(EventArgs args) => AfterValidation?.Invoke(this, args);
+
+        /// <summary>
+        /// Raises the <see cref="AfterSetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterExecute(AfterExecuteEventArgs args) => AfterExecute?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:BeforeUnsetup" /> event.
+        /// Raises the <see cref="BeforeUnsetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeUnsetup(EventArgs args) => BeforeUnsetup?.Invoke(this, args);
 
         /// <summary>
-        /// Raises the <see cref="E:AfterUnsetup" /> event.
+        /// Raises the <see cref="AfterUnsetup" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);
         #endregion
-
-        /// <summary>
-        /// Set up all behaviors previously created.
-        /// </summary>
-        /// <param name="entities">The circuit entities.</param>
-        private void SetupBehaviors(EntityCollection entities)
-        {
-            SimulationStatistics.BehaviorCreationTime.Start();
-            var types = BehaviorTypes.ToArray();
-            foreach (var entity in entities)
-                entity.CreateBehaviors(types, this, entities);
-            SimulationStatistics.BehaviorCreationTime.Stop();
-        }
-
-        /// <summary>
-        /// Collect and set up the parameter sets of all circuit entities.
-        /// </summary>
-        /// <remarks>
-        /// The parameter sets are cloned during set up to avoid issues when running multiple
-        /// simulations in parallel.
-        /// </remarks>
-        /// <param name="entities">The entities for which parameter sets need to be collected.</param>
-        private void SetupParameters(IEnumerable<Entity> entities)
-        {
-            entities.ThrowIfNull(nameof(entities));
-
-            // Register all parameters
-            foreach (var entity in entities)
-            {
-                foreach (var p in entity.ParameterSets.Values)
-                {
-                    var parameterset = _cloneParameters ? p.Clone() : p;
-                    parameterset.CalculateDefaults();
-                    EntityParameters.Add(entity.Name, parameterset);
-                }
-            }
-        }
     }
 }

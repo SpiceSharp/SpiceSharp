@@ -1,23 +1,23 @@
-﻿using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
-using SpiceSharp.Simulations;
 using SpiceSharp.Components;
+using SpiceSharp.Simulations;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
     [TestFixture]
     public class BipolarJunctionTransistorTests : Framework
     {
-        BipolarJunctionTransistor CreateBJT(string name, 
-            string c, string b, string e, string subst, 
+        BipolarJunctionTransistor CreateBJT(string name,
+            string c, string b, string e, string subst,
             string model)
         {
             // Create the transistor
             var bjt = new BipolarJunctionTransistor(name, c, b, e, subst, model);
             return bjt;
         }
-        
+
         BipolarJunctionTransistorModel CreateBJTModel(string name, string parameters)
         {
             var bjtmodel = new BipolarJunctionTransistorModel(name);
@@ -26,7 +26,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTDC_Expect_Spice3f5Reference()
+        public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
              * BJT connect to only voltage sources
@@ -53,12 +53,12 @@ namespace SpiceSharpTest.Models
 
             // Create simulation
             var dc = new DC("dc", new[] {
-                new SweepConfiguration("V1", 0, 0.8, 0.1),
-                new SweepConfiguration("V2", 0, 5, 0.5)
+                new ParameterSweep("V1", new LinearSweep(0, 0.8, 0.1)),
+                new ParameterSweep("V2", new LinearSweep(0, 5, 0.5))
             });
 
             // Create exports
-            Export<double>[] exports = { new RealPropertyExport(dc, "V2", "i"), new RealPropertyExport(dc, "V1", "i") };
+            IExport<double>[] exports = { new RealPropertyExport(dc, "V2", "i"), new RealPropertyExport(dc, "V1", "i") };
 
             // Provided by Spice 3f5
             double[][] references =
@@ -73,7 +73,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTSmallSignal_Expect_Spice3f5Reference()
+        public void When_CommonEmitterSmallSignal_Expect_Spice3f5Reference()
         {
             // Build circuit
             var ckt = new Circuit(
@@ -101,7 +101,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
 
             // Create exports
-            Export<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
 
             // Create references
             double[] riref = { 1.334417655221981e-06, 3.471965089573855e-04, 3.351830745696013e-06, 5.502570946227631e-04, 8.418945895773095e-06, 8.720498043349111e-04, 2.114445669597715e-05, 1.381911086546095e-03, 5.309368526798768e-05, 2.189406695272188e-03, 1.332469066652801e-04, 3.466895147088519e-03, 3.339563613753496e-04, 5.482432501910041e-03, 8.341980040370838e-04, 8.640775529878610e-03, 2.066558898597437e-03, 1.350614394562201e-02, 5.017427448376650e-03, 2.069020111657962e-02, 1.162687214173939e-02, 3.025147596713823e-02, 2.444806066150139e-02, 4.013545957396424e-02, 4.357949902126839e-02, 4.514050832244691e-02, 6.329927287469508e-02, 4.136984589249247e-02, 7.720778968190564e-02, 3.183821694967992e-02, 8.460892410281305e-02, 2.201455496720340e-02, 8.796592758796802e-02, 1.444187547976473e-02, 8.937770311337523e-02, 9.259273400620089e-03, 8.995244044657570e-02, 5.881087349156842e-03, 9.018332766108905e-02, 3.722325696488050e-03, 9.027562051537531e-02, 2.354340724190566e-03, 9.031252808298670e-02, 1.491338054090604e-03, 9.032751174287083e-02, 9.494226860852369e-04, 9.033418279536445e-02, 6.121839678644588e-04, 9.033858322545092e-02, 4.068213923146900e-04, 9.034456220674270e-02, 2.884413123461178e-04, 9.035667499179965e-02, 2.293512095670885e-04, 9.038149464070865e-02, 2.102372862964381e-04, 9.042443030168182e-02, 2.125125991591739e-04, 9.048191631184549e-02, 2.196186992196002e-04, 9.054643271040638e-02, 2.275933681030558e-04, 9.062185343008869e-02, 2.359674744810228e-04, 9.071079692976204e-02, 2.293406880105455e-04, 9.079365040405127e-02, 1.944976240778528e-04, 9.084916360239491e-02, 1.441205567769769e-04, 9.087793546139709e-02, 9.797275248012720e-05, 9.089082649598122e-02, 6.381079386729101e-05, 9.089621923422748e-02, 4.078876004594734e-05, 9.089840984364973e-02, 2.587116901301420e-05, 9.089928903096885e-02, 1.635803306436918e-05, 9.089964017582838e-02, 1.033019503722961e-05, 9.089978014956063e-02, 6.520640901850731e-06, 9.089983590285976e-02, 4.115679165634339e-06, 9.089985810348898e-02, 2.598362267948606e-06, 9.089986694319310e-02, 1.641720674824373e-06, 9.089987046435224e-02, 1.039399501946855e-06 };
@@ -118,7 +118,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_BJTTransient_Expect_Spice3f5Reference()
+        public void When_CommonEmitterTransient_Expect_Spice3f5Reference()
         {
             /*
              * Transient analysis of a BJT common emitter amplifier
@@ -148,9 +148,9 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-9, 10e-6);
 
             // Create exports
-            Export<double>[] exports =
+            IExport<double>[] exports =
             {
-                new GenericExport<double>(tran, () => tran.Method.Time), 
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "out")
             };
 
@@ -222,14 +222,14 @@ namespace SpiceSharpTest.Models
                     5.739702363159462e-02
                 }
             };
-            
+
             // Run simulation
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }
 
         [Test]
-        public void When_BJTCircuit_Expect_NoException()
+        public void When_CommonEmitter2OPSmallSignal_Expect_NoException()
         {
             // Build the circuit
             var ckt = new Circuit(

@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Attributes;
+﻿using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components.NonlinearResistorBehaviors
 {

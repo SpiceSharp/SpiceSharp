@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class SparseMatrix&lt;T&gt;.Row
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -111,6 +112,16 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected class Row</code></pre>
   </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Algebra_SparseMatrix_1_Row__ctor_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.#ctor*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row__ctor" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.#ctor">Row()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Row()</code></pre>
+  </div>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_FirstInRow_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.FirstInRow*"></a>
@@ -120,7 +131,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SparseMatrix&lt;T&gt;.SparseMatrixElement FirstInRow { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public SparseMatrix&lt;T&gt;.Element FirstInRow { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -132,8 +143,9 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
+        <td><p>The first element in the row.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -144,7 +156,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SparseMatrix&lt;T&gt;.SparseMatrixElement LastInRow { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public SparseMatrix&lt;T&gt;.Element LastInRow { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -156,21 +168,31 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
+        <td><p>The last element in the row.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_CreateGetElement_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.CreateGetElement*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_CreateGetElement_System_Int32_System_Int32_SpiceSharp_Algebra_SparseMatrix__0__SparseMatrixElement__" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.CreateGetElement(System.Int32,System.Int32,SpiceSharp.Algebra.SparseMatrix{`0}.SparseMatrixElement@)">CreateGetElement(Int32, Int32, out SparseMatrix&lt;T&gt;.SparseMatrixElement)</h4>
-  <div class="markdown level1 summary"><p>Create or get an element in the row.</p>
+  <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_Clear_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_Clear" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all matrix elements in the row.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool CreateGetElement(int row, int column, out SparseMatrix&lt;T&gt;.SparseMatrixElement result)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_CreateOrGetElement_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.CreateOrGetElement*"></a>
+  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_CreateOrGetElement_SpiceSharp_Algebra_MatrixLocation_SpiceSharp_Algebra_SparseMatrix__0__Element__" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.CreateOrGetElement(SpiceSharp.Algebra.MatrixLocation,SpiceSharp.Algebra.SparseMatrix{`0}.Element@)">CreateOrGetElement(MatrixLocation, out SparseMatrix&lt;T&gt;.Element)</h4>
+  <div class="markdown level1 summary"><p>Gets an element in the row, or creates it if it doesn&apos;t exist yet.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool CreateOrGetElement(MatrixLocation location, out SparseMatrix&lt;T&gt;.Element result)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -183,19 +205,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">row</span></td>
-        <td><p>The row index used for creating a new element</p>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>The location of the element.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">column</span></td>
-        <td><p>The column index.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
         <td><span class="parametername">result</span></td>
         <td><p>The found or created element.</p>
 </td>
@@ -213,7 +229,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p>True if the element was found, false if it was created.</p>
+        <td><p><code>true</code> if the element was found, <code>false</code> if it was created.</p>
 </td>
       </tr>
     </tbody>
@@ -225,7 +241,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public SparseMatrix&lt;T&gt;.SparseMatrixElement Find(int column)</code></pre>
+    <pre><code class="lang-csharp hljs">public SparseMatrix&lt;T&gt;.Element Find(int column)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -255,47 +271,20 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
-        <td><p>The element at the specified column, or null if it doesn&apos;t exist.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_Insert_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Insert*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_Insert_SpiceSharp_Algebra_SparseMatrix__0__SparseMatrixElement_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Insert(SpiceSharp.Algebra.SparseMatrix{`0}.SparseMatrixElement)">Insert(SparseMatrix&lt;T&gt;.SparseMatrixElement)</h4>
-  <div class="markdown level1 summary"><p>Insert an element in the row. This method assumes an element does not exist at its indices!</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Insert(SparseMatrix&lt;T&gt;.SparseMatrixElement newElement)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
-        <td><span class="parametername">newElement</span></td>
-        <td><p>The new element to insert.</p>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
+        <td><p>The element at the specified column, or <code>null</code> if the element doesn&apos;t exist.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_Remove_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Remove*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_Remove_SpiceSharp_Algebra_SparseMatrix__0__SparseMatrixElement_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Remove(SpiceSharp.Algebra.SparseMatrix{`0}.SparseMatrixElement)">Remove(SparseMatrix&lt;T&gt;.SparseMatrixElement)</h4>
+  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_Remove_SpiceSharp_Algebra_SparseMatrix__0__Element_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Remove(SpiceSharp.Algebra.SparseMatrix{`0}.Element)">Remove(SparseMatrix&lt;T&gt;.Element)</h4>
   <div class="markdown level1 summary"><p>Remove an element from the row.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Remove(SparseMatrix&lt;T&gt;.SparseMatrixElement element)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Remove(SparseMatrix&lt;T&gt;.Element element)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -308,7 +297,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
         <td><span class="parametername">element</span></td>
         <td><p>The element to be removed.</p>
 </td>
@@ -316,14 +305,14 @@
     </tbody>
   </table>
   <a id="SpiceSharp_Algebra_SparseMatrix_1_Row_Swap_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Swap*"></a>
-  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_Swap_SpiceSharp_Algebra_SparseMatrix__0__SparseMatrixElement_SpiceSharp_Algebra_SparseMatrix__0__SparseMatrixElement_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Swap(SpiceSharp.Algebra.SparseMatrix{`0}.SparseMatrixElement,SpiceSharp.Algebra.SparseMatrix{`0}.SparseMatrixElement,System.Int32,System.Int32)">Swap(SparseMatrix&lt;T&gt;.SparseMatrixElement, SparseMatrix&lt;T&gt;.SparseMatrixElement, Int32, Int32)</h4>
+  <h4 id="SpiceSharp_Algebra_SparseMatrix_1_Row_Swap_SpiceSharp_Algebra_SparseMatrix__0__Element_SpiceSharp_Algebra_SparseMatrix__0__Element_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.SparseMatrix`1.Row.Swap(SpiceSharp.Algebra.SparseMatrix{`0}.Element,SpiceSharp.Algebra.SparseMatrix{`0}.Element,System.Int32,System.Int32)">Swap(SparseMatrix&lt;T&gt;.Element, SparseMatrix&lt;T&gt;.Element, Int32, Int32)</h4>
   <div class="markdown level1 summary"><p>Swap two elements in the row, <code data-dev-comment-type="paramref" class="paramref">first</code> and <code data-dev-comment-type="paramref" class="paramref">columnFirst</code> 
-are supposed to come first in the row. Does not update column pointers!</p>
+are supposed to come first in the row.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Swap(SparseMatrix&lt;T&gt;.SparseMatrixElement first, SparseMatrix&lt;T&gt;.SparseMatrixElement second, int columnFirst, int columnSecond)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Swap(SparseMatrix&lt;T&gt;.Element first, SparseMatrix&lt;T&gt;.Element second, int columnFirst, int columnSecond)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -336,13 +325,13 @@ are supposed to come first in the row. Does not update column pointers!</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
         <td><span class="parametername">first</span></td>
         <td><p>The first matrix element.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix.SparseMatrixElement</a>&lt;&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix.Element</a>&lt;&gt;</td>
         <td><span class="parametername">second</span></td>
         <td><p>The second matrix element.</p>
 </td>
@@ -364,51 +353,6 @@ are supposed to come first in the row. Does not update column pointers!</p>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

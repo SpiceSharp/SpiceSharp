@@ -1,7 +1,7 @@
 # SpiceSharp
 This API documentation is created using DocFX.
 
-## Supported (standard) Spice components
+## Supported Spice components
 
 All components are typically stored under the namespace **[SpiceSharp.Components](xref:SpiceSharp.Components)**.
 

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ExportDataEventArgs
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -195,30 +196,6 @@ This class contains some helper methods for extracting data from the simulation.
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_ExportDataEventArgs_SweepValue_" data-uid="SpiceSharp.Simulations.ExportDataEventArgs.SweepValue*"></a>
-  <h4 id="SpiceSharp_Simulations_ExportDataEventArgs_SweepValue" data-uid="SpiceSharp.Simulations.ExportDataEventArgs.SweepValue">SweepValue</h4>
-  <div class="markdown level1 summary"><p>Gets the current sweep value if the simulation is a <a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a> analysis.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double SweepValue { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Simulations_ExportDataEventArgs_Time_" data-uid="SpiceSharp.Simulations.ExportDataEventArgs.Time*"></a>
   <h4 id="SpiceSharp_Simulations_ExportDataEventArgs_Time" data-uid="SpiceSharp.Simulations.ExportDataEventArgs.Time">Time</h4>
   <div class="markdown level1 summary"><p>Gets the time if the simulation supports it.</p>
@@ -267,7 +244,7 @@ This class contains some helper methods for extracting data from the simulation.
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">node</span></td>
-        <td><p>The node identifier.</p>
+        <td><p>The node name.</p>
 </td>
       </tr>
     </tbody>
@@ -317,13 +294,13 @@ This class contains some helper methods for extracting data from the simulation.
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">positive</span></td>
-        <td><p>The identifier of the node at the positive probe.</p>
+        <td><p>The name of the node at the positive probe.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">negative</span></td>
-        <td><p>The identifier of the node at the negative probe.</p>
+        <td><p>The name of the node at the negative probe.</p>
 </td>
       </tr>
     </tbody>
@@ -341,6 +318,30 @@ This class contains some helper methods for extracting data from the simulation.
         <td><span class="xref">System.Numerics.Complex</span></td>
         <td><p>The extracted voltage.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_ExportDataEventArgs_GetSweepValues_" data-uid="SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues*"></a>
+  <h4 id="SpiceSharp_Simulations_ExportDataEventArgs_GetSweepValues" data-uid="SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues">GetSweepValues()</h4>
+  <div class="markdown level1 summary"><p>Gets the current sweep value if the simulation is a <a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a> analysis.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double[] GetSweepValues()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span>[]</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -366,7 +367,7 @@ This class contains some helper methods for extracting data from the simulation.
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">node</span></td>
-        <td><p>The node identifier.</p>
+        <td><p>The node name.</p>
 </td>
       </tr>
     </tbody>
@@ -416,13 +417,13 @@ This class contains some helper methods for extracting data from the simulation.
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">positive</span></td>
-        <td><p>The identifier of the node at the positive probe.</p>
+        <td><p>The name of the node at the positive probe.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">negative</span></td>
-        <td><p>The identifier of the node at the negative probe.</p>
+        <td><p>The name of the node at the negative probe.</p>
 </td>
       </tr>
     </tbody>
@@ -446,51 +447,6 @@ This class contains some helper methods for extracting data from the simulation.
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">

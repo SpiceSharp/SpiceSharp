@@ -3,7 +3,7 @@
 namespace SpiceSharp.Components.Semiconductors
 {
     /// <summary>
-    /// A class with static methods for semiconductor devices
+    /// A class with helper methods for semiconductor devices.
     /// </summary>
     public static class Semiconductor
     {
@@ -14,12 +14,12 @@ namespace SpiceSharp.Components.Semiconductors
         /// <remarks>
         /// Taken from ngSpice, where it was fixed by Alan Gillespie's code.
         /// </remarks>
-        /// <param name="newVoltage">New voltage</param>
-        /// <param name="oldVoltage">Old voltage</param>
-        /// <param name="thermalVoltage">Thermal voltage</param>
-        /// <param name="criticalVoltage">Critical voltage</param>
-        /// <param name="limited">Limited flag</param>
-        /// <returns></returns>
+        /// <param name="newVoltage">The target voltage.</param>
+        /// <param name="oldVoltage">The current voltage.</param>
+        /// <param name="thermalVoltage">The thermal voltage.</param>
+        /// <param name="criticalVoltage">The critical voltage.</param>
+        /// <param name="limited">If <c>true</c>, the value was limited.</param>
+        /// <returns>The new voltage value, limited if necessary.</returns>
         public static double LimitJunction(double newVoltage, double oldVoltage, double thermalVoltage, double criticalVoltage, ref bool limited)
         {
             if (newVoltage > criticalVoltage && Math.Abs(newVoltage - oldVoltage) > thermalVoltage + thermalVoltage)

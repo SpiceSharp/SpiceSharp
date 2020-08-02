@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.IntegrationMethods;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;
+using System;
+using System.Collections.Generic;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -13,7 +13,7 @@ namespace SpiceSharpTest.Simulations
     public class TransientTests : Framework
     {
         [Test]
-        public void When_RCFilterConstantTransient_Expect_Reference()
+        public void When_RCFilterConstantTransientTrapezoidal_Expect_Reference()
         {
             // Create the circuit
             var ckt = new Circuit(
@@ -24,11 +24,9 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.Configurations.Get<TimeConfiguration>().InitTime = 0.0;
-            tran.Configurations.Get<TimeConfiguration>().Method = new Gear();
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-9);
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-12);
             };
             tran.Run(ckt);
 
@@ -53,10 +51,11 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("C1", "out", "0", 20));
 
             // Create the transient analysis
-            var tran = new Transient("tran 1", 1.0, 10.0);
-            // TODO: review this test
-            // tran.Configurations.Get<TimeConfiguration>().Method = new Gear();
-            tran.ExportSimulationData += (sender, args) => { Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12); };
+            var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10);
+            };
             tran.Run(ckt);
 
             // Let's run the simulation twice to check if it is consistent
@@ -98,14 +97,14 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 10.0);
-            Export<double> export = null;
+            IExport<double> export = null;
             tran.ExportSimulationData += (sender, args) =>
             {
                 // If the time > 5.0 then start exporting our stuff
                 if (args.Time > 5.0)
                 {
                     if (export == null)
-                        export = new RealPropertyExport((Simulation) sender, "R1", "i");
+                        export = new RealPropertyExport((Simulation)sender, "R1", "i");
                     Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
                 }
             };
@@ -125,8 +124,7 @@ namespace SpiceSharpTest.Simulations
                 );
 
             // Create a transient analysis using Backward Euler with fixed timesteps
-            var tran = new Transient("tran", 1e-7, 10e-5);
-            tran.Configurations.Get<TimeConfiguration>().Method = new FixedEuler();
+            var tran = new Transient("tran", new FixedEuler { Step = 1e-7, StopTime = 10e-5 });
             tran.Run(ckt);
         }
 
@@ -142,7 +140,7 @@ namespace SpiceSharpTest.Simulations
 
             // Build the simulation
             var tran = new Transient("tran", 1e-6, 10e-6);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
                 new RealVoltageExport(tran, "in"),
                 new RealVoltageExport(tran, "out")
@@ -154,8 +152,7 @@ namespace SpiceSharpTest.Simulations
             };
 
             // Set initial conditions
-            var ic = tran.Configurations.Get<TimeConfiguration>().InitialConditions;
-            ic["in"] = 0.0;
+            tran.TimeParameters.InitialConditions["in"] = 0.0;
 
             // Analyze
             AnalyzeTransient(tran, ckt, exports, references);
@@ -164,6 +161,8 @@ namespace SpiceSharpTest.Simulations
         [Test]
         public void When_LargeExample_Expect_Reference()
         {
+            // This is badly conditioned problem. We test the limit of the solver here.
+
             // First create the models
             var diodeModelA = new DiodeModel("DA")
                 .SetParameter("n", 0.1e-3);
@@ -177,20 +176,9 @@ namespace SpiceSharpTest.Simulations
                 .SetParameter("pnp", true)
                 .SetParameter("is", 16e-15)
                 .SetParameter("bf", 1610.5);
+            SpiceSharpWarning.WarningGenerated += (sender, args) => Console.WriteLine(args.Message);
 
             var ckt = new Circuit(
-                new NodeMapper(new[]
-                {
-                    "VDD", "test:11", "test:12", "VEE", "test:91", "test:92", "test:13",
-                    "test:15", "test:14", "test:16", "test:20", "test:32", "test:111",
-                    "test:17", "test:112", "test:113", "test:114", "test:115", "INP",
-                    "INN", "test:21", "test:22", "test:23", "test:110", "test:33",
-                    "test:59", "test:34", "test:60", "test:61", "test:63", "test:62",
-                    "test:65", "test:66", "test:64", "test:67", "test:68", "test:69",
-                    "test:70", "OUT", "test:77", "test:78", "test:79", "test:80",
-                    "test:81", "test:83", "test:84", "test:85", "test:86", "test:87",
-                    "test:88", "test:89", "test:90"
-                }),
                 diodeModelA,
                 diodeModelB,
                 bjtModelQp1,
@@ -290,6 +278,8 @@ namespace SpiceSharpTest.Simulations
 
             // Calculate the operating point
             var tran = new Transient("tran", 1e-9, 10e-6);
+            // tran.BiasingParameters.Solver = new SparseRealSolver();
+            // tran.BiasingParameters.Solver.SetParameter("pivrel", 0.999);
             tran.Run(ckt);
         }
 
@@ -330,6 +320,69 @@ namespace SpiceSharpTest.Simulations
             pexport.Simulation = sim2;
 
             sim2.Run(ckt);
+        }
+
+        [Test]
+        public void When_MultipleTransient_Expect_Reference()
+        {
+            /*
+             * We test if the simulation can run twice on different circuits with
+             * different number of equations.
+             */
+            var cktA = new Circuit(
+                new CurrentSource("I1", "0", "in", new Pulse(0, 1e-3, 0, 1e-15, 1, 10, 20)),
+                new Resistor("R1", "in", "0", 1e9),
+                new Capacitor("C1", "in", "0", 1e-6));
+            var cktB = new Circuit(
+                new CurrentSource("I1", "0", "in", new Pulse(0, 1e-3, 0, 1e-15, 1, 10, 20)),
+                new VoltageSource("V1", "in", "out", 0.0),
+                new Resistor("R1", "in", "0", 1e9),
+                new Capacitor("C1", "out", "0", 1e-6),
+                new Capacitor("C2", "out", "0", 1e-6));
+
+            var tran = new Transient("tran", 1e-9, 1e-6);
+            var a = true;
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                if (a)
+                    Assert.AreEqual(args.Time * 1e-3 / 1e-6, args.GetVoltage("in"), 1e-12);
+                else
+                    Assert.AreEqual(args.Time * 1e-3 / 2e-6, args.GetVoltage("in"), 1e-12);
+            };
+            a = false; // Doing second circuit
+            tran.Run(cktB);
+            a = true; // Doing first circuit
+            tran.Run(cktA);
+        }
+
+        [Test]
+        public void When_TransientRerun_Expect_Same()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10.0),
+                new Resistor("R1", "in", "out", 10),
+                new Capacitor("C1", "out", "0", 20)
+            );
+
+            // Create the transient analysis
+            var tran = new Transient("tran 1", 1.0, 10.0);
+            tran.TimeParameters.InitialConditions["out"] = 0;
+            var export = new RealVoltageExport(tran, "out");
+
+            // Run the simulation a first time for building the reference values
+            var r = new List<double>();
+            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(export.Value);
+            tran.ExportSimulationData += BuildReference;
+            tran.Run(ckt);
+            tran.ExportSimulationData -= BuildReference;
+
+            // Rerun the simulation for building the reference values
+            var index = 0;
+            void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(r[index++], export.Value, 1e-20);
+            tran.ExportSimulationData += CheckReference;
+            tran.Rerun();
+            tran.ExportSimulationData -= CheckReference;
         }
     }
 }

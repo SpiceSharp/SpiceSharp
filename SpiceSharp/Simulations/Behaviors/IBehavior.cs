@@ -1,27 +1,23 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.ParameterSets;
+using System;
 
 namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Contract for a behavior.
     /// </summary>
-    public interface IBehavior
+    /// <seealso cref="IParameterSet"/>
+    public interface IBehavior : IParameterSetCollection
     {
         /// <summary>
         /// Gets the name of the behavior.
         /// </summary>
+        /// <value>
+        /// The name of the behavior.
+        /// </value>
+        /// <remarks>
+        /// This is typically the name of the entity that created it.
+        /// </remarks>
         string Name { get; }
-
-        /// <summary>
-        /// Bind the behavior to the specified simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation to be bound to.</param>
-        /// <param name="context">The binding context.</param>
-        void Bind(Simulation simulation, BindingContext context);
-
-        /// <summary>
-        /// Unbind the behavior from any allocated resources.
-        /// </summary>
-        void Unbind();
     }
 }

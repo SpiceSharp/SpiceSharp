@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ParallelSimulation
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ParallelSimulation
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation">
+  
+  
+  <h1 id="SpiceSharp_Components_ParallelComponents_ParallelSimulation" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation" class="text-break">Class ParallelSimulation
+  </h1>
+  <div class="markdown level0 summary"><p>A subcircuit simulation that captures created behaviors in a local container.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html">SimulationWrapper</a></div>
+    <div class="level2"><span class="xref">ParallelSimulation</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Run_SpiceSharp_Entities_IEntityCollection_">SimulationWrapper.Run(IEntityCollection)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_TryGetState__1___0__">SimulationWrapper.TryGetState&lt;S&gt;(S)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_GetParentState__1">SimulationWrapper.GetParentState&lt;S&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_TryGetParentState__1___0__">SimulationWrapper.TryGetParentState&lt;S&gt;(S)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_UsesState__1">SimulationWrapper.UsesState&lt;S&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_UsesBehaviors__1">SimulationWrapper.UsesBehaviors&lt;B&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_GetParameterSet__1">SimulationWrapper.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_TryGetParameterSet__1___0__">SimulationWrapper.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_SetParameter__1_System_String___0_">SimulationWrapper.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_TrySetParameter__1_System_String___0_">SimulationWrapper.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_GetProperty__1_System_String_">SimulationWrapper.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_TryGetProperty__1_System_String___0__">SimulationWrapper.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_CreateParameterSetter__1_System_String_">SimulationWrapper.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_CreatePropertyGetter__1_System_String_">SimulationWrapper.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Clone">SimulationWrapper.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_CopyFrom_SpiceSharp_ICloneable_">SimulationWrapper.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Parent">SimulationWrapper.Parent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_LocalStates">SimulationWrapper.LocalStates</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_States">SimulationWrapper.States</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Behaviors">SimulationWrapper.Behaviors</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Name">SimulationWrapper.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Status">SimulationWrapper.Status</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_EntityBehaviors">SimulationWrapper.EntityBehaviors</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_ParameterSets">SimulationWrapper.ParameterSets</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.ParallelComponents.html">SpiceSharp.Components.ParallelComponents</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_ParallelComponents_ParallelSimulation_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ParallelSimulation : SimulationWrapper, ISimulation, IStateful, IBehavioral, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Components_ParallelComponents_ParallelSimulation__ctor_" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_ParallelComponents_ParallelSimulation__ctor_SpiceSharp_Simulations_ISimulation_SpiceSharp_ParameterSets_IParameterSetCollection_" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.ParameterSets.IParameterSetCollection)">ParallelSimulation(ISimulation, IParameterSetCollection)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelSimulation.html">ParallelSimulation</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ParallelSimulation(ISimulation parent, IParameterSetCollection parameters)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">parent</span></td>
+        <td><p>The parent simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></td>
+        <td><span class="parametername">parameters</span></td>
+        <td><p>The parallel component parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_ParallelComponents_ParallelSimulation_LocalParameters_" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation.LocalParameters*"></a>
+  <h4 id="SpiceSharp_Components_ParallelComponents_ParallelSimulation_LocalParameters" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation.LocalParameters">LocalParameters</h4>
+  <div class="markdown level1 summary"><p>Gets the local configurations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IParameterSetCollection LocalParameters { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></td>
+        <td><p>The local configurations.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_ParallelComponents_ParallelSimulation_GetState_" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation.GetState*"></a>
+  <h4 id="SpiceSharp_Components_ParallelComponents_ParallelSimulation_GetState__1" data-uid="SpiceSharp.Components.ParallelComponents.ParallelSimulation.GetState``1">GetState&lt;S&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets the state of the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override S GetState&lt;S&gt;()
+    where S : ISimulationState</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">S</span></td>
+        <td><p>The type, or <code>null</code> if the state isn&apos;t used.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">S</span></td>
+        <td><p>The simulation state type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_GetState__1">SimulationWrapper.GetState&lt;S&gt;()</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
+        <td><p>Thrown if the simulation state is not defined on this instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

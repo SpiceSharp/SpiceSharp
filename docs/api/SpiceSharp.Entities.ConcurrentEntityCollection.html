@@ -1,0 +1,1011 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ConcurrentEntityCollection
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ConcurrentEntityCollection
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection">
+  
+  
+  <h1 id="SpiceSharp_Entities_ConcurrentEntityCollection" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection" class="text-break">Class ConcurrentEntityCollection
+  </h1>
+  <div class="markdown level0 summary"><p>A collection of entities that can be accessed by multiple threads concurrently.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ConcurrentEntityCollection</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></div>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Entities.html">SpiceSharp.Entities</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Entities_ConcurrentEntityCollection_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ConcurrentEntityCollection : IEntityCollection, ICollection&lt;IEntity&gt;, IEnumerable&lt;IEntity&gt;, IEnumerable, ICloneable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection__ctor_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.#ctor*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection__ctor" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.#ctor">ConcurrentEntityCollection()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Entities.ConcurrentEntityCollection.html">ConcurrentEntityCollection</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ConcurrentEntityCollection()</code></pre>
+  </div>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection__ctor_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.#ctor*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection__ctor_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.#ctor(System.Collections.Generic.IEqualityComparer{System.String})">ConcurrentEntityCollection(IEqualityComparer&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Entities.ConcurrentEntityCollection.html">ConcurrentEntityCollection</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ConcurrentEntityCollection(IEqualityComparer&lt;string&gt; comparer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">comparer</span></td>
+        <td><p>The <span class="xref">System.Collections.Generic.IEqualityComparer&lt;T&gt;</span> implementation to use when comparing entity names, or <code>null</code> to use the default <span class="xref">System.Collections.Generic.EqualityComparer`1</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Comparer_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Comparer*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Comparer" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"><p>Gets the comparer used to compare <a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a> names.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEqualityComparer&lt;string&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>The comparer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Count_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Count*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Count" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Gets the number of entities in the collection</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of entities.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_IsReadOnly_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.IsReadOnly*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_IsReadOnly" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary"><p>Gets a value indicating whether the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span> is read-only.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Item_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Item*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Item_System_String_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Item(System.String)">Item[String]</h4>
+  <div class="markdown level1 summary"><p>Gets the <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a> with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEntity this[string name] { get; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><p>The <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.KeyNotFoundException</span></td>
+        <td><p>Thrown if no entity with the name <code data-dev-comment-type="paramref" class="paramref">name</code> could be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Add_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Add*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Add_SpiceSharp_Entities_IEntity_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Add(SpiceSharp.Entities.IEntity)">Add(IEntity)</h4>
+  <div class="markdown level1 summary"><p>Adds an item to the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(IEntity item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><span class="parametername">item</span></td>
+        <td><p>The object to add to the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">item</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if another entity with the same name already exists.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_ByType_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.ByType*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_ByType__1" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.ByType``1">ByType&lt;E&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets all entities that are of a specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;E&gt; ByType&lt;E&gt;()
+    where E : IEntity</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;E&gt;</td>
+        <td><p>The entities.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">E</span></td>
+        <td><p>The type of entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Clear_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Clear*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Clear" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clear all entities in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Clone_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Clone*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Clone" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Clone">Clone()</h4>
+  <div class="markdown level1 summary"><p>Clones the instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual ICloneable Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
+        <td><p>The cloned instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Contains_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Contains*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Contains_SpiceSharp_Entities_IEntity_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Contains(SpiceSharp.Entities.IEntity)">Contains(IEntity)</h4>
+  <div class="markdown level1 summary"><p>Determines whether this instance contains the object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(IEntity item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><span class="parametername">item</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the collection contains the entity; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">item</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Contains_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Contains*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Contains_System_String_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Contains(System.String)">Contains(String)</h4>
+  <div class="markdown level1 summary"><p>Determines whether this instance contains an <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a> with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the collection contains the entity; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_CopyFrom_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.CopyFrom*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_CopyFrom_SpiceSharp_ICloneable_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.CopyFrom(SpiceSharp.ICloneable)">CopyFrom(ICloneable)</h4>
+  <div class="markdown level1 summary"><p>Copies the contents of one interface to this one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void CopyFrom(ICloneable source)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
+        <td><span class="parametername">source</span></td>
+        <td><p>The source parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_GetEnumerator_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_GetEnumerator" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IEnumerator&lt;IEntity&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>&gt;</td>
+        <td><p>An enumerator that can be used to iterate through the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_OnEntityAdded_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.OnEntityAdded*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_OnEntityAdded_SpiceSharp_Entities_EntityEventArgs_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.OnEntityAdded(SpiceSharp.Entities.EntityEventArgs)">OnEntityAdded(EntityEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Entities.ConcurrentEntityCollection.html#SpiceSharp_Entities_ConcurrentEntityCollection_EntityAdded">EntityAdded</a> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnEntityAdded(EntityEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.EntityEventArgs.html">EntityEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_OnEntityRemoved_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.OnEntityRemoved*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_OnEntityRemoved_SpiceSharp_Entities_EntityEventArgs_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.OnEntityRemoved(SpiceSharp.Entities.EntityEventArgs)">OnEntityRemoved(EntityEventArgs)</h4>
+  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Entities.ConcurrentEntityCollection.html#SpiceSharp_Entities_ConcurrentEntityCollection_EntityRemoved">EntityRemoved</a> event.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void OnEntityRemoved(EntityEventArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.EntityEventArgs.html">EntityEventArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Remove_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Remove_SpiceSharp_Entities_IEntity_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Remove(SpiceSharp.Entities.IEntity)">Remove(IEntity)</h4>
+  <div class="markdown level1 summary"><p>Removes the first occurrence of a specific object from the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(IEntity item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><span class="parametername">item</span></td>
+        <td><p>The object to remove from the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">item</code> was successfully removed from the <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">item</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_Remove_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Remove*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_Remove_System_String_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.Remove(System.String)">Remove(String)</h4>
+  <div class="markdown level1 summary"><p>Removes the <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a> with specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> is the entity was removed succesfully; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_TryGetEntity_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.TryGetEntity*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_TryGetEntity_System_String_SpiceSharp_Entities_IEntity__" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.TryGetEntity(System.String,SpiceSharp.Entities.IEntity@)">TryGetEntity(String, out IEntity)</h4>
+  <div class="markdown level1 summary"><p>Tries to find an <a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a> in the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetEntity(string name, out IEntity entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>True</code> if the entity is found; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="events">Events
+  </h3>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_EntityAdded" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.EntityAdded">EntityAdded</h4>
+  <div class="markdown level1 summary"><p>Occurs when an entity is about to be added to the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EntityEventArgs&gt; EntityAdded</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Entities.EntityEventArgs.html">EntityEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_EntityRemoved" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.EntityRemoved">EntityRemoved</h4>
+  <div class="markdown level1 summary"><p>Occurs when an entity has been removed from the collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EntityEventArgs&gt; EntityRemoved</code></pre>
+  </div>
+  <h5 class="eventType">Event Type</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="SpiceSharp.Entities.EntityEventArgs.html">EntityEventArgs</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_SpiceSharp_ICloneable_Clone_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.SpiceSharp#ICloneable#Clone*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_SpiceSharp_ICloneable_Clone" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.SpiceSharp#ICloneable#Clone">ICloneable.Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ICloneable ICloneable.Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_SpiceSharp_ICloneable_CopyFrom_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.SpiceSharp#ICloneable#CopyFrom*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.SpiceSharp#ICloneable#CopyFrom(SpiceSharp.ICloneable)">ICloneable.CopyFrom(ICloneable)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ICloneable.CopyFrom(ICloneable source)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
+        <td><span class="parametername">source</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_System_Collections_Generic_ICollection_SpiceSharp_Entities_IEntity__CopyTo_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.System#Collections#Generic#ICollection{SpiceSharp#Entities#IEntity}#CopyTo*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_System_Collections_Generic_ICollection_SpiceSharp_Entities_IEntity__CopyTo_SpiceSharp_Entities_IEntity___System_Int32_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.System#Collections#Generic#ICollection{SpiceSharp#Entities#IEntity}#CopyTo(SpiceSharp.Entities.IEntity[],System.Int32)">ICollection&lt;IEntity&gt;.CopyTo(IEntity[], Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ICollection&lt;IEntity&gt;.CopyTo(IEntity[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_ConcurrentEntityCollection_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="SpiceSharp_Entities_ConcurrentEntityCollection_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.Entities.ConcurrentEntityCollection.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Validation.Helpers.html#SpiceSharp_Validation_Helpers_IsValid_SpiceSharp_Entities_IEntityCollection_">Helpers.IsValid(IEntityCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Validation.Helpers.html#SpiceSharp_Validation_Helpers_Validate_SpiceSharp_Entities_IEntityCollection_">Helpers.Validate(IEntityCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Validation.Helpers.html#SpiceSharp_Validation_Helpers_Validate_SpiceSharp_Entities_IEntityCollection_SpiceSharp_Validation_IRules_">Helpers.Validate(IEntityCollection, IRules)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

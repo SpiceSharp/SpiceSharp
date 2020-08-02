@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Example of MNA - Diodes </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Example of MNA - Diodes ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="example-of-mna---diodes">Example of MNA - Diodes</h1>
+
+<p>A diode is an example of a <em>nonlinear</em> component. When connected between two nodes A and B, we can use the <a href="https://en.wikipedia.org/wiki/Diode_modelling">Shockley diode model</a> to model the voltage-current relationship.</p>
+<p align="center"><img src="images/example_circuit_mna_dio.svg" alt="Diode definition" width="100px"></p>
+
+<p>$$i_D = I_{SS}\left(e^\frac{v_A-v_B}{\eta V_T}\right)$$</p>
+<p>The diode current flows <em>out</em> of node A, and <em>into</em> node B, so we have contributions to <em>two</em> current equations.</p>
+<p>$$\begin{aligned}
+f_A(...,v_A,...,v_B,...) &amp;= +i_D = I_S\left(e^{\frac{v_A-v_B}{nV_T}}-1\right)\
+f_B(...,v_A,...,v_B,...) &amp;= -i_D=-I_S\left(e^{\frac{v_A-v_B}{nV-T}}-1)\right)
+\end{aligned}$$</p>
+<p>From this we can calculate the contributions to the <em>Y-matrix</em>. Since the current equation contributions only depend on nodes A and B, we only get contributions to four elements.</p>
+<p>$$\begin{aligned}
+Y_{A,A} &amp;= \left.\frac{\partial f_A}{\partial v_A}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;+g_D\
+Y_{A,B} &amp;= \left.\frac{\partial f_A}{\partial v_B}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;-g_D\
+Y_{B,A} &amp;= \left.\frac{\partial f_B}{\partial v_A}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;-g_D\
+Y_{B,B} &amp;= \left.\frac{\partial f_B}{\partial v_B}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;+g_D
+\end{aligned}$$</p>
+<p>We then calculate the contributions to the <em>RHS-vector</em>:</p>
+<p>$$\begin{aligned}
+RHS_A &amp;= f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_A\pmb x^{(k)}\
+ &amp;= I_S\left(e^\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}-1\right)-g_D\cdot (v_A^{(k)}-v_B^{(k)})\ &amp;= +c_D\ RHS_B &amp;= f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_B\pmb x^{(k)}\ &amp;= -\left(I_S\left(e^\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}-1\right)-g_D\cdot (v_A^{(k)}-v_B^{(k)})\right)\ &amp;= -c_D
+\end{aligned}$$</p>
+<p>We note that this time the <em>RHS-vector</em> contributions are <em>not</em> 0 for the current equations. This is again typical for <em>nonlinear</em> components. The solution will need to be found in multiple iterations.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

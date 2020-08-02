@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using NUnit.Framework;
+using System;
 
 namespace SpiceSharpTest.Waveforms
 {
@@ -13,15 +13,15 @@ namespace SpiceSharpTest.Waveforms
         public void When_PulseHasInvalidParameters_Expect_Exception()
         {
             // Negative rise time
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Setup());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, -1, 1, 2, 5).Create(null));
             // Negative fall time
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Setup());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, -1, 2, 5).Create(null));
             // Negative pulse width
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Setup());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, 1, -1, 5).Create(null));
             // Negative period
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Setup());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, 1, 1, -1).Create(null));
             // Sum of times is higher than a period
-            Assert.Throws<CircuitException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Setup());
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pulse(0, 1, 0, 1, 1, 1, 2).Create(null));
         }
 
         [Test]

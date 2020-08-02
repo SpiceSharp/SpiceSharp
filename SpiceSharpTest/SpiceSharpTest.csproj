@@ -46,23 +46,34 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algebra\DenseFactorTests.cs" />
+    <Compile Include="Algebra\DenseMatrixTests.cs" />
+    <Compile Include="Algebra\DenseSolverTests.cs" />
+    <Compile Include="Algebra\DenseVectorTests.cs" />
     <Compile Include="BasicExampleTests.cs" />
     <Compile Include="Circuits\CircuitTests.cs" />
-    <Compile Include="Circuits\ValidatorTests.cs" />
     <Compile Include="Examples\ChangingParameter\Changing.cs" />
     <Compile Include="Examples\CustomResistor\BaseParameters.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistor.cs" />
     <Compile Include="Examples\CustomResistor\BiasingBehavior.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistorTests.cs" />
+    <Compile Include="General\InheritedTypeDictionaryTests.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="Models\ComponentHelper.cs" />
+    <Compile Include="Models\ComponentRules.cs" />
     <Compile Include="Models\Currentsources\CCCS\CurrentControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\ISRC\CurrentSourceTests.cs" />
     <Compile Include="Models\Currentsources\VCCS\VoltageControlledCurrentSourceTests.cs" />
     <Compile Include="Models\Distributed\DelayTests.cs" />
     <Compile Include="Models\Distributed\TransmissionLineTests.cs" />
+    <Compile Include="Models\BindingContextHelper.cs" />
+    <Compile Include="Models\Parallel\SimpleParallelTests.cs" />
+    <Compile Include="Models\Proxy.cs" />
     <Compile Include="Models\RLC\CAP\CapacitorTests.cs" />
     <Compile Include="Models\RLC\IND\InductorTests.cs" />
     <Compile Include="Models\RLC\MUT\MutualInductanceTests.cs" />
@@ -73,11 +84,12 @@
     <Compile Include="Models\Semiconductors\JFET\JFETTests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level1\MOS1Tests.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level2\MOS2Tests.cs" />
-    <Compile Include="Algebra\NewSparseMatrixTest.cs" />
-    <Compile Include="Algebra\NewSparseSolveTest.cs" />
-    <Compile Include="Algebra\NewSparseVectorTest.cs" />
+    <Compile Include="Algebra\SparseMatrixTests.cs" />
+    <Compile Include="Algebra\SparseSolverTests.cs" />
+    <Compile Include="Algebra\SparseVectorTests.cs" />
     <Compile Include="Algebra\SolveFramework.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Tests.cs" />
+    <Compile Include="Models\Subcircuits\SimpleSubcircuitTests.cs" />
     <Compile Include="Models\Switches\CSW\CurrentSwitchTests.cs" />
     <Compile Include="Models\Switches\VSW\VoltageSwitchTests.cs" />
     <Compile Include="Models\Voltagesources\CCVS\CurrentControlledVoltageSourceTests.cs" />
@@ -85,12 +97,13 @@
     <Compile Include="Models\Voltagesources\VSRC\VoltageSourceTests.cs" />
     <Compile Include="ParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Algebra\SparseFactorTest.cs" />
+    <Compile Include="Algebra\SparseFactorTests.cs" />
+    <Compile Include="Simulations\ACTests.cs" />
     <Compile Include="Simulations\ConcurrentSimulationsTests.cs" />
     <Compile Include="Simulations\DCTests.cs" />
+    <Compile Include="Simulations\NoiseTests.cs" />
     <Compile Include="Simulations\TransientTests.cs" />
     <Compile Include="Models\WaveformTests.cs" />
-    <Compile Include="Utils\AssertExtensions.cs" />
     <Compile Include="Waveforms\PulseTests.cs" />
     <Compile Include="Waveforms\PwlTests.cs" />
   </ItemGroup>
@@ -101,7 +114,7 @@
     <Content Include="Algebra\Matrices\spice3f5_vector01.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Algebra\Matrices\fidapm05.mtx">
+    <Content Include="Algebra\Matrices\fidapm05">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -119,7 +132,7 @@
       <Version>3.11.1</Version>
     </PackageReference>
     <PackageReference Include="NUnit3TestAdapter">
-      <Version>3.16.1</Version>
+      <Version>3.17.0</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

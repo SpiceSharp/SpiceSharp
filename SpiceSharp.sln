@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0530BC95-5ECA-4D35-BD40-7880B4803608}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
-		appveyor.yml = appveyor.yml
+		.editorconfig = .editorconfig
+		docfx.json = docfx.json
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharp", "SpiceSharp\SpiceSharp.csproj", "{FD906B56-E076-46B7-ACEF-2D870189588C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpiceSharp", "SpiceSharp\SpiceSharp.csproj", "{FD906B56-E076-46B7-ACEF-2D870189588C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpiceSharpTest", "SpiceSharpTest\SpiceSharpTest.csproj", "{DE500B6D-352C-4C63-AA37-655D7369D728}"
 EndProject

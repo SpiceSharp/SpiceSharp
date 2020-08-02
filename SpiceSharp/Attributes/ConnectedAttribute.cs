@@ -1,13 +1,13 @@
-﻿using System;
+﻿using SpiceSharp.Components;
+using System;
 
 namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// Indicates that two pins are connected by a finite impedance at DC. This attribute can be
-    /// applied to a <see cref="Components.Component" /> to check for floating nodes using a <see cref="SpiceSharp.Circuits.Validator" />.
-    /// If this attribute is not applied, then all pins are assumed to be connected.
+    /// applied to an <see cref="Component" /> to check for floating nodes.
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class ConnectedAttribute : Attribute
     {

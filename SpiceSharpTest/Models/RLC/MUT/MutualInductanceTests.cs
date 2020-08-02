@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -36,10 +36,10 @@ namespace SpiceSharpTest.Models
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 1e-4, 1e-6);
-            tran.Configurations.Get<TimeConfiguration>().InitialConditions["1"] = 0;
+            tran.TimeParameters.InitialConditions["1"] = 0;
 
             // Create exports
-            var exports = new Export<double>[1];
+            var exports = new IExport<double>[1];
             exports[0] = new RealVoltageExport(tran, "OUT");
 
             // Create references
@@ -51,7 +51,7 @@ namespace SpiceSharpTest.Models
             var invtau1 = (-b + discriminant) / (2.0 * a);
             var invtau2 = (-b - discriminant) / (2.0 * a);
             var factor = mut * r2 / a / (invtau1 - invtau2);
-            Func<double, double>[] references = {  t => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
+            Func<double, double>[] references = { t => factor * (Math.Exp(t * invtau1) - Math.Exp(t * invtau2)) };
 
             // Increase the allowed threshold
             // It should also be verfied that the error decreases if the maximum timestep is decreased
@@ -85,7 +85,7 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(1, 1e8, 10));
 
             // Create exports
-            var exports = new Export<Complex>[1];
+            var exports = new IExport<Complex>[1];
             exports[0] = new ComplexVoltageExport(ac, "OUT");
 
             // Create references

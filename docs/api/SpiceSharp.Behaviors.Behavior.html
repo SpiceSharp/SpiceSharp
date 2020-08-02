@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Behavior
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,48 +74,100 @@
   
   <h1 id="SpiceSharp_Behaviors_Behavior" data-uid="SpiceSharp.Behaviors.Behavior" class="text-break">Class Behavior
   </h1>
-  <div class="markdown level0 summary"><p>Template for a behavior.</p>
+  <div class="markdown level0 summary"><p>A base template for an <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Behavior</span></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.BipolarBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.CapacitorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSourceBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.CurrentSourceBehaviors.AcceptBehavior.html">AcceptBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.CurrentSourceBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.AcceptBehavior.html">AcceptBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.DelayBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.DiodeBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.InductorBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.JFETBehaviors.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.JFETBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLineBehaviors.AcceptBehavior.html">AcceptBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLineBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level1.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level2.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level2.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.ModelTemperatureBehavior.html">ModelTemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MosfetBehaviors.Level3.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.MutualInductanceBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.ResistorBehaviors.TemperatureBehavior.html">TemperatureBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.SwitchBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSourceBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSourceBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.VoltageSourceBehaviors.BiasingBehavior.html">BiasingBehavior</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><span class="xref">Behavior</span></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Bipolars.ModelTemperature.html">ModelTemperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Capacitors.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Common.ParameterBehavior-1.html">ParameterBehavior&lt;P&gt;</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSources.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentControlledVoltageSources.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.CurrentSources.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Diodes.ModelTemperature.html">ModelTemperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Diodes.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Inductors.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.JFETs.ModelTemperature.html">ModelTemperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.JFETs.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.LosslessTransmissionLines.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Frequency.html">Frequency</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Level1.ModelTemperature.html">ModelTemperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Level1.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Level2.ModelTemperature.html">ModelTemperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Level2.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Level3.ModelTemperature.html">ModelTemperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Level3.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Mosfets.Time.html">Time</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.MutualInductances.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.Accept.html">Accept</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.BiasingUpdate.html">BiasingUpdate</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.Frequency.html">Frequency</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.FrequencyUpdate.html">FrequencyUpdate</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.Noise.html">Noise</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.ParallelComponents.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Resistors.Temperature.html">Temperature</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Subcircuits.Simple.SubcircuitBehavior-1.html">SubcircuitBehavior&lt;B&gt;</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.Switches.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageControlledCurrentSources.BiasingBehavior.html">BiasingBehavior</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageControlledVoltageSources.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageDelays.Biasing.html">Biasing</a></div>
+      <div class="level4"><a class="xref" href="SpiceSharp.Components.VoltageSources.BiasingBehavior.html">BiasingBehavior</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -141,8 +194,12 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Behaviors_Behavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class Behavior : IBehavior</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Behavior : ParameterSetCollection, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
   </div>
+  <h5 id="SpiceSharp_Behaviors_Behavior_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>This class also allows the behavior to define its own named parameters and properties,
+as well as link to existing <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a> classes.</p>
+</div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Behaviors_Behavior__ctor_" data-uid="SpiceSharp.Behaviors.Behavior.#ctor*"></a>
@@ -167,19 +224,35 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
-        <td><p>The identifier of the behavior.</p>
+        <td><p>The name of the behavior.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 id="SpiceSharp_Behaviors_Behavior__ctor_System_String__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>The identifier of the behavior should be the same as that of the entity creating it.</p>
+  <div class="markdown level1 remarks"><p>The name of the behavior should be the same as that of the entity creating it.</p>
 </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_Behaviors_Behavior_Name_" data-uid="SpiceSharp.Behaviors.Behavior.Name*"></a>
   <h4 id="SpiceSharp_Behaviors_Behavior_Name" data-uid="SpiceSharp.Behaviors.Behavior.Name">Name</h4>
-  <div class="markdown level1 summary"><p>Gets the identifier of the behavior.</p>
+  <div class="markdown level1 summary"><p>Gets the name of the behavior.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -197,203 +270,47 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td></td>
+        <td><p>The name of the behavior.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h5 id="SpiceSharp_Behaviors_Behavior_Name_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This should be the same identifier as the entity that created it.</p>
+  <div class="markdown level1 remarks"><p>This is typically the name of the entity that created it.</p>
 </div>
-  <a id="SpiceSharp_Behaviors_Behavior_Simulation_" data-uid="SpiceSharp.Behaviors.Behavior.Simulation*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_Simulation" data-uid="SpiceSharp.Behaviors.Behavior.Simulation">Simulation</h4>
-  <div class="markdown level1 summary"><p>Gets the simulation this behavior is bound to.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Simulation Simulation { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Behaviors_Behavior_Bind_" data-uid="SpiceSharp.Behaviors.Behavior.Bind*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_" data-uid="SpiceSharp.Behaviors.Behavior.Bind(SpiceSharp.Simulations.Simulation,SpiceSharp.Behaviors.BindingContext)">Bind(Simulation, BindingContext)</h4>
-  <div class="markdown level1 summary"><p>Bind the behavior to a simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Bind(Simulation simulation, BindingContext context)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></td>
-        <td><span class="parametername">context</span></td>
-        <td><p>The binding context.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Behaviors_Behavior_CreateGetter_" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_CreateGetter__1_SpiceSharp_Simulations_Simulation_System_String_System_Collections_Generic_IEqualityComparer_System_String__" data-uid="SpiceSharp.Behaviors.Behavior.CreateGetter``1(SpiceSharp.Simulations.Simulation,System.String,System.Collections.Generic.IEqualityComparer{System.String})">CreateGetter&lt;T&gt;(Simulation, String, IEqualityComparer&lt;String&gt;)</h4>
-  <div class="markdown level1 summary"><p>Create a getter for a behavior parameter (possibly requiring a simulation or simulation state).</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Func&lt;T&gt; CreateGetter&lt;T&gt;(Simulation simulation, string name, IEqualityComparer&lt;string&gt; comparer = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The parameter name.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEqualityComparer</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td><span class="parametername">comparer</span></td>
-        <td><p>The comparer used to compare property names.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Func</span>&lt;T&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">T</span></td>
-        <td><p>The parameter type.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Behaviors_Behavior_Unbind_" data-uid="SpiceSharp.Behaviors.Behavior.Unbind*"></a>
-  <h4 id="SpiceSharp_Behaviors_Behavior_Unbind" data-uid="SpiceSharp.Behaviors.Behavior.Unbind">Unbind()</h4>
-  <div class="markdown level1 summary"><p>Destroy the behavior.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Unbind()</code></pre>
-  </div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+      <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
   </div>
 </article>
           </div>

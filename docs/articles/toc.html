@@ -4,6 +4,7 @@
     <div class="sidefilter">
       <form class="toc-filter">
         <span class="glyphicon glyphicon-filter filter-icon"></span>
+        <span class="glyphicon glyphicon-remove clear-icon" id="toc_filter_clear"></span>
         <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
       </form>
     </div>
@@ -13,22 +14,32 @@
           <ul class="nav level1">
                 <li>
                     <span class="expand-stub"></span>
-                    <a href="tutorial/gettingstarted.html" name="" title="Getting started">Getting started</a>
+                    <a href="tutorials/gettingstarted.html" name="" title="Getting started">Getting started</a>
                     
                     <ul class="nav level2">
                           <li>
                               <span class="expand-stub"></span>
-                              <a href="tutorial/analysis.html" name="" title="Analysis">Analysis</a>
+                              <a href="tutorials/examples.html" name="" title="Examples">Examples</a>
                               
                               <ul class="nav level3">
                                     <li>
-                                        <a href="tutorial/dcanalysis.html" name="" title="DC analysis">DC analysis</a>
+                                        <a href="tutorials/dcanalysis.html" name="" title="DC analysis example">DC analysis example</a>
                                     </li>
                                     <li>
-                                        <a href="tutorial/acanalysis.html" name="" title="AC analysis">AC analysis</a>
+                                        <a href="tutorials/acanalysis.html" name="" title="AC analysis example">AC analysis example</a>
                                     </li>
                                     <li>
-                                        <a href="tutorial/transientanalysis.html" name="" title="Transient analysis">Transient analysis</a>
+                                        <a href="tutorials/transientanalysis.html" name="" title="Transient analysis example">Transient analysis example</a>
+                                    </li>
+                                    <li>
+                                        <span class="expand-stub"></span>
+                                        <a href="tutorials/changing_parameters/changing_parameters_during_simulation.html" name="" title="Changing parameters during simulation">Changing parameters during simulation</a>
+                                        
+                                        <ul class="nav level4">
+                                              <li>
+                                                  <a href="tutorials/changing_parameters/example.html" name="" title="Example">Example</a>
+                                              </li>
+                                        </ul>
                                     </li>
                               </ul>
                           </li>
@@ -36,14 +47,23 @@
                 </li>
                 <li>
                     <span class="expand-stub"></span>
-                    <a href="structure/structure.html" name="" title="Spice# structure">Spice# structure</a>
+                    <a href="structure/flow.html" name="" title="Spice# structure">Spice# structure</a>
                     
                     <ul class="nav level2">
                           <li>
-                              <a href="structure/entities.html" name="" title="Entities, components and models">Entities, components and models</a>
+                              <a href="structure/flow.html" name="" title="Spice# Flow">Spice# Flow</a>
                           </li>
                           <li>
-                              <a href="structure/parameters.html" name="" title="Parameters">Parameters</a>
+                              <a href="structure/iterate.html" name="" title="Iterating to a solution">Iterating to a solution</a>
+                          </li>
+                          <li>
+                              <a href="structure/operatingpoint.html" name="" title="DC / Operating point analysis">DC / Operating point analysis</a>
+                          </li>
+                          <li>
+                              <a href="structure/frequency.html" name="" title="AC / Small Signal analysis">AC / Small Signal analysis</a>
+                          </li>
+                          <li>
+                              <a href="structure/transient.html" name="" title="Transient analysis">Transient analysis</a>
                           </li>
                     </ul>
                 </li>
@@ -56,17 +76,10 @@
                               <a href="custom_components/modified_nodal_analysis.html" name="" title="Modified Nodal Analysis">Modified Nodal Analysis</a>
                           </li>
                           <li>
-                              <a href="custom_components/base_behaviors.html" name="" title="Base behaviors">Base behaviors</a>
+                              <a href="custom_components/example_resistor.html" name="" title="Example of MNA - Resistors">Example of MNA - Resistors</a>
                           </li>
-                    </ul>
-                </li>
-                <li>
-                    <span class="expand-stub"></span>
-                    <a href="changing_parameters/changing_parameters_during_simulation.html" name="" title="Changing parameters during simulation">Changing parameters during simulation</a>
-                    
-                    <ul class="nav level2">
                           <li>
-                              <a href="changing_parameters/example.html" name="" title="Example">Example</a>
+                              <a href="custom_components/example_diode.html" name="" title="Example of MNA - Diodes">Example of MNA - Diodes</a>
                           </li>
                     </ul>
                 </li>

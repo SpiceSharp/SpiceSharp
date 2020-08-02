@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Semiconductor
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,7 +74,7 @@
   
   <h1 id="SpiceSharp_Components_Semiconductors_Semiconductor" data-uid="SpiceSharp.Components.Semiconductors.Semiconductor" class="text-break">Class Semiconductor
   </h1>
-  <div class="markdown level0 summary"><p>A class with static methods for semiconductor devices</p>
+  <div class="markdown level0 summary"><p>A class with helper methods for semiconductor devices.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
@@ -136,31 +137,31 @@ Defined as DEVpnjlim in devsup.c</p>
       <tr>
         <td><span class="xref">System.Double</span></td>
         <td><span class="parametername">newVoltage</span></td>
-        <td><p>New voltage</p>
+        <td><p>The target voltage.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Double</span></td>
         <td><span class="parametername">oldVoltage</span></td>
-        <td><p>Old voltage</p>
+        <td><p>The current voltage.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Double</span></td>
         <td><span class="parametername">thermalVoltage</span></td>
-        <td><p>Thermal voltage</p>
+        <td><p>The thermal voltage.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Double</span></td>
         <td><span class="parametername">criticalVoltage</span></td>
-        <td><p>Critical voltage</p>
+        <td><p>The critical voltage.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
         <td><span class="parametername">limited</span></td>
-        <td><p>Limited flag</p>
+        <td><p>If <code>true</code>, the value was limited.</p>
 </td>
       </tr>
     </tbody>
@@ -176,7 +177,8 @@ Defined as DEVpnjlim in devsup.c</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td></td>
+        <td><p>The new voltage value, limited if necessary.</p>
+</td>
       </tr>
     </tbody>
   </table>

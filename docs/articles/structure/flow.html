@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Spice# Flow </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Spice# Flow ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="spice-flow">Spice# Flow</h1>
+
+<p>The main structure of Spice# revolves around <strong>entities</strong>, <strong>behaviors</strong>, <strong>simulations</strong> and their <strong>simulation states</strong>.</p>
+<p align="center"><img src="images/simulation_flow.svg"></p>
+
+<p>When running a simulation, that simulation will ask for each entity to create behaviors for the simulation (the entity can add its behaviors to the simulation&#39;s <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IEntityBehaviorCollection</a></strong>). These behaviors are then called on by the simulation when they are needed.</p>
+<p>These behaviors implement specific parts of the algorithm and is specific to the <strong>entity</strong>. For example, a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Transient.html">Transient</a></strong> simulation requires several types of behaviors that a component might want to implement. The behaviors would then implement one or more of these interfaces:</p>
+<ul>
+<li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong> that describes a method that tells the behavior that the temperature might have changed. The entity should recalculate anything that might have changed.</li>
+<li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> that contains methods that are called each iteration in order to build up the Y-matrix and right-hand side vector.</li>
+<li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a></strong> that allows some influence over deciding whether or not a new iteration should be computed.</li>
+<li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></strong> that gets called when it&#39;s okay to make time-dependent states that can be integrated.</li>
+</ul>
+<p>Once all <strong>behaviors</strong> have been created by all <strong>entities</strong>, the simulation no longer has a need for any entities, and will continue to work with just behaviors.</p>
+<h1 id="entities">Entities</h1>
+<p>An entity implements the <strong><a class="xref" href="../../api/SpiceSharp.Entities.IEntity.html">IEntity</a></strong> interface. The main job of the entity is to create behaviors for simulations, at which point they are allowed to search for other entities that they are linked to (like a mutual inductance that searches for its inductors, or a component/instance that searches for its model). Each entity also has a <strong>name</strong> and can contain <strong>parameters</strong>.</p>
+<p>In all Spice-based simulators the distinction is made between <em>instances</em> and <em>models</em>. Both are considered <strong>entities</strong> in Spice#, however the instance entity will ask the simulation for the model behaviors by using the model&#39;s name, allowing the model behaviors to be created first by the model entity. The instance entity can then use these model behaviors to create the instance behaviors. An instance entity in Spice# has been implemented through the <strong><a class="xref" href="../../api/SpiceSharp.Components.IComponent.html">IComponent</a></strong> interface.</p>
+<h2 id="parameters-and-properties">Parameters and properties</h2>
+<p>Entities can contain one or more <strong><a class="xref" href="../../api/SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></strong>&#39;s that can be used by behaviors. They are usually simple classes with properties that contain information that needs to be passed down to the behaviors, like the resistance of a resistor or DC voltage of a voltage source, but they can just as well be used to describe anything. These parameters can be set directly by accessing the entity&#39;s members or, when implemented, they can also be set using their Spice &quot;name&quot;. The name of a parameter is nothing more than a shorthand notation used by most Spice simulators to identify the parameter.</p>
+<p>For example, the parameters of a resistor are defined in <a class="xref" href="../../api/SpiceSharp.Components.Resistors.Parameters.html">Parameters</a>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Property name</th>
+<th style="text-align:left">Names</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Resistance</td>
+<td style="text-align:left">&quot;resistance&quot; or &quot;r&quot;</td>
+<td style="text-align:left">Resistance (ohms)</td>
+<td style="text-align:left">If not specified, the model is used to determine the resistance.</td>
+</tr>
+<tr>
+<td style="text-align:left">TemperatureCelsius</td>
+<td style="text-align:left">&quot;temp&quot;</td>
+<td style="text-align:left">Instance operating temperature (degrees Celsius)</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Width</td>
+<td style="text-align:left">&quot;w&quot;</td>
+<td style="text-align:left">Width (m)</td>
+<td style="text-align:left">Optional parameter that is only used if a model is specified.</td>
+</tr>
+<tr>
+<td style="text-align:left">Length</td>
+<td style="text-align:left">&quot;l&quot;</td>
+<td style="text-align:left">Length (m)</td>
+<td style="text-align:left">Optional parameter that is only used if a model is specified.</td>
+</tr>
+<tr>
+<td style="text-align:left">ParallelMultiplier</td>
+<td style="text-align:left">&quot;m&quot;</td>
+<td style="text-align:left">Number of resistors in parallel</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">SeriesMultiplier</td>
+<td style="text-align:left">&quot;n&quot;</td>
+<td style="text-align:left">Number of resistors in series</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<p>It is possible to set the resistance of the resistor simply by using any of the following methods:</p>
+<pre><code>// Set resistance straight from the constructor to 1kOhm
+var resistor = new Resistor(&quot;R1&quot;, &quot;a&quot;, &quot;b&quot;, 1e3);
+
+// Set resistance using the property directly to 2kOhm
+resistor.Parameters.Resistance = 2.0e3;
+
+// Set resistance using the name of the parameter using reflection to 3kOhm
+// Note: if you use 3e3 instead of 3.0e3, then this method will try to find
+// a parameter of type &quot;int&quot; so make sure to specify a double!
+resistor.Parameters.SetParameter(&quot;r&quot;, 3.0e3);
+</code></pre><h2 id="entity-collections">Entity collections</h2>
+<p>Entities can be grouped into collections using <strong><a class="xref" href="../../api/SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></strong>. The name of each entity should be uniquely defined within that collection. The most used implementation of such a collection is <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong>.</p>
+<h1 id="simulations">Simulations</h1>
+<p>Simulations will manipulate behaviors in a way that is useful for modeling reality, like doing a transient simulation. In order for behaviors to work together, they can all gain access to shared <strong>simulation states</strong>. A simulation state can contain the current iteration solution&#39;s node voltages and branch currents for biasing simulations, but just as well the noise quantities for noise simulations, or the integration method used by a transient simulation.</p>
+<h2 id="behaviors">Behaviors</h2>
+<p>Once behaviors are created, they should be self-sufficient. This means that any properties that you wish to be able to retrieve (even those defined in the entity) will need to be referenced or redefined in the behavior.</p>
+<h2 id="simulation-states">Simulation states</h2>
+<p>Simulation states are usually just classes that are only exposed through some interface that implements <strong><a class="xref" href="../../api/SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a></strong>. They can come in many forms, but the most common one will probably be the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></strong>. This simulation state contains the Y-matrix and right-hand side vector needed to iterate to a solution of the whole circuit.</p>
+<p>Code in behaviors should be written in a way that is compatible with the simulation. Unforunately this takes some knowledge, but to help you along you can follow the section about custom components.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,31 +1,71 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations;
+using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A binding context for a <see cref="Component"/>.
+    /// Context for binding an <see cref="IBehavior" /> created by an <see cref="IComponent" /> to an <see cref="ISimulation" />.
     /// </summary>
-    public class ComponentBindingContext : BindingContext
+    /// <seealso cref="BindingContext" />
+    /// <seealso cref="IComponentBindingContext" />
+    public class ComponentBindingContext : BindingContext,
+        IComponentBindingContext
     {
         /// <summary>
-        /// Gets the pins the component is connected to.
+        /// Gets the model behaviors.
         /// </summary>
-        public int[] Pins { get; private set; } = new int[0];
+        /// <value>
+        /// The model behaviors.
+        /// </value>
+        public IBehaviorContainer ModelBehaviors { get; }
 
         /// <summary>
-        /// Apply the indices that the pins of the component are connected to.
+        /// Gets the nodes that the component is connected to.
         /// </summary>
-        /// <param name="pins">The pins.</param>
-        public void Connect(params int[] pins)
+        /// <value>
+        /// The pins.
+        /// </value>
+        public IReadOnlyList<string> Nodes { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BindingContext"/> class.
+        /// </summary>
+        /// <param name="component">The component creating the behavior.</param>
+        /// <param name="simulation">The simulation for which a behavior is created.</param>
+        /// <param name="behaviors">The behaviors created by the entity.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
+        public ComponentBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors)
+            : base(component, simulation, behaviors)
         {
-            if (pins == null || pins.Length == 0)
+            // Get the nodes of the component
+            var nodes = component.Nodes;
+            string[] myNodes;
+            if (nodes != null && nodes.Count > 0)
             {
-                Pins = new int[0];
-                return;
+                myNodes = new string[nodes.Count];
+                for (var i = 0; i < nodes.Count; i++)
+                {
+                    if (nodes[i] == null)
+                    {
+                        myNodes[i] = Constants.Ground;
+                        SpiceSharpWarning.Warning(this, Properties.Resources.Nodes_NullToGround.FormatString(component.Name, i));
+                    }
+                    else
+                        myNodes[i] = nodes[i];
+                }
             }
-            Pins = new int[pins.Length];
-            for (var i = 0; i < pins.Length; i++)
-                Pins[i] = pins[i];
+            else
+                myNodes = Array<string>.Empty();
+            Nodes = myNodes;
+
+            // Get the model of the component
+            if (component.Model != null)
+                ModelBehaviors = simulation.EntityBehaviors[component.Model];
+            else
+                ModelBehaviors = null;
         }
     }
 }

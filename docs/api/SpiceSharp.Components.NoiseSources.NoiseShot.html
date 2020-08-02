@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class NoiseShot
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,43 +74,38 @@
   
   <h1 id="SpiceSharp_Components_NoiseSources_NoiseShot" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot" class="text-break">Class NoiseShot
   </h1>
-  <div class="markdown level0 summary"><p>Shotnoise generator</p>
+  <div class="markdown level0 summary"><p>A noise source that can be described using shot noise models.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html">NoiseGenerator</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.NoiseSource.html">NoiseSource</a></div>
     <div class="level2"><span class="xref">NoiseShot</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_Name">NoiseGenerator.Name</a>
+      <a class="xref" href="SpiceSharp.Simulations.NoiseSource.html#SpiceSharp_Simulations_NoiseSource_Initialize">NoiseSource.Initialize()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_Noise">NoiseGenerator.Noise</a>
+      <a class="xref" href="SpiceSharp.Simulations.NoiseSource.html#SpiceSharp_Simulations_NoiseSource_Integrate_SpiceSharp_Simulations_INoiseSimulationState_">NoiseSource.Integrate(INoiseSimulationState)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_LogNoise">NoiseGenerator.LogNoise</a>
+      <a class="xref" href="SpiceSharp.Simulations.NoiseSource.html#SpiceSharp_Simulations_NoiseSource_Name">NoiseSource.Name</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_TotalOutputNoise">NoiseGenerator.TotalOutputNoise</a>
+      <a class="xref" href="SpiceSharp.Simulations.NoiseSource.html#SpiceSharp_Simulations_NoiseSource_OutputNoiseDensity">NoiseSource.OutputNoiseDensity</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_TotalInputNoise">NoiseGenerator.TotalInputNoise</a>
+      <a class="xref" href="SpiceSharp.Simulations.NoiseSource.html#SpiceSharp_Simulations_NoiseSource_TotalOutputNoise">NoiseSource.TotalOutputNoise</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_Nodes">NoiseGenerator.Nodes</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_Setup_System_Int32___">NoiseGenerator.Setup(Int32[])</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_Unsetup">NoiseGenerator.Unsetup()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_Evaluate_SpiceSharp_Simulations_Noise_">NoiseGenerator.Evaluate(Noise)</a>
+      <a class="xref" href="SpiceSharp.Simulations.NoiseSource.html#SpiceSharp_Simulations_NoiseSource_TotalInputNoise">NoiseSource.TotalInputNoise</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -137,18 +133,18 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_NoiseSources_NoiseShot_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class NoiseShot : NoiseGenerator</code></pre>
+    <pre><code class="lang-csharp hljs">public class NoiseShot : NoiseSource, INoiseSource</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_NoiseSources_NoiseShot__ctor_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_NoiseSources_NoiseShot__ctor_System_String_System_Int32_System_Int32_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.#ctor(System.String,System.Int32,System.Int32)">NoiseShot(String, Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseShot.html">NoiseShot</a> class.</p>
+  <h4 id="SpiceSharp_Components_NoiseSources_NoiseShot__ctor_System_String_SpiceSharp_Simulations_IVariable_System_Numerics_Complex__SpiceSharp_Simulations_IVariable_System_Numerics_Complex__" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.#ctor(System.String,SpiceSharp.Simulations.IVariable{System.Numerics.Complex},SpiceSharp.Simulations.IVariable{System.Numerics.Complex})">NoiseShot(String, IVariable&lt;Complex&gt;, IVariable&lt;Complex&gt;)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseShot.html">NoiseShot</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public NoiseShot(string name, int node1, int node2)</code></pre>
+    <pre><code class="lang-csharp hljs">public NoiseShot(string name, IVariable&lt;Complex&gt; pos, IVariable&lt;Complex&gt; neg)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -163,60 +159,34 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
-        <td><p>Name of the noise source</p>
+        <td><p>Name of the noise source.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">node1</span></td>
-        <td><p>Node 1</p>
+        <td><a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</td>
+        <td><span class="parametername">pos</span></td>
+        <td><p>The positive node.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">node2</span></td>
-        <td><p>Node 2</p>
+        <td><a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</td>
+        <td><span class="parametername">neg</span></td>
+        <td><p>The negative node.</p>
 </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
-  </h3>
-  <a id="SpiceSharp_Components_NoiseSources_NoiseShot_Current_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.Current*"></a>
-  <h4 id="SpiceSharp_Components_NoiseSources_NoiseShot_Current" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.Current">Current</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the gain of the shot noise
-The noise will be 2 * q * Gain</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public double Current { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span></td>
-        <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_NoiseSources_NoiseShot_CalculateNoise_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.CalculateNoise*"></a>
-  <h4 id="SpiceSharp_Components_NoiseSources_NoiseShot_CalculateNoise_SpiceSharp_Simulations_Noise_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.CalculateNoise(SpiceSharp.Simulations.Noise)">CalculateNoise(Noise)</h4>
-  <div class="markdown level1 summary"><p>Calculate the noise contribution</p>
+  <a id="SpiceSharp_Components_NoiseSources_NoiseShot_Compute_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.Compute*"></a>
+  <h4 id="SpiceSharp_Components_NoiseSources_NoiseShot_Compute_System_Double_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.Compute(System.Double)">Compute(Double)</h4>
+  <div class="markdown level1 summary"><p>Computes the noise density of shot noise.
+This is equal to 2 * q * I</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override double CalculateNoise(Noise simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Compute(double current)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -224,112 +194,28 @@ The noise will be 2 * q * Gain</p>
       <tr>
         <th>Type</th>
         <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>Noise simulation</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">current</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_CalculateNoise_SpiceSharp_Simulations_Noise_">NoiseGenerator.CalculateNoise(Noise)</a></div>
-  <a id="SpiceSharp_Components_NoiseSources_NoiseShot_SetCoefficients_" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.SetCoefficients*"></a>
-  <h4 id="SpiceSharp_Components_NoiseSources_NoiseShot_SetCoefficients_System_Double___" data-uid="SpiceSharp.Components.NoiseSources.NoiseShot.SetCoefficients(System.Double[])">SetCoefficients(Double[])</h4>
-  <div class="markdown level1 summary"><p>Set the parameters of the shot noise</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void SetCoefficients(params double[] coefficients)</code></pre>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Double</span>[]</td>
-        <td><span class="parametername">coefficients</span></td>
-        <td><p>Values</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.NoiseSources.NoiseGenerator.html#SpiceSharp_Components_NoiseSources_NoiseGenerator_SetCoefficients_System_Double___">NoiseGenerator.SetCoefficients(Double[])</a></div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Simulations.NoiseSource.html">NoiseSource</a></div>
   </div>
 </article>
           </div>

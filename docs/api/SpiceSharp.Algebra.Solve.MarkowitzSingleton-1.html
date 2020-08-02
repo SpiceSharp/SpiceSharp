@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class MarkowitzSingleton&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -111,7 +112,7 @@ singletons (rows or columns with only one element), these can be found rather ch
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_Solve_MarkowitzSingleton_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class MarkowitzSingleton&lt;T&gt; : MarkowitzSearchStrategy&lt;T&gt; where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class MarkowitzSingleton&lt;T&gt; : MarkowitzSearchStrategy&lt;T&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -129,16 +130,26 @@ singletons (rows or columns with only one element), these can be found rather ch
       </tr>
     </tbody>
   </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Algebra_Solve_MarkowitzSingleton_1__ctor_" data-uid="SpiceSharp.Algebra.Solve.MarkowitzSingleton`1.#ctor*"></a>
+  <h4 id="SpiceSharp_Algebra_Solve_MarkowitzSingleton_1__ctor" data-uid="SpiceSharp.Algebra.Solve.MarkowitzSingleton`1.#ctor">MarkowitzSingleton()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MarkowitzSingleton()</code></pre>
+  </div>
   <h3 id="methods">Methods
   </h3>
   <a id="SpiceSharp_Algebra_Solve_MarkowitzSingleton_1_FindPivot_" data-uid="SpiceSharp.Algebra.Solve.MarkowitzSingleton`1.FindPivot*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_MarkowitzSingleton_1_FindPivot_SpiceSharp_Algebra_Solve_Markowitz__0__SpiceSharp_Algebra_SparseMatrix__0__System_Int32_" data-uid="SpiceSharp.Algebra.Solve.MarkowitzSingleton`1.FindPivot(SpiceSharp.Algebra.Solve.Markowitz{`0},SpiceSharp.Algebra.SparseMatrix{`0},System.Int32)">FindPivot(Markowitz&lt;T&gt;, SparseMatrix&lt;T&gt;, Int32)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_MarkowitzSingleton_1_FindPivot_SpiceSharp_Algebra_Solve_Markowitz__0__SpiceSharp_Algebra_ISparseMatrix__0__System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.MarkowitzSingleton`1.FindPivot(SpiceSharp.Algebra.Solve.Markowitz{`0},SpiceSharp.Algebra.ISparseMatrix{`0},System.Int32,System.Int32)">FindPivot(Markowitz&lt;T&gt;, ISparseMatrix&lt;T&gt;, Int32, Int32)</h4>
   <div class="markdown level1 summary"><p>Find a pivot in a matrix.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override MatrixElement&lt;T&gt; FindPivot(Markowitz&lt;T&gt; markowitz, SparseMatrix&lt;T&gt; matrix, int eliminationStep)</code></pre>
+    <pre><code class="lang-csharp hljs">public override Pivot&lt;ISparseMatrixElement&lt;T&gt;&gt; FindPivot(Markowitz&lt;T&gt; markowitz, ISparseMatrix&lt;T&gt; matrix, int eliminationStep, int max)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -157,15 +168,21 @@ singletons (rows or columns with only one element), these can be found rather ch
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix</a>&lt;T&gt;</td>
         <td><span class="parametername">matrix</span></td>
-        <td><p>The matrix</p>
+        <td><p>The matrix.</p>
 </td>
       </tr>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">eliminationStep</span></td>
         <td><p>The current elimination step.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td><p>The maximum row/column index.</p>
 </td>
       </tr>
     </tbody>
@@ -180,62 +197,39 @@ singletons (rows or columns with only one element), these can be found rather ch
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.Solve.Pivot-1.html">Pivot</a>&lt;<a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement</a>&lt;T&gt;&gt;</td>
         <td><p>The pivot element, or null if no pivot was found.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Solve.MarkowitzSearchStrategy&lt;T&gt;.FindPivot(SpiceSharp.Algebra.Solve.Markowitz&lt;T&gt;, SpiceSharp.Algebra.SparseMatrix&lt;T&gt;, System.Int32)</span></div>
+  <div><span class="xref">SpiceSharp.Algebra.Solve.MarkowitzSearchStrategy&lt;T&gt;.FindPivot(SpiceSharp.Algebra.Solve.Markowitz&lt;T&gt;, SpiceSharp.Algebra.ISparseMatrix&lt;T&gt;, System.Int32, System.Int32)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">markowitz</code> or <code data-dev-comment-type="paramref" class="paramref">matrix</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">eliminationStep</code> or <code data-dev-comment-type="paramref" class="paramref">max</code> not 1 or higher,
+or <code data-dev-comment-type="paramref" class="paramref">eliminationStep</code> is higher than <code data-dev-comment-type="paramref" class="paramref">max</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

@@ -1,0 +1,728 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Noise
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Noise
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.Bipolars.Noise">
+  
+  
+  <h1 id="SpiceSharp_Components_Bipolars_Noise" data-uid="SpiceSharp.Components.Bipolars.Noise" class="text-break">Class Noise
+  </h1>
+  <div class="markdown level0 summary"><p>Noise behavior for <a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistor.html">BipolarJunctionTransistor</a></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
+    <div class="level3"><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html">Temperature</a></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html">Biasing</a></div>
+    <div class="level6"><a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html">Dynamic</a></div>
+    <div class="level7"><a class="xref" href="SpiceSharp.Components.Bipolars.Frequency.html">Frequency</a></div>
+    <div class="level8"><span class="xref">Noise</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.Bipolars.Parameters.html">Parameters</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></div>
+    <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Frequency.html#SpiceSharp_Components_Bipolars_Frequency_SpiceSharp_Behaviors_IFrequencyBehavior_InitializeParameters">Frequency.IFrequencyBehavior.InitializeParameters()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Frequency.html#SpiceSharp_Components_Bipolars_Frequency_SpiceSharp_Behaviors_IFrequencyBehavior_Load">Frequency.IFrequencyBehavior.Load()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Frequency.html#SpiceSharp_Components_Bipolars_Frequency_CollectorPrime">Frequency.CollectorPrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Frequency.html#SpiceSharp_Components_Bipolars_Frequency_BasePrime">Frequency.BasePrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Frequency.html#SpiceSharp_Components_Bipolars_Frequency_EmitterPrime">Frequency.EmitterPrime</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_CalculateCapacitances_System_Double_System_Double_System_Double_System_Double_">Dynamic.CalculateCapacitances(Double, Double, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_CapBe">Dynamic.CapBe</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_CapBc">Dynamic.CapBc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_CapBx">Dynamic.CapBx</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_CapCs">Dynamic.CapCs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_ChargeBe">Dynamic.ChargeBe</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_ChargeBc">Dynamic.ChargeBc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_ChargeBx">Dynamic.ChargeBx</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_ChargeCs">Dynamic.ChargeCs</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Dynamic.html#SpiceSharp_Components_Bipolars_Dynamic_Geqcb">Dynamic.Geqcb</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Load">Biasing.Load()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_SpiceSharp_Behaviors_IBiasingBehavior_Load">Biasing.IBiasingBehavior.Load()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_ExcessPhaseCalculation_System_Double__System_Double__System_Double__">Biasing.ExcessPhaseCalculation(Double, Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Initialize_System_Double__System_Double__">Biasing.Initialize(Double, Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_SpiceSharp_Behaviors_IConvergenceBehavior_IsConvergent">Biasing.IConvergenceBehavior.IsConvergent()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_BaseConfiguration">Biasing.BaseConfiguration</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_VoltageBe">Biasing.VoltageBe</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_VoltageBc">Biasing.VoltageBc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_CollectorCurrent">Biasing.CollectorCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_BaseCurrent">Biasing.BaseCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_ConductancePi">Biasing.ConductancePi</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_ConductanceMu">Biasing.ConductanceMu</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Transconductance">Biasing.Transconductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_OutputConductance">Biasing.OutputConductance</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_ConductanceX">Biasing.ConductanceX</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Power">Biasing.Power</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_CurrentBe">Biasing.CurrentBe</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_CurrentBc">Biasing.CurrentBc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_CondBe">Biasing.CondBe</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_CondBc">Biasing.CondBc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_BaseCharge">Biasing.BaseCharge</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Dqbdvc">Biasing.Dqbdvc</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Dqbdve">Biasing.Dqbdve</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Biasing.html#SpiceSharp_Components_Bipolars_Biasing_Iteration">Biasing.Iteration</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_SpiceSharp_Behaviors_ITemperatureBehavior_Temperature">Temperature.ITemperatureBehavior.Temperature()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_Parameters">Temperature.Parameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_ModelParameters">Temperature.ModelParameters</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_ModelTemperature">Temperature.ModelTemperature</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempSaturationCurrent">Temperature.TempSaturationCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBetaForward">Temperature.TempBetaForward</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBetaReverse">Temperature.TempBetaReverse</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBeLeakageCurrent">Temperature.TempBeLeakageCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBcLeakageCurrent">Temperature.TempBcLeakageCurrent</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBeCap">Temperature.TempBeCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBePotential">Temperature.TempBePotential</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBcCap">Temperature.TempBcCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempBcPotential">Temperature.TempBcPotential</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempDepletionCap">Temperature.TempDepletionCap</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempFactor1">Temperature.TempFactor1</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempFactor4">Temperature.TempFactor4</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempFactor5">Temperature.TempFactor5</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_TempVCritical">Temperature.TempVCritical</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_Vt">Temperature.Vt</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Bipolars.Temperature.html#SpiceSharp_Components_Bipolars_Temperature_BiasingState">Temperature.BiasingState</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Behaviors.Behavior.html#SpiceSharp_Behaviors_Behavior_Name">Behavior.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Components.Bipolars.html">SpiceSharp.Components.Bipolars</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_Bipolars_Noise_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Noise : Frequency, ITemperatureBehavior, IParameterized&lt;Parameters&gt;, IConvergenceBehavior, IBiasingBehavior, IFrequencyBehavior, INoiseBehavior, INoiseSource, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <a id="SpiceSharp_Components_Bipolars_Noise__ctor_" data-uid="SpiceSharp.Components.Bipolars.Noise.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise__ctor_System_String_SpiceSharp_Components_IComponentBindingContext_" data-uid="SpiceSharp.Components.Bipolars.Noise.#ctor(System.String,SpiceSharp.Components.IComponentBindingContext)">Noise(String, IComponentBindingContext)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Bipolars.Noise.html">Noise</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Noise(string name, IComponentBindingContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_Bipolars_Noise_Flicker_" data-uid="SpiceSharp.Components.Bipolars.Noise.Flicker*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_Flicker" data-uid="SpiceSharp.Components.Bipolars.Noise.Flicker">Flicker</h4>
+  <div class="markdown level1 summary"><p>Gets the flicker noise source.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;flicker&quot;)]
+[ParameterInfo(&quot;The flicker noise&quot;)]
+public INoiseSource Flicker { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></td>
+        <td><p>The flicker noise source.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_OutputNoiseDensity_" data-uid="SpiceSharp.Components.Bipolars.Noise.OutputNoiseDensity*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_OutputNoiseDensity" data-uid="SpiceSharp.Components.Bipolars.Noise.OutputNoiseDensity">OutputNoiseDensity</h4>
+  <div class="markdown level1 summary"><p>Gets the last calculated noise density.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double OutputNoiseDensity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The last calculated noise density.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_ShotBaseCurrent_" data-uid="SpiceSharp.Components.Bipolars.Noise.ShotBaseCurrent*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_ShotBaseCurrent" data-uid="SpiceSharp.Components.Bipolars.Noise.ShotBaseCurrent">ShotBaseCurrent</h4>
+  <div class="markdown level1 summary"><p>Gets the shot noise of the base-emitter current.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ib&quot;)]
+[ParameterInfo(&quot;The shot noise of the base-emitter current&quot;)]
+public INoiseSource ShotBaseCurrent { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></td>
+        <td><p>The shot noise source.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_ShotCollectorCurrent_" data-uid="SpiceSharp.Components.Bipolars.Noise.ShotCollectorCurrent*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_ShotCollectorCurrent" data-uid="SpiceSharp.Components.Bipolars.Noise.ShotCollectorCurrent">ShotCollectorCurrent</h4>
+  <div class="markdown level1 summary"><p>Gets the shot noise source of the collector-emitter current.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ic&quot;)]
+[ParameterInfo(&quot;The shot noise of the collector-emitter current&quot;)]
+public INoiseSource ShotCollectorCurrent { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></td>
+        <td><p>The shot noise source.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_ThermalBaseResistor_" data-uid="SpiceSharp.Components.Bipolars.Noise.ThermalBaseResistor*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_ThermalBaseResistor" data-uid="SpiceSharp.Components.Bipolars.Noise.ThermalBaseResistor">ThermalBaseResistor</h4>
+  <div class="markdown level1 summary"><p>Gets the thermal noise source of the resistor at the base.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;rb&quot;)]
+[ParameterInfo(&quot;Ther thermal noise at the base&quot;)]
+public INoiseSource ThermalBaseResistor { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></td>
+        <td><p>The thermal noise source.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_ThermalCollectorResistor_" data-uid="SpiceSharp.Components.Bipolars.Noise.ThermalCollectorResistor*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_ThermalCollectorResistor" data-uid="SpiceSharp.Components.Bipolars.Noise.ThermalCollectorResistor">ThermalCollectorResistor</h4>
+  <div class="markdown level1 summary"><p>Gets the thermal noise source of the resistor at the collector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;rc&quot;)]
+[ParameterInfo(&quot;The thermal noise at the collector&quot;)]
+public INoiseSource ThermalCollectorResistor { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></td>
+        <td><p>The thermal noise source.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_ThermalEmitterResistor_" data-uid="SpiceSharp.Components.Bipolars.Noise.ThermalEmitterResistor*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_ThermalEmitterResistor" data-uid="SpiceSharp.Components.Bipolars.Noise.ThermalEmitterResistor">ThermalEmitterResistor</h4>
+  <div class="markdown level1 summary"><p>Gets the thermal noise source of the resistor at the emitter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public INoiseSource ThermalEmitterResistor { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></td>
+        <td><p>The thermal noise source.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_TotalInputNoise_" data-uid="SpiceSharp.Components.Bipolars.Noise.TotalInputNoise*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_TotalInputNoise" data-uid="SpiceSharp.Components.Bipolars.Noise.TotalInputNoise">TotalInputNoise</h4>
+  <div class="markdown level1 summary"><p>Gets the total integrated input noise.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double TotalInputNoise { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The total integrated input noise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Bipolars_Noise_TotalOutputNoise_" data-uid="SpiceSharp.Components.Bipolars.Noise.TotalOutputNoise*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_TotalOutputNoise" data-uid="SpiceSharp.Components.Bipolars.Noise.TotalOutputNoise">TotalOutputNoise</h4>
+  <div class="markdown level1 summary"><p>Gets the total integrated output noise.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double TotalOutputNoise { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The total integrated output noise.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_Bipolars_Noise_SpiceSharp_Behaviors_INoiseBehavior_Compute_" data-uid="SpiceSharp.Components.Bipolars.Noise.SpiceSharp#Behaviors#INoiseBehavior#Compute*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_SpiceSharp_Behaviors_INoiseBehavior_Compute" data-uid="SpiceSharp.Components.Bipolars.Noise.SpiceSharp#Behaviors#INoiseBehavior#Compute">INoiseBehavior.Compute()</h4>
+  <div class="markdown level1 summary"><p>Computes the noise contributions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void INoiseBehavior.Compute()</code></pre>
+  </div>
+  <a id="SpiceSharp_Components_Bipolars_Noise_SpiceSharp_Simulations_INoiseSource_Initialize_" data-uid="SpiceSharp.Components.Bipolars.Noise.SpiceSharp#Simulations#INoiseSource#Initialize*"></a>
+  <h4 id="SpiceSharp_Components_Bipolars_Noise_SpiceSharp_Simulations_INoiseSource_Initialize" data-uid="SpiceSharp.Components.Bipolars.Noise.SpiceSharp#Simulations#INoiseSource#Initialize">INoiseSource.Initialize()</h4>
+  <div class="markdown level1 summary"><p>Initializes the noise source. Resets all noise contributions to 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void INoiseSource.Initialize()</code></pre>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

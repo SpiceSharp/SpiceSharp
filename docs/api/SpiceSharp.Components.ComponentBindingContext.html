@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ComponentBindingContext
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,40 +74,49 @@
   
   <h1 id="SpiceSharp_Components_ComponentBindingContext" data-uid="SpiceSharp.Components.ComponentBindingContext" class="text-break">Class ComponentBindingContext
   </h1>
-  <div class="markdown level0 summary"><p>A binding context for a <a class="xref" href="SpiceSharp.Components.Component.html">Component</a>.</p>
+  <div class="markdown level0 summary"><p>Context for binding an <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a> created by an <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a> to an <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Behaviors.BindingContext.html">BindingContext</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a></div>
     <div class="level2"><span class="xref">ComponentBindingContext</span></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Components.CommonBehaviors.CurrentControlledBindingContext.html">CurrentControlledBindingContext</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></div>
+    <div><a class="xref" href="SpiceSharp.Entities.IBindingContext.html">IBindingContext</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_ParametersCount">BindingContext.ParametersCount</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_GetState__1">BindingContext.GetState&lt;S&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_BehaviorsCount">BindingContext.BehaviorsCount</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_TryGetState__1___0__">BindingContext.TryGetState&lt;S&gt;(S)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_Add_System_String_SpiceSharp_ParameterSetDictionary_">BindingContext.Add(String, ParameterSetDictionary)</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_GetSimulationParameterSet__1">BindingContext.GetSimulationParameterSet&lt;P&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_Add_System_String_SpiceSharp_Behaviors_EntityBehaviorDictionary_">BindingContext.Add(String, EntityBehaviorDictionary)</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_TryGetSimulationParameterSet__1___0__">BindingContext.TryGetSimulationParameterSet&lt;P&gt;(P)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_GetParameterSet__1_System_String_">BindingContext.GetParameterSet&lt;T&gt;(String)</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_GetParameterSet__1">BindingContext.GetParameterSet&lt;P&gt;()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_TryGetParameterSet__1_System_String___0__">BindingContext.TryGetParameterSet&lt;T&gt;(String, T)</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_TryGetParameterSet__1___0__">BindingContext.TryGetParameterSet&lt;P&gt;(P)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_GetBehavior__1_System_String_">BindingContext.GetBehavior&lt;T&gt;(String)</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_Simulation">BindingContext.Simulation</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Behaviors.BindingContext.html#SpiceSharp_Behaviors_BindingContext_TryGetBehavior__1_System_String___0__">BindingContext.TryGetBehavior&lt;T&gt;(String, T)</a>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_Entity">BindingContext.Entity</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_Behaviors">BindingContext.Behaviors</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -134,44 +144,18 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_ComponentBindingContext_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ComponentBindingContext : BindingContext</code></pre>
+    <pre><code class="lang-csharp hljs">public class ComponentBindingContext : BindingContext, IComponentBindingContext, IBindingContext</code></pre>
   </div>
-  <h3 id="properties">Properties
+  <h3 id="constructors">Constructors
   </h3>
-  <a id="SpiceSharp_Components_ComponentBindingContext_Pins_" data-uid="SpiceSharp.Components.ComponentBindingContext.Pins*"></a>
-  <h4 id="SpiceSharp_Components_ComponentBindingContext_Pins" data-uid="SpiceSharp.Components.ComponentBindingContext.Pins">Pins</h4>
-  <div class="markdown level1 summary"><p>Gets the pins the component is connected to.</p>
+  <a id="SpiceSharp_Components_ComponentBindingContext__ctor_" data-uid="SpiceSharp.Components.ComponentBindingContext.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_ComponentBindingContext__ctor_SpiceSharp_Components_IComponent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_System_Boolean_" data-uid="SpiceSharp.Components.ComponentBindingContext.#ctor(SpiceSharp.Components.IComponent,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer,System.Boolean)">ComponentBindingContext(IComponent, ISimulation, IBehaviorContainer, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int[] Pins { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_ComponentBindingContext_Connect_" data-uid="SpiceSharp.Components.ComponentBindingContext.Connect*"></a>
-  <h4 id="SpiceSharp_Components_ComponentBindingContext_Connect_System_Int32___" data-uid="SpiceSharp.Components.ComponentBindingContext.Connect(System.Int32[])">Connect(Int32[])</h4>
-  <div class="markdown level1 summary"><p>Apply the indices that the pins of the component are connected to.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Connect(params int[] pins)</code></pre>
+    <pre><code class="lang-csharp hljs">public ComponentBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,61 +168,114 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span>[]</td>
-        <td><span class="parametername">pins</span></td>
+        <td><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></td>
+        <td><span class="parametername">component</span></td>
+        <td><p>The component creating the behavior.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation for which a behavior is created.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><span class="parametername">behaviors</span></td>
+        <td><p>The behaviors created by the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">linkParameters</span></td>
+        <td><p>Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">component</code> or <code data-dev-comment-type="paramref" class="paramref">simulation</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_ComponentBindingContext_ModelBehaviors_" data-uid="SpiceSharp.Components.ComponentBindingContext.ModelBehaviors*"></a>
+  <h4 id="SpiceSharp_Components_ComponentBindingContext_ModelBehaviors" data-uid="SpiceSharp.Components.ComponentBindingContext.ModelBehaviors">ModelBehaviors</h4>
+  <div class="markdown level1 summary"><p>Gets the model behaviors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IBehaviorContainer ModelBehaviors { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><p>The model behaviors.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_ComponentBindingContext_Nodes_" data-uid="SpiceSharp.Components.ComponentBindingContext.Nodes*"></a>
+  <h4 id="SpiceSharp_Components_ComponentBindingContext_Nodes" data-uid="SpiceSharp.Components.ComponentBindingContext.Nodes">Nodes</h4>
+  <div class="markdown level1 summary"><p>Gets the nodes that the component is connected to.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;string&gt; Nodes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
         <td><p>The pins.</p>
 </td>
       </tr>
     </tbody>
   </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IBindingContext.html">IBindingContext</a>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a></div>
+      <div><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></div>
   </div>
 </article>
           </div>

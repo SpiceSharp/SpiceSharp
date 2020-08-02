@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Variable
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -81,6 +82,10 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">Variable</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.IVariable.html">IVariable</a></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -106,18 +111,18 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_Variable_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Variable</code></pre>
+    <pre><code class="lang-csharp hljs">public class Variable : IVariable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Simulations_Variable__ctor_" data-uid="SpiceSharp.Simulations.Variable.#ctor*"></a>
-  <h4 id="SpiceSharp_Simulations_Variable__ctor_System_String_SpiceSharp_Simulations_VariableType_System_Int32_" data-uid="SpiceSharp.Simulations.Variable.#ctor(System.String,SpiceSharp.Simulations.VariableType,System.Int32)">Variable(String, VariableType, Int32)</h4>
+  <h4 id="SpiceSharp_Simulations_Variable__ctor_System_String_SpiceSharp_Simulations_Variables_IUnit_" data-uid="SpiceSharp.Simulations.Variable.#ctor(System.String,SpiceSharp.Simulations.Variables.IUnit)">Variable(String, IUnit)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Simulations.Variable.html">Variable</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Variable(string name, VariableType type, int index)</code></pre>
+    <pre><code class="lang-csharp hljs">public Variable(string name, IUnit unit)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -132,115 +137,22 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
-        <td><p>The identifier of the variable.</p>
+        <td><p>The name.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.VariableType.html">VariableType</a></td>
-        <td><span class="parametername">type</span></td>
-        <td><p>The type of variable.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">index</span></td>
-        <td><p>The index of the unknown variable.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Variable__ctor_" data-uid="SpiceSharp.Simulations.Variable.#ctor*"></a>
-  <h4 id="SpiceSharp_Simulations_Variable__ctor_System_String_System_Int32_" data-uid="SpiceSharp.Simulations.Variable.#ctor(System.String,System.Int32)">Variable(String, Int32)</h4>
-  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Simulations.Variable.html">Variable</a> class.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Variable(string name, int index)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The identifier of the variable.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">index</span></td>
-        <td><p>The index of the unknown variable.</p>
+        <td><a class="xref" href="SpiceSharp.Simulations.Variables.IUnit.html">IUnit</a></td>
+        <td><span class="parametername">unit</span></td>
+        <td><p>The unit.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Simulations_Variable_Diagonal_" data-uid="SpiceSharp.Simulations.Variable.Diagonal*"></a>
-  <h4 id="SpiceSharp_Simulations_Variable_Diagonal" data-uid="SpiceSharp.Simulations.Variable.Diagonal">Diagonal</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the diagonal matrix element associated with the node.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MatrixElement&lt;double&gt; Diagonal { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="SpiceSharp_Simulations_Variable_Diagonal_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This variable is used by simulations to aid convergence in specific situations.</p>
-</div>
-  <a id="SpiceSharp_Simulations_Variable_Index_" data-uid="SpiceSharp.Simulations.Variable.Index*"></a>
-  <h4 id="SpiceSharp_Simulations_Variable_Index" data-uid="SpiceSharp.Simulations.Variable.Index">Index</h4>
-  <div class="markdown level1 summary"><p>Gets the index of the node.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int Index { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="SpiceSharp_Simulations_Variable_Index_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This index is typically used as the row index for the KCL law of this node voltage.</p>
-</div>
   <a id="SpiceSharp_Simulations_Variable_Name_" data-uid="SpiceSharp.Simulations.Variable.Name*"></a>
   <h4 id="SpiceSharp_Simulations_Variable_Name" data-uid="SpiceSharp.Simulations.Variable.Name">Name</h4>
-  <div class="markdown level1 summary"><p>Gets the identifier of the variable.</p>
+  <div class="markdown level1 summary"><p>Gets the name of the variable.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -258,18 +170,19 @@
     <tbody>
       <tr>
         <td><span class="xref">System.String</span></td>
-        <td></td>
+        <td><p>The name of the variable. Can be <code>null</code>.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Variable_UnknownType_" data-uid="SpiceSharp.Simulations.Variable.UnknownType*"></a>
-  <h4 id="SpiceSharp_Simulations_Variable_UnknownType" data-uid="SpiceSharp.Simulations.Variable.UnknownType">UnknownType</h4>
-  <div class="markdown level1 summary"><p>Gets the node type.</p>
+  <a id="SpiceSharp_Simulations_Variable_Unit_" data-uid="SpiceSharp.Simulations.Variable.Unit*"></a>
+  <h4 id="SpiceSharp_Simulations_Variable_Unit" data-uid="SpiceSharp.Simulations.Variable.Unit">Unit</h4>
+  <div class="markdown level1 summary"><p>Gets the units of the quantity.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public VariableType UnknownType { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IUnit Unit { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -281,38 +194,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.VariableType.html">VariableType</a></td>
-        <td></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.Variables.IUnit.html">IUnit</a></td>
+        <td><p>The units.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Simulations_Variable_Clone_" data-uid="SpiceSharp.Simulations.Variable.Clone*"></a>
-  <h4 id="SpiceSharp_Simulations_Variable_Clone" data-uid="SpiceSharp.Simulations.Variable.Clone">Clone()</h4>
-  <div class="markdown level1 summary"><p>Clones this variable.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Variable Clone()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Variable.html">Variable</a></td>
-        <td><p>A clone of this variable.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Simulations_Variable_ToString_" data-uid="SpiceSharp.Simulations.Variable.ToString*"></a>
   <h4 id="SpiceSharp_Simulations_Variable_ToString" data-uid="SpiceSharp.Simulations.Variable.ToString">ToString()</h4>
   <div class="markdown level1 summary"><p>Returns a <span class="xref">System.String</span> that represents this instance.</p>
@@ -340,54 +229,13 @@
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IVariable.html">IVariable</a>
+  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

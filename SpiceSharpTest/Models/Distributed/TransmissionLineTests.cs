@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -11,7 +11,7 @@ namespace SpiceSharpTest.Models
     public class TransmissionLineTests : Framework
     {
         [Test]
-        public void When_LosslessTransmissionLineTransient_Expect_Reference()
+        public void When_TerminatedTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -24,9 +24,9 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation
             var tran = new Transient("tran", 1e-6, 20e-6);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.Method.Time),
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "a"),
                 new RealVoltageExport(tran, "b")
             };
@@ -304,12 +304,12 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_LosslessTransmissionLineFrequency_Expect_Reference()
+        public void When_TerminatedFrequency_Expect_Reference()
         {
             // Parameters
             double rsource = 100.0, rload = 25.0;
             double impedance = 50.0, delay = 1.0e-6;
-            
+
             // Build the circuit
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0)
@@ -320,10 +320,10 @@ namespace SpiceSharpTest.Models
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(0.1, 1e8, 5));
-            var exports = new Export<Complex>[]
+            var exports = new IExport<Complex>[]
             {
                 new ComplexVoltageExport(ac, "a"),
-                new ComplexVoltageExport(ac, "b"), 
+                new ComplexVoltageExport(ac, "b"),
             };
 
             double rsnorm = rsource / impedance, rlnorm = rload / impedance;
@@ -331,13 +331,13 @@ namespace SpiceSharpTest.Models
             {
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.ComplexState.Laplace * delay);
+                    var k = Complex.Exp(-ac.GetState<IComplexSimulationState>().Laplace * delay);
                     k = (k * k - 1) / (k * k + 1);
                     return (k - rlnorm) / ((1 + rlnorm * rsnorm) * k - rsnorm - rlnorm);
                 },
                 frequency =>
                 {
-                    var k = Complex.Exp(-ac.ComplexState.Laplace * delay);
+                    var k = Complex.Exp(-ac.GetState<IComplexSimulationState>().Laplace * delay);
                     return -2 * rlnorm * k / (k * k + 1) /
                            ((1 + rlnorm * rsnorm) * (k * k - 1) / (k * k + 1) - rsnorm - rlnorm);
                 }

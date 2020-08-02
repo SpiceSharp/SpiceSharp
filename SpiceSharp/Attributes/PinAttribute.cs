@@ -3,9 +3,9 @@
 namespace SpiceSharp.Attributes
 {
     /// <summary>
-    /// Specifies the pins for a circuit component that extends <see cref="Components.Component" />.
+    /// Specifies the pins for a circuit component that extends <see cref="Components.IComponent" />.
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public sealed class PinAttribute : Attribute
     {

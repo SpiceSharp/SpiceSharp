@@ -33,12 +33,13 @@ namespace SpiceSharpTest.Examples
             // <example_change_parameter_setup>
             // Now we need to make sure we have a reference to both the base parameters and temperature behavior
             // of the resistor
-            SpiceSharp.Components.ResistorBehaviors.BaseParameters bp = null;
+            SpiceSharp.Components.Resistors.Parameters bp = null;
             SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
             tran.AfterSetup += (sender, args) =>
             {
-                tran.EntityParameters["R2"].TryGet(out bp);
-                tran.EntityBehaviors["R2"].TryGet(out tb);
+                var eb = tran.EntityBehaviors["R2"];
+                eb.TryGetValue(out tb);
+                eb.TryGetParameterSet(out bp);
             };
             // </example_change_parameter_setup>
             // <example_change_parameter_load>
@@ -46,15 +47,13 @@ namespace SpiceSharpTest.Examples
             tran.BeforeLoad += (sender, args) =>
             {
                 // First we need to figure out the timepoint that will be loaded
-                var time = tran.Method.Time;
+                var time = tran.GetState<IIntegrationMethod>().Time;
 
                 // Then we need to calculate the resistance for "R2"
                 var resistance = 1.0e3 * (1 + time * 1.0e5);
 
                 // Now let's update the parameter
-                if (bp == null || tb == null)
-                    return;
-                bp.Resistance.Value = resistance;
+                bp.Resistance = resistance;
                 tb.Temperature();
             };
 

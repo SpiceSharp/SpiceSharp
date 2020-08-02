@@ -1,105 +1,81 @@
-﻿using System;
-using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Circuits;
-using SpiceSharp.Components.CurrentControlledVoltageSourceBehaviors;
-using SpiceSharp.Simulations;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Components.CurrentControlledVoltageSources;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Validation;
+using System;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A current-controlled voltage source
+    /// A current-controlled voltage source.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="ICurrentControllingComponent"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="CurrentControlledVoltageSources.Parameters"/>
+    /// <seealso cref="IRuleSubject"/>
     [Pin(0, "H+"), Pin(1, "H-"), VoltageDriver(0, 1)]
-    public class CurrentControlledVoltageSource : Component
+    public class CurrentControlledVoltageSource : Component<CurrentControlledBindingContext>,
+        ICurrentControllingComponent,
+        IParameterized<Parameters>,
+        IRuleSubject
     {
-        static CurrentControlledVoltageSource()
-        {
-            RegisterBehaviorFactory(typeof(CurrentControlledVoltageSource), new BehaviorFactoryDictionary
-            {
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)}
-            });
-        }
+        /// <inheritdoc/>
+        public Parameters Parameters { get; } = new Parameters();
 
         /// <summary>
-        /// Controlling source name
+        /// Gets or sets the name of the controlling entity.
         /// </summary>
+        /// <value>
+        /// The name of the controlling entity.
+        /// </value>
         [ParameterName("control"), ParameterInfo("Controlling voltage source")]
-        public string ControllingName { get; set; }
+        public string ControllingSource { get; set; }
 
         /// <summary>
-        /// Constants
+        /// The pin count for current-controlled voltage sources.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int CurrentControlledVoltageSourcePinCount = 2;
-        
+        public const int PinCount = 2;
+
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current-controlled current source</param>
-        public CurrentControlledVoltageSource(string name) 
-            : base(name, CurrentControlledVoltageSourcePinCount)
+        /// <param name="name">The name of the current-controlled current source.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public CurrentControlledVoltageSource(string name)
+            : base(name, PinCount)
         {
-            ParameterSets.Add(new BaseParameters());
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentControlledVoltageSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current-controlled current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="controllingSource">The controlling voltage source name</param>
-        /// <param name="gain">The transresistance (gain)</param>
-        public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain) 
-            : base(name, CurrentControlledVoltageSourcePinCount)
+        /// <param name="name">The name of the current-controlled current source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="controllingSource">The controlling voltage source name.</param>
+        /// <param name="gain">The transresistance (gain).</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public CurrentControlledVoltageSource(string name, string pos, string neg, string controllingSource, double gain)
+            : this(name)
         {
-            ParameterSets.Add(new BaseParameters(gain));
+            Parameters.Coefficient = gain;
             Connect(pos, neg);
-            ControllingName = controllingSource;
+            ControllingSource = controllingSource;
         }
 
-        /// <summary>
-        /// Creates behaviors of the specified type.
-        /// </summary>
-        /// <param name="types"></param>
-        /// <param name="simulation">The simulation requesting the behaviors.</param>
-        /// <param name="entities">The entities being processed.</param>
-        public override void CreateBehaviors(Type[] types, Simulation simulation, EntityCollection entities)
+        /// <inheritdoc/>
+        void IRuleSubject.Apply(IRules rules)
         {
-            if (ControllingName != null)
-                entities[ControllingName].CreateBehaviors(types, simulation, entities);
-            base.CreateBehaviors(types, simulation, entities);
-        }
-
-        /// <summary>
-        /// Build the binding context.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <returns></returns>
-        protected override ComponentBindingContext BuildBindingContext(Simulation simulation)
-        {
-            var context = base.BuildBindingContext(simulation);
-
-            // Add the controlling source
-            context.Add("control", simulation.EntityParameters[ControllingName]);
-            context.Add("control", simulation.EntityBehaviors[ControllingName]);
-
-            return context;
-        }
-
-        /// <summary>
-        /// Clone the current controlled current source
-        /// </summary>
-        /// <param name="data">Instance data.</param>
-        /// <returns></returns>
-        public override Entity Clone(InstanceData data)
-        {
-            var clone = (CurrentControlledCurrentSource)base.Clone(data);
-            if (clone.ControllingName != null && data is ComponentInstanceData cid)
-                clone.ControllingName = cid.GenerateIdentifier(clone.ControllingName);
-            return clone;
+            var p = rules.GetParameterSet<ComponentRuleParameters>();
+            var nodes = Nodes.Select(name => p.Factory.GetSharedVariable(name)).ToArray();
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+                rule.AddPath(this, nodes[0], nodes[1]);
+            foreach (var rule in rules.GetRules<IAppliedVoltageRule>())
+                rule.Fix(this, nodes[0], nodes[1]);
         }
     }
 }

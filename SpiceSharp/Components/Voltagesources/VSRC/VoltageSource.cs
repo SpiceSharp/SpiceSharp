@@ -1,69 +1,85 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
-using SpiceSharp.Components.VoltageSourceBehaviors;
+using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.Components.VoltageSources;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Simulations;
+using SpiceSharp.Validation;
+using System;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// An independent voltage source
+    /// An independent voltage source.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="IRuleSubject"/>
+    /// <seealso cref="IndependentSourceParameters"/>
     [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
-    public class VoltageSource : Component
+    public class VoltageSource : Component<ComponentBindingContext>,
+        IParameterized<IndependentSourceParameters>,
+        IRuleSubject
     {
-        static VoltageSource()
-        {
-            RegisterBehaviorFactory(typeof(VoltageSource), new BehaviorFactoryDictionary
-            {
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name)}
-            });
-        }
+        /// <inheritdoc/>
+        public IndependentSourceParameters Parameters { get; } = new IndependentSourceParameters();
 
         /// <summary>
-        /// Constants
+        /// The pin count for a voltage source.
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int VoltageSourcePinCount = 2;
+        public const int PinCount = 2;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="VoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name</param>
-        public VoltageSource(string name) : base(name, VoltageSourcePinCount)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public VoltageSource(string name)
+            : base(name, PinCount)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters());
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="VoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="dc">The DC value</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public VoltageSource(string name, string pos, string neg, double dc)
-            : base(name, VoltageSourcePinCount)
+            : this(name)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(dc));
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.DcValue = dc;
             Connect(pos, neg);
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="VoltageSource"/> class.
+        /// Initializes a new instance of the <see cref="VoltageSource"/> class.
         /// </summary>
         /// <param name="name">The name of the voltage source</param>
         /// <param name="pos">The positive node</param>
         /// <param name="neg">The negative node</param>
         /// <param name="waveform">The waveform</param>
-        public VoltageSource(string name, string pos, string neg, Waveform waveform) 
-            : base(name, VoltageSourcePinCount)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public VoltageSource(string name, string pos, string neg, IWaveformDescription waveform)
+            : this(name)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.Waveform = waveform;
             Connect(pos, neg);
+        }
+
+        /// <inheritdoc/>
+        void IRuleSubject.Apply(IRules rules)
+        {
+            var p = rules.GetParameterSet<ComponentRuleParameters>();
+            var nodes = Nodes.Select(name => p.Factory.GetSharedVariable(name)).ToArray();
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+                rule.AddPath(this, nodes[0], nodes[1]);
+            foreach (var rule in rules.GetRules<IAppliedVoltageRule>())
+                rule.Fix(this, nodes[0], nodes[1]);
         }
     }
 }

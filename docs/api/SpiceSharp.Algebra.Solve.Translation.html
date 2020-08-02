@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Translation
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -149,11 +150,27 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">size</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_Algebra_Solve_Translation_Item_" data-uid="SpiceSharp.Algebra.Solve.Translation.Item*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Translation_Item_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Translation.Item(System.Int32)">Item[Int32]</h4>
-  <div class="markdown level1 summary"><p>Gets the internal index.</p>
+  <div class="markdown level1 summary"><p>Gets the internal index from an external index.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -194,6 +211,22 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Translation_Length_" data-uid="SpiceSharp.Algebra.Solve.Translation.Length*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Translation_Length" data-uid="SpiceSharp.Algebra.Solve.Translation.Length">Length</h4>
   <div class="markdown level1 summary"><p>Gets the current length of the translation vector.</p>
@@ -214,15 +247,25 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td></td>
+        <td><p>The length of the translation vector.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="SpiceSharp_Algebra_Solve_Translation_Clear_" data-uid="SpiceSharp.Algebra.Solve.Translation.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_Solve_Translation_Clear" data-uid="SpiceSharp.Algebra.Solve.Translation.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all translations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
   <a id="SpiceSharp_Algebra_Solve_Translation_Reverse_" data-uid="SpiceSharp.Algebra.Solve.Translation.Reverse*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Translation_Reverse_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Translation.Reverse(System.Int32)">Reverse(Int32)</h4>
-  <div class="markdown level1 summary"><p>Gets the external index.</p>
+  <div class="markdown level1 summary"><p>Gets the external index from an internal index.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -263,15 +306,30 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Translation_Scramble_" data-uid="SpiceSharp.Algebra.Solve.Translation.Scramble*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Translation_Scramble__1_SpiceSharp_Algebra_Vector___0__SpiceSharp_Algebra_Vector___0__" data-uid="SpiceSharp.Algebra.Solve.Translation.Scramble``1(SpiceSharp.Algebra.Vector{``0},SpiceSharp.Algebra.Vector{``0})">Scramble&lt;T&gt;(Vector&lt;T&gt;, Vector&lt;T&gt;)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Translation_Scramble__1_SpiceSharp_Algebra_IVector___0__SpiceSharp_Algebra_IVector___0__" data-uid="SpiceSharp.Algebra.Solve.Translation.Scramble``1(SpiceSharp.Algebra.IVector{``0},SpiceSharp.Algebra.IVector{``0})">Scramble&lt;T&gt;(IVector&lt;T&gt;, IVector&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Scramble a vector according to the map.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Scramble&lt;T&gt;(Vector&lt;T&gt; source, Vector&lt;T&gt; target)
-    where T : IFormattable</code></pre>
+    <pre><code class="lang-csharp hljs">public void Scramble&lt;T&gt;(IVector&lt;T&gt; source, IVector&lt;T&gt; target)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -284,13 +342,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
         <td><span class="parametername">source</span></td>
         <td><p>The source vector.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
         <td><span class="parametername">target</span></td>
         <td><p>The target vector.</p>
 </td>
@@ -313,9 +371,31 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">target</code> does not have the same length as <code data-dev-comment-type="paramref" class="paramref">source</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">source</code> or <code data-dev-comment-type="paramref" class="paramref">target</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Translation_Swap_" data-uid="SpiceSharp.Algebra.Solve.Translation.Swap*"></a>
   <h4 id="SpiceSharp_Algebra_Solve_Translation_Swap_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.Solve.Translation.Swap(System.Int32,System.Int32)">Swap(Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Swap two (internal) indices.</p>
+  <div class="markdown level1 summary"><p>Swaps two (internal) indices, such that the external indices
+still point to the right ones.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -346,15 +426,30 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index1</code> or <code data-dev-comment-type="paramref" class="paramref">index2</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_Solve_Translation_Unscramble_" data-uid="SpiceSharp.Algebra.Solve.Translation.Unscramble*"></a>
-  <h4 id="SpiceSharp_Algebra_Solve_Translation_Unscramble__1___0___SpiceSharp_Algebra_Vector___0__" data-uid="SpiceSharp.Algebra.Solve.Translation.Unscramble``1(``0[],SpiceSharp.Algebra.Vector{``0})">Unscramble&lt;T&gt;(T[], Vector&lt;T&gt;)</h4>
+  <h4 id="SpiceSharp_Algebra_Solve_Translation_Unscramble__1___0___SpiceSharp_Algebra_IVector___0__" data-uid="SpiceSharp.Algebra.Solve.Translation.Unscramble``1(``0[],SpiceSharp.Algebra.IVector{``0})">Unscramble&lt;T&gt;(T[], IVector&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Unscramble a vector. The first index of the array is ignored.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Unscramble&lt;T&gt;(T[] source, Vector&lt;T&gt; target)
-    where T : IFormattable</code></pre>
+    <pre><code class="lang-csharp hljs">public void Unscramble&lt;T&gt;(T[] source, IVector&lt;T&gt; target)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -373,7 +468,7 @@
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</td>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
         <td><span class="parametername">target</span></td>
         <td><p>The target vector.</p>
 </td>
@@ -396,54 +491,31 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">target</code> (including the trashcan element)
+does not have the same number of elements as <code data-dev-comment-type="paramref" class="paramref">source</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">source</code> or <code data-dev-comment-type="paramref" class="paramref">target</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
   </div>
 </article>
           </div>

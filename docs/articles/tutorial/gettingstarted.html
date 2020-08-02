@@ -8,7 +8,7 @@
     <title>Getting started </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Getting started ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -69,27 +70,43 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="getting-started">Getting started</h1>
 
-<p>In this section we will quickly go over everything needed to create a simple circuit and simulate it.</p>
+<p>In this section we will try to quickly go over everything you need to create a simple circuit and simulate it using Spice#.</p>
 <h2 id="installation">Installation</h2>
-<p>The easiest way to install the NuGet package here:</p>
+<p>The easiest way to install Spice# is by installing the NuGet package Spice#.</p>
 <p><a href="https://www.nuget.org/packages/SpiceSharp/"><img src="https://buildstats.info/nuget/spicesharp" alt="NuGet Badge"></a></p>
 <p>You can also clone the repository directly. However, while you get the latest features and bug fixes, the documentation might not be up to date!</p>
-<p>AppVeyor CI (Windows) build status: <a href="https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master"><img src="https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true" alt="Build status"></a></p>
-<p>Travis CI (Linux/Mono) build status: <a href="https://travis-ci.org/SpiceSharp/SpiceSharp"><img src="https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master" alt="Build Status"></a></p>
-<h2 id="building-the-circuit">Building the circuit</h2>
-<p>Let&#39;s start with a very simple circuit called a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
-<p align="center"><img src="images/example01.svg"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Platform</th>
+<th style="text-align:right">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">AppVeyor CI (Windows) build status</td>
+<td style="text-align:right"><a href="https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master"><img src="https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true" alt="Build status"></a></td>
+</tr>
+<tr>
+<td style="text-align:left">Travis CI (Linux/Mono) build status</td>
+<td style="text-align:right"><a href="https://travis-ci.org/SpiceSharp/SpiceSharp"><img src="https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master" alt="Build Status"></a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="building-a-circuit">Building a circuit</h2>
+<p>Let&#39;s start with a very simple circuit known as a <em>resistive voltage divider</em>. The schematic looks as follows.</p>
+<p align="center"><img src="images/example01.svg" width="256px"></p>
 
 <p>The output voltage of this circuit is 2/3 times the input voltage.</p>
-<p>Creating this circuit is done using the <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong>-class. This is a container of multiple entities, such as voltage sources and resistors. The <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong>-class is defined in the namespace <em><a class="xref" href="../../api/SpiceSharp.html">SpiceSharp</a></em>, while all default components are in the namespace <em><a class="xref" href="../../api/SpiceSharp.Components.html">SpiceSharp.Components</a></em>.</p>
+<p>Creating this circuit is done using the <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong>-class. This is a container of multiple so-called entities (<strong><a class="xref" href="../../api/SpiceSharp.Entities.IEntity.html">IEntity</a></strong>), such as voltage sources and resistors. The <strong><a class="xref" href="../../api/SpiceSharp.Circuit.html">Circuit</a></strong>-class is defined in the namespace <em><a class="xref" href="../../api/SpiceSharp.html">SpiceSharp</a></em>, while all default components are typically specified in the namespace <em><a class="xref" href="../../api/SpiceSharp.Components.html">SpiceSharp.Components</a></em>.</p>
 <pre><code class="lang-csharp" name="Circuit">// Build the circuit
 var ckt = new Circuit(
     new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 1.0),
     new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 1.0e4),
     new Resistor(&quot;R2&quot;, &quot;out&quot;, &quot;0&quot;, 2.0e4)
     );
-</code></pre><h2 id="running-a-dc-analysis">Running a DC analysis</h2>
-<p>A <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DC.html">DC</a></strong> simulation will (by default) sweep a voltage or current source value. The result is a DC transfer curve in function of the swept parameter.</p>
+</code></pre><h2 id="running-a-dc-analysis-on-the-circuit">Running a DC analysis on the circuit</h2>
+<p>A <strong><a class="xref" href="../../api/SpiceSharp.Simulations.DC.html">DC</a></strong> simulation will (by default) sweep a voltage or current source value and it will assume a &quot;quiet&quot; circuit. The result is a DC transfer curve in function of the swept parameter.</p>
 <p>We will sweep the input voltage source from -1V to 1V in steps of 200mV.</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
 var dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
@@ -101,7 +118,8 @@ dc.ExportSimulationData += (sender, args) =&gt;
     var output = args.GetVoltage(&quot;out&quot;);
 };
 dc.Run(ckt);
-</code></pre><p>The output will yield as expected:</p>
+</code></pre><p>By default, access to simulation output data can be achieved by registering to the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData">ExportSimulationData</a></strong> event. This event is automatically fired by the simulation when the data is ready to be exported.</p>
+<p>The output will show:</p>
 <pre><code>-1 V : -0.667 V
 -0.8 V : -0.533 V
 -0.6 V : -0.4 V
@@ -114,14 +132,14 @@ dc.Run(ckt);
 0.8 V : 0.533 V
 1 V : 0.667 V
 </code></pre><h2 id="using-exports">Using exports</h2>
-<p>Using <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Export-1.html">Export<t></t></a></strong> gives faster and more access to circuit properties. These exports also allow easier access to properties of components. For example, we could be interested in the current through voltage source V1. In which case we can some exports as follows:</p>
+<p>Using exports allows for faster access to voltages, currents, circuit properties, etc. For example, we could be interested in the current through voltage source V1. In which case we can define some exports:</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
 var dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
 
 // Create exports
-Export&lt;double&gt; inputExport = new RealVoltageExport(dc, &quot;in&quot;);
-Export&lt;double&gt; outputExport = new RealVoltageExport(dc, &quot;out&quot;);
-Export&lt;double&gt; currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
+var inputExport = new RealVoltageExport(dc, &quot;in&quot;);
+var outputExport = new RealVoltageExport(dc, &quot;out&quot;);
+var currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
 
 // Catch exported data
 dc.ExportSimulationData += (sender, args) =&gt;
@@ -131,7 +149,7 @@ dc.ExportSimulationData += (sender, args) =&gt;
     var current = currentExport.Value;
 };
 dc.Run(ckt);
-</code></pre><p>Yielding the output:</p>
+</code></pre><p>This will lead to the result:</p>
 <pre><code>-1 V : -0.667 V. 3.33E-05 A
 -0.8 V : -0.533 V. 2.67E-05 A
 -0.6 V : -0.4 V. 2E-05 A
@@ -143,7 +161,7 @@ dc.Run(ckt);
 0.6 V : 0.4 V. -2E-05 A
 0.8 V : 0.533 V. -2.67E-05 A
 1 V : 0.667 V. -3.33E-05 A
-</code></pre><div class="pull-right"><a href="analysis.html">Next: Analysis</a></div>
+</code></pre><p>These export classes are setup automatically. These classes dynamically build a method that allows extracting data more efficiently during the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData">ExportSimulationData</a></strong> event compared to using the event&#39;s arguments.</p>
 </article>
           </div>
           

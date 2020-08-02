@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class DenseVector&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,21 +80,14 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</div>
-    <div class="level2"><span class="xref">DenseVector&lt;T&gt;</span></div>
+    <div class="level1"><span class="xref">DenseVector&lt;T&gt;</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><span class="xref">System.IFormattable</span></div>
+    <div><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="SpiceSharp.Algebra.Vector-1.html#SpiceSharp_Algebra_Vector_1_Length">Vector&lt;T&gt;.Length</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Algebra.Vector-1.html#SpiceSharp_Algebra_Vector_1_CopyTo_SpiceSharp_Algebra_Vector__0__">Vector&lt;T&gt;.CopyTo(Vector&lt;T&gt;)</a>
-    </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
@@ -117,7 +111,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_DenseVector_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class DenseVector&lt;T&gt; : Vector&lt;T&gt;, IFormattable where T : IFormattable</code></pre>
+    <pre><code class="lang-csharp hljs">public class DenseVector&lt;T&gt; : IVector&lt;T&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -144,36 +138,14 @@ the vector.</p>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Algebra_DenseVector_1__ctor_" data-uid="SpiceSharp.Algebra.DenseVector`1.#ctor*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseVector_1__ctor__0___" data-uid="SpiceSharp.Algebra.DenseVector`1.#ctor(`0[])">DenseVector(T[])</h4>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1__ctor" data-uid="SpiceSharp.Algebra.DenseVector`1.#ctor">DenseVector()</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.DenseVector-1.html">DenseVector&lt;T&gt;</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected DenseVector(T[] values)</code></pre>
+    <pre><code class="lang-csharp hljs">public DenseVector()</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>T[]</td>
-        <td><span class="parametername">values</span></td>
-        <td><p>Values of the vector.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 id="SpiceSharp_Algebra_DenseVector_1__ctor__0____remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>The value at index 0 is considered the trashcan element. The length of the vector
-is therefore considered to be the array length - 1.</p>
-</div>
   <a id="SpiceSharp_Algebra_DenseVector_1__ctor_" data-uid="SpiceSharp.Algebra.DenseVector`1.#ctor*"></a>
   <h4 id="SpiceSharp_Algebra_DenseVector_1__ctor_System_Int32_" data-uid="SpiceSharp.Algebra.DenseVector`1.#ctor(System.Int32)">DenseVector(Int32)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.DenseVector-1.html">DenseVector&lt;T&gt;</a> class.</p>
@@ -210,7 +182,7 @@ is therefore considered to be the array length - 1.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override T this[int index] { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public T this[int index] { get; set; }</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -225,7 +197,7 @@ is therefore considered to be the array length - 1.</p>
       <tr>
         <td><span class="xref">System.Int32</span></td>
         <td><span class="parametername">index</span></td>
-        <td><p>The index in the vector.</p>
+        <td><p>The index.</p>
 </td>
       </tr>
     </tbody>
@@ -241,26 +213,55 @@ is therefore considered to be the array length - 1.</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td><p>The value at the specified index.</p>
+        <td><p>The value.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Vector&lt;T&gt;.Item[System.Int32]</span></div>
-  <h5 id="SpiceSharp_Algebra_DenseVector_1_Item_System_Int32__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>The element at index 0 is considered a trash can element. Use indices ranging 1 to the vector length.</p>
+  <a id="SpiceSharp_Algebra_DenseVector_1_Length_" data-uid="SpiceSharp.Algebra.DenseVector`1.Length*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_Length" data-uid="SpiceSharp.Algebra.DenseVector`1.Length">Length</h4>
+  <div class="markdown level1 summary"><p>Gets the length of the vector.</p>
 </div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Length { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The length.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Algebra_DenseVector_1_CopyFrom_" data-uid="SpiceSharp.Algebra.DenseVector`1.CopyFrom*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseVector_1_CopyFrom_SpiceSharp_Algebra_DenseVector__0__" data-uid="SpiceSharp.Algebra.DenseVector`1.CopyFrom(SpiceSharp.Algebra.DenseVector{`0})">CopyFrom(DenseVector&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Copy contents from another vector.</p>
+  <a id="SpiceSharp_Algebra_DenseVector_1_Clear_" data-uid="SpiceSharp.Algebra.DenseVector`1.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_Clear" data-uid="SpiceSharp.Algebra.DenseVector`1.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all elements in the vector. The size of the vector becomes 0.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void CopyFrom(DenseVector&lt;T&gt; vector)</code></pre>
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_DenseVector_1_CopyTo_" data-uid="SpiceSharp.Algebra.DenseVector`1.CopyTo*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_CopyTo_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.DenseVector`1.CopyTo(SpiceSharp.Algebra.IVector{`0})">CopyTo(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Copies the contents of the vector to another one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(IVector&lt;T&gt; target)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -273,21 +274,21 @@ is therefore considered to be the array length - 1.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.DenseVector-1.html">DenseVector</a>&lt;T&gt;</td>
-        <td><span class="parametername">vector</span></td>
-        <td><p>Source vector.</p>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">target</span></td>
+        <td><p>The target vector.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Algebra_DenseVector_1_CopyTo_" data-uid="SpiceSharp.Algebra.DenseVector`1.CopyTo*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseVector_1_CopyTo_SpiceSharp_Algebra_DenseVector__0__" data-uid="SpiceSharp.Algebra.DenseVector`1.CopyTo(SpiceSharp.Algebra.DenseVector{`0})">CopyTo(DenseVector&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Copies contents to another vector.</p>
+  <a id="SpiceSharp_Algebra_DenseVector_1_GetVectorValue_" data-uid="SpiceSharp.Algebra.DenseVector`1.GetVectorValue*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_GetVectorValue_System_Int32_" data-uid="SpiceSharp.Algebra.DenseVector`1.GetVectorValue(System.Int32)">GetVectorValue(Int32)</h4>
+  <div class="markdown level1 summary"><p>Gets the value of the vector at the specified index.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void CopyTo(DenseVector&lt;T&gt; vector)</code></pre>
+    <pre><code class="lang-csharp hljs">public T GetVectorValue(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -300,9 +301,116 @@ is therefore considered to be the array length - 1.</p>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.DenseVector-1.html">DenseVector</a>&lt;T&gt;</td>
-        <td><span class="parametername">vector</span></td>
-        <td><p>The target vector.</p>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">index</code> is negative</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseVector_1_Reset_" data-uid="SpiceSharp.Algebra.DenseVector`1.Reset*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_Reset" data-uid="SpiceSharp.Algebra.DenseVector`1.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Resets all elements in the vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_DenseVector_1_SetVectorValue_" data-uid="SpiceSharp.Algebra.DenseVector`1.SetVectorValue*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_SetVectorValue_System_Int32__0_" data-uid="SpiceSharp.Algebra.DenseVector`1.SetVectorValue(System.Int32,`0)">SetVectorValue(Int32, T)</h4>
+  <div class="markdown level1 summary"><p>Sets the value of the vector at the specified index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetVectorValue(int index, T value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The index.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseVector_1_SwapElements_" data-uid="SpiceSharp.Algebra.DenseVector`1.SwapElements*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseVector_1_SwapElements_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.DenseVector`1.SwapElements(System.Int32,System.Int32)">SwapElements(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Swaps two elements in the vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SwapElements(int index1, int index2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index1</span></td>
+        <td><p>The first index.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index2</span></td>
+        <td><p>The second index.</p>
 </td>
       </tr>
     </tbody>
@@ -334,112 +442,13 @@ is therefore considered to be the array length - 1.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">System.Object.ToString()</span></div>
-  <a id="SpiceSharp_Algebra_DenseVector_1_ToString_" data-uid="SpiceSharp.Algebra.DenseVector`1.ToString*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseVector_1_ToString_System_String_System_IFormatProvider_" data-uid="SpiceSharp.Algebra.DenseVector`1.ToString(System.String,System.IFormatProvider)">ToString(String, IFormatProvider)</h4>
-  <div class="markdown level1 summary"><p>Returns a <span class="xref">System.String</span> that represents this instance.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ToString(string format, IFormatProvider formatProvider)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">format</span></td>
-        <td><p>The format for each element of the vector.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IFormatProvider</span></td>
-        <td><span class="parametername">formatProvider</span></td>
-        <td><p>The format provider for each element of the vector.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><p>A <span class="xref">System.String</span> that represents this instance.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">System.IFormattable</span>
+      <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <h3 id="seealso">See Also</h3>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector</a>&lt;T&gt;</div>
-      <div><span class="xref">System.IFormattable</span></div>
   </div>
 </article>
           </div>

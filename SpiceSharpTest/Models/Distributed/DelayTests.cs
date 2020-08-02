@@ -1,9 +1,9 @@
-﻿using System;
-using System.Numerics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
+using System.Numerics;
 
 namespace SpiceSharpTest.Models
 {
@@ -11,7 +11,7 @@ namespace SpiceSharpTest.Models
     public class DelayTests : Framework
     {
         [Test]
-        public void When_DelayTransient_Expect_Reference()
+        public void When_SimplePulsedTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -21,11 +21,11 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation
             var tran = new Transient("tran", 1e-7, 10e-5);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.Method.Time), 
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "in"),
-                new RealVoltageExport(tran, "out"), 
+                new RealVoltageExport(tran, "out"),
             };
             var references = new[]
             {
@@ -87,7 +87,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DelayTransient02_Expect_NoException()
+        public void When_SimpleSineTransient_Expect_NoException()
         {
             var ckt = new Circuit(
                 new VoltageSource("V1", "1", "0", new Sine(0, 5, 50, 0, 0, 90)),
@@ -101,7 +101,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DelayTransientBreakpoints_Expect_Reference()
+        public void When_BreakpointsTransient_Expect_Reference()
         {
             // Build the circuit
             var ckt = new Circuit(
@@ -113,11 +113,11 @@ namespace SpiceSharpTest.Models
 
             // Build the simulation
             var tran = new Transient("tran", 1e-7, 10e-5);
-            var exports = new Export<double>[]
+            var exports = new IExport<double>[]
             {
-                new GenericExport<double>(tran, () => tran.Method.Time), 
+                new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                 new RealVoltageExport(tran, "in"),
-                new RealVoltageExport(tran, "out"), 
+                new RealVoltageExport(tran, "out"),
             };
             var references = new[]
             {
@@ -207,7 +207,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_DelayFrequency_Expect_Reference()
+        public void When_SimpleSmallSignal_Expect_Reference()
         {
             var delay = 1e-6;
 
@@ -219,13 +219,13 @@ namespace SpiceSharpTest.Models
 
             // Build the analysis
             var ac = new AC("ac", new DecadeSweep(1e-3, 1e5, 5));
-            var exports = new Export<Complex>[]
+            var exports = new IExport<Complex>[]
             {
                 new ComplexVoltageExport(ac, "out")
             };
             var references = new Func<double, Complex>[]
             {
-                frequency => Complex.Exp(-ac.ComplexState.Laplace * delay)
+                frequency => Complex.Exp(-ac.GetState<IComplexSimulationState>().Laplace * delay)
             };
 
             // Analyze the AC behavior

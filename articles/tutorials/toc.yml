@@ -1,0 +1,12 @@
+- name: Examples
+  href: examples.md
+  items:
+  - name: DC analysis example
+    href: dcanalysis.md
+  - name: AC analysis example
+    href: acanalysis.md
+  - name: Transient analysis example
+    href: transientanalysis.md
+  - name: Changing parameters during simulation
+    href: changing_parameters/toc.yml
+    topicHref: changing_parameters/changing_parameters_during_simulation.md

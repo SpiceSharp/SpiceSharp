@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Algebra
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -77,63 +78,99 @@
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
   </h3>
-      <h4><a class="xref" href="SpiceSharp.Algebra.ComplexSolver.html">ComplexSolver</a></h4>
-      <section><p>Class for solving real matrices</p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></h4>
+      <section><p>Sparse matrix exception</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.DenseMatrix-1.html">DenseMatrix&lt;T&gt;</a></h4>
-      <section><p>A square matrix using a dense representation. As a small optimization, the row and column with
-index 0 are not considered trash can elements.</p>
+      <section><p>A square matrix using a dense representation.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.DenseRealSolver.html">DenseRealSolver</a></h4>
+      <section><p>Class for solving dense sets of equations with real numbers.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.DenseVector-1.html">DenseVector&lt;T&gt;</a></h4>
       <section><p>A vector with real values</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.LinearSystemIndices.html">LinearSystemIndices</a></h4>
-      <section><p>Indices of an element in a linear system.</p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.Element-1.html">Element&lt;T&gt;</a></h4>
+      <section><p>A description of a matrix element.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.Matrix-1.html">Matrix&lt;T&gt;</a></h4>
-      <section><p>Base class for square matrices.</p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ElementSet-1.html">ElementSet&lt;T&gt;</a></h4>
+      <section><p>A set of matrix and right-hand-side vector elements</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.MatrixElement-1.html">MatrixElement&lt;T&gt;</a></h4>
-      <section><p>Base class for matrix elements.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.RealSolver.html">RealSolver</a></h4>
-      <section><p>Class for solving sets of equations with real numbers.</p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.RookPivoting-1.html">RookPivoting&lt;T&gt;</a></h4>
+      <section><p>Rook pivoting strategy.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.SingularException.html">SingularException</a></h4>
       <section><p>Exception thrown when a matrix is singular.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.Solver-1.html">Solver&lt;T&gt;</a></h4>
-      <section><p>A base class for linear systems that can be solved.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.SparseException.html">SparseException</a></h4>
-      <section><p>Sparse matrix exception</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.SparseLinearSystem-1.html">SparseLinearSystem&lt;T&gt;</a></h4>
-      <section><p>A class that represents a system of linear equations.</p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.SparseComplexSolver.html">SparseComplexSolver</a></h4>
+      <section><p>Class for solving real matrices</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.html">SparseMatrix&lt;T&gt;</a></h4>
-      <section><p>A square matrix that uses a sparse storage method.</p>
+      <section><p>A square matrix that uses a sparse storage method with doubly-linked elements.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Column.html">SparseMatrix&lt;T&gt;.Column</a></h4>
       <section><p>A class that keeps track of a linked list of matrix elements for a column.</p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Element.html">SparseMatrix&lt;T&gt;.Element</a></h4>
+      <section><p>An element for a sparse matrix.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.Row.html">SparseMatrix&lt;T&gt;.Row</a></h4>
       <section><p>A class that keeps track of a linked list of matrix elements for a row.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.SparseMatrix-1.SparseMatrixElement.html">SparseMatrix&lt;T&gt;.SparseMatrixElement</a></h4>
-      <section><p>An element for a sparse matrix.</p>
+      <h4><a class="xref" href="SpiceSharp.Algebra.SparseRealSolver.html">SparseRealSolver</a></h4>
+      <section><p>Class for solving sparse sets of equations with real numbers.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Algebra.SparseVector-1.html">SparseVector&lt;T&gt;</a></h4>
-      <section><p>Sparse vector</p>
+      <section><p>A vector that uses sparse storage methods with doubly-linked elements.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.SparseVector-1.SparseVectorElement.html">SparseVector&lt;T&gt;.SparseVectorElement</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Algebra.SparseVector-1.Element.html">SparseVector&lt;T&gt;.Element</a></h4>
       <section><p>A vector element for <a class="xref" href="SpiceSharp.Algebra.SparseVector-1.html">SparseVector&lt;T&gt;</a></p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.Vector-1.html">Vector&lt;T&gt;</a></h4>
-      <section><p>A base class for vectors.</p>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></h4>
+      <section><p>A simple struct for describing a matrix row/column location.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Algebra.VectorElement-1.html">VectorElement&lt;T&gt;</a></h4>
-      <section><p>A base class for vector elements.</p>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&lt;T&gt;</a></h4>
+      <section><p>Describes a matrix.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.IPivotingSolver-3.html">IPivotingSolver&lt;M, V, T&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a> that implements mechanisms for pivoting. This means
+that the solver may reorder the internal matrix and right hand side vector.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a></h4>
+      <section><p>Describes a linear system of equations. It tracks permutations of
+the equations and the variables.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix&lt;T&gt;</a></h4>
+      <section><p>Describes a sparse matrix that return elements that have links to neighboring non-zero elements.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISparseMatrixElement-1.html">ISparseMatrixElement&lt;T&gt;</a></h4>
+      <section><p>A matrix element for an <a class="xref" href="SpiceSharp.Algebra.ISparseMatrix-1.html">ISparseMatrix&lt;T&gt;</a>. This element has links
+to the surrounding matrix elements.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISparsePivotingSolver-1.html">ISparsePivotingSolver&lt;T&gt;</a></h4>
+      <section><p>A sparse solver that can use pivoting to solve equations.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISparseSolver-1.html">ISparseSolver&lt;T&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a> that uses sparse elements internally.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector&lt;T&gt;</a></h4>
+      <section><p>Describes a vector that can be stepped through.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.ISparseVectorElement-1.html">ISparseVectorElement&lt;T&gt;</a></h4>
+      <section><p>A vector element for an <a class="xref" href="SpiceSharp.Algebra.ISparseVector-1.html">ISparseVector&lt;T&gt;</a>. This element has links
+to the next and previous elements.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a></h4>
+      <section><p>A description of a vector.</p>
+</section>
+    <h3 id="delegates">Delegates
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Algebra.PreconditioningMethod-3.html">PreconditioningMethod&lt;M, V, T&gt;</a></h4>
+      <section><p>Describes a method for preconditioning an <a class="xref" href="SpiceSharp.Algebra.IPivotingSolver-3.html">IPivotingSolver&lt;M, V, T&gt;</a>.</p>
 </section>
 </article>
           </div>

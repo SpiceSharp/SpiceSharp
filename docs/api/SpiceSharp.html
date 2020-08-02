@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -77,50 +78,39 @@
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
   </h3>
-      <h4><a class="xref" href="SpiceSharp.BadParameterException.html">BadParameterException</a></h4>
-      <section><p>Exception for identifying a bad parameter.</p>
+      <h4><a class="xref" href="SpiceSharp.Array-1.html">Array&lt;T&gt;</a></h4>
+      <section><p>A helper method as a replacement for System.Array.
+This method does not exist in .NET Standard 1.5 (even though the docs say it does).</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.BehaviorsNotFoundException.html">BehaviorsNotFoundException</a></h4>
+      <section><p>An exception that is thrown when a problem occurs with the generic type of a method.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Circuit.html">Circuit</a></h4>
       <section><p>Represents an electronic circuit.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.CircuitException.html">CircuitException</a></h4>
-      <section><p>An exception for circuit-related issues.</p>
+      <h4><a class="xref" href="SpiceSharp.Constants.html">Constants</a></h4>
+      <section><p>Helpful (electronics-related) constants used throughout Spice#.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.CircuitWarning.html">CircuitWarning</a></h4>
+      <h4><a class="xref" href="SpiceSharp.NodeMismatchException.html">NodeMismatchException</a></h4>
+      <section><p>Exception thrown when nodes aren&apos;t matched.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.NoEquivalentSubcircuitException.html">NoEquivalentSubcircuitException</a></h4>
+      <section><p>An exception thrown when a subcircuit cannot be represented.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.ReflectionHelper.html">ReflectionHelper</a></h4>
+      <section><p>Helper class for using reflection in combination with Spice#.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.SpiceSharpException.html">SpiceSharpException</a></h4>
+      <section><p>An exception for SpiceSharp-related issues.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.SpiceSharpWarning.html">SpiceSharpWarning</a></h4>
       <section><p>A static class that tracks warnings.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Constants.html">Constants</a></h4>
-      <section><p>Helpful electronics-related constants</p>
+      <h4><a class="xref" href="SpiceSharp.TimestepTooSmallException.html">TimestepTooSmallException</a></h4>
+      <section><p>Exception thrown when the timestep is too small.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter&lt;T&gt;</a></h4>
-      <section><p>This class describes a parameter that is optional. Whether or not it was specified can be
-found using the Given variable. It also has a default value when not specified.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Parameter-1.html">Parameter&lt;T&gt;</a></h4>
-      <section><p>A template for parameters of a specific type.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.ParameterHelper.html">ParameterHelper</a></h4>
-      <section><p>Helper methods for managing (named) parameters using reflection.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.ParameterPool.html">ParameterPool</a></h4>
-      <section><p>Collection for parameter sets. This class will keep track which parameter sets belong to which entity.
-Only a <a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a> can be requested from the collection.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a></h4>
-      <section><p>A class that describes a set of parameters.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.ParameterSetDictionary.html">ParameterSetDictionary</a></h4>
-      <section><p>A dictionary of <a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a>. Only one instance of each type is allowed.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Reflection.html">Reflection</a></h4>
-      <section><p>Helper class for using reflection in Spice#.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Reflection.CachedMemberInfo.html">Reflection.CachedMemberInfo</a></h4>
-      <section><p>Holds information about a specified member of the class and its attributes.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.TypeDictionary-1.html">TypeDictionary&lt;T&gt;</a></h4>
-      <section><p>A base template for storing objects that can be retrieved by their type. It also tracks inheritance,
-so you can retrieve objects by their base class.</p>
+      <h4><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></h4>
+      <section><p>An exception that is thrown when a problem occurs with the generic type of a method.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Utility.html">Utility</a></h4>
       <section><p>Some utility methods</p>
@@ -128,13 +118,19 @@ so you can retrieve objects by their base class.</p>
       <h4><a class="xref" href="SpiceSharp.WarningEventArgs.html">WarningEventArgs</a></h4>
       <section><p>Event arguments that are used when a warning is generated.</p>
 </section>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter&lt;T&gt;</a></h4>
+      <section><p>This class describes a parameter that is optional. Whether or not it was specified can be
+found using the Given variable. It also has a default value when not specified.</p>
+</section>
     <h3 id="interfaces">Interfaces
   </h3>
       <h4><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></h4>
       <section><p>A template for a parameter that can be cloned and copied.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a></h4>
-      <section><p>A template for a parameter that can be cloned and copied (typed version).</p>
+      <h4><a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a></h4>
+      <section><p>A dictionary that can store objects, and indexes them by their type.</p>
 </section>
 </article>
           </div>

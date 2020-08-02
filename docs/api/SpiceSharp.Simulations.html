@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Simulations
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -83,35 +84,23 @@
       <h4><a class="xref" href="SpiceSharp.Simulations.AfterExecuteEventArgs.html">AfterExecuteEventArgs</a></h4>
       <section><p>Event arguments that are used after simulation execution.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.BaseConfiguration.html">BaseConfiguration</a></h4>
-      <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a>.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.BaseSimulation.html">BaseSimulation</a></h4>
-      <section><p>The base simulation.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.BaseSimulationState.html">BaseSimulationState</a></h4>
-      <section><p>A simulation state for simulations using real numbers.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.BaseSimulationStatistics.html">BaseSimulationStatistics</a></h4>
-      <section><p>Statistics for a <a class="xref" href="SpiceSharp.Simulations.BaseSimulationStatistics.html">BaseSimulationStatistics</a>.</p>
-</section>
       <h4><a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a></h4>
       <section><p>Event arguments that are used before simulation execution.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.CollectionConfiguration.html">CollectionConfiguration</a></h4>
-      <section><p>This class can configure how collections are created in simulations.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.BiasingParameters.html">BiasingParameters</a></h4>
+      <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a></h4>
+      <section><p>A class that can bias components.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.IterationState.html">BiasingSimulation.IterationState</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.IIterationSimulationState.html">IIterationSimulationState</a> for a <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.ComplexCurrentExport.html">ComplexCurrentExport</a></h4>
       <section><p>This class can export complex currents.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.ComplexPropertyExport.html">ComplexPropertyExport</a></h4>
       <section><p>This class can export complex property values.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.ComplexSimulationState.html">ComplexSimulationState</a></h4>
-      <section><p>A simulation state using complex numbers.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.ComplexSimulationStatistics.html">ComplexSimulationStatistics</a></h4>
-      <section><p>Statistics for a <a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.ComplexVoltageExport.html">ComplexVoltageExport</a></h4>
       <section><p>This class can export complex voltages.</p>
@@ -122,27 +111,27 @@
       <h4><a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a></h4>
       <section><p>Class that implements a DC sweep analysis.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.DCConfiguration.html">DCConfiguration</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.DCParameters.html">DCParameters</a></h4>
       <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.DC.html">DC</a> simulation.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.DCParameterSearchEventArgs.html">DCParameterSearchEventArgs</a></h4>
-      <section><p>Event arguments for searching a parameter used as a sweep in DC analysis.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.DecadeSweep.html">DecadeSweep</a></h4>
       <section><p>This class implements a sweep with a number of points per decade.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.Export-1.html">Export&lt;T&gt;</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.Export-2.html">Export&lt;S, T&gt;</a></h4>
       <section><p>A template for exporting data for a simulation.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.ExportDataEventArgs.html">ExportDataEventArgs</a></h4>
       <section><p>A class that describes exported simulation data. Can be used by simulations to pass exported simulation data as an event argument.
 This class contains some helper methods for extracting data from the simulation.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.FrequencyConfiguration.html">FrequencyConfiguration</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.FrequencyParameters.html">FrequencyParameters</a></h4>
       <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a></h4>
       <section><p>A template for frequency-dependent analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.ComplexSimulationState.html">FrequencySimulation.ComplexSimulationState</a></h4>
+      <section><p>A simulation state using complex numbers.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.GenericExport-1.html">GenericExport&lt;T&gt;</a></h4>
       <section><p>This class allows any function to be specified.</p>
@@ -156,20 +145,20 @@ This class contains some helper methods for extracting data from the simulation.
       <h4><a class="xref" href="SpiceSharp.Simulations.LoadStateEventArgs.html">LoadStateEventArgs</a></h4>
       <section><p>Event arguments that are used when a state is loaded.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.ModifiedNodalAnalysisHelper.html">ModifiedNodalAnalysisHelper</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ModifiedNodalAnalysisHelper-1.html">ModifiedNodalAnalysisHelper&lt;T&gt;</a></h4>
       <section><p>A helper class that is specific to Modified Nodal Analysis.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.NestedSweeps.html">NestedSweeps</a></h4>
-      <section><p>A class describing sweeps that can be nested</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a></h4>
       <section><p>A class that implements a noise analysis.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.NoiseConfiguration.html">NoiseConfiguration</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.Noise.NoiseSimulationState.html">Noise.NoiseSimulationState</a></h4>
+      <section><p>A class that represents the state of a <a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a> analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.NoiseParameters.html">NoiseParameters</a></h4>
       <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a> analysis.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.NoiseState.html">NoiseState</a></h4>
-      <section><p>A class that represents the state of a <a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a> analysis.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.NoiseSource.html">NoiseSource</a></h4>
+      <section><p>A basic implementation of a <a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.OctaveSweep.html">OctaveSweep</a></h4>
       <section><p>Class that describes a sweep with a number of points per octave.</p>
@@ -179,6 +168,9 @@ This class contains some helper methods for extracting data from the simulation.
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.OutputNoiseDensityExport.html">OutputNoiseDensityExport</a></h4>
       <section><p>This class can export the output noise density.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ParameterSweep.html">ParameterSweep</a></h4>
+      <section><p>A sweep of a property of an entity.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.RealCurrentExport.html">RealCurrentExport</a></h4>
       <section><p>This class can export real currents.</p>
@@ -192,55 +184,151 @@ This class contains some helper methods for extracting data from the simulation.
       <h4><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></h4>
       <section><p>A template for any simulation.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.SimulationState.html">SimulationState</a></h4>
-      <section><p>This class represents a simulation state.</p>
-</section>
       <h4><a class="xref" href="SpiceSharp.Simulations.SimulationStatistics.html">SimulationStatistics</a></h4>
       <section><p>Statistics for a <a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a>.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.Statistics.html">Statistics</a></h4>
-      <section><p>A class that can store statistics about anything.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.SIUnitDefinition.html">SIUnitDefinition</a></h4>
+      <section><p>The most straight-forward implementation of a unit: one that is directly
+derived from SI units.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.Sweep-1.html">Sweep&lt;T&gt;</a></h4>
-      <section><p>A template for a sweep.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.SolverVariable-1.html">SolverVariable&lt;T&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable&lt;T&gt;</a> that takes its value from an <a class="xref" href="SpiceSharp.Simulations.ISolverSimulationState-1.html">ISolverSimulationState&lt;T&gt;</a>.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.SweepConfiguration.html">SweepConfiguration</a></h4>
-      <section><p>A class that describes a sweep.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.SweepInstance.html">SweepInstance</a></h4>
-      <section><p>Class that implements a sweep.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.TimeConfiguration.html">TimeConfiguration</a></h4>
-      <section><p>Configuration for a <a class="xref" href="SpiceSharp.Simulations.TimeConfiguration.html">TimeConfiguration</a></p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.TimeSimulation.html">TimeSimulation</a></h4>
-      <section><p>A base class for time-domain analysis.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.TimeSimulationStatistics.html">TimeSimulationStatistics</a></h4>
-      <section><p>Statistics for a <a class="xref" href="SpiceSharp.Simulations.TimeSimulationStatistics.html">TimeSimulationStatistics</a>.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.TimeParameters.html">TimeParameters</a></h4>
+      <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.ITimeSimulation.html">ITimeSimulation</a> with all the necessary parameters to do a transient analysis.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.Transient.html">Transient</a></h4>
-      <section><p>This class implements the transient analysis.</p>
+      <section><p>A base class for time-domain analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.Units.html">Units</a></h4>
+      <section><p>This class defines some standard units.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ValidationFailedException.html">ValidationFailedException</a></h4>
+      <section><p>An exception thrown when a simulation fails its validation.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.Variable.html">Variable</a></h4>
       <section><p>A class that describes an unknown variable in a system of equations.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.VariableEventArgs.html">VariableEventArgs</a></h4>
-      <section><p>Arguments for events that pass a <a class="xref" href="SpiceSharp.Simulations.VariableEventArgs.html#SpiceSharp_Simulations_VariableEventArgs_Variable">Variable</a>.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.VariableDictionary-1.html">VariableDictionary&lt;V&gt;</a></h4>
+      <section><p>An implementation of the <a class="xref" href="SpiceSharp.Simulations.IVariableDictionary-1.html">IVariableDictionary&lt;V&gt;</a>.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.VariableSet.html">VariableSet</a></h4>
-      <section><p>Contains and manages circuit nodes.</p>
+      <h4><a class="xref" href="SpiceSharp.Simulations.VariableMap.html">VariableMap</a></h4>
+      <section><p>A default implementation for a variable map.</p>
+</section>
+    <h3 id="structs">Structs
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Simulations.JacobianInfo.html">JacobianInfo</a></h4>
+      <section><p>Information for filling in the Jacobian matrix and right-hand-side vector.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.NoisePoint.html">NoisePoint</a></h4>
+      <section><p>A system description at a data point in a <a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a> simulation.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a></h4>
+      <section><p>An interface that describes a class that can use behaviors.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral&lt;B&gt;</a></h4>
+      <section><p>Specifies that the class uses behaviors of a certain type.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a></h4>
+      <section><p>An interface describing a simulation that can calculate the biasing state of a circuit.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></h4>
+      <section><p>Simulation state for a <a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IComplexSimulationState.html">IComplexSimulationState</a></h4>
+      <section><p>A simulation state using complex numbers.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IDerivative.html">IDerivative</a></h4>
+      <section><p>Describes a state with a value and its derivative.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> that raises events.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IExport-1.html">IExport&lt;T&gt;</a></h4>
+      <section><p>An interface that describes an exporter for simulation data.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IFrequencySimulation.html">IFrequencySimulation</a></h4>
+      <section><p>An interface that describes a class that can do small-signal analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IHistory-1.html">IHistory&lt;T&gt;</a></h4>
+      <section><p>Interface describing a history of a value.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IIntegrationMethod.html">IIntegrationMethod</a></h4>
+      <section><p>An interface describing an integration method.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IIntegrationState.html">IIntegrationState</a></h4>
+      <section><p>Describes a general state with a history for a <a class="xref" href="SpiceSharp.Simulations.IIntegrationMethod.html">IIntegrationMethod</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IIterationSimulationState.html">IIterationSimulationState</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a> that tracks the current iteration mode.
+This state is used to help iterating to a solution using some tricks specific to a <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.INoiseSimulation.html">INoiseSimulation</a></h4>
+      <section><p>An interface describing a class that can do noise analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.INoiseSimulationState.html">INoiseSimulationState</a></h4>
+      <section><p>A simulation state for a <a class="xref" href="SpiceSharp.Simulations.Noise.html">Noise</a> analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.INoiseSource.html">INoiseSource</a></h4>
+      <section><p>Describes a noise source.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></h4>
+      <section><p>Interface that describes a simulation.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ISimulation-1.html">ISimulation&lt;V&gt;</a></h4>
+      <section><p>Interface that describes a simulation that outputs its solved variables.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a></h4>
+      <section><p>The state of a simulation.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ISolverSimulationState-1.html">ISolverSimulationState&lt;T&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a> that describes a simulation state that uses a solver for modified nodal analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a></h4>
+      <section><p>An interface describing a class that can contain states.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful&lt;S&gt;</a></h4>
+      <section><p>Contract for a class that uses an <a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ISweep.html">ISweep</a></h4>
+      <section><p>An interface that describes a sweep of simulation properties.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulation.html">ITemperatureSimulation</a></h4>
+      <section><p>A class that can calculate temperature-dependent effects.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulationState.html">ITemperatureSimulationState</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a> for tracking temperature.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ITimeSimulation.html">ITimeSimulation</a></h4>
+      <section><p>An interface that describes a class that can do transient analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.ITimeSimulationState.html">ITimeSimulationState</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.Simulations.ISimulationState.html">ISimulationState</a> for a <a class="xref" href="SpiceSharp.Simulations.Transient.html">Transient</a> analysis.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IVariable.html">IVariable</a></h4>
+      <section><p>Describes an unknown variable that will be solved by a simulation.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable&lt;T&gt;</a></h4>
+      <section><p>Describes an <a class="xref" href="SpiceSharp.Simulations.IVariable.html">IVariable</a> that also returns its value.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IVariableDictionary-1.html">IVariableDictionary&lt;V&gt;</a></h4>
+      <section><p>A template for a dictionary of strongly typed variables.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IVariableFactory-1.html">IVariableFactory&lt;V&gt;</a></h4>
+      <section><p>A template for a variable factory.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IVariableMap.html">IVariableMap</a></h4>
+      <section><p>A template for mapping a variable to indices.</p>
 </section>
     <h3 id="enums">Enums
   </h3>
-      <h4><a class="xref" href="SpiceSharp.Simulations.InitializationModes.html">InitializationModes</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.IterationModes.html">IterationModes</a></h4>
       <section><p>Possible modes for initialization of behaviors.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.Simulation.Statuses.html">Simulation.Statuses</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.SimulationStatus.html">SimulationStatus</a></h4>
       <section><p>Possible statuses for a simulation.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.VariableType.html">VariableType</a></h4>
-      <section><p>Enumeration of variable types.</p>
 </section>
 </article>
           </div>

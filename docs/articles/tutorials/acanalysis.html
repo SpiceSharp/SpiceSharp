@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>AC analysis </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="AC analysis ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="ac-analysis">AC analysis</h1>
+
+<p>An AC analysis allows you to find the behavior of a circuit for small signals. The simulation will first determine the operating point, after which small sinusoidal perturbations are applied on top of the calculated biasing conditions. Each voltage, current or other simulated quantity will then vary along with the perturbation and will have its own amplitude and phase shift that is represented by a single complex number. This is useful when characterizing a filter, or when analyzing stability of systems that have feedback.</p>
+<p>By assuming that the perturbations are small and sinusoidal, the circuit can be linearized which makes this type of simulation relatively fast. The result is a <em>Complex</em> number, which contains the amplitude and phase information.</p>
+<p>Consider the following circuit:</p>
+<p align="center"><img src="images/example_AC.svg"></p>
+
+<p>To simulate this, we can write</p>
+<pre><code class="lang-csharp" name="Circuit">// Build the circuit
+var ckt = new Circuit(
+    new VoltageSource(&quot;V1&quot;, &quot;in&quot;, &quot;0&quot;, 0.0)
+        .SetParameter(&quot;acmag&quot;, 1.0),
+    new Resistor(&quot;R1&quot;, &quot;in&quot;, &quot;out&quot;, 10.0e3),
+    new Capacitor(&quot;C1&quot;, &quot;out&quot;, &quot;0&quot;, 1e-6)
+    );
+
+// Create the simulation
+var ac = new AC(&quot;AC 1&quot;, new DecadeSweep(1e-2, 1.0e3, 5));
+
+// Make the export
+var exportVoltage = new ComplexVoltageExport(ac, &quot;out&quot;);
+
+// Simulate
+ac.ExportSimulationData += (sender, args) =&gt;
+{
+    var output = exportVoltage.Value;
+    var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
+};
+ac.Run(ckt);
+</code></pre><p>The independent voltage source <code>V1</code> will be the one applying the small sinusoidal perturbation, and it will give that perturbation a weight/amplitude of 1. The amplitude and phase of the excitation can be set by using the <em>acmag</em> and <em>acphase</em> parameters of the <strong><a class="xref" href="../../api/SpiceSharp.Components.VoltageSource.html">VoltageSource</a></strong> instance. Current sources can also be set to perturb the system using the same kind of parameters.</p>
+<p>The frequency points that are simulated in our example range from 10mHz to 1kHz, simulating 5 points per decade, logarithmically spaced.</p>
+<p>This is effectively the same as using the following netlist in other Spice simulators:</p>
+<pre><code>AC example
+
+V1 in 0 0 AC 1
+R1 in out 10k
+C1 out 0 1u
+
+.AC dec 5 10m 1k
+
+* Export voltages/currents/etc.
+
+.END
+</code></pre><p>Plotting the output amplitude in decibels gives the following low-pass filter characteristic, neatly showing the bandwidth to be a bit higher than 10Hz (the exact (f_{-3dB} = 15.915Hz)).</p>
+<p align="center"><img src="images/example_ACgraph.svg"></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

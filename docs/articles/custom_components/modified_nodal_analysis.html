@@ -8,7 +8,7 @@
     <title>Modified Nodal Analysis </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Modified Nodal Analysis ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -77,94 +78,93 @@
 <p>This circuit contains two types of elements:</p>
 <ul>
 <li><em>Current sources</em> do not care about the voltage across them and will always drive the specified current.</li>
-<li><em>Resistors</em> obey Ohm&#39;s law, such that:</li>
+<li><em>Resistors</em> obey Ohm&#39;s law, such that (v_R = R\cdot i_R).</li>
 </ul>
-<p align="center"><a href="https://www.codecogs.com/eqnedit.php?latex=v_R&space;=&space;R\cdot&space;i_R"><img src="https://latex.codecogs.com/svg.latex?v_R&space;=&space;R\cdot&space;i_R"></a></p>
-
 <p><em>Kirchoff&#39;s Current Law</em> states that the <em>sum</em> of all <em>currents</em> in every <em>node</em> has to equal <em>zero</em>. In this circuit, we have 3 nodes, and so we get a system of 3 equations:</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\left\{\begin{matrix}&space;&&space;-1A&space;&plus;&space;\frac{v_1&space;-&space;v_2}{5\Omega}&space;=&space;0&space;\\&space;&&space;\frac{v_2&space;-&space;v_1}{5\Omega}&space;&plus;&space;\frac{v_2}{10\Omega}&space;&plus;&space;\frac{v_2&space;-&space;v_3}{7\Omega}&space;=&space;0&space;\\&space;&&space;\frac{v_3&space;-&space;v_2}{7\Omega}&space;-&space;1.5A&space;=&space;0&space;\end{matrix}\right."></p>
-
+<p>$$\left{\begin{matrix} &amp; -1A + \frac{v_1 - v_2}{5\Omega} = 0 \ &amp; \frac{v_2 - v_1}{5\Omega} + \frac{v_2}{10\Omega} + \frac{v_2 - v_3}{7\Omega} = 0 \ &amp; \frac{v_3 - v_2}{7\Omega} - 1.5A = 0 \end{matrix}\right.$$</p>
 <p>This can conveniently be written in matrix formulation as well:</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{pmatrix}&space;\frac{1}{5\Omega}&space;&&space;-\frac{1}{5\Omega}&space;&&space;0&space;\\&space;-\frac{1}{5\Omega}&space;&&space;\frac{1}{5\Omega}&plus;\frac{1}{7\Omega}&plus;\frac{1}{10\Omega}&space;&&space;-\frac{1}{7\Omega}&space;\\&space;0&space;&&space;-\frac{1}{7\Omega}&space;&&space;\frac{1}{7\Omega}&space;\end{pmatrix}&space;\begin{pmatrix}&space;v_1&space;\\&space;v_2&space;\\&space;v_3&space;\end{pmatrix}&space;=&space;\begin{pmatrix}&space;1A&space;\\&space;0&space;\\&space;1.5A&space;\end{pmatrix}"></p>
-
-<p>The 3x3 matrix on the left is called the <em>admittance matrix</em>, while the vector on the right is the current vector. Pretty much <em>all</em> circuit simulation software will formulate a problem in terms of a <em>matrix</em> and a <em>vector</em>, for which the simulator will then solve <img src="https://latex.codecogs.com/svg.latex?%5Cpmb%20G%5Ccdot%20%5Cpmb%20v%20%3D%20%5Cpmb%20i" alt="G*v=i">.</p>
+<p>$$\begin{pmatrix}
+  \frac{1}{5\Omega} &amp; -\frac{1}{5\Omega} &amp; 0 \
+  -\frac{1}{5\Omega} &amp; \frac{1}{5\Omega}+\frac{1}{7\Omega}+\frac{1}{10\Omega} &amp; -\frac{1}{7\Omega} \
+  0 &amp; -\frac{1}{7\Omega} &amp; \frac{1}{7\Omega}
+\end{pmatrix}
+\begin{pmatrix}
+  v_1 \
+  v_2 \
+  v_3
+\end{pmatrix} = 
+\begin{pmatrix}
+  1A \
+  0 \
+  1.5A
+\end{pmatrix}$$</p>
+<p>The 3x3 matrix on the left is called the <em>admittance matrix</em>, while the vector on the right is the current vector. Pretty much <em>all</em> circuit simulation software will formulate a problem in terms of a <em>matrix</em> and a <em>vector</em>, for which the simulator will then solve (G\cdot v = i).</p>
 <h2 id="modified-nodal-analysis-1">Modified Nodal Analysis</h2>
 <p>What happens if we introduce a <em>voltage source</em> into the circuit?</p>
 <p align="center"><img src="images/example_circuit_mna_2.svg" alt="Example circuit"></p>
 
-<p>We can&#39;t use the KCL equation now, because it is in the nature of a voltage source to <em>not care</em> about currents! This is where we get creative. We define a new unknown variable, the current through the voltage source <img src="https://latex.codecogs.com/svg.latex?\inline&space;i_V" alt="i_V">. We also add the equation of the voltage source to the system of equations:</p>
-<p align="center"><a href="https://www.codecogs.com/eqnedit.php?latex=v_1&space;=&space;1V"><img src="https://latex.codecogs.com/svg.latex?v_1&space;=&space;1V"></a></p>
-
+<p>We can&#39;t use the KCL equation now, because it is in the nature of a voltage source to <em>not care</em> about currents! This is where we get creative. We define a new unknown variable, the current through the voltage source (i_V). We also add the equation of the voltage source to the system of equations:</p>
+<p>$$v_1 = 1V$$</p>
 <p>And what we find is the useful result: we can combine it all using a matrix and vector again!</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{pmatrix}&space;\frac{1}{5\Omega}&space;&&space;-\frac{1}{5\Omega}&space;&&space;0&space;&&space;1&space;\\&space;-\frac{1}{5\Omega}&space;&&space;\frac{1}{5\Omega}&space;&plus;&space;\frac{1}{10\Omega}&space;&plus;&space;\frac{1}{7\Omega}&space;&&space;-\frac{1}{7\Omega}&space;&&space;0&space;\\&space;0&space;&&space;-\frac{1}{7\Omega}&space;&&space;\frac{1}{7\Omega}&space;&&space;0&space;\\&space;1&space;&&space;0&space;&&space;0&space;&&space;0&space;\end{pmatrix}&space;\begin{pmatrix}&space;v_1&space;\\&space;v_2&space;\\&space;v_3&space;\\&space;i_V&space;\end{pmatrix}&space;=&space;\begin{pmatrix}&space;0&space;\\&space;0&space;\\&space;1.5A&space;\\&space;1V&space;\end{pmatrix}"></p>
-
-<p>We notice the following properties:</p>
+<p>$$\begin{pmatrix}
+  \frac{1}{5\Omega} &amp; -\frac{1}{5\Omega} &amp; 0 &amp; 1 \
+  -\frac{1}{5\Omega} &amp; \frac{1}{5\Omega} + \frac{1}{10\Omega} + \frac{1}{7\Omega} &amp; -\frac{1}{7\Omega} &amp; 0 \
+  0 &amp; -\frac{1}{7\Omega} &amp; \frac{1}{7\Omega} &amp; 0 \
+  1 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+\begin{pmatrix} 
+  v_1 \
+  v_2 \
+  v_3 \
+  i_V
+\end{pmatrix} = 
+\begin{pmatrix}
+  0 \
+  0 \
+  1.5A \
+  1V
+\end{pmatrix}$$</p>
+<p>We notice the following:</p>
 <ul>
-<li>We added an unknown <em>current</em>. For <em>regular</em> Nodal Analysis, the unknowns are <em>always a voltage</em>.</li>
-<li>The circuit got <em>larger</em> because we added a voltage source. While this may not be desirable when working it out by hand, a simulator will rarely feel the difference.</li>
-<li>Each component of the circuit has its own unique contribution to the admittance matrix and current vector. This is a direct consequence of KCL that says that the <strong>sum</strong> of currents needs to total to 0. In fact, the resistors only affect the elements to which they are connected to - ie. the nodes where they add or subtract current. For example, the 5 ohm resistor only affects the rows and columns of <img src="https://www.codecogs.com/svg.latex?\inline&space;v_1" alt="v_1"> and <img src="https://www.codecogs.com/svg.latex?\inline&space;v_2" alt="v_2">. This turns out to be an important general property! A Spice simulator will give the matrix and vector to each component, and the component will <em>stamp</em> the matrix and vector with contributions that depend <em>only</em> on that component!</li>
+<li>We added an unknown <em>current</em>. For <em>regular</em> Nodal Analysis, the unknowns were always a <em>voltage</em>.</li>
+<li>The circuit got <em>larger</em> because we added a voltage source. While this may not be desirable when working out the equations by hand, a simulator will not really feel the difference.</li>
+<li>Each component in the circuit has its own unique contribution to the admittance matrix and current vector. This is a direct consequence of KCL that says that the <strong>sum</strong> of currents needs to total to 0. In fact, the resistors only affect the elements to which they are connected to - ie. the nodes where they push in or take away current. For example, the 5 ohm resistor only affects the rows and columns of (v_1) and (v_2). This turns out to be an important general property! A Spice simulator will give the matrix and vector to each component, and the component will <em>stamp</em> the matrix and vector with contributions that depend <em>only</em> on that component!</li>
 </ul>
 <h2 id="nonlinear-components">Nonlinear components</h2>
 <p>The electronics world is littered with so-called nonlinear components. These are components where the currents and voltages do not relate <em>linearly</em>, but are often connected in complex ways.</p>
-<p>A resistor is a <em>linear</em> component, because the current and voltage are connected via Ohm&#39;s law: ![v = R*i](https://latex.codecogs.com/svg.latex?\inline&space;v=R\cdot i). However, a diode is a <em>non-linear</em> component, because the diode current depends on the diode voltage following the equation <img src="https://latex.codecogs.com/svg.latex?\inline&space;i=I_{ss}\left(e^{\frac{qV}{nkT}}-1\right)" alt="i = I_s(e^{qV/nkT}-1)">.</p>
+<p>A resistor is a <em>linear</em> component, because the current and voltage are connected via Ohm&#39;s law: (v = R\cdot i). However, a diode is a <em>non-linear</em> component, because the diode current depends on the diode voltage following the equation (i = I_{ss}(e^{qV/\eta kT} - 1)).</p>
 <p>In order to solve a circuit with nonlinear components, we have to resort to <em>iterative</em> algorithms. Spice-based simulators almost exclusively use the <strong>Newton-Raphson</strong> algorithm. This algorithm tries to solve, generally speaking, the following problem:</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\left\{&space;\begin{matrix}&space;f_1(x_1,&space;x_2,&space;...,&space;x_n)&space;&&space;=&space;0&space;\\&space;\vdots&space;&&space;=&space;0&space;\\&space;f_n(x_1,&space;x_2,&space;...,&space;x_n)&space;&&space;=&space;0&space;\end{matrix}\right.&space;\&space;\text{or}\&space;\pmb&space;F(\pmb&space;X)&space;=&space;0"></p>
-
-<p>For this problem, the functions <img src="https://latex.codecogs.com/svg.latex?\inline&space;f_1%2C%20f_2%2C%20...%2C%20f_n" alt="f_1, f_2, ..., f_n"> do <em>not</em> have to be linear! The algorithm then shows that, starting from an initial vector <img src="https://latex.codecogs.com/svg.latex?\inline&space;%5Cpmb%20x%5E%7B%280%29%7D" alt="x^(0)">, a <em>new</em> vector, <img src="https://latex.codecogs.com/svg.latex?\inline&space;%5Cpmb%20x%5E%7B%281%29%7D" alt="x^(1)"> can be approximated that is <em>closer</em> to the real solution. The new solution <img src="https://latex.codecogs.com/svg.latex?\inline&space;%5Cpmb%20x%5E%7B%281%29%7D" alt="x^(1)"> can be found by solving the following set of equations.</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\pmb&space;J(\pmb&space;x^{(0)})\cdot\Delta\pmb&space;x^{(1)}=\pmb&space;F(\pmb&space;x^{(0)})&space;\Rightarrow&space;\pmb&space;x^{(1)}&space;=&space;\pmb&space;x^{(0)}&plus;\Delta\pmb&space;x^{(1)}"></p>
-
-<p>Where <img src="https://latex.codecogs.com/svg.latex?\inline&space;%5Cpmb%20J%28%5Cpmb%20x%5E%7B%280%29%7D%29" alt="J(x^(0))"> is called the <em>Jacobian</em>, which is</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\pmb&space;J(\pmb&space;x)&space;=&space;\begin{pmatrix}&space;\frac{\partial&space;f_1}{\partial&space;x_1}&space;&&space;\hdots&space;&&space;\frac{\partial&space;f_1}{x_n}&space;\\&space;\hdots&space;&&space;\ddots&space;&&space;\hdots&space;\\&space;\frac{\partial&space;f_n}{\partial&space;x_1}&space;&&space;\hdots&space;&&space;\frac{\partial&space;f_n}{x_n}&space;\end{pmatrix}"></p>
-
-<p>We can repeat the process using <img src="https://latex.codecogs.com/svg.latex?\inline&space;\pmb&space;x^{(1)}" alt="x^(1)"> as a starting solution, to get even <em>closer</em> to the real position. As we repeat this algorithm, the solution will <em>converge</em> to the real solution. Once our solution is almost indistinguishably close to the real solution, we accept it as our final solution.</p>
+<p>$$\left{
+  \begin{matrix}
+    f_1(x_1, x_2, ..., x_n) &amp; = 0 \
+    \vdots &amp; = 0 \
+    f_n(x_1, x_2, ..., x_n) &amp; = 0
+  \end{matrix}\right. \ \text{or}\ 
+  \pmb F(\pmb X) = 0$$</p>
+<p>The notations in bold have multiple elements.</p>
+<p>For this problem, the functions (f_1, f_2, ..., f_n) do <em>not</em> have to be linear! The algorithm then shows that, starting from an initial vector (\pmb x^{(0)}), a <em>new</em> vector, (\pmb x^{(1)}) can be approximated that is <em>closer</em> to the real solution. The new solution (x^{(1)}) can be found by solving the following set of equations.</p>
+<p>$$\pmb J(\pmb x^{(0)})\cdot\Delta\pmb x^{(1)}=\pmb F(\pmb x^{(0)}) \Rightarrow \pmb x^{(1)} = \pmb x^{(0)}+\Delta\pmb x^{(1)}$$</p>
+<p>Where (J(x^{(0)})) is called the <em>Jacobian</em>, which is</p>
+<p>$$\pmb J(\pmb x) = 
+\begin{pmatrix} 
+  \frac{\partial f_1}{\partial x_1} &amp; \frac{\partial f_1}{\partial x_2} &amp; \dots &amp; \frac{\partial f_1}{x_n} \
+  \frac{\partial f_2}{\partial x_1} &amp; \frac{\partial f_2}{\partial x_2} &amp; \dots &amp; \frac{\partial f_2}{x_n} \
+  \vdots &amp; \vdots &amp; \ddots &amp; \vdots \
+  \frac{\partial f_n}{\partial x_1} &amp; \frac{\partial f_n}{\partial x_2} &amp; \dots &amp; \frac{\partial f_n}{x_n}
+\end{pmatrix}$$</p>
+<p>We can repeat the process using (\pmb x^{(1)}) as a starting solution, to get even <em>closer</em> to the real position. As we repeat this algorithm, the solution will <em>converge</em> to the real solution. Once our solution is almost indistinguishably close to the real solution, we accept it as our final solution.</p>
 <p>One more thing to note is that Spice will modify the algorithm a tiny bit.</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;\pmb&space;J(\pmb&space;x^{(0)})\cdot\Delta\pmb&space;x^{(k+1)}&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;\\&space;&\Downarrow&space;\\&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot\left(\pmb&space;x^{(k+1)}-\pmb&space;x^{(k)}\right)&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;\\&space;&&space;\Downarrow&space;\\&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot&space;\pmb&space;x^{(k+1)}&space;&=&space;\pmb&space;F(\pmb&space;x^{(k)})&space;-&space;\pmb&space;J(\pmb&space;x^{(k)})\cdot\pmb&space;x^{(k)}&space;\end{align*}"></p>
-
+<p>$$
+\begin{aligned}
+\pmb J(\pmb x^{(0)})\cdot\Delta\pmb x^{(k+1)} &amp;= \pmb F(\pmb x^{(k)}) \
+&amp; \Downarrow \
+\pmb J(\pmb x^{(k)})\cdot\left(\pmb x^{(k+1)}-\pmb x^{(k)}\right) &amp;= \pmb F(\pmb x^{(k)}) \
+&amp; \Downarrow \
+\pmb J(\pmb x^{(k)})\cdot \pmb x^{(k+1)} &amp;= \pmb F(\pmb x^{(k)}) - \pmb J(\pmb x^{(k)})\cdot\pmb x^{(k)}
+\end{aligned}$$</p>
 <p>The <em>Jacobian</em> is from here on out called the <em>Y-matrix</em>. Everything on the right of the equation is called the <em>Right-Hand Side vector</em> (RHS vector). This formulation allows us to immediately calculate the <em>next</em> solution rather than the increment to find the next solution.</p>
 <h2 id="how-spice-does-it">How Spice# does it</h2>
-<p>Spice# will give each behavior the chance to:</p>
-<ul>
-<li>allocate elements in the Y-matrix and RHS-vector during binding (in the method <em><a class="xref" href="../../api/SpiceSharp.Behaviors.IBehavior.html#SpiceSharp_Behaviors_IBehavior_Bind_SpiceSharp_Simulations_Simulation_SpiceSharp_Behaviors_BindingContext_">Bind</a></em>). To optimize performance and memory, the behavior should try not allocate more elements than needed.</li>
-<li>add contributions to the allocated elements when computing a new iteration. This is called <em>loading</em> the Y-matrix and RHS-vector. After all components have loaded the matrix and vector, the simulator will solve the system of equations to find the solution for this iteration.</li>
-</ul>
-<h3 id="example-resistors">Example: Resistors</h3>
-<p>As discussed in the first section, a resistor follows Ohm&#39;s law. Let us assume that the resistor is connected between two nodes A and B.</p>
-<p align="center"><img src="images/example_circuit_mna_res.svg" width="100px" alt="Resistor definition"></p>
-
-<p>Then Ohm&#39;s law dictates that</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\frac{v_A-v_B}{R}=i_R"></p>
-
-<p>The resistor current <img src="https://latex.codecogs.com/svg.latex?\inline&space;i_R" alt="i_R"> will flow <em>out</em> of node A, and <em>into</em> node B, so we have contributions to row A and row B:</p>
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;f_A(...,v_A,...,v_B,...)=&plus;i_R&space;&=&&space;\frac{1}{R}v_A&space;&-\frac{1}{R}v_B\\&space;f_B(...,v_A,...,v_B,...)=-i_R&space;&=&&space;-\frac{1}{R}v_A&space;&&plus;\frac{1}{R}v_B&space;\end{align*}"></p>
-
-<p>Now we can compute the contributions to the <em>Y-matrix</em>:</p>
-<p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;Y_{A,A}&=\frac{\partial&space;f_A}{\partial&space;v_A}=\frac{1}{R}\\&space;Y_{A,B}&=\frac{\partial&space;f_A}{\partial&space;v_B}=-\frac{1}{R}\\&space;Y_{B,A}&=\frac{\partial&space;f_B}{\partial&space;v_A}=-\frac{1}{R}\\&space;Y_{B,B}&=\frac{\partial&space;f_B}{\partial&space;v_B}=\frac{1}{R}&space;\end{align*}"></p>
-<p>All other <em>Y-matrix</em> contributions are 0. Similarly, we calculate the contributions to the <em>RHS vector</em>:</p>
-<p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;RHS_A&=f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_A\pmb&space;x^{(k)}\\&space;&=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right&space;)\\&space;&=0\\&space;RHS_B&=f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_B\pmb&space;x^{(k)}\\&space;&=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right&space;)\\&space;&=0&space;\end{align*}"></p>
-<p>The first and second terms for the RHS vector cancel each other out. This turns out to be a <em>general property of linear components</em>. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need <em>one</em> iteration to find the right solution <em>if we only have linear components</em>. Once a nonlinear component is introduced, a single iteration will not be sufficient anymore.</p>
-<p>To summarize:</p>
-<ul>
-<li>During binding, the <em>Resistor</em> biasing behavior will allocate 4 matrix elements: <img src="https://latex.codecogs.com/svg.latex?\inline&space;Y_{A,A},Y_{A,B},Y_{B,A},Y_{B,B}" alt="matrix elements">. It does not need RHS vector elements because they are always 0.</li>
-<li><p>During execution, the <em>Resistor</em> biasing behavior will add values to the following elements:</p>
-<p><img src="https://latex.codecogs.com/svg.latex?%5Cbegin%7Balign*%7D%20Y_%7BA%2CA%7D%26%5Cmathrel%7B&plus;%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BA%2CB%7D%26%5Cmathrel%7B-%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BB%2CA%7D%26%5Cmathrel%7B-%7D%3D%5Cfrac%7B1%7D%7BR%7D%5C%5C%20Y_%7BB%2CB%7D%26%5Cmathrel%7B&plus;%7D%3D%5Cfrac%7B1%7D%7BR%7D%20%5Cend%7Balign*%7D" alt="Contributions"></p>
-</li>
-<li><p>The simulator will give all other components in the circuit a chance to load the matrix with its contributions.</p>
-</li>
-</ul>
-<h3 id="example-diodes">Example: Diodes</h3>
-<p>A diode is an example of a <em>nonlinear</em> component. When connected between two nodes A and B, we can use the <a href="https://en.wikipedia.org/wiki/Diode_modelling">Shockley diode model</a> to model the voltage-current relationship.</p>
-<p align="center"><img src="images/example_circuit_mna_dio.svg" alt="Diode definition" width="100px"></p>
-
-<p align="center"><img src="https://latex.codecogs.com/svg.latex?i_D=I_S\left(e^{\frac{v_A-v_B}{nV_T}}-1\right)"></p>
-
-<p>The diode current flows <em>out</em> of node A, and <em>into</em> node B, so we have contributions to <em>two</em> current equations.</p>
-<p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;f_A(...,v_A,...,v_B,...)&=&plus;i_D=I_S\left(e^{\frac{v_A-v_B}{nV_T}}-1\right)\\&space;f_B(...,v_A,...,v_B,...)&=-i_D=-I_S\left(e^{\frac{v_A-v_B}{nV-T}}-1)\right)&space;\end{align*}"></p>
-<p>From this we can calculate the contributions to the <em>Y-matrix</em>. Since the current equation contributions only depend on nodes A and B, we only get contributions to four elements.</p>
-<p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;Y_{A,A}&=\left.\frac{\partial&space;f_A}{\partial&space;v_A}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}}&=&&plus;g_D\\&space;Y_{A,B}&=\left.\frac{\partial&space;f_A}{\partial&space;v_B}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}}&=&-g_D\\&space;Y_{B,A}&=\left.\frac{\partial&space;f_B}{\partial&space;v_A}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}}&space;&=&-g_D\\&space;Y_{B,B}&=\left.\frac{\partial&space;f_B}{\partial&space;v_B}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}}&=&&plus;g_D&space;\end{align*}"></p>
-<p>We then calculate the contributions to the <em>RHS-vector</em>:</p>
-<p><img src="https://latex.codecogs.com/svg.latex?\begin{align*}&space;RHS_A&=&space;f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_A\pmb&space;x^{(k)}\\&space;&=&space;I_S\left(e^\frac{v_A-v_B}{nV_T}-1\right)-g_D(v_A-v_B)\\&space;&=&space;&plus;c_D\\&space;RHS_B&=&space;f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb&space;J_B\pmb&space;x^{(k)}\\&space;&=&space;-\left(I_S\left(e^\frac{v_A-v_B}{nV_T}-1\right)-g_D(v_A-v_B)\right)\\&space;&=&space;-c_D&space;\end{align*}"></p>
-<p>We note that this time the <em>RHS-vector</em> contributions are <em>not</em> 0 for the current equations. This is again typical for <em>nonlinear</em> components. The solution will need to be found in multiple iterations.</p>
-<div class="pull-left"><a href="custom_models.html">Previous: Custom Models</a></div> <div class="pull-right"><a href="base_behaviors.html">Next: Base Behaviors</a></div>
+<p>Spice# will give each behavior the chance to add contributions to the allocated elements when computing a new iteration. This is called <em>loading</em> the Y-matrix and RHS-vector. After all components have loaded the matrix and vector, the simulator will solve the system of equations to find the solution for this iteration.</p>
 </article>
           </div>
           

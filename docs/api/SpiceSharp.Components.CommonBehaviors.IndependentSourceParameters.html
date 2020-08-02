@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class IndependentSourceParameters
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,36 +74,55 @@
   
   <h1 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters" class="text-break">Class IndependentSourceParameters
   </h1>
-  <div class="markdown level0 summary"><p>Base parameters for an independent source.</p>
+  <div class="markdown level0 summary"><p>Parameters that are common to an independent source.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
     <div class="level2"><span class="xref">IndependentSourceParameters</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet</a>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet</a>&lt;<span class="xref">System.Double</span>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet</a>&lt;<a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet</a>&lt;<a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
-    <div><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable</a>&lt;<a class="xref" href="SpiceSharp.ParameterSet.html">ParameterSet</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_CalculateDefaults">ParameterSet.CalculateDefaults()</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_Clone">ParameterSet.Clone()</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_CopyFrom_SpiceSharp_ParameterSet_">ParameterSet.CopyFrom(ParameterSet)</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.ParameterSet.html#SpiceSharp_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SetParameter__1_System_String___0_">ParameterSet.SetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TrySetParameter__1_System_String___0_">ParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_GetProperty__1_System_String_">ParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TryGetProperty__1_System_String___0__">ParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreateParameterSetter__1_System_String_">ParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreatePropertyGetter__1_System_String_">ParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -130,75 +150,75 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class IndependentSourceParameters : ParameterSet, ICloneable, ICloneable&lt;ParameterSet&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">[GeneratedParameters(AddNames = true, AddRules = false)]
+public class IndependentSourceParameters : ParameterSet, IImportParameterSet&lt;double&gt;, IExportPropertySet&lt;double&gt;, IImportParameterSet&lt;IWaveformDescription&gt;, IExportPropertySet&lt;IWaveformDescription&gt;, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters__ctor_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.#ctor*"></a>
   <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters__ctor" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.#ctor">IndependentSourceParameters()</h4>
-  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.html">IndependentSourceParameters</a> class.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public IndependentSourceParameters()</code></pre>
   </div>
-  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters__ctor_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters__ctor_SpiceSharp_Components_Waveform_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.#ctor(SpiceSharp.Components.Waveform)">IndependentSourceParameters(Waveform)</h4>
-  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.html">IndependentSourceParameters</a> class.</p>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_AcMagnitude_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.AcMagnitude*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_AcMagnitude" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.AcMagnitude">AcMagnitude</h4>
+  <div class="markdown level1 summary"><p>Small-signal magnitude.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IndependentSourceParameters(Waveform waveform)</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;acmag&quot;)]
+[ParameterInfo(&quot;AC magnitude value&quot;)]
+public double AcMagnitude { get; set; }</code></pre>
   </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></td>
-        <td><span class="parametername">waveform</span></td>
-        <td><p>Waveform</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters__ctor_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters__ctor_System_Double_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.#ctor(System.Double)">IndependentSourceParameters(Double)</h4>
-  <div class="markdown level1 summary"><p>Creates a new instance of the <a class="xref" href="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.html">IndependentSourceParameters</a> class.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IndependentSourceParameters(double dc)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span></td>
-        <td><span class="parametername">dc</span></td>
-        <td><p>DC value</p>
+        <td><p>The small-signal magnitude.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h3 id="properties">Properties
-  </h3>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_AcPhase_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.AcPhase*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_AcPhase" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.AcPhase">AcPhase</h4>
+  <div class="markdown level1 summary"><p>Small-signal phase.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;acphase&quot;)]
+[ParameterInfo(&quot;AC phase value&quot;)]
+public double AcPhase { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The small-signal phase.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_DcValue_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.DcValue*"></a>
   <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_DcValue" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.DcValue">DcValue</h4>
   <div class="markdown level1 summary"><p>The DC value of the source.</p>
@@ -208,7 +228,7 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;dc&quot;)]
 [ParameterInfo(&quot;D.C. source value&quot;)]
-public GivenParameter&lt;double&gt; DcValue { get; }</code></pre>
+public GivenParameter&lt;double&gt; DcValue { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -221,20 +241,19 @@ public GivenParameter&lt;double&gt; DcValue { get; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><p>The DC value.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_Waveform_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.Waveform*"></a>
-  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_Waveform" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.Waveform">Waveform</h4>
-  <div class="markdown level1 summary"><p>The time-dependent waveform of the source.</p>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_Phasor_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.Phasor*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_Phasor" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.Phasor">Phasor</h4>
+  <div class="markdown level1 summary"><p>Gets the phasor represented by the amplitude and phase.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;waveform&quot;)]
-[ParameterInfo(&quot;The waveform object for this source&quot;)]
-public Waveform Waveform { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public Complex Phasor { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -246,66 +265,857 @@ public Waveform Waveform { get; set; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></td>
+        <td><span class="xref">System.Numerics.Complex</span></td>
+        <td><p>The complex phasor.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_Waveform_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.Waveform*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_Waveform" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.Waveform">Waveform</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the waveform description.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;waveform&quot;)]
+[ParameterInfo(&quot;The waveform&quot;)]
+public IWaveformDescription Waveform { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></td>
+        <td><p>The waveform description.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SetAc_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SetAc*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SetAc_System_Double___" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SetAc(System.Double[])">SetAc(Double[])</h4>
+  <div class="markdown level1 summary"><p>Sets the small-signal parameters of the source.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;ac&quot;)]
+[ParameterInfo(&quot;A.C. magnitude, phase vector&quot;)]
+public void SetAc(double[] ac)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span>[]</td>
+        <td><span class="parametername">ac</span></td>
+        <td><p>Parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">ac</code> does not have 0-2 arguments.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_UpdatePhasor_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.UpdatePhasor*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_UpdatePhasor" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.UpdatePhasor">UpdatePhasor()</h4>
+  <div class="markdown level1 summary"><p>Updates the phasor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void UpdatePhasor()</code></pre>
+  </div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_SpiceSharp_Components_IWaveformDescription__CreatePropertyGetter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{SpiceSharp#Components#IWaveformDescription}#CreatePropertyGetter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_SpiceSharp_Components_IWaveformDescription__CreatePropertyGetter_System_String_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{SpiceSharp#Components#IWaveformDescription}#CreatePropertyGetter(System.String)">IExportPropertySet&lt;IWaveformDescription&gt;.CreatePropertyGetter(String)</h4>
+  <div class="markdown level1 summary"><p>Creates a getter for a parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Func&lt;IWaveformDescription&gt; IExportPropertySet&lt;IWaveformDescription&gt;.CreatePropertyGetter(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>&gt;</td>
+        <td><p>A getter for the parameter value if it exists; otherwise <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_SpiceSharp_Components_IWaveformDescription__GetProperty_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{SpiceSharp#Components#IWaveformDescription}#GetProperty*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_SpiceSharp_Components_IWaveformDescription__GetProperty_System_String_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{SpiceSharp#Components#IWaveformDescription}#GetProperty(System.String)">IExportPropertySet&lt;IWaveformDescription&gt;.GetProperty(String)</h4>
+  <div class="markdown level1 summary"><p>Gets the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IWaveformDescription IExportPropertySet&lt;IWaveformDescription&gt;.GetProperty(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Diagnostics.ParameterNotFoundException.html">ParameterNotFoundException</a></td>
+        <td><p>Thrown if the property could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_SpiceSharp_Components_IWaveformDescription__TryGetProperty_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{SpiceSharp#Components#IWaveformDescription}#TryGetProperty*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_SpiceSharp_Components_IWaveformDescription__TryGetProperty_System_String_System_Boolean__" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{SpiceSharp#Components#IWaveformDescription}#TryGetProperty(System.String,System.Boolean@)">IExportPropertySet&lt;IWaveformDescription&gt;.TryGetProperty(String, out Boolean)</h4>
+  <div class="markdown level1 summary"><p>Tries to get the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IWaveformDescription IExportPropertySet&lt;IWaveformDescription&gt;.TryGetProperty(string name, out bool isValid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isValid</span></td>
+        <td><p>If <code>true</code>, the property was found and the returned value is valid.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></td>
+        <td><p><code>true</code> if the parameter was found; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_System_Double__CreatePropertyGetter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{System#Double}#CreatePropertyGetter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_System_Double__CreatePropertyGetter_System_String_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{System#Double}#CreatePropertyGetter(System.String)">IExportPropertySet&lt;Double&gt;.CreatePropertyGetter(String)</h4>
+  <div class="markdown level1 summary"><p>Creates a getter for a parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Func&lt;double&gt; IExportPropertySet&lt;double&gt;.CreatePropertyGetter(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>A getter for the parameter value if it exists; otherwise <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_System_Double__GetProperty_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{System#Double}#GetProperty*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_System_Double__GetProperty_System_String_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{System#Double}#GetProperty(System.String)">IExportPropertySet&lt;Double&gt;.GetProperty(String)</h4>
+  <div class="markdown level1 summary"><p>Gets the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double IExportPropertySet&lt;double&gt;.GetProperty(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Diagnostics.ParameterNotFoundException.html">ParameterNotFoundException</a></td>
+        <td><p>Thrown if the property could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_System_Double__TryGetProperty_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{System#Double}#TryGetProperty*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IExportPropertySet_System_Double__TryGetProperty_System_String_System_Boolean__" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IExportPropertySet{System#Double}#TryGetProperty(System.String,System.Boolean@)">IExportPropertySet&lt;Double&gt;.TryGetProperty(String, out Boolean)</h4>
+  <div class="markdown level1 summary"><p>Tries to get the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double IExportPropertySet&lt;double&gt;.TryGetProperty(string name, out bool isValid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isValid</span></td>
+        <td><p>If <code>true</code>, the property was found and the returned value is valid.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><p><code>true</code> if the parameter was found; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_SpiceSharp_Components_IWaveformDescription__CreateParameterSetter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{SpiceSharp#Components#IWaveformDescription}#CreateParameterSetter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_SpiceSharp_Components_IWaveformDescription__CreateParameterSetter_System_String_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{SpiceSharp#Components#IWaveformDescription}#CreateParameterSetter(System.String)">IImportParameterSet&lt;IWaveformDescription&gt;.CreateParameterSetter(String)</h4>
+  <div class="markdown level1 summary"><p>Creates a setter for a parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Action&lt;IWaveformDescription&gt; IImportParameterSet&lt;IWaveformDescription&gt;.CreateParameterSetter(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>&gt;</td>
+        <td><p>A setter if the parameter exists; otherwise <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_SpiceSharp_Components_IWaveformDescription__SetParameter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{SpiceSharp#Components#IWaveformDescription}#SetParameter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_SpiceSharp_Components_IWaveformDescription__SetParameter_System_String_SpiceSharp_Components_IWaveformDescription_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{SpiceSharp#Components#IWaveformDescription}#SetParameter(System.String,SpiceSharp.Components.IWaveformDescription)">IImportParameterSet&lt;IWaveformDescription&gt;.SetParameter(String, IWaveformDescription)</h4>
+  <div class="markdown level1 summary"><p>Sets the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IImportParameterSet&lt;IWaveformDescription&gt;.SetParameter(string name, IWaveformDescription value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></td>
+        <td><span class="parametername">value</span></td>
         <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Diagnostics.ParameterNotFoundException.html">ParameterNotFoundException</a></td>
+        <td><p>Thrown if the parameter could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_SpiceSharp_Components_IWaveformDescription__TrySetParameter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{SpiceSharp#Components#IWaveformDescription}#TrySetParameter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_SpiceSharp_Components_IWaveformDescription__TrySetParameter_System_String_SpiceSharp_Components_IWaveformDescription_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{SpiceSharp#Components#IWaveformDescription}#TrySetParameter(System.String,SpiceSharp.Components.IWaveformDescription)">IImportParameterSet&lt;IWaveformDescription&gt;.TrySetParameter(String, IWaveformDescription)</h4>
+  <div class="markdown level1 summary"><p>Tries to set the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IImportParameterSet&lt;IWaveformDescription&gt;.TrySetParameter(string name, IWaveformDescription value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the parameter was set; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_System_Double__CreateParameterSetter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{System#Double}#CreateParameterSetter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_System_Double__CreateParameterSetter_System_String_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{System#Double}#CreateParameterSetter(System.String)">IImportParameterSet&lt;Double&gt;.CreateParameterSetter(String)</h4>
+  <div class="markdown level1 summary"><p>Creates a setter for a parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Action&lt;double&gt; IImportParameterSet&lt;double&gt;.CreateParameterSetter(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>A setter if the parameter exists; otherwise <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_System_Double__SetParameter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{System#Double}#SetParameter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_System_Double__SetParameter_System_String_System_Double_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{System#Double}#SetParameter(System.String,System.Double)">IImportParameterSet&lt;Double&gt;.SetParameter(String, Double)</h4>
+  <div class="markdown level1 summary"><p>Sets the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void IImportParameterSet&lt;double&gt;.SetParameter(string name, double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Diagnostics.ParameterNotFoundException.html">ParameterNotFoundException</a></td>
+        <td><p>Thrown if the parameter could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_System_Double__TrySetParameter_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{System#Double}#TrySetParameter*"></a>
+  <h4 id="SpiceSharp_Components_CommonBehaviors_IndependentSourceParameters_SpiceSharp_ParameterSets_IImportParameterSet_System_Double__TrySetParameter_System_String_System_Double_" data-uid="SpiceSharp.Components.CommonBehaviors.IndependentSourceParameters.SpiceSharp#ParameterSets#IImportParameterSet{System#Double}#TrySetParameter(System.String,System.Double)">IImportParameterSet&lt;Double&gt;.TrySetParameter(String, Double)</h4>
+  <div class="markdown level1 summary"><p>Tries to set the value of the parameter with the specified name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IImportParameterSet&lt;double&gt;.TrySetParameter(string name, double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the parameter.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the parameter was set; otherwise <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet&lt;P&gt;</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
   </div>
 </article>
           </div>

@@ -1,70 +1,78 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
-using SpiceSharp.Components.CurrentSourceBehaviors;
+using SpiceSharp.Components.CommonBehaviors;
+using SpiceSharp.ParameterSets;
+using SpiceSharp.Validation;
+using System;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// An independent current source
+    /// An independent current source.
     /// </summary>
+    /// <seealso cref="Component"/>
+    /// <seealso cref="IParameterized{P}"/>
+    /// <seealso cref="IndependentSourceParameters"/>
+    /// <seealso cref="IRuleSubject"/>
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
-    public class CurrentSource : Component
+    public class CurrentSource : Component<ComponentBindingContext>,
+        IParameterized<IndependentSourceParameters>,
+        IRuleSubject
     {
-        static CurrentSource()
-        {
-            RegisterBehaviorFactory(typeof(CurrentSource), new BehaviorFactoryDictionary
-            {
-                {typeof(BiasingBehavior), e => new BiasingBehavior(e.Name)},
-                {typeof(FrequencyBehavior), e => new FrequencyBehavior(e.Name)},
-                {typeof(AcceptBehavior), e => new AcceptBehavior(e.Name)}
-            });
-        }
+        /// <inheritdoc/>
+        public IndependentSourceParameters Parameters { get; } = new IndependentSourceParameters();
 
         /// <summary>
         /// Constants
         /// </summary>
         [ParameterName("pincount"), ParameterInfo("Number of pins")]
-		public const int CurrentSourcePinCount = 2;
+        public const int PinCount = 2;
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current source</param>
-        public CurrentSource(string name) 
-            : base(name, CurrentSourcePinCount)
+        /// <param name="name">The name of the current source.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        public CurrentSource(string name)
+            : base(name, PinCount)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters());
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="dc">The DC value</param>
+        /// <param name="name">The name of the current source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="dc">The DC value.</param>
         public CurrentSource(string name, string pos, string neg, double dc)
             : this(name)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(dc));
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.DcValue = dc;
             Connect(pos, neg);
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="CurrentSource"/> class.
+        /// Initializes a new instance of the <see cref="CurrentSource"/> class.
         /// </summary>
-        /// <param name="name">The name of the current source</param>
-        /// <param name="pos">The positive node</param>
-        /// <param name="neg">The negative node</param>
-        /// <param name="waveform">The Waveform-object</param>
-        public CurrentSource(string name, string pos, string neg, Waveform waveform)
+        /// <param name="name">The name of the current source.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="waveform">The Waveform-object.</param>
+        public CurrentSource(string name, string pos, string neg, IWaveformDescription waveform)
             : this(name)
         {
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceParameters(waveform));
-            ParameterSets.Add(new CommonBehaviors.IndependentSourceFrequencyParameters());
+            Parameters.Waveform = waveform;
             Connect(pos, neg);
+        }
+
+        /// <inheritdoc/>
+        void IRuleSubject.Apply(IRules rules)
+        {
+            var p = rules.GetParameterSet<ComponentRuleParameters>();
+            var nodes = Nodes.Select(name => p.Factory.GetSharedVariable(name)).ToArray();
+            foreach (var rule in rules.GetRules<IConductiveRule>())
+                rule.AddPath(this, ConductionTypes.None, nodes[0], nodes[1]);
         }
     }
 }

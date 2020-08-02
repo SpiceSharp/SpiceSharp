@@ -117,19 +117,214 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GminSteppingFailed" xml:space="preserve">
-    <value>Gmin step failed</value>
+  <data name="Algebra.BadlyConditioned" xml:space="preserve">
+    <value>The solver was forced to choose a pivot that did not meet tolerance levels at matrix element ({0}, {1}).</value>
   </data>
-  <data name="SourceSteppingFailed" xml:space="preserve">
-    <value>Source stepping failed</value>
+  <data name="Algebra.InvalidPivot" xml:space="preserve">
+    <value>The pivot for elimination step {0} is zero.</value>
   </data>
-  <data name="StartDiagonalGminStepping" xml:space="preserve">
-    <value>Starting diagonal Gmin stepping</value>
+  <data name="Algebra.SingularMatrix" xml:space="preserve">
+    <value>The matrix is singular.</value>
   </data>
-  <data name="StartGminStepping" xml:space="preserve">
-    <value>Starting Gmin stepping</value>
+  <data name="Algebra.SingularMatrixIndexed" xml:space="preserve">
+    <value>The matrix was found to be singular when eliminating row {0}.</value>
   </data>
-  <data name="StartSourceStepping" xml:space="preserve">
-    <value>Starting source stepping</value>
+  <data name="Algebra.SolverNotFactored" xml:space="preserve">
+    <value>The solver is not factored yet.</value>
+  </data>
+  <data name="Algebra.VectorLengthMismatch" xml:space="preserve">
+    <value>The vector has {0} elements, but {1} were expected.</value>
+  </data>
+  <data name="Behaviors.BehaviorsAlreadyExist" xml:space="preserve">
+    <value>There are already behaviors for '{0}'.</value>
+  </data>
+  <data name="Behaviors.NoBehaviorFor" xml:space="preserve">
+    <value>Could not find behaviors for '{0}'.</value>
+  </data>
+  <data name="Components.NodeMismatch" xml:space="preserve">
+    <value>Node mismatch: {0} nodes expected, but {1} were given.</value>
+  </data>
+  <data name="Components.NodeMismatchNamed" xml:space="preserve">
+    <value>Node mismatch for '{0}': {1} nodes expected, but {1} were given.</value>
+  </data>
+  <data name="Components.NoModel" xml:space="preserve">
+    <value>No model was specified for component '{0}' of type {1}.</value>
+  </data>
+  <data name="Delays.NonCausalDelay" xml:space="preserve">
+    <value>Non-causal delay detected. Delays should be greater than 0.</value>
+  </data>
+  <data name="Delays.NonIncreasingTime" xml:space="preserve">
+    <value>Time points are not monotonically increasing. Time goes from {0:e3} to {1:e3}.</value>
+  </data>
+  <data name="DI.CannotResolveConstructor" xml:space="preserve">
+    <value>Cannot resolve constructor for '{0}'.</value>
+  </data>
+  <data name="DI.InvalidConstructorParameter" xml:space="preserve">
+    <value>Cannot resolve a parameter of type '{0}' for the constructor of '{1}'.</value>
+  </data>
+  <data name="Diodes.BreakdownCurrentIncreased" xml:space="preserve">
+    <value>{0}: breakdown current increased to {1:g5} to resolve incompatibility with specified saturation current.</value>
+  </data>
+  <data name="Diodes.ImpossibleFwdRevMatch" xml:space="preserve">
+    <value>{0}: unable to match forward and reverse diode region. Bv = {1:g}, ibv = {2:g}.</value>
+  </data>
+  <data name="EntityCollection.KeyExists" xml:space="preserve">
+    <value>An entity with the name "{0}" already exists.</value>
+  </data>
+  <data name="IndependentSources.NoDc" xml:space="preserve">
+    <value>{0} has no DC value, 0 assumed.</value>
+  </data>
+  <data name="IndependentSources.NoDcUseWaveform" xml:space="preserve">
+    <value>{0} has no DC value, waveform value at time 0 used.</value>
+  </data>
+  <data name="Mosfets.EffectiveChannelTooSmall" xml:space="preserve">
+    <value>{0}: effective channel length less than zero.</value>
+  </data>
+  <data name="Nodes.NullToGround" xml:space="preserve">
+    <value>Node {1} of component {0} was 'null', and was connected to ground.</value>
+  </data>
+  <data name="NotEnoughElements" xml:space="preserve">
+    <value>No enough elements.</value>
+  </data>
+  <data name="Parallel.AccessNotSupported" xml:space="preserve">
+    <value>Parallel access to {0} is not supported.</value>
+  </data>
+  <data name="Parameters.ArgumentCountMismatch" xml:space="preserve">
+    <value>Expected {2} arguments for {0}, but {1} were passed.</value>
+  </data>
+  <data name="Parameters.IsZero" xml:space="preserve">
+    <value>The parameter cannot be zero.</value>
+  </data>
+  <data name="Parameters.LowerLimitReached" xml:space="preserve">
+    <value>The parameter value of {0} was too small, and was raised from {1} to {2}.</value>
+  </data>
+  <data name="Parameters.NotFoundNamed" xml:space="preserve">
+    <value>Could not find parameter '{0}' of type '{1}' on {2}.</value>
+  </data>
+  <data name="Parameters.NotFoundTyped" xml:space="preserve">
+    <value>Could not find a parameter with type '{0}'.</value>
+  </data>
+  <data name="Parameters.NotGreater" xml:space="preserve">
+    <value>The parameter value should be greater than {0}.</value>
+  </data>
+  <data name="Parameters.NotGreaterOrEqual" xml:space="preserve">
+    <value>The parameter value should be at least {0}.</value>
+  </data>
+  <data name="Parameters.NotLess" xml:space="preserve">
+    <value>The parameter value should be less than {0}.</value>
+  </data>
+  <data name="Parameters.NotLessOrEqual" xml:space="preserve">
+    <value>The parameter value should be at most {0}.</value>
+  </data>
+  <data name="Parameters.NotWithinRange" xml:space="preserve">
+    <value>The parameter value is outside the allowed range {0}-{1}.</value>
+  </data>
+  <data name="Parameters.ParameterSetNotFound" xml:space="preserve">
+    <value>A parameter set of type '{0}' could not be found.</value>
+  </data>
+  <data name="Parameters.UpperLimitReached" xml:space="preserve">
+    <value>The parameter value of {0} was too large, and was reduced from {1} to {2}.</value>
+  </data>
+  <data name="ParameterSets.NotDefined" xml:space="preserve">
+    <value>The parameter set of type '{0}' is not defined.</value>
+  </data>
+  <data name="Reflection.NotMatchingType" xml:space="preserve">
+    <value>The destination type does not match the source.</value>
+  </data>
+  <data name="Reflection.SameName" xml:space="preserve">
+    <value>The parameter or property '{0}' points to both {1} and {2}.</value>
+  </data>
+  <data name="Resistors.ZeroResistance" xml:space="preserve">
+    <value>{0}: Model describes short-circuit, 1kOhm used.</value>
+  </data>
+  <data name="Simulation.Biasing.GminSteppingFailed" xml:space="preserve">
+    <value>Gmin step failed.</value>
+  </data>
+  <data name="Simulation.VariableNotANumber" xml:space="preserve">
+    <value>The solution of variable '{0}' is not a number for the current iteration.</value>
+  </data>
+  <data name="Simulations.Biasing.NoOp" xml:space="preserve">
+    <value>Could not determine the operating point.</value>
+  </data>
+  <data name="Simulations.Biasing.SourceSteppingFailed" xml:space="preserve">
+    <value>Source stepping failed.</value>
+  </data>
+  <data name="Simulations.Biasing.StartDiagonalGminStepping" xml:space="preserve">
+    <value>Starting diagonal Gmin stepping.</value>
+  </data>
+  <data name="Simulations.Biasing.StartGminStepping" xml:space="preserve">
+    <value>Starting Gmin stepping.</value>
+  </data>
+  <data name="Simulations.Biasing.StartSourceStepping" xml:space="preserve">
+    <value>Starting source stepping.</value>
+  </data>
+  <data name="Simulations.ConvergenceAidVariableNotFound" xml:space="preserve">
+    <value>Could not set convergence aid: variable '{0}' could not be found.</value>
+  </data>
+  <data name="Simulations.DC.NoSweepPoints" xml:space="preserve">
+    <value>The sweep '{0}' does not contain any points to simulate.</value>
+  </data>
+  <data name="Simulations.History.InvalidLength" xml:space="preserve">
+    <value>Histories cannot track less than one point.</value>
+  </data>
+  <data name="Simulations.InvalidInitializationMode" xml:space="preserve">
+    <value>Invalid initialization mode.</value>
+  </data>
+  <data name="Simulations.NoEntities" xml:space="preserve">
+    <value>{0}: there are no entities.</value>
+  </data>
+  <data name="Simulations.Time.MaximumExpansionTooSmall" xml:space="preserve">
+    <value>The expansion factor should be greater or equal than 1.</value>
+  </data>
+  <data name="Simulations.Time.Terminated" xml:space="preserve">
+    <value>{0}: transient simulation was terminated.</value>
+  </data>
+  <data name="Simulations.Time.TimestepInvalid" xml:space="preserve">
+    <value>The timestep is invalid.</value>
+  </data>
+  <data name="Simulations.Time.TimestepTooSmall" xml:space="preserve">
+    <value>The timestep {0:e5}s is too small at t={1:e5}s.</value>
+  </data>
+  <data name="Simulations.ValidationFailed" xml:space="preserve">
+    <value>The simulation '{0}' has {1} rule violations.</value>
+  </data>
+  <data name="Stateful.NotDefined" xml:space="preserve">
+    <value>A simulation state of type '{0}' is not defined.</value>
+  </data>
+  <data name="Subcircuits.NoEquivalent" xml:space="preserve">
+    <value>Cannot compute an equivalent solution for subcircuit '{0}'.</value>
+  </data>
+  <data name="Sweeps.PointsTooSmall" xml:space="preserve">
+    <value>The number of points should be greater than 0.</value>
+  </data>
+  <data name="TypeAlreadyExists" xml:space="preserve">
+    <value>A value of type {0} already exists.</value>
+  </data>
+  <data name="TypeDictionary.AmbiguousType" xml:space="preserve">
+    <value>The type '{0}' resolved to multiple instances.</value>
+  </data>
+  <data name="TypeDictionary.TypeNotFound" xml:space="preserve">
+    <value>A value of the type '{0}' could not be found.</value>
+  </data>
+  <data name="Units.InvalidExponent" xml:space="preserve">
+    <value>Invalid exponent. Cannot represent the exponent {0}/{1}.</value>
+  </data>
+  <data name="VariableDictionary.KeyExists" xml:space="preserve">
+    <value>A variable with id '{0}' already exists.</value>
+  </data>
+  <data name="VariableMap.KeyExists" xml:space="preserve">
+    <value>The variable '{0}' is already mapped.</value>
+  </data>
+  <data name="VariableNotFound" xml:space="preserve">
+    <value>A variable by the name of '{0}' could not be found.</value>
+  </data>
+  <data name="Waveforms.Pwl.Empty" xml:space="preserve">
+    <value>No points are specified.</value>
+  </data>
+  <data name="Waveforms.Pwl.NoIncreasingTimeValues" xml:space="preserve">
+    <value>The time values are not monotonically increasing.</value>
+  </data>
+  <data name="Waveforms.Pwl.TimeValueLength" xml:space="preserve">
+    <value>The piece-wise linear function requires the same amount of time and value points.</value>
   </data>
 </root>

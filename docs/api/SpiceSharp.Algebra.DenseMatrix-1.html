@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class DenseMatrix&lt;T&gt;
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -73,21 +74,20 @@
   
   <h1 id="SpiceSharp_Algebra_DenseMatrix_1" data-uid="SpiceSharp.Algebra.DenseMatrix`1" class="text-break">Class DenseMatrix&lt;T&gt;
   </h1>
-  <div class="markdown level0 summary"><p>A square matrix using a dense representation. As a small optimization, the row and column with
-index 0 are not considered trash can elements.</p>
+  <div class="markdown level0 summary"><p>A square matrix using a dense representation.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Algebra.Matrix-1.html">Matrix</a>&lt;T&gt;</div>
-    <div class="level2"><span class="xref">DenseMatrix&lt;T&gt;</span></div>
+    <div class="level1"><span class="xref">DenseMatrix&lt;T&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;T&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="SpiceSharp.Algebra.Matrix-1.html#SpiceSharp_Algebra_Matrix_1_Size">Matrix&lt;T&gt;.Size</a>
-    </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
@@ -111,7 +111,7 @@ index 0 are not considered trash can elements.</p>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Algebra_DenseMatrix_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class DenseMatrix&lt;T&gt; : Matrix&lt;T&gt; where T : IFormattable, IEquatable&lt;T&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class DenseMatrix&lt;T&gt; : IMatrix&lt;T&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -131,6 +131,15 @@ index 0 are not considered trash can elements.</p>
   </table>
   <h3 id="constructors">Constructors
   </h3>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1__ctor_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.#ctor*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1__ctor" data-uid="SpiceSharp.Algebra.DenseMatrix`1.#ctor">DenseMatrix()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.DenseMatrix-1.html">DenseMatrix&lt;T&gt;</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DenseMatrix()</code></pre>
+  </div>
   <a id="SpiceSharp_Algebra_DenseMatrix_1__ctor_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.#ctor*"></a>
   <h4 id="SpiceSharp_Algebra_DenseMatrix_1__ctor_System_Int32_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.#ctor(System.Int32)">DenseMatrix(Int32)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Algebra.DenseMatrix-1.html">DenseMatrix&lt;T&gt;</a> class.</p>
@@ -158,11 +167,70 @@ index 0 are not considered trash can elements.</p>
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">size</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_Algebra_DenseMatrix_1_Item_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Item*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_Item_SpiceSharp_Algebra_MatrixLocation_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Item(SpiceSharp.Algebra.MatrixLocation)">Item[MatrixLocation]</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the value at the specified location.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T this[MatrixLocation location] { get; set; }</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.MatrixLocation.html">MatrixLocation</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>The location.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1_Item_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Item*"></a>
   <h4 id="SpiceSharp_Algebra_DenseMatrix_1_Item_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Item(System.Int32,System.Int32)">Item[Int32, Int32]</h4>
-  <div class="markdown level1 summary"><p>Gets or sets a value at the specified row and column.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the value at the specified row and column.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -204,104 +272,170 @@ index 0 are not considered trash can elements.</p>
     <tbody>
       <tr>
         <td><span class="xref">T</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Algebra_DenseMatrix_1_GetValue_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.GetValue*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_GetValue_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.GetValue(System.Int32,System.Int32)">GetValue(Int32, Int32)</h4>
-  <div class="markdown level1 summary"><p>Gets a value in the matrix at a specific row and column.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override T GetValue(int row, int column)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">row</span></td>
-        <td><p>The row index.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">column</span></td>
-        <td><p>The column index.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><p>The value at the specified row and column.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Matrix&lt;T&gt;.GetValue(System.Int32, System.Int32)</span></div>
-  <a id="SpiceSharp_Algebra_DenseMatrix_1_SetValue_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.SetValue*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_SetValue_System_Int32_System_Int32__0_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.SetValue(System.Int32,System.Int32,`0)">SetValue(Int32, Int32, T)</h4>
-  <div class="markdown level1 summary"><p>Sets the value in the matrix at a specific row and column.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void SetValue(int row, int column, T value)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">row</span></td>
-        <td><p>The row index.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><span class="parametername">column</span></td>
-        <td><p>The column index.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">value</span></td>
         <td><p>The value.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Algebra.Matrix&lt;T&gt;.SetValue(System.Int32, System.Int32, T)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">row</code> or <code data-dev-comment-type="paramref" class="paramref">column</code> is not positive.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1_Size_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Size*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_Size" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Size">Size</h4>
+  <div class="markdown level1 summary"><p>Gets the size of the matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Size { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The matrix size.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1_Clear_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Clear*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_Clear" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears the matrix of any elements. The size of the matrix becomes 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1_Reset_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Reset*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_Reset" data-uid="SpiceSharp.Algebra.DenseMatrix`1.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Resets all elements in the matrix to their default value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1_SwapColumns_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.SwapColumns*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_SwapColumns_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.SwapColumns(System.Int32,System.Int32)">SwapColumns(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Swaps two columns in the matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SwapColumns(int column1, int column2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">column1</span></td>
+        <td><p>The first column index.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">column2</span></td>
+        <td><p>The second column index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">column1</code> or <code data-dev-comment-type="paramref" class="paramref">column2</code> is not greater than 0.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_DenseMatrix_1_SwapRows_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.SwapRows*"></a>
+  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_SwapRows_System_Int32_System_Int32_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.SwapRows(System.Int32,System.Int32)">SwapRows(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Swaps two rows in the matrix.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SwapRows(int row1, int row2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row1</span></td>
+        <td><p>The first row index.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">row2</span></td>
+        <td><p>The second row index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentOutOfRangeException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">row1</code> or <code data-dev-comment-type="paramref" class="paramref">row2</code> is not greater than 0.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_DenseMatrix_1_ToString_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.ToString*"></a>
   <h4 id="SpiceSharp_Algebra_DenseMatrix_1_ToString" data-uid="SpiceSharp.Algebra.DenseMatrix`1.ToString">ToString()</h4>
   <div class="markdown level1 summary"><p>Returns a <span class="xref">System.String</span> that represents this instance.</p>
@@ -329,102 +463,17 @@ index 0 are not considered trash can elements.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><span class="xref">System.Object.ToString()</span></div>
-  <a id="SpiceSharp_Algebra_DenseMatrix_1_ToString_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.ToString*"></a>
-  <h4 id="SpiceSharp_Algebra_DenseMatrix_1_ToString_System_String_System_IFormatProvider_" data-uid="SpiceSharp.Algebra.DenseMatrix`1.ToString(System.String,System.IFormatProvider)">ToString(String, IFormatProvider)</h4>
-  <div class="markdown level1 summary"><p>Convert to a string</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string ToString(string format, IFormatProvider formatProvider)</code></pre>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&lt;T&gt;</a>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">format</span></td>
-        <td><p>Format</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IFormatProvider</span></td>
-        <td><span class="parametername">formatProvider</span></td>
-        <td><p>Format provider</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix</a>&lt;T&gt;</div>
   </div>
 </article>
           </div>

@@ -11,13 +11,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the state.
         /// </summary>
-        public SimulationState State { get; }
+        public ISimulationState State { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadStateEventArgs"/> class.
         /// </summary>
         /// <param name="state">The state.</param>
-        public LoadStateEventArgs(SimulationState state)
+        public LoadStateEventArgs(ISimulationState state)
         {
             State = state;
         }

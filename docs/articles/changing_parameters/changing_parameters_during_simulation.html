@@ -8,7 +8,7 @@
     <title>Changing parameters during simulation </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Changing parameters during simulation ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../../api/images/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -69,18 +70,16 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="changing-parameters-during-simulation">Changing parameters during simulation</h1>
 
-<p>Spice# makes it possible to change parameters during simulations. This allows you to customize
-behaviors with much more freedom.</p>
-<p>In order to use this feature, it is first important to realize its limitations.</p>
+<p>Spice# makes it possible to change parameters during simulations by registering to events. This allows you to customize behaviors with much more freedom.</p>
+<p>In order to use this feature, it is first important to realize its limitations:</p>
 <ul>
 <li>When changing something during simulation, there is a chance that convergence becomes more difficult or even impossible. Depending on the situation, you should avoid making changes that are too drastic.</li>
-<li>You will need a good understanding of the <a href="../structure/structure.html">structure</a> of Spice#, as well as details about the parameters that you want to change. For example:<ul>
-<li>If there are behaviors that modify the parameter before using it, you will have to call those behaviors in order for the change to take effect.</li>
-<li>You will also need to know about the simulation in question. You need to find out <em>how</em> and <em>where</em> you can tap into the simulation to change parameters.</li>
+<li>You will need a good understanding of the flows of the <a href="../structure/flow.html">structure</a> of Spice#, as well as details about the parameters that you want to change. For example:<ul>
+<li>It is not uncommon that parameters are used to compute derived properties in some properties. You may have to call those behaviors manually if the simulator doesn&#39;t do this automatically.</li>
+<li>You will also need to know <em>how</em> and <em>where</em> you can tap into the simulation to change parameters. Understanding the simulation flow can help with this.</li>
 </ul>
 </li>
 </ul>
-<div class="pull-left"><a href="../custom_components/base_behaviors.html">Previous: Base behaviors</a></div> <div class="pull-right"><a href="example.html">Next: Example</a></div>
 </article>
           </div>
           

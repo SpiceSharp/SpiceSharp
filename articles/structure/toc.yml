@@ -1,4 +1,10 @@
-- name: Entities, components and models
-  href: entities.md
-- name: Parameters
-  href: parameters.md
+- name: Spice# Flow
+  href: flow.md
+- name: Iterating to a solution
+  href: iterate.md
+- name: DC / Operating point analysis
+  href: operatingpoint.md
+- name: AC / Small Signal analysis
+  href: frequency.md
+- name: Transient analysis
+  href: transient.md

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class ComplexCurrentExport
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,28 +80,38 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Export-1.html">Export</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Export-2.html">Export</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IFrequencySimulation.html">IFrequencySimulation</a>, <span class="xref">System.Numerics.Complex</span>&gt;</div>
     <div class="level2"><span class="xref">ComplexCurrentExport</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Simulations.IExport-1.html">IExport</a>&lt;<span class="xref">System.Numerics.Complex</span>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_IsValid">Export&lt;Complex&gt;.IsValid</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Destroy">Export&lt;IFrequencySimulation, Complex&gt;.Destroy()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Extractor">Export&lt;Complex&gt;.Extractor</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_LazyLoad">Export&lt;IFrequencySimulation, Complex&gt;.LazyLoad()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Simulation">Export&lt;Complex&gt;.Simulation</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Initialize_System_Object_System_EventArgs_">Export&lt;IFrequencySimulation, Complex&gt;.Initialize(Object, EventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Value">Export&lt;Complex&gt;.Value</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Finalize_System_Object_System_EventArgs_">Export&lt;IFrequencySimulation, Complex&gt;.Finalize(Object, EventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Destroy">Export&lt;Complex&gt;.Destroy()</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_IsValid">Export&lt;IFrequencySimulation, Complex&gt;.IsValid</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_LazyLoad">Export&lt;Complex&gt;.LazyLoad()</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Extractor">Export&lt;IFrequencySimulation, Complex&gt;.Extractor</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Simulation">Export&lt;IFrequencySimulation, Complex&gt;.Simulation</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Value">Export&lt;IFrequencySimulation, Complex&gt;.Value</a>
     </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
@@ -128,18 +139,18 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_ComplexCurrentExport_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ComplexCurrentExport : Export&lt;Complex&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class ComplexCurrentExport : Export&lt;IFrequencySimulation, Complex&gt;, IExport&lt;Complex&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Simulations_ComplexCurrentExport__ctor_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.#ctor*"></a>
-  <h4 id="SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_FrequencySimulation_System_String_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.FrequencySimulation,System.String)">ComplexCurrentExport(FrequencySimulation, String)</h4>
+  <h4 id="SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_String_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String)">ComplexCurrentExport(IFrequencySimulation, String)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Simulations.RealCurrentExport.html">RealCurrentExport</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ComplexCurrentExport(FrequencySimulation simulation, string source)</code></pre>
+    <pre><code class="lang-csharp hljs">public ComplexCurrentExport(IFrequencySimulation simulation, string source)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -152,7 +163,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html">FrequencySimulation</a></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.IFrequencySimulation.html">IFrequencySimulation</a></td>
         <td><span class="parametername">simulation</span></td>
         <td><p>The simulation.</p>
 </td>
@@ -160,7 +171,7 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">source</span></td>
-        <td><p>The source identifier.</p>
+        <td><p>The source name.</p>
 </td>
       </tr>
     </tbody>
@@ -193,7 +204,7 @@
   </table>
   <a id="SpiceSharp_Simulations_ComplexCurrentExport_Source_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.Source*"></a>
   <h4 id="SpiceSharp_Simulations_ComplexCurrentExport_Source" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.Source">Source</h4>
-  <div class="markdown level1 summary"><p>Gets the identifier of the voltage source.</p>
+  <div class="markdown level1 summary"><p>Gets the name of the voltage source.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -239,7 +250,7 @@
       <tr>
         <td><span class="xref">System.Object</span></td>
         <td><span class="parametername">sender</span></td>
-        <td><p>The object (simulation) sending the event</p>
+        <td><p>The object (simulation) sending the event.</p>
 </td>
       </tr>
       <tr>
@@ -251,7 +262,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Simulations.Export&lt;System.Numerics.Complex&gt;.Finalize(System.Object, System.EventArgs)</span></div>
+  <div><span class="xref">SpiceSharp.Simulations.Export&lt;SpiceSharp.Simulations.IFrequencySimulation, System.Numerics.Complex&gt;.Finalize(System.Object, System.EventArgs)</span></div>
   <a id="SpiceSharp_Simulations_ComplexCurrentExport_Initialize_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.Initialize*"></a>
   <h4 id="SpiceSharp_Simulations_ComplexCurrentExport_Initialize_System_Object_System_EventArgs_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.Initialize(System.Object,System.EventArgs)">Initialize(Object, EventArgs)</h4>
   <div class="markdown level1 summary"><p>Initializes the export.</p>
@@ -286,103 +297,18 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Simulations.Export&lt;System.Numerics.Complex&gt;.Initialize(System.Object, System.EventArgs)</span></div>
-  <a id="SpiceSharp_Simulations_ComplexCurrentExport_IsValidSimulation_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.IsValidSimulation*"></a>
-  <h4 id="SpiceSharp_Simulations_ComplexCurrentExport_IsValidSimulation_SpiceSharp_Simulations_Simulation_" data-uid="SpiceSharp.Simulations.ComplexCurrentExport.IsValidSimulation(SpiceSharp.Simulations.Simulation)">IsValidSimulation(Simulation)</h4>
-  <div class="markdown level1 summary"><p>Check if the simulation is a frequency simulation</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override bool IsValidSimulation(Simulation simulation)</code></pre>
+  <div><span class="xref">SpiceSharp.Simulations.Export&lt;SpiceSharp.Simulations.IFrequencySimulation, System.Numerics.Complex&gt;.Initialize(System.Object, System.EventArgs)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.IExport-1.html">IExport&lt;T&gt;</a>
   </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><span class="xref">SpiceSharp.Simulations.Export&lt;System.Numerics.Complex&gt;.IsValidSimulation(SpiceSharp.Simulations.Simulation)</span></div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Simulations.Export-1.html">Export</a>&lt;T&gt;</div>
+      <div><a class="xref" href="SpiceSharp.Simulations.Export-2.html">Export</a>&lt;S, T&gt;</div>
   </div>
 </article>
           </div>

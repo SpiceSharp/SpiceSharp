@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class Sine
    ">
-    <meta name="generator" content="docfx 2.44.0.0">
+    <meta name="generator" content="docfx 2.52.0.0">
     
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -19,6 +19,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     
     
     
@@ -79,33 +80,46 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
     <div class="level2"><span class="xref">Sine</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
-    <div><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable</a>&lt;<a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Value">Waveform.Value</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Clone">Waveform.Clone()</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_SpiceSharp_ICloneable_Clone">Waveform.ICloneable.Clone()</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_CopyFrom_SpiceSharp_Components_Waveform_">Waveform.CopyFrom(Waveform)</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">Waveform.ICloneable.CopyFrom(ICloneable)</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SetParameter__1_System_String___0_">ParameterSet.SetParameter&lt;P&gt;(String, P)</a>
     </div>
     <div>
-      <span class="xref">System.Object.ToString()</span>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TrySetParameter__1_System_String___0_">ParameterSet.TrySetParameter&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_GetProperty__1_System_String_">ParameterSet.GetProperty&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TryGetProperty__1_System_String___0__">ParameterSet.TryGetProperty&lt;P&gt;(String, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreateParameterSetter__1_System_String_">ParameterSet.CreateParameterSetter&lt;P&gt;(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreatePropertyGetter__1_System_String_">ParameterSet.CreatePropertyGetter&lt;P&gt;(String)</a>
     </div>
     <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
@@ -130,7 +144,8 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Sine_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Sine : Waveform, ICloneable, ICloneable&lt;Waveform&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">[GeneratedParameters]
+public class Sine : ParameterSet, IWaveformDescription, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -182,6 +197,22 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">frequency</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_Sine__ctor_" data-uid="SpiceSharp.Components.Sine.#ctor*"></a>
   <h4 id="SpiceSharp_Components_Sine__ctor_System_Double_System_Double_System_Double_System_Double_System_Double_" data-uid="SpiceSharp.Components.Sine.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double)">Sine(Double, Double, Double, Double, Double)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a> class.</p>
@@ -229,6 +260,22 @@
         <td><span class="xref">System.Double</span></td>
         <td><span class="parametername">theta</span></td>
         <td><p>The theta.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">frequency</code> is negative.</p>
 </td>
       </tr>
     </tbody>
@@ -290,18 +337,34 @@
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">frequency</code> is negative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
   </h3>
   <a id="SpiceSharp_Components_Sine_Amplitude_" data-uid="SpiceSharp.Components.Sine.Amplitude*"></a>
   <h4 id="SpiceSharp_Components_Sine_Amplitude" data-uid="SpiceSharp.Components.Sine.Amplitude">Amplitude</h4>
-  <div class="markdown level1 summary"><p>Gets the amplitude of the sine wave.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the amplitude of the sine wave.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;va&quot;)]
 [ParameterInfo(&quot;The amplitude of the sine wave&quot;)]
-public GivenParameter&lt;double&gt; Amplitude { get; }</code></pre>
+public double Amplitude { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -313,21 +376,22 @@ public GivenParameter&lt;double&gt; Amplitude { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The amplitude of the sine wave.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_Sine_Delay_" data-uid="SpiceSharp.Components.Sine.Delay*"></a>
   <h4 id="SpiceSharp_Components_Sine_Delay" data-uid="SpiceSharp.Components.Sine.Delay">Delay</h4>
-  <div class="markdown level1 summary"><p>Gets the delay of the sine wave in seconds.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the delay of the sine wave in seconds.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;td&quot;)]
-[ParameterInfo(&quot;The delay in seconds&quot;)]
-public GivenParameter&lt;double&gt; Delay { get; }</code></pre>
+[ParameterInfo(&quot;The delay&quot;, Units = &quot;s&quot;)]
+public double Delay { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -339,21 +403,23 @@ public GivenParameter&lt;double&gt; Delay { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The delay of the sine wave.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_Sine_Frequency_" data-uid="SpiceSharp.Components.Sine.Frequency*"></a>
   <h4 id="SpiceSharp_Components_Sine_Frequency" data-uid="SpiceSharp.Components.Sine.Frequency">Frequency</h4>
-  <div class="markdown level1 summary"><p>Gets the frequency of the sine wave in Hertz (Hz).</p>
+  <div class="markdown level1 summary"><p>Gets or sets the frequency of the sine wave in Hertz (Hz).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;freq&quot;)]
-[ParameterInfo(&quot;The frequency in Hz&quot;)]
-public GivenParameter&lt;double&gt; Frequency { get; }</code></pre>
+[ParameterInfo(&quot;The frequency in Hz&quot;, Units = &quot;Hz&quot;)]
+[GreaterThanOrEquals(0)]
+public double Frequency { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -365,21 +431,22 @@ public GivenParameter&lt;double&gt; Frequency { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The frequency of the sine wave.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_Sine_Offset_" data-uid="SpiceSharp.Components.Sine.Offset*"></a>
   <h4 id="SpiceSharp_Components_Sine_Offset" data-uid="SpiceSharp.Components.Sine.Offset">Offset</h4>
-  <div class="markdown level1 summary"><p>Gets the offset.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the offset.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;vo&quot;)]
 [ParameterInfo(&quot;The offset of the sine wave&quot;)]
-public GivenParameter&lt;double&gt; Offset { get; }</code></pre>
+public double Offset { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -391,21 +458,22 @@ public GivenParameter&lt;double&gt; Offset { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The offset of the sine wave.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_Sine_Phase_" data-uid="SpiceSharp.Components.Sine.Phase*"></a>
   <h4 id="SpiceSharp_Components_Sine_Phase" data-uid="SpiceSharp.Components.Sine.Phase">Phase</h4>
-  <div class="markdown level1 summary"><p>Gets the phase of the sinewave.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the phase of the sine wave.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;phase&quot;)]
-[ParameterInfo(&quot;The phase&quot;)]
-public GivenParameter&lt;double&gt; Phase { get; }</code></pre>
+[ParameterInfo(&quot;The phase&quot;, Units = &quot;&#176;&quot;)]
+public double Phase { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -417,21 +485,22 @@ public GivenParameter&lt;double&gt; Phase { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The phase.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Components_Sine_Theta_" data-uid="SpiceSharp.Components.Sine.Theta*"></a>
   <h4 id="SpiceSharp_Components_Sine_Theta" data-uid="SpiceSharp.Components.Sine.Theta">Theta</h4>
-  <div class="markdown level1 summary"><p>Gets the damping factor theta of the sinewave.</p>
+  <div class="markdown level1 summary"><p>Gets or sets the damping factor theta of the sine wave.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;theta&quot;)]
 [ParameterInfo(&quot;The damping factor&quot;)]
-public GivenParameter&lt;double&gt; Theta { get; }</code></pre>
+public double Theta { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -443,21 +512,22 @@ public GivenParameter&lt;double&gt; Theta { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<span class="xref">System.Double</span>&gt;</td>
-        <td></td>
+        <td><span class="xref">System.Double</span></td>
+        <td><p>The damping factor theta.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <a id="SpiceSharp_Components_Sine_Accept_" data-uid="SpiceSharp.Components.Sine.Accept*"></a>
-  <h4 id="SpiceSharp_Components_Sine_Accept_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.Sine.Accept(SpiceSharp.Simulations.TimeSimulation)">Accept(TimeSimulation)</h4>
-  <div class="markdown level1 summary"><p>Accepts the current timepoint.</p>
+  <a id="SpiceSharp_Components_Sine_Create_" data-uid="SpiceSharp.Components.Sine.Create*"></a>
+  <h4 id="SpiceSharp_Components_Sine_Create_SpiceSharp_Simulations_IIntegrationMethod_" data-uid="SpiceSharp.Components.Sine.Create(SpiceSharp.Simulations.IIntegrationMethod)">Create(IIntegrationMethod)</h4>
+  <div class="markdown level1 summary"><p>Creates a waveform instance for the specified simulation and entity.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Accept(TimeSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public IWaveform Create(IIntegrationMethod method)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -470,44 +540,28 @@ public GivenParameter&lt;double&gt; Theta { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.TimeSimulation.html">TimeSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The time-based simulation</p>
-</td>
+        <td><a class="xref" href="SpiceSharp.Simulations.IIntegrationMethod.html">IIntegrationMethod</a></td>
+        <td><span class="parametername">method</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Accept_SpiceSharp_Simulations_TimeSimulation_">Waveform.Accept(TimeSimulation)</a></div>
-  <a id="SpiceSharp_Components_Sine_Probe_" data-uid="SpiceSharp.Components.Sine.Probe*"></a>
-  <h4 id="SpiceSharp_Components_Sine_Probe_SpiceSharp_Simulations_TimeSimulation_" data-uid="SpiceSharp.Components.Sine.Probe(SpiceSharp.Simulations.TimeSimulation)">Probe(TimeSimulation)</h4>
-  <div class="markdown level1 summary"><p>Indicates a new timepoint is being probed.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Probe(TimeSimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.TimeSimulation.html">TimeSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The time-based simulation.</p>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveform.html">IWaveform</a></td>
+        <td><p>The waveform instance.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Probe_SpiceSharp_Simulations_TimeSimulation_">Waveform.Probe(TimeSimulation)</a></div>
   <a id="SpiceSharp_Components_Sine_SetSine_" data-uid="SpiceSharp.Components.Sine.SetSine*"></a>
   <h4 id="SpiceSharp_Components_Sine_SetSine_System_Double___" data-uid="SpiceSharp.Components.Sine.SetSine(System.Double[])">SetSine(Double[])</h4>
   <div class="markdown level1 summary"><p>Sets all the sine parameters.</p>
@@ -517,7 +571,7 @@ public GivenParameter&lt;double&gt; Theta { get; }</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;sine&quot;)]
 [ParameterInfo(&quot;A vector of all sine waveform parameters&quot;)]
-public void SetSine(double[] parameters)</code></pre>
+public void SetSine(double[] sine)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -531,81 +585,79 @@ public void SetSine(double[] parameters)</code></pre>
     <tbody>
       <tr>
         <td><span class="xref">System.Double</span>[]</td>
-        <td><span class="parametername">parameters</span></td>
-        <td></td>
+        <td><span class="parametername">sine</span></td>
+        <td><p>The sine parameters.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_Sine_Setup_" data-uid="SpiceSharp.Components.Sine.Setup*"></a>
-  <h4 id="SpiceSharp_Components_Sine_Setup" data-uid="SpiceSharp.Components.Sine.Setup">Setup()</h4>
-  <div class="markdown level1 summary"><p>Sets up the waveform.</p>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">sine</code> does not have 1 to 6 arguments.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_Sine_ToString_" data-uid="SpiceSharp.Components.Sine.ToString*"></a>
+  <h4 id="SpiceSharp_Components_Sine_ToString" data-uid="SpiceSharp.Components.Sine.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Returns a string that represents the current sine waveform.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Setup()</code></pre>
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
   </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>A string that represents the current sine waveform.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.Waveform.html#SpiceSharp_Components_Waveform_Setup">Waveform.Setup()</a></div>
+  <div><span class="xref">System.Object.ToString()</span></div>
   <h3 id="implements">Implements</h3>
   <div>
-      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+      <a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNotBound__1___0_SpiceSharp_Behaviors_Behavior_">Utility.ThrowIfNotBound&lt;T&gt;(T, Behavior)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
   </div>
   <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetPrincipalParameter__1_System_Object___0_">ParameterHelper.TrySetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetPrincipalParameter__1_System_Object___0_">ParameterHelper.SetPrincipalParameter&lt;T&gt;(Object, T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter__1_System_Object_System_String___0_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter&lt;T&gt;(Object, String, T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TrySetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TrySetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_SetParameter_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.SetParameter(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object_System_String___0__System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, String, out T, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.GetParameter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_TryGetParameter__1_System_Object___0__">ParameterHelper.TryGetParameter&lt;T&gt;(Object, out T)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_GetParameter__1_System_Object_">ParameterHelper.GetParameter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_">ParameterHelper.CreateGetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateGetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateGetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_">ParameterHelper.CreateSetter&lt;T&gt;(Object)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterHelper.html#SpiceSharp_ParameterHelper_CreateSetter__1_System_Object_System_String_System_Collections_Generic_IEqualityComparer_System_String__">ParameterHelper.CreateSetter&lt;T&gt;(Object, String, IEqualityComparer&lt;String&gt;)</a>
+      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Components.Waveform.html">Waveform</a></div>
+      <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+      <div><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></div>
   </div>
 </article>
           </div>
