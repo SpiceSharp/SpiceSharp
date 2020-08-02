@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.General
 {
@@ -35,5 +36,15 @@ namespace SpiceSharp.General
         ///   <c>true</c> if this instance contains type; otherwise, <c>false</c>.
         /// </returns>
         bool ContainsType<TResult>() where TResult : V;
+
+        /// <summary>
+        /// Determines whether this instance contains a value of the specified type.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified key contains type; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
+        bool ContainsType(Type key);
     }
 }

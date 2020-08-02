@@ -44,7 +44,7 @@ namespace SpiceSharpTest.Models
             public override void CreateBehaviors(ISimulation simulation)
             {
                 var behaviors = new BehaviorContainer(Name);
-                var context = new ModelBindingContext(this, simulation, behaviors, LinkParameters);
+                var context = new BindingContext(this, simulation, behaviors);
                 behaviors.Add(new Mapper(_nodes, context));
                 simulation.EntityBehaviors.Add(behaviors);
             }

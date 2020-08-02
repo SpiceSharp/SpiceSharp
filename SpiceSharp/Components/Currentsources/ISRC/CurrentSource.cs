@@ -1,9 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
-using SpiceSharp.Components.CurrentSources;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -18,7 +15,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IndependentSourceParameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "I+"), Pin(1, "I-"), IndependentSource, Connected]
-    public class CurrentSource : Component,
+    public class CurrentSource : Component<ComponentBindingContext>,
         IParameterized<IndependentSourceParameters>,
         IRuleSubject
     {
@@ -70,17 +67,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

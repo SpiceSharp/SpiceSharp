@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Components.ParallelComponents;
 using SpiceSharp.Simulations;
@@ -20,7 +21,8 @@ namespace SpiceSharpTest.Models
                 new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Resistor("R2", "out", "0", 1e3))
-                    .SetParameter("biasing.load", workDistributor));
+                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingSimulation), workDistributor))
+                );
 
             var op = new OP("op");
             var exports = new IExport<double>[] { new RealVoltageExport(op, "out") };
@@ -37,7 +39,7 @@ namespace SpiceSharpTest.Models
                 new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Resistor("R2", "out", "0", 1e3))
-                    .SetParameter("biasing.convergence", workDistributor));
+                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IConvergenceBehavior), workDistributor)));
 
             var op = new OP("op");
             var exports = new IExport<double>[] { new RealVoltageExport(op, "out") };
@@ -54,7 +56,8 @@ namespace SpiceSharpTest.Models
                 new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Capacitor("C1", "out", "0", 1e-6))
-                    .SetParameter("frequency.load", workDistributor));
+                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IFrequencyBehavior), workDistributor))
+                );
 
             var ac = new AC("ac", new DecadeSweep(1, 1e6, 2));
             var exports = new IExport<Complex>[] { new ComplexVoltageExport(ac, "out") };
@@ -71,7 +74,7 @@ namespace SpiceSharpTest.Models
                 new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Capacitor("C1", "out", "0", 1e-6))
-                    .SetParameter("biasing.load", workDistributor));
+                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingBehavior), workDistributor)));
 
             var tran = new Transient("tran", 1e-7, 10e-6);
             var exports = new IExport<double>[] { new RealVoltageExport(tran, "out") };
@@ -89,7 +92,7 @@ namespace SpiceSharpTest.Models
                     new Resistor("R1", "in", "out", 1e3),
                     new Capacitor("C1", "out", "0", 1e-6),
                     new Capacitor("C2", "out", "0", 1e-6))
-                    .SetParameter("time.init", workDistributor));
+                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(ITimeBehavior), workDistributor)));
 
             var tran = new Transient("tran", 1e-7, 10e-6);
             var exports = new IExport<double>[] { new RealVoltageExport(tran, "out") };

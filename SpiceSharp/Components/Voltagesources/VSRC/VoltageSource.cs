@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IRuleSubject"/>
     /// <seealso cref="IndependentSourceParameters"/>
     [Pin(0, "V+"), Pin(1, "V-"), VoltageDriver(0, 1), IndependentSource]
-    public class VoltageSource : Component,
+    public class VoltageSource : Component<ComponentBindingContext>,
         IParameterized<IndependentSourceParameters>,
         IRuleSubject
     {
@@ -72,17 +72,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new FrequencyBehavior(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new BiasingBehavior(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

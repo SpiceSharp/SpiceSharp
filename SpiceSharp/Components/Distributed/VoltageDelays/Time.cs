@@ -1,7 +1,9 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Distributed;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.VoltageDelays
 {
@@ -10,6 +12,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
+    [BehaviorFor(typeof(VoltageDelay), typeof(ITimeBehavior), 1)]
     public class Time : Biasing,
         IBiasingBehavior,
         ITimeBehavior
@@ -30,10 +33,10 @@ namespace SpiceSharp.Components.VoltageDelays
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Time(IComponentBindingContext context)
+            : base(context)
         {
             _time = context.GetState<ITimeSimulationState>();
             _biasing = context.GetState<IBiasingSimulationState>();

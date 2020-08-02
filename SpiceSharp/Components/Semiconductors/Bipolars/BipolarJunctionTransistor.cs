@@ -1,9 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Bipolars;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
@@ -14,7 +11,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Bipolars.Parameters"/>
     [Pin(0, "Collector"), Pin(1, "Base"), Pin(2, "Emitter"), Pin(3, "Substrate")]
-    public class BipolarJunctionTransistor : Component,
+    public class BipolarJunctionTransistor : Component<ComponentBindingContext>,
         IParameterized<Parameters>
     {
         /// <inheritdoc/>
@@ -49,22 +46,6 @@ namespace SpiceSharp.Components
         {
             Connect(c, b, e, s);
             Model = model;
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name, typeof(BipolarJunctionTransistorModel));
-            behaviors
-                .AddIfNo<INoiseBehavior>(simulation, () => new Bipolars.Noise(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

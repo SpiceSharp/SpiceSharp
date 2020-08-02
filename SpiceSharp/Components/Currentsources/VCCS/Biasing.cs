@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSources
 {
@@ -12,7 +14,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
     /// <seealso cref="Behavior"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="Parameters"/>
+    /// <seealso cref="VoltageControlledCurrentSources.Parameters"/>
+    [BehaviorFor(typeof(VoltageControlledCurrentSource), typeof(IBiasingBehavior))]
     public class BiasingBehavior : Behavior,
         IBiasingBehavior,
         IParameterized<Parameters>
@@ -39,9 +42,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// <summary>
         /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public BiasingBehavior(string name, IComponentBindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public BiasingBehavior(IComponentBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(4);
@@ -62,6 +66,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
                     });
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             var value = Parameters.Transconductance;

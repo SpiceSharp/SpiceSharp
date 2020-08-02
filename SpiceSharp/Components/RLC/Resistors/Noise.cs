@@ -1,7 +1,9 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Resistors
 {
@@ -10,6 +12,7 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>
+    [BehaviorFor(typeof(Resistor), typeof(INoiseBehavior), 3)]
     public class Noise : Frequency, INoiseBehavior
     {
         private readonly NoiseThermal _thermal;
@@ -35,9 +38,9 @@ namespace SpiceSharp.Components.Resistors
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
-        /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
-        public Noise(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Noise(IComponentBindingContext context) : base(context)
         {
             var state = context.GetState<IComplexSimulationState>();
             _thermal = new NoiseThermal("r",

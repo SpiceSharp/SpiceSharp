@@ -40,10 +40,10 @@ namespace SpiceSharp.Components.Diodes
         /// <summary>
         /// Initializes a new instance of the <see cref="Dynamic"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        protected Dynamic(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        protected Dynamic(IComponentBindingContext context)
+            : base(context)
         {
         }
 

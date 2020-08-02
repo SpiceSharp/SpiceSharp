@@ -1,6 +1,8 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
+using System;
 
 namespace SpiceSharp.Components.Common
 {
@@ -10,6 +12,8 @@ namespace SpiceSharp.Components.Common
     /// <typeparam name="P">The parameter set type.</typeparam>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IParameterized{P}" />
+    [BehaviorFor(typeof(ResistorModel), typeof(ITemperatureBehavior), new[] { typeof(Resistors.ModelParameters) })]
+    [BehaviorFor(typeof(CapacitorModel), typeof(ITemperatureBehavior), new[] { typeof(Capacitors.ModelParameters) })]
     public class ParameterBehavior<P> : Behavior,
         IParameterized<P> where P : IParameterSet
     {
@@ -19,10 +23,10 @@ namespace SpiceSharp.Components.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterBehavior{P}"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ParameterBehavior(string name, IBindingContext context)
-            : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public ParameterBehavior(IBindingContext context)
+            : base(context)
         {
             Parameters = context.GetParameterSet<P>();
         }

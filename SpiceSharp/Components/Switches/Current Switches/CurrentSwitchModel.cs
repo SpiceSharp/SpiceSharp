@@ -1,16 +1,13 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Common;
-using SpiceSharp.Components.Switches;
+﻿using SpiceSharp.Components.Switches;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
     /// A model for a <see cref="CurrentSwitch"/>
     /// </summary>
-    public class CurrentSwitchModel : Model,
+    public class CurrentSwitchModel : Entity<BindingContext>,
         IParameterized<CurrentModelParameters>
     {
         /// <summary>
@@ -28,18 +25,6 @@ namespace SpiceSharp.Components
         public CurrentSwitchModel(string name)
             : base(name)
         {
-        }
-
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            Parameters.CalculateDefaults();
-            var container = new BehaviorContainer(Name);
-            container.Add(new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters)));
-            simulation.EntityBehaviors.Add(container);
         }
     }
 }

@@ -83,6 +83,14 @@ namespace SpiceSharp.General
         }
 
         /// <summary>
+        /// Gets the number of values.
+        /// </summary>
+        /// <value>
+        /// The count.
+        /// </value>
+        public int Count { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TypeValues{T}" /> class.
         /// </summary>
         public TypeValues()
@@ -125,6 +133,7 @@ namespace SpiceSharp.General
                 };
                 _first.Next = node;
             }
+            Count++;
         }
 
         /// <summary>
@@ -136,6 +145,7 @@ namespace SpiceSharp.General
             if (_first.Value.Equals(value))
             {
                 _first = _first.Next;
+                Count--;
                 return true;
             }
             else
@@ -147,6 +157,7 @@ namespace SpiceSharp.General
                     if (elt.Value.Equals(value))
                     {
                         previous.Next = elt.Next;
+                        Count--;
                         return true;
                     }
                     previous = elt;

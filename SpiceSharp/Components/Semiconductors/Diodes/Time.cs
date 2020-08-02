@@ -1,6 +1,8 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -9,6 +11,7 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
+    [BehaviorFor(typeof(Diode), typeof(ITimeBehavior), 2)]
     public class Time : Dynamic,
         ITimeBehavior
     {
@@ -27,15 +30,17 @@ namespace SpiceSharp.Components.Diodes
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Time(IComponentBindingContext context)
+            : base(context)
         {
             _time = context.GetState<ITimeSimulationState>();
             var method = context.GetState<IIntegrationMethod>();
             _capCharge = method.CreateDerivative();
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
             double vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;

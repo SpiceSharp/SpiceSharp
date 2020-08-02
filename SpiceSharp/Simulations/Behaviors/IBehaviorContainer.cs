@@ -1,9 +1,11 @@
-﻿using SpiceSharp.General;
+﻿using SpiceSharp.Entities;
+using SpiceSharp.General;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 
 namespace SpiceSharp.Behaviors
 {
@@ -27,13 +29,13 @@ namespace SpiceSharp.Behaviors
         string Name { get; }
 
         /// <summary>
-        /// Adds a behavior if the specified behavior does not yet exist in the container.
+        /// Starts building the behaviors for the behavior container.
         /// </summary>
-        /// <typeparam name="Target">The target behavior type.</typeparam>
+        /// <typeparam name="TContext">The type of binding context.</typeparam>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="factory">The factory.</param>
-        /// <returns>The container itself for chaining calls.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> or <paramref name="factory"/> is <c>null</c>.</exception>
-        IBehaviorContainer AddIfNo<Target>(ISimulation simulation, Func<IBehavior> factory) where Target : IBehavior;
+        /// <param name="context">The binding context.</param>
+        /// <returns>The behavior container builder.</returns>
+        IBehaviorContainerBuilder<TContext> Build<TContext>(ISimulation simulation, TContext context)
+            where TContext : IBindingContext;
     }
 }

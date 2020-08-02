@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Capacitors
 {
@@ -11,6 +13,7 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature" />
     /// <seealso cref="ITimeBehavior" />
+    [BehaviorFor(typeof(Capacitor), typeof(ITimeBehavior), 1)]
     public class Time : Temperature,
         IBiasingBehavior,
         ITimeBehavior
@@ -36,9 +39,9 @@ namespace SpiceSharp.Components.Capacitors
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Time(IComponentBindingContext context) : base(context)
         {
             context.Nodes.CheckNodes(2);
             _biasing = context.GetState<IBiasingSimulationState>();

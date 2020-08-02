@@ -11,7 +11,8 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="BindingContext" />
     /// <seealso cref="IComponentBindingContext" />
-    public class ComponentBindingContext : BindingContext, IComponentBindingContext
+    public class ComponentBindingContext : BindingContext,
+        IComponentBindingContext
     {
         /// <summary>
         /// Gets the model behaviors.
@@ -35,10 +36,9 @@ namespace SpiceSharp.Components
         /// <param name="component">The component creating the behavior.</param>
         /// <param name="simulation">The simulation for which a behavior is created.</param>
         /// <param name="behaviors">The behaviors created by the entity.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public ComponentBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
-            : base(component, simulation, behaviors, linkParameters)
+        public ComponentBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors)
+            : base(component, simulation, behaviors)
         {
             // Get the nodes of the component
             var nodes = component.Nodes;

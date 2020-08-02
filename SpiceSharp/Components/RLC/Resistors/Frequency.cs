@@ -4,6 +4,8 @@ using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Resistors
 {
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(Resistor), typeof(IFrequencyBehavior), 2)]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {
@@ -40,19 +43,21 @@ namespace SpiceSharp.Components.Resistors
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context) : base(context)
         {
             var state = context.GetState<IComplexSimulationState>();
             _variables = new OnePort<Complex>(state, context);
             _elements = new ElementSet<Complex>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             _elements.Add(Conductance, -Conductance, -Conductance, Conductance);

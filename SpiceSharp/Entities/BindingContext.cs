@@ -43,6 +43,9 @@ namespace SpiceSharp.Entities
         /// <inheritdoc/>
         public bool TryGetState<S>(out S state) where S : ISimulationState => Simulation.TryGetState(out state);
 
+        /// <inheritdoc/>
+        public bool UsesState<S>() where S : ISimulationState => Simulation.UsesState<S>();
+
         /// <summary>
         /// Gets a simulation parameter set of the specified type.
         /// </summary>
@@ -124,14 +127,13 @@ namespace SpiceSharp.Entities
         /// <param name="entity">The entity creating the behavior.</param>
         /// <param name="simulation">The simulation for which a behavior is created.</param>
         /// <param name="behaviors">The behavior container.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked. If <c>false</c>, only cloned parameters are returned by the context.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/> or <paramref name="simulation"/> is <c>null</c>.</exception>
-        public BindingContext(IEntity entity, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
+        public BindingContext(IEntity entity, ISimulation simulation, IBehaviorContainer behaviors)
         {
             Entity = entity.ThrowIfNull(nameof(entity));
             Simulation = simulation.ThrowIfNull(nameof(simulation));
             Behaviors = behaviors;
-            _cloned = linkParameters ? null : new Dictionary<IParameterSet, IParameterSet>();
+            _cloned = entity.LinkParameters ? null : new Dictionary<IParameterSet, IParameterSet>();
         }
     }
 }

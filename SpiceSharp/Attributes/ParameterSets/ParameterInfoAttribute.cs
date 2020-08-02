@@ -25,16 +25,7 @@ namespace SpiceSharp.ParameterSets
         public bool IsPrincipal { get; set; } = false;
 
         /// <summary>
-        /// Gets or sets the exponent (scientific notation). Indicates that
-        /// the value will be multiplied with 10^Exponent internally.
-        /// </summary>
-        /// <value>
-        /// The exponent.
-        /// </value>
-        public sbyte Exponent { get; set; } = 0;
-
-        /// <summary>
-        /// Gets the units of the parameter.
+        /// Gets or sets the units of the parameter.
         /// </summary>
         /// <value>
         /// The units.

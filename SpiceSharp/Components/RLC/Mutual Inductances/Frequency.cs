@@ -1,7 +1,9 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.MutualInductances
 {
@@ -10,6 +12,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(MutualInductance), typeof(IFrequencyBehavior), 1)]
     public class Frequency : Temperature,
         IFrequencyBehavior
     {
@@ -20,9 +23,10 @@ namespace SpiceSharp.Components.MutualInductances
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, BindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(BindingContext context) 
+            : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
             _branch1 = context.Inductor1Behaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
@@ -35,10 +39,12 @@ namespace SpiceSharp.Components.MutualInductances
                 new MatrixLocation(br2, br1));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var value = _complex.Laplace * Factor;

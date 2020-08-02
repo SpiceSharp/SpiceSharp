@@ -1,9 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Switches;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System.Linq;
 
@@ -13,7 +10,7 @@ namespace SpiceSharp.Components
     /// A voltage-controlled switch
     /// </summary>
     [Pin(0, "S+"), Pin(1, "S-"), Pin(2, "SC+"), Pin(3, "SC-"), Connected(0, 1)]
-    public class VoltageSwitch : Component,
+    public class VoltageSwitch : Component<VoltageSwitchBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -56,27 +53,7 @@ namespace SpiceSharp.Components
             Connect(pos, neg, controlPos, controlNeg);
         }
 
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name, typeof(VoltageSwitchModel));
-            behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context, new VoltageControlled(context)))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context, new VoltageControlled(context)))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context, new VoltageControlled(context)));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
-        /// <summary>
-        /// Applies the subject to any rules in the validation provider.
-        /// </summary>
-        /// <param name="rules">The provider.</param>
+        /// <inheritdoc/>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

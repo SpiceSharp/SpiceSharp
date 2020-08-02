@@ -40,31 +40,5 @@ namespace SpiceSharp.Components.Switches
         /// The hysteresis value.
         /// </value>
         public virtual double Hysteresis { get; set; }
-
-        /// <summary>
-        /// Gets the on conductance.
-        /// </summary>
-        /// <value>
-        /// The on conductance.
-        /// </value>
-        public double OnConductance { get; private set; }
-
-        /// <summary>
-        /// Gets the off conductance.
-        /// </summary>
-        /// <value>
-        /// The off conductance.
-        /// </value>
-        public double OffConductance { get; private set; }
-
-        /// <inheritdoc/>
-        public void CalculateDefaults()
-        {
-            // Only positive hysteresis values!
-            if (Hysteresis < 0)
-                Hysteresis = -Hysteresis;
-            OnConductance = 1.0 / OnResistance;
-            OffConductance = 1.0 / OffResistance;
-        }
     }
 }

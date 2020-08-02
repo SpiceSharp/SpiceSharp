@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageDelays;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -14,7 +12,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IParameterized{P}"/>
     [Pin(0, "V+"), Pin(1, "V-"), Pin(2, "VC+"), Pin(3, "VC-")]
     [Connected(0, 1), VoltageDriver(0, 1)]
-    public partial class VoltageDelay : Component,
+    public partial class VoltageDelay : Component<ComponentBindingContext>,
         IParameterized<VoltageDelayParameters>
     {
         /// <inheritdoc/>
@@ -51,19 +49,6 @@ namespace SpiceSharp.Components
         {
             Parameters.Delay = delay;
             Connect(pos, neg, controlPos, controlNeg);
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<IAcceptBehavior>(simulation, () => new Accept(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

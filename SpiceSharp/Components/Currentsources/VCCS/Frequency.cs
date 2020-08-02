@@ -1,9 +1,11 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSources
 {
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
     /// </summary>
     /// <seealso cref="BiasingBehavior"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(VoltageControlledCurrentSource), typeof(IFrequencyBehavior), 1)]
     public class FrequencyBehavior : BiasingBehavior,
         IFrequencyBehavior
     {
@@ -34,10 +37,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public FrequencyBehavior(IComponentBindingContext context)
+            : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
             _variables = new TwoPort<Complex>(_complex, context);
@@ -53,10 +56,12 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
                 new MatrixLocation(neg, contNeg));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var value = Parameters.Transconductance;

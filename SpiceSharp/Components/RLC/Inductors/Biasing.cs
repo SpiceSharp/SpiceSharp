@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Inductors
 {
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.Inductors
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior" />
     /// <seealso cref="IBranchedBehavior{T}" />
+    [BehaviorFor(typeof(Inductor), typeof(IBiasingBehavior), 1)]
     public class Biasing : Temperature,
         IBiasingBehavior,
         IBranchedBehavior<double>
@@ -37,9 +40,10 @@ namespace SpiceSharp.Components.Inductors
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context) 
+            : base(context)
         {
             context.Nodes.CheckNodes(2);
             var state = context.GetState<IBiasingSimulationState>();
@@ -56,9 +60,7 @@ namespace SpiceSharp.Components.Inductors
                 new MatrixLocation(br, pos));
         }
 
-        /// <summary>
-        /// Loads the Y-matrix and right hand side vector.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual void Load()
         {
             _elements.Add(1, -1, -1, 1);

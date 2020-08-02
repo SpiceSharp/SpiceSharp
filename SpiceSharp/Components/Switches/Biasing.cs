@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.Switches
 {
@@ -13,26 +15,23 @@ namespace SpiceSharp.Components.Switches
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Switches.Parameters"/>
+    [BehaviorFor(typeof(CurrentSwitch), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(VoltageSwitch), typeof(IBiasingBehavior))]
     public class Biasing : Behavior, IBiasingBehavior,
         IParameterized<Parameters>
     {
-        private readonly Controller _controller;
+        private readonly Func<double> _controller;
         private readonly IIterationSimulationState _iteration;
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
 
         /// <summary>
-        /// Gets the parameter set.
+        /// The model temperature behavior.
         /// </summary>
-        /// <value>
-        /// The parameter set.
-        /// </value>
-        public Parameters Parameters { get; }
+        protected readonly ModelTemperature ModelTemperature;
 
-        /// <summary>
-        /// The model parameters.
-        /// </summary>
-        protected readonly ModelParameters ModelParameters;
+        /// <inheritdoc/>
+        public Parameters Parameters { get; }
 
         /// <summary>
         /// Gets or sets the old state of the switch.
@@ -87,18 +86,18 @@ namespace SpiceSharp.Components.Switches
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Biasing"/> class.
+        /// Initializes a new instance of the <see cref="Biasing" /> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        /// <param name="controller">The controller.</param>
-        public Biasing(string name, IComponentBindingContext context, Controller controller) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(ISwitchBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
 
             _iteration = context.GetState<IIterationSimulationState>();
-            _controller = controller.ThrowIfNull(nameof(controller));
-            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            _controller = context.ControlValue;
+            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperature>();
             Parameters = context.GetParameterSet<Parameters>();
 
             var state = context.GetState<IBiasingSimulationState>();
@@ -106,6 +105,7 @@ namespace SpiceSharp.Components.Switches
             _elements = new ElementSet<double>(state.Solver, _variables.GetMatrixLocations(state.Map));
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             bool currentState;
@@ -129,13 +129,13 @@ namespace SpiceSharp.Components.Switches
             else
             {
                 // Get the previous state
-                var ctrl = _controller.Value;
+                var ctrl = _controller();
                 if (UseOldState)
                 {
                     // Calculate the current state
-                    if (ctrl > ModelParameters.Threshold + ModelParameters.Hysteresis)
+                    if (ctrl > ModelTemperature.Threshold + ModelTemperature.Hysteresis)
                         currentState = true;
-                    else if (ctrl < ModelParameters.Threshold - ModelParameters.Hysteresis)
+                    else if (ctrl < ModelTemperature.Threshold - ModelTemperature.Hysteresis)
                         currentState = false;
                     else
                         currentState = PreviousState;
@@ -147,12 +147,12 @@ namespace SpiceSharp.Components.Switches
                     PreviousState = CurrentState;
 
                     // Calculate the current state
-                    if (ctrl > ModelParameters.Threshold + ModelParameters.Hysteresis)
+                    if (ctrl > ModelTemperature.Threshold + ModelTemperature.Hysteresis)
                     {
                         CurrentState = true;
                         currentState = true;
                     }
-                    else if (ctrl < ModelParameters.Threshold - ModelParameters.Hysteresis)
+                    else if (ctrl < ModelTemperature.Threshold - ModelTemperature.Hysteresis)
                     {
                         CurrentState = false;
                         currentState = false;
@@ -174,7 +174,7 @@ namespace SpiceSharp.Components.Switches
             }
 
             // Get the current conduction
-            var gNow = currentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
+            var gNow = currentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
             Conductance = gNow;
 
             // Load the Y-matrix

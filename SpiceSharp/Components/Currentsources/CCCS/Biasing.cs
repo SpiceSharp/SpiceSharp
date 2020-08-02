@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
@@ -14,6 +15,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
+    [BehaviorFor(typeof(CurrentControlledCurrentSource), typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<Parameters>
@@ -41,12 +43,11 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing" /> class.
         /// </summary>
-        /// <param name="name">The name of the behavior.</param>
         /// <param name="context">The context for the behavior.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/>, <paramref name="context"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if the simulation does not define an <see cref="IComplexSimulationState"/>.</exception>
         /// <exception cref="TypeNotFoundException">Thrown if the controlling entity does not have a behavior of type <see cref="IBranchedBehavior{T}"/>.</exception>
-        public Biasing(string name, ICurrentControlledBindingContext context) : base(name)
+        public Biasing(ICurrentControlledBindingContext context) : base(context)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(2);

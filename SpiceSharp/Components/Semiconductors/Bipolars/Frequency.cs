@@ -2,6 +2,8 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -10,6 +12,7 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(IFrequencyBehavior), 2)]
     public class Frequency : Dynamic,
         IFrequencyBehavior
     {
@@ -44,9 +47,10 @@ namespace SpiceSharp.Components.Bipolars
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context)
+            : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
 
@@ -99,6 +103,7 @@ namespace SpiceSharp.Components.Bipolars
                 new MatrixLocation(_collectorPrimeNode, _baseNode));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
             var vbe = VoltageBe;
@@ -108,6 +113,7 @@ namespace SpiceSharp.Components.Bipolars
             CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var cstate = _complex;

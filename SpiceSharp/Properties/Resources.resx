@@ -156,6 +156,12 @@
   <data name="Delays.NonIncreasingTime" xml:space="preserve">
     <value>Time points are not monotonically increasing. Time goes from {0:e3} to {1:e3}.</value>
   </data>
+  <data name="DI.CannotResolveConstructor" xml:space="preserve">
+    <value>Cannot resolve constructor for '{0}'.</value>
+  </data>
+  <data name="DI.InvalidConstructorParameter" xml:space="preserve">
+    <value>Cannot resolve a parameter of type '{0}' for the constructor of '{1}'.</value>
+  </data>
   <data name="Diodes.BreakdownCurrentIncreased" xml:space="preserve">
     <value>{0}: breakdown current increased to {1:g5} to resolve incompatibility with specified saturation current.</value>
   </data>

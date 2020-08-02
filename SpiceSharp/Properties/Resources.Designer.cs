@@ -179,6 +179,24 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot resolve constructor for &apos;{0}&apos;..
+        /// </summary>
+        public static string DI_CannotResolveConstructor {
+            get {
+                return ResourceManager.GetString("DI.CannotResolveConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot resolve a parameter of type &apos;{0}&apos; for the constructor of &apos;{1}&apos;..
+        /// </summary>
+        public static string DI_InvalidConstructorParameter {
+            get {
+                return ResourceManager.GetString("DI.InvalidConstructorParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: breakdown current increased to {1:g5} to resolve incompatibility with specified saturation current..
         /// </summary>
         public static string Diodes_BreakdownCurrentIncreased {

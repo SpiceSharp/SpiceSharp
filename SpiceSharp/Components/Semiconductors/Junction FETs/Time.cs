@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
@@ -10,6 +11,7 @@ namespace SpiceSharp.Components.JFETs
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
+    [BehaviorFor(typeof(JFET), typeof(ITimeBehavior), 2)]
     public class Time : Biasing,
         ITimeBehavior
     {
@@ -37,9 +39,9 @@ namespace SpiceSharp.Components.JFETs
         /// <summary>
         /// Initializes a new instance of the <see cref="Time"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Time(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Time(IComponentBindingContext context) : base(context)
         {
             _time = context.GetState<ITimeSimulationState>();
             var method = context.GetState<IIntegrationMethod>();
@@ -61,6 +63,7 @@ namespace SpiceSharp.Components.JFETs
             }, new[] { _gateNode, _drainPrimeNode, _sourcePrimeNode });
         }
 
+        /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
             var vgs = Vgs;

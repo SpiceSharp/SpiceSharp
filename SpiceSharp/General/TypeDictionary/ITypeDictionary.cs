@@ -101,5 +101,12 @@ namespace SpiceSharp.General
         /// <returns>The values.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="key"/> is <c>null</c>.</exception>
         IEnumerable<V> GetAllValues(Type key);
+
+        /// <summary>
+        /// Gets the the number of values that this type points to (direct or indirect).
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>The number of values.</returns>
+        int GetValueCount(Type key);
     }
 }

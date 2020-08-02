@@ -1,8 +1,10 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.Mosfets
 {
@@ -11,6 +13,9 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     /// <seealso cref="Behavior"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(Mosfet1), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(Mosfet2), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(Mosfet3), typeof(IFrequencyBehavior), 1)]
     public class Frequency : Behavior,
         IFrequencyBehavior
     {
@@ -48,15 +53,15 @@ namespace SpiceSharp.Components.Mosfets
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">Name.</param>
         /// <param name="context">The binding context.</param>
-        public Frequency(string name, IComponentBindingContext context)
-            : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context)
+            : base(context)
         {
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
             Behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();
             _complex = context.GetState<IComplexSimulationState>();
-            Variables = new MosfetVariables<Complex>(name, _complex, context.Nodes,
+            Variables = new MosfetVariables<Complex>(Name, _complex, context.Nodes,
                 !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Behavior.Parameters.DrainSquares > 0,
                 !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Behavior.Parameters.SourceSquares > 0);
             _elements = new ElementSet<Complex>(_complex.Solver, Variables.GetMatrixLocations(_complex.Map));

@@ -105,6 +105,15 @@ namespace SpiceSharp.General
         }
 
         /// <inheritdoc/>
+        public int GetValueCount(Type key)
+        {
+            key.ThrowIfNull(nameof(key));
+            if (_interfaces.TryGetValue(key, out var result))
+                return result.Count;
+            return 0;
+        }
+
+        /// <inheritdoc/>
         public bool TryGetValue(Type key, out V value)
         {
             key.ThrowIfNull(nameof(key));

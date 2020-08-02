@@ -107,7 +107,7 @@ namespace SpiceSharp.Components.Common
         {
             if (LocalStates.TryGetValue(out S result))
                 return result;
-            return default;
+            return Parent.GetState<S>();
         }
 
         /// <inheritdoc/>
@@ -115,8 +115,7 @@ namespace SpiceSharp.Components.Common
         {
             if (LocalStates.TryGetValue(out state))
                 return true;
-            state = default;
-            return false;
+            return Parent.TryGetState(out state);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using System;
 
@@ -11,6 +12,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="MutualInductances.Parameters"/>
+    [BehaviorFor(typeof(MutualInductance), typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>
@@ -22,17 +24,16 @@ namespace SpiceSharp.Components.MutualInductances
         /// </summary>
         protected double Factor { get; private set; }
 
-        /// <summary>
-        /// Gets the base parameters.
-        /// </summary>
+        /// <inheritdoc/>
         public Parameters Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Temperature"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Temperature(string name, BindingContext context) : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Temperature(BindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
 
@@ -41,9 +42,7 @@ namespace SpiceSharp.Components.MutualInductances
             _temp2 = (Inductors.Temperature)context.Inductor2Behaviors.GetValue<ITemperatureBehavior>();
         }
 
-        /// <summary>
-        /// Perform temperature-dependent calculations.
-        /// </summary>
+        /// <inheritdoc/>
         void ITemperatureBehavior.Temperature()
         {
             // Calculate coupling factor

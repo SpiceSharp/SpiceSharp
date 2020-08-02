@@ -1,9 +1,11 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Numerics;
+using System;
 
 namespace SpiceSharp.Components.Capacitors
 {
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IFrequencyBehavior"/>
+    [BehaviorFor(typeof(Capacitor), typeof(IFrequencyBehavior), 1)]
     public class Frequency : Temperature,
         IFrequencyBehavior
     {
@@ -42,10 +45,10 @@ namespace SpiceSharp.Components.Capacitors
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Frequency(string name, IComponentBindingContext context)
-            : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Frequency(IComponentBindingContext context)
+            : base(context)
         {
             context.Nodes.CheckNodes(2);
             _complex = context.GetState<IComplexSimulationState>();
@@ -53,10 +56,12 @@ namespace SpiceSharp.Components.Capacitors
             _elements = new ElementSet<Complex>(_complex.Solver, _variables.GetMatrixLocations(_complex.Map));
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
         }
 
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var val = _complex.Laplace * Capacitance;

@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
@@ -10,7 +11,11 @@ namespace SpiceSharp.Components.JFETs
     /// <summary>
     /// Frequency behavior for a <see cref="JFET" />.
     /// </summary>
-    public class FrequencyBehavior : Biasing, IFrequencyBehavior
+    /// <seealso cref="Biasing" />
+    /// <seealso cref="IFrequencyBehavior" />
+    [BehaviorFor(typeof(JFET), typeof(IFrequencyBehavior), 2)]
+    public class FrequencyBehavior : Biasing,
+        IFrequencyBehavior
     {
         private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
 
@@ -61,9 +66,10 @@ namespace SpiceSharp.Components.JFETs
         /// <summary>
         /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public FrequencyBehavior(string name, IComponentBindingContext context) : base(name, context)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public FrequencyBehavior(IComponentBindingContext context)
+            : base(context)
         {
             ComplexState = context.GetState<IComplexSimulationState>();
 
@@ -99,9 +105,7 @@ namespace SpiceSharp.Components.JFETs
                 new MatrixLocation(_sourcePrimeNode, _drainPrimeNode));
         }
 
-        /// <summary>
-        /// Initializes the parameters.
-        /// </summary>
+        /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
             var vgs = Vgs;
@@ -130,9 +134,7 @@ namespace SpiceSharp.Components.JFETs
                 CapGd = czgdf2 * (ModelTemperature.F3 + vgd / twop);
         }
 
-        /// <summary>
-        /// Load the Y-matrix and Rhs vector.
-        /// </summary>
+        /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
             var omega = ComplexState.Laplace.Imaginary;

@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Capacitors;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -17,7 +15,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Capacitors.Parameters"/>
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "C+"), Pin(1, "C-"), Connected]
-    public class Capacitor : Component,
+    public class Capacitor : Component<ComponentBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -56,17 +54,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();

@@ -68,10 +68,10 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "a", "b", 1e3),
                 new Resistor("R2", "b", "0", 1e3)),
                 "a", "b");
-            subckt.Parameters.LocalBiasingSolver = true;
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new Subcircuit("X1", subckt, "in", "out"));
+                new Subcircuit("X1", subckt, "in", "out")
+                    .SetParameter("localsolver", true));
 
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
@@ -88,10 +88,10 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "a", "b", 1e3),
                 new Resistor("R2", "b", "0", 1e3)),
                 "a", "b");
-            subckt.Parameters.LocalBiasingSolver = true;
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
-                new Subcircuit("X1", subckt, "in", "out"));
+                new Subcircuit("X1", subckt, "in", "out")
+                    .SetParameter("localsolver", true));
 
             var ac = new AC("ac", new DecadeSweep(1, 100, 3));
             IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
@@ -109,10 +109,10 @@ namespace SpiceSharpTest.Models
                 new Resistor("R2", "b", "c", 1e3),
                 new Resistor("R3", "b", "0", 1e3)),
                 "a", "c");
-            subckt.Parameters.LocalBiasingSolver = true;
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new Subcircuit("X1", subckt, "in", "out"));
+                new Subcircuit("X1", subckt, "in", "out")
+                    .SetParameter("localsolver", true));
 
             var op = new OP("op");
             IExport<double>[] exports = new[]
@@ -135,10 +135,10 @@ namespace SpiceSharpTest.Models
                 new Resistor("R2", "b", "c", 1e3),
                 new Resistor("R3", "b", "0", 1e3)),
                 "a", "c");
-            subckt.Parameters.LocalBiasingSolver = true;
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
-                new Subcircuit("X1", subckt, "in", "out"));
+                new Subcircuit("X1", subckt, "in", "out")
+                    .SetParameter("localsolver", true));
 
             var ac = new AC("ac", new DecadeSweep(1, 100, 3));
             IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
@@ -155,10 +155,10 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "a", "b", 1e3),
                 new Capacitor("C1", "b", "0", 1e-6)),
                 "a", "b");
-            subckt.Parameters.LocalBiasingSolver = true;
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1.0),
-                new Subcircuit("X1", subckt, "in", "out"));
+                new Subcircuit("X1", subckt, "in", "out")
+                    .SetParameter("localsolver", true));
 
             var tran = new Transient("transient", 1e-6, 1e-3);
             tran.TimeParameters.InitialConditions.Add("out", 0.0);
@@ -174,11 +174,11 @@ namespace SpiceSharpTest.Models
             // Variable that makes an equivalent circuit impossible
             var subckt = new SubcircuitDefinition(new Circuit(
                 new VoltageSource("V1", "a", "0", 1.0)), "a");
-            subckt.Parameters.LocalBiasingSolver = true;
             var ckt = new Circuit(
                 new Resistor("R1", "in", "out", 1e3),
                 new Resistor("R2", "out", "0", 1e3),
-                new Subcircuit("X1", subckt, "in"));
+                new Subcircuit("X1", subckt, "in")
+                    .SetParameter("localsolver", true));
 
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };

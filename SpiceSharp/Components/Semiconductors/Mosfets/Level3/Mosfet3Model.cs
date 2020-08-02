@@ -1,7 +1,6 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Mosfets.Level3;
+﻿using SpiceSharp.Components.Mosfets.Level3;
+using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -9,7 +8,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Mosfet3"/>
     /// </summary>
-    public class Mosfet3Model : Model,
+    public class Mosfet3Model : Entity<BindingContext>,
         IParameterized<ModelParameters>
     {
         /// <summary>
@@ -43,15 +42,6 @@ namespace SpiceSharp.Components
                 Parameters.SetNmos(true);
             else
                 Parameters.SetPmos(true);
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ModelBindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors.AddIfNo<ITemperatureBehavior>(simulation, () => new ModelTemperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

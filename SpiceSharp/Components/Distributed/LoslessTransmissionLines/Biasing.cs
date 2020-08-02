@@ -1,7 +1,9 @@
 ﻿using SpiceSharp.Algebra;
+using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.LosslessTransmissionLines
 {
@@ -12,6 +14,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
+    [BehaviorFor(typeof(LosslessTransmissionLine), typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<Parameters>
@@ -72,16 +75,17 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public Biasing(string name, IComponentBindingContext context)
-            : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public Biasing(IComponentBindingContext context)
+            : base(context)
         {
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(4);
 
             // Get parameters
             Parameters = context.GetParameterSet<Parameters>();
+            Parameters.CalculateDefaults();
             BiasingState = context.GetState<IBiasingSimulationState>();
             _pos1 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[0])];
             _neg1 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[1])];
@@ -123,6 +127,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
                 new MatrixLocation(_br2, _br2));
         }
 
+        /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
             var y = Parameters.Admittance;

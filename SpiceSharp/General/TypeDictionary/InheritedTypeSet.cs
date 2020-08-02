@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,6 +48,9 @@ namespace SpiceSharp.General
 
         /// <inheritdoc/>
         public bool ContainsType<TResult>() where TResult : V => _dictionary.ContainsKey(typeof(TResult));
+
+        /// <inheritdoc/>
+        public bool ContainsType(Type key) => _dictionary.ContainsKey(key.ThrowIfNull(nameof(key)));
 
         /// <summary>
         /// Copies the elements of the <see cref="ICollection{T}" /> to an <see cref="System.Array" />, starting at a particular <see cref="System.Array" /> index.

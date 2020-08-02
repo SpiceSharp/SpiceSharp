@@ -1,8 +1,6 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.MutualInductances;
+﻿using SpiceSharp.Components.MutualInductances;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -13,7 +11,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Component"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="MutualInductances.Parameters"/>
-    public class MutualInductance : Entity,
+    public class MutualInductance : Entity<MutualInductances.BindingContext>,
         IParameterized<Parameters>
     {
         /// <inheritdoc/>
@@ -61,18 +59,6 @@ namespace SpiceSharp.Components
             Parameters.Coupling = coupling;
             InductorName1 = inductorName1;
             InductorName2 = inductorName2;
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new MutualInductances.BindingContext(this, simulation, behaviors, LinkParameters);
-            behaviors
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Mosfets;
-using SpiceSharp.Components.Mosfets.Level1;
-using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -20,7 +16,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk")]
     [Connected(0, 2), Connected(0, 3)]
-    public class Mosfet1 : Component,
+    public class Mosfet1 : Component<ComponentBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -52,31 +48,12 @@ namespace SpiceSharp.Components
         /// <param name="s">The source node.</param>
         /// <param name="b">The bulk node.</param>
         /// <param name="model">The mosfet model.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
         public Mosfet1(string name, string d, string g, string s, string b, string model)
             : this(name)
         {
             Connect(d, g, s, b);
             Model = model;
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name, typeof(Mosfet1Model));
-            behaviors
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context))
-
-                // Small-signal behaviors are separate instances
-                .AddIfNo<INoiseBehavior>(simulation, () => new Mosfets.Level1.Noise(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-
-                // Time behaviors are separate instances
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
         }
 
         /// <inheritdoc/>

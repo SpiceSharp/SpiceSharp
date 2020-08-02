@@ -20,7 +20,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IRuleSubject"/>
     [Pin(0, "Drain"), Pin(1, "Gate"), Pin(2, "Source"), Pin(3, "Bulk")]
     [Connected(0, 2), Connected(0, 3)]
-    public class Mosfet2 : Component,
+    public class Mosfet2 : Component<ComponentBindingContext>,
         IParameterized<Parameters>,
         IRuleSubject
     {
@@ -61,25 +61,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            var context = new ComponentBindingContext(this, simulation, behaviors, LinkParameters);
-            if (context.ModelBehaviors == null)
-                throw new NoModelException(Name, typeof(Mosfet2Model));
-            behaviors
-                .AddIfNo<IBiasingBehavior>(simulation, () => new Biasing(Name, context))
-                .AddIfNo<ITemperatureBehavior>(simulation, () => new Temperature(Name, context))
-
-                // Small-signal behaviors are separate instances
-                .AddIfNo<INoiseBehavior>(simulation, () => new Mosfets.Level2.Noise(Name, context))
-                .AddIfNo<IFrequencyBehavior>(simulation, () => new Frequency(Name, context))
-
-                // Time behaviors are separate instances
-                .AddIfNo<ITimeBehavior>(simulation, () => new Time(Name, context));
-            simulation.EntityBehaviors.Add(behaviors);
-        }
-
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
