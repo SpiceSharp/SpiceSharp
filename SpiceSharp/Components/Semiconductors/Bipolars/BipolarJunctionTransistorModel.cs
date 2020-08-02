@@ -1,16 +1,17 @@
 ﻿using SpiceSharp.Components.Bipolars;
+using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A model for a <see cref="BipolarJunctionTransistor"/>.
+    /// A model for a <see cref="BipolarJunctionTransistor" />.
     /// </summary>
-    /// <seealso cref="Model"/>
-    /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="ModelParameters"/>
-    public class BipolarJunctionTransistorModel : Model<ModelBindingContext>,
+    /// <seealso cref="Entity{T}" />
+    /// <seealso cref="IParameterized{P}" />
+    /// <seealso cref="ModelParameters" />
+    public class BipolarJunctionTransistorModel : Entity<BindingContext>,
         IParameterized<ModelParameters>
     {
         /// <inheritdoc/>

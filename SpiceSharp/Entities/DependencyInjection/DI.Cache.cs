@@ -75,13 +75,13 @@ namespace SpiceSharp.Entities
                 {
                     var ctors = behaviorType.GetTypeInfo().GetConstructors();
                     if (ctors == null || ctors.Length != 1)
-                        throw new ArgumentException("Cannot resolve constructor for '{0}'.".FormatString(behaviorType.FullName));
+                        throw new ArgumentException();
                     var pContext = Expression.Parameter(typeof(TContext), "context");
                     return Expression.Lambda<Func<TContext, IBehavior>>(Expression.New(ctors[0], pContext), pContext).Compile();
                 }
                 catch (ArgumentException)
                 {
-                    throw new ArgumentException("Cannot resolve constructor for '{0}'.".FormatString(behaviorType.FullName));
+                    throw new ArgumentException(Properties.Resources.DI_CannotResolveConstructor.FormatString(behaviorType.FullName));
                 }
             }
 

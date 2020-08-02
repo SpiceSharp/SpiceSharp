@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
@@ -16,9 +17,9 @@ namespace SpiceSharp.Components.ParallelComponents
         /// <param name="entity">The entity.</param>
         /// <param name="simulation">The simulation for which behaviors are created.</param>
         /// <param name="behaviors">The behaviors created by the entity.</param>
-        /// <param name="linkParameters">If set to <c>true</c>, parameters are linked instead of cloned.</param>
-        public ParallelBindingContext(IEntity entity, ParallelSimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
-            : base(entity, simulation, behaviors, linkParameters)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="entity"/>, <paramref name="simulation"/> or <paramref name="behaviors"/> is <c>null</c>.</exception>
+        public ParallelBindingContext(IEntity entity, ParallelSimulation simulation, IBehaviorContainer behaviors)
+            : base(entity, simulation, behaviors)
         {
         }
 

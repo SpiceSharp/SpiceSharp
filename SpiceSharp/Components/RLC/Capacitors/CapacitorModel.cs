@@ -1,9 +1,6 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Capacitors;
-using SpiceSharp.Components.Common;
+﻿using SpiceSharp.Components.Capacitors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
@@ -11,10 +8,9 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a semiconductor <see cref="Capacitor"/>
     /// </summary>
-    /// <seealso cref="Model"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    public class CapacitorModel : Model,
+    public class CapacitorModel : Entity<BindingContext>,
         IParameterized<ModelParameters>
     {
         /// <inheritdoc/>
@@ -28,16 +24,6 @@ namespace SpiceSharp.Components
         public CapacitorModel(string name)
             : base(name)
         {
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var container = new BehaviorContainer(Name)
-            {
-                new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters))
-            };
-            simulation.EntityBehaviors.Add(container);
         }
     }
 }

@@ -23,6 +23,16 @@ namespace SpiceSharp.Entities
         string Name { get; }
 
         /// <summary>
+        /// Gets a value indicating whether behaviors need to be linked to the original entity. If this is <c>true</c>,
+        /// then changing parameter values on the entity will be reflected in any behaviors that this entity creates. If
+        /// <c>false</c>, then parameters are cloned as behaviors request it.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [link parameters]; otherwise, <c>false</c>.
+        /// </value>
+        bool LinkParameters { get; }
+
+        /// <summary>
         /// Creates the behaviors and stores them in the specified container.
         /// </summary>
         /// <param name="simulation">The simulation.</param>

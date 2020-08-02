@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
+using System;
 
 namespace SpiceSharp.Components.Subcircuits
 {
@@ -24,9 +25,9 @@ namespace SpiceSharp.Components.Subcircuits
         /// <param name="component">The component creating the behavior.</param>
         /// <param name="simulation">The simulation for which behaviors are created.</param>
         /// <param name="behaviors">The behaviors created by the entity.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
-        public SubcircuitBindingContext(IComponent component, SubcircuitSimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
-            : base(component, simulation, behaviors, linkParameters)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/>, <paramref name="simulation"/> or <paramref name="behaviors"/> is <c>null</c>.</exception>
+        public SubcircuitBindingContext(IComponent component, SubcircuitSimulation simulation, IBehaviorContainer behaviors)
+            : base(component, simulation, behaviors)
         {
         }
 

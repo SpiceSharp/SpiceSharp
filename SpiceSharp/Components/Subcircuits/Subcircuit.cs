@@ -79,7 +79,7 @@ namespace SpiceSharp.Components
             {
                 // Create our local simulation and binding context to allow our behaviors to do stuff
                 var localSim = new SubcircuitSimulation(Name, simulation, Parameters.Definition, NodeMap);
-                var context = new SubcircuitBindingContext(this, localSim, behaviors, LinkParameters);
+                var context = new SubcircuitBindingContext(this, localSim, behaviors);
                 DI.Resolve(simulation, this, behaviors, context);
 
                 // Run the simulation

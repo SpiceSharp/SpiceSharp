@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.Switches
         {
             get
             {
-                var gNow = CurrentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
+                var gNow = CurrentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
                 return ComplexVoltage * gNow;
             }
         }
@@ -63,7 +63,7 @@ namespace SpiceSharp.Components.Switches
         void IFrequencyBehavior.Load()
         {
             // Get the current state
-            var gNow = CurrentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
+            var gNow = CurrentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
 
             // Load the Y-matrix
             _elements.Add(gNow, -gNow, -gNow, gNow);

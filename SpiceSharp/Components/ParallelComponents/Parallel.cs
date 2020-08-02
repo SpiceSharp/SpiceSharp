@@ -108,7 +108,7 @@ namespace SpiceSharp.Components
             {
                 // Create our local simulation and binding context to allow behaviors to do stuff
                 var localSim = new ParallelSimulation(simulation, this);
-                var context = new ParallelBindingContext(this, localSim, behaviors, LinkParameters);
+                var context = new ParallelBindingContext(this, localSim, behaviors);
                 DI.Resolve(simulation, this, behaviors, context);
 
                 // Run the simulation

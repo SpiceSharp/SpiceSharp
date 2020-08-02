@@ -1,20 +1,18 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Capacitors;
-using SpiceSharp.Components.Common;
+﻿using SpiceSharp.Components.Capacitors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using System;
 
 namespace SpiceSharp.Components
 {
     /// <summary>
-    /// A model for semiconductor <see cref="Resistor"/>
+    /// A model for semiconductor <see cref="Resistor" />
     /// </summary>
-    /// <seealso cref="Model"/>
-    /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="ModelParameters"/>
-    public class ResistorModel : Model,
+    /// <seealso cref="Entity{T}" />
+    /// <seealso cref="IParameterized{T}" />
+    /// <seealso cref="IParameterized{P}" />
+    /// <seealso cref="ModelParameters" />
+    public class ResistorModel : Entity<BindingContext>,
         IParameterized<ModelParameters>
     {
         /// <inheritdoc/>
@@ -28,14 +26,6 @@ namespace SpiceSharp.Components
         public ResistorModel(string name)
             : base(name)
         {
-        }
-
-        /// <inheritdoc/>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var container = new BehaviorContainer(Name);
-            container.Add(new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters)));
-            simulation.EntityBehaviors.Add(container);
         }
     }
 }

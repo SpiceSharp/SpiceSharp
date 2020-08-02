@@ -10,7 +10,7 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="VoltageSwitch"/>
     /// </summary>
-    public class VoltageSwitchModel : Model,
+    public class VoltageSwitchModel : Entity<BindingContext>,
         IParameterized<VoltageModelParameters>
     {
         /// <summary>
@@ -28,18 +28,6 @@ namespace SpiceSharp.Components
         public VoltageSwitchModel(string name)
             : base(name)
         {
-        }
-
-        /// <summary>
-        /// Creates the behaviors for the specified simulation and registers them with the simulation.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            Parameters.CalculateDefaults();
-            var container = new BehaviorContainer(Name);
-            container.Add(new ParameterBehavior<ModelParameters>(Name, new BindingContext(this, simulation, null, LinkParameters)));
-            simulation.EntityBehaviors.Add(container);
         }
     }
 }

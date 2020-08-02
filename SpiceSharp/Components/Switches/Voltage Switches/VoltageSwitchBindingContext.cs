@@ -21,8 +21,9 @@ namespace SpiceSharp.Components.Switches
         /// <param name="component">The component creating the behavior.</param>
         /// <param name="simulation">The simulation for which a behavior is created.</param>
         /// <param name="behaviors">The behaviors created by the entity.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</param>
-        public VoltageSwitchBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters) : base(component, simulation, behaviors, linkParameters)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/>, <paramref name="component"/> or <paramref name="behaviors"/> is <c>null</c>.</exception>
+        public VoltageSwitchBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors)
+            : base(component, simulation, behaviors)
         {
             var state = GetState<IBiasingSimulationState>();
             var a = state.GetSharedVariable(Nodes[2]);

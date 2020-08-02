@@ -63,7 +63,7 @@ namespace SpiceSharp.Entities
                 else if (ctors.Length > 0)
                     ctor = ctors[0];
                 else
-                    throw new ArgumentException("Cannot resolve constructor for '{0}'.".FormatString(typeof(TContext).FullName));
+                    throw new ArgumentException(Properties.Resources.DI_CannotResolveConstructor.FormatString(typeof(TContext).FullName));
 
                 var pSimulation = Expression.Parameter(typeof(ISimulation), "simulation");
                 var pEntity = Expression.Parameter(typeof(IEntity), "entity");
@@ -91,7 +91,7 @@ namespace SpiceSharp.Entities
                     else if (typeof(IBehaviorContainer).GetTypeInfo().IsAssignableFrom(type))
                         arguments[p.Position] = Expression.TypeAs(pContainer, type);
                     else
-                        throw new ArgumentException("Constructor of '{0}' contains a parameter that cannot be resolved.".FormatString(typeof(TContext).FullName));
+                        throw new ArgumentException(Properties.Resources.DI_InvalidConstructorParameter.FormatString(type.FullName, typeof(TContext).FullName));
                 }
                 _contextFactory = Expression.Lambda<ContextFactory>(Expression.New(ctor, arguments), pSimulation, pEntity, pContainer, pLinkParameters).Compile();
             }

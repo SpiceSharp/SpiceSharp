@@ -25,13 +25,13 @@ namespace SpiceSharp.Components.Switches
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
 
+        /// <summary>
+        /// The model temperature behavior.
+        /// </summary>
+        protected readonly ModelTemperature ModelTemperature;
+
         /// <inheritdoc/>
         public Parameters Parameters { get; }
-
-        /// <summary>
-        /// The model parameters.
-        /// </summary>
-        protected readonly ModelParameters ModelParameters;
 
         /// <summary>
         /// Gets or sets the old state of the switch.
@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.Switches
 
             _iteration = context.GetState<IIterationSimulationState>();
             _controller = context.ControlValue;
-            ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            ModelTemperature = context.ModelBehaviors.GetValue<ModelTemperature>();
             Parameters = context.GetParameterSet<Parameters>();
 
             var state = context.GetState<IBiasingSimulationState>();
@@ -133,9 +133,9 @@ namespace SpiceSharp.Components.Switches
                 if (UseOldState)
                 {
                     // Calculate the current state
-                    if (ctrl > ModelParameters.Threshold + ModelParameters.Hysteresis)
+                    if (ctrl > ModelTemperature.Threshold + ModelTemperature.Hysteresis)
                         currentState = true;
-                    else if (ctrl < ModelParameters.Threshold - ModelParameters.Hysteresis)
+                    else if (ctrl < ModelTemperature.Threshold - ModelTemperature.Hysteresis)
                         currentState = false;
                     else
                         currentState = PreviousState;
@@ -147,12 +147,12 @@ namespace SpiceSharp.Components.Switches
                     PreviousState = CurrentState;
 
                     // Calculate the current state
-                    if (ctrl > ModelParameters.Threshold + ModelParameters.Hysteresis)
+                    if (ctrl > ModelTemperature.Threshold + ModelTemperature.Hysteresis)
                     {
                         CurrentState = true;
                         currentState = true;
                     }
-                    else if (ctrl < ModelParameters.Threshold - ModelParameters.Hysteresis)
+                    else if (ctrl < ModelTemperature.Threshold - ModelTemperature.Hysteresis)
                     {
                         CurrentState = false;
                         currentState = false;
@@ -174,7 +174,7 @@ namespace SpiceSharp.Components.Switches
             }
 
             // Get the current conduction
-            var gNow = currentState ? ModelParameters.OnConductance : ModelParameters.OffConductance;
+            var gNow = currentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
             Conductance = gNow;
 
             // Load the Y-matrix

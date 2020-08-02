@@ -21,9 +21,9 @@ namespace SpiceSharp.Components.Switches
         /// <param name="component">The component that creates the behavior.</param>
         /// <param name="simulation">The simulation for which the behavior is created.</param>
         /// <param name="behaviors">The created behaviors.</param>
-        /// <param name="linkParameters">Flag indicating that parameters should be linked.If false, only cloned parameters are returned by the context.</param>
-        public CurrentSwitchBindingContext(ICurrentControllingComponent component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)
-            : base(component, simulation, behaviors, linkParameters)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/>, <paramref name="simulation"/> or <paramref name="behaviors"/> is <c>null</c>.</exception>
+        public CurrentSwitchBindingContext(ICurrentControllingComponent component, ISimulation simulation, IBehaviorContainer behaviors)
+            : base(component, simulation, behaviors)
         {
             var branch = ControlBehaviors.GetValue<IBranchedBehavior<double>>().Branch;
             ControlValue = () => branch.Value;

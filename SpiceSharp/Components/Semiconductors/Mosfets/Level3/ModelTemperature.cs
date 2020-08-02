@@ -40,12 +40,11 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelTemperature"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
         /// <param name="context">The context.</param>
-        public ModelTemperature(string name, IBindingContext context)
-            : base(name)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+        public ModelTemperature(IBindingContext context)
+            : base(context)
         {
-            context.ThrowIfNull(nameof(context));
             _temperature = context.GetState<ITemperatureSimulationState>();
             Parameters = context.GetParameterSet<ModelParameters>();
         }
