@@ -5,8 +5,6 @@ name: Publish to NuGet
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  push:
-    branches: [ master ]
   release:
     branches: [ master ]
     types: [ published ]
@@ -37,4 +35,4 @@ jobs:
           KEY: ${{ secrets.NUGET_APIKEY }}
         run: |
           cd SpiceSharp\bin\Release
-          dotnet nuget push *.nupkg -k $KEY -s https://api.nuget.org/v3/index.json
+          dotnet nuget push *.nupkg --api-key $KEY --source https://api.nuget.org/v3/index.json
