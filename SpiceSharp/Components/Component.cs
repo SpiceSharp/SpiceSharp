@@ -129,7 +129,7 @@ namespace SpiceSharp.Components
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            DI.Resolve(simulation, this, behaviors, LinkParameters);
+            DI.Resolve(simulation, this, behaviors);
             simulation.EntityBehaviors.Add(behaviors);
         }
     }

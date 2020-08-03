@@ -24,9 +24,8 @@ namespace SpiceSharp.Entities
             /// <param name="simulation">The simulation.</param>
             /// <param name="entity">The entity.</param>
             /// <param name="container">The behavior container.</param>
-            /// <param name="linkParameters">if set to <c>true</c>, parameters are linked and not cloned.</param>
             /// <returns>The new context.</returns>
-            public static TContext Get(ISimulation simulation, IEntity entity, IBehaviorContainer container, bool linkParameters)
+            public static TContext Get(ISimulation simulation, IEntity entity, IBehaviorContainer container)
             {
                 if (_contextFactory == null)
                 {
@@ -36,7 +35,7 @@ namespace SpiceSharp.Entities
                             CreateFactory();
                     }
                 }
-                return _contextFactory(simulation, entity, container, linkParameters);
+                return _contextFactory(simulation, entity, container);
             }
 
             /// <summary>
@@ -45,9 +44,8 @@ namespace SpiceSharp.Entities
             /// <param name="simulation">The simulation.</param>
             /// <param name="entity">The entity.</param>
             /// <param name="container">The container with the behaviors.</param>
-            /// <param name="linkParameters">if set to <c>true</c>, the parameters will be linked.</param>
             /// <returns>The context.</returns>
-            public delegate TContext ContextFactory(ISimulation simulation, IEntity entity, IBehaviorContainer container, bool linkParameters);
+            public delegate TContext ContextFactory(ISimulation simulation, IEntity entity, IBehaviorContainer container);
 
             /// <summary>
             /// Creates the factory for creating binding contexts.
@@ -68,7 +66,6 @@ namespace SpiceSharp.Entities
                 var pSimulation = Expression.Parameter(typeof(ISimulation), "simulation");
                 var pEntity = Expression.Parameter(typeof(IEntity), "entity");
                 var pContainer = Expression.Parameter(typeof(IBehaviorContainer), "behaviors");
-                var pLinkParameters = Expression.Parameter(typeof(bool), "linkParameters");
                 var parameters = ctor.GetParameters();
                 var arguments = new Expression[parameters.Length];
                 foreach (var p in parameters)
@@ -76,8 +73,6 @@ namespace SpiceSharp.Entities
                     var type = p.ParameterType;
                     if (type == typeof(ISimulation))
                         arguments[p.Position] = pSimulation;
-                    else if (type == typeof(bool))
-                        arguments[p.Position] = pLinkParameters;
                     else if (type == typeof(IBehaviorContainer))
                         arguments[p.Position] = pContainer;
                     else if (type == typeof(IEntity))
@@ -93,7 +88,7 @@ namespace SpiceSharp.Entities
                     else
                         throw new ArgumentException(Properties.Resources.DI_InvalidConstructorParameter.FormatString(type.FullName, typeof(TContext).FullName));
                 }
-                _contextFactory = Expression.Lambda<ContextFactory>(Expression.New(ctor, arguments), pSimulation, pEntity, pContainer, pLinkParameters).Compile();
+                _contextFactory = Expression.Lambda<ContextFactory>(Expression.New(ctor, arguments), pSimulation, pEntity, pContainer).Compile();
             }
         }
     }
