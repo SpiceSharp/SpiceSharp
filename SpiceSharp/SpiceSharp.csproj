@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.5;netstandard2.0;net45;netcoreapp2.0</TargetFrameworks>
-    <Version>3.0.0</Version>
+    <Version>3.0.1</Version>
     <Authors>Sven Boulanger</Authors>
     <Title>Spice#</Title>
     <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>

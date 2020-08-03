@@ -92,10 +92,10 @@ namespace SpiceSharp.Entities
             }
 
             /// <inheritdoc/>
-            public void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container, bool linkParameters)
+            public void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container)
             {
                 // Reading is not really a problem
-                var context = Context<TContext>.Get(simulation, entity, container, linkParameters);
+                var context = Context<TContext>.Get(simulation, entity, container);
                 var builder = container.Build(simulation, context);
                 foreach (var action in _builders)
                     action(builder);
