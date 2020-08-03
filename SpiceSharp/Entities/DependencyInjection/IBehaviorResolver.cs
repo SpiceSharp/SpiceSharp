@@ -37,8 +37,7 @@ namespace SpiceSharp.Entities
         /// <param name="simulation">The simulation.</param>
         /// <param name="entity">The entity.</param>
         /// <param name="container">The behavior container.</param>
-        /// <param name="linkParameters">if set to <c>true</c>, parameters are linked instead of cloned.</param>
-        void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container, bool linkParameters);
+        void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container);
 
         /// <summary>
         /// Clears any strategies.

@@ -32,7 +32,6 @@ jobs:
 
       - name: Publish to NuGet
         env:
-          KEY: ${{ secrets.NUGET_APIKEY }}
-        run: |
-          cd SpiceSharp\bin\Release
-          dotnet nuget push *.nupkg --api-key $KEY --source https://api.nuget.org/v3/index.json
+          APIKEY: ${{ secrets.NUGET_APIKEY }}
+        run: dotnet nuget push .\SpiceSharp\bin\Release\SpiceSharp.*.nupkg -k $env:APIKEY -s "https://api.nuget.org/v3/index.json"
+      
