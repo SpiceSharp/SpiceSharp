@@ -3,7 +3,7 @@ using SpiceSharp.ParameterSets;
 namespace SpiceSharp.Components.Mosfets.Level1
 {
     /// <summary>
-    /// Base parameters for a <see cref="Model"/>
+    /// Base parameters for a <see cref="Mosfet1Model"/>
     /// </summary>
     /// <seealso cref="Mosfets.ModelParameters"/>
     [GeneratedParameters]

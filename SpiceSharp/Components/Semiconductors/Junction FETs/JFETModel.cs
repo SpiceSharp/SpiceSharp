@@ -7,7 +7,8 @@ namespace SpiceSharp.Components
     /// <summary>
     /// Model for a <see cref="JFET" />.
     /// </summary>
-    /// <seealso cref="Model" />
+    /// <seealso cref="Entity{TContext}"/>
+    /// <seealso cref="BindingContext"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
     public class JFETModel : Entity<BindingContext>,

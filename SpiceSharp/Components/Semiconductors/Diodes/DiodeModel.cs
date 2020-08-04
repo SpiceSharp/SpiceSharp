@@ -8,7 +8,8 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Diode"/>.
     /// </summary>
-    /// <seealso cref="Model"/>
+    /// <seealso cref="Entity{TContext}"/>
+    /// <seealso cref="BindingContext"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
     public class DiodeModel : Entity<BindingContext>,

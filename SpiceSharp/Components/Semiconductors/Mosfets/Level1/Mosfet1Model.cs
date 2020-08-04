@@ -8,7 +8,8 @@ namespace SpiceSharp.Components
     /// <summary>
     /// A model for a <see cref="Mosfet1"/>.
     /// </summary>
-    /// <seealso cref="Model"/>
+    /// <seealso cref="Entity{TContext}"/>
+    /// <seealso cref="BindingContext"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
     public class Mosfet1Model : Entity<BindingContext>,
