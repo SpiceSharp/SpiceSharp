@@ -4,6 +4,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
+using SpiceSharp.Reflection;
 
 namespace SpiceSharpTest.Models
 {
@@ -32,7 +33,7 @@ namespace SpiceSharpTest.Models
             var resistor = new Resistor("R1", "a", "b", 1.0e3);
             resistor.Parameters.SeriesMultiplier = 2.0;
             resistor.Parameters.ParallelMultiplier = 3.0;
-            var clone = (Resistor)Activator.CreateInstance(typeof(Resistor), new object[] { "R1Clone" });
+            var clone = Factory<string>.Get<Resistor>("R1Clone");
             ReflectionHelper.CopyPropertiesAndFields(resistor, clone);
 
             resistor.Parameters.ParallelMultiplier = 1.0;

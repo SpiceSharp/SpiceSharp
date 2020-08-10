@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SpiceSharp.Entities
+namespace SpiceSharp.Entities.DependencyInjection
 {
     public static partial class DI
     {
@@ -14,12 +14,13 @@ namespace SpiceSharp.Entities
         /// The dependency injection container that is used by entities to
         /// create behaviors.
         /// </summary>
-        protected class Cache<TContext> : IBehaviorResolver<TContext>
+        /// <seealso cref="IBehaviorResolver{T}"/>
+        protected class Resolver<TContext> : IBehaviorResolver<TContext>
             where TContext : IBindingContext
         {
             private readonly List<BuildBehavior> _builders = new List<BuildBehavior>();
 
-            private delegate IBehaviorResolver<TContext> RegisterMethod(Cache<TContext> instance, Func<TContext, IBehavior> factory);
+            private delegate IBehaviorResolver<TContext> RegisterMethod(Resolver<TContext> instance, Func<TContext, IBehavior> factory);
             private class RegisterMethods
             {
                 public RegisterMethod After;
@@ -95,7 +96,7 @@ namespace SpiceSharp.Entities
             public void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer container)
             {
                 // Reading is not really a problem
-                var context = Context<TContext>.Get(simulation, entity, container);
+                var context = ContextFactory.Get<TContext>(simulation, entity, container);
                 var builder = container.Build(simulation, context);
                 foreach (var action in _builders)
                     action(builder);
@@ -129,14 +130,14 @@ namespace SpiceSharp.Entities
             /// Gets the register methods for a specified behavior.
             /// </summary>
             /// <param name="behavior">The behavior.</param>
-            /// <returns></returns>
+            /// <returns>The methods for registering factories.</returns>
             private RegisterMethods GetRegisterMethods(Type behavior)
             {
                 return _methodCache.GetOrAdd(behavior, type =>
                 {
-                    var info = typeof(Cache<TContext>).GetTypeInfo();
+                    var info = typeof(Resolver<TContext>).GetTypeInfo();
                     var result = new RegisterMethods();
-                    var pCache = Expression.Parameter(typeof(Cache<TContext>), "cache");
+                    var pCache = Expression.Parameter(typeof(Resolver<TContext>), "cache");
                     var pFunc = Expression.Parameter(typeof(Func<TContext, IBehavior>), "factory");
                     foreach (var method in info.GetMethods(BindingFlags.Public | BindingFlags.Instance))
                     {

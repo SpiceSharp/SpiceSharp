@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Reflection;
 using SpiceSharp.Simulations;
 using System;
 
@@ -60,7 +61,7 @@ namespace SpiceSharp.Entities
         /// <inheritdoc/>
         protected override ICloneable Clone()
         {
-            var clone = (Entity)Activator.CreateInstance(GetType(), Name);
+            var clone = (Entity)Factory<string>.Get(GetType(), Name);
             clone.CopyFrom(this);
             return clone;
         }
@@ -102,7 +103,7 @@ namespace SpiceSharp.Entities
         public override void CreateBehaviors(ISimulation simulation)
         {
             var behaviors = new BehaviorContainer(Name);
-            DI.Resolve(simulation, this, behaviors);
+            DependencyInjection.DI.Resolve(simulation, this, behaviors);
             simulation.EntityBehaviors.Add(behaviors);
         }
     }
