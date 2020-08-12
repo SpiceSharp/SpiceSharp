@@ -31,19 +31,34 @@ namespace SpiceSharp.General
         }
 
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets the number of elements contained in the set.
+        /// </summary>
         public int Count => _dictionary.Count;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets a value indicating whether the set is read-only.
+        /// </summary>
         public bool IsReadOnly => false;
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Adds the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
         public void Add(V value) => _dictionary.Add(value.GetType(), value);
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes all items from the set.
+        /// </summary>
         public void Clear() => _dictionary.Clear();
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Determines whether this instance contains the object.
+        /// </summary>
+        /// <param name="item">The object to locate in the set.</param>
+        /// <returns>
+        /// true if <paramref name="item" /> is found in the set; otherwise, false.
+        /// </returns>
         public bool Contains(V item) => _dictionary.Contains(item);
 
         /// <inheritdoc/>
@@ -77,7 +92,13 @@ namespace SpiceSharp.General
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Removes the first occurrence of a specific object from the set.
+        /// </summary>
+        /// <param name="item">The object to remove from the set.</param>
+        /// <returns>
+        /// true if <paramref name="item" /> was successfully removed from the set; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original set.
+        /// </returns>
         public bool Remove(V item) => _dictionary.Remove(item.GetType(), item);
 
         /// <inheritdoc/>
@@ -114,7 +135,7 @@ namespace SpiceSharp.General
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => _dictionary.Values.GetEnumerator();
     }

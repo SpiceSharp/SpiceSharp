@@ -83,16 +83,19 @@
     <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
-    <div class="level4"><span class="xref">Parallel</span></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Entities.Entity-1.html">Entity</a>&lt;<a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html">ParallelBindingContext</a>&gt;</div>
+    <div class="level5"><span class="xref">Parallel</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity</a>&lt;<a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html">ParallelBindingContext</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></div>
     <div><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.ParallelComponents.Parameters.html">Parameters</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -167,7 +170,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Parallel_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Parallel : Entity, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class Parallel : Entity&lt;ParallelBindingContext&gt;, IEntity&lt;ParallelBindingContext&gt;, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;, IRuleSubject</code></pre>
   </div>
   <h5 id="SpiceSharp_Components_Parallel_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks"><p>Running entity behaviors in parallel requires shared resources to be locked. Running entities
@@ -175,7 +178,7 @@ in parallel are not a good idea if the entities spend a lot of time accessing th
 shared resources compared to the time they spend actually computing. Especially since
 there is also some overhead in setting up these resources and structures for executing
 behaviors in parallel.</p>
-<p>It is possible to combine entities into a <a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a> first, and giving them
+<p>It is possible to combine entities into a <a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a> first, and having them use
 a local solver. This keeps the shared resources very limited, allowing each subcircuit to do
 its work without interference from read-write locking. This option is very advantageous if the
 subcircuits are large, but have only a few voltage nodes common with the outside.</p>
@@ -402,6 +405,33 @@ subcircuits are large, but have only a few voltage nodes common with the outside
   </table>
   <h3 id="methods">Methods
   </h3>
+  <a id="SpiceSharp_Components_Parallel_Apply_" data-uid="SpiceSharp.Components.Parallel.Apply*"></a>
+  <h4 id="SpiceSharp_Components_Parallel_Apply_SpiceSharp_Validation_IRules_" data-uid="SpiceSharp.Components.Parallel.Apply(SpiceSharp.Validation.IRules)">Apply(IRules)</h4>
+  <div class="markdown level1 summary"><p>Applies the subject to any rules in the validation provider.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Apply(IRules rules)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></td>
+        <td><span class="parametername">rules</span></td>
+        <td><p>The provider.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_Parallel_Connect_" data-uid="SpiceSharp.Components.Parallel.Connect*"></a>
   <h4 id="SpiceSharp_Components_Parallel_Connect_System_String___" data-uid="SpiceSharp.Components.Parallel.Connect(System.String[])">Connect(String[])</h4>
   <div class="markdown level1 summary"><p>Connects the component in the circuit.</p>
@@ -494,7 +524,7 @@ subcircuits are large, but have only a few voltage nodes common with the outside
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Entity.CreateBehaviors(ISimulation)</a></div>
+  <div><span class="xref">SpiceSharp.Entities.Entity&lt;SpiceSharp.Components.ParallelComponents.ParallelBindingContext&gt;.CreateBehaviors(SpiceSharp.Simulations.ISimulation)</span></div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -528,6 +558,9 @@ subcircuits are large, but have only a few voltage nodes common with the outside
   </table>
   <h3 id="implements">Implements</h3>
   <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity&lt;TContext&gt;</a>
+  </div>
+  <div>
       <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a>
   </div>
   <div>
@@ -544,6 +577,9 @@ subcircuits are large, but have only a few voltage nodes common with the outside
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>

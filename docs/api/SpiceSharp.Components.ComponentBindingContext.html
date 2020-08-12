@@ -83,6 +83,8 @@
     <div class="level1"><a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a></div>
     <div class="level2"><span class="xref">ComponentBindingContext</span></div>
       <div class="level3"><a class="xref" href="SpiceSharp.Components.CommonBehaviors.CurrentControlledBindingContext.html">CurrentControlledBindingContext</a></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitBindingContext.html">SubcircuitBindingContext</a></div>
+      <div class="level3"><a class="xref" href="SpiceSharp.Components.Switches.VoltageSwitchBindingContext.html">VoltageSwitchBindingContext</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -96,6 +98,9 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_TryGetState__1___0__">BindingContext.TryGetState&lt;S&gt;(S)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_UsesState__1">BindingContext.UsesState&lt;S&gt;()</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Entities.BindingContext.html#SpiceSharp_Entities_BindingContext_GetSimulationParameterSet__1">BindingContext.GetSimulationParameterSet&lt;P&gt;()</a>
@@ -149,13 +154,13 @@
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_ComponentBindingContext__ctor_" data-uid="SpiceSharp.Components.ComponentBindingContext.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_ComponentBindingContext__ctor_SpiceSharp_Components_IComponent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_System_Boolean_" data-uid="SpiceSharp.Components.ComponentBindingContext.#ctor(SpiceSharp.Components.IComponent,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer,System.Boolean)">ComponentBindingContext(IComponent, ISimulation, IBehaviorContainer, Boolean)</h4>
+  <h4 id="SpiceSharp_Components_ComponentBindingContext__ctor_SpiceSharp_Components_IComponent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_" data-uid="SpiceSharp.Components.ComponentBindingContext.#ctor(SpiceSharp.Components.IComponent,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer)">ComponentBindingContext(IComponent, ISimulation, IBehaviorContainer)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ComponentBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)</code></pre>
+    <pre><code class="lang-csharp hljs">public ComponentBindingContext(IComponent component, ISimulation simulation, IBehaviorContainer behaviors)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -183,12 +188,6 @@
         <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
         <td><span class="parametername">behaviors</span></td>
         <td><p>The behaviors created by the entity.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">linkParameters</span></td>
-        <td><p>Flag indicating that parameters should be linked. If false, only cloned parameters are returned by the context.</p>
 </td>
       </tr>
     </tbody>
