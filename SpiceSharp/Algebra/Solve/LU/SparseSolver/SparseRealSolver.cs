@@ -48,7 +48,7 @@ namespace SpiceSharp.Algebra
                 _intermediate[index++] = 0.0;
             while (index <= Size)
             {
-                _intermediate[index] = solution[Row.Reverse(index)];
+                _intermediate[index] = solution[Column.Reverse(index)];
                 index++;
             }
 

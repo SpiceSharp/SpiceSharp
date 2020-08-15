@@ -46,8 +46,13 @@ namespace SpiceSharp.Algebra
                 _intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
-            while (index <= Size)
+            while (index <= order)
                 _intermediate[index++] = 0.0;
+            while (index <= Size)
+            {
+                _intermediate[index] = solution[Column.Reverse(index)];
+                index++;
+            }
 
             // Forward substitution
             for (var i = 1; i <= order; i++)
