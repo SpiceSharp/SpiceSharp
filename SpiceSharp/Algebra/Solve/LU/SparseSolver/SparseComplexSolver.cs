@@ -39,7 +39,7 @@ namespace SpiceSharp.Algebra
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
             var index = 0;
-            while (rhsElement != null)
+            while (rhsElement != null && rhsElement.Index <= order)
             {
                 while (index < rhsElement.Index)
                     _intermediate[index++] = 0.0;
