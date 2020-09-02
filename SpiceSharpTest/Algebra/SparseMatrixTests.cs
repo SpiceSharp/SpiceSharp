@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -181,6 +183,49 @@ namespace SpiceSharpTest.Algebra
             }
 
             matrix.Clear();
+        }
+
+        [Test]
+        [TestCaseSource(nameof(Locations3By3))]
+        public void When_RemoveElement_Expect_Reference(int row, int column)
+        {
+            var matrix = new SparseMatrix<double>();
+            var index = 1;
+            for (var r = 1; r <= 3; r++)
+            {
+                for (var c = 1; c <= 3; c++)
+                {
+                    matrix.GetElement(new MatrixLocation(r, c)).Value = index;
+                    index++;
+                }
+            }
+
+            matrix.RemoveElement(new MatrixLocation(row, column));
+
+            index = 1;
+            for (var r = 1; r <= 3; r++)
+            {
+                for (var c = 1; c <= 3; c++)
+                {
+                    if (r == row && c == column)
+                        Assert.AreEqual(null, matrix.FindElement(new MatrixLocation(r, c)));
+                    else
+                        Assert.AreEqual(index, matrix.FindElement(new MatrixLocation(r, c)).Value, 1e-9);
+                    index++;
+                }
+            }
+        }
+
+        public static IEnumerable<TestCaseData> Locations3By3
+        {
+            get
+            {
+                for (var r = 1; r <= 3; r++)
+                {
+                    for (var c = 1; c <= 3; c++)
+                        yield return new TestCaseData(r, c);
+                }
+            }
         }
     }
 }
