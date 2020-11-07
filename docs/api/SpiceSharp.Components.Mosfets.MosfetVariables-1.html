@@ -117,13 +117,13 @@
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_Mosfets_MosfetVariables_1__ctor_" data-uid="SpiceSharp.Components.Mosfets.MosfetVariables`1.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_Mosfets_MosfetVariables_1__ctor_System_String_SpiceSharp_Simulations_IVariableFactory_SpiceSharp_Simulations_IVariable__0___System_Collections_Generic_IReadOnlyList_System_String__System_Boolean_System_Boolean_" data-uid="SpiceSharp.Components.Mosfets.MosfetVariables`1.#ctor(System.String,SpiceSharp.Simulations.IVariableFactory{SpiceSharp.Simulations.IVariable{`0}},System.Collections.Generic.IReadOnlyList{System.String},System.Boolean,System.Boolean)">MosfetVariables(String, IVariableFactory&lt;IVariable&lt;T&gt;&gt;, IReadOnlyList&lt;String&gt;, Boolean, Boolean)</h4>
+  <h4 id="SpiceSharp_Components_Mosfets_MosfetVariables_1__ctor_SpiceSharp_Components_IComponentBindingContext_SpiceSharp_Simulations_IVariableFactory_SpiceSharp_Simulations_IVariable__0___" data-uid="SpiceSharp.Components.Mosfets.MosfetVariables`1.#ctor(SpiceSharp.Components.IComponentBindingContext,SpiceSharp.Simulations.IVariableFactory{SpiceSharp.Simulations.IVariable{`0}})">MosfetVariables(IComponentBindingContext, IVariableFactory&lt;IVariable&lt;T&gt;&gt;)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Mosfets.MosfetVariables-1.html">MosfetVariables&lt;T&gt;</a> struct.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MosfetVariables(string name, IVariableFactory&lt;IVariable&lt;T&gt;&gt; factory, IReadOnlyList&lt;string&gt; nodes, bool internalDrain, bool internalSource)</code></pre>
+    <pre><code class="lang-csharp hljs">public MosfetVariables(IComponentBindingContext context, IVariableFactory&lt;IVariable&lt;T&gt;&gt; factory)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -136,33 +136,15 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name.</p>
+        <td><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The binding context.</p>
 </td>
       </tr>
       <tr>
         <td><a class="xref" href="SpiceSharp.Simulations.IVariableFactory-1.html">IVariableFactory</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;T&gt;&gt;</td>
         <td><span class="parametername">factory</span></td>
-        <td><p>The factory.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
-        <td><span class="parametername">nodes</span></td>
-        <td><p>The nodes.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">internalDrain</span></td>
-        <td><p>If set to <code>true</code>, an internal drain is created, otherwise, the external drain is used.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">internalSource</span></td>
-        <td><p>If set to <code>true</code>, an internal source is created, otherwise, the external source is used.</p>
+        <td><p>The variable factory.</p>
 </td>
       </tr>
     </tbody>

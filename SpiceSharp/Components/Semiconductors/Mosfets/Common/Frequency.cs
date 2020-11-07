@@ -61,9 +61,7 @@ namespace SpiceSharp.Components.Mosfets
             ModelParameters = context.ModelBehaviors.GetParameterSet<ModelParameters>();
             Behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();
             _complex = context.GetState<IComplexSimulationState>();
-            Variables = new MosfetVariables<Complex>(Name, _complex, context.Nodes,
-                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Behavior.Parameters.DrainSquares > 0,
-                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Behavior.Parameters.SourceSquares > 0);
+            Variables = new MosfetVariables<Complex>(context, _complex);
             _elements = new ElementSet<Complex>(_complex.Solver, Variables.GetMatrixLocations(_complex.Map));
         }
 

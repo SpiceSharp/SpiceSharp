@@ -84,22 +84,33 @@
       <h4><a class="xref" href="SpiceSharp.General.InheritanceCache.html">InheritanceCache</a></h4>
       <section><p>A static class that caches inherited objects of a specified type.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.General.InheritedTypeDictionary-1.html">InheritedTypeDictionary&lt;T&gt;</a></h4>
-      <section><p>An <a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a> that tracks inheritance and interfaces.</p>
+      <h4><a class="xref" href="SpiceSharp.General.InheritedTypeDictionary-1.html">InheritedTypeDictionary&lt;V&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary&lt;V&gt;</a> that tracks both inheritance and implemented interfaces.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.General.InheritedTypeSet-1.html">InheritedTypeSet&lt;V&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.General.InheritedTypeDictionary-1.html">InheritedTypeDictionary&lt;V&gt;</a> that can add values by their own types.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.General.InterfaceCache.html">InterfaceCache</a></h4>
       <section><p>A static class that caches interfaces of a specified type.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.General.InterfaceTypeDictionary-1.html">InterfaceTypeDictionary&lt;T&gt;</a></h4>
-      <section><p>An implementation of the <a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a> interface that
-also allows retrieving information using interface types.</p>
+      <h4><a class="xref" href="SpiceSharp.General.InterfaceTypeDictionary-1.html">InterfaceTypeDictionary&lt;V&gt;</a></h4>
+      <section><p>An implementation of the <a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary&lt;V&gt;</a> interface that
+allows retrieving information using interface types.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.General.TypeDictionary-1.html">TypeDictionary&lt;T&gt;</a></h4>
-      <section><p>An implementation of the <a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a> interface.
-This implementation supports multithreaded access.</p>
+      <h4><a class="xref" href="SpiceSharp.General.InterfaceTypeSet-1.html">InterfaceTypeSet&lt;V&gt;</a></h4>
+      <section><p>An <a class="xref" href="SpiceSharp.General.ITypeSet-1.html">ITypeSet&lt;V&gt;</a> that tracks interfaces.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.General.TypeValues-1.html">TypeValues&lt;T&gt;</a></h4>
       <section><p>A class that stores information about the inheritance tree stored in a type dictionary.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary&lt;V&gt;</a></h4>
+      <section><p>A dictionary that can store instances, and indexes them by a type. This dictionary
+distinguishes itself by supporting for example inheritance on the type.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.General.ITypeSet-1.html">ITypeSet&lt;V&gt;</a></h4>
+      <section><p>A set of instances that can also be found by their type.</p>
 </section>
 </article>
           </div>

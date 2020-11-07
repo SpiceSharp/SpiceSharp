@@ -1,13 +1,15 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Reflection;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
-namespace SpiceSharp.Entities
+namespace SpiceSharp.Entities.DependencyInjection
 {
     /// <summary>
     /// General helper methods for dependency injection containers that are used by
@@ -158,8 +160,8 @@ namespace SpiceSharp.Entities
                 });
 
             // Get the DI container and method for registering behaviors
-            var di = typeof(Cache<>).MakeGenericType(etype.GetTypeInfo().GenericTypeArguments[0]);
-            var resolver = (IBehaviorResolver)Activator.CreateInstance(di);
+            var di = typeof(Resolver<>).MakeGenericType(etype.GetTypeInfo().GenericTypeArguments[0]);
+            var resolver = (IBehaviorResolver)Factory.Get(di);
 
             List<BehaviorDescription> behaviors = null;
             lock (_lock)
@@ -205,7 +207,7 @@ namespace SpiceSharp.Entities
         public static void Resolve<TContext>(ISimulation simulation, IEntity entity, IBehaviorContainer behaviors, TContext context)
             where TContext : IBindingContext
         {
-            var resolver = (Cache<TContext>)_behaviorResolvers.GetOrAdd(entity.GetType(), CreateFactoriesFor);
+            var resolver = (Resolver<TContext>)_behaviorResolvers.GetOrAdd(entity.GetType(), CreateFactoriesFor);
             resolver.Resolve(simulation, behaviors, context);
         }
 

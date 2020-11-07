@@ -84,10 +84,13 @@
     <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
     <div class="level4"><a class="xref" href="SpiceSharp.Components.Component.html">Component</a></div>
-    <div class="level5"><span class="xref">CurrentControlledCurrentSource</span></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.Component-1.html">Component</a>&lt;<a class="xref" href="SpiceSharp.Components.CommonBehaviors.CurrentControlledBindingContext.html">CurrentControlledBindingContext</a>&gt;</div>
+    <div class="level6"><span class="xref">CurrentControlledCurrentSource</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity</a>&lt;<a class="xref" href="SpiceSharp.Components.CommonBehaviors.CurrentControlledBindingContext.html">CurrentControlledBindingContext</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Components.ICurrentControllingComponent.html">ICurrentControllingComponent</a></div>
     <div><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></div>
     <div><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
@@ -98,6 +101,9 @@
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Component-1.html#SpiceSharp_Components_Component_1_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Component&lt;CurrentControlledBindingContext&gt;.CreateBehaviors(ISimulation)</a>
+    </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_Connect_System_String___">Component.Connect(String[])</a>
     </div>
@@ -181,7 +187,7 @@
     <pre><code class="lang-csharp hljs">[Pin(0, &quot;F+&quot;)]
 [Pin(1, &quot;F-&quot;)]
 [Connected(0, 0)]
-public class CurrentControlledCurrentSource : Component, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;, IRuleSubject</code></pre>
+public class CurrentControlledCurrentSource : Component&lt;CurrentControlledBindingContext&gt;, IEntity&lt;CurrentControlledBindingContext&gt;, ICurrentControllingComponent, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;, IRuleSubject</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -376,73 +382,12 @@ public string ControllingSource { get; set; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_CurrentControlledCurrentSource_CreateBehaviors_" data-uid="SpiceSharp.Components.CurrentControlledCurrentSource.CreateBehaviors*"></a>
-  <h4 id="SpiceSharp_Components_CurrentControlledCurrentSource_CreateBehaviors_SpiceSharp_Simulations_ISimulation_" data-uid="SpiceSharp.Components.CurrentControlledCurrentSource.CreateBehaviors(SpiceSharp.Simulations.ISimulation)">CreateBehaviors(ISimulation)</h4>
-  <div class="markdown level1 summary"><p>Creates the behaviors and stores them in the specified container.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateBehaviors(ISimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Entity.CreateBehaviors(ISimulation)</a></div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">simulation</code> is <code>null</code>.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.ArgumentException</span></td>
-        <td><p>Thrown if the simulation does not use an <a class="xref" href="SpiceSharp.Simulations.IComplexSimulationState.html">IComplexSimulationState</a>.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
-        <td><p>Thrown if a required behavior or parameter set could not be found.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.General.AmbiguousTypeException.html">AmbiguousTypeException</a></td>
-        <td><p>Thrown if a behavior or parameter set could not be resolved unambiguously.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="eii">Explicit Interface Implementations
   </h3>
   <a id="SpiceSharp_Components_CurrentControlledCurrentSource_SpiceSharp_Validation_IRuleSubject_Apply_" data-uid="SpiceSharp.Components.CurrentControlledCurrentSource.SpiceSharp#Validation#IRuleSubject#Apply*"></a>
   <h4 id="SpiceSharp_Components_CurrentControlledCurrentSource_SpiceSharp_Validation_IRuleSubject_Apply_SpiceSharp_Validation_IRules_" data-uid="SpiceSharp.Components.CurrentControlledCurrentSource.SpiceSharp#Validation#IRuleSubject#Apply(SpiceSharp.Validation.IRules)">IRuleSubject.Apply(IRules)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Applies the subject to any rules in the validation provider.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -461,11 +406,18 @@ public string ControllingSource { get; set; }</code></pre>
       <tr>
         <td><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></td>
         <td><span class="parametername">rules</span></td>
-        <td></td>
+        <td><p>The provider.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity&lt;TContext&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.ICurrentControllingComponent.html">ICurrentControllingComponent</a>
+  </div>
   <div>
       <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a>
   </div>

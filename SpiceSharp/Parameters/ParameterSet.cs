@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharp.Reflection;
+using System;
 
 namespace SpiceSharp.ParameterSets
 {
@@ -22,7 +23,7 @@ namespace SpiceSharp.ParameterSets
         /// </returns>
         protected virtual ICloneable Clone()
         {
-            var clone = (ParameterSet)Activator.CreateInstance(GetType());
+            var clone = (ICloneable)Factory.Get(GetType());
             clone.CopyFrom(this);
             return clone;
         }

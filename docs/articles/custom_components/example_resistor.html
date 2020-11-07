@@ -75,38 +75,38 @@
 
 <p>Then Ohm&#39;s law dictates that</p>
 <p>$$\frac{v_A - v_B}{R} = i_R$$</p>
-<p>The resistor current (i_R) will flow <em>out</em> of node A, and <em>into</em> node B, so we have contributions to row A and row B:</p>
+<p>The resistor current \(i_R\) will flow <em>out</em> of node A, and <em>into</em> node B, so we have contributions to row A and row B:</p>
 <p>$$
 \begin{aligned}
-f_A(...,v_A,...,v_B,...) = +i_R &amp;=&amp; \frac{1}{R}v_A &amp;-\frac{1}{R}v_B\
+f_A(...,v_A,...,v_B,...) = +i_R &amp;=&amp; \frac{1}{R}v_A &amp;-\frac{1}{R}v_B\\
 f_B(...,v_A,...,v_B,...) = -i_R &amp;=&amp; -\frac{1}{R}v_A &amp;+\frac{1}{R}v_B 
 \end{aligned}$$</p>
 <p>Our convention is that a current flowing <em>out</em> of a node is <em>positive</em>. Now we can compute the contributions to the <em>Y-matrix</em>:</p>
 <p>$$\begin{aligned}
-Y_{A,A} &amp;= \frac{\partial f_A}{\partial v_A} = \frac{1}{R}\
-Y_{A,B} &amp;= \frac{\partial f_A}{\partial v_B} = -\frac{1}{R}\
-Y_{B,A} &amp;= \frac{\partial f_B}{\partial v_A} = -\frac{1}{R}\
+Y_{A,A} &amp;= \frac{\partial f_A}{\partial v_A} = \frac{1}{R}\\
+Y_{A,B} &amp;= \frac{\partial f_A}{\partial v_B} = -\frac{1}{R}\\
+Y_{B,A} &amp;= \frac{\partial f_B}{\partial v_A} = -\frac{1}{R}\\
 Y_{B,B} &amp;= \frac{\partial f_B}{\partial v_B} = \frac{1}{R}
 \end{aligned}$$</p>
 <p>All other <em>Y-matrix</em> contributions are 0. Similarly, we calculate the contributions to the <em>RHS vector</em>:</p>
 <p>$$\begin{aligned}
-RHS_A &amp;= f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_A\pmb x^{(k)}\
-&amp;=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right )\
-&amp;=0\
-RHS_B &amp;= f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_B\pmb x^{(k)}\
-&amp;=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right )\
+RHS_A &amp;= \pmb J_A\pmb x^{(k)} - f_A(...,v_A^{(k)},...,v_B^{(k)},...)\\
+&amp;=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right )\\
+&amp;=0\\
+RHS_B &amp;= \pmb J_B\pmb x^{(k)} - f_B(...,v_A^{(k)},...,v_B^{(k)},...)\\
+&amp;=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right )\\
 &amp;=0
 \end{aligned}$$</p>
 <p>The first and second terms for the RHS vector cancel each other out. This turns out to be a <em>general property of linear components</em>. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need <em>one</em> iteration to find the right solution <em>if we only have linear components</em>. Once a nonlinear component is introduced, a single iteration will not be sufficient anymore.</p>
 <p>To summarize:</p>
 <ul>
-<li>During the creation of the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> for a resistor, 4 Y-matrix elements are allocated: (Y_{A,A}, Y_{A,B}, Y_{B,A}, Y_{B,B}). It does not need RHS vector elements because they are always 0.</li>
+<li>During the creation of the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> for a resistor, 4 Y-matrix elements are allocated: \(Y_{A,A}, Y_{A,B}, Y_{B,A}, Y_{B,B}\). It does not need RHS vector elements because they are always 0.</li>
 <li>When loading the Y-matrix, the behavior will add the following values to these matrix elements.</li>
 </ul>
 <p>$$\begin{aligned}
-Y_{A,A} &amp;+= \frac{1}{R} \
-Y_{A,B} &amp;-= \frac{1}{R} \
-Y_{B,A} &amp;-= \frac{1}{R} \
+Y_{A,A} &amp;+= \frac{1}{R} \\
+Y_{A,B} &amp;-= \frac{1}{R} \\
+Y_{B,A} &amp;-= \frac{1}{R} \\
 Y_{B,B} &amp;+= \frac{1}{R}
 \end{aligned}$$</p>
 <ul>

@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class InterfaceTypeDictionary&lt;T&gt;
+    <title>Class InterfaceTypeDictionary&lt;V&gt;
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class InterfaceTypeDictionary&lt;T&gt;
+    <meta name="title" content="Class InterfaceTypeDictionary&lt;V&gt;
    ">
     <meta name="generator" content="docfx 2.52.0.0">
     
@@ -72,23 +72,20 @@
             <article class="content wrap" id="_content" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1">
   
   
-  <h1 id="SpiceSharp_General_InterfaceTypeDictionary_1" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1" class="text-break">Class InterfaceTypeDictionary&lt;T&gt;
+  <h1 id="SpiceSharp_General_InterfaceTypeDictionary_1" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1" class="text-break">Class InterfaceTypeDictionary&lt;V&gt;
   </h1>
-  <div class="markdown level0 summary"><p>An implementation of the <a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a> interface that
-also allows retrieving information using interface types.</p>
+  <div class="markdown level0 summary"><p>An implementation of the <a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary&lt;V&gt;</a> interface that
+allows retrieving information using interface types.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">InterfaceTypeDictionary&lt;T&gt;</span></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Behaviors.BehaviorContainer.html">BehaviorContainer</a></div>
+    <div class="level1"><span class="xref">InterfaceTypeDictionary&lt;V&gt;</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary</a>&lt;T&gt;</div>
-    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;&gt;</div>
-    <div><span class="xref">System.Collections.IEnumerable</span></div>
+    <div><a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary</a>&lt;V&gt;</div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
   </div>
   <div class="inheritedMembers">
@@ -119,7 +116,7 @@ also allows retrieving information using interface types.</p>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_General_InterfaceTypeDictionary_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class InterfaceTypeDictionary&lt;T&gt; : ITypeDictionary&lt;T&gt;, IEnumerable&lt;KeyValuePair&lt;Type, T&gt;&gt;, IEnumerable, ICloneable</code></pre>
+    <pre><code class="lang-csharp hljs">public class InterfaceTypeDictionary&lt;V&gt; : ITypeDictionary&lt;V&gt;, ICloneable</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -131,8 +128,8 @@ also allows retrieving information using interface types.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="parametername">T</span></td>
-        <td><p>The base type.</p>
+        <td><span class="parametername">V</span></td>
+        <td><p>The value type.</p>
 </td>
       </tr>
     </tbody>
@@ -141,7 +138,7 @@ also allows retrieving information using interface types.</p>
   </h3>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1__ctor_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.#ctor*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1__ctor" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.#ctor">InterfaceTypeDictionary()</h4>
-  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.General.InterfaceTypeDictionary-1.html">InterfaceTypeDictionary&lt;T&gt;</a> class.</p>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.General.InterfaceTypeDictionary-1.html">InterfaceTypeDictionary&lt;V&gt;</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -152,7 +149,7 @@ also allows retrieving information using interface types.</p>
   </h3>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Count_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Count*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Count" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Count">Count</h4>
-  <div class="markdown level1 summary"><p>Gets the number of elements contained in the <a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a>.</p>
+  <div class="markdown level1 summary"><p>Gets the number of items in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -170,19 +167,19 @@ also allows retrieving information using interface types.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>The count.</p>
+        <td><p>The number of items in the dictionary.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Item_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Item*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Item_System_Type_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Item(System.Type)">Item[Type]</h4>
-  <div class="markdown level1 summary"><p>Gets the value with the specified key.</p>
+  <div class="markdown level1 summary"><p>Gets a value from the dictionary by its type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public T this[Type type] { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public V this[Type key] { get; }</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -196,8 +193,9 @@ also allows retrieving information using interface types.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Type</span></td>
-        <td><span class="parametername">type</span></td>
-        <td></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The type.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -211,8 +209,8 @@ also allows retrieving information using interface types.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">T</span></td>
-        <td><p>The key type.</p>
+        <td><span class="xref">V</span></td>
+        <td><p>The value.</p>
 </td>
       </tr>
     </tbody>
@@ -232,20 +230,15 @@ also allows retrieving information using interface types.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.KeyNotFoundException</span></td>
-        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">key</code> was not found.</p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="SpiceSharp.General.AmbiguousTypeException.html">AmbiguousTypeException</a></td>
-        <td><p>If there are multiple values of type <code data-dev-comment-type="paramref" class="paramref">key</code>.</p>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">key</code> does not point to a single instance.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Keys_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Keys*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Keys" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Keys">Keys</h4>
-  <div class="markdown level1 summary"><p>Gets the keys.</p>
+  <div class="markdown level1 summary"><p>Gets all the keys in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -263,19 +256,19 @@ also allows retrieving information using interface types.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Type</span>&gt;</td>
-        <td><p>The keys.</p>
+        <td><p>The keys in the dictionary.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Values_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Values*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Values" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Values">Values</h4>
-  <div class="markdown level1 summary"><p>Gets the values.</p>
+  <div class="markdown level1 summary"><p>Gets all the values in the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;T&gt; Values { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;V&gt; Values { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -287,8 +280,8 @@ also allows retrieving information using interface types.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
-        <td><p>The values.</p>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;V&gt;</td>
+        <td><p>The values in the dictionary.</p>
 </td>
       </tr>
     </tbody>
@@ -296,14 +289,71 @@ also allows retrieving information using interface types.</p>
   <h3 id="methods">Methods
   </h3>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Add_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Add*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Add__1___0_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Add``1(``0)">Add&lt;V&gt;(V)</h4>
-  <div class="markdown level1 summary"><p>Adds the specified value to the dictionary.</p>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Add_System_Type__0_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Add(System.Type,`0)">Add(Type, V)</h4>
+  <div class="markdown level1 summary"><p>Adds a value to the dictionary.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Add&lt;V&gt;(V value)
-    where V : T</code></pre>
+    <pre><code class="lang-csharp hljs">public void Add(Type key, V value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key type.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">V</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">key</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Clear_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Clear*"></a>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Clear" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all values from the dictionary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Contains_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Contains*"></a>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Contains__0_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Contains(`0)">Contains(V)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the dictionary contains the value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Contains(V value)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -323,55 +373,25 @@ also allows retrieving information using interface types.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="typeParameters">Type Parameters</h5>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
-        <th>Name</th>
+        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="parametername">V</span></td>
-        <td><p>The value type.</p>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the dictionary contains the value; otherwise, <code>false</code>.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">value</code> is <code>null</code>.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.ArgumentException</span></td>
-        <td><p>Thrown if a value of type <code data-dev-comment-type="typeparamref" class="typeparamref">V</code> was already added.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Clear_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Clear*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Clear" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Clear">Clear()</h4>
-  <div class="markdown level1 summary"><p>Clears all items in the dictionary.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
-  </div>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_ContainsKey_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.ContainsKey*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_ContainsKey_System_Type_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.ContainsKey(System.Type)">ContainsKey(Type)</h4>
-  <div class="markdown level1 summary"><p>Determines whether the dictionary contains one or more values of the specified type.</p>
+  <div class="markdown level1 summary"><p>Determines whether the dictionary contains a value with the specified key.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -407,7 +427,49 @@ also allows retrieving information using interface types.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p><code>true</code> if the dictionary contains one ore more values of the specified type; otherwise, <code>false</code>.</p>
+        <td><p><code>true</code> if the dictionary contains a value with the specified key; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_GetAllValues_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetAllValues*"></a>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_GetAllValues_System_Type_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetAllValues(System.Type)">GetAllValues(Type)</h4>
+  <div class="markdown level1 summary"><p>Gets all values from the dictionary that the specified key can point to.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;V&gt; GetAllValues(Type key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;V&gt;</td>
+        <td><p>The values.</p>
 </td>
       </tr>
     </tbody>
@@ -428,262 +490,14 @@ also allows retrieving information using interface types.</p>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_ContainsValue_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.ContainsValue*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_ContainsValue__0_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.ContainsValue(`0)">ContainsValue(T)</h4>
-  <div class="markdown level1 summary"><p>Determines whether the dictionary contains the specified value.</p>
+  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_GetValueCount_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetValueCount*"></a>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_GetValueCount_System_Type_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetValueCount(System.Type)">GetValueCount(Type)</h4>
+  <div class="markdown level1 summary"><p>Gets the the number of values that this type points to (direct or indirect).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool ContainsValue(T value)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">value</span></td>
-        <td><p>The value.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><p><code>true</code> if the dictionary contains the specified value; otherwise, <code>false</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">value</code> is <code>null</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_GetAllValues_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetAllValues*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_GetAllValues__1" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetAllValues``1">GetAllValues&lt;TResult&gt;()</h4>
-  <div class="markdown level1 summary"><p>Gets all strongly typed values from the dictionary.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TResult&gt; GetAllValues&lt;TResult&gt;()
-    where TResult : T</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TResult&gt;</td>
-        <td><p>The results.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">TResult</span></td>
-        <td><p>The type of the result.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_GetEnumerator_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetEnumerator*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_GetEnumerator" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetEnumerator">GetEnumerator()</h4>
-  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the collection.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEnumerator&lt;KeyValuePair&lt;Type, T&gt;&gt; GetEnumerator()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, T&gt;&gt;</td>
-        <td><p>An enumerator that can be used to iterate through the collection.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_GetValue_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetValue*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_GetValue__1" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.GetValue``1">GetValue&lt;TResult&gt;()</h4>
-  <div class="markdown level1 summary"><p>Gets the strongly typed value from the dictionary.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TResult GetValue&lt;TResult&gt;()
-    where TResult : T</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">TResult</span></td>
-        <td><p>The result.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="typeParameters">Type Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="parametername">TResult</span></td>
-        <td><p>The type of the result.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.TypeNotFoundException.html">TypeNotFoundException</a></td>
-        <td><p>Thrown if a value of type <code data-dev-comment-type="typeparamref" class="typeparamref">TResult</code> could not be found.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.General.AmbiguousTypeException.html">AmbiguousTypeException</a></td>
-        <td><p>If there are multiple values of type <code data-dev-comment-type="typeparamref" class="typeparamref">TResult</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Remove_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Remove*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Remove__0_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Remove(`0)">Remove(T)</h4>
-  <div class="markdown level1 summary"><p>Removes the specified value.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool Remove(T value)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">value</span></td>
-        <td><p>The value.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><p><code>true</code> if the value was removed; otherwise <code>false</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">value</code> is <code>null</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_TryGetValue_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.TryGetValue*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_TryGetValue_System_Type__0__" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.TryGetValue(System.Type,`0@)">TryGetValue(Type, out T)</h4>
-  <div class="markdown level1 summary"><p>Tries to get a value from the dictionary.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool TryGetValue(Type key, out T value)</code></pre>
+    <pre><code class="lang-csharp hljs">public int GetValueCount(Type key)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -698,13 +512,7 @@ also allows retrieving information using interface types.</p>
       <tr>
         <td><span class="xref">System.Type</span></td>
         <td><span class="parametername">key</span></td>
-        <td><p>The key type.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">T</span></td>
-        <td><span class="parametername">value</span></td>
-        <td><p>The value.</p>
+        <td><p>The key.</p>
 </td>
       </tr>
     </tbody>
@@ -719,37 +527,21 @@ also allows retrieving information using interface types.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><p><code>true</code> if the value was resolved; otherwise <code>false</code>.</p>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of values.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.General.AmbiguousTypeException.html">AmbiguousTypeException</a></td>
-        <td><p>If there are multiple values of type <code data-dev-comment-type="paramref" class="paramref">key</code>.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_TryGetValue_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.TryGetValue*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_TryGetValue__1___0__" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.TryGetValue``1(``0@)">TryGetValue&lt;TResult&gt;(out TResult)</h4>
-  <div class="markdown level1 summary"><p>Tries to get a strongly typed value from the dictionary.</p>
+  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_Remove_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Remove*"></a>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_Remove_System_Type__0_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.Remove(System.Type,`0)">Remove(Type, V)</h4>
+  <div class="markdown level1 summary"><p>Removes a value from the dictionary, but only if the value was added through
+the same key originally to avoid inconsistencies.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool TryGetValue&lt;TResult&gt;(out TResult value)
-    where TResult : T</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Remove(Type key, V value)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -762,7 +554,13 @@ also allows retrieving information using interface types.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">TResult</span></td>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">V</span></td>
         <td><span class="parametername">value</span></td>
         <td><p>The value.</p>
 </td>
@@ -780,39 +578,56 @@ also allows retrieving information using interface types.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td><p><code>true</code> if the specified key contains the type; otherwise <code>false</code>.</p>
+        <td><p><code>true</code> if the value was remove; otherwise, <code>false</code>.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="typeParameters">Type Parameters</h5>
+  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_TryGetValue_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.TryGetValue*"></a>
+  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_TryGetValue_System_Type__0__" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.TryGetValue(System.Type,`0@)">TryGetValue(Type, out V)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a value from the dictionary indexed by the specified type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryGetValue(Type key, out V value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
+        <th>Type</th>
         <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="parametername">TResult</span></td>
-        <td><p>The type of the result.</p>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>The key.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">V</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The value.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
+  <h5 class="returns">Returns</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Condition</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.General.AmbiguousTypeException.html">AmbiguousTypeException</a></td>
-        <td><p>If the value could not be uniquely determined.</p>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the value was found; otherwise, <code>false</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -821,7 +636,8 @@ also allows retrieving information using interface types.</p>
   </h3>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_SpiceSharp_ICloneable_Clone_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.SpiceSharp#ICloneable#Clone*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_SpiceSharp_ICloneable_Clone" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.SpiceSharp#ICloneable#Clone">ICloneable.Clone()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Clones the instance.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -838,13 +654,15 @@ also allows retrieving information using interface types.</p>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
-        <td></td>
+        <td><p>The cloned instance.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_General_InterfaceTypeDictionary_1_SpiceSharp_ICloneable_CopyFrom_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.SpiceSharp#ICloneable#CopyFrom*"></a>
   <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.SpiceSharp#ICloneable#CopyFrom(SpiceSharp.ICloneable)">ICloneable.CopyFrom(ICloneable)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Copies the contents of one interface to this one.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -863,44 +681,35 @@ also allows retrieving information using interface types.</p>
       <tr>
         <td><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></td>
         <td><span class="parametername">source</span></td>
-        <td></td>
+        <td><p>The source parameter.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_General_InterfaceTypeDictionary_1_System_Collections_IEnumerable_GetEnumerator_" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.System#Collections#IEnumerable#GetEnumerator*"></a>
-  <h4 id="SpiceSharp_General_InterfaceTypeDictionary_1_System_Collections_IEnumerable_GetEnumerator" data-uid="SpiceSharp.General.InterfaceTypeDictionary`1.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
-  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through a collection.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
+  <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Description</th>
+        <th>Condition</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.IEnumerator</span></td>
-        <td><p>An <span class="xref">System.Collections.IEnumerator</span> object that can be used to iterate through the collection.</p>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">source</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">source</code> does not have the same type.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="implements">Implements</h3>
   <div>
-      <a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary&lt;T&gt;</a>
-  </div>
-  <div>
-      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
-  </div>
-  <div>
-      <span class="xref">System.Collections.IEnumerable</span>
+      <a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary&lt;V&gt;</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
@@ -911,7 +720,7 @@ also allows retrieving information using interface types.</p>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.ITypeDictionary-1.html">ITypeDictionary</a>&lt;T&gt;</div>
+      <div><a class="xref" href="SpiceSharp.General.ITypeDictionary-1.html">ITypeDictionary</a>&lt;V&gt;</div>
   </div>
 </article>
           </div>

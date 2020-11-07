@@ -160,169 +160,6 @@
   </div>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_AcceptDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.AcceptDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_AcceptDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.AcceptDistributor">AcceptDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for accepting a timepoint.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;time.accept&quot;)]
-[ParameterInfo(&quot;Work distributor for accepting a timepoint&quot;)]
-public IWorkDistributor AcceptDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_AcInitDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.AcInitDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_AcInitDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.AcInitDistributor">AcInitDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for initializing small-signal parameters.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;frequency.init&quot;)]
-[ParameterName(&quot;frequency.initialize&quot;)]
-[ParameterInfo(&quot;Work distributor for initializing small-signal parameters&quot;)]
-public IWorkDistributor AcInitDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_AcLoadDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.AcLoadDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_AcLoadDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.AcLoadDistributor">AcLoadDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for loading the small-signal contributions.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;frequency.load&quot;)]
-[ParameterInfo(&quot;Work distributor for loading the small-signal contributions&quot;)]
-public IWorkDistributor AcLoadDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_BiasConvergenceDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.BiasConvergenceDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_BiasConvergenceDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.BiasConvergenceDistributor">BiasConvergenceDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for testing convergence in biasing simulations.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;biasing.convergence&quot;)]
-[ParameterInfo(&quot;Workload distributor for testing convergence&quot;)]
-public IWorkDistributor&lt;bool&gt; BiasConvergenceDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor-1.html">IWorkDistributor</a>&lt;<span class="xref">System.Boolean</span>&gt;</td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_BiasLoadDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.BiasLoadDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_BiasLoadDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.BiasLoadDistributor">BiasLoadDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for loading in biasing simulations.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;biasing.load&quot;)]
-[ParameterInfo(&quot;Work distributor for loading the Y-matrix and Rhs-vector&quot;)]
-public IWorkDistributor BiasLoadDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_BiasUpdateDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.BiasUpdateDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_BiasUpdateDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.BiasUpdateDistributor">BiasUpdateDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for updating a behavior after solving.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;biasing.update&quot;)]
-[ParameterInfo(&quot;Workload distributor for updating a behavior after solving&quot;)]
-public IWorkDistributor BiasUpdateDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The biasing update distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Components_ParallelComponents_Parameters_Entities_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.Entities*"></a>
   <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_Entities" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.Entities">Entities</h4>
   <div class="markdown level1 summary"><p>Gets or sets the entities that should be run in parallel.</p>
@@ -330,7 +167,9 @@ public IWorkDistributor BiasUpdateDistributor { get; set; }</code></pre>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IEntityCollection Entities { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;entities&quot;)]
+[ParameterInfo(&quot;The entities that can be run in parallel.&quot;)]
+public IEntityCollection Entities { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -348,16 +187,16 @@ public IWorkDistributor BiasUpdateDistributor { get; set; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_NoiseComputeDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.NoiseComputeDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_NoiseComputeDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.NoiseComputeDistributor">NoiseComputeDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for noise computations.</p>
+  <a id="SpiceSharp_Components_ParallelComponents_Parameters_WorkDistributors_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.WorkDistributors*"></a>
+  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_WorkDistributors" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.WorkDistributors">WorkDistributors</h4>
+  <div class="markdown level1 summary"><p>Gets the work distributors.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;noise.compute&quot;)]
-[ParameterInfo(&quot;Work distributor for computing noise contributions&quot;)]
-public IWorkDistributor NoiseComputeDistributor { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;workdistributors&quot;)]
+[ParameterInfo(&quot;Workload distributors by the behavior type.&quot;)]
+public Dictionary&lt;Type, IWorkDistributor&gt; WorkDistributors { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -369,117 +208,55 @@ public IWorkDistributor NoiseComputeDistributor { get; set; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor for noise computations.</p>
+        <td><span class="xref">System.Collections.Generic.Dictionary</span>&lt;<span class="xref">System.Type</span>, <a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a>&gt;</td>
+        <td><p>The work distributors.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_NoiseInitializeDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.NoiseInitializeDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_NoiseInitializeDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.NoiseInitializeDistributor">NoiseInitializeDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for noise initialization.</p>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_ParallelComponents_Parameters_SetWorkDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.SetWorkDistributor*"></a>
+  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_SetWorkDistributor_System_Collections_Generic_KeyValuePair_System_Type_SpiceSharp_Components_IWorkDistributor__" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.SetWorkDistributor(System.Collections.Generic.KeyValuePair{System.Type,SpiceSharp.Components.IWorkDistributor})">SetWorkDistributor(KeyValuePair&lt;Type, IWorkDistributor&gt;)</h4>
+  <div class="markdown level1 summary"><p>Sets the work distributor for a specified type.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;noise.initialize&quot;)]
-[ParameterInfo(&quot;Work distributor for initializing noise sources&quot;)]
-public IWorkDistributor NoiseInitializeDistributor { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;workdistributor&quot;)]
+[ParameterInfo(&quot;Sets a workload distributor.&quot;)]
+public void SetWorkDistributor(KeyValuePair&lt;Type, IWorkDistributor&gt; pair)</code></pre>
   </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
+        <th>Name</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor for noise initialization.</p>
+        <td><span class="xref">System.Collections.Generic.KeyValuePair</span>&lt;<span class="xref">System.Type</span>, <a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a>&gt;</td>
+        <td><span class="parametername">pair</span></td>
+        <td><p>The key-value pair.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_ProbeDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.ProbeDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_ProbeDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.ProbeDistributor">ProbeDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for probing a new timepoint.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;time.probe&quot;)]
-[ParameterInfo(&quot;Work distributor for probing a new timepoint&quot;)]
-public IWorkDistributor ProbeDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-striped table-condensed">
     <thead>
       <tr>
         <th>Type</th>
-        <th>Description</th>
+        <th>Condition</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_TemperatureDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.TemperatureDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_TemperatureDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.TemperatureDistributor">TemperatureDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets the workload distributor for temperature-dependent calculations.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;temperature&quot;)]
-[ParameterInfo(&quot;Workload distributor for temperature-dependent calculations.&quot;)]
-public IWorkDistributor TemperatureDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_ParallelComponents_Parameters_TimeInitDistributor_" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.TimeInitDistributor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Parameters_TimeInitDistributor" data-uid="SpiceSharp.Components.ParallelComponents.Parameters.TimeInitDistributor">TimeInitDistributor</h4>
-  <div class="markdown level1 summary"><p>Gets or sets workload distributor for initializing time-dependent parameters.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">[ParameterName(&quot;time.init&quot;)]
-[ParameterName(&quot;time.initialize&quot;)]
-[ParameterInfo(&quot;Work distributor for initializing time-dependent quantities&quot;)]
-public IWorkDistributor TimeInitDistributor { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></td>
-        <td><p>The workload distributor.</p>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">pair</code> or the key is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>

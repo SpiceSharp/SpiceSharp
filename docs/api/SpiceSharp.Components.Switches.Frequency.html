@@ -99,7 +99,7 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Components.Switches.Biasing.html#SpiceSharp_Components_Switches_Biasing_ModelParameters">Biasing.ModelParameters</a>
+      <a class="xref" href="SpiceSharp.Components.Switches.Biasing.html#SpiceSharp_Components_Switches_Biasing_ModelTemperature">Biasing.ModelTemperature</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.Switches.Biasing.html#SpiceSharp_Components_Switches_Biasing_SpiceSharp_Behaviors_IBiasingBehavior_Load">Biasing.IBiasingBehavior.Load()</a>
@@ -196,18 +196,20 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Switches_Frequency_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Frequency : Biasing, IBiasingBehavior, IParameterized&lt;Parameters&gt;, IFrequencyBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+    <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(CurrentSwitch), typeof(IFrequencyBehavior), 1)]
+[BehaviorFor(typeof(VoltageSwitch), typeof(IFrequencyBehavior), 1)]
+public class Frequency : Biasing, IBiasingBehavior, IParameterized&lt;Parameters&gt;, IFrequencyBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_Switches_Frequency__ctor_" data-uid="SpiceSharp.Components.Switches.Frequency.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_Switches_Frequency__ctor_System_String_SpiceSharp_Components_IComponentBindingContext_SpiceSharp_Components_Switches_Controller_" data-uid="SpiceSharp.Components.Switches.Frequency.#ctor(System.String,SpiceSharp.Components.IComponentBindingContext,SpiceSharp.Components.Switches.Controller)">Frequency(String, IComponentBindingContext, Controller)</h4>
+  <h4 id="SpiceSharp_Components_Switches_Frequency__ctor_SpiceSharp_Components_Switches_ISwitchBindingContext_" data-uid="SpiceSharp.Components.Switches.Frequency.#ctor(SpiceSharp.Components.Switches.ISwitchBindingContext)">Frequency(ISwitchBindingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Switches.Frequency.html">Frequency</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Frequency(string name, IComponentBindingContext context, Controller controller)</code></pre>
+    <pre><code class="lang-csharp hljs">public Frequency(ISwitchBindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -220,21 +222,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></td>
+        <td><a class="xref" href="SpiceSharp.Components.Switches.ISwitchBindingContext.html">ISwitchBindingContext</a></td>
         <td><span class="parametername">context</span></td>
         <td><p>The context.</p>
 </td>
       </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.Switches.Controller.html">Controller</a></td>
-        <td><span class="parametername">controller</span></td>
-        <td><p>The controller.</p>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -374,6 +380,11 @@ public Complex ComplexVoltage { get; }</code></pre>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Components.Switches.Biasing.html">Biasing</a></div>
+      <div><a class="xref" href="SpiceSharp.Behaviors.IFrequencyBehavior.html">IFrequencyBehavior</a></div>
   </div>
 </article>
           </div>

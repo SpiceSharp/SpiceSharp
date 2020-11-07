@@ -44,7 +44,7 @@ namespace SpiceSharp.Components.Diodes
         /// If the parallel multiplier is set, then this current is the sum of all currents through all the
         /// diodes in parallel.
         /// </remarks>
-        [ParameterName("i"), ParameterName("id"), ParameterName("c"), ParameterName("cd"), ParameterInfo("The complex current through the diode")]
+        [ParameterName("i"), ParameterName("id"), ParameterName("c"), ParameterInfo("The complex current through the diode")]
         public double Current => LocalCurrent * Parameters.ParallelMultiplier;
 
         /// <summary>

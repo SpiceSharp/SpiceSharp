@@ -56,26 +56,26 @@ namespace SpiceSharp.Algebra.Solve
             // Start search of matrix on column by column basis
             for (var i = eliminationStep; i <= max; i++)
             {
+                // Find an entry point to the interesting part of the column
+                var lowest = matrix.GetLastInColumn(i);
+                while (lowest != null && lowest.Row > max)
+                    lowest = lowest.Above;
+                if (lowest == null || lowest.Row < eliminationStep)
+                    continue;
+
                 // Find the biggest magnitude in the column for checking valid pivots later
                 var largest = 0.0;
-                var diagonal = matrix.FindDiagonalElement(i);
-                var element = diagonal;
+                var element = lowest;
                 while (element != null && element.Row >= eliminationStep)
                 {
                     largest = Math.Max(largest, markowitz.Magnitude(element.Value));
                     element = element.Above;
                 }
-                element = diagonal?.Below;
-                while (element != null && element.Row <= max)
-                {
-                    largest = Math.Max(largest, markowitz.Magnitude(element.Value));
-                    element = element.Below;
-                }
                 if (largest.Equals(0.0))
                     continue;
 
                 // Restart search for a pivot
-                element = element?.Above ?? matrix.GetLastInColumn(i);
+                element = lowest;
                 while (element != null && element.Row >= eliminationStep)
                 {
                     // Find the magnitude and Markowitz product

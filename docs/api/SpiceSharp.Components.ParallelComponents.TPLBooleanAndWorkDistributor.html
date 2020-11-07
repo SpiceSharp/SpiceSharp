@@ -80,14 +80,22 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">TPLBooleanAndWorkDistributor</span></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Components.ParallelComponents.TPLWorkDistributor.html">TPLWorkDistributor</a></div>
+    <div class="level2"><span class="xref">TPLBooleanAndWorkDistributor</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="SpiceSharp.Components.IWorkDistributor-1.html">IWorkDistributor</a>&lt;<span class="xref">System.Boolean</span>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.ParallelComponents.TPLWorkDistributor.html#SpiceSharp_Components_ParallelComponents_TPLWorkDistributor_Execute_System_Collections_Generic_IReadOnlyList_System_Action__">TPLWorkDistributor.Execute(IReadOnlyList&lt;Action&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.ParallelComponents.TPLWorkDistributor.html#SpiceSharp_Components_ParallelComponents_TPLWorkDistributor_Execute__1_System_Collections_Generic_IReadOnlyList_System_Func___0___">TPLWorkDistributor.Execute&lt;R&gt;(IReadOnlyList&lt;Func&lt;R&gt;&gt;)</a>
+    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -114,7 +122,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_ParallelComponents_TPLBooleanAndWorkDistributor_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TPLBooleanAndWorkDistributor : IWorkDistributor&lt;bool&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class TPLBooleanAndWorkDistributor : TPLWorkDistributor, IWorkDistributor&lt;bool&gt;, IWorkDistributor</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -189,6 +197,9 @@
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Components.IWorkDistributor-1.html">IWorkDistributor&lt;R&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.IWorkDistributor.html">IWorkDistributor</a>
   </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>

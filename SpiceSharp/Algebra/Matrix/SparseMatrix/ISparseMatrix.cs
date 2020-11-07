@@ -83,5 +83,15 @@ namespace SpiceSharp.Algebra
         /// The matrix element if it exists; otherwise <c>null</c>.
         /// </returns>
         Element<T> FindElement(MatrixLocation location);
+
+        /// <summary>
+        /// Removes a matrix element at the specified row and column. If the element
+        /// doesn't exist, this method returns <c>false</c>.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        /// <returns>
+        /// <c>true</c> if the element was removed; otherwise, <c>false</c>.
+        /// </returns>
+        bool RemoveElement(MatrixLocation location);
     }
 }

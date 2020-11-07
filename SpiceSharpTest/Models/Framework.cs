@@ -260,7 +260,7 @@ namespace SpiceSharpTest.Models
                     {
                         var sweeps = sim.DCParameters.Sweeps;
                         var values = sim.GetCurrentSweepValue();
-                        string msg = ex.Message + " at ";
+                        var msg = ex.Message + " at ";
                         var index = 0;
                         foreach (var sweep in sweeps)
                             msg += "{0}={1}".FormatString(sweep.Name, values[index++]) + ", ";
@@ -300,7 +300,7 @@ namespace SpiceSharpTest.Models
                     {
                         var sweeps = sim.DCParameters.Sweeps;
                         var values = sim.GetCurrentSweepValue();
-                        string msg = ex.Message + " at ";
+                        var msg = ex.Message + " at ";
                         var index = 0;
                         foreach (var sweep in sweeps)
                             msg += "{0}={1}".FormatString(sweep.Name, values[index++]) + ", ";
@@ -613,7 +613,7 @@ namespace SpiceSharpTest.Models
 
             // Dump the current iteration solution
             Console.WriteLine("- Solutions");
-            Dictionary<int, string> variables = new Dictionary<int, string>();
+            var variables = new Dictionary<int, string>();
             foreach (var variable in rstate.Map)
                 variables.Add(variable.Value, $"{variable.Value} - {variable.Key.Name} ({variable.Key.Unit}): {rstate.Solution[variable.Value]}");
             for (var i = 0; i <= state.MaxOrder; i++)

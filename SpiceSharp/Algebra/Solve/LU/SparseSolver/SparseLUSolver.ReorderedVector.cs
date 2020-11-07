@@ -52,6 +52,9 @@ namespace SpiceSharp.Algebra.Solve
             public Element<T> GetElement(int index) => _parent.Vector.GetElement(index);
 
             /// <inheritdoc/>
+            public bool RemoveElement(int index) => _parent.Vector.RemoveElement(index);
+
+            /// <inheritdoc/>
             public Element<T> FindElement(int index) => _parent.Vector.FindElement(index);
 
             /// <inheritdoc/>

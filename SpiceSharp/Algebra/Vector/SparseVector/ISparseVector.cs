@@ -41,6 +41,15 @@ namespace SpiceSharp.Algebra
         Element<T> GetElement(int index);
 
         /// <summary>
+        /// Removes a vector element at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>
+        /// <c>true</c> if the element was removed; otherwise, <c>false</c>.
+        /// </returns>
+        bool RemoveElement(int index);
+
+        /// <summary>
         /// Finds a vector element at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>

@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DI
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DI
+   ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Entities.DependencyInjection.DI">
+  
+  
+  <h1 id="SpiceSharp_Entities_DependencyInjection_DI" data-uid="SpiceSharp.Entities.DependencyInjection.DI" class="text-break">Class DI
+  </h1>
+  <div class="markdown level0 summary"><p>General helper methods for dependency injection containers that are used by
+entities to create behaviors.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">DI</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Entities.DependencyInjection.html">SpiceSharp.Entities.DependencyInjection</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Entities_DependencyInjection_DI_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class DI</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <a id="SpiceSharp_Entities_DependencyInjection_DI_ScanIfNotFound_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.ScanIfNotFound*"></a>
+  <h4 id="SpiceSharp_Entities_DependencyInjection_DI_ScanIfNotFound" data-uid="SpiceSharp.Entities.DependencyInjection.DI.ScanIfNotFound">ScanIfNotFound</h4>
+  <div class="markdown level1 summary"><p>If <code>true</code>, then all loaded assemblies are searched for behaviors the first time that behaviors are
+created.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool ScanIfNotFound { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the assembly is scanned for behaviors if an entity doesn&apos;t have any behaviors; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Entities_DependencyInjection_DI_Get_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.Get*"></a>
+  <h4 id="SpiceSharp_Entities_DependencyInjection_DI_Get__2" data-uid="SpiceSharp.Entities.DependencyInjection.DI.Get``2">Get&lt;TEntity, TContext&gt;()</h4>
+  <div class="markdown level1 summary"><p>Gets the behavior resolver for the specified entity and binding context types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IBehaviorResolver&lt;TContext&gt; Get&lt;TEntity, TContext&gt;()
+    where TEntity : IEntity&lt;TContext&gt; where TContext : IBindingContext</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IBehaviorResolver-1.html">IBehaviorResolver</a>&lt;TContext&gt;</td>
+        <td><p>The <a class="xref" href="SpiceSharp.Entities.IBehaviorResolver-1.html">IBehaviorResolver&lt;TContext&gt;</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>The type of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TContext</span></td>
+        <td><p>The type of the context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_DependencyInjection_DI_RegisterAllBehaviors_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.RegisterAllBehaviors*"></a>
+  <h4 id="SpiceSharp_Entities_DependencyInjection_DI_RegisterAllBehaviors_System_Reflection_Assembly_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.RegisterAllBehaviors(System.Reflection.Assembly)">RegisterAllBehaviors(Assembly)</h4>
+  <div class="markdown level1 summary"><p>Registers all behaviors in the specified assembly.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RegisterAllBehaviors(Assembly assembly)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Reflection.Assembly</span></td>
+        <td><span class="parametername">assembly</span></td>
+        <td><p>The assembly.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">assembly</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_DependencyInjection_DI_RegisterBehaviorFor_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.RegisterBehaviorFor*"></a>
+  <h4 id="SpiceSharp_Entities_DependencyInjection_DI_RegisterBehaviorFor__3_System_Int32_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.RegisterBehaviorFor``3(System.Int32)">RegisterBehaviorFor&lt;TEntity, TTarget, TBehavior&gt;(Int32)</h4>
+  <div class="markdown level1 summary"><p>Registers a behavior for the specified entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RegisterBehaviorFor&lt;TEntity, TTarget, TBehavior&gt;(int priority)
+    where TEntity : IEntity where TTarget : IBehavior where TBehavior : TTarget</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">priority</span></td>
+        <td><p>The priority of the behavior.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TEntity</span></td>
+        <td><p>The type of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TTarget</span></td>
+        <td><p>The type of the target.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TBehavior</span></td>
+        <td><p>The type of the behavior.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_DependencyInjection_DI_Resolve_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.Resolve*"></a>
+  <h4 id="SpiceSharp_Entities_DependencyInjection_DI_Resolve_SpiceSharp_Simulations_ISimulation_SpiceSharp_Entities_IEntity_SpiceSharp_Behaviors_IBehaviorContainer_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.Resolve(SpiceSharp.Simulations.ISimulation,SpiceSharp.Entities.IEntity,SpiceSharp.Behaviors.IBehaviorContainer)">Resolve(ISimulation, IEntity, IBehaviorContainer)</h4>
+  <div class="markdown level1 summary"><p>Resolves behaviors for the specified simulation and entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Resolve(ISimulation simulation, IEntity entity, IBehaviorContainer behaviors)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><span class="parametername">behaviors</span></td>
+        <td><p>The behaviors.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_DependencyInjection_DI_Resolve_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.Resolve*"></a>
+  <h4 id="SpiceSharp_Entities_DependencyInjection_DI_Resolve__1_SpiceSharp_Simulations_ISimulation_SpiceSharp_Entities_IEntity_SpiceSharp_Behaviors_IBehaviorContainer___0_" data-uid="SpiceSharp.Entities.DependencyInjection.DI.Resolve``1(SpiceSharp.Simulations.ISimulation,SpiceSharp.Entities.IEntity,SpiceSharp.Behaviors.IBehaviorContainer,``0)">Resolve&lt;TContext&gt;(ISimulation, IEntity, IBehaviorContainer, TContext)</h4>
+  <div class="markdown level1 summary"><p>Resolves behaviors for the specified simulation and entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Resolve&lt;TContext&gt;(ISimulation simulation, IEntity entity, IBehaviorContainer behaviors, TContext context)
+    where TContext : IBindingContext</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
+        <td><span class="parametername">behaviors</span></td>
+        <td><p>The behaviors.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TContext</span></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TContext</span></td>
+        <td><p>The type of the context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

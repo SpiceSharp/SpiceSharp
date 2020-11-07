@@ -166,18 +166,19 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_MutualInductances_Temperature_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Temperature : Behavior, ITemperatureBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(MutualInductance), typeof(ITemperatureBehavior))]
+public class Temperature : Behavior, ITemperatureBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_MutualInductances_Temperature__ctor_" data-uid="SpiceSharp.Components.MutualInductances.Temperature.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_MutualInductances_Temperature__ctor_System_String_SpiceSharp_Components_MutualInductances_BindingContext_" data-uid="SpiceSharp.Components.MutualInductances.Temperature.#ctor(System.String,SpiceSharp.Components.MutualInductances.BindingContext)">Temperature(String, BindingContext)</h4>
+  <h4 id="SpiceSharp_Components_MutualInductances_Temperature__ctor_SpiceSharp_Components_MutualInductances_BindingContext_" data-uid="SpiceSharp.Components.MutualInductances.Temperature.#ctor(SpiceSharp.Components.MutualInductances.BindingContext)">Temperature(BindingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.MutualInductances.Temperature.html">Temperature</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Temperature(string name, BindingContext context)</code></pre>
+    <pre><code class="lang-csharp hljs">public Temperature(BindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -190,15 +191,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name.</p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="SpiceSharp.Components.MutualInductances.BindingContext.html">BindingContext</a></td>
         <td><span class="parametername">context</span></td>
         <td><p>The context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -231,7 +242,7 @@
   </table>
   <a id="SpiceSharp_Components_MutualInductances_Temperature_Parameters_" data-uid="SpiceSharp.Components.MutualInductances.Temperature.Parameters*"></a>
   <h4 id="SpiceSharp_Components_MutualInductances_Temperature_Parameters" data-uid="SpiceSharp.Components.MutualInductances.Temperature.Parameters">Parameters</h4>
-  <div class="markdown level1 summary"><p>Gets the base parameters.</p>
+  <div class="markdown level1 summary"><p>Gets the parameter set.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -249,7 +260,8 @@
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Components.MutualInductances.Parameters.html">Parameters</a></td>
-        <td></td>
+        <td><p>The parameter set.</p>
+</td>
       </tr>
     </tbody>
   </table>

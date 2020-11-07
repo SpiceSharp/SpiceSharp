@@ -210,18 +210,19 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Diodes_Biasing_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Biasing : Temperature, ITemperatureBehavior, IParameterized&lt;Parameters&gt;, IConvergenceBehavior, IBiasingBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+    <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(Diode), typeof(IBiasingBehavior), 1)]
+public class Biasing : Temperature, ITemperatureBehavior, IParameterized&lt;Parameters&gt;, IConvergenceBehavior, IBiasingBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_Diodes_Biasing__ctor_" data-uid="SpiceSharp.Components.Diodes.Biasing.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_Diodes_Biasing__ctor_System_String_SpiceSharp_Components_IComponentBindingContext_" data-uid="SpiceSharp.Components.Diodes.Biasing.#ctor(System.String,SpiceSharp.Components.IComponentBindingContext)">Biasing(String, IComponentBindingContext)</h4>
+  <h4 id="SpiceSharp_Components_Diodes_Biasing__ctor_SpiceSharp_Components_IComponentBindingContext_" data-uid="SpiceSharp.Components.Diodes.Biasing.#ctor(SpiceSharp.Components.IComponentBindingContext)">Biasing(IComponentBindingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Diodes.Biasing.html">Biasing</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Biasing(string name, IComponentBindingContext context)</code></pre>
+    <pre><code class="lang-csharp hljs">public Biasing(IComponentBindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -234,15 +235,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name.</p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></td>
         <td><span class="parametername">context</span></td>
         <td><p>The context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -525,8 +536,7 @@ diodes in series.</p>
   </table>
   <a id="SpiceSharp_Components_Diodes_Biasing_Load_" data-uid="SpiceSharp.Components.Diodes.Biasing.Load*"></a>
   <h4 id="SpiceSharp_Components_Diodes_Biasing_Load" data-uid="SpiceSharp.Components.Diodes.Biasing.Load">Load()</h4>
-  <div class="markdown level1 summary"><p>Loads the Y-matrix and right hand side vector.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -536,15 +546,33 @@ diodes in series.</p>
   </h3>
   <a id="SpiceSharp_Components_Diodes_Biasing_SpiceSharp_Behaviors_IBiasingBehavior_Load_" data-uid="SpiceSharp.Components.Diodes.Biasing.SpiceSharp#Behaviors#IBiasingBehavior#Load*"></a>
   <h4 id="SpiceSharp_Components_Diodes_Biasing_SpiceSharp_Behaviors_IBiasingBehavior_Load" data-uid="SpiceSharp.Components.Diodes.Biasing.SpiceSharp#Behaviors#IBiasingBehavior#Load">IBiasingBehavior.Load()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Loads the Y-matrix and right hand side vector.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void IBiasingBehavior.Load()</code></pre>
   </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.SpiceSharpException.html">SpiceSharpException</a></td>
+        <td><p>Thrown if the behavior can&apos;t load the matrix and/or right hand side vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Components_Diodes_Biasing_SpiceSharp_Behaviors_IConvergenceBehavior_IsConvergent_" data-uid="SpiceSharp.Components.Diodes.Biasing.SpiceSharp#Behaviors#IConvergenceBehavior#IsConvergent*"></a>
   <h4 id="SpiceSharp_Components_Diodes_Biasing_SpiceSharp_Behaviors_IConvergenceBehavior_IsConvergent" data-uid="SpiceSharp.Components.Diodes.Biasing.SpiceSharp#Behaviors#IConvergenceBehavior#IsConvergent">IConvergenceBehavior.IsConvergent()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Tests convergence at the device-level.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -561,7 +589,8 @@ diodes in series.</p>
     <tbody>
       <tr>
         <td><span class="xref">System.Boolean</span></td>
-        <td></td>
+        <td><p><code>true</code> if the device determines the solution converges; otherwise, <code>false</code>.</p>
+</td>
       </tr>
     </tbody>
   </table>
