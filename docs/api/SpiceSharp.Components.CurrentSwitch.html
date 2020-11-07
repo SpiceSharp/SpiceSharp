@@ -84,20 +84,26 @@
     <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
     <div class="level4"><a class="xref" href="SpiceSharp.Components.Component.html">Component</a></div>
-    <div class="level5"><span class="xref">CurrentSwitch</span></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.Component-1.html">Component</a>&lt;<a class="xref" href="SpiceSharp.Components.Switches.CurrentSwitchBindingContext.html">CurrentSwitchBindingContext</a>&gt;</div>
+    <div class="level6"><span class="xref">CurrentSwitch</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a></div>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity</a>&lt;<a class="xref" href="SpiceSharp.Components.Switches.CurrentSwitchBindingContext.html">CurrentSwitchBindingContext</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.Components.ICurrentControllingComponent.html">ICurrentControllingComponent</a></div>
     <div><a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a></div>
     <div><a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
-    <div><a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.Switches.Parameters.html">Parameters</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Component-1.html#SpiceSharp_Components_Component_1_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Component&lt;CurrentSwitchBindingContext&gt;.CreateBehaviors(ISimulation)</a>
+    </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_Connect_System_String___">Component.Connect(String[])</a>
     </div>
@@ -184,7 +190,7 @@
     <pre><code class="lang-csharp hljs">[Pin(0, &quot;W+&quot;)]
 [Pin(1, &quot;W-&quot;)]
 [Connected(0, 1)]
-public class CurrentSwitch : Component, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IRuleSubject, IParameterized&lt;Parameters&gt;</code></pre>
+public class CurrentSwitch : Component&lt;CurrentSwitchBindingContext&gt;, IRuleSubject, IEntity&lt;CurrentSwitchBindingContext&gt;, ICurrentControllingComponent, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -211,6 +217,22 @@ public class CurrentSwitch : Component, IComponent, IEntity, IParameterSetCollec
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
         <td><p>The name of the current-controlled switch.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -260,6 +282,22 @@ public class CurrentSwitch : Component, IComponent, IEntity, IParameterSetCollec
       </tr>
     </tbody>
   </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="fields">Fields
   </h3>
   <h4 id="SpiceSharp_Components_CurrentSwitch_CurrentSwitchPinCount" data-uid="SpiceSharp.Components.CurrentSwitch.CurrentSwitchPinCount">CurrentSwitchPinCount</h4>
@@ -289,8 +327,8 @@ public const int CurrentSwitchPinCount = 2</code></pre>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <a id="SpiceSharp_Components_CurrentSwitch_ControllingName_" data-uid="SpiceSharp.Components.CurrentSwitch.ControllingName*"></a>
-  <h4 id="SpiceSharp_Components_CurrentSwitch_ControllingName" data-uid="SpiceSharp.Components.CurrentSwitch.ControllingName">ControllingName</h4>
+  <a id="SpiceSharp_Components_CurrentSwitch_ControllingSource_" data-uid="SpiceSharp.Components.CurrentSwitch.ControllingSource*"></a>
+  <h4 id="SpiceSharp_Components_CurrentSwitch_ControllingSource" data-uid="SpiceSharp.Components.CurrentSwitch.ControllingSource">ControllingSource</h4>
   <div class="markdown level1 summary"><p>Controlling source name</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -298,7 +336,7 @@ public const int CurrentSwitchPinCount = 2</code></pre>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;control&quot;)]
 [ParameterInfo(&quot;Name of the controlling source&quot;)]
-public string ControllingName { get; set; }</code></pre>
+public string ControllingSource { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -340,38 +378,16 @@ public string ControllingName { get; set; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_CurrentSwitch_CreateBehaviors_" data-uid="SpiceSharp.Components.CurrentSwitch.CreateBehaviors*"></a>
-  <h4 id="SpiceSharp_Components_CurrentSwitch_CreateBehaviors_SpiceSharp_Simulations_ISimulation_" data-uid="SpiceSharp.Components.CurrentSwitch.CreateBehaviors(SpiceSharp.Simulations.ISimulation)">CreateBehaviors(ISimulation)</h4>
-  <div class="markdown level1 summary"><p>Creates the behaviors for the specified simulation and registers them with the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateBehaviors(ISimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Entity.CreateBehaviors(ISimulation)</a></div>
   <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity&lt;TContext&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.ICurrentControllingComponent.html">ICurrentControllingComponent</a>
+  </div>
   <div>
       <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a>
   </div>
@@ -386,9 +402,6 @@ public string ControllingName { get; set; }</code></pre>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
@@ -411,6 +424,13 @@ public string ControllingName { get; set; }</code></pre>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="SpiceSharp.Components.Component.html">Component</a></div>
+      <div><a class="xref" href="SpiceSharp.Components.ICurrentControllingComponent.html">ICurrentControllingComponent</a></div>
+      <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;P&gt;</div>
+      <div><a class="xref" href="SpiceSharp.Components.CurrentSwitch.html#SpiceSharp_Components_CurrentSwitch_Parameters">Parameters</a></div>
   </div>
 </article>
           </div>

@@ -163,7 +163,9 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Common_ParameterBehavior_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ParameterBehavior&lt;P&gt; : Behavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;P&gt; where P : IParameterSet</code></pre>
+    <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(ResistorModel), typeof(ITemperatureBehavior), new Type[]{typeof(ModelParameters)})]
+[BehaviorFor(typeof(CapacitorModel), typeof(ITemperatureBehavior), new Type[]{typeof(ModelParameters)})]
+public class ParameterBehavior&lt;P&gt; : Behavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;P&gt; where P : IParameterSet</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,13 +186,13 @@
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_Common_ParameterBehavior_1__ctor_" data-uid="SpiceSharp.Components.Common.ParameterBehavior`1.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_Common_ParameterBehavior_1__ctor_System_String_SpiceSharp_Entities_IBindingContext_" data-uid="SpiceSharp.Components.Common.ParameterBehavior`1.#ctor(System.String,SpiceSharp.Entities.IBindingContext)">ParameterBehavior(String, IBindingContext)</h4>
+  <h4 id="SpiceSharp_Components_Common_ParameterBehavior_1__ctor_SpiceSharp_Entities_IBindingContext_" data-uid="SpiceSharp.Components.Common.ParameterBehavior`1.#ctor(SpiceSharp.Entities.IBindingContext)">ParameterBehavior(IBindingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.Common.ParameterBehavior-1.html">ParameterBehavior&lt;P&gt;</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ParameterBehavior(string name, IBindingContext context)</code></pre>
+    <pre><code class="lang-csharp hljs">public ParameterBehavior(IBindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -203,15 +205,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name.</p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="SpiceSharp.Entities.IBindingContext.html">IBindingContext</a></td>
         <td><span class="parametername">context</span></td>
         <td><p>The context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>

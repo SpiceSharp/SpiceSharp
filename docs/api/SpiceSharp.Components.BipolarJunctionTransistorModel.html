@@ -83,7 +83,7 @@
     <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
     <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
-    <div class="level4"><a class="xref" href="SpiceSharp.Components.Model.html">Model</a></div>
+    <div class="level4"><a class="xref" href="SpiceSharp.Entities.Entity-1.html">Entity</a>&lt;<a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a>&gt;</div>
     <div class="level5"><span class="xref">BipolarJunctionTransistorModel</span></div>
   </div>
   <div classs="implements">
@@ -92,10 +92,14 @@
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity</a>&lt;<a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.Bipolars.ModelParameters.html">ModelParameters</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Entities.Entity-1.html#SpiceSharp_Entities_Entity_1_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Entity&lt;BindingContext&gt;.CreateBehaviors(ISimulation)</a>
+    </div>
     <div>
       <a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_SetParameter__1_System_String___0_">Entity.SetParameter&lt;P&gt;(String, P)</a>
     </div>
@@ -167,7 +171,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_BipolarJunctionTransistorModel_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class BipolarJunctionTransistorModel : Model, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;ModelParameters&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class BipolarJunctionTransistorModel : Entity&lt;BindingContext&gt;, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IEntity&lt;BindingContext&gt;, IParameterized&lt;ModelParameters&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -194,6 +198,22 @@
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">name</span></td>
         <td><p>The name of the device.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -225,37 +245,6 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_BipolarJunctionTransistorModel_CreateBehaviors_" data-uid="SpiceSharp.Components.BipolarJunctionTransistorModel.CreateBehaviors*"></a>
-  <h4 id="SpiceSharp_Components_BipolarJunctionTransistorModel_CreateBehaviors_SpiceSharp_Simulations_ISimulation_" data-uid="SpiceSharp.Components.BipolarJunctionTransistorModel.CreateBehaviors(SpiceSharp.Simulations.ISimulation)">CreateBehaviors(ISimulation)</h4>
-  <div class="markdown level1 summary"><p>Creates the behaviors for the specified simulation and registers them with the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateBehaviors(ISimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Components.Model.html#SpiceSharp_Components_Model_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Model.CreateBehaviors(ISimulation)</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Entities.IEntity.html">IEntity</a>
@@ -268,6 +257,9 @@
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity&lt;TContext&gt;</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
@@ -290,7 +282,7 @@
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Components.Model.html">Model</a></div>
+      <div><a class="xref" href="SpiceSharp.Entities.Entity-1.html">Entity</a>&lt;TContext&gt;</div>
       <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;P&gt;</div>
       <div><a class="xref" href="SpiceSharp.Components.Bipolars.ModelParameters.html">ModelParameters</a></div>
   </div>

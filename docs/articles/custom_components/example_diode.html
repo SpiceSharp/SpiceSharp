@@ -76,20 +76,24 @@
 <p>$$i_D = I_{SS}\left(e^\frac{v_A-v_B}{\eta V_T}\right)$$</p>
 <p>The diode current flows <em>out</em> of node A, and <em>into</em> node B, so we have contributions to <em>two</em> current equations.</p>
 <p>$$\begin{aligned}
-f_A(...,v_A,...,v_B,...) &amp;= +i_D = I_S\left(e^{\frac{v_A-v_B}{nV_T}}-1\right)\
+f_A(...,v_A,...,v_B,...) &amp;= +i_D = I_S\left(e^{\frac{v_A-v_B}{nV_T}}-1\right)\\
 f_B(...,v_A,...,v_B,...) &amp;= -i_D=-I_S\left(e^{\frac{v_A-v_B}{nV-T}}-1)\right)
 \end{aligned}$$</p>
 <p>From this we can calculate the contributions to the <em>Y-matrix</em>. Since the current equation contributions only depend on nodes A and B, we only get contributions to four elements.</p>
 <p>$$\begin{aligned}
-Y_{A,A} &amp;= \left.\frac{\partial f_A}{\partial v_A}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;+g_D\
-Y_{A,B} &amp;= \left.\frac{\partial f_A}{\partial v_B}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;-g_D\
-Y_{B,A} &amp;= \left.\frac{\partial f_B}{\partial v_A}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;-g_D\
+Y_{A,A} &amp;= \left.\frac{\partial f_A}{\partial v_A}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;+g_D\\
+Y_{A,B} &amp;= \left.\frac{\partial f_A}{\partial v_B}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;-g_D\\
+Y_{B,A} &amp;= \left.\frac{\partial f_B}{\partial v_A}\right|^{(k)}=-\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;-g_D\\
 Y_{B,B} &amp;= \left.\frac{\partial f_B}{\partial v_B}\right|^{(k)}=\frac{I_S}{nV_T}e^{\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}} &amp;= &amp;+g_D
 \end{aligned}$$</p>
 <p>We then calculate the contributions to the <em>RHS-vector</em>:</p>
 <p>$$\begin{aligned}
-RHS_A &amp;= f_A(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_A\pmb x^{(k)}\
- &amp;= I_S\left(e^\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}-1\right)-g_D\cdot (v_A^{(k)}-v_B^{(k)})\ &amp;= +c_D\ RHS_B &amp;= f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_B\pmb x^{(k)}\ &amp;= -\left(I_S\left(e^\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}-1\right)-g_D\cdot (v_A^{(k)}-v_B^{(k)})\right)\ &amp;= -c_D
+RHS_A &amp;= \pmb J_A\pmb x^{(k)} - f_A(...,v_A^{(k)},...,v_B^{(k)},...)\\
+&amp;= g_D\cdot (v_A^{(k)}-v_B^{(k)}) - I_S\left(e^\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}-1\right)\\
+&amp;= +c_D\\
+RHS_B &amp;= f_B(...,v_A^{(k)},...,v_B^{(k)},...)-\pmb J_B\pmb x^{(k)}\\
+&amp;= -\left(g_D\cdot (v_A^{(k)}-v_B^{(k)}) - I_S\left(e^\frac{v_A^{(k)}-v_B^{(k)}}{nV_T}-1\right)\right)\\
+&amp;= -c_D
 \end{aligned}$$</p>
 <p>We note that this time the <em>RHS-vector</em> contributions are <em>not</em> 0 for the current equations. This is again typical for <em>nonlinear</em> components. The solution will need to be found in multiple iterations.</p>
 </article>

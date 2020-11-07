@@ -103,6 +103,29 @@ namespace SpiceSharp.Algebra
         }
 
         /// <inheritdoc/>
+        public bool RemoveElement(int index)
+        {
+            if (index < 1 || index > Length)
+                return false;
+
+            // Find the element
+            var element = _firstInVector;
+            while (element != null)
+            {
+                if (element.Index == index)
+                    break;
+                if (element.Index > index)
+                    return false;
+                element = element.NextInVector;
+            }
+
+            if (element == null)
+                return false;
+            Remove(element);
+            return true;
+        }
+
+        /// <inheritdoc/>
         public Element<T> FindElement(int index)
         {
             index.GreaterThanOrEquals(nameof(index), 0);

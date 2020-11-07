@@ -82,8 +82,8 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">BindingContext</span></div>
       <div class="level2"><a class="xref" href="SpiceSharp.Components.ComponentBindingContext.html">ComponentBindingContext</a></div>
-      <div class="level2"><a class="xref" href="SpiceSharp.Components.ModelBindingContext.html">ModelBindingContext</a></div>
       <div class="level2"><a class="xref" href="SpiceSharp.Components.MutualInductances.BindingContext.html">BindingContext</a></div>
+      <div class="level2"><a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html">ParallelBindingContext</a></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -126,13 +126,13 @@ is being created. This makes sure that behaviors are only using the data that ma
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Entities_BindingContext__ctor_" data-uid="SpiceSharp.Entities.BindingContext.#ctor*"></a>
-  <h4 id="SpiceSharp_Entities_BindingContext__ctor_SpiceSharp_Entities_IEntity_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_System_Boolean_" data-uid="SpiceSharp.Entities.BindingContext.#ctor(SpiceSharp.Entities.IEntity,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer,System.Boolean)">BindingContext(IEntity, ISimulation, IBehaviorContainer, Boolean)</h4>
+  <h4 id="SpiceSharp_Entities_BindingContext__ctor_SpiceSharp_Entities_IEntity_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_" data-uid="SpiceSharp.Entities.BindingContext.#ctor(SpiceSharp.Entities.IEntity,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer)">BindingContext(IEntity, ISimulation, IBehaviorContainer)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Entities.BindingContext.html">BindingContext</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BindingContext(IEntity entity, ISimulation simulation, IBehaviorContainer behaviors, bool linkParameters)</code></pre>
+    <pre><code class="lang-csharp hljs">public BindingContext(IEntity entity, ISimulation simulation, IBehaviorContainer behaviors)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -160,12 +160,6 @@ is being created. This makes sure that behaviors are only using the data that ma
         <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
         <td><span class="parametername">behaviors</span></td>
         <td><p>The behavior container.</p>
-</td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">linkParameters</span></td>
-        <td><p>Flag indicating that parameters should be linked. If <code>false</code>, only cloned parameters are returned by the context.</p>
 </td>
       </tr>
     </tbody>
@@ -584,6 +578,45 @@ is being created. This makes sure that behaviors are only using the data that ma
         <td><span class="parametername">S</span></td>
         <td><p>The type of simulation state.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Entities_BindingContext_UsesState_" data-uid="SpiceSharp.Entities.BindingContext.UsesState*"></a>
+  <h4 id="SpiceSharp_Entities_BindingContext_UsesState__1" data-uid="SpiceSharp.Entities.BindingContext.UsesState``1">UsesState&lt;S&gt;()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool UsesState&lt;S&gt;()
+    where S : ISimulationState</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">S</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

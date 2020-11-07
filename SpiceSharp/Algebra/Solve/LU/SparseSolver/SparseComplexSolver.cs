@@ -39,15 +39,20 @@ namespace SpiceSharp.Algebra
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
             var index = 0;
-            while (rhsElement != null)
+            while (rhsElement != null && rhsElement.Index <= order)
             {
                 while (index < rhsElement.Index)
                     _intermediate[index++] = 0.0;
                 _intermediate[index++] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
-            while (index <= Size)
+            while (index <= order)
                 _intermediate[index++] = 0.0;
+            while (index <= Size)
+            {
+                _intermediate[index] = solution[Column.Reverse(index)];
+                index++;
+            }
 
             // Forward substitution
             for (var i = 1; i <= order; i++)

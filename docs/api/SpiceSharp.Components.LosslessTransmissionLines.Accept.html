@@ -198,18 +198,19 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_LosslessTransmissionLines_Accept_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Accept : Time, IParameterized&lt;Parameters&gt;, IBiasingBehavior, ITimeBehavior, IAcceptBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+    <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(LosslessTransmissionLine), typeof(IAcceptBehavior), 2)]
+public class Accept : Time, IParameterized&lt;Parameters&gt;, IBiasingBehavior, ITimeBehavior, IAcceptBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_LosslessTransmissionLines_Accept__ctor_" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_LosslessTransmissionLines_Accept__ctor_System_String_SpiceSharp_Components_IComponentBindingContext_" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.#ctor(System.String,SpiceSharp.Components.IComponentBindingContext)">Accept(String, IComponentBindingContext)</h4>
+  <h4 id="SpiceSharp_Components_LosslessTransmissionLines_Accept__ctor_SpiceSharp_Components_IComponentBindingContext_" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.#ctor(SpiceSharp.Components.IComponentBindingContext)">Accept(IComponentBindingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.LosslessTransmissionLines.Accept.html">Accept</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Accept(string name, IComponentBindingContext context)</code></pre>
+    <pre><code class="lang-csharp hljs">public Accept(IComponentBindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -222,15 +223,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name.</p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></td>
         <td><span class="parametername">context</span></td>
         <td><p>The context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -239,7 +250,8 @@
   </h3>
   <a id="SpiceSharp_Components_LosslessTransmissionLines_Accept_SpiceSharp_Behaviors_IAcceptBehavior_Accept_" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.SpiceSharp#Behaviors#IAcceptBehavior#Accept*"></a>
   <h4 id="SpiceSharp_Components_LosslessTransmissionLines_Accept_SpiceSharp_Behaviors_IAcceptBehavior_Accept" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.SpiceSharp#Behaviors#IAcceptBehavior#Accept">IAcceptBehavior.Accept()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Accepts the current timepoint.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -247,7 +259,8 @@
   </div>
   <a id="SpiceSharp_Components_LosslessTransmissionLines_Accept_SpiceSharp_Behaviors_IAcceptBehavior_Probe_" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.SpiceSharp#Behaviors#IAcceptBehavior#Probe*"></a>
   <h4 id="SpiceSharp_Components_LosslessTransmissionLines_Accept_SpiceSharp_Behaviors_IAcceptBehavior_Probe" data-uid="SpiceSharp.Components.LosslessTransmissionLines.Accept.SpiceSharp#Behaviors#IAcceptBehavior#Probe">IAcceptBehavior.Probe()</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Called when a new timepoint is being tested.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">

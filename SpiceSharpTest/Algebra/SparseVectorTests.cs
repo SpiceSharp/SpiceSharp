@@ -44,5 +44,25 @@ namespace SpiceSharpTest.Algebra
                 }
             }
         }
+
+        [Test]
+        [TestCase(1), TestCase(2), TestCase(3)]
+        public void When_RemoveElement_Expect_Reference(int index)
+        {
+            var vector = new SparseVector<double>();
+            vector.GetElement(1).Value = 1;
+            vector.GetElement(2).Value = 2;
+            vector.GetElement(3).Value = 3;
+
+            vector.RemoveElement(index);
+
+            for (var i = 1; i <= 3; i++)
+            {
+                if (i == index)
+                    Assert.AreEqual(null, vector.FindElement(i));
+                else
+                    Assert.AreEqual(i, vector.FindElement(i).Value);
+            }
+        }
     }
 }

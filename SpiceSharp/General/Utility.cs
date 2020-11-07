@@ -335,7 +335,7 @@ namespace SpiceSharp
         /// Thrown if <paramref name="nodes"/> or any of the node names in it is <c>null</c>.
         /// </exception>
         /// <exception cref="NodeMismatchException">The number of nodes in <paramref name="nodes"/> does not match <paramref name="count"/>.</exception>
-        public static void CheckNodes(this IReadOnlyCollection<string> nodes, int count)
+        public static IReadOnlyList<string> CheckNodes(this IReadOnlyList<string> nodes, int count)
         {
             if (nodes == null)
                 throw new ArgumentNullException(nameof(nodes));
@@ -343,6 +343,7 @@ namespace SpiceSharp
                 throw new NodeMismatchException(count, nodes.Count);
             foreach (var node in nodes)
                 node.ThrowIfNull(nameof(node));
+            return nodes;
         }
     }
 }

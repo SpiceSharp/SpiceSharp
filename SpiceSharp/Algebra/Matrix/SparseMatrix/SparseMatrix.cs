@@ -119,6 +119,36 @@ namespace SpiceSharp.Algebra
         }
 
         /// <inheritdoc/>
+        public bool RemoveElement(MatrixLocation location)
+        {
+            if (location.Row < 1 || location.Column < 1)
+                return false;
+            if (location.Row > Size || location.Column > Size)
+                return false;
+
+            // Quick access to diagonals
+            if (location.Row == location.Column)
+            {
+                if (_diagonal[location.Row] != null)
+                {
+                    _rows[location.Row].Remove(_diagonal[location.Row]);
+                    _columns[location.Column].Remove(_diagonal[location.Column]);
+                    _diagonal[location.Row] = null;
+                    return true;
+                }
+                return false;
+            }
+
+            // General case
+            var elt = _rows[location.Row].Find(location.Column);
+            if (elt == null)
+                return false;
+            _rows[location.Row].Remove(elt);
+            _columns[location.Column].Remove(elt);
+            return true;
+        }
+
+        /// <inheritdoc/>
         public ISparseMatrixElement<T> FindDiagonalElement(int index)
         {
             index.GreaterThanOrEquals(nameof(index), 0);

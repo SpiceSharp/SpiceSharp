@@ -122,10 +122,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             Vdsat = 0;
             Von = 0;
             Mode = 1;
-
-            _variables = new MosfetVariables<double>(Name, state, context.Nodes,
-                !ModelParameters.DrainResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.DrainSquares > 0,
-                !ModelParameters.SourceResistance.Equals(0.0) || !ModelParameters.SheetResistance.Equals(0.0) && Parameters.SourceSquares > 0);
+            _variables = new MosfetVariables<double>(context, state);
 
             // Get matrix pointers
             _elements = new ElementSet<double>(state.Solver,

@@ -43,20 +43,27 @@ namespace SpiceSharp.Components.Mosfets
         /// <summary>
         /// Initializes a new instance of the <see cref="MosfetVariables{T}"/> struct.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="factory">The factory.</param>
-        /// <param name="nodes">The nodes.</param>
-        /// <param name="internalDrain">If set to <c>true</c>, an internal drain is created, otherwise, the external drain is used.</param>
-        /// <param name="internalSource">If set to <c>true</c>, an internal source is created, otherwise, the external source is used.</param>
-        public MosfetVariables(string name, IVariableFactory<IVariable<T>> factory, IReadOnlyList<string> nodes, bool internalDrain, bool internalSource)
+        /// <param name="context">The binding context.</param>
+        /// <param name="factory">The variable factory.</param>
+        public MosfetVariables(IComponentBindingContext context, IVariableFactory<IVariable<T>> factory)
         {
-            nodes.CheckNodes(4);
+            var nodes = context.Nodes.CheckNodes(4);
             Drain = factory.GetSharedVariable(nodes[0]);
             Gate = factory.GetSharedVariable(nodes[1]);
             Source = factory.GetSharedVariable(nodes[2]);
             Bulk = factory.GetSharedVariable(nodes[3]);
-            DrainPrime = internalDrain ? factory.CreatePrivateVariable(name.Combine("drain"), Units.Volt) : Drain;
-            SourcePrime = internalSource ? factory.CreatePrivateVariable(name.Combine("source"), Units.Volt) : Source;
+            var bp = context.GetParameterSet<Parameters>();
+            var mbp = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            
+            if (!mbp.DrainResistance.Equals(0.0) || !mbp.SheetResistance.Equals(0.0) && bp.DrainSquares > 0)
+                DrainPrime = factory.CreatePrivateVariable(context.Behaviors.Name.Combine("drain"), Units.Volt);
+            else
+                DrainPrime = Drain;
+
+            if (!mbp.SourceResistance.Equals(0.0) || !mbp.SheetResistance.Equals(0.0) && bp.SourceSquares > 0)
+                SourcePrime = factory.CreatePrivateVariable(context.Behaviors.Name.Combine("source"), Units.Volt);
+            else
+                SourcePrime = Source;
         }
 
         /// <summary>

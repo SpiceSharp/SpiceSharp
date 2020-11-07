@@ -180,6 +180,13 @@ namespace SpiceSharp.Algebra.Solve
         }
 
         /// <inheritdoc/>
+        public bool RemoveElement(MatrixLocation location)
+        {
+            location = ExternalToInternal(location);
+            return Matrix.RemoveElement(location);
+        }
+
+        /// <inheritdoc/>
         public Element<T> GetElement(int row)
         {
             if (row < 0)
@@ -194,6 +201,13 @@ namespace SpiceSharp.Algebra.Solve
                     SwapRows(Size, Size - Degeneracy);
             }
             return elt;
+        }
+
+        /// <inheritdoc/>
+        public bool RemoveElement(int row)
+        {
+            row = Row[row];
+            return Vector.RemoveElement(row);
         }
 
         /// <summary>

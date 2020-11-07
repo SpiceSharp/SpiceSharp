@@ -84,7 +84,8 @@
     <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
     <div class="level3"><a class="xref" href="SpiceSharp.Entities.Entity.html">Entity</a></div>
     <div class="level4"><a class="xref" href="SpiceSharp.Components.Component.html">Component</a></div>
-    <div class="level5"><span class="xref">VoltageSwitch</span></div>
+    <div class="level5"><a class="xref" href="SpiceSharp.Components.Component-1.html">Component</a>&lt;<a class="xref" href="SpiceSharp.Components.Switches.VoltageSwitchBindingContext.html">VoltageSwitchBindingContext</a>&gt;</div>
+    <div class="level6"><span class="xref">VoltageSwitch</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
@@ -93,11 +94,15 @@
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
     <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
+    <div><a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity</a>&lt;<a class="xref" href="SpiceSharp.Components.Switches.VoltageSwitchBindingContext.html">VoltageSwitchBindingContext</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.Switches.Parameters.html">Parameters</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.Validation.IRuleSubject.html">IRuleSubject</a></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.Components.Component-1.html#SpiceSharp_Components_Component_1_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Component&lt;VoltageSwitchBindingContext&gt;.CreateBehaviors(ISimulation)</a>
+    </div>
     <div>
       <a class="xref" href="SpiceSharp.Components.Component.html#SpiceSharp_Components_Component_Connect_System_String___">Component.Connect(String[])</a>
     </div>
@@ -183,7 +188,7 @@
 [Pin(2, &quot;SC+&quot;)]
 [Pin(3, &quot;SC-&quot;)]
 [Connected(0, 1)]
-public class VoltageSwitch : Component, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;, IRuleSubject</code></pre>
+public class VoltageSwitch : Component&lt;VoltageSwitchBindingContext&gt;, IComponent, IEntity, IParameterSetCollection, IParameterSet, ICloneable, IEntity&lt;VoltageSwitchBindingContext&gt;, IParameterized&lt;Parameters&gt;, IRuleSubject</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -325,37 +330,6 @@ public const int VoltageSwitchPinCount = 4</code></pre>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_VoltageSwitch_CreateBehaviors_" data-uid="SpiceSharp.Components.VoltageSwitch.CreateBehaviors*"></a>
-  <h4 id="SpiceSharp_Components_VoltageSwitch_CreateBehaviors_SpiceSharp_Simulations_ISimulation_" data-uid="SpiceSharp.Components.VoltageSwitch.CreateBehaviors(SpiceSharp.Simulations.ISimulation)">CreateBehaviors(ISimulation)</h4>
-  <div class="markdown level1 summary"><p>Creates the behaviors for the specified simulation and registers them with the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void CreateBehaviors(ISimulation simulation)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The simulation.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Entities.Entity.html#SpiceSharp_Entities_Entity_CreateBehaviors_SpiceSharp_Simulations_ISimulation_">Entity.CreateBehaviors(ISimulation)</a></div>
   <h3 id="eii">Explicit Interface Implementations
   </h3>
   <a id="SpiceSharp_Components_VoltageSwitch_SpiceSharp_Validation_IRuleSubject_Apply_" data-uid="SpiceSharp.Components.VoltageSwitch.SpiceSharp#Validation#IRuleSubject#Apply*"></a>
@@ -400,6 +374,9 @@ public const int VoltageSwitchPinCount = 4</code></pre>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Entities.IEntity-1.html">IEntity&lt;TContext&gt;</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>

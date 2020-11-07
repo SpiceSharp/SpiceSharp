@@ -440,6 +440,15 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Simulations_Simulation_Finish_" data-uid="SpiceSharp.Simulations.Simulation.Finish*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Finish" data-uid="SpiceSharp.Simulations.Simulation.Finish">Finish()</h4>
+  <div class="markdown level1 summary"><p>Finish the simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void Finish()</code></pre>
+  </div>
   <a id="SpiceSharp_Simulations_Simulation_GetState_" data-uid="SpiceSharp.Simulations.Simulation.GetState*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_GetState__1" data-uid="SpiceSharp.Simulations.Simulation.GetState``1">GetState&lt;S&gt;()</h4>
   <div class="markdown level1 summary"><p>Gets the state of the specified type.</p>
@@ -741,9 +750,18 @@
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Simulations_Simulation_Rerun_" data-uid="SpiceSharp.Simulations.Simulation.Rerun*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Rerun" data-uid="SpiceSharp.Simulations.Simulation.Rerun">Rerun()</h4>
+  <div class="markdown level1 summary"><p>Reruns the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> with the previous behaviors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Rerun()</code></pre>
+  </div>
   <a id="SpiceSharp_Simulations_Simulation_Run_" data-uid="SpiceSharp.Simulations.Simulation.Run*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection)">Run(IEntityCollection)</h4>
-  <div class="markdown level1 summary"><p>Runs the simulation on the specified circuit.</p>
+  <div class="markdown level1 summary"><p>Runs the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> on the specified <a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -763,7 +781,7 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
         <td><span class="parametername">entities</span></td>
-        <td><p>The entities to simulate.</p>
+        <td><p>The entities.</p>
 </td>
       </tr>
     </tbody>
@@ -828,15 +846,6 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Simulation_Unsetup_" data-uid="SpiceSharp.Simulations.Simulation.Unsetup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Unsetup" data-uid="SpiceSharp.Simulations.Simulation.Unsetup">Unsetup()</h4>
-  <div class="markdown level1 summary"><p>Free all objects used by the simulation.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract void Unsetup()</code></pre>
-  </div>
   <a id="SpiceSharp_Simulations_Simulation_UsesBehaviors_" data-uid="SpiceSharp.Simulations.Simulation.UsesBehaviors*"></a>
   <h4 id="SpiceSharp_Simulations_Simulation_UsesBehaviors__1" data-uid="SpiceSharp.Simulations.Simulation.UsesBehaviors``1">UsesBehaviors&lt;B&gt;()</h4>
   <div class="markdown level1 summary"><p>Checks if the class uses the specified behaviors.</p>

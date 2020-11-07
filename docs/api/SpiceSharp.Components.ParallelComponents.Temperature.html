@@ -88,6 +88,7 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
+    <div><a class="xref" href="SpiceSharp.Components.ParallelComponents.IParallelBehavior.html">IParallelBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
@@ -163,18 +164,19 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_ParallelComponents_Temperature_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Temperature : Behavior, ITemperatureBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
+    <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(Parallel), typeof(ITemperatureBehavior))]
+public class Temperature : Behavior, ITemperatureBehavior, IParallelBehavior, IBehavior, IParameterSetCollection, IParameterSet, ICloneable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <a id="SpiceSharp_Components_ParallelComponents_Temperature__ctor_" data-uid="SpiceSharp.Components.ParallelComponents.Temperature.#ctor*"></a>
-  <h4 id="SpiceSharp_Components_ParallelComponents_Temperature__ctor_System_String_SpiceSharp_Components_ParallelComponents_ParallelSimulation_" data-uid="SpiceSharp.Components.ParallelComponents.Temperature.#ctor(System.String,SpiceSharp.Components.ParallelComponents.ParallelSimulation)">Temperature(String, ParallelSimulation)</h4>
+  <h4 id="SpiceSharp_Components_ParallelComponents_Temperature__ctor_SpiceSharp_Components_ParallelComponents_ParallelBindingContext_" data-uid="SpiceSharp.Components.ParallelComponents.Temperature.#ctor(SpiceSharp.Components.ParallelComponents.ParallelBindingContext)">Temperature(ParallelBindingContext)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.ParallelComponents.Temperature.html">Temperature</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Temperature(string name, ParallelSimulation simulation)</code></pre>
+    <pre><code class="lang-csharp hljs">public Temperature(ParallelBindingContext context)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -187,15 +189,54 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">name</span></td>
-        <td><p>The name of the behavior.</p>
+        <td><a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html">ParallelBindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context.</p>
 </td>
       </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelSimulation.html">ParallelSimulation</a></td>
-        <td><span class="parametername">simulation</span></td>
-        <td><p>The parallel simulation.</p>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">context</code> is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <a id="SpiceSharp_Components_ParallelComponents_Temperature_FetchBehaviors_" data-uid="SpiceSharp.Components.ParallelComponents.Temperature.FetchBehaviors*"></a>
+  <h4 id="SpiceSharp_Components_ParallelComponents_Temperature_FetchBehaviors_SpiceSharp_Components_ParallelComponents_ParallelBindingContext_" data-uid="SpiceSharp.Components.ParallelComponents.Temperature.FetchBehaviors(SpiceSharp.Components.ParallelComponents.ParallelBindingContext)">FetchBehaviors(ParallelBindingContext)</h4>
+  <div class="markdown level1 summary"><p>Fetches the behaviors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FetchBehaviors(ParallelBindingContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html">ParallelBindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The context.</p>
 </td>
       </tr>
     </tbody>
@@ -214,6 +255,9 @@
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.ParallelComponents.IParallelBehavior.html">IParallelBehavior</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>

@@ -55,6 +55,10 @@ namespace SpiceSharp.Algebra
             size = Math.Min(size, Size);
             var order = Math.Min(size, Size - Degeneracy);
 
+            // Fill in the values from the solution for degenerate cases
+            for (var i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Column.Reverse(i)];
+
             // Forward substitution
             for (var i = 1; i <= order; i++)
             {

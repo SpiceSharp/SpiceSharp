@@ -61,6 +61,9 @@ namespace SpiceSharp.Algebra.Solve
             public Element<T> GetElement(MatrixLocation location) => _parent.Matrix.GetElement(location);
 
             /// <inheritdoc/>
+            public bool RemoveElement(MatrixLocation location) => _parent.Matrix.RemoveElement(location);
+
+            /// <inheritdoc/>
             public Element<T> FindElement(MatrixLocation location) => _parent.Matrix.FindElement(location);
 
             /// <inheritdoc/>

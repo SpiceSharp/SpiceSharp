@@ -80,59 +80,14 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
-    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
-    <div class="level3"><span class="xref">SubcircuitDefinition</span></div>
+    <div class="level1"><span class="xref">SubcircuitDefinition</span></div>
   </div>
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="SpiceSharp.Components.ISubcircuitDefinition.html">ISubcircuitDefinition</a></div>
-    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
-    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
-    <div><a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a></div>
-    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.Subcircuits.Simple.Parameters.html">Parameters</a>&gt;</div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetParameterSet__1___0__">ParameterSetCollection.TryGetParameterSet&lt;P&gt;(P)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_SetParameter__1_System_String___0_">ParameterSetCollection.SetParameter&lt;P&gt;(String, P)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TrySetParameter__1_System_String___0_">ParameterSetCollection.TrySetParameter&lt;P&gt;(String, P)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetProperty__1_System_String_">ParameterSetCollection.GetProperty&lt;P&gt;(String)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_TryGetProperty__1_System_String___0__">ParameterSetCollection.TryGetProperty&lt;P&gt;(String, P)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreateParameterSetter__1_System_String_">ParameterSetCollection.CreateParameterSetter&lt;P&gt;(String)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_CreatePropertyGetter__1_System_String_">ParameterSetCollection.CreatePropertyGetter&lt;P&gt;(String)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_ParameterSets">ParameterSetCollection.ParameterSets</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_Clone">ParameterSet.Clone()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_Clone">ParameterSet.ICloneable.Clone()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.CopyFrom(ICloneable)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SpiceSharp_ICloneable_CopyFrom_SpiceSharp_ICloneable_">ParameterSet.ICloneable.CopyFrom(ICloneable)</a>
-    </div>
     <div>
       <span class="xref">System.Object.ToString()</span>
     </div>
@@ -159,7 +114,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_SubcircuitDefinition_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class SubcircuitDefinition : ParameterSetCollection, ISubcircuitDefinition, IParameterSetCollection, IParameterSet, ICloneable, IParameterized&lt;Parameters&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class SubcircuitDefinition : ISubcircuitDefinition</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -241,41 +196,16 @@ public IEntityCollection Entities { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Components_SubcircuitDefinition_Parameters_" data-uid="SpiceSharp.Components.SubcircuitDefinition.Parameters*"></a>
-  <h4 id="SpiceSharp_Components_SubcircuitDefinition_Parameters" data-uid="SpiceSharp.Components.SubcircuitDefinition.Parameters">Parameters</h4>
-  <div class="markdown level1 summary"><p>Gets the parameter set.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Parameters Parameters { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.Subcircuits.Simple.Parameters.html">Parameters</a></td>
-        <td><p>The parameter set.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Components_SubcircuitDefinition_PinCount_" data-uid="SpiceSharp.Components.SubcircuitDefinition.PinCount*"></a>
-  <h4 id="SpiceSharp_Components_SubcircuitDefinition_PinCount" data-uid="SpiceSharp.Components.SubcircuitDefinition.PinCount">PinCount</h4>
-  <div class="markdown level1 summary"><p>Gets the number of pins defined by the subcircuit.</p>
+  <a id="SpiceSharp_Components_SubcircuitDefinition_Pins_" data-uid="SpiceSharp.Components.SubcircuitDefinition.Pins*"></a>
+  <h4 id="SpiceSharp_Components_SubcircuitDefinition_Pins" data-uid="SpiceSharp.Components.SubcircuitDefinition.Pins">Pins</h4>
+  <div class="markdown level1 summary"><p>Gets the pin names. These are the nodes that can be connected to the outside.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[ParameterName(&quot;pins&quot;)]
-[ParameterInfo(&quot;The number of pins.&quot;)]
-public int PinCount { get; }</code></pre>
+[ParameterInfo(&quot;The pins that connect this subcircuit definition to the outside.&quot;)]
+public IReadOnlyList&lt;string&gt; Pins { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -287,105 +217,8 @@ public int PinCount { get; }</code></pre>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
-        <td><p>The pin count.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  <a id="SpiceSharp_Components_SubcircuitDefinition_CreateBehaviors_" data-uid="SpiceSharp.Components.SubcircuitDefinition.CreateBehaviors*"></a>
-  <h4 id="SpiceSharp_Components_SubcircuitDefinition_CreateBehaviors_SpiceSharp_Components_Subcircuit_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_" data-uid="SpiceSharp.Components.SubcircuitDefinition.CreateBehaviors(SpiceSharp.Components.Subcircuit,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer)">CreateBehaviors(Subcircuit, ISimulation, IBehaviorContainer)</h4>
-  <div class="markdown level1 summary"><p>Creates the behaviors for the entities in the subcircuit.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void CreateBehaviors(Subcircuit subcircuit, ISimulation parentSimulation, IBehaviorContainer behaviors)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a></td>
-        <td><span class="parametername">subcircuit</span></td>
-        <td><p>The subcircuit that wants to create the behaviors through the definition.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
-        <td><span class="parametername">parentSimulation</span></td>
-        <td><p>The parent simulation.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a></td>
-        <td><span class="parametername">behaviors</span></td>
-        <td><p>The <a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainer.html">IBehaviorContainer</a> used for the subcircuit.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ArgumentNullException</span></td>
-        <td><p>Thrown if <code data-dev-comment-type="paramref" class="paramref">subcircuit</code>, <code data-dev-comment-type="paramref" class="paramref">parentSimulation</code> or <code data-dev-comment-type="paramref" class="paramref">behaviors</code> is <code>null</code>.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.NodeMismatchException.html">NodeMismatchException</a></td>
-        <td><p>Thrown if the number of pins of the instance don&apos;t match the number of pins defined by the definition.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="eii">Explicit Interface Implementations
-  </h3>
-  <a id="SpiceSharp_Components_SubcircuitDefinition_SpiceSharp_Components_ISubcircuitDefinition_Apply_" data-uid="SpiceSharp.Components.SubcircuitDefinition.SpiceSharp#Components#ISubcircuitDefinition#Apply*"></a>
-  <h4 id="SpiceSharp_Components_SubcircuitDefinition_SpiceSharp_Components_ISubcircuitDefinition_Apply_SpiceSharp_Components_Subcircuit_SpiceSharp_Validation_IRules_" data-uid="SpiceSharp.Components.SubcircuitDefinition.SpiceSharp#Components#ISubcircuitDefinition#Apply(SpiceSharp.Components.Subcircuit,SpiceSharp.Validation.IRules)">ISubcircuitDefinition.Apply(Subcircuit, IRules)</h4>
-  <div class="markdown level1 summary"><p>Applies the rules to the entities in the subcircuit.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void ISubcircuitDefinition.Apply(Subcircuit subcircuit, IRules rules)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Components.Subcircuit.html">Subcircuit</a></td>
-        <td><span class="parametername">subcircuit</span></td>
-        <td><p>The subcircuit.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Validation.IRules.html">IRules</a></td>
-        <td><span class="parametername">rules</span></td>
-        <td><p>The rules.</p>
+        <td><span class="xref">System.Collections.Generic.IReadOnlyList</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>The pins.</p>
 </td>
       </tr>
     </tbody>
@@ -394,40 +227,15 @@ public int PinCount { get; }</code></pre>
   <div>
       <a class="xref" href="SpiceSharp.Components.ISubcircuitDefinition.html">ISubcircuitDefinition</a>
   </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ICloneable.html">ICloneable</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
-  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSetCollection_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSetCollection, Boolean)</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Reflection.Documentation.html#SpiceSharp_Reflection_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, Boolean)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
       <div><a class="xref" href="SpiceSharp.Components.ISubcircuitDefinition.html">ISubcircuitDefinition</a></div>
       <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;P&gt;</div>
-      <div><a class="xref" href="SpiceSharp.Components.Subcircuits.Simple.Parameters.html">Parameters</a></div>
   </div>
 </article>
           </div>

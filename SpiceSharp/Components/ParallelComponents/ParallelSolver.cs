@@ -145,6 +145,10 @@ namespace SpiceSharp.Components.ParallelComponents
         }
 
         /// <inheritdoc/>
+        public bool RemoveElement(MatrixLocation location) =>
+            throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor)));
+
+        /// <inheritdoc/>
         public Element<T> GetElement(int row)
         {
             var elt = _parent.GetElement(row);
@@ -158,6 +162,10 @@ namespace SpiceSharp.Components.ParallelComponents
                 _sharedVectorElements.Add(row);
             return elt;
         }
+
+        /// <inheritdoc/>
+        public bool RemoveElement(int index)
+            => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.OrderAndFactor)));
 
         /// <summary>
         /// Clears all matrix and vector elements.
