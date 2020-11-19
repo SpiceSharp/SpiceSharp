@@ -50,7 +50,7 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node.</param>
         /// <param name="neg">The negative node.</param>
         /// <param name="inductance">The inductance.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or any node is <c>null</c>.</exception>
         public Inductor(string name, string pos, string neg, double inductance)
             : this(name)
         {

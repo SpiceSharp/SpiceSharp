@@ -45,11 +45,26 @@ namespace SpiceSharp.Components
         /// <param name="pos">The positive node.</param>
         /// <param name="neg">The negative node.</param>
         /// <param name="cap">The capacitance value.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or any node is <c>null</c>.</exception>
         public Capacitor(string name, string pos, string neg, double cap)
             : this(name)
         {
             Parameters.Capacitance = cap;
+            Connect(pos, neg);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Capacitor"/> class.
+        /// </summary>
+        /// <param name="name">The name of the capacitor.</param>
+        /// <param name="pos">The positive node.</param>
+        /// <param name="neg">The negative node.</param>
+        /// <param name="model">The model name.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or any node is <c>null</c>.</exception>
+        public Capacitor(string name, string pos, string neg, string model)
+            : this(name)
+        {
+            Model = model;
             Connect(pos, neg);
         }
 
