@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Components.Capacitors;
+﻿using SpiceSharp.Components.Resistors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using System;

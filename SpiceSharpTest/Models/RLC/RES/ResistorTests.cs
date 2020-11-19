@@ -43,6 +43,30 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual((double)clone.Parameters.ParallelMultiplier, 3.0, 1e-20);
         }
 
+        [Test]
+        public void When_ResistorModel_Expect_Reference()
+        {
+            // Bug found by Marcin Golebiowski
+            ResistorModel model;
+            Resistor res;
+            var ckt = new Circuit(
+                new CurrentSource("I1", "0", "a", 1),
+                model = new ResistorModel("RM1"),
+                res = new Resistor("R1", "a", "0", "RM1"));
+            model.Parameters.DefaultWidth = 0.5e-6;
+            model.Parameters.Narrow = 0.1e-6;
+            model.Parameters.SheetResistance = 20;
+            res.Parameters.Length = 5e-6;
+
+            var op = new OP("op");
+
+            var exports = new IExport<double>[] { new RealVoltageExport(op, "a") };
+            var references = new[] { 245.0 };
+
+            AnalyzeOp(op, ckt, exports, references);
+            DestroyExports(exports);
+        }
+
         /// <summary>
         /// Create a voltage source shunted by a resistor
         /// </summary>
@@ -273,100 +297,5 @@ namespace SpiceSharpTest.Models
             };
             noise.Run(ckt);
         }
-
-        /*
-        [TestCaseSource(nameof(Temperature))]
-        public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double conductance)
-        {
-            var behavior = new TemperatureBehavior("R1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            Check.Double(behavior.Conductance, conductance);
-        }
-        [TestCaseSource(nameof(Biasing))]
-        public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
-        {
-            var behavior = new BiasingBehavior("R1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            ((IBiasingBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
-        }
-        [TestCaseSource(nameof(Frequency))]
-        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
-        {
-            var behavior = new FrequencyBehavior("R1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            ((IBiasingBehavior)behavior).Load();
-            ((IFrequencyBehavior)behavior).InitializeParameters();
-            ((IFrequencyBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
-        }
-        [TestCaseSource(nameof(Noise))]
-        public void When_NoiseBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double expected)
-        {
-            var behavior = new NoiseBehavior("R1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            ((IBiasingBehavior)behavior).Load();
-            ((INoiseBehavior)behavior).Noise();
-            Check.Double(expected, behavior.ResistorNoise.Noise);
-        }
-
-        public static IEnumerable<TestCaseData> Temperature
-        {
-            get
-            {
-                IComponentBindingContext context;
-                context = Substitute.For<IComponentBindingContext>()
-                    .Parameter(new BaseParameters(1e3));
-                yield return new TestCaseData(context.AsProxy(), 1e-3).SetName("{m}(R=1k)");
-
-                context = Substitute.For<IComponentBindingContext>()
-                    .Parameter(new BaseParameters(1e3) { ParallelMultiplier = 4 });
-                yield return new TestCaseData(context.AsProxy(), 4.0e-3).SetName("{m}(R=1k m=4)");
-
-                context = Substitute.For<IComponentBindingContext>()
-                    .Parameter(new BaseParameters(1e3) { SeriesMultiplier = 4 });
-                yield return new TestCaseData(context.AsProxy(), 0.25e-3).SetName("{m}(R=1k n=4)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Biasing
-        {
-            get
-            {
-                IComponentBindingContext context;
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Bias().Parameter(new BaseParameters(1e3));
-                yield return new TestCaseData(context.AsProxy(), new double[]
-                {
-                    1e-3, -1e-3, double.NaN,
-                    -1e-3, 1e-3, double.NaN
-                }).SetName("{m}(DC)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Frequency
-        {
-            get
-            {
-                IComponentBindingContext context;
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Frequency().Parameter(new BaseParameters(1e3));
-                yield return new TestCaseData(context.AsProxy(), new Complex[]
-                {
-                    1e-3, -1e-3, double.NaN,
-                    -1e-3, 1e-3, double.NaN
-                }).SetName("{m}(AC)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Noise
-        {
-            get
-            {
-                IComponentBindingContext context;
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Frequency(state => { state.Solution[2] = 1e10; })
-                    .Noise().Parameter(new BaseParameters(1e3));
-                yield return new TestCaseData(context.AsProxy(), 1.65757549356e-3).SetName("{m}(Noise)");
-            }
-        }
-        */
     }
 }
