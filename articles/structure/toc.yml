@@ -8,3 +8,5 @@
   href: frequency.md
 - name: Transient analysis
   href: transient.md
+- name: Dependency Injection
+  href: di.md

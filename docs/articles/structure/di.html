@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Dependency injection </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Dependency injection ">
+    <meta name="generator" content="docfx 2.52.0.0">
+    
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    
+    
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="dependency-injection">Dependency injection</h1>
+
+<p>Spice# has a basic implementation for inversion of control, which allows you to register your own behaviors for components. The class that tracks all of this is <strong><a class="xref" href="../../api/SpiceSharp.Entities.DependencyInjection.DI.html">DI</a></strong>.</p>
+<p>By default, the static <strong><a class="xref" href="../../api/SpiceSharp.Entities.DependencyInjection.DI.html">DI</a></strong> class automatically searches the assembly for components and behaviors  the first time it is invoked. This is done using reflection, and if you want to keep the startup very light-weight you can choose to disable this behavior by clearing the <strong><a class="xref" href="../../api/SpiceSharp.Entities.DependencyInjection.DI.html#SpiceSharp_Entities_DependencyInjection_DI_ScanIfNotFound">ScanIfNotFound</a></strong> flag, in which case you will need to add the necessary behaviors and components manually.
+Searching the assembly is done by looking at the <strong><a class="xref" href="../../api/SpiceSharp.Attributes.BehaviorForAttribute.html">BehaviorForAttribute</a></strong> on behavior classes. This allows you to flag a behavior to be used for a specific component.</p>
+<p>The class allows you to manually register all the behaviors of an assembly, or add behaviors for entities manually using the <strong><a class="xref" href="../../api/SpiceSharp.Entities.DependencyInjection.DI.html#SpiceSharp_Entities_DependencyInjection_DI_RegisterBehaviorFor_">RegisterBehaviorFor</a></strong> method. Overriding existing behaviors can be done by registering behaviors with a higher priority such that they are checked first.</p>
+<h2 id="deciding-on-the-right-behavior">Deciding on the right behavior</h2>
+<p>Once the <strong><a class="xref" href="../../api/SpiceSharp.Entities.DependencyInjection.DI.html">DI</a></strong> container needs to decide on behaviors for the specified simulation and component, it will go over each found behavior in order of decreasing <em>priority</em>. If the behavior implements all the necessary <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></strong> interfaces that are requested by the simulation, then the behavior is created and added to the simulation.</p>
+<h3 id="example-the-diode">Example: the diode</h3>
+<p>A transient simulation requests the following behaviors from a <strong><a class="xref" href="../../api/SpiceSharp.Components.Diode.html">Diode</a></strong>:</p>
+<ul>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></strong></li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong></li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a></strong></li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong></li>
+</ul>
+<p>The container checks the following behaviors:</p>
+<ol>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Components.Diodes.Noise.html">Noise</a></strong> has the highest priority so it is checked first. It implements the <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.INoiseBehavior.html">INoiseBehavior</a></strong> among others which isn&#39;t requested by the simulation so it <em>isn&#39;t</em> created.</li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Components.Diodes.Noise.html">Frequency</a></strong> has the same priority as the next step, but since it implements <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.INoiseBehavior.html">IFrequencyBehavior</a></strong> which isn&#39;t requested by the simulation, it <em>isn&#39;t</em> created.</li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Components.Diodes.Time.html">Time</a></strong> implements <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></strong>, and since it inherits from its biasing behavior it also implements <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong>, <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a></strong> and <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong>. All of these are requested by the simulation so <strong>this behavior is created</strong>!</li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Components.Diodes.Biasing.html">Biasing</a></strong> contains interfaces that are already created, so this behavior is skipped.</li>
+<li><strong><a class="xref" href="../../api/SpiceSharp.Components.Diodes.Biasing.html">Temperature</a></strong> contains interfaces that are already created so this behavior is skipped.</li>
+</ol>
+<p>In a lot of models, quantities and computations need to be shared between different behaviors of a component. The ordering by priority gives the freedom necessery to deal with inheritance to avoid code duplication.</p>
+<div class="WARNING">
+  <h5>WARNING</h5>
+  <p>Note that the <strong><a class="xref" href="../../api/SpiceSharp.Entities.DependencyInjection.DI.html">DI</a></strong> does not need to concern itself with the order of <em>creation</em> of the behaviors. It only makes sure that behaviors of the same behavior type are not added twice.</p>
+</div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

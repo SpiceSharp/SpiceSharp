@@ -9,10 +9,11 @@ The easiest way to install Spice# is by installing the NuGet package Spice#.
 
 You can also **clone** the repository directly. However, while you get the latest features and bug fixes, the documentation might not be up to date!
 
-| Platform | Status |
-|:---------|-------:|
-| AppVeyor CI (Windows) build status | [![Build status](https://ci.appveyor.com/api/projects/status/tg6q7y8m5725g8ou/branch/master?svg=true)](https://ci.appveyor.com/project/SpiceSharp/spicesharp/branch/master) |
-| Travis CI (Linux/Mono) build status | [![Build Status](https://travis-ci.org/SpiceSharp/SpiceSharp.svg?branch=master)](https://travis-ci.org/SpiceSharp/SpiceSharp) |
+|    | Status |
+|:---|-------:|
+| Windows | ![Windows Tests](https://github.com/SpiceSharp/SpiceSharp/workflows/Windows%20Tests/badge.svg) |
+| MacOS | ![MacOS Tests](https://github.com/SpiceSharp/SpiceSharp/workflows/MacOS%20Tests/badge.svg) |
+| Linux/Ubuntu | ![Linux Tests](https://github.com/SpiceSharp/SpiceSharp/workflows/Linux%20Tests/badge.svg) |
 
 ## Building a circuit
 Let's start with a very simple circuit known as a *resistive voltage divider*. The schematic looks as follows.
