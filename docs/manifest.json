@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "README.html",
-          "hash": "DsDPzS/w8MOTZdV556vFCA=="
+          "hash": "7ubF+6RWX6pG2MuHmnvKvw=="
         }
       },
       "is_incremental": false,
@@ -129,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.ISparseMatrix-1.html",
-          "hash": "pQv4RXhnVyre0NTW9YY6zQ=="
+          "hash": "XFrPhRQp+2RyId7JsftBlA=="
         }
       },
       "is_incremental": false,
@@ -153,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.ISparsePivotingSolver-1.html",
-          "hash": "g6cfxZ+42yEHyYWH7OX08w=="
+          "hash": "AKB/Aj6RSTv2SM7vsGQhBg=="
         }
       },
       "is_incremental": false,
@@ -165,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.ISparseSolver-1.html",
-          "hash": "MlcGZqPIsRO+ExR1VlvECQ=="
+          "hash": "8FAR1+1tygV6gJWbr4a62w=="
         }
       },
       "is_incremental": false,
@@ -177,7 +177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.ISparseVector-1.html",
-          "hash": "X+TEJ3S95ICLzIk/TFqGTQ=="
+          "hash": "70dH4iZ5jRzNIu56FoXsKA=="
         }
       },
       "is_incremental": false,
@@ -405,7 +405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedMatrix.html",
-          "hash": "R3sh51wiEhtErzOomnoU1g=="
+          "hash": "15DVqREb1xYqTrNn64emmg=="
         }
       },
       "is_incremental": false,
@@ -417,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedVector.html",
-          "hash": "dSUcGpWeHCBymH7HDMIDxQ=="
+          "hash": "evN2NlJugTHTKpc4R/jDdA=="
         }
       },
       "is_incremental": false,
@@ -429,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.html",
-          "hash": "sa7XVCZulA/Nv5wek0/IXA=="
+          "hash": "LEiskexjhfsceSeEiLI6Nw=="
         }
       },
       "is_incremental": false,
@@ -465,7 +465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.SparseComplexSolver.html",
-          "hash": "UzwT3x7MZ742S+TPZ22TrA=="
+          "hash": "QUdZVm9nV6MZm6x7FYSVOQ=="
         }
       },
       "is_incremental": false,
@@ -513,7 +513,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.SparseMatrix-1.html",
-          "hash": "dmPuu0XArz6LYRopyCziDA=="
+          "hash": "4bUeQPsR9XeYbOt1VS9GaA=="
         }
       },
       "is_incremental": false,
@@ -525,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.SparseRealSolver.html",
-          "hash": "UGZl6ULuOnkmo2DlA1BsIw=="
+          "hash": "jHydZ3fBx1YGWDSUagPqeg=="
         }
       },
       "is_incremental": false,
@@ -549,7 +549,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Algebra.SparseVector-1.html",
-          "hash": "vHULqSxJC3JbmXx+9cjnQg=="
+          "hash": "13SK2+oSsuk9ccKb0Ino0Q=="
         }
       },
       "is_incremental": false,
@@ -586,18 +586,6 @@
         ".html": {
           "relative_path": "api/SpiceSharp.Attributes.BehaviorForAttribute.html",
           "hash": "tMA1Wtb4kvHs9r9bj8fPEg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Attributes.BehavioralAttribute.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Attributes.BehavioralAttribute.html",
-          "hash": "DvekCOWSQBEQJNogYtqkNA=="
         }
       },
       "is_incremental": false,
@@ -657,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Attributes.html",
-          "hash": "YfRetAsgr6PdqncPqOQ7ig=="
+          "hash": "KUEJkT3f3Vi+ev4uV6eZSQ=="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1089,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Capacitor.html",
-          "hash": "Sw+u5JXTE1MwQ925nYZscg=="
+          "hash": "8o5V5rKyfgGYKVztDT+NJg=="
         }
       },
       "is_incremental": false,
@@ -1581,7 +1569,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Diodes.Biasing.html",
-          "hash": "dHRX2CAGo5EzJ/EKwCDsrg=="
+          "hash": "xPzymDMyQcflTKz5K5Xfyg=="
         }
       },
       "is_incremental": false,
@@ -1845,7 +1833,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Inductor.html",
-          "hash": "IK/ItkFFEq/9dFSN3qbRGQ=="
+          "hash": "iQfuKKJ2+4cYXu5A9wVfGg=="
         }
       },
       "is_incremental": false,
@@ -2973,7 +2961,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.ParallelComponents.ParallelSolver-1.html",
-          "hash": "B82khzke09KDuN8iUy8r6Q=="
+          "hash": "fiu+KJlHJS9Wyl1+Lr6YyQ=="
         }
       },
       "is_incremental": false,
@@ -3165,7 +3153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Resistor.html",
-          "hash": "NwOg1Hi2G13aCIveknQDWQ=="
+          "hash": "3lPefSQ6c5IEsWDcDOlbWg=="
         }
       },
       "is_incremental": false,
@@ -3177,7 +3165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.ResistorModel.html",
-          "hash": "6hidWxFbBWaZVDLWrzNQSQ=="
+          "hash": "brmSpkTSd7kiFPfKpYz3pA=="
         }
       },
       "is_incremental": false,
@@ -6741,7 +6729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "UZyNWEWVzGOM+/djcegdsA=="
+          "hash": "EpPapXmVkDjRnve6J86ejw=="
         }
       },
       "is_incremental": false,
@@ -6920,6 +6908,18 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/structure/di.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/structure/di.html",
+          "hash": "2TKYKDzIVjeNBPZDDVuOeg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/structure/flow.md",
       "output": {
         ".html": {
@@ -7061,7 +7061,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "o8YeEwsNQRewaFDUVY26xA=="
+          "hash": "zy1Tj9EwBAZUgxX127Z8/g=="
         }
       },
       "is_incremental": false,
@@ -7155,7 +7155,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/tutorials/gettingstarted.html",
-          "hash": "iVWcPjO2V5hNNJrfXrDcXQ=="
+          "hash": "4G86FEfGrlalevCyhhDHdA=="
         }
       },
       "is_incremental": false,
@@ -7256,7 +7256,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "eNteP7dIal1ln/ew2NVBqQ=="
+          "hash": "rEM8Nabjusb2I2UaYHW+PA=="
         }
       },
       "is_incremental": false,
@@ -7289,13 +7289,13 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 20,
+          "total_file_count": 21,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 560,
+          "total_file_count": 559,
           "skipped_file_count": 0
         },
         "ResourceDocumentProcessor": {

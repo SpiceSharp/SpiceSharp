@@ -1198,6 +1198,22 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISparseMatrix(Of T).GetLastInRow
   nameWithType: ISparseMatrix<T>.GetLastInRow
   nameWithType.vb: ISparseMatrix(Of T).GetLastInRow
+- uid: SpiceSharp.Algebra.ISparseMatrix`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  name: RemoveElement(MatrixLocation)
+  href: api/SpiceSharp.Algebra.ISparseMatrix-1.html#SpiceSharp_Algebra_ISparseMatrix_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation_
+  commentId: M:SpiceSharp.Algebra.ISparseMatrix`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName: SpiceSharp.Algebra.ISparseMatrix<T>.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName.vb: SpiceSharp.Algebra.ISparseMatrix(Of T).RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  nameWithType: ISparseMatrix<T>.RemoveElement(MatrixLocation)
+  nameWithType.vb: ISparseMatrix(Of T).RemoveElement(MatrixLocation)
+- uid: SpiceSharp.Algebra.ISparseMatrix`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.ISparseMatrix-1.html#SpiceSharp_Algebra_ISparseMatrix_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.ISparseMatrix`1.RemoveElement
+  fullName: SpiceSharp.Algebra.ISparseMatrix<T>.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.ISparseMatrix(Of T).RemoveElement
+  nameWithType: ISparseMatrix<T>.RemoveElement
+  nameWithType.vb: ISparseMatrix(Of T).RemoveElement
 - uid: SpiceSharp.Algebra.ISparseMatrixElement`1
   name: ISparseMatrixElement<T>
   href: api/SpiceSharp.Algebra.ISparseMatrixElement-1.html
@@ -1385,6 +1401,30 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISparseSolver(Of T).GetElement
   nameWithType: ISparseSolver<T>.GetElement
   nameWithType.vb: ISparseSolver(Of T).GetElement
+- uid: SpiceSharp.Algebra.ISparseSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  name: RemoveElement(MatrixLocation)
+  href: api/SpiceSharp.Algebra.ISparseSolver-1.html#SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation_
+  commentId: M:SpiceSharp.Algebra.ISparseSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName: SpiceSharp.Algebra.ISparseSolver<T>.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName.vb: SpiceSharp.Algebra.ISparseSolver(Of T).RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  nameWithType: ISparseSolver<T>.RemoveElement(MatrixLocation)
+  nameWithType.vb: ISparseSolver(Of T).RemoveElement(MatrixLocation)
+- uid: SpiceSharp.Algebra.ISparseSolver`1.RemoveElement(System.Int32)
+  name: RemoveElement(Int32)
+  href: api/SpiceSharp.Algebra.ISparseSolver-1.html#SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_System_Int32_
+  commentId: M:SpiceSharp.Algebra.ISparseSolver`1.RemoveElement(System.Int32)
+  fullName: SpiceSharp.Algebra.ISparseSolver<T>.RemoveElement(System.Int32)
+  fullName.vb: SpiceSharp.Algebra.ISparseSolver(Of T).RemoveElement(System.Int32)
+  nameWithType: ISparseSolver<T>.RemoveElement(Int32)
+  nameWithType.vb: ISparseSolver(Of T).RemoveElement(Int32)
+- uid: SpiceSharp.Algebra.ISparseSolver`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.ISparseSolver-1.html#SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.ISparseSolver`1.RemoveElement
+  fullName: SpiceSharp.Algebra.ISparseSolver<T>.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.ISparseSolver(Of T).RemoveElement
+  nameWithType: ISparseSolver<T>.RemoveElement
+  nameWithType.vb: ISparseSolver(Of T).RemoveElement
 - uid: SpiceSharp.Algebra.ISparseVector`1
   name: ISparseVector<T>
   href: api/SpiceSharp.Algebra.ISparseVector-1.html
@@ -1474,6 +1514,22 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISparseVector(Of T).GetLastInVector
   nameWithType: ISparseVector<T>.GetLastInVector
   nameWithType.vb: ISparseVector(Of T).GetLastInVector
+- uid: SpiceSharp.Algebra.ISparseVector`1.RemoveElement(System.Int32)
+  name: RemoveElement(Int32)
+  href: api/SpiceSharp.Algebra.ISparseVector-1.html#SpiceSharp_Algebra_ISparseVector_1_RemoveElement_System_Int32_
+  commentId: M:SpiceSharp.Algebra.ISparseVector`1.RemoveElement(System.Int32)
+  fullName: SpiceSharp.Algebra.ISparseVector<T>.RemoveElement(System.Int32)
+  fullName.vb: SpiceSharp.Algebra.ISparseVector(Of T).RemoveElement(System.Int32)
+  nameWithType: ISparseVector<T>.RemoveElement(Int32)
+  nameWithType.vb: ISparseVector(Of T).RemoveElement(Int32)
+- uid: SpiceSharp.Algebra.ISparseVector`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.ISparseVector-1.html#SpiceSharp_Algebra_ISparseVector_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.ISparseVector`1.RemoveElement
+  fullName: SpiceSharp.Algebra.ISparseVector<T>.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.ISparseVector(Of T).RemoveElement
+  nameWithType: ISparseVector<T>.RemoveElement
+  nameWithType.vb: ISparseVector(Of T).RemoveElement
 - uid: SpiceSharp.Algebra.ISparseVectorElement`1
   name: ISparseVectorElement<T>
   href: api/SpiceSharp.Algebra.ISparseVectorElement-1.html
@@ -3801,6 +3857,30 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).Precondition
   nameWithType: SparseLUSolver<T>.Precondition
   nameWithType.vb: SparseLUSolver(Of T).Precondition
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  name: RemoveElement(MatrixLocation)
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation_
+  commentId: M:SpiceSharp.Algebra.Solve.SparseLUSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  nameWithType: SparseLUSolver<T>.RemoveElement(MatrixLocation)
+  nameWithType.vb: SparseLUSolver(Of T).RemoveElement(MatrixLocation)
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.RemoveElement(System.Int32)
+  name: RemoveElement(Int32)
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_RemoveElement_System_Int32_
+  commentId: M:SpiceSharp.Algebra.Solve.SparseLUSolver`1.RemoveElement(System.Int32)
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.RemoveElement(System.Int32)
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).RemoveElement(System.Int32)
+  nameWithType: SparseLUSolver<T>.RemoveElement(Int32)
+  nameWithType.vb: SparseLUSolver(Of T).RemoveElement(Int32)
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.Solve.SparseLUSolver`1.RemoveElement
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).RemoveElement
+  nameWithType: SparseLUSolver<T>.RemoveElement
+  nameWithType.vb: SparseLUSolver(Of T).RemoveElement
 - uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedMatrix
   name: SparseLUSolver<T>.ReorderedMatrix
   href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedMatrix.html
@@ -3997,6 +4077,22 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).ReorderedMatrix.Item
   nameWithType: SparseLUSolver<T>.ReorderedMatrix.Item
   nameWithType.vb: SparseLUSolver(Of T).ReorderedMatrix.Item
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedMatrix.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  name: RemoveElement(MatrixLocation)
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedMatrix.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_ReorderedMatrix_RemoveElement_SpiceSharp_Algebra_MatrixLocation_
+  commentId: M:SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedMatrix.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.ReorderedMatrix.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).ReorderedMatrix.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  nameWithType: SparseLUSolver<T>.ReorderedMatrix.RemoveElement(MatrixLocation)
+  nameWithType.vb: SparseLUSolver(Of T).ReorderedMatrix.RemoveElement(MatrixLocation)
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedMatrix.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedMatrix.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_ReorderedMatrix_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedMatrix.RemoveElement
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.ReorderedMatrix.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).ReorderedMatrix.RemoveElement
+  nameWithType: SparseLUSolver<T>.ReorderedMatrix.RemoveElement
+  nameWithType.vb: SparseLUSolver(Of T).ReorderedMatrix.RemoveElement
 - uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedMatrix.Reset
   name: Reset()
   href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedMatrix.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_ReorderedMatrix_Reset
@@ -4249,6 +4345,22 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).ReorderedVector.Length
   nameWithType: SparseLUSolver<T>.ReorderedVector.Length
   nameWithType.vb: SparseLUSolver(Of T).ReorderedVector.Length
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedVector.RemoveElement(System.Int32)
+  name: RemoveElement(Int32)
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedVector.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_ReorderedVector_RemoveElement_System_Int32_
+  commentId: M:SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedVector.RemoveElement(System.Int32)
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.ReorderedVector.RemoveElement(System.Int32)
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).ReorderedVector.RemoveElement(System.Int32)
+  nameWithType: SparseLUSolver<T>.ReorderedVector.RemoveElement(Int32)
+  nameWithType.vb: SparseLUSolver(Of T).ReorderedVector.RemoveElement(Int32)
+- uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedVector.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedVector.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_ReorderedVector_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedVector.RemoveElement
+  fullName: SpiceSharp.Algebra.Solve.SparseLUSolver<T>.ReorderedVector.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.Solve.SparseLUSolver(Of T).ReorderedVector.RemoveElement
+  nameWithType: SparseLUSolver<T>.ReorderedVector.RemoveElement
+  nameWithType.vb: SparseLUSolver(Of T).ReorderedVector.RemoveElement
 - uid: SpiceSharp.Algebra.Solve.SparseLUSolver`1.ReorderedVector.Reset
   name: Reset()
   href: api/SpiceSharp.Algebra.Solve.SparseLUSolver-1.ReorderedVector.html#SpiceSharp_Algebra_Solve_SparseLUSolver_1_ReorderedVector_Reset
@@ -5005,6 +5117,22 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseMatrix(Of T).Item
   nameWithType: SparseMatrix<T>.Item
   nameWithType.vb: SparseMatrix(Of T).Item
+- uid: SpiceSharp.Algebra.SparseMatrix`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  name: RemoveElement(MatrixLocation)
+  href: api/SpiceSharp.Algebra.SparseMatrix-1.html#SpiceSharp_Algebra_SparseMatrix_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation_
+  commentId: M:SpiceSharp.Algebra.SparseMatrix`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName: SpiceSharp.Algebra.SparseMatrix<T>.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName.vb: SpiceSharp.Algebra.SparseMatrix(Of T).RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  nameWithType: SparseMatrix<T>.RemoveElement(MatrixLocation)
+  nameWithType.vb: SparseMatrix(Of T).RemoveElement(MatrixLocation)
+- uid: SpiceSharp.Algebra.SparseMatrix`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.SparseMatrix-1.html#SpiceSharp_Algebra_SparseMatrix_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.SparseMatrix`1.RemoveElement
+  fullName: SpiceSharp.Algebra.SparseMatrix<T>.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.SparseMatrix(Of T).RemoveElement
+  nameWithType: SparseMatrix<T>.RemoveElement
+  nameWithType.vb: SparseMatrix(Of T).RemoveElement
 - uid: SpiceSharp.Algebra.SparseMatrix`1.Reset
   name: Reset()
   href: api/SpiceSharp.Algebra.SparseMatrix-1.html#SpiceSharp_Algebra_SparseMatrix_1_Reset
@@ -5576,6 +5704,22 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseVector(Of T).Length
   nameWithType: SparseVector<T>.Length
   nameWithType.vb: SparseVector(Of T).Length
+- uid: SpiceSharp.Algebra.SparseVector`1.RemoveElement(System.Int32)
+  name: RemoveElement(Int32)
+  href: api/SpiceSharp.Algebra.SparseVector-1.html#SpiceSharp_Algebra_SparseVector_1_RemoveElement_System_Int32_
+  commentId: M:SpiceSharp.Algebra.SparseVector`1.RemoveElement(System.Int32)
+  fullName: SpiceSharp.Algebra.SparseVector<T>.RemoveElement(System.Int32)
+  fullName.vb: SpiceSharp.Algebra.SparseVector(Of T).RemoveElement(System.Int32)
+  nameWithType: SparseVector<T>.RemoveElement(Int32)
+  nameWithType.vb: SparseVector(Of T).RemoveElement(Int32)
+- uid: SpiceSharp.Algebra.SparseVector`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Algebra.SparseVector-1.html#SpiceSharp_Algebra_SparseVector_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Algebra.SparseVector`1.RemoveElement
+  fullName: SpiceSharp.Algebra.SparseVector<T>.RemoveElement
+  fullName.vb: SpiceSharp.Algebra.SparseVector(Of T).RemoveElement
+  nameWithType: SparseVector<T>.RemoveElement
+  nameWithType.vb: SparseVector(Of T).RemoveElement
 - uid: SpiceSharp.Algebra.SparseVector`1.Reset
   name: Reset()
   href: api/SpiceSharp.Algebra.SparseVector-1.html#SpiceSharp_Algebra_SparseVector_1_Reset
@@ -5655,24 +5799,6 @@ references:
   commentId: N:SpiceSharp.Attributes
   fullName: SpiceSharp.Attributes
   nameWithType: SpiceSharp.Attributes
-- uid: SpiceSharp.Attributes.BehavioralAttribute
-  name: BehavioralAttribute
-  href: api/SpiceSharp.Attributes.BehavioralAttribute.html
-  commentId: T:SpiceSharp.Attributes.BehavioralAttribute
-  fullName: SpiceSharp.Attributes.BehavioralAttribute
-  nameWithType: BehavioralAttribute
-- uid: SpiceSharp.Attributes.BehavioralAttribute.#ctor
-  name: BehavioralAttribute()
-  href: api/SpiceSharp.Attributes.BehavioralAttribute.html#SpiceSharp_Attributes_BehavioralAttribute__ctor
-  commentId: M:SpiceSharp.Attributes.BehavioralAttribute.#ctor
-  fullName: SpiceSharp.Attributes.BehavioralAttribute.BehavioralAttribute()
-  nameWithType: BehavioralAttribute.BehavioralAttribute()
-- uid: SpiceSharp.Attributes.BehavioralAttribute.#ctor*
-  name: BehavioralAttribute
-  href: api/SpiceSharp.Attributes.BehavioralAttribute.html#SpiceSharp_Attributes_BehavioralAttribute__ctor_
-  commentId: Overload:SpiceSharp.Attributes.BehavioralAttribute.#ctor
-  fullName: SpiceSharp.Attributes.BehavioralAttribute.BehavioralAttribute
-  nameWithType: BehavioralAttribute.BehavioralAttribute
 - uid: SpiceSharp.Attributes.BehaviorForAttribute
   name: BehaviorForAttribute
   href: api/SpiceSharp.Attributes.BehaviorForAttribute.html
@@ -9550,6 +9676,12 @@ references:
   commentId: M:SpiceSharp.Components.Capacitor.#ctor(System.String,System.String,System.String,System.Double)
   fullName: SpiceSharp.Components.Capacitor.Capacitor(System.String, System.String, System.String, System.Double)
   nameWithType: Capacitor.Capacitor(String, String, String, Double)
+- uid: SpiceSharp.Components.Capacitor.#ctor(System.String,System.String,System.String,System.String)
+  name: Capacitor(String, String, String, String)
+  href: api/SpiceSharp.Components.Capacitor.html#SpiceSharp_Components_Capacitor__ctor_System_String_System_String_System_String_System_String_
+  commentId: M:SpiceSharp.Components.Capacitor.#ctor(System.String,System.String,System.String,System.String)
+  fullName: SpiceSharp.Components.Capacitor.Capacitor(System.String, System.String, System.String, System.String)
+  nameWithType: Capacitor.Capacitor(String, String, String, String)
 - uid: SpiceSharp.Components.Capacitor.#ctor*
   name: Capacitor
   href: api/SpiceSharp.Components.Capacitor.html#SpiceSharp_Components_Capacitor__ctor_
@@ -22526,6 +22658,30 @@ references:
   fullName.vb: SpiceSharp.Components.ParallelComponents.ParallelSolver(Of T).PivotSearchReduction
   nameWithType: ParallelSolver<T>.PivotSearchReduction
   nameWithType.vb: ParallelSolver(Of T).PivotSearchReduction
+- uid: SpiceSharp.Components.ParallelComponents.ParallelSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  name: RemoveElement(MatrixLocation)
+  href: api/SpiceSharp.Components.ParallelComponents.ParallelSolver-1.html#SpiceSharp_Components_ParallelComponents_ParallelSolver_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation_
+  commentId: M:SpiceSharp.Components.ParallelComponents.ParallelSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName: SpiceSharp.Components.ParallelComponents.ParallelSolver<T>.RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  fullName.vb: SpiceSharp.Components.ParallelComponents.ParallelSolver(Of T).RemoveElement(SpiceSharp.Algebra.MatrixLocation)
+  nameWithType: ParallelSolver<T>.RemoveElement(MatrixLocation)
+  nameWithType.vb: ParallelSolver(Of T).RemoveElement(MatrixLocation)
+- uid: SpiceSharp.Components.ParallelComponents.ParallelSolver`1.RemoveElement(System.Int32)
+  name: RemoveElement(Int32)
+  href: api/SpiceSharp.Components.ParallelComponents.ParallelSolver-1.html#SpiceSharp_Components_ParallelComponents_ParallelSolver_1_RemoveElement_System_Int32_
+  commentId: M:SpiceSharp.Components.ParallelComponents.ParallelSolver`1.RemoveElement(System.Int32)
+  fullName: SpiceSharp.Components.ParallelComponents.ParallelSolver<T>.RemoveElement(System.Int32)
+  fullName.vb: SpiceSharp.Components.ParallelComponents.ParallelSolver(Of T).RemoveElement(System.Int32)
+  nameWithType: ParallelSolver<T>.RemoveElement(Int32)
+  nameWithType.vb: ParallelSolver(Of T).RemoveElement(Int32)
+- uid: SpiceSharp.Components.ParallelComponents.ParallelSolver`1.RemoveElement*
+  name: RemoveElement
+  href: api/SpiceSharp.Components.ParallelComponents.ParallelSolver-1.html#SpiceSharp_Components_ParallelComponents_ParallelSolver_1_RemoveElement_
+  commentId: Overload:SpiceSharp.Components.ParallelComponents.ParallelSolver`1.RemoveElement
+  fullName: SpiceSharp.Components.ParallelComponents.ParallelSolver<T>.RemoveElement
+  fullName.vb: SpiceSharp.Components.ParallelComponents.ParallelSolver(Of T).RemoveElement
+  nameWithType: ParallelSolver<T>.RemoveElement
+  nameWithType.vb: ParallelSolver(Of T).RemoveElement
 - uid: SpiceSharp.Components.ParallelComponents.ParallelSolver`1.Reset
   name: Reset()
   href: api/SpiceSharp.Components.ParallelComponents.ParallelSolver-1.html#SpiceSharp_Components_ParallelComponents_ParallelSolver_1_Reset
@@ -24014,6 +24170,12 @@ references:
   commentId: M:SpiceSharp.Components.Resistor.#ctor(System.String,System.String,System.String,System.Double)
   fullName: SpiceSharp.Components.Resistor.Resistor(System.String, System.String, System.String, System.Double)
   nameWithType: Resistor.Resistor(String, String, String, Double)
+- uid: SpiceSharp.Components.Resistor.#ctor(System.String,System.String,System.String,System.String)
+  name: Resistor(String, String, String, String)
+  href: api/SpiceSharp.Components.Resistor.html#SpiceSharp_Components_Resistor__ctor_System_String_System_String_System_String_System_String_
+  commentId: M:SpiceSharp.Components.Resistor.#ctor(System.String,System.String,System.String,System.String)
+  fullName: SpiceSharp.Components.Resistor.Resistor(System.String, System.String, System.String, System.String)
+  nameWithType: Resistor.Resistor(String, String, String, String)
 - uid: SpiceSharp.Components.Resistor.#ctor*
   name: Resistor
   href: api/SpiceSharp.Components.Resistor.html#SpiceSharp_Components_Resistor__ctor_
