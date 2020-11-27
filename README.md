@@ -7,6 +7,7 @@ You can find documentation at [https://spicesharp.github.io/SpiceSharp/](https:/
 - The general structure of Spice#.
 - A tutorial on how to implement your own *custom* model equations (prerequisite knowledge needed).
 - An example of changing parameters during simulation.
+- etc.
 
 ## Quickstart
 Simulating a circuit is relatively straightforward. For example:
