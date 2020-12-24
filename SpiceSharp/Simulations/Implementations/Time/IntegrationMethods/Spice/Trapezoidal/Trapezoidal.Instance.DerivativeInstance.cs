@@ -16,20 +16,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 private readonly Instance _method;
                 private readonly IHistory<SpiceIntegrationState> _states;
 
-                /// <summary>
-                /// Gets the current derivative.
-                /// </summary>
-                /// <value>
-                /// The derivative.
-                /// </value>
+                /// <inheritdoc/>
                 public double Derivative => _states.Value.State[_index + 1];
 
-                /// <summary>
-                /// Gets or sets the current value.
-                /// </summary>
-                /// <value>
-                /// The current value.
-                /// </value>
+                /// <inheritdoc/>
                 public double Value
                 {
                     get => _states.Value.State[_index];
@@ -40,7 +30,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// Initializes a new instance of the <see cref="DerivativeInstance"/> class.
                 /// </summary>
                 /// <param name="method">The integration method.</param>
-                /// <param name="index">The derivative value index.</param>
+                /// <param name="index">The integrated value index.</param>
                 public DerivativeInstance(Instance method, int index)
                 {
                     _method = method.ThrowIfNull(nameof(method));
@@ -48,30 +38,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     _index = index;
                 }
 
-                /// <summary>
-                /// Gets the jacobian value and Rhs-vector value.
-                /// </summary>
-                /// <param name="coefficient">The coefficient of the quantity that is derived.</param>
-                /// <param name="currentValue">The current value of the derived state.</param>
-                /// <returns>
-                /// The information for filling in the Y-matrix and Rhs-vector.
-                /// </returns>
+                /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient, double currentValue)
                 {
-                    double g = _method.Slope * coefficient;
+                    var g = _method.Slope * coefficient;
                     return new JacobianInfo(
                         g,
                         Derivative - g * currentValue);
                 }
 
-                /// <summary>
-                /// Gets the Y-matrix value and Rhs-vector contributions for the derived quantity.
-                /// The relationship is assumed to be linear.
-                /// </summary>
-                /// <param name="coefficient">The coefficient of the quantity that is derived.</param>
-                /// <returns>
-                /// The information for filling in the Y-matrix and Rhs-vector
-                /// </returns>
+                /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient)
                 {
                     var h = _method.Slope;
@@ -81,29 +57,15 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                         s[_index + 1] - h * s[_index]);
                 }
 
-                /// <summary>
-                /// Gets a previous value of the state. An index of 0 indicates the current value.
-                /// </summary>
-                /// <param name="index">The number of points to go back in time.</param>
-                /// <returns>
-                /// The previous value.
-                /// </returns>
+                /// <inheritdoc/>
                 public double GetPreviousValue(int index)
                     => _states.GetPreviousValue(index).State[_index];
 
-                /// <summary>
-                /// Gets a previous derivative of the state. An index of 0 indicates the current value.
-                /// </summary>
-                /// <param name="index">The number of points to go back in time.</param>
-                /// <returns>
-                /// The previous derivative.
-                /// </returns>
+                /// <inheritdoc/>
                 public double GetPreviousDerivative(int index)
                     => _states.GetPreviousValue(index).State[_index + 1];
 
-                /// <summary>
-                /// Integrates the state (calculates the derivative).
-                /// </summary>
+                /// <inheritdoc/>
                 public void Integrate()
                 {
                     var derivativeIndex = _index + 1;
@@ -124,12 +86,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     }
                 }
 
-                /// <summary>
-                /// Truncates the current timestep.
-                /// </summary>
-                /// <returns>
-                /// The maximum timestep allowed by this integration state.
-                /// </returns>
+                /// <inheritdoc/>
                 public double Truncate()
                 {
                     var parameters = _method.Parameters;
@@ -168,7 +125,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     }
 
                     // Calculate the new timestep
-                    double factor = double.NaN;
+                    var factor = double.NaN;
                     switch (_method.Order)
                     {
                         case 1:

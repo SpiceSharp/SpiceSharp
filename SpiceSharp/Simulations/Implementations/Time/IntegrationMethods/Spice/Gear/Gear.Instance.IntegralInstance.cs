@@ -7,32 +7,32 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         protected partial class Instance
         {
             /// <summary>
-            /// An <see cref="IDerivative"/> for <see cref="Gear"/>.
+            /// An <see cref="IIntegral"/> for <see cref="Gear"/>.
             /// </summary>
-            /// <seealso cref="IDerivative" />
-            /// <seealso cref="ITruncatable" />
-            protected class DerivativeInstance : IDerivative, ITruncatable
+            /// <seealso cref="IIntegral"/>
+            /// <seealso cref="ITruncatable"/>
+            protected class IntegralInstance : IIntegral, ITruncatable
             {
                 private readonly int _index;
                 private readonly Instance _method;
                 private readonly IHistory<SpiceIntegrationState> _states;
 
                 /// <inheritdoc/>
-                public double Derivative => _states.Value.State[_index + 1];
-
-                /// <inheritdoc/>
-                public double Value
+                public double Derivative
                 {
                     get => _states.Value.State[_index];
                     set => _states.Value.State[_index] = value;
                 }
 
+                /// <inheritdoc/>
+                public double Value => _states.Value.State[_index + 1];
+
                 /// <summary>
-                /// Initializes a new instance of the <see cref="DerivativeInstance"/> class.
+                /// Initializes a new instance of the <see cref="IntegralInstance"/> class.
                 /// </summary>
                 /// <param name="method">The method.</param>
                 /// <param name="index">The index.</param>
-                public DerivativeInstance(Instance method, int index)
+                public IntegralInstance(Instance method, int index)
                 {
                     _method = method.ThrowIfNull(nameof(method));
                     _states = _method.States;
@@ -42,7 +42,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient, double currentValue)
                 {
-                    var g = _method.Slope * coefficient;
+                    var g = coefficient / _method.Slope;
                     return new JacobianInfo(
                         g,
                         Derivative - g * currentValue);
@@ -51,31 +51,32 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient)
                 {
-                    var h = _method.Slope;
+                    var h = 1 / _method.Slope;
                     var s = _states.Value.State;
                     return new JacobianInfo(
                         h * coefficient,
-                        s[_index + 1] - h * s[_index]);
+                        coefficient * (s[_index + 1] - h * s[_index]));
                 }
 
                 /// <inheritdoc/>
                 public double GetPreviousValue(int index)
-                    => _states.GetPreviousValue(index).State[_index];
+                    => _states.GetPreviousValue(index).State[_index + 1];
 
                 /// <inheritdoc/>
                 public double GetPreviousDerivative(int index)
-                    => _states.GetPreviousValue(index).State[_index + 1];
+                    => _states.GetPreviousValue(index).State[_index];
 
                 /// <inheritdoc/>
                 public void Integrate()
                 {
-                    var derivativeIndex = _index + 1;
+                    var integratedIndex = _index + 1;
                     var ag = _method.Coefficients;
-
                     var current = _states.Value.State;
-                    current[derivativeIndex] = 0.0;
-                    for (var i = 0; i <= _method.Order; i++)
-                        current[derivativeIndex] += ag[i + 1] * _states.GetPreviousValue(i).State[_index];
+
+                    var result = current[_index];
+                    for (var i = 1; i <= _method.Order; i++)
+                        result -= ag[i + 1] * _states.GetPreviousValue(i).State[_index + 1];
+                    current[_index + 1] = result / ag[1];
                 }
 
                 /// <inheritdoc/>
