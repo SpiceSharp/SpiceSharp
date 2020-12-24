@@ -62,7 +62,7 @@ namespace SpiceSharp.Components.Diodes
 
             // Integrate
             _capCharge.Value = LocalCapCharge;
-            _capCharge.Integrate();
+            _capCharge.Derive();
             var info = _capCharge.GetContributions(LocalCapacitance, vd);
             var geq = info.Jacobian;
             var ceq = info.Rhs;

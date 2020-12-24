@@ -84,10 +84,10 @@ namespace SpiceSharp.Components.JFETs
             CalculateStates(vgs, vgd);
 
             // Integrate and add contributions
-            _qgs.Integrate();
+            _qgs.Derive();
             var ggs = _qgs.GetContributions(CapGs).Jacobian;
             var cg = _qgs.Derivative;
-            _qgd.Integrate();
+            _qgd.Derive();
             var ggd = _qgd.GetContributions(CapGd).Jacobian;
             cg += _qgd.Derivative;
             var cd = -_qgd.Derivative;

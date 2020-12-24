@@ -136,13 +136,13 @@ namespace SpiceSharp.Components.Mosfets
 
             // Bulk junction capacitances
             _qbd.Value = _charges.Qbd;
-            _qbd.Integrate();
+            _qbd.Derive();
             c.Bd.G += _qbd.GetContributions(_charges.Cbd).Jacobian;
             c.Bd.C += _qbd.Derivative;
             c.Ds.C -= _qbd.Derivative;
 
             _qbs.Value = _charges.Qbs;
-            _qbs.Integrate();
+            _qbs.Derive();
             c.Bs.G += _qbs.GetContributions(_charges.Cbs).Jacobian;
             c.Bs.C += _qbs.Derivative;
 
@@ -167,17 +167,17 @@ namespace SpiceSharp.Components.Mosfets
             _qgd.Value = (vgd - vgd1) * capgd + _qgd.GetPreviousValue(1);
             _qgb.Value = (vgb1 - vgb1) * capgb + _qgb.GetPreviousValue(1);
 
-            _qgs.Integrate();
+            _qgs.Derive();
             var info = _qgs.GetContributions(capgs, vgs);
             c.Gs.G += info.Jacobian;
             c.Gs.C += info.Rhs;
 
-            _qgd.Integrate();
+            _qgd.Derive();
             info = _qgd.GetContributions(capgd, vgd);
             c.Gd.G += info.Jacobian;
             c.Gd.C += info.Rhs;
 
-            _qgb.Integrate();
+            _qgb.Derive();
             info = _qgb.GetContributions(capgb, vgb);
             c.Gb.G += info.Jacobian;
             c.Gb.C += info.Rhs;

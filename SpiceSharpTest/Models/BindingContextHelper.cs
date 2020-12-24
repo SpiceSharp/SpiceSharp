@@ -27,7 +27,7 @@ namespace SpiceSharpTest.Models
                     h * coefficient,
                     Derivative - h * Value);
             }
-            public void Integrate()
+            public void Derive()
             {
             }
         }

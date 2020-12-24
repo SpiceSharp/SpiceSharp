@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     => _states.GetPreviousValue(index).State[_index + 1];
 
                 /// <inheritdoc/>
-                public void Integrate()
+                public void Derive()
                 {
                     var derivativeIndex = _index + 1;
                     var current = _states.Value.State;

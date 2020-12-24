@@ -57,7 +57,7 @@ namespace SpiceSharpTest.Simulations
                 if (_time.UseDc || _method.Time.Equals(0.0))
                     return;
                 _derivative.Value = _biasing.Solution[1];
-                _derivative.Integrate();
+                _derivative.Derive();
             }
             void IAcceptBehavior.Probe()
             {

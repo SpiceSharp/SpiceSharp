@@ -59,6 +59,6 @@
         /// <summary>
         /// Integrates the state (calculates the derivative from the value).
         /// </summary>
-        void Integrate();
+        void Derive();
     }
 }
