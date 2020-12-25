@@ -126,8 +126,12 @@ namespace SpiceSharp.Entities.DependencyInjection
                         _behaviorDescriptions.Add(attribute.EntityType, types);
                     }
                     var ctype = type;
+
+                    // Find possible generic type arguments
                     if (attribute.GenericTypeArguments != null)
                         ctype = ctype.MakeGenericType(attribute.GenericTypeArguments);
+
+                    // Cache the description of the behavior
                     types.Add(new BehaviorDescription
                     {
                         Priority = attribute.Priority,

@@ -79,6 +79,7 @@
     <Compile Include="Models\RLC\MUT\MutualInductanceTests.cs" />
     <Compile Include="Models\RLC\RES\ResistorTests.cs" />
     <Compile Include="Models\Framework.cs" />
+    <Compile Include="Models\Sampler\SamplerTests.cs" />
     <Compile Include="Models\Semiconductors\Bipolar\BipolarJunctionTransistorTests.cs" />
     <Compile Include="Models\Semiconductors\DIO\DiodeTests.cs" />
     <Compile Include="Models\Semiconductors\JFET\JFETTests.cs" />
