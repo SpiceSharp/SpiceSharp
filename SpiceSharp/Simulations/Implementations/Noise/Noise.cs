@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using System;
@@ -46,12 +47,14 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <param name="input">The name of the input source.</param>
         /// <param name="output">The output node name.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Noise(string name, string output, IEnumerable<double> frequencySweep)
+        public Noise(string name, string input, string output, IEnumerable<double> frequencySweep)
             : base(name, frequencySweep)
         {
+            NoiseParameters.InputSource = input;
             NoiseParameters.Output = output;
         }
 
@@ -59,13 +62,15 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="Noise"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
+        /// <param name="input">The name of the input source.</param>
         /// <param name="output">The output node name.</param>
         /// <param name="reference">The reference output node name.</param>
         /// <param name="frequencySweep">The frequency points.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        public Noise(string name, string output, string reference, IEnumerable<double> frequencySweep)
+        public Noise(string name, string input, string output, string reference, IEnumerable<double> frequencySweep)
             : base(name, frequencySweep)
         {
+            NoiseParameters.InputSource = input;
             NoiseParameters.Output = output;
             NoiseParameters.OutputRef = reference;
         }
@@ -89,7 +94,6 @@ namespace SpiceSharp.Simulations
         {
             base.Execute();
             var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
-
             var noiseconfig = NoiseParameters;
             var exportargs = new ExportDataEventArgs(this);
 
@@ -97,44 +101,76 @@ namespace SpiceSharp.Simulations
             var posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
             var negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.OutputRef)] : 0;
 
-            // Initialize
-            var freq = FrequencyParameters.Frequencies.GetEnumerator();
-            if (!freq.MoveNext())
-                return;
-            cstate.Laplace = 0;
-            Op(BiasingParameters.DcMaxIterations);
-
-            // Initialize all devices for small-signal analysis and reset all noise contributions
-            InitializeAcParameters();
-            foreach (var behavior in _noiseBehaviors)
-                behavior.Initialize();
-
-            // Loop through noise figures
-            do
+            // We only want to enable the source that is flagged as the input
+            var source = EntityBehaviors[NoiseParameters.InputSource];
+            var originalParameters = new List<Tuple<IndependentSourceParameters, double, double>>();
+            foreach (var container in EntityBehaviors)
             {
-                // First compute the AC gain
-                cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq.Current);
-                AcIterate();
-
-                var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                var inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
-                _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
-
-                // Solve the adjoint system
-                NzIterate(posOutNode, negOutNode);
-
-                // Now we use the adjoint system to calculate the noise
-                // contributions of each generator in the circuit
-                foreach (var behavior in _noiseBehaviors)
+                if (container.TryGetParameterSet(out IndependentSourceParameters parameters))
                 {
-                    behavior.Compute();
-                    _state.Add(behavior);
+                    originalParameters.Add(Tuple.Create(parameters, parameters.AcMagnitude, parameters.AcPhase));
+                    if (ReferenceEquals(container, source))
+                    {
+                        parameters.AcMagnitude = 1.0;
+                        parameters.AcPhase = 0.0;
+                    }
+                    else
+                    {
+                        parameters.AcMagnitude = 0.0;
+                        parameters.AcPhase = 0.0;
+                    }
                 }
-
-                // Export the data
-                OnExport(exportargs);
             }
-            while (freq.MoveNext());
+
+            try
+            {
+                // Initialize
+                var freq = FrequencyParameters.Frequencies.GetEnumerator();
+                if (!freq.MoveNext())
+                    return;
+                cstate.Laplace = 0;
+                Op(BiasingParameters.DcMaxIterations);
+
+                // Initialize all devices for small-signal analysis and reset all noise contributions
+                InitializeAcParameters();
+                foreach (var behavior in _noiseBehaviors)
+                    behavior.Initialize();
+
+                // Loop through noise figures
+                do
+                {
+                    // First compute the AC gain
+                    cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq.Current);
+                    AcIterate();
+
+                    var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
+                    var inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                    _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
+
+                    // Solve the adjoint system
+                    NzIterate(posOutNode, negOutNode);
+
+                    // Now we use the adjoint system to calculate the noise
+                    // contributions of each generator in the circuit
+                    foreach (var behavior in _noiseBehaviors)
+                    {
+                        behavior.Compute();
+                        _state.Add(behavior);
+                    }
+
+                    // Export the data
+                    OnExport(exportargs);
+                }
+                while (freq.MoveNext());
+            }
+            finally
+            {
+                foreach (var parameters in originalParameters)
+                {
+                    parameters.Item1.AcMagnitude = parameters.Item2;
+                    parameters.Item1.AcPhase = parameters.Item3;
+                }
+            }
         }
 
         /// <summary>

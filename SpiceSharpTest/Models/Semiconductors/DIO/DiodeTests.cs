@@ -157,15 +157,14 @@ namespace SpiceSharpTest.Models
         {
             // Build the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0)
-                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V1", "in", "0", 1.0),
                 new Resistor("R1", "in", "out", 10e3),
                 CreateDiode("D1", "out", "0", "1N914"),
                 CreateDiodeModel("1N914", "Is=2.52e-9 Rs=0.568 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-14 Af=0.9")
             );
 
             // Create the noise, exports and reference values
-            var noise = new Noise("Noise", "out", new DecadeSweep(10, 10e9, 10));
+            var noise = new Noise("Noise", "V1", "out", new DecadeSweep(10, 10e9, 10));
             IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {
@@ -267,7 +266,7 @@ namespace SpiceSharpTest.Models
         {
             var model = CreateDiodeModel("1N914", "Is=2.52e-9 Rs=5680 N=1.752 Cjo=4e-12 M=0.4 tt=20e-9 Kf=1e-10 Af=0.9");
             var cktReference = new Circuit(
-                new VoltageSource("V1", "in", "0", 3).SetParameter("acmag", 1.0),
+                new VoltageSource("V1", "in", "0", 3),
                 new Resistor("R1", "in", "out", 10e3),
                 model);
             ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "out", "0", 3, 2);
@@ -276,7 +275,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "in", "out", 10e3), model,
                 new Diode("D1", "out", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
-            var noise = new Noise("noise", "out", new DecadeSweep(0.1, 1e6, 5));
+            var noise = new Noise("noise", "V1", "out", new DecadeSweep(0.1, 1e6, 5));
             var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);

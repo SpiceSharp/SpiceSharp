@@ -271,7 +271,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("Rs", "in", "out", 10e3));
             ParallelSeries(cktReference, name => new Resistor(name, "", "", 1e3), "out", "0", 3, 2);
 
-            var noise = new SpiceSharp.Simulations.Noise("op", "out", new LinearSweep(0, 10, 2));
+            var noise = new Noise("noise", "V1", "out", new LinearSweep(0, 10, 2));
             var exports = new IExport<double>[] { new OutputNoiseDensityExport(noise), new InputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);
@@ -282,11 +282,11 @@ namespace SpiceSharpTest.Models
         public void When_ResistorNoise_Expect_Reference()
         {
             var ckt = new Circuit(
-                new CurrentSource("I1", "in", "0", 1).SetParameter("acmag", 1.0),
+                new CurrentSource("I1", "in", "0", 1),
                 new Resistor("R1", "in", "0", 1e3).SetParameter("temp", 20.0));
             var temp = 20 + Constants.CelsiusKelvin;
 
-            var noise = new SpiceSharp.Simulations.Noise("noise", "in", new DecadeSweep(10, 10e9, 10));
+            var noise = new Noise("noise", "I1", "in", new DecadeSweep(10, 10e9, 10));
             var onoise = new OutputNoiseDensityExport(noise);
             var inoise = new InputNoiseDensityExport(noise);
             noise.ExportSimulationData += (sender, args) =>

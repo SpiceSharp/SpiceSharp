@@ -14,13 +14,13 @@ namespace SpiceSharpTest.Simulations
         {
             // Create the circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 10.0).SetParameter("acmag", 1.0),
+                new VoltageSource("V1", "in", "0", 10.0),
                 new Resistor("R1", "in", "out", 10),
                 new Capacitor("C1", "out", "0", 20)
             );
 
             // Create the transient analysis
-            var noise = new Noise("noise 1", "out", new DecadeSweep(1, 1e9, 10));
+            var noise = new Noise("noise 1", "V1", "out", new DecadeSweep(1, 1e9, 10));
             var export = new OutputNoiseDensityExport(noise);
 
             // Run the simulation a first time for building the reference values
