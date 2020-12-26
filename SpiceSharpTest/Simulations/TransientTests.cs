@@ -480,5 +480,11 @@ namespace SpiceSharpTest.Simulations
             tran.Rerun();
             tran.ExportSimulationData -= CheckReference;
         }
+
+        [Test]
+        public void When_TransientUIC_Expect_Reference()
+        {
+
+        }
     }
 }

@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.Inductors
         void ITimeBehavior.InitializeStates()
         {
             // Get the current through
-            if (Parameters.InitialCondition.Given)
+            if (_time.UseIc && Parameters.InitialCondition.Given)
                 _flux.Value = Parameters.InitialCondition * Inductance;
             else
                 _flux.Value = Branch.Value * Inductance;

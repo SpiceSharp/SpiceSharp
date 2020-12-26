@@ -161,22 +161,39 @@ namespace SpiceSharp.Simulations
         {
             base.Execute();
 
-            // Apply initial conditions if they are not set for the devices (UseIc).
-            if (_initialConditions.Count > 0 && !_time.UseIc)
-                AfterLoad += LoadInitialConditions;
-
             // Calculate the operating point of the circuit
             _time.UseIc = TimeParameters.UseIc;
             _time.UseDc = true;
-            Op(BiasingParameters.DcMaxIterations);
+            if (_time.UseIc)
+            {
+                // Copy initial conditions in the current solution such that device may be able to copy them
+                // in InitializeStates()
+                var state = GetState<IBiasingSimulationState>();
+                foreach (var ic in _initialConditions)
+                {
+                    var index = state.Map[ic.Variable];
+                    state.Solution[index] = ic.Value;
+                    state.OldSolution[index] = ic.Value; // Just to make sure...
+                }
+            }
+            else
+            {
+                if (_initialConditions.Count > 0)
+                {
+                    AfterLoad += LoadInitialConditions;
+                    Op(BiasingParameters.DcMaxIterations);
+                    AfterLoad -= LoadInitialConditions;
+                }
+                else
+                    Op(BiasingParameters.DcMaxIterations);
+            }
             Statistics.TimePoints++;
 
-            // Stop calculating the operating point
+            // Stop calculating the operating point and allow the devices to 
+            // retrieve their initial conditions if necessary
+            InitializeStates();
             _time.UseIc = false;
             _time.UseDc = false;
-            InitializeStates();
-            AfterLoad -= LoadInitialConditions;
-
             var exportargs = new ExportDataEventArgs(this);
 
             // Start our statistics
@@ -251,16 +268,6 @@ namespace SpiceSharp.Simulations
                 Statistics.TransientIterations += stats.Iterations - startIters;
                 Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
             }
-        }
-
-        /// <summary>
-        /// Destroys the simulation.
-        /// </summary>
-        protected override void Finish()
-        {
-            // Destroy the initial conditions
-            AfterLoad -= LoadInitialConditions;
-            base.Finish();
         }
 
         /// <summary>

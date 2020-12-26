@@ -143,10 +143,26 @@ namespace SpiceSharp.Components.Bipolars
         void ITimeBehavior.InitializeStates()
         {
             // Calculate capacitances
-            var vbe = VoltageBe;
-            var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
+            double vbe, vbc, vbx, vcs;
+            if (_time.UseIc)
+            {
+                vbe = Parameters.InitialVoltageBe.Given ?
+                    Parameters.InitialVoltageBe.Value :
+                    ModelParameters.BipolarType * (BiasingState.Solution[_basePrimeNode] - BiasingState.Solution[_collectorPrimeNode]);
+                var vce = Parameters.InitialVoltageCe.Given ?
+                    Parameters.InitialVoltageCe.Value :
+                    ModelParameters.BipolarType * (BiasingState.Solution[_collectorPrimeNode] - BiasingState.Solution[_emitterPrimeNode]);
+                vbc = vbe - vce;
+                vbx = vbc;
+                vcs = 0;
+            }
+            else
+            {
+                vbe = VoltageBe;
+                vbc = VoltageBc;
+                vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
+                vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
+            }
             CalculateCapacitances(vbe, vbc, vbx, vcs);
             _biasingStateExcessPhaseCurrentBc.Value = CapCurrentBe / BaseCharge;
         }

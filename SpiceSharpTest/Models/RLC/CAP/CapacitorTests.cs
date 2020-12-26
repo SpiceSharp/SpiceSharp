@@ -268,95 +268,25 @@ namespace SpiceSharpTest.Models
             DestroyExports(exports);
         }
 
-        /*
-        [TestCaseSource(nameof(Temperature))]
-        public void When_TemperatureBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double expected)
+        [Test]
+        public void When_CapacitorIC_Expect_Reference()
         {
-            var behavior = new TemperatureBehavior("C1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            Check.Double(behavior.Capacitance, expected);
-        }
-        [TestCaseSource(nameof(Frequency))]
-        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
-        {
-            var behavior = new FrequencyBehavior("C1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            ((IFrequencyBehavior)behavior).InitializeParameters();
-            ((IFrequencyBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
-        }
-        [TestCaseSource(nameof(Transient))]
-        public void When_TimeBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
-        {
-            var behavior = new TimeBehavior("C1", context.Value);
-            ((ITemperatureBehavior)behavior).Temperature();
-            ((ITimeBehavior)behavior).InitializeStates();
-            ((ITimeBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
-        }
-        [TestCaseSource(nameof(Rules))]
-        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
-        {
-            ckt.Validate(rules);
-            Assert.AreEqual(violations.Length, rules.ViolationCount);
-            int index = 0;
-            foreach (var violation in rules.Violations)
-                Assert.AreEqual(violations[index++], violation.GetType());
-        }
+            double R = 1.0, C = 1e-3, v0 = 1.0;
+            var tau = R * C;
 
-        public static IEnumerable<TestCaseData> Temperature
-        {
-            get
-            {
-                IComponentBindingContext context;
-                context = Substitute.For<IComponentBindingContext>()
-                    .Parameter(new BaseParameters(1e-6));
-                yield return new TestCaseData(context.AsProxy(), 1e-6).SetName("{m}(C=1u)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Frequency
-        {
-            get
-            {
-                IComponentBindingContext context;
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Frequency(5.0).Parameter(new BaseParameters(2e-6));
-                var g = new Complex(0.0, 5 * 2 * Math.PI * 2e-6);
-                yield return new TestCaseData(context.AsProxy(), new Complex[]
-                {
-                    g, -g, double.NaN,
-                    -g, g, double.NaN
-                }).SetName("{m}(AC)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Transient
-        {
-            get
-            {
-                IComponentBindingContext context;
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0),
+                new Capacitor("C1", "in", "out", C).SetParameter("ic", v0),
+                new Resistor("R1", "out", "0", R));
 
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b").Transient(0.5, 1e-3)
-                    .Parameter(new BaseParameters(1e-6));
-                var g = 1e-6 / 1e-3;
-                yield return new TestCaseData(context.AsProxy(), new double[]
-                {
-                    g, -g, -1,
-                    -g, g, 1
-                }).SetName("{m}(C=1u dt=1n dvdt=1)");
-            }
+            // Make small timesteps for the transient simulation to ensure small truncation errors
+            var tran = new Transient("tran", new Trapezoidal() { StopTime = 1e-3, MaxStep = 1e-6 });
+            tran.TimeParameters.UseIc = true;
+            var exports = new IExport<double>[] { new RealVoltageExport(tran, "out") };
+            var references = new Func<double, double>[] { time => time > 0 ? -v0 * R * Math.Exp(-time / tau) : 0.0 };
+
+            AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
-        public static IEnumerable<TestCaseData> Rules
-        {
-            get
-            {
-                ComponentRuleParameters parameters;
-                yield return new TestCaseData(
-                    new Circuit(new Capacitor("C1", "in", "0", 1.0)),
-                    new ComponentRules(parameters = new ComponentRuleParameters(), new FloatingNodeRule(parameters.Variables.Ground)),
-                    new[] { typeof(FloatingNodeRuleViolation) });
-            }
-        }
-        */
     }
 }
