@@ -10,14 +10,29 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets or sets the noise output node name.
         /// </summary>
+        /// <value>
+        /// The noise output node name.
+        /// </value>
         [ParameterName("output"), ParameterInfo("Noise output summation node")]
         public string Output { get; set; }
 
         /// <summary>
         /// Gets or sets the noise output reference node name.
         /// </summary>
+        /// <value>
+        /// The noise output reference node name.
+        /// </value>
         [ParameterName("outputref"), ParameterInfo("Noise output reference node")]
         public string OutputRef { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the input source.
+        /// </summary>
+        /// <value>
+        /// The name of the input source.
+        /// </value>
+        [ParameterName("input"), ParameterInfo("Source that acts as the input")]
+        public string InputSource { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoiseParameters"/> class.

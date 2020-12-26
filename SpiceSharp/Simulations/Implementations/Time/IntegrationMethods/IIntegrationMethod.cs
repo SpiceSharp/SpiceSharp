@@ -64,6 +64,13 @@ namespace SpiceSharp.Simulations
         IDerivative CreateDerivative(bool track = true);
 
         /// <summary>
+        /// Creates an integrator.
+        /// </summary>
+        /// <param name="track">If set to <c>true</c>, the integration method will use this state to limit truncation errors.</param>
+        /// <returns>The integrator.</returns>
+        IIntegral CreateIntegral(bool track = true);
+
+        /// <summary>
         /// Gets a previous solution used by the integration method. An index of 0 indicates the last accepted solution.
         /// </summary>
         /// <param name="index">The number of points to go back.</param>

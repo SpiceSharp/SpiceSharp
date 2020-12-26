@@ -26,5 +26,10 @@ namespace SpiceSharp.Simulations
         /// Ohm.
         /// </summary>
         public static readonly IUnit Ohm = new SIUnitDefinition("\u03a9", new SIUnits(-3, 2, 1, 0, 0, 0, 0));
+
+        /// <summary>
+        /// Seconds.
+        /// </summary>
+        public static readonly IUnit Seconds = new SIUnitDefinition("s", new SIUnits(1, 0, 0, 0, 0, 0, 0));
     }
 }

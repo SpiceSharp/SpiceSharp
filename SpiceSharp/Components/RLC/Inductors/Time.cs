@@ -85,7 +85,7 @@ namespace SpiceSharp.Components.Inductors
             }
 
             // Finally load the Y-matrix
-            _flux.Integrate();
+            _flux.Derive();
             var info = _flux.GetContributions(Inductance);
             _elements.Add(
                 -info.Jacobian,

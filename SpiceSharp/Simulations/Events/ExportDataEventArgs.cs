@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly Simulation _simulation;
+        private readonly ISimulation _simulation;
 
         /// <summary>
         /// Gets the time if the simulation supports it.
@@ -22,8 +22,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is IStateful<IIntegrationMethod> sim)
-                    return sim.State.Time;
+                if (_simulation.TryGetState(out IIntegrationMethod state))
+                    return state.Time;
                 return double.NaN;
             }
         }
@@ -35,9 +35,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is IStateful<IComplexSimulationState> sim)
+                if (_simulation.TryGetState(out IComplexSimulationState state))
                 {
-                    var state = sim.State;
                     if (!state.Laplace.Real.Equals(0.0))
                         return double.NaN;
                     return state.Laplace.Imaginary / 2.0 / Math.PI;
@@ -53,8 +52,8 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (_simulation is IStateful<IComplexSimulationState> sim)
-                    return sim.State.Laplace;
+                if (_simulation.TryGetState(out IComplexSimulationState state))
+                    return state.Laplace;
                 return double.NaN;
             }
         }
@@ -63,7 +62,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ExportDataEventArgs"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        public ExportDataEventArgs(Simulation simulation)
+        public ExportDataEventArgs(ISimulation simulation)
         {
             _simulation = simulation ?? throw new ArgumentNullException(nameof(simulation));
         }
@@ -133,6 +132,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the current sweep value if the simulation is a <see cref="DC" /> analysis.
         /// </summary>
+        /// <returns>The sweep values.</returns>
         public double[] GetSweepValues()
         {
             if (_simulation is DC dc)

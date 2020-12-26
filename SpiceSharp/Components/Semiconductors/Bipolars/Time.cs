@@ -169,20 +169,20 @@ namespace SpiceSharp.Components.Bipolars
             var vcs = ModelParameters.BipolarType * (state.Solution[_substrateNode] - state.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
 
-            _biasingStateChargeBe.Integrate();
+            _biasingStateChargeBe.Derive();
             var info = _biasingStateChargeBe.GetContributions(Geqcb);
             var geqcb = info.Jacobian; // Multiplies geqcb with method.Slope (ag[0])
             gpi += _biasingStateChargeBe.GetContributions(CapBe).Jacobian;
             cb += _biasingStateChargeBe.Derivative;
-            _biasingStateChargeBc.Integrate();
+            _biasingStateChargeBc.Derive();
             gmu += _biasingStateChargeBc.GetContributions(CapBc).Jacobian;
             cb += _biasingStateChargeBc.Derivative;
             cc -= _biasingStateChargeBc.Derivative;
 
             // Charge storage for c-s and b-x junctions
-            _biasingStateChargeCs.Integrate();
+            _biasingStateChargeCs.Derive();
             var gccs = _biasingStateChargeCs.GetContributions(CapCs).Jacobian;
-            _biasingStateChargeBx.Integrate();
+            _biasingStateChargeBx.Derive();
             var geqbx = _biasingStateChargeBx.GetContributions(CapBx).Jacobian;
 
             // Load current excitation vector

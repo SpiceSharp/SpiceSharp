@@ -3,7 +3,7 @@
     /// <summary>
     /// Behavior that can accept a time point.
     /// </summary>
-    /// <seealso cref="SpiceSharp.Behaviors.IBehavior" />
+    /// <seealso cref="IBehavior" />
     public interface IAcceptBehavior : IBehavior
     {
         /// <summary>

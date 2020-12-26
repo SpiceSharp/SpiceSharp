@@ -237,6 +237,9 @@
   <data name="Resistors.ZeroResistance" xml:space="preserve">
     <value>{0}: Model describes short-circuit, 1kOhm used.</value>
   </data>
+  <data name="Sampler.NoExportEvent" xml:space="preserve">
+    <value>The simulation {0} does not export simulation data.</value>
+  </data>
   <data name="Simulation.Biasing.GminSteppingFailed" xml:space="preserve">
     <value>Gmin step failed.</value>
   </data>

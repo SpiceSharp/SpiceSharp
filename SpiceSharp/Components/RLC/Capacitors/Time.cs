@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.Capacitors
 
             // Integrate
             _qcap.Value = Capacitance * vcap;
-            _qcap.Integrate();
+            _qcap.Derive();
             var info = _qcap.GetContributions(Capacitance);
             var geq = info.Jacobian;
             var ceq = info.Rhs;

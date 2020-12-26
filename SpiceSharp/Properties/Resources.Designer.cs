@@ -422,6 +422,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The simulation {0} does not export simulation data..
+        /// </summary>
+        public static string Sampler_NoExportEvent {
+            get {
+                return ResourceManager.GetString("Sampler.NoExportEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gmin step failed..
         /// </summary>
         public static string Simulation_Biasing_GminSteppingFailed {

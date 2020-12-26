@@ -39,10 +39,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             {
             }
 
-            /// <summary>
-            /// Initializes the integration method using the allocated biasing state.
-            /// At this point, all entities should have received the chance to allocate and register integration states.
-            /// </summary>
+            /// <inheritdoc/>
             public override void Initialize()
             {
                 // Create all the states
@@ -64,13 +61,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     TruncatableStates.Add(new NodeTruncation(this));
             }
 
-            /// <summary>
-            /// Creates a derivative.
-            /// </summary>
-            /// <param name="track">If set to <c>true</c>, the integration method will use this state to limit truncation errors.</param>
-            /// <returns>
-            /// The derivative.
-            /// </returns>
+            /// <inheritdoc/>
             public override IDerivative CreateDerivative(bool track)
             {
                 var derivative = new DerivativeInstance(this, _stateValues + 1);
@@ -80,9 +71,17 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 return derivative;
             }
 
-            /// <summary>
-            /// Computes the integration coefficients.
-            /// </summary>
+            /// <inheritdoc/>
+            public override IIntegral CreateIntegral(bool track = true)
+            {
+                var integral = new IntegralInstance(this, _stateValues + 1);
+                _stateValues += 2;
+                if (track)
+                    TruncatableStates.Add(integral);
+                return integral;
+            }
+
+            /// <inheritdoc/>
             protected override void ComputeCoefficients()
             {
                 var delta = States.Value.Delta;
@@ -135,9 +134,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Slope = Coefficients[1];
             }
 
-            /// <summary>
-            /// Predicts a solution for truncation.
-            /// </summary>
+            /// <inheritdoc/>
             protected override void Predict()
             {
                 // Use the previous solutions to predict a new one
