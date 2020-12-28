@@ -43,7 +43,9 @@ namespace SpiceSharp.Components.Diodes
         /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
-            double vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
+            var vd = _time.UseIc && Parameters.InitCond.Given ?
+                Parameters.InitCond.Value / Parameters.SeriesMultiplier :
+                (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
             CalculateCapacitance(vd);
             _capCharge.Value = LocalCapCharge;
         }

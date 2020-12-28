@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.Capacitors
         void ITimeBehavior.InitializeStates()
         {
             // Calculate the state for DC
-            if (_time.UseIc)
+            if (_time.UseIc && Parameters.InitialCondition.Given)
                 _qcap.Value = Capacitance * Parameters.InitialCondition;
             else
                 _qcap.Value = Capacitance * (_variables.Positive.Value - _variables.Negative.Value);

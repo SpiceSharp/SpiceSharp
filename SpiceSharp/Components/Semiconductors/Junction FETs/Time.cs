@@ -66,8 +66,11 @@ namespace SpiceSharp.Components.JFETs
         /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
-            var vgs = Vgs;
-            var vgd = Vgd;
+            var vgs = _time.UseIc && Parameters.InitialVgs.Given ?
+                Parameters.InitialVgs.Value : Vgs;
+            var vds = _time.UseIc && Parameters.InitialVds.Given ?
+                Parameters.InitialVds.Value : -Vgd - Vgs;
+            var vgd = vgs - vds;
             CalculateStates(vgs, vgd);
         }
 

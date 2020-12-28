@@ -73,7 +73,7 @@ namespace SpiceSharp.Components.JFETs
         /// The initial drain-source voltage.
         /// </value>
         [ParameterName("ic-vds"), ParameterInfo("Initial D-S voltage", Units = "V")]
-        public double InitialVds { get; set; }
+        public GivenParameter<double> InitialVds { get; set; }
 
         /// <summary>
         /// Gets or sets the initial gate-source voltage.
@@ -82,7 +82,7 @@ namespace SpiceSharp.Components.JFETs
         /// The initial gate-source voltage.
         /// </value>
         [ParameterName("ic-vgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
-        public double InitialVgs { get; set; }
+        public GivenParameter<double> InitialVgs { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is off.

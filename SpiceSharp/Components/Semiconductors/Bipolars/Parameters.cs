@@ -77,7 +77,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The initial base-emitter voltage.
         /// </value>
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage", Units = "V")]
-        public double InitialVoltageBe { get; set; }
+        public GivenParameter<double> InitialVoltageBe { get; set; }
 
         /// <summary>
         /// Gets the initial collector-emitter voltage parameter.
@@ -86,7 +86,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The initial collector-emitter voltage.
         /// </value>
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage", Units = "V")]
-        public double InitialVoltageCe { get; set; }
+        public GivenParameter<double> InitialVoltageCe { get; set; }
 
         /// <summary>
         /// Set initial conditions of the device.

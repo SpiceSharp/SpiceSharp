@@ -24,6 +24,7 @@ namespace SpiceSharp.Components.Mosfets
         private readonly Charges _charges = new Charges();
         private readonly IMosfetBiasingBehavior _behavior;
         private readonly ModelParameters _mp;
+        private readonly Parameters _bp;
 
         /// <include file='../common/docs.xml' path='docs/members/GateSourceCharge/*'/>
         [ParameterName("qgs"), ParameterInfo("Gate-source charge storage", Units = "C")]
@@ -77,6 +78,7 @@ namespace SpiceSharp.Components.Mosfets
             _time = context.GetState<ITimeSimulationState>();
             _behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();
             _mp = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            _bp = context.GetParameterSet<Parameters>();
             var method = context.GetState<IIntegrationMethod>();
             _vgs = new StateValue<double>(2); method.RegisterState(_vgs);
             _vds = new StateValue<double>(2); method.RegisterState(_vds);
@@ -95,9 +97,12 @@ namespace SpiceSharp.Components.Mosfets
         /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
-            var vgs = _behavior.Vgs;
-            var vds = _behavior.Vds;
-            var vbs = _behavior.Vbs;
+            var vgs = _time.UseIc && _bp.InitialVgs.Given ?
+                _bp.InitialVgs.Value : _behavior.Vgs;
+            var vds = _time.UseIc && _bp.InitialVds.Given ?
+                _bp.InitialVds.Value : _behavior.Vds;
+            var vbs = _time.UseIc && _bp.InitialVbs.Given ?
+                _bp.InitialVbs.Value : _behavior.Vbs;
             var vgd = vgs - vds;
             var vgb = vgs - vbs;
 
