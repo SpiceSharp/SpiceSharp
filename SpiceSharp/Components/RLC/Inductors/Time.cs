@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.Inductors
         void ITimeBehavior.InitializeStates()
         {
             // Get the current through
-            if (Parameters.InitialCondition.Given)
+            if (_time.UseIc && Parameters.InitialCondition.Given)
                 _flux.Value = Parameters.InitialCondition * Inductance;
             else
                 _flux.Value = Branch.Value * Inductance;
@@ -85,7 +85,7 @@ namespace SpiceSharp.Components.Inductors
             }
 
             // Finally load the Y-matrix
-            _flux.Integrate();
+            _flux.Derive();
             var info = _flux.GetContributions(Inductance);
             _elements.Add(
                 -info.Jacobian,

@@ -91,6 +91,8 @@ namespace SpiceSharp.Reflection
             var ctors = type.GetTypeInfo().GetConstructors();
             var pInput = Expression.Parameter(typeof(T1), "arg");
             var arguments = new Expression[1];
+
+            // Find a valid constructor
             var ctor = ctors.FirstOrDefault(ctor =>
             {
                 var parameters = ctor.GetParameters();
@@ -104,6 +106,8 @@ namespace SpiceSharp.Reflection
                     return false;
                 return true;
             }) ?? throw new ArgumentException(Properties.Resources.DI_CannotResolveConstructor.FormatString(type.FullName));
+
+            // Compile a factory method for the given type
             return Expression.Lambda<Method>(Expression.New(ctor, arguments), pInput).Compile();
         }
 

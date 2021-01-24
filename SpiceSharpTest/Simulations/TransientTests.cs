@@ -129,6 +129,102 @@ namespace SpiceSharpTest.Simulations
         }
 
         [Test]
+        public void When_FixedEulerDerivative_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+                 
+            var tran = new Transient("tran", new FixedEuler { Step = 1e-7, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
+                new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-1));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_FixedEulerIntegral_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new FixedEuler { Step = 1e-7, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
+                new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-3, 1e-8));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_TrapezoidalDerivative_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new Trapezoidal { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Trapezoidal integration allows for more accurate derivatives
+                new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-3));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_TrapezoidalIntegral_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new Trapezoidal { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
+                new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-6, 1e-6));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_GearDerivative_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new Gear { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Trapezoidal integration allows for more accurate derivatives
+                new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-3));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_GearIntegral_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new Gear { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
+                new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-6, 1e-6));
+            tran.Run(ckt);
+        }
+
+        [Test]
         public void When_FloatingCapacitor_Expect_Reference()
         {
             // Build the circuit
@@ -383,6 +479,12 @@ namespace SpiceSharpTest.Simulations
             tran.ExportSimulationData += CheckReference;
             tran.Rerun();
             tran.ExportSimulationData -= CheckReference;
+        }
+
+        [Test]
+        public void When_TransientUIC_Expect_Reference()
+        {
+
         }
     }
 }

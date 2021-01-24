@@ -143,10 +143,26 @@ namespace SpiceSharp.Components.Bipolars
         void ITimeBehavior.InitializeStates()
         {
             // Calculate capacitances
-            var vbe = VoltageBe;
-            var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
+            double vbe, vbc, vbx, vcs;
+            if (_time.UseIc)
+            {
+                vbe = Parameters.InitialVoltageBe.Given ?
+                    Parameters.InitialVoltageBe.Value :
+                    ModelParameters.BipolarType * (BiasingState.Solution[_basePrimeNode] - BiasingState.Solution[_collectorPrimeNode]);
+                var vce = Parameters.InitialVoltageCe.Given ?
+                    Parameters.InitialVoltageCe.Value :
+                    ModelParameters.BipolarType * (BiasingState.Solution[_collectorPrimeNode] - BiasingState.Solution[_emitterPrimeNode]);
+                vbc = vbe - vce;
+                vbx = vbc;
+                vcs = 0;
+            }
+            else
+            {
+                vbe = VoltageBe;
+                vbc = VoltageBc;
+                vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
+                vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
+            }
             CalculateCapacitances(vbe, vbc, vbx, vcs);
             _biasingStateExcessPhaseCurrentBc.Value = CapCurrentBe / BaseCharge;
         }
@@ -169,20 +185,20 @@ namespace SpiceSharp.Components.Bipolars
             var vcs = ModelParameters.BipolarType * (state.Solution[_substrateNode] - state.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
 
-            _biasingStateChargeBe.Integrate();
+            _biasingStateChargeBe.Derive();
             var info = _biasingStateChargeBe.GetContributions(Geqcb);
             var geqcb = info.Jacobian; // Multiplies geqcb with method.Slope (ag[0])
             gpi += _biasingStateChargeBe.GetContributions(CapBe).Jacobian;
             cb += _biasingStateChargeBe.Derivative;
-            _biasingStateChargeBc.Integrate();
+            _biasingStateChargeBc.Derive();
             gmu += _biasingStateChargeBc.GetContributions(CapBc).Jacobian;
             cb += _biasingStateChargeBc.Derivative;
             cc -= _biasingStateChargeBc.Derivative;
 
             // Charge storage for c-s and b-x junctions
-            _biasingStateChargeCs.Integrate();
+            _biasingStateChargeCs.Derive();
             var gccs = _biasingStateChargeCs.GetContributions(CapCs).Jacobian;
-            _biasingStateChargeBx.Integrate();
+            _biasingStateChargeBx.Derive();
             var geqbx = _biasingStateChargeBx.GetContributions(CapBx).Jacobian;
 
             // Load current excitation vector

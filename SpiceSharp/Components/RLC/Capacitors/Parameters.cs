@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The initial voltage.
         /// </value>
         [ParameterName("ic"), ParameterInfo("Initial capacitor voltage", Units = "V", Interesting = false)]
-        public double InitialCondition { get; set; }
+        public GivenParameter<double> InitialCondition { get; set; }
 
         /// <summary>
         /// Gets the width of the capacitor.

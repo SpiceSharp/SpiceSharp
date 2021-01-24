@@ -110,7 +110,14 @@ namespace SpiceSharp.Algebra.Solve
 
             for (; step <= order; step++)
             {
-                var pivot = Parameters.FindPivot(Matrix, step, max);
+                Pivot<ISparseMatrixElement<T>> pivot;
+                if (step <= max)
+                    pivot = Parameters.FindPivot(Matrix, step, max);
+                else
+                {
+                    var elt = Matrix.FindDiagonalElement(step);
+                    pivot = new Pivot<ISparseMatrixElement<T>>(elt, elt != null ? PivotInfo.Good : PivotInfo.None);
+                }
                 if (pivot.Info == PivotInfo.None)
                     return step - 1;
                 else if (pivot.Info == PivotInfo.Bad)

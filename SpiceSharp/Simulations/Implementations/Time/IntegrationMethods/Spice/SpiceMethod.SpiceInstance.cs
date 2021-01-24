@@ -102,7 +102,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
 
             /// <inheritdoc/>
-            public abstract IDerivative CreateDerivative(bool track);
+            public abstract IDerivative CreateDerivative(bool track = true);
+
+            /// <inheritdoc/>
+            public abstract IIntegral CreateIntegral(bool track = true);
 
             /// <inheritdoc/>
             public IVector<double> GetPreviousSolution(int index)

@@ -213,7 +213,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial bulk-source voltage.
         /// </value>
         [ParameterName("icvbs"), ParameterInfo("Initial B-S voltage", Units = "V")]
-        public double InitialVbs { get; set; }
+        public GivenParameter<double> InitialVbs { get; set; }
 
         /// <summary>
         /// Gets or sets the initial drain-source voltage.
@@ -222,7 +222,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial drain-source voltage.
         /// </value>
         [ParameterName("icvds"), ParameterInfo("Initial D-S voltage", Units = "V")]
-        public double InitialVds { get; set; }
+        public GivenParameter<double> InitialVds { get; set; }
 
         /// <summary>
         /// Gets or sets the initial gate-source voltage.
@@ -231,7 +231,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial gate-source voltage.
         /// </value>
         [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
-        public double InitialVgs { get; set; }
+        public GivenParameter<double> InitialVgs { get; set; }
 
         /// <summary>
         /// Gets or sets the parallel multplier (the number of transistors in parallel).

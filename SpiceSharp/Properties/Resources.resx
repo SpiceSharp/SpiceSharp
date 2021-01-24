@@ -168,6 +168,9 @@
   <data name="Diodes.ImpossibleFwdRevMatch" xml:space="preserve">
     <value>{0}: unable to match forward and reverse diode region. Bv = {1:g}, ibv = {2:g}.</value>
   </data>
+  <data name="Element.DefaultMethodNotCreated" xml:space="preserve">
+    <value>The default method could not be created for this target framework. Please specify Element&lt;T&gt;.Addition and Element&lt;T&gt;.Subtraction manually.</value>
+  </data>
   <data name="EntityCollection.KeyExists" xml:space="preserve">
     <value>An entity with the name "{0}" already exists.</value>
   </data>
@@ -236,6 +239,9 @@
   </data>
   <data name="Resistors.ZeroResistance" xml:space="preserve">
     <value>{0}: Model describes short-circuit, 1kOhm used.</value>
+  </data>
+  <data name="Sampler.NoExportEvent" xml:space="preserve">
+    <value>The simulation {0} does not export simulation data.</value>
   </data>
   <data name="Simulation.Biasing.GminSteppingFailed" xml:space="preserve">
     <value>Gmin step failed.</value>

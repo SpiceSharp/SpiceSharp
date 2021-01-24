@@ -215,6 +215,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The default method could not be created for this target framework. Please specify Element&lt;T&gt;.Addition and Element&lt;T&gt;.Subtraction manually..
+        /// </summary>
+        public static string Element_DefaultMethodNotCreated {
+            get {
+                return ResourceManager.GetString("Element.DefaultMethodNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An entity with the name &quot;{0}&quot; already exists..
         /// </summary>
         public static string EntityCollection_KeyExists {
@@ -418,6 +427,15 @@ namespace SpiceSharp.Properties {
         public static string Resistors_ZeroResistance {
             get {
                 return ResourceManager.GetString("Resistors.ZeroResistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The simulation {0} does not export simulation data..
+        /// </summary>
+        public static string Sampler_NoExportEvent {
+            get {
+                return ResourceManager.GetString("Sampler.NoExportEvent", resourceCulture);
             }
         }
         

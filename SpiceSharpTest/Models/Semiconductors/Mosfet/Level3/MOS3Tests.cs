@@ -236,8 +236,7 @@ namespace SpiceSharpTest.Models
         {
             // Create circuit
             var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 0)
-                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V1", "in", "0", 0),
                 new VoltageSource("Vsupply", "vdd", "0", 1.8),
                 new Resistor("R1", "out", "0", 100e3),
                 new Resistor("R2", "g", "out", 10e3),
@@ -249,7 +248,7 @@ namespace SpiceSharpTest.Models
                 );
 
             // Make simulation, exports and references
-            var noise = new Noise("Noise", "out", new DecadeSweep(10.0, 10.0e9, 10));
+            var noise = new Noise("Noise", "V1", "out", new DecadeSweep(10.0, 10.0e9, 10));
             IExport<double>[] exports = { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
             double[][] references =
             {

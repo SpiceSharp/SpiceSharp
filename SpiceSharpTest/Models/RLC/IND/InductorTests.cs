@@ -2,6 +2,7 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;
@@ -95,6 +96,7 @@ namespace SpiceSharpTest.Models
             // Create simulation
             var tran = new Transient("tran", 1e-9, 1e-3, 1e-7);
             tran.TimeParameters.InitialConditions["OUT"] = 0.0;
+            tran.TimeParameters.UseIc = true;
 
             // Create exports
             var exports = new IExport<double>[1];
@@ -123,6 +125,27 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual(1, ex.Rules.ViolationCount);
             var violation = ex.Rules.Violations.First();
             Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+        }
+
+        [Test]
+        public void When_InductorIC_Expect_Reference()
+        {
+            double L = 1.0, R = 1.0e3, i0 = 1.0;
+            var tau = L / R;
+
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0),
+                new Inductor("L1", "in", "out", L).SetParameter("ic", i0),
+                new Resistor("R1", "out", "0", R));
+
+            // Make small timesteps for the transient simulation to ensure small truncation errors
+            var tran = new Transient("tran", new Trapezoidal() { StopTime = 1e-3, MaxStep = 1e-6 });
+            tran.TimeParameters.UseIc = true;
+            var exports = new IExport<double>[] { new RealVoltageExport(tran, "out") };
+            var references = new Func<double, double>[] { time => time > 0 ? i0 * R * Math.Exp(-time / tau) : 0.0 };
+
+            AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
         }
     }
 }

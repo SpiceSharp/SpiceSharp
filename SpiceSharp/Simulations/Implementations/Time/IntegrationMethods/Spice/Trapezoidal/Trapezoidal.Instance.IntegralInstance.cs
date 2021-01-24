@@ -7,31 +7,32 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         protected partial class Instance
         {
             /// <summary>
-            /// An <see cref="IDerivative"/> for <see cref="Trapezoidal"/>.
+            /// An <see cref="IIntegral"/> for <see cref="Trapezoidal"/>.
             /// </summary>
-            /// <seealso cref="IDerivative" />
-            protected class DerivativeInstance : IDerivative, ITruncatable
+            /// <seealso cref="IIntegral"/>
+            /// <seealso cref="ITruncatable"/>
+            protected class IntegralInstance : IIntegral, ITruncatable
             {
                 private readonly int _index;
                 private readonly Instance _method;
                 private readonly IHistory<SpiceIntegrationState> _states;
 
                 /// <inheritdoc/>
-                public double Derivative => _states.Value.State[_index + 1];
-
-                /// <inheritdoc/>
-                public double Value
+                public double Derivative
                 {
                     get => _states.Value.State[_index];
                     set => _states.Value.State[_index] = value;
                 }
 
+                /// <inheritdoc/>
+                public double Value => _states.Value.State[_index + 1];
+
                 /// <summary>
-                /// Initializes a new instance of the <see cref="DerivativeInstance"/> class.
+                /// Initializes a new instance of the <see cref="IntegralInstance"/> class.
                 /// </summary>
                 /// <param name="method">The integration method.</param>
-                /// <param name="index">The integrated value index.</param>
-                public DerivativeInstance(Instance method, int index)
+                /// <param name="index">The derivative value index.</param>
+                public IntegralInstance(Instance method, int index)
                 {
                     _method = method.ThrowIfNull(nameof(method));
                     _states = _method.States;
@@ -41,7 +42,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient, double currentValue)
                 {
-                    var g = _method.Slope * coefficient;
+                    var g = coefficient / _method.Slope;
                     return new JacobianInfo(
                         g,
                         Derivative - g * currentValue);
@@ -50,7 +51,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient)
                 {
-                    var h = _method.Slope;
+                    var h = 1 / _method.Slope;
                     var s = _states.Value.State;
                     return new JacobianInfo(
                         h * coefficient,
@@ -59,16 +60,16 @@ namespace SpiceSharp.Simulations.IntegrationMethods
 
                 /// <inheritdoc/>
                 public double GetPreviousValue(int index)
-                    => _states.GetPreviousValue(index).State[_index];
-
-                /// <inheritdoc/>
-                public double GetPreviousDerivative(int index)
                     => _states.GetPreviousValue(index).State[_index + 1];
 
                 /// <inheritdoc/>
-                public void Derive()
+                public double GetPreviousDerivative(int index)
+                    => _states.GetPreviousValue(index).State[_index];
+
+                /// <inheritdoc/>
+                public void Integrate()
                 {
-                    var derivativeIndex = _index + 1;
+                    var integratedIndex = _index + 1;
                     var current = _states.Value.State;
                     var previous = _states.GetPreviousValue(1).State;
                     var ag = _method.Coefficients;
@@ -76,12 +77,11 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     switch (_method.Order)
                     {
                         case 1:
-                            current[derivativeIndex] = ag[0] * current[_index] + ag[1] * previous[_index];
+                            current[integratedIndex] = (current[_index] - ag[1] * previous[integratedIndex]) / ag[0];
                             break;
 
                         case 2:
-                            current[derivativeIndex] = -previous[derivativeIndex] * ag[1] +
-                                                       ag[0] * (current[_index] - previous[_index]);
+                            current[integratedIndex] = previous[integratedIndex] + (current[_index] + ag[1] * previous[_index]) / ag[0];
                             break;
                     }
                 }

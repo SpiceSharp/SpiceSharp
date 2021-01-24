@@ -24,6 +24,7 @@ namespace SpiceSharp.Components.Mosfets
         private readonly Charges _charges = new Charges();
         private readonly IMosfetBiasingBehavior _behavior;
         private readonly ModelParameters _mp;
+        private readonly Parameters _bp;
 
         /// <include file='../common/docs.xml' path='docs/members/GateSourceCharge/*'/>
         [ParameterName("qgs"), ParameterInfo("Gate-source charge storage", Units = "C")]
@@ -77,6 +78,7 @@ namespace SpiceSharp.Components.Mosfets
             _time = context.GetState<ITimeSimulationState>();
             _behavior = context.Behaviors.GetValue<IMosfetBiasingBehavior>();
             _mp = context.ModelBehaviors.GetParameterSet<ModelParameters>();
+            _bp = context.GetParameterSet<Parameters>();
             var method = context.GetState<IIntegrationMethod>();
             _vgs = new StateValue<double>(2); method.RegisterState(_vgs);
             _vds = new StateValue<double>(2); method.RegisterState(_vds);
@@ -95,9 +97,12 @@ namespace SpiceSharp.Components.Mosfets
         /// <inheritdoc/>
         void ITimeBehavior.InitializeStates()
         {
-            var vgs = _behavior.Vgs;
-            var vds = _behavior.Vds;
-            var vbs = _behavior.Vbs;
+            var vgs = _time.UseIc && _bp.InitialVgs.Given ?
+                _bp.InitialVgs.Value : _behavior.Vgs;
+            var vds = _time.UseIc && _bp.InitialVds.Given ?
+                _bp.InitialVds.Value : _behavior.Vds;
+            var vbs = _time.UseIc && _bp.InitialVbs.Given ?
+                _bp.InitialVbs.Value : _behavior.Vbs;
             var vgd = vgs - vds;
             var vgb = vgs - vbs;
 
@@ -136,13 +141,13 @@ namespace SpiceSharp.Components.Mosfets
 
             // Bulk junction capacitances
             _qbd.Value = _charges.Qbd;
-            _qbd.Integrate();
+            _qbd.Derive();
             c.Bd.G += _qbd.GetContributions(_charges.Cbd).Jacobian;
             c.Bd.C += _qbd.Derivative;
             c.Ds.C -= _qbd.Derivative;
 
             _qbs.Value = _charges.Qbs;
-            _qbs.Integrate();
+            _qbs.Derive();
             c.Bs.G += _qbs.GetContributions(_charges.Cbs).Jacobian;
             c.Bs.C += _qbs.Derivative;
 
@@ -167,17 +172,17 @@ namespace SpiceSharp.Components.Mosfets
             _qgd.Value = (vgd - vgd1) * capgd + _qgd.GetPreviousValue(1);
             _qgb.Value = (vgb1 - vgb1) * capgb + _qgb.GetPreviousValue(1);
 
-            _qgs.Integrate();
+            _qgs.Derive();
             var info = _qgs.GetContributions(capgs, vgs);
             c.Gs.G += info.Jacobian;
             c.Gs.C += info.Rhs;
 
-            _qgd.Integrate();
+            _qgd.Derive();
             info = _qgd.GetContributions(capgd, vgd);
             c.Gd.G += info.Jacobian;
             c.Gd.C += info.Rhs;
 
-            _qgb.Integrate();
+            _qgb.Derive();
             info = _qgb.GetContributions(capgb, vgb);
             c.Gb.G += info.Jacobian;
             c.Gb.C += info.Rhs;

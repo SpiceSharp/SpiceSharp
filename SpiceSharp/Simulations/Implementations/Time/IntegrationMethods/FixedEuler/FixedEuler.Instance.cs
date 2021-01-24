@@ -58,6 +58,14 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
 
             /// <inheritdoc/>
+            public IIntegral CreateIntegral(bool track = true)
+            {
+                var result = new IntegralInstance(this, _stateValues + 1);
+                _stateValues += 2;
+                return result;
+            }
+
+            /// <inheritdoc/>
             public IVector<double> GetPreviousSolution(int index) => null;
 
             /// <inheritdoc/>
