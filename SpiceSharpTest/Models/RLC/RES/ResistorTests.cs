@@ -59,7 +59,6 @@ namespace SpiceSharpTest.Models
             res.Parameters.Length = 5e-6;
 
             var op = new OP("op");
-
             var exports = new IExport<double>[] { new RealVoltageExport(op, "a") };
             var references = new[] { 245.0 };
 

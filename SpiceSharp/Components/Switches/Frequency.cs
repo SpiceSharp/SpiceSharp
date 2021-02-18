@@ -14,8 +14,9 @@ namespace SpiceSharp.Components.Switches
     /// </summary>
     /// <seealso cref="Biasing" />
     /// <seealso cref="IFrequencyBehavior" />
-    [BehaviorFor(typeof(CurrentSwitch), typeof(IFrequencyBehavior), 1)]
-    [BehaviorFor(typeof(VoltageSwitch), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(CurrentSwitch))]
+    [BehaviorFor(typeof(VoltageSwitch))]
+    [AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {

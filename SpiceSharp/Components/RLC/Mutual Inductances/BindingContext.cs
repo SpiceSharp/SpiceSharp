@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
 
@@ -8,6 +9,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// Binding context for a <see cref="MutualInductance"/>.
     /// </summary>
     /// <seealso cref="Entities.BindingContext" />
+    [BindingContextFor(typeof(MutualInductance))]
     public class BindingContext : Entities.BindingContext
     {
         /// <summary>

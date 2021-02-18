@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    [BehaviorFor(typeof(Mosfet3Model), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(Mosfet3Model)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>

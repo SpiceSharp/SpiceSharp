@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.Inductors
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
-    [BehaviorFor(typeof(Inductor), typeof(IFrequencyBehavior), 2)]
+    [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>

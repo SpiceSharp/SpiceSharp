@@ -3,6 +3,7 @@ using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Entities
 {
@@ -14,6 +15,7 @@ namespace SpiceSharp.Entities
     /// is being created. This makes sure that behaviors are only using the data that matters.
     /// </remarks>
     /// <seealso cref="IBindingContext"/>
+    [BindingContextFor(typeof(Entity))]
     public class BindingContext : IBindingContext
     {
         private readonly Dictionary<IParameterSet, IParameterSet> _cloned;

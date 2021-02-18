@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -6,6 +7,7 @@ namespace SpiceSharp.Behaviors
     /// A behavior that is used by <see cref="Noise" />.
     /// </summary>
     /// <seealso cref="IBehavior" />
+    [SimulationBehavior]
     public interface INoiseBehavior : INoiseSource, IBehavior
     {
         /// <summary>

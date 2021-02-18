@@ -13,8 +13,9 @@ namespace SpiceSharp.Components.Switches
     /// <seealso cref="IParameterized{T}" />
     /// <seealso cref="ITemperatureBehavior" />
     /// <seealso cref="ModelParameters"/>
-    [BehaviorFor(typeof(CurrentSwitchModel), typeof(ITemperatureBehavior))]
-    [BehaviorFor(typeof(VoltageSwitchModel), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(CurrentSwitchModel))]
+    [BehaviorFor(typeof(VoltageSwitchModel))]
+    [AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     public class ModelTemperature : Behavior,
         IParameterized<ModelParameters>,
         ITemperatureBehavior

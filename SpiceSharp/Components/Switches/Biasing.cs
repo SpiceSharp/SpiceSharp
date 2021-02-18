@@ -15,8 +15,9 @@ namespace SpiceSharp.Components.Switches
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Switches.Parameters"/>
-    [BehaviorFor(typeof(CurrentSwitch), typeof(IBiasingBehavior))]
-    [BehaviorFor(typeof(VoltageSwitch), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(CurrentSwitch))]
+    [BehaviorFor(typeof(VoltageSwitch))]
+    [AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Behavior, IBiasingBehavior,
         IParameterized<Parameters>
     {

@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.CurrentSources
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(CurrentSource), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(CurrentSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {

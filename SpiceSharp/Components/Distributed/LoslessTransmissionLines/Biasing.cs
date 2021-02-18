@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
-    [BehaviorFor(typeof(LosslessTransmissionLine), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(LosslessTransmissionLine)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<Parameters>

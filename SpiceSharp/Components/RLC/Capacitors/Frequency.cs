@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(Capacitor), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(Capacitor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Temperature,
         IFrequencyBehavior
     {

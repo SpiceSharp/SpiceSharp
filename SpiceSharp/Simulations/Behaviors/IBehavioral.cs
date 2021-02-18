@@ -33,6 +33,15 @@ namespace SpiceSharp.Simulations
         ///   <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
         /// </returns>
         bool UsesBehaviors<B>() where B : IBehavior;
+
+        /// <summary>
+        /// Checks if the class uses the specified behavior.
+        /// </summary>
+        /// <param name="types">The behavior (interface) type.</param>
+        /// <returns>
+        ///     <c>true</c> if the class uses the behavior; otherwise <c>false</c>.
+        /// </returns>
+        bool UsesBehavior(Type types);
     }
 
     /// <summary>

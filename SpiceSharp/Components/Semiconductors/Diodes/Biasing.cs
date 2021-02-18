@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Diodes
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
-    [BehaviorFor(typeof(Diode), typeof(IBiasingBehavior), 1)]
+    [BehaviorFor(typeof(Diode)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Temperature,
         IBiasingBehavior,
         IConvergenceBehavior

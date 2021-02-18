@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
 
@@ -9,6 +10,7 @@ namespace SpiceSharp.Components.Switches
     /// </summary>
     /// <seealso cref="ComponentBindingContext" />
     /// <seealso cref="ISwitchBindingContext" />
+    [BindingContextFor(typeof(VoltageSwitch))]
     public class VoltageSwitchBindingContext : ComponentBindingContext,
         ISwitchBindingContext
     {

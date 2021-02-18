@@ -27,7 +27,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IComponent" />
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ParallelComponents.Parameters"/>
-    public class Parallel : Entity<ParallelBindingContext>,
+    public class Parallel : Entity,
         IComponent,
         IParameterized<Parameters>,
         IRuleSubject
@@ -109,7 +109,19 @@ namespace SpiceSharp.Components
                 // Create our local simulation and binding context to allow behaviors to do stuff
                 var localSim = new ParallelSimulation(simulation, this);
                 var context = new ParallelBindingContext(this, localSim, behaviors);
-                Entities.DependencyInjection.DI.Resolve(simulation, this, behaviors, context);
+
+                // Let's create our behaviors
+                // Note: we do this first, such that any parallel simulation states can be added to the local simulation
+                behaviors.Build(simulation, context)
+                    .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
+                    .AddIfNo<IConvergenceBehavior>(context => new Convergence(context))
+                    .AddIfNo<IBiasingBehavior>(context => new Biasing(context))
+                    .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(context))
+                    .AddIfNo<IFrequencyBehavior>(context => new Frequency(context))
+                    .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(context))
+                    .AddIfNo<INoiseBehavior>(context => new ParallelComponents.Noise(context))
+                    .AddIfNo<ITimeBehavior>(context => new Time(context))
+                    .AddIfNo<IAcceptBehavior>(context => new Accept(context));
 
                 // Run the simulation
                 localSim.Run(Parameters.Entities);

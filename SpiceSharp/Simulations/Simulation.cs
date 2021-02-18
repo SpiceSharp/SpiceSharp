@@ -356,6 +356,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
+        public virtual bool UsesBehavior(Type behaviorType) => Behaviors.Any(b => b.Equals(behaviorType));
+
+        /// <inheritdoc/>
         public virtual S GetState<S>() where S : ISimulationState
         {
             if (this is IStateful<S> stateful)

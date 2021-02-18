@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
-    [BehaviorFor(typeof(VoltageControlledVoltageSource), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(VoltageControlledVoltageSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>

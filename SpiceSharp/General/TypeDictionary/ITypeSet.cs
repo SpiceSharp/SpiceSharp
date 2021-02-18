@@ -10,6 +10,11 @@ namespace SpiceSharp.General
     public interface ITypeSet<V> : ICollection<V>, ICloneable
     {
         /// <summary>
+        /// Occurs if a type could not be found.
+        /// </summary>
+        event EventHandler<TypeNotFoundEventArgs<V>> TypeNotFound;
+
+        /// <summary>
         /// Tries getting a value from the set with the specified type.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>

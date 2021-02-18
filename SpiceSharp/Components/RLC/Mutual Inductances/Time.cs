@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(MutualInductance), typeof(ITimeBehavior), 1)]
+    [BehaviorFor(typeof(MutualInductance)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Temperature,
         IBiasingBehavior,
         ITimeBehavior

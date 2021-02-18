@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.Inductors
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(Inductor), typeof(ITimeBehavior), 2)]
+    [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Biasing,
         ITimeBehavior
     {

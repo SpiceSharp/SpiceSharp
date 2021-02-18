@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="Time"/>
     /// <seealso cref="IAcceptBehavior"/>
-    [BehaviorFor(typeof(VoltageDelay), typeof(IAcceptBehavior), 2)]
+    [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IAcceptBehavior))]
     public class Accept : Time,
         IAcceptBehavior
     {

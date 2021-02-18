@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(CurrentControlledCurrentSource), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(CurrentControlledCurrentSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {
@@ -44,6 +44,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
             : base(context)
         {
             _complex = context.GetState<IComplexSimulationState>();
+            var behavior = context.Behaviors.GetValue<Biasing>();
 
             _variables = new OnePort<Complex>(_complex, context);
             _control = context.ControlBehaviors.GetValue<IBranchedBehavior<Complex>>().Branch;

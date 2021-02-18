@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(LosslessTransmissionLine), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(LosslessTransmissionLine)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {

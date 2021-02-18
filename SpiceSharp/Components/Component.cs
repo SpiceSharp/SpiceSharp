@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
+﻿using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
@@ -100,37 +99,6 @@ namespace SpiceSharp.Components
             if (_connections != null && _connections.Length > 0)
                 return "{0} {1} {2}".FormatString(Name, string.Join(", ", _connections), Model ?? "");
             return "{0} {1}".FormatString(Name, Model ?? "");
-        }
-    }
-
-    /// <summary>
-    /// A class that represents a (Spice) component/device.
-    /// This implementation will by default use dependency injection to find behaviors.
-    /// </summary>
-    /// <typeparam name="TContext">The type of the context.</typeparam>
-    /// <seealso cref="Entity" />
-    /// <seealso cref="IComponent" />
-    /// <seealso cref="IRuleSubject" />
-    public abstract class Component<TContext> : Component,
-        IEntity<TContext>
-        where TContext : IBindingContext
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Component{TContext}"/> class.
-        /// </summary>
-        /// <param name="name">The string of the entity.</param>
-        /// <param name="nodeCount">The node count.</param>
-        protected Component(string name, int nodeCount) 
-            : base(name, nodeCount)
-        {
-        }
-
-        /// <inheritdoc />
-        public override void CreateBehaviors(ISimulation simulation)
-        {
-            var behaviors = new BehaviorContainer(Name);
-            Entities.DependencyInjection.DI.Resolve(simulation, this, behaviors);
-            simulation.EntityBehaviors.Add(behaviors);
         }
     }
 }

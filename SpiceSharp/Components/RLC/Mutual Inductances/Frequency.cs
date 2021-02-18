@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(MutualInductance), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(MutualInductance)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Temperature,
         IFrequencyBehavior
     {

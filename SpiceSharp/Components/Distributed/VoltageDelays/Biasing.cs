@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// <seealso cref="IBranchedBehavior{T}"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="VoltageDelayParameters"/>
-    [BehaviorFor(typeof(VoltageDelay), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,

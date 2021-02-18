@@ -147,6 +147,9 @@ namespace SpiceSharp.Components.Common
         public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
 
         /// <inheritdoc/>
+        public bool UsesBehavior(Type behaviorType) => Parent.UsesBehavior(behaviorType);
+
+        /// <inheritdoc/>
         public virtual P GetParameterSet<P>() where P : IParameterSet => Parent.GetParameterSet<P>();
 
         /// <inheritdoc/>

@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
-    [BehaviorFor(typeof(Resistor), typeof(IBiasingBehavior), 1)]
+    [BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Temperature,
         IBiasingBehavior
     {

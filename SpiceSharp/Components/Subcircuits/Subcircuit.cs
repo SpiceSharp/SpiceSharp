@@ -15,7 +15,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity<SubcircuitBindingContext>,
+    public partial class Subcircuit : Entity,
         IComponent,
         IParameterized<Parameters>,
         IRuleSubject
@@ -80,7 +80,17 @@ namespace SpiceSharp.Components
                 // Create our local simulation and binding context to allow our behaviors to do stuff
                 var localSim = new SubcircuitSimulation(Name, simulation, Parameters.Definition, NodeMap);
                 var context = new SubcircuitBindingContext(this, localSim, behaviors);
-                Entities.DependencyInjection.DI.Resolve(simulation, this, behaviors, context);
+
+                // Add the necessary behaviors
+                behaviors.Build(simulation, context)
+                    .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
+                    .AddIfNo<IAcceptBehavior>(context => new Accept(context))
+                    .AddIfNo<ITimeBehavior>(context => new Time(context))
+                    .AddIfNo<IBiasingBehavior>(context => new Biasing(context))
+                    .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(context))
+                    .AddIfNo<IFrequencyBehavior>(context => new Frequency(context))
+                    .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(context))
+                    .AddIfNo<INoiseBehavior>(context => new Subcircuits.Noise(context));
 
                 // Run the simulation
                 localSim.Run(Parameters.Definition.Entities);

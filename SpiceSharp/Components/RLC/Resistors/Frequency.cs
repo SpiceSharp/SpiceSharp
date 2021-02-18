@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(Resistor), typeof(IFrequencyBehavior), 2)]
+    [BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior
     {

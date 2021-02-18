@@ -20,7 +20,7 @@ namespace SpiceSharp.Components.CurrentSources
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="IndependentSourceParameters"/>
-    [BehaviorFor(typeof(CurrentSource), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(CurrentSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<IndependentSourceParameters>

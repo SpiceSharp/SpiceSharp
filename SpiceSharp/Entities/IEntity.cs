@@ -43,16 +43,4 @@ namespace SpiceSharp.Entities
         /// <exception cref="AmbiguousTypeException">Thrown if a behavior or parameter set could not be resolved unambiguously.</exception>
         void CreateBehaviors(ISimulation simulation);
     }
-
-    /// <summary>
-    /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>. It also declares that the entity
-    /// will be providing a type of binding context to behaviors.
-    /// </summary>
-    /// <typeparam name="TContext">The type of binding context.</typeparam>
-    /// <seealso cref="ICloneable" />
-    /// <seealso cref="IParameterSetCollection" />
-    public interface IEntity<TContext>
-        where TContext : IBindingContext
-    {
-    }
 }

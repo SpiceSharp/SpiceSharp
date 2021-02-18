@@ -11,7 +11,6 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="INoiseBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(INoiseBehavior))]
     public partial class Noise : Behavior,
         IParallelBehavior,
         INoiseBehavior

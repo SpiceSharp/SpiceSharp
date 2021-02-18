@@ -16,8 +16,8 @@ namespace SpiceSharp.Components.VoltageSources
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="IndependentSourceParameters"/>
-    [BehaviorFor(typeof(VoltageSource), typeof(IBiasingBehavior))]
-    public class BiasingBehavior : Behavior,
+    [BehaviorFor(typeof(VoltageSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    public class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,
         IParameterized<IndependentSourceParameters>
@@ -55,11 +55,11 @@ namespace SpiceSharp.Components.VoltageSources
         public IVariable<double> Branch { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
-        public BiasingBehavior(IComponentBindingContext context)
+        public Biasing(IComponentBindingContext context)
             : base(context)
         {
             context.ThrowIfNull(nameof(context));

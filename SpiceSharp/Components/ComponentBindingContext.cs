@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
@@ -11,6 +12,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="BindingContext" />
     /// <seealso cref="IComponentBindingContext" />
+    [BindingContextFor(typeof(Component))]
     public class ComponentBindingContext : BindingContext,
         IComponentBindingContext
     {

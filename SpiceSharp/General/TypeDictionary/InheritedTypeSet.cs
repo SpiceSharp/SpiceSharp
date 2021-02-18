@@ -13,6 +13,9 @@ namespace SpiceSharp.General
     {
         private readonly InheritedTypeDictionary<V> _dictionary;
 
+        /// <inheritdoc/>
+        public event EventHandler<TypeNotFoundEventArgs<V>> TypeNotFound;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InheritedTypeSet{V}"/> class.
         /// </summary>
@@ -84,7 +87,17 @@ namespace SpiceSharp.General
         {
             try
             {
-                return (TResult)_dictionary[typeof(TResult)];
+                if (!_dictionary.TryGetValue(typeof(TResult), out V result))
+                {
+                    var args = new TypeNotFoundEventArgs<V>(typeof(TResult));
+                    TypeNotFound?.Invoke(this, args);
+                    if (args.Value is TResult newResult)
+                    {
+                        Add(newResult);
+                        return newResult;
+                    }
+                }
+                return (TResult)result;
             }
             catch (KeyNotFoundException ex)
             {

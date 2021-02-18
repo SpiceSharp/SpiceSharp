@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
-    [BehaviorFor(typeof(VoltageDelay), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
