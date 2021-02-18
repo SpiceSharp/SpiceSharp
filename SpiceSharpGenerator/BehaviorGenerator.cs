@@ -1,5 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using ClassDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;
 using FieldDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax;
@@ -12,6 +15,8 @@ namespace SpiceSharpGenerator
     [Generator]
     public class BehaviorGenerator : ISourceGenerator
     {
+        private static object _lock = new object();
+
         /// <inheritdoc/>
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -166,13 +171,13 @@ namespace SpiceSharpGenerator
                     var symbol = model.GetDeclaredSymbol(variable, context.CancellationToken) as IFieldSymbol;
                     var @class = symbol.ContainingType;
                     if (!map.TryGetValue(@class, out var list))
-                    {
+                {
                         list = new List<(IFieldSymbol, SyntaxTriviaList)>();
                         map.Add(@class, list);
                     }
                     list.Add((symbol, field.GetLeadingTrivia()));
                 }
-            }
+                }
             foreach (var pair in map)
             {
                 var factory = new PropertyResolver(pair.Key, pair.Value);

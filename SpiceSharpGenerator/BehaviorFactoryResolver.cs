@@ -15,6 +15,7 @@ namespace SpiceSharpGenerator
 #pragma warning disable RS1024 // Compare symbols correctly
         private readonly Dictionary<INamedTypeSymbol, BehaviorData> _behaviors = new Dictionary<INamedTypeSymbol, BehaviorData>(SymbolEqualityComparer.Default);
 #pragma warning restore RS1024 // Compare symbols correctly
+        private readonly HashSet<string> _namespaces = new HashSet<string>();
         private readonly DependencyGraph<BehaviorData> _graph = new DependencyGraph<BehaviorData>();
 
         /// <summary>
@@ -32,6 +33,9 @@ namespace SpiceSharpGenerator
                 _graph.Add(behavior);
             }
             _context = context;
+            _namespaces.Add("System");
+            _namespaces.Add("SpiceSharp.Simulations");
+            _namespaces.Add("SpiceSharp.Behaviors");
         }
 
         private void Resolve()
