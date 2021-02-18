@@ -170,7 +170,7 @@ namespace SpiceSharp.Simulations
         /// iteration (or it will at least try to approach it). If you know an approximate solution
         /// to any voltage node, you can improve convergence by specifying it on this dictionary.
         /// </remarks>
-        public Dictionary<string, double> Nodesets { get; }
+        public Dictionary<string, double> Nodesets { get; } = new Dictionary<string, double>();
 
         /// <summary>
         /// Gets or sets the relative threshold for choosing a pivot.
@@ -303,16 +303,6 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The comparer use for nodes.
         /// </value>
-        public IEqualityComparer<string> NodeComparer { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BiasingParameters"/> class.
-        /// </summary>
-        /// <param name="comparer">The comparer.</param>
-        public BiasingParameters(IEqualityComparer<string> comparer = null)
-        {
-            NodeComparer = comparer ?? EqualityComparer<string>.Default;
-            Nodesets = new Dictionary<string, double>(comparer);
-        }
+        public IEqualityComparer<string> NodeComparer { get; set; } = Constants.DefaultComparer;
     }
 }

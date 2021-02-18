@@ -32,7 +32,7 @@ namespace SpiceSharp.Simulations.Biasing
             var ground = factory.ThrowIfNull(nameof(factory)).GetSharedVariable(Constants.Ground);
             _floatingNode = new FloatingNodeRule(ground);
             _groundPresence = new VariablePresenceRule(ground);
-            Parameters = new ComponentRuleParameters(factory, comparer);
+            Parameters = new ComponentRuleParameters(factory, comparer ?? Constants.DefaultComparer);
         }
 
         /// <summary>

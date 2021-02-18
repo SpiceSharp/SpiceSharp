@@ -1,4 +1,7 @@
-﻿namespace SpiceSharp
+﻿using System;
+using System.Collections.Generic;
+
+namespace SpiceSharp
 {
     /// <summary>
     /// Helpful (electronics-related) constants used throughout Spice#.
@@ -55,5 +58,13 @@
         /// </para>
         /// </remarks>
         public const string Ground = "0";
+
+        /// <summary>
+        /// Gets the default string comparer.
+        /// </summary>
+        /// <value>
+        /// The default string comparer.
+        /// </value>
+        public static IEqualityComparer<string> DefaultComparer { get; } = StringComparer.OrdinalIgnoreCase;
     }
 }

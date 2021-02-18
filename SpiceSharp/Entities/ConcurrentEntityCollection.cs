@@ -87,7 +87,7 @@ namespace SpiceSharp.Entities
         public ConcurrentEntityCollection(IEqualityComparer<string> comparer)
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, IEntity>(comparer);
+            _entities = new Dictionary<string, IEntity>(comparer ?? Constants.DefaultComparer);
         }
 
         /// <summary>

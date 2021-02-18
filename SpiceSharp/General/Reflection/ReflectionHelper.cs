@@ -15,7 +15,7 @@ namespace SpiceSharp
     /// </summary>
     public static class ReflectionHelper
     {
-        private static IEqualityComparer<string> _comparer = EqualityComparer<string>.Default;
+        private static IEqualityComparer<string> _comparer = Constants.DefaultComparer;
         private static readonly ConcurrentDictionary<Type, ParameterMap> _parameterMapDict = new ConcurrentDictionary<Type, ParameterMap>();
 
         /// <summary>

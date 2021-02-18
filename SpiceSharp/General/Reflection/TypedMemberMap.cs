@@ -25,7 +25,7 @@ namespace SpiceSharp.Reflection
         /// <param name="comparer">The comparer.</param>
         public TypedMemberMap(IEqualityComparer<string> comparer)
         {
-            _members = new Dictionary<string, MemberDescription>(comparer);
+            _members = new Dictionary<string, MemberDescription>(comparer ?? Constants.DefaultComparer);
         }
 
         /// <inheritdoc/>

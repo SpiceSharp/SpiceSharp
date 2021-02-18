@@ -14,7 +14,7 @@ namespace SpiceSharp.Validation
         {
             return new Simulations.Biasing.Rules(
                 new VariableFactory(),
-                EqualityComparer<string>.Default);
+                Constants.DefaultComparer);
         };
 
         /// <summary>

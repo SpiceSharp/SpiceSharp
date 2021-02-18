@@ -51,7 +51,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         public EntityCollection()
         {
-            _entities = new Dictionary<string, IEntity>();
+            _entities = new Dictionary<string, IEntity>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace SpiceSharp.Entities
         /// <param name="comparer">The comparer.</param>
         public EntityCollection(IEqualityComparer<string> comparer)
         {
-            _entities = new Dictionary<string, IEntity>(comparer);
+            _entities = new Dictionary<string, IEntity>(comparer ?? Constants.DefaultComparer);
         }
 
         /// <summary>

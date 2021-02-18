@@ -72,7 +72,7 @@ namespace SpiceSharp.Behaviors
         /// Initializes a new instance of the <see cref="BehaviorContainerCollection" /> class.
         /// </summary>
         public BehaviorContainerCollection()
-            : this(EqualityComparer<string>.Default)
+            : this(Constants.DefaultComparer)
         {
         }
 
@@ -82,7 +82,7 @@ namespace SpiceSharp.Behaviors
         /// <param name="comparer">The comparer for behaviors.</param>
         public BehaviorContainerCollection(IEqualityComparer<string> comparer)
         {
-            _dictionary = new Dictionary<string, IBehaviorContainer>(comparer);
+            _dictionary = new Dictionary<string, IBehaviorContainer>(comparer ?? Constants.DefaultComparer);
             _values = new List<IBehaviorContainer>();
         }
 
