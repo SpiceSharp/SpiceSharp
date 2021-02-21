@@ -1,8 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using ClassDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;
 using FieldDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax;
@@ -15,19 +13,17 @@ namespace SpiceSharpGenerator
     [Generator]
     public class BehaviorGenerator : ISourceGenerator
     {
-        private static object _lock = new object();
-
         /// <inheritdoc/>
         public void Initialize(GeneratorInitializationContext context)
         {
             // No initialization required for this one
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-            /*
+            
 #if DEBUG
             if (!Debugger.IsAttached)
                 Debugger.Launch();
 #endif
-            */
+            
         }
 
         /// <inheritdoc/>
