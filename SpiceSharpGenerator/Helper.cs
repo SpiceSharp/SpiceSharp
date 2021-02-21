@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace SpiceSharpGenerator
 {
@@ -179,6 +180,40 @@ namespace SpiceSharpGenerator
 
                 symbol = symbol.BaseType;
             }
+        }
+
+        /// <summary>
+        /// Formats an object that is meant for code.
+        /// </summary>
+        /// <param name="constant">The value.</param>
+        /// <returns>The string representation.</returns>
+        public static string Format(this object constant)
+        {
+            return constant switch
+            {
+                double dbl => dbl.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                _ => constant?.ToString() ?? "null",
+            };
+        }
+
+        private static readonly Regex _dashes = new Regex(@"[\-\.](?<word>\w+)");
+
+        /// <summary>
+        /// Turn a string into a name that can be used as a variable.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>The variable.</returns>
+        public static string ToVariable(this string name)
+        {
+            // Remove spaces
+            name = name.Replace(' ', '_');
+            name = _dashes.Replace(name, match =>
+            {
+                var word = match.Groups["word"].Value;
+                return char.ToUpper(word[0]) + word.Substring(1);
+            });
+            name = char.ToUpper(name[0]) + name.Substring(1);
+            return name;
         }
     }
 }

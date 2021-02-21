@@ -14,7 +14,8 @@ namespace SpiceSharp.Components.Capacitors
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Capacitors.Parameters"/>
     [BehaviorFor(typeof(Capacitor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
-    public class Temperature : Behavior,
+    [GeneratedParameters]
+    public partial class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>
     {

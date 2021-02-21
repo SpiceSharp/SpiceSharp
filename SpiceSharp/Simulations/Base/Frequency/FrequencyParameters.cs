@@ -3,6 +3,7 @@ using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -11,11 +12,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class FrequencyParameters : ParameterSet
+    public partial class FrequencyParameters : ParameterSet
     {
-        private double _absolutePivotThreshold = 1e-13;
-        private double _relativePivotThreshold = 1e-3;
-
         /// <summary>
         /// Gets or sets a value indicating whether the operation point should be exported.
         /// </summary>
@@ -43,15 +41,7 @@ namespace SpiceSharp.Simulations
         /// </exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
-        public double RelativePivotThreshold
-        {
-            get => _relativePivotThreshold;
-            set
-            {
-                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
-                _relativePivotThreshold = value;
-            }
-        }
+        private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
@@ -64,15 +54,7 @@ namespace SpiceSharp.Simulations
         /// </exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
-        public double AbsolutePivotThreshold
-        {
-            get => _absolutePivotThreshold;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
-                _absolutePivotThreshold = value;
-            }
-        }
+        private double _absolutePivotThreshold = 1e-13;
 
         /// <summary>
         /// Creates solver used to solve equations.

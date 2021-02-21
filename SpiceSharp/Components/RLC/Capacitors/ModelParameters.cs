@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Capacitors
 {
@@ -7,57 +8,31 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class ModelParameters : ParameterSet
+    public partial class ModelParameters : ParameterSet
     {
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
-        private double _defaultWidth = 10e-6;
-        private double _junctionCapSidewall;
-        private double _junctionCap;
-
         /// <summary>
         /// Gets the bottom junction capacitance parameter.
         /// </summary>
         [ParameterName("cj"), ParameterInfo("Bottom capacitance per area", Units = "F/m^2")]
         [GreaterThanOrEquals(0)]
-        public double JunctionCap
-        {
-            get => _junctionCap;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(JunctionCap), 0);
-                _junctionCap = value;
-            }
-        }
+        private double _junctionCap;
 
         /// <summary>
         /// Gets the junction sidewall capacitance parameter.
         /// </summary>
         [ParameterName("cjsw"), ParameterInfo("Sidewall capacitance per meter", Units = "F/m")]
         [GreaterThanOrEquals(0)]
-        public double JunctionCapSidewall
-        {
-            get => _junctionCapSidewall;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(JunctionCapSidewall), 0);
-                _junctionCapSidewall = value;
-            }
-        }
+        private double _junctionCapSidewall;
 
         /// <summary>
-        /// Gets the default width parameter.
+        /// Gets or sets the default width parameter.
         /// </summary>
+        /// <value>
+        /// The default width.
+        /// </value>
         [ParameterName("defw"), ParameterInfo("Default width", Units = "m")]
         [GreaterThanOrEquals(0)]
-        public double DefaultWidth
-        {
-            get => _defaultWidth;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(DefaultWidth), 0);
-                _defaultWidth = value;
-            }
-        }
+        private double _defaultWidth = 10e-6;
 
         /// <summary>
         /// Gets the width correction factor parameter.
@@ -92,14 +67,6 @@ namespace SpiceSharp.Components.Capacitors
         /// Gets the nominal temperature parameter in degrees Kelvin.
         /// </summary>
         [GreaterThan(0)]
-        public GivenParameter<double> NominalTemperature
-        {
-            get => _nominalTemperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
-                _nominalTemperature = value;
-            }
-        }
+        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
     }
 }

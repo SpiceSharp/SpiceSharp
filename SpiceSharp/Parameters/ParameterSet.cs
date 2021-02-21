@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Reflection;
 using System;
+using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.ParameterSets
 {
@@ -49,58 +50,73 @@ namespace SpiceSharp.ParameterSets
         /// <inheritdoc/>
         public virtual void SetParameter<P>(string name, P value)
         {
+            // If we have a generic implementation for it, use that instead
             if (this is IImportParameterSet<P> ips)
                 ips.SetParameter(name, value);
             else
-                ReflectionHelper.Set(this, name, value);
+                throw new ParameterNotFoundException(this, name, typeof(P));
+                //ReflectionHelper.Set(this, name, value);
         }
 
         /// <inheritdoc/>
         public virtual bool TrySetParameter<P>(string name, P value)
         {
+            // If we have a generic implementation for it, use that instead
             if (this is IImportParameterSet<P> ips)
                 return ips.TrySetParameter(name, value);
             else
-                return ReflectionHelper.TrySet(this, name, value);
+                return false;
+                // return ReflectionHelper.TrySet(this, name, value);
         }
 
         /// <inheritdoc/>
         public virtual P GetProperty<P>(string name)
         {
+            // If we have a generic implementation for it, use that instead
             if (this is IExportPropertySet<P> eps)
                 return eps.GetProperty(name);
             else
-                return ReflectionHelper.Get<P>(this, name);
+                throw new ParameterNotFoundException(this, name, typeof(P));
+                // return ReflectionHelper.Get<P>(this, name);
         }
 
         /// <inheritdoc/>
         public virtual bool TryGetProperty<P>(string name, out P value)
         {
+            // If we have a generic implementation for it, use that instead
             if (this is IExportPropertySet<P> eps)
             {
                 value = eps.TryGetProperty(name, out var isValid);
                 return isValid;
             }
             else
-                return ReflectionHelper.TryGet(this, name, out value);
+            {
+                value = default;
+                return false;
+            }
+            // return ReflectionHelper.TryGet(this, name, out value);
         }
 
         /// <inheritdoc/>
         public virtual Action<P> CreateParameterSetter<P>(string name)
         {
+            // If we have a generic implementation for it, use that instead
             if (this is IImportParameterSet<P> ips)
                 return ips.CreateParameterSetter(name);
             else
-                return ReflectionHelper.CreateSetter<P>(this, name);
+                return null;
+                // return ReflectionHelper.CreateSetter<P>(this, name);
         }
 
         /// <inheritdoc/>
         public virtual Func<P> CreatePropertyGetter<P>(string name)
         {
+            // If we have a generic implementation for it, use that instead
             if (this is IExportPropertySet<P> eps)
                 return eps.CreatePropertyGetter(name);
             else
-                return ReflectionHelper.CreateGetter<P>(this, name);
+                return null;
+                // return ReflectionHelper.CreateGetter<P>(this, name);
         }
     }
 }

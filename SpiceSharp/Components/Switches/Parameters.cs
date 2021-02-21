@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Switches
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.Switches
     /// Base parameters for a switch.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet
     {
         /// <summary>
         /// Sets the switch initially to conducting.

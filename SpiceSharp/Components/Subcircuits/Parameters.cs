@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Subcircuits
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.Subcircuits
     /// Parameters for a <see cref="Subcircuit"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the subcircuit definition.

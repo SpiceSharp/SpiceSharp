@@ -2,6 +2,7 @@ using SpiceSharp.Algebra;
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -10,19 +11,8 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class BiasingParameters : ParameterSet
+    public partial class BiasingParameters : ParameterSet
     {
-        private double _nominalTemperature = 300.15;
-        private double _temperature = 300.15;
-        private double _absolutePivotThreshold = 1e-13;
-        private double _relativePivotThreshold = 1e-3;
-        private double _absoluteTolerance = 1e-12;
-        private double _voltageTolerance = 1e-6;
-        private double _relativeTolerance = 1e-3;
-        private int _sourceSteps = 10;
-        private int _gminSteps = 10;
-        private double _gmin = 1e-12;
-
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should go straight to gmin stepping.
         /// </summary>
@@ -45,15 +35,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         [ParameterName("gmin"), ParameterInfo("A minimum conductance for helping convergence.")]
         [GreaterThanOrEquals(0)]
-        public double Gmin
-        {
-            get => _gmin;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Gmin), 0);
-                _gmin = value;
-            }
-        }
+        private double _gmin = 1e-12;
 
         /// <summary>
         /// Gets or sets the number of steps to use when using gmin stepping to improve convergence.
@@ -63,15 +45,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("gminsteps"), ParameterInfo("The number of steps used for gmin stepping.")]
         [GreaterThanOrEquals(0)]
-        public int GminSteps
-        {
-            get => _gminSteps;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(GminSteps), 0);
-                _gminSteps = value;
-            }
-        }
+        private int _gminSteps = 10;
 
         /// <summary>
         /// Gets or sets the number of steps when using source stepping to improve convergence.
@@ -86,15 +60,7 @@ namespace SpiceSharp.Simulations
         /// </remarks>
         [ParameterName("sourcesteps"), ParameterInfo("The number of steps used for source stepping.")]
         [GreaterThanOrEquals(0)]
-        public int SourceSteps
-        {
-            get => _sourceSteps;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(SourceSteps), 0);
-                _sourceSteps = value;
-            }
-        }
+        private int _sourceSteps = 10;
 
         /// <summary>
         /// Gets or sets the allowed relative tolerance.
@@ -104,15 +70,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("reltol"), ParameterInfo("The relative error tolerance.")]
         [GreaterThan(0)]
-        public double RelativeTolerance
-        {
-            get => _relativeTolerance;
-            set
-            {
-                Utility.GreaterThan(value, nameof(RelativeTolerance), 0);
-                _relativeTolerance = value;
-            }
-        }
+        private double _relativeTolerance = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute tolerance on voltages.
@@ -122,15 +80,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("vntol"), ParameterInfo("The absolute voltage error tolerance.")]
         [GreaterThanOrEquals(0)]
-        public double VoltageTolerance
-        {
-            get => _voltageTolerance;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(VoltageTolerance), 0);
-                _voltageTolerance = value;
-            }
-        }
+        private double _voltageTolerance = 1e-6;
 
         /// <summary>
         /// Gets or sets the absolute tolerance.
@@ -140,15 +90,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("abstol"), ParameterInfo("The absolute error tolerance.")]
         [GreaterThanOrEquals(0)]
-        public double AbsoluteTolerance
-        {
-            get => _absoluteTolerance;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(AbsoluteTolerance), 0);
-                _absoluteTolerance = value;
-            }
-        }
+        private double _absoluteTolerance = 1e-12;
 
         /// <summary>
         /// Gets or sets the maximum number of iterations for operating point simulation.
@@ -183,15 +125,7 @@ namespace SpiceSharp.Simulations
         /// </exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
-        public double RelativePivotThreshold
-        {
-            get => _relativePivotThreshold;
-            set
-            {
-                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
-                _relativePivotThreshold = value;
-            }
-        }
+        private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
@@ -204,15 +138,7 @@ namespace SpiceSharp.Simulations
         /// </exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
-        public double AbsolutePivotThreshold
-        {
-            get => _absolutePivotThreshold;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
-                _absolutePivotThreshold = value;
-            }
-        }
+        private double _absolutePivotThreshold = 1e-13;
 
         /// <summary>
         /// Creates solver used to solve equations.
@@ -233,15 +159,7 @@ namespace SpiceSharp.Simulations
         /// The temperature.
         /// </value>
         [GreaterThan(0)]
-        public double Temperature
-        {
-            get => _temperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Temperature), 0);
-                _temperature = value;
-            }
-        }
+        private double _temperature = 300.15;
 
         /// <summary>
         /// Gets or sets the (initial) temperature in degrees celsius of the simulation.
@@ -264,15 +182,7 @@ namespace SpiceSharp.Simulations
         /// The nominal temperature.
         /// </value>
         [GreaterThan(0)]
-        public double NominalTemperature
-        {
-            get => _nominalTemperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
-                _nominalTemperature = value;
-            }
-        }
+        private double _nominalTemperature = 300.15;
 
         /// <summary>
         /// Gets or sets the nominal temperature in degrees celsius.

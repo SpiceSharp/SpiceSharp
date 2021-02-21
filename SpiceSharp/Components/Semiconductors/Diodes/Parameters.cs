@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Diodes
 {
@@ -7,13 +8,8 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet
     {
-        private double _seriesMultiplier = 1.0;
-        private double _parallelMultiplier = 1.0;
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
-        private double _area = 1;
-
         /// <summary>
         /// Gets or sets the area.
         /// </summary>
@@ -22,15 +18,7 @@ namespace SpiceSharp.Components.Diodes
         /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         [GreaterThanOrEquals(0)]
-        public double Area
-        {
-            get => _area;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Area), 0);
-                _area = value;
-            }
-        }
+        private double _area = 1;
 
         /// <summary>
         /// Gets or sets whether or not the diode is initially off (non-conducting).
@@ -71,15 +59,7 @@ namespace SpiceSharp.Components.Diodes
         /// The temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0)]
-        public GivenParameter<double> Temperature
-        {
-            get => _temperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Temperature), 0);
-                _temperature = value;
-            }
-        }
+        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the number of diodes in parallel.
@@ -89,15 +69,7 @@ namespace SpiceSharp.Components.Diodes
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
         [GreaterThanOrEquals(0)]
-        public double ParallelMultiplier
-        {
-            get => _parallelMultiplier;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(ParallelMultiplier), 0);
-                _parallelMultiplier = value;
-            }
-        }
+        private double _parallelMultiplier = 1.0;
 
         /// <summary>
         /// Gets or sets the number of diodes in series.
@@ -107,14 +79,6 @@ namespace SpiceSharp.Components.Diodes
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
         [GreaterThan(0)]
-        public double SeriesMultiplier
-        {
-            get => _seriesMultiplier;
-            set
-            {
-                Utility.GreaterThan(value, nameof(SeriesMultiplier), 0);
-                _seriesMultiplier = value;
-            }
-        }
+        private double _seriesMultiplier = 1.0;
     }
 }

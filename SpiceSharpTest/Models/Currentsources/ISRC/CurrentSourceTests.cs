@@ -124,7 +124,7 @@ namespace SpiceSharpTest.Models
                 .SetParameter("waveform", new Pulse(0.0, 1.0, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5));
 
             // Clone the entity
-            var clone = (CurrentSource)((SpiceSharp.ICloneable)isrc).Clone();
+            var clone = (CurrentSource)((ICloneable)isrc).Clone();
 
             // Change some stuff (should not be reflected in the clone)
             isrc.GetProperty<IWaveformDescription>("waveform").SetParameter("v2", 2.0);

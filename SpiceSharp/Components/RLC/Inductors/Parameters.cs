@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Inductors
 {
@@ -7,12 +8,8 @@ namespace SpiceSharp.Components.Inductors
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet
     {
-        private double _seriesMultiplier = 1.0;
-        private double _parallelMultiplier = 1.0;
-        private double _inductance;
-
         /// <summary>
         /// Gets the inductance parameter.
         /// </summary>
@@ -21,15 +18,7 @@ namespace SpiceSharp.Components.Inductors
         /// </value>
         [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units = "H", IsPrincipal = true)]
         [GreaterThanOrEquals(0)]
-        public double Inductance
-        {
-            get => _inductance;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Inductance), 0);
-                _inductance = value;
-            }
-        }
+        private double _inductance;
 
         /// <summary>
         /// Gets the initial current parameter.
@@ -48,15 +37,7 @@ namespace SpiceSharp.Components.Inductors
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
         [GreaterThan(0)]
-        public double ParallelMultiplier
-        {
-            get => _parallelMultiplier;
-            set
-            {
-                Utility.GreaterThan(value, nameof(ParallelMultiplier), 0);
-                _parallelMultiplier = value;
-            }
-        }
+        private double _parallelMultiplier = 1.0;
 
         /// <summary>
         /// Gets or sets the series multiplier.
@@ -66,14 +47,6 @@ namespace SpiceSharp.Components.Inductors
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
         [GreaterThanOrEquals(0)]
-        public double SeriesMultiplier
-        {
-            get => _seriesMultiplier;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(SeriesMultiplier), 0);
-                _seriesMultiplier = value;
-            }
-        }
+        private double _seriesMultiplier = 1.0;
     }
 }

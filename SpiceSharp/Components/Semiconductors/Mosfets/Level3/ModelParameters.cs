@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Mosfets.Level3
 {
@@ -7,11 +8,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
     /// </summary>
     /// <seealso cref="Mosfets.ModelParameters" />
     [GeneratedParameters]
-    public class ModelParameters : Mosfets.ModelParameters
+    public partial class ModelParameters : Mosfets.ModelParameters
     {
-        private GivenParameter<double> _junctionDepth;
-        private GivenParameter<double> _fastSurfaceStateDensity;
-
         /// <summary>
         /// The possible versions used for the implementation.
         /// </summary>
@@ -84,15 +82,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// </value>
         [ParameterName("nfs"), ParameterInfo("Fast surface state density")]
         [GreaterThanOrEquals(0)]
-        public GivenParameter<double> FastSurfaceStateDensity
-        {
-            get => _fastSurfaceStateDensity;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(FastSurfaceStateDensity), 0);
-                _fastSurfaceStateDensity = value;
-            }
-        }
+        private GivenParameter<double> _fastSurfaceStateDensity;
 
         /// <summary>
         /// Gets or sets the maximum drift velocity.
@@ -111,15 +101,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// </value>
         [ParameterName("xj"), ParameterInfo("Junction depth")]
         [GreaterThanOrEquals(0)]
-        public GivenParameter<double> JunctionDepth
-        {
-            get => _junctionDepth;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(JunctionDepth), 0);
-                _junctionDepth = value;
-            }
-        }
+        private GivenParameter<double> _junctionDepth;
 
         /// <summary>
         /// Gets or sets the width effect on the threshold voltage.

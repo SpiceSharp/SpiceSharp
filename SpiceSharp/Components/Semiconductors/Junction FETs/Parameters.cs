@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.JFETs
 {
@@ -7,12 +8,8 @@ namespace SpiceSharp.Components.JFETs
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet
     {
-        private double _area = 1;
-        private GivenParameter<double> _temperature = new GivenParameter<double>(300.15, false);
-        private double _temperatureCelsius;
-
         /// <summary>
         /// Gets or sets the temperature in degrees celsius.
         /// </summary>
@@ -23,12 +20,8 @@ namespace SpiceSharp.Components.JFETs
         [GreaterThan(Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
-            get => _temperatureCelsius;
-            set
-            {
-                Utility.GreaterThan(value, nameof(TemperatureCelsius), Constants.CelsiusKelvin);
-                _temperatureCelsius = value;
-            }
+            get => Temperature - Constants.CelsiusKelvin;
+            set => Temperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
@@ -38,15 +31,7 @@ namespace SpiceSharp.Components.JFETs
         /// The temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0)]
-        public GivenParameter<double> Temperature
-        {
-            get => _temperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Temperature), 0);
-                _temperature = value;
-            }
-        }
+        private GivenParameter<double> _temperature = new GivenParameter<double>(300.15, false);
 
         /// <summary>
         /// Gets or sets the area.
@@ -56,15 +41,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         [GreaterThanOrEquals(0)]
-        public double Area
-        {
-            get => _area;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Area), 0);
-                _area = value;
-            }
-        }
+        private double _area = 1;
 
         /// <summary>
         /// Gets or sets the initial drain-source voltage.

@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Resistors
 {
@@ -6,16 +7,9 @@ namespace SpiceSharp.Components.Resistors
     /// Parameters for a <see cref="Resistor" />.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-	[GeneratedParameters(AddNames = true)]
+	[GeneratedParameters]
     public partial class Parameters : ParameterSet
     {
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
-        private double _seriesMultiplier = 1.0;
-        private double _parallelMultiplier = 1.0;
-        private GivenParameter<double> _length;
-        private GivenParameter<double> _width = new GivenParameter<double>(1.0, false);
-        private GivenParameter<double> _resistance;
-
         /// <summary>
         /// The minimum resistance for any resistor.
         /// </summary>
@@ -28,15 +22,7 @@ namespace SpiceSharp.Components.Resistors
         /// The temperature of the resistor.
         /// </value>
         [GreaterThanOrEquals(0)]
-        public GivenParameter<double> Temperature
-        {
-            get => _temperature;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Temperature), 0);
-                _temperature = value;
-            }
-        }
+        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the resistance of the resistor.
@@ -50,16 +36,7 @@ namespace SpiceSharp.Components.Resistors
         /// </remarks>
         [ParameterName("resistance"), ParameterName("r"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
         [GreaterThanOrEquals(0), LowerLimit(MinimumResistance)]
-        public GivenParameter<double> Resistance
-        {
-            get => _resistance;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Resistance), 0);
-                value = Utility.LowerLimit(value, this, nameof(Resistance), MinimumResistance);
-                _resistance = value;
-            }
-        }
+        private GivenParameter<double> _resistance;
 
         /// <summary>
         /// Gets or sets the resistor operating temperature in degrees Celsius.
@@ -83,15 +60,7 @@ namespace SpiceSharp.Components.Resistors
         /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
         [GreaterThan(0)]
-        public GivenParameter<double> Width
-        {
-            get => _width;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Width), 0);
-                _width = value;
-            }
-        }
+        private GivenParameter<double> _width = new GivenParameter<double>(1.0, false);
 
         /// <summary>
         /// Gets or sets the length of the resistor.
@@ -101,15 +70,7 @@ namespace SpiceSharp.Components.Resistors
         /// </value>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
         [GreaterThanOrEquals(0)]
-        public GivenParameter<double> Length
-        {
-            get => _length;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Length), 0);
-                _length = value;
-            }
-        }
+        private GivenParameter<double> _length;
 
         /// <summary>
         /// Gets or sets the number of resistors in parallel.
@@ -119,15 +80,7 @@ namespace SpiceSharp.Components.Resistors
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
         [GreaterThanOrEquals(0)]
-        public double ParallelMultiplier
-        {
-            get => _parallelMultiplier;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(ParallelMultiplier), 0);
-                _parallelMultiplier = value;
-            }
-        }
+        private double _parallelMultiplier = 1.0;
 
         /// <summary>
         /// Gets or sets the number of resistors in series.
@@ -137,14 +90,6 @@ namespace SpiceSharp.Components.Resistors
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
         [GreaterThan(0)]
-        public double SeriesMultiplier
-        {
-            get => _seriesMultiplier;
-            set
-            {
-                Utility.GreaterThan(value, nameof(SeriesMultiplier), 0);
-                _seriesMultiplier = value;
-            }
-        }
+        private double _seriesMultiplier = 1.0;
     }
 }

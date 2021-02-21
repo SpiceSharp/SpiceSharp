@@ -1,12 +1,15 @@
 ﻿using System;
 
-namespace SpiceSharp.ParameterSets
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// This attribute specifies a description and other metadata of a parameter. It can be applied to a field, property or method
     /// </summary>
+    /// <remarks>
+    /// If this attribute is used on a private field, the source generator will automatically generate a property.
+    /// </remarks>
     /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class ParameterInfoAttribute : Attribute
     {
         /// <summary>

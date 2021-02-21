@@ -15,7 +15,8 @@ namespace SpiceSharp.Components.Mosfets.Level1
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     [BehaviorFor(typeof(Mosfet1)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Temperature,
+    [GeneratedParameters]
+    public partial class Biasing : Temperature,
         IMosfetBiasingBehavior,
         IConvergenceBehavior
     {

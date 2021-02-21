@@ -14,7 +14,8 @@ namespace SpiceSharp.Components.Resistors
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     [BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Temperature,
+    [GeneratedParameters]
+    public partial class Biasing : Temperature,
         IBiasingBehavior
     {
         private readonly ElementSet<double> _elements;

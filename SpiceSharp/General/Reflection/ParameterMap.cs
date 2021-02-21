@@ -59,6 +59,7 @@ namespace SpiceSharp.Reflection
         public ParameterMap(Type type, IEqualityComparer<string> comparer)
         {
             type.ThrowIfNull(nameof(type));
+            Comparer = comparer ?? Constants.DefaultComparer;
 
             foreach (var member in type.GetTypeInfo().GetMembers(BindingFlags.Instance | BindingFlags.Public))
             {
@@ -81,7 +82,7 @@ namespace SpiceSharp.Reflection
                 if (!_memberMaps.TryGetValue(descType, out var members))
                 {
                     // Create a new instance
-                    members = CreateMap(descType, comparer);
+                    members = CreateMap(descType, Comparer);
                     _memberMaps.Add(descType, members);
                 }
                 members.Add(desc);
@@ -94,6 +95,7 @@ namespace SpiceSharp.Reflection
         /// <param name="comparer">The comparer.</param>
         public void Remap(IEqualityComparer<string> comparer)
         {
+            comparer ??= Constants.DefaultComparer;
             var d = new Dictionary<Type, IMemberMap>();
             foreach (var map in _memberMaps)
             {

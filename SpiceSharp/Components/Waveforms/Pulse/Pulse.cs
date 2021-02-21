@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -9,6 +10,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
+    [GeneratedParameters]
     public partial class Pulse : ParameterSet,
         IWaveformDescription
     {

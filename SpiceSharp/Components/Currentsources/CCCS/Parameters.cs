@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.CurrentControlledCurrentSources
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// Base parameters for a <see cref="CurrentControlledCurrentSource"/>
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the current gain of the source.

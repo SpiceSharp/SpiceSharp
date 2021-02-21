@@ -12,7 +12,8 @@ namespace SpiceSharp.Components.Switches
     [BehaviorFor(typeof(CurrentSwitch))]
     [BehaviorFor(typeof(VoltageSwitch))]
     [AddBehaviorIfNo(typeof(IAcceptBehavior))]
-    public class Accept : Biasing,
+    [GeneratedParameters]
+    public partial class Accept : Biasing,
         IAcceptBehavior
     {
         /// <summary>

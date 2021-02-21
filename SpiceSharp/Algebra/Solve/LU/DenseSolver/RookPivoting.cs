@@ -1,6 +1,7 @@
 using SpiceSharp.Algebra.Solve;
 using SpiceSharp.ParameterSets;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra
 {
@@ -9,12 +10,8 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ParameterSet" />
-    [GeneratedParameters]
-    public class RookPivoting<T> : ParameterSet
+    public partial class RookPivoting<T> : ParameterSet
     {
-        private double _absolutePivotThreshold = 1e-13;
-        private double _relativePivotThreshold = 1e-3;
-
         /// <summary>
         /// Gets the magnitude.
         /// </summary>
@@ -32,15 +29,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not greater than 0.</exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
-        public double RelativePivotThreshold
-        {
-            get => _relativePivotThreshold;
-            set
-            {
-                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
-                _relativePivotThreshold = value;
-            }
-        }
+        private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute pivot threshold.
@@ -51,15 +40,7 @@ namespace SpiceSharp.Algebra
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
-        public double AbsolutePivotThreshold
-        {
-            get => _absolutePivotThreshold;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
-                _absolutePivotThreshold = value;
-            }
-        }
+        private double _absolutePivotThreshold = 1e-13;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RookPivoting{T}"/> class.

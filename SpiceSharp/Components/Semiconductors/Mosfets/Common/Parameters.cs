@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Mosfets
 {
@@ -7,19 +8,8 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet
     {
-        private double _parallelMultiplier = 1.0;
-        private double _drainSquares = 1;
-        private double _sourceSquares = 1;
-        private double _drainPerimeter;
-        private double _sourcePerimeter;
-        private double _drainArea;
-        private double _sourceArea;
-        private GivenParameter<double> _length = new GivenParameter<double>(1e-4, false);
-        private GivenParameter<double> _width = new GivenParameter<double>(1e-4, false);
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
-
         /// <summary>
         /// Gets or sets the temperature in degrees celsius.
         /// </summary>
@@ -41,15 +31,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The temperature in Kelvin.
         /// </value>
         [GreaterThan(0)]
-        public GivenParameter<double> Temperature
-        {
-            get => _temperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Temperature), 0);
-                _temperature = value;
-            }
-        }
+        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the instance temperature difference.
@@ -68,15 +50,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
         [GreaterThan(0)]
-        public GivenParameter<double> Width
-        {
-            get => _width;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Width), 0);
-                _width = value;
-            }
-        }
+        private GivenParameter<double> _width = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
         /// Gets or sets the mosfet length.
@@ -86,15 +60,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
         [GreaterThan(0)]
-        public GivenParameter<double> Length
-        {
-            get => _length;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Length), 0);
-                _length = value;
-            }
-        }
+        private GivenParameter<double> _length = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
         /// Gets or sets the source layout area.
@@ -104,15 +70,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("as"), ParameterInfo("Source area", Units = "m^2")]
         [GreaterThanOrEquals(0)]
-        public double SourceArea
-        {
-            get => _sourceArea;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(SourceArea), 0);
-                _sourceArea = value;
-            }
-        }
+        private double _sourceArea;
 
         /// <summary>
         /// Gets or sets the drain layout area.
@@ -122,15 +80,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("ad"), ParameterInfo("Drain area", Units = "m^2")]
         [GreaterThanOrEquals(0)]
-        public double DrainArea
-        {
-            get => _drainArea;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(DrainArea), 0);
-                _drainArea = value;
-            }
-        }
+        private double _drainArea;
 
         /// <summary>
         /// Gets or sets the source layout perimeter.
@@ -140,15 +90,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("ps"), ParameterInfo("Source perimeter", Units = "m")]
         [GreaterThanOrEquals(0)]
-        public double SourcePerimeter
-        {
-            get => _sourcePerimeter;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(SourcePerimeter), 0);
-                _sourcePerimeter = value;
-            }
-        }
+        private double _sourcePerimeter;
 
         /// <summary>
         /// Gets or sets the drain layout perimeter.
@@ -158,15 +100,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("pd"), ParameterInfo("Drain perimeter", Units = "m")]
         [GreaterThanOrEquals(0)]
-        public double DrainPerimeter
-        {
-            get => _drainPerimeter;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(DrainPerimeter), 0);
-                _drainPerimeter = value;
-            }
-        }
+        private double _drainPerimeter;
 
         /// <summary>
         /// Gets or sets the number of squares of the source.
@@ -174,15 +108,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </summary>
         [ParameterName("nrs"), ParameterInfo("Source squares")]
         [GreaterThanOrEquals(0)]
-        public double SourceSquares
-        {
-            get => _sourceSquares;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(SourceSquares), 0);
-                _sourceSquares = value;
-            }
-        }
+        private double _sourceSquares = 1;
 
         /// <summary>
         /// Gets or sets the number of squares of the drain.
@@ -190,15 +116,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </summary>
         [ParameterName("nrd"), ParameterInfo("Drain squares")]
         [GreaterThanOrEquals(0)]
-        public double DrainSquares
-        {
-            get => _drainSquares;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(DrainSquares), 0);
-                _drainSquares = value;
-            }
-        }
+        private double _drainSquares = 1;
 
         /// <summary>
         /// Gets or sets a value indicating whether the device is on or off.
@@ -239,16 +157,9 @@ namespace SpiceSharp.Components.Mosfets
         /// <value>
         /// The parallel multplier.
         /// </value>
+        [ParameterName("m"), ParameterInfo("The parallel multiplier")]
         [GreaterThan(0)]
-        public double ParallelMultiplier
-        {
-            get => _parallelMultiplier;
-            set
-            {
-                Utility.GreaterThan(value, nameof(ParallelMultiplier), 0);
-                _parallelMultiplier = value;
-            }
-        }
+        private double _parallelMultiplier = 1.0;
 
         /// <summary>
         /// Set the initial conditions of the device.

@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.JFETs
 {
@@ -7,21 +8,8 @@ namespace SpiceSharp.Components.JFETs
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public class ModelParameters : ParameterSet
+    public partial class ModelParameters : ParameterSet
     {
-        private double _b = 1;
-        private double _depletionCapCoefficient = 0.5;
-        private double _gateSaturationCurrent = 1e-14;
-        private double _gatePotential = 1;
-        private double _capGd;
-        private double _capGs;
-        private double _sourceResistance;
-        private double _drainResistance;
-        private double _lModulation;
-        private double _beta = 1e-4;
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(300.15, false);
-        private double _nominalTemperatureCelsius;
-
         /// <summary>
         /// Gets or sets the measurement temperature in degrees celsius.
         /// </summary>
@@ -32,12 +20,8 @@ namespace SpiceSharp.Components.JFETs
         [GreaterThan(Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
-            get => _nominalTemperatureCelsius;
-            set
-            {
-                Utility.GreaterThan(value, nameof(NominalTemperatureCelsius), Constants.CelsiusKelvin);
-                _nominalTemperatureCelsius = value;
-            }
+            get => NominalTemperature - Constants.CelsiusKelvin;
+            set => NominalTemperature = value + Constants.CelsiusKelvin;
         }
 
         /// <summary>
@@ -47,15 +31,7 @@ namespace SpiceSharp.Components.JFETs
         /// The measurement temperature in Kelvin.
         /// </value>
         [GreaterThan(0)]
-        public GivenParameter<double> NominalTemperature
-        {
-            get => _nominalTemperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(NominalTemperature), 0);
-                _nominalTemperature = value;
-            }
-        }
+        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(300.15, false);
 
         /// <summary>
         /// Gets or sets the threshold voltage.
@@ -74,15 +50,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("beta"), ParameterInfo("Transconductance parameter", Units = "\u03a9^-1")]
         [GreaterThanOrEquals(0)]
-        public double Beta
-        {
-            get => _beta;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Beta), 0);
-                _beta = value;
-            }
-        }
+        private double _beta = 1e-4;
 
         /// <summary>
         /// Gets or sets the channel length modulation parameter.
@@ -92,15 +60,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation parameter", Units = "V^-1")]
         [GreaterThanOrEquals(0)]
-        public double LModulation
-        {
-            get => _lModulation;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(LModulation), 0);
-                _lModulation = value;
-            }
-        }
+        private double _lModulation;
 
         /// <summary>
         /// Gets or sets the drain resistance.
@@ -110,15 +70,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
         [GreaterThanOrEquals(0)]
-        public double DrainResistance
-        {
-            get => _drainResistance;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(DrainResistance), 0);
-                _drainResistance = value;
-            }
-        }
+        private double _drainResistance;
 
         /// <summary>
         /// Gets or sets the source resistance.
@@ -128,15 +80,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
         [GreaterThanOrEquals(0)]
-        public double SourceResistance
-        {
-            get => _sourceResistance;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(SourceResistance), 0);
-                _sourceResistance = value;
-            }
-        }
+        private double _sourceResistance;
 
         /// <summary>
         /// Gets or sets the gate-source junction capacitance.
@@ -146,15 +90,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("cgs"), ParameterInfo("G-S junction capacitance", Units = "F")]
         [GreaterThanOrEquals(0)]
-        public double CapGs
-        {
-            get => _capGs;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(CapGs), 0);
-                _capGs = value;
-            }
-        }
+        private double _capGs;
 
         /// <summary>
         /// Gets or sets the gate-drain junction capacitance.
@@ -164,15 +100,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("cgd"), ParameterInfo("G-D junction capacitance", Units = "F")]
         [GreaterThanOrEquals(0)]
-        public double CapGd
-        {
-            get => _capGd;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(CapGd), 0);
-                _capGd = value;
-            }
-        }
+        private double _capGd;
 
         /// <summary>
         /// Gets or sets the gate junction potential.
@@ -182,15 +110,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("pb"), ParameterInfo("Gate junction potential", Units = "V")]
         [GreaterThan(0)]
-        public double GatePotential
-        {
-            get => _gatePotential;
-            set
-            {
-                Utility.GreaterThan(value, nameof(GatePotential), 0);
-                _gatePotential = value;
-            }
-        }
+        private double _gatePotential = 1;
 
         /// <summary>
         /// Gets or sets the gate saturation current.
@@ -200,15 +120,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("is"), ParameterInfo("Gate junction saturation current", Units = "A")]
         [GreaterThan(0)]
-        public double GateSaturationCurrent
-        {
-            get => _gateSaturationCurrent;
-            set
-            {
-                Utility.GreaterThan(value, nameof(GateSaturationCurrent), 0);
-                _gateSaturationCurrent = value;
-            }
-        }
+        private double _gateSaturationCurrent = 1e-14;
 
         /// <summary>
         /// Gets or sets the forward bias junction fitting parameter.
@@ -218,16 +130,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fitting parameter")]
         [GreaterThan(0), UpperLimit(0.95)]
-        public double DepletionCapCoefficient
-        {
-            get => _depletionCapCoefficient;
-            set
-            {
-                Utility.GreaterThan(value, nameof(DepletionCapCoefficient), 0);
-                value = Utility.UpperLimit(value, this, nameof(DepletionCapCoefficient), 0.95);
-                _depletionCapCoefficient = value;
-            }
-        }
+        private double _depletionCapCoefficient = 0.5;
 
         /// <summary>
         /// Gets the doping tail parameter.
@@ -237,15 +140,7 @@ namespace SpiceSharp.Components.JFETs
         /// </value>
         [ParameterName("b"), ParameterInfo("Doping tail parameter")]
         [GreaterThanOrEquals(0)]
-        public double B
-        {
-            get => _b;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(B), 0);
-                _b = value;
-            }
-        }
+        private double _b = 1;
 
         /// <summary>
         /// Gets or sets the type of the JFET.

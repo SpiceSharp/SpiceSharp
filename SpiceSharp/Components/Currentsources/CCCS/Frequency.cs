@@ -15,7 +15,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     [BehaviorFor(typeof(CurrentControlledCurrentSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly OnePort<Complex> _variables;

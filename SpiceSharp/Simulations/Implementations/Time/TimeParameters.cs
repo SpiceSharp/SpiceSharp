@@ -1,6 +1,7 @@
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -8,13 +9,8 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="ITimeSimulation"/> with all the necessary parameters to do a transient analysis.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    [GeneratedParameters]
-    public abstract class TimeParameters : ParameterSet
+    public abstract partial class TimeParameters : ParameterSet
     {
-        private int _transientMaxIterations = 10;
-        private double _stopTime;
-        private double _startTime;
-
         /// <summary>
         /// Gets or sets the start time.
         /// </summary>
@@ -24,15 +20,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentException">Thrown if the timepoint is negative.</exception>
         [ParameterName("tstart"), ParameterName("t0"), ParameterInfo("The initial timepoint to start exporting data.")]
         [GreaterThanOrEquals(0)]
-        public double StartTime
-        {
-            get => _startTime;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(StartTime), 0);
-                _startTime = value;
-            }
-        }
+        private double _startTime;
 
         /// <summary>
         /// Gets or sets the stop time.
@@ -43,15 +31,7 @@ namespace SpiceSharp.Simulations
         /// <exception cref="ArgumentException">Thrown if the timepoint is negative.</exception>
         [ParameterName("tstop"), ParameterInfo("The final timepoint.")]
         [GreaterThanOrEquals(0)]
-        public double StopTime
-        {
-            get => _stopTime;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(StopTime), 0);
-                _stopTime = value;
-            }
-        }
+        private double _stopTime;
 
         /// <summary>
         /// Gets or sets a value indicating whether initial conditions should be set by the entities.
@@ -70,15 +50,7 @@ namespace SpiceSharp.Simulations
         /// </value>
         [ParameterName("itl4"), ParameterInfo("The maximum number of transient timepoint iterations.")]
         [GreaterThan(0)]
-        public int TransientMaxIterations
-        {
-            get => _transientMaxIterations;
-            set
-            {
-                Utility.GreaterThan(value, nameof(TransientMaxIterations), 0);
-                _transientMaxIterations = value;
-            }
-        }
+        private int _transientMaxIterations = 10;
 
         /// <summary>
         /// Gets the initial conditions.

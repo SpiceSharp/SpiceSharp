@@ -15,7 +15,8 @@ namespace SpiceSharp.Components.CurrentSources
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     [BehaviorFor(typeof(CurrentSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly IComplexSimulationState _complex;

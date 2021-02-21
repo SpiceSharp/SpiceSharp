@@ -1,4 +1,5 @@
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Bipolars
 {
@@ -7,11 +8,8 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet
     {
-        private double _area = 1;
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
-
         /// <summary>
         /// Gets or sets the temperature in degrees Celsius.
         /// </summary>
@@ -33,15 +31,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0)]
-        public GivenParameter<double> Temperature
-        {
-            get => _temperature;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Temperature), 0);
-                _temperature = value;
-            }
-        }
+        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the area of the transistor.
@@ -51,15 +41,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
         [GreaterThan(0)]
-        public double Area
-        {
-            get => _area;
-            set
-            {
-                Utility.GreaterThan(value, nameof(Area), 0);
-                _area = value;
-            }
-        }
+        private double _area = 1;
 
         /// <summary>
         /// Gets or sets whether or not the device is initially off (non-conducting).

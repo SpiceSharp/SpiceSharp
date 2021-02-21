@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Biasing,
         IBiasingBehavior,
         ITimeBehavior

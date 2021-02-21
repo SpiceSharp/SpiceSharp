@@ -10,7 +10,8 @@ namespace SpiceSharp.Components.VoltageSources
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IAcceptBehavior"/>
     [BehaviorFor(typeof(VoltageSource)), AddBehaviorIfNo(typeof(IAcceptBehavior))]
-    public class Accept : Biasing,
+    [GeneratedParameters]
+    public partial class Accept : Biasing,
         IAcceptBehavior
     {
         /// <summary>

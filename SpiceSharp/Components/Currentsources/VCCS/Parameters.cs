@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.VoltageControlledCurrentSources
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
     /// Base parameters for a <see cref="VoltageControlledCurrentSource"/>
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the transconductance gain.

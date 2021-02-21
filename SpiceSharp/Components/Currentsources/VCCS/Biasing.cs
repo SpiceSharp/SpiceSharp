@@ -16,7 +16,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="VoltageControlledCurrentSources.Parameters"/>
     [BehaviorFor(typeof(VoltageControlledCurrentSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class BiasingBehavior : Behavior,
+    [GeneratedParameters]
+    public partial class BiasingBehavior : Behavior,
         IBiasingBehavior,
         IParameterized<Parameters>
     {

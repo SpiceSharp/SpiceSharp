@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.ParameterSets;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -7,7 +8,8 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="DC" /> simulation.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class DCParameters : ParameterSet
+    [GeneratedParameters]
+    public partial class DCParameters : ParameterSet
     {
         /// <summary>
         /// Gets the list of sweeps that need to be executed.

@@ -1,6 +1,7 @@
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.ObjectModel;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -8,11 +9,8 @@ namespace SpiceSharp.Algebra.Solve
     /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    [GeneratedParameters]
-    public class Markowitz<T> : ParameterSet
+    public partial class Markowitz<T> : ParameterSet
     {
-        private double _absolutePivotThreshold = 1e-13;
-        private double _relativePivotThreshold = 1e-3;
         private int[] _markowitzRow;
         private int[] _markowitzColumn;
         private int[] _markowitzProduct;
@@ -76,15 +74,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
-        public double RelativePivotThreshold
-        {
-            get => _relativePivotThreshold;
-            set
-            {
-                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
-                _relativePivotThreshold = value;
-            }
-        }
+        private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
@@ -97,15 +87,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
-        public double AbsolutePivotThreshold
-        {
-            get => _absolutePivotThreshold;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
-                _absolutePivotThreshold = value;
-            }
-        }
+        private double _absolutePivotThreshold = 1e-13;
 
         /// <summary>
         /// Gets the strategies used for finding a pivot.

@@ -18,7 +18,8 @@ namespace SpiceSharp.Components.Switches
     [BehaviorFor(typeof(CurrentSwitch))]
     [BehaviorFor(typeof(VoltageSwitch))]
     [AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Behavior, IBiasingBehavior,
+    [GeneratedParameters]
+    public partial class Biasing : Behavior, IBiasingBehavior,
         IParameterized<Parameters>
     {
         private readonly Func<double> _controller;
@@ -134,9 +135,9 @@ namespace SpiceSharp.Components.Switches
                 if (UseOldState)
                 {
                     // Calculate the current state
-                    if (ctrl > ModelTemperature.Threshold + ModelTemperature.Hysteresis)
+                    if (ctrl > ModelTemperature.Parameters.Threshold + ModelTemperature.Hysteresis)
                         currentState = true;
-                    else if (ctrl < ModelTemperature.Threshold - ModelTemperature.Hysteresis)
+                    else if (ctrl < ModelTemperature.Parameters.Threshold - ModelTemperature.Hysteresis)
                         currentState = false;
                     else
                         currentState = PreviousState;
@@ -148,12 +149,12 @@ namespace SpiceSharp.Components.Switches
                     PreviousState = CurrentState;
 
                     // Calculate the current state
-                    if (ctrl > ModelTemperature.Threshold + ModelTemperature.Hysteresis)
+                    if (ctrl > ModelTemperature.Parameters.Threshold + ModelTemperature.Hysteresis)
                     {
                         CurrentState = true;
                         currentState = true;
                     }
-                    else if (ctrl < ModelTemperature.Threshold - ModelTemperature.Hysteresis)
+                    else if (ctrl < ModelTemperature.Parameters.Threshold - ModelTemperature.Hysteresis)
                     {
                         CurrentState = false;
                         currentState = false;

@@ -2,6 +2,7 @@
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components
 {
@@ -10,6 +11,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
+    [GeneratedParameters]
     public partial class Pwl : ParameterSet,
         IWaveformDescription
     {

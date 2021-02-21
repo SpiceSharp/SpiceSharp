@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.Switches
     [BehaviorFor(typeof(CurrentSwitch))]
     [BehaviorFor(typeof(VoltageSwitch))]
     [AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;

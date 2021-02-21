@@ -1,11 +1,14 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
     /// A configuration for a <see cref="Noise"/> analysis.
     /// </summary>
-    public class NoiseParameters : ParameterSet
+    /// <seealso cref="ParameterSet"/>
+    [GeneratedParameters]
+    public partial class NoiseParameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the noise output node name.

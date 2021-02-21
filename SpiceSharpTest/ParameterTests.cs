@@ -1,48 +1,50 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharpTest.Parameters
 {
+    /// <summary>
+    /// Example parameter class that contains parameters of every type
+    /// </summary>
+    [GeneratedParameters]
+    public partial class ParameterExample : ParameterSet
+    {
+        [ParameterName("field1")]
+        public double Field1;
+
+        [ParameterName("field2")]
+        public int Field2;
+
+        [ParameterName("property1")]
+        public double Property1 { get; private set; }
+
+        [ParameterName("property2")]
+        public int Property2 { get; set; }
+
+        [ParameterName("method1")]
+        public void SetMethod1(double value) => Property1 = value;
+
+        [ParameterName("method2")]
+        public double GetMethod() => 1.0;
+
+        [ParameterName("parameter1")]
+        public GivenParameter<double> Parameter1 { get; set; }
+
+        [ParameterName("parameter2")]
+        public GivenParameter<int> Parameter2 { get; set; } = new GivenParameter<int>();
+
+        [ParameterName("principal"), ParameterInfo("Principal parameter", IsPrincipal = true)]
+        public GivenParameter<double> PrincipalTest { get; set; } = new GivenParameter<double>(0.8, false);
+    }
+
     /// <summary>
     /// Summary description for ParameterTests
     /// </summary>
     [TestFixture]
     public class ParameterTests
     {
-        /// <summary>
-        /// Example parameter class that contains parameters of every type
-        /// </summary>
-        private class ParameterExample : ParameterSet
-        {
-            [ParameterName("field1")]
-            public double Field1;
-
-            [ParameterName("field2")]
-            public int Field2;
-
-            [ParameterName("property1")]
-            public double Property1 { get; private set; }
-
-            [ParameterName("property2")]
-            public int Property2 { get; set; }
-
-            [ParameterName("method1")]
-            public void SetMethod1(double value) => Property1 = value;
-
-            [ParameterName("method2")]
-            public double GetMethod() => 1.0;
-
-            [ParameterName("parameter1")]
-            public GivenParameter<double> Parameter1 { get; set; }
-
-            [ParameterName("parameter2")]
-            public GivenParameter<int> Parameter2 { get; set; } = new GivenParameter<int>();
-
-            [ParameterName("principal"), ParameterInfo("Principal parameter", IsPrincipal = true)]
-            public GivenParameter<double> PrincipalTest { get; set; } = new GivenParameter<double>(0.8, false);
-        }
-
         [Test]
         public void When_CopyPropertiesAndFields_CopiesField()
         {

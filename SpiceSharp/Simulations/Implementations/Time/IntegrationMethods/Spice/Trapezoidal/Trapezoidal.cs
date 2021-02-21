@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {
@@ -7,6 +8,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
     /// implemented by Spice 3f5.
     /// </summary>
     /// <seealso cref="SpiceMethod" />
+    [GeneratedParameters]
     public partial class Trapezoidal : SpiceMethod
     {
         /// <summary>
@@ -16,7 +18,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// The xmu constant.
         /// </value>
         [ParameterName("xmu"), ParameterInfo("The xmu parameter.")]
-        public double Xmu { get; } = 0.5;
+        public double Xmu { get; set; } = 0.5;
 
         /// <summary>
         /// Creates an instance of the integration method for an associated <see cref="IBiasingSimulationState" />.

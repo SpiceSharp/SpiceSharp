@@ -16,7 +16,8 @@ namespace SpiceSharp.Components.Inductors
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
     [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
     {
@@ -33,7 +34,7 @@ namespace SpiceSharp.Components.Inductors
         public Complex ComplexCurrent => Branch.Value;
 
         /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
-        [ParameterName("p"), ParameterName("The complex power")]
+        [ParameterName("p"), ParameterInfo("The complex power")]
         public Complex ComplexPower => -Branch.Value * (_variables.Positive.Value - _variables.Negative.Value);
 
         /// <inheritdoc/>

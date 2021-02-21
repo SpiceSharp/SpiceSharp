@@ -1,9 +1,12 @@
-﻿namespace SpiceSharp.Simulations.IntegrationMethods
+﻿using SpiceSharp.Attributes;
+
+namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// A class that implements the Gear integration method.
     /// </summary>
     /// <seealso cref="SpiceMethod" />
+    [GeneratedParameters]
     public partial class Gear : SpiceMethod
     {
         /// <summary>

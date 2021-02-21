@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.ParameterSets;
 using System;
 using System.Numerics;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.CommonBehaviors
 {
@@ -8,7 +9,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// Parameters that are common to an independent source.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-    [GeneratedParameters(AddNames = true, AddRules = false)]
+    [GeneratedParameters]
     public partial class IndependentSourceParameters : ParameterSet
     {
         /// <summary>

@@ -2,6 +2,7 @@
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.ParallelComponents
 {
@@ -9,7 +10,8 @@ namespace SpiceSharp.Components.ParallelComponents
     /// Base parameters for a <see cref="ParallelComponents"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet
     {
         /// <summary>
         /// Gets or sets the entities that should be run in parallel.

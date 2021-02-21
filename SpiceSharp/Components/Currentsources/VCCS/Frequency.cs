@@ -15,7 +15,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
     /// <seealso cref="BiasingBehavior"/>
     /// <seealso cref="IFrequencyBehavior"/>
     [BehaviorFor(typeof(VoltageControlledCurrentSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class FrequencyBehavior : BiasingBehavior,
+    [GeneratedParameters]
+    public partial class FrequencyBehavior : BiasingBehavior,
         IFrequencyBehavior
     {
         private readonly IComplexSimulationState _complex;

@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.VoltageSources
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="IndependentSourceParameters"/>
     [BehaviorFor(typeof(VoltageSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Behavior,
+    [GeneratedParameters]
+    public partial class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,
         IParameterized<IndependentSourceParameters>

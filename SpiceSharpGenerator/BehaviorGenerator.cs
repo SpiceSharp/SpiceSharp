@@ -1,10 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
+using ClassDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;
+using FieldDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.FieldDeclarationSyntax;
 
 namespace SpiceSharpGenerator
 {
@@ -14,19 +13,17 @@ namespace SpiceSharpGenerator
     [Generator]
     public class BehaviorGenerator : ISourceGenerator
     {
-        private static object _lock = new object();
-
         /// <inheritdoc/>
         public void Initialize(GeneratorInitializationContext context)
         {
             // No initialization required for this one
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-            /*
+            
 #if DEBUG
             if (!Debugger.IsAttached)
                 Debugger.Launch();
 #endif
-            */
+            
         }
 
         /// <inheritdoc/>
@@ -36,8 +33,17 @@ namespace SpiceSharpGenerator
                 return;
 
             // Get all the binding contexts
+            var bindingContexts = GetBindingContexts(context, receiver.BindingContexts.Keys);
+            var behaviorMap = GetBehaviorMap(context, receiver.Behaviors.Keys);
+            CreateBehaviorFactories(context, bindingContexts, behaviorMap, receiver.Entities.Keys);
+            var generatedProperties = CreatePropertyChecks(context, receiver.CheckedFields.Keys);
+            CreatePropertyParameterMethods(context, receiver.ParameterSets.Keys, generatedProperties);
+        }
+
+        private BindingContextCollection GetBindingContexts(GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> @classes)
+        {
             var contexts = new BindingContextCollection();
-            foreach (var bindingContext in receiver.BindingContexts)
+            foreach (var bindingContext in @classes)
             {
                 var model = context.Compilation.GetSemanticModel(bindingContext.SyntaxTree);
                 var symbol = model.GetDeclaredSymbol(bindingContext, context.CancellationToken) as INamedTypeSymbol;
@@ -49,14 +55,17 @@ namespace SpiceSharpGenerator
                     contexts.Add(target, symbol);
                 }
             }
-
+            return contexts;
+        }
+        private Dictionary<INamedTypeSymbol, List<BehaviorData>> GetBehaviorMap(GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> @classes)
+        {
             // First bin all the behaviors based on the entity that they
 #pragma warning disable RS1024 // Compare symbols correctly
             var behaviorMap = new Dictionary<INamedTypeSymbol, List<BehaviorData>>(SymbolEqualityComparer.Default);
             var created = new List<BehaviorData>(8);
             var required = new List<INamedTypeSymbol>(4);
 #pragma warning restore RS1024 // Compare symbols correctly
-            foreach (var behavior in receiver.Behaviors)
+            foreach (var behavior in @classes)
             {
                 var model = context.Compilation.GetSemanticModel(behavior.SyntaxTree);
                 var symbol = model.GetDeclaredSymbol(behavior, context.CancellationToken) as INamedTypeSymbol;
@@ -111,29 +120,68 @@ namespace SpiceSharpGenerator
                     c.Required = arr;
                 }
             }
-
+            return behaviorMap;
+        }
+        private void CreateBehaviorFactories(GeneratorExecutionContext context,
+            BindingContextCollection bindingContexts,
+            Dictionary<INamedTypeSymbol, List<BehaviorData>> behaviorMap,
+            IEnumerable<ClassDeclarationSyntax> @classes)
+        {
             // Let's start by generating code for incomplete entities
-            foreach (var entity in receiver.Entities)
+            foreach (var entity in @classes)
             {
                 var model = context.Compilation.GetSemanticModel(entity.SyntaxTree);
                 var symbol = model.GetDeclaredSymbol(entity, context.CancellationToken) as INamedTypeSymbol;
 
                 // Get the set of behaviors for this entity
-                var bindingContext = contexts.GetBindingContext(symbol);
+                var bindingContext = bindingContexts.GetBindingContext(symbol);
                 var factory = new BehaviorFactoryResolver(symbol, behaviorMap[symbol], bindingContext);
                 var code = factory.Create();
                 context.AddSource(symbol.ToString() + ".cs", code);
-
-#if DEBUG
-                lock (_lock)
-                {
-                    var filename = Path.Combine("C:/tmp", symbol.ToString() + ".cs");
-                    using var sw = new StreamWriter(filename, false);
-                    sw.WriteLine(code);
-                    sw.Close();
-                }
-#endif
             }
+        }
+        private void CreatePropertyParameterMethods(GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> @classes,
+            Dictionary<INamedTypeSymbol, GeneratedPropertyCollection> generatedProperties)
+        {
+            foreach (var parameterset in @classes)
+            {
+                var model = context.Compilation.GetSemanticModel(parameterset.SyntaxTree);
+                var symbol = model.GetDeclaredSymbol(parameterset, context.CancellationToken) as INamedTypeSymbol;
+
+                var factory = new ParameterImportExportResolver(symbol, generatedProperties);
+                var code = factory.Create();
+                context.AddSource($"{symbol}.Named.cs", code);
+            }
+        }
+        private Dictionary<INamedTypeSymbol, GeneratedPropertyCollection> CreatePropertyChecks(GeneratorExecutionContext context, IEnumerable<FieldDeclarationSyntax> fields)
+        {
+#pragma warning disable RS1024 // Compare symbols correctly
+            var map = new Dictionary<INamedTypeSymbol, List<(IFieldSymbol, SyntaxTriviaList)>>(SymbolEqualityComparer.Default);
+            var generated = new Dictionary<INamedTypeSymbol, GeneratedPropertyCollection>(SymbolEqualityComparer.Default);
+#pragma warning restore RS1024 // Compare symbols correctly
+            foreach (var field in fields)
+            {
+                var model = context.Compilation.GetSemanticModel(field.SyntaxTree);
+                foreach (var variable in field.Declaration.Variables)
+                {
+                    var symbol = model.GetDeclaredSymbol(variable, context.CancellationToken) as IFieldSymbol;
+                    var @class = symbol.ContainingType;
+                    if (!map.TryGetValue(@class, out var list))
+                    {
+                        list = new List<(IFieldSymbol, SyntaxTriviaList)>();
+                        map.Add(@class, list);
+                    }
+                    list.Add((symbol, field.GetLeadingTrivia()));
+                }
+            }
+            foreach (var pair in map)
+            {
+                var factory = new PropertyResolver(pair.Key, pair.Value);
+                var code = factory.Create();
+                context.AddSource($"{pair.Key.ContainingNamespace}.{pair.Key.Name}.AutoProperties.cs", code);
+                generated.Add(pair.Key, factory.Generated);
+            }
+            return generated;
         }
     }
 }
