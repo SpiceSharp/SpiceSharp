@@ -172,13 +172,6 @@ namespace SpiceSharpGenerator
 
         private IEnumerable<string> GetCode()
         {
-            // Let use first create the Enum
-            yield return "private enum NamedParameters";
-            yield return "{";
-            foreach (var variable in _namedMap.Values.Distinct())
-                yield return $"\t{variable},";
-            yield return "}";
-
             // Create the dictionary
             yield return "private static Dictionary<string, int> _namedMap = new Dictionary<string, int>(SpiceSharp.Constants.DefaultComparer)";
             yield return "{";
@@ -191,36 +184,6 @@ namespace SpiceSharpGenerator
             {
                 if (pair.Value.HasImport)
                 {
-                    // SetParameter(name, value)
-                    yield return "/// <inheritdoc/>";
-                    yield return $"void IImportParameterSet<{pair.Key}>.SetParameter(string name, {pair.Key} value)";
-                    yield return "{";
-                    yield return $"\tif (((IImportParameterSet<{pair.Key}>)this).TrySetParameter(name, value))";
-                    yield return "\t\treturn;";
-                    yield return $"\tthrow new ParameterNotFoundException(this, name, typeof({pair.Key}));";
-                    yield return "}";
-
-                    // TrySetParameter(name)
-                    yield return "/// <inheritdoc/>";
-                    yield return $"bool IImportParameterSet<{pair.Key}>.TrySetParameter(string name, {pair.Key} value)";
-                    yield return "{";
-                    yield return "\tif (_namedMap.TryGetValue(name, out var id))";
-                    yield return "\t{";
-                    yield return "\t\tswitch (id)";
-                    yield return "\t\t{";
-                    foreach (var pp in pair.Value)
-                    {
-                        if (pp.Value.Setter == null)
-                            continue;
-                        yield return $"\t\t\tcase NamedParameters.{_namedMap[pp.Key]}:";
-                        yield return $"\t\t\t\t{pp.Value.Setter};";
-                        yield return $"\t\t\t\treturn true;";
-                    }
-                    yield return "\t\t}";
-                    yield return "\t}";
-                    yield return "\treturn false;";
-                    yield return "}";
-
                     // CreateParameterSetter
                     yield return "/// <inheritdoc/>";
                     yield return $"Action<{pair.Key}> IImportParameterSet<{pair.Key}>.GetParameterSetter(string name)";
@@ -244,38 +207,6 @@ namespace SpiceSharpGenerator
 
                 if (pair.Value.HasExport)
                 {
-                    // GetProperty(name)
-                    yield return "/// <inheritdoc/>";
-                    yield return $"{pair.Key} IExportPropertySet<{pair.Key}>.GetProperty(string name)";
-                    yield return "{";
-                    yield return $"\t{pair.Key} result = ((IExportPropertySet<{pair.Key}>)this).TryGetProperty(name, out bool isValid);";
-                    yield return "\tif (isValid)";
-                    yield return "\t\treturn result;";
-                    yield return $"\tthrow new ParameterNotFoundException(this, name, typeof({pair.Key}));";
-                    yield return "}";
-                
-                    // TryGetProperty(name, out value)
-                    yield return "/// <inheritdoc/>";
-                    yield return $"{pair.Key} IExportPropertySet<{pair.Key}>.TryGetProperty(string name, out bool isValid)";
-                    yield return "{";
-                    yield return "\tisValid = true;";
-                    yield return "\tif (_namedMap.TryGetValue(name, out var id))";
-                    yield return "\t{";
-                    yield return "\t\tswitch (id)";
-                    yield return "\t\t{";
-                    foreach (var pp in pair.Value)
-                    {
-                        if (pp.Value.Getter == null)
-                            continue;
-                        yield return $"\t\t\tcase NamedParameters.{_namedMap[pp.Key]}:";
-                        yield return $"\t\t\t\treturn {pp.Value.Getter};";
-                    }
-                    yield return "\t\t}";
-                    yield return "\t}";
-                    yield return "\tisValid = false;";
-                    yield return "\treturn default;";
-                    yield return "}";
-
                     // CreatePropertyGetter
                     yield return "/// <inheritdoc/>";
                     yield return $"Func<{pair.Key}> IExportPropertySet<{pair.Key}>.GetPropertyGetter(string name)";
