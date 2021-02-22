@@ -52,10 +52,15 @@ namespace SpiceSharp.ParameterSets
         {
             // If we have a generic implementation for it, use that instead
             if (this is IImportParameterSet<P> ips)
-                ips.SetParameter(name, value);
-            else
-                throw new ParameterNotFoundException(this, name, typeof(P));
-                //ReflectionHelper.Set(this, name, value);
+            {
+                var method = ips.GetParameterSetter(name);
+                if (method != null)
+                {
+                    method.Invoke(value);
+                    return;
+                }
+            }
+            throw new ParameterNotFoundException(this, name, typeof(P));
         }
 
         /// <inheritdoc/>
@@ -63,10 +68,15 @@ namespace SpiceSharp.ParameterSets
         {
             // If we have a generic implementation for it, use that instead
             if (this is IImportParameterSet<P> ips)
-                return ips.TrySetParameter(name, value);
-            else
-                return false;
-                // return ReflectionHelper.TrySet(this, name, value);
+            {
+                var method = ips.GetParameterSetter(name);
+                if (method != null)
+                {
+                    method.Invoke(value);
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <inheritdoc/>
@@ -74,10 +84,12 @@ namespace SpiceSharp.ParameterSets
         {
             // If we have a generic implementation for it, use that instead
             if (this is IExportPropertySet<P> eps)
-                return eps.GetProperty(name);
-            else
-                throw new ParameterNotFoundException(this, name, typeof(P));
-                // return ReflectionHelper.Get<P>(this, name);
+            {
+                var method = eps.GetPropertyGetter(name);
+                if (method != null)
+                    return method.Invoke();
+            }
+            throw new ParameterNotFoundException(this, name, typeof(P));
         }
 
         /// <inheritdoc/>
@@ -86,15 +98,15 @@ namespace SpiceSharp.ParameterSets
             // If we have a generic implementation for it, use that instead
             if (this is IExportPropertySet<P> eps)
             {
-                value = eps.TryGetProperty(name, out var isValid);
-                return isValid;
+                var method = eps.GetPropertyGetter(name);
+                if (method != null)
+                {
+                    value = method.Invoke();
+                    return true;
+                }
             }
-            else
-            {
-                value = default;
-                return false;
-            }
-            // return ReflectionHelper.TryGet(this, name, out value);
+            value = default;
+            return false;
         }
 
         /// <inheritdoc/>
@@ -102,10 +114,8 @@ namespace SpiceSharp.ParameterSets
         {
             // If we have a generic implementation for it, use that instead
             if (this is IImportParameterSet<P> ips)
-                return ips.CreateParameterSetter(name);
-            else
-                return null;
-                // return ReflectionHelper.CreateSetter<P>(this, name);
+                return ips.GetParameterSetter(name);
+            return null;
         }
 
         /// <inheritdoc/>
@@ -113,10 +123,8 @@ namespace SpiceSharp.ParameterSets
         {
             // If we have a generic implementation for it, use that instead
             if (this is IExportPropertySet<P> eps)
-                return eps.CreatePropertyGetter(name);
-            else
-                return null;
-                // return ReflectionHelper.CreateGetter<P>(this, name);
+                return eps.GetPropertyGetter(name);
+            return null;
         }
     }
 }

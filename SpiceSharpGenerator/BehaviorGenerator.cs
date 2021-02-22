@@ -18,12 +18,12 @@ namespace SpiceSharpGenerator
         {
             // No initialization required for this one
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-            
+            /*
 #if DEBUG
             if (!Debugger.IsAttached)
                 Debugger.Launch();
 #endif
-            
+            */
         }
 
         /// <inheritdoc/>

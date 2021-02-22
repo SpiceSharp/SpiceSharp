@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp.Diagnostics
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp.Diagnostics
     /// Exception thrown when a parameter cannot be found.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class ParameterNotFoundException : SpiceSharpException
     {
         /// <summary>
@@ -39,7 +35,6 @@ namespace SpiceSharp.Diagnostics
         /// </value>
         public string ParameterName { get; } = "";
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterNotFoundException"/> class.
         /// </summary>
@@ -71,7 +66,6 @@ namespace SpiceSharp.Diagnostics
             info.AddValue(nameof(ParameterizedObject), ParameterizedObject?.ToString());
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterNotFoundException"/> class.

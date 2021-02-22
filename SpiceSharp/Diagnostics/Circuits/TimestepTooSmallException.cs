@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp
     /// Exception thrown when the timestep is too small.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class TimestepTooSmallException : SpiceSharpException
     {
         /// <summary>
@@ -31,7 +27,6 @@ namespace SpiceSharp
         /// </value>
         public virtual double Time { get; } = double.NaN;
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="TimestepTooSmallException"/> class.
         /// </summary>
@@ -57,7 +52,6 @@ namespace SpiceSharp
             info.AddValue(nameof(Time), Time);
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimestepTooSmallException"/> class.

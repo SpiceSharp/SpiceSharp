@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp
     /// Exception thrown when nodes aren't matched.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class NodeMismatchException : SpiceSharpException
     {
         /// <summary>
@@ -31,7 +27,6 @@ namespace SpiceSharp
         /// </value>
         public virtual int Actual { get; } = -1;
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
         /// </summary>
@@ -57,7 +52,6 @@ namespace SpiceSharp
             info.AddValue(nameof(Expected), Expected);
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NodeMismatchException"/> class.
