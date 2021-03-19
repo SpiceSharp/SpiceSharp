@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SpiceSharp.Reflection
+namespace SpiceSharp.Documentation
 {
     /// <summary>
     /// A helper class that helps listing documentation at runtime.
@@ -21,19 +21,25 @@ namespace SpiceSharp.Reflection
         /// <param name="type">The type.</param>
         /// <returns>All the members on a type.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
-        public static IEnumerable<MemberDescription> GetMembers(Type type)
+        public static IEnumerable<MemberDocumentation> GetMembers(Type type)
         {
             var info = type.ThrowIfNull(nameof(type)).GetTypeInfo();
             foreach (var member in info.GetMembers(BindingFlags.Instance | BindingFlags.Public))
             {
                 var mt = member.MemberType;
+
+                // Filter by type
                 if (mt != MemberTypes.Property &&
                     mt != MemberTypes.Field &&
                     mt != MemberTypes.Method)
                     continue;
-                var md = new MemberDescription(member);
-                if (md.Names != null && md.Names.Count > 0)
-                    yield return md;
+
+                // Make sure it can be named
+                if (!member.GetCustomAttributes<ParameterNameAttribute>().Any())
+                    continue;
+
+                // Create documentation
+                yield return new MemberDocumentation(member);
             }
         }
 
@@ -43,19 +49,13 @@ namespace SpiceSharp.Reflection
         /// <param name="type">The component type.</param>
         /// <returns>The pin names.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
-        public static IEnumerable<string> Pins(Type type)
+        public static IReadOnlyList<string> Pins(Type type)
         {
             type.ThrowIfNull(nameof(type));
-            var attributes = AttributeCache
-                .GetAttributes(type)
-                .Where(a => a is PinAttribute)
-                .Cast<PinAttribute>()
-                .ToArray();
-
-            // Store the pin names in order
-            var pins = new string[attributes.Length];
-            foreach (var attr in attributes)
-                pins[attr.Index] = attr.Name;
+            var pinAttributes = type.GetCustomAttributes<PinAttribute>().ToArray();
+            var pins = new string[pinAttributes.Length];
+            foreach (var attribute in pinAttributes)
+                pins[attribute.Index] = attribute.Name;
             return pins;
         }
 
@@ -66,7 +66,7 @@ namespace SpiceSharp.Reflection
         /// <returns>The pin names.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="component"/> is <c>null</c>.</exception>
         public static IEnumerable<string> Pins(this IComponent component)
-            => Pins(component.ThrowIfNull(nameof(component)).GetType());
+            => Pins(component?.GetType());
 
         /// <summary>
         /// Enumerates all the named members.
@@ -75,7 +75,7 @@ namespace SpiceSharp.Reflection
         /// <returns>
         /// The named parameters.
         /// </returns>
-        public static IEnumerable<MemberDescription> Parameters(this IParameterSetCollection parameterized)
+        public static IEnumerable<MemberDocumentation> Parameters(this IParameterSetCollection parameterized)
         {
             foreach (var ps in parameterized.ParameterSets)
             {
@@ -100,19 +100,8 @@ namespace SpiceSharp.Reflection
         /// All the named parameters.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameters"/> is <c>null</c>.</exception>
-        public static IEnumerable<MemberDescription> Parameters(this IParameterSet parameters)
-            => Parameters(parameters.ThrowIfNull(nameof(parameters)).GetType());
-
-        /// <summary>
-        /// Enumerates all the named members (all parameters and properties with the <see cref="ParameterNameAttribute"/> attribute) on a type.
-        /// </summary>
-        /// <param name="type">The type containing the parameters.</param>
-        /// <returns>
-        /// The named parameters.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="type"/> is <c>null</c>.</exception>
-        public static IEnumerable<MemberDescription> Parameters(Type type)
-            => ReflectionHelper.GetParameterMap(type.ThrowIfNull(nameof(type))).Members.Where(p => p.Names.Count > 0);
+        public static IEnumerable<MemberDocumentation> Parameters(this IParameterSet parameters)
+            => GetMembers(parameters?.GetType());
 
         /// <summary>
         /// Creates a dictionary of all properties and their values on a parameter set.
@@ -123,16 +112,16 @@ namespace SpiceSharp.Reflection
         /// <returns>
         /// A read-only dictionary for all members and their values.
         /// </returns>
-        public static IReadOnlyDictionary<MemberDescription, T> ParameterValues<T>(this IParameterSetCollection parameterSetCollection, bool givenOnly = true)
+        public static IReadOnlyDictionary<MemberDocumentation, T> ParameterValues<T>(this IParameterSetCollection parameterSetCollection, bool givenOnly = true)
         {
-            var result = new Dictionary<MemberDescription, T>();
+            var result = new Dictionary<MemberDocumentation, T>();
             foreach (var ps in parameterSetCollection.ParameterSets)
             {
                 var n = ParameterValues<T>(ps, givenOnly);
                 foreach (var pair in n)
                     result.Add(pair.Key, pair.Value);
             }
-            return new ReadOnlyDictionary<MemberDescription, T>(result);
+            return new ReadOnlyDictionary<MemberDocumentation, T>(result);
         }
 
         /// <summary>
@@ -145,27 +134,27 @@ namespace SpiceSharp.Reflection
         /// A read-only dictionary for all members and their values.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameterSet"/> is <c>null</c>.</exception>
-        public static IReadOnlyDictionary<MemberDescription, T> ParameterValues<T>(this IParameterSet parameterSet, bool givenOnly = true)
+        public static IReadOnlyDictionary<MemberDocumentation, T> ParameterValues<T>(this IParameterSet parameterSet, bool givenOnly = true)
         {
             parameterSet.ThrowIfNull(nameof(parameterSet));
-            var result = new Dictionary<MemberDescription, T>();
-            foreach (var member in Parameters(parameterSet.GetType()))
+            var result = new Dictionary<MemberDocumentation, T>();
+            foreach (var member in Parameters(parameterSet))
             {
                 if (member.Names == null || member.Names.Count == 0)
                     continue;
                 if (givenOnly)
                 {
-                    if (member.TryGet<GivenParameter<T>>(parameterSet, out var gp))
+                    if (parameterSet.TryGetProperty<GivenParameter<T>>(member.Names[0], out var gp))
                     {
                         if (gp.Given)
                             result.Add(member, gp.Value);
                         continue;
                     }
                 }
-                if (parameterSet.TryGetProperty<T>(member.Names.First(), out var value))
+                if (parameterSet.TryGetProperty<T>(member.Names[0], out var value))
                     result.Add(member, value);
             }
-            return new ReadOnlyDictionary<MemberDescription, T>(result);
+            return new ReadOnlyDictionary<MemberDocumentation, T>(result);
         }
 
         /// <summary>
@@ -177,18 +166,18 @@ namespace SpiceSharp.Reflection
         /// The string representation for all parameters and their values.
         /// </returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parameterValues"/> is <c>null</c>.</exception>
-        public static string AsString<T>(this IReadOnlyDictionary<MemberDescription, T> parameterValues)
+        public static string AsString<T>(this IReadOnlyDictionary<MemberDocumentation, T> parameterValues)
         {
             parameterValues.ThrowIfNull(nameof(parameterValues));
-            StringBuilder sb = new StringBuilder(parameterValues.Count * 10);
+            var sb = new StringBuilder(parameterValues.Count * 10);
             bool first = true;
-            foreach (var value in parameterValues)
+            foreach (var value in parameterValues.Where(p => p.Key.IsParameter && p.Key.IsProperty))
             {
                 if (first)
                     first = false;
                 else
                     sb.Append(' ');
-                sb.Append("{0}={1}".FormatString(value.Key.Names.FirstOrDefault() ?? "?", value.Value));
+                sb.Append("{0}={1}".FormatString(value.Key.Names[0] ?? "?", value.Value));
             }
             return sb.ToString();
         }

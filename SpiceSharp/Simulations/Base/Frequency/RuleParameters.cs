@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations.Frequency
     /// Rule parameters for a <see cref="Rules"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class RuleParameters : ParameterSet
+    public class RuleParameters : ParameterSet, ICloneable<RuleParameters>
     {
         /// <summary>
         /// Gets the frequencies.
@@ -27,5 +27,9 @@ namespace SpiceSharp.Simulations.Frequency
         {
             Frequencies = frequencies.ThrowIfNull(nameof(frequencies));
         }
+
+        /// <inheritdoc/>
+        public RuleParameters Clone()
+            => (RuleParameters)MemberwiseClone();
     }
 }

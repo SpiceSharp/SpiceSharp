@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.CurrentSources
         private readonly ElementSet<double> _elements;
 
         /// <inheritdoc/>
-        public IndependentSourceParameters Parameters { get; }
+        public IndependentSourceParameters Parameters { get; private set; }
 
         /// <summary>
         /// Gets the waveform.

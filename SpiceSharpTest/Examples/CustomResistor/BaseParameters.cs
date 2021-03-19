@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class BaseParameters : ParameterSet
+    public partial class BaseParameters : ParameterSet<BaseParameters>
     {
         [ParameterName("a")]
         public double A { get; set; } = 1.0e3;

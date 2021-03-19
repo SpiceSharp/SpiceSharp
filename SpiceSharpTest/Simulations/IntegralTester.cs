@@ -20,6 +20,10 @@ namespace SpiceSharpTest.Simulations
             _relTol = relTol;
             _absTol = absTol;
         }
+
+        public override IEntity Clone()
+            => (IEntity)MemberwiseClone();
+
         public override void CreateBehaviors(ISimulation simulation)
         {
             var eb = new BehaviorContainer("dF/dx");

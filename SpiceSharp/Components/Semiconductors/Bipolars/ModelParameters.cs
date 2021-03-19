@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class ModelParameters : ParameterSet
+    public partial class ModelParameters : ParameterSet<ModelParameters>
     {
         /// <summary>
         /// Scalar used for NPN transistors.

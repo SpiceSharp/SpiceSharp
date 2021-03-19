@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.Switches
     /// <seealso cref="Behavior" />
     /// <seealso cref="IParameterized{T}" />
     /// <seealso cref="ITemperatureBehavior" />
-    /// <seealso cref="ModelParameters"/>
+    /// <seealso cref="VoltageModelParameters"/>
     [BehaviorFor(typeof(CurrentSwitchModel))]
     [BehaviorFor(typeof(VoltageSwitchModel))]
     [AddBehaviorIfNo(typeof(ITemperatureBehavior))]

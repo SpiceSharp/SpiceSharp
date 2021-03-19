@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Switches
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Sets the switch initially to conducting.

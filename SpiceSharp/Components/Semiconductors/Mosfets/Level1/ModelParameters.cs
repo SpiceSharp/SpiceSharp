@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
     /// </summary>
     /// <seealso cref="Mosfets.ModelParameters"/>
     [GeneratedParameters]
-    public partial class ModelParameters : Mosfets.ModelParameters
+    public partial class ModelParameters : Mosfets.ModelParameters, ICloneable<ModelParameters>
     {
         /// <summary>
         /// Gets the channel length modulation parameter.
@@ -18,5 +18,9 @@ namespace SpiceSharp.Components.Mosfets.Level1
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
         [GreaterThanOrEquals(0)]
         private GivenParameter<double> _lambda;
+
+        /// <inheritdoc/>
+        ModelParameters ICloneable<ModelParameters>.Clone()
+            => (ModelParameters)MemberwiseClone();
     }
 }

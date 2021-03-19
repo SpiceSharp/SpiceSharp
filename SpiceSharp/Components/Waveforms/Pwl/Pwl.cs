@@ -3,6 +3,7 @@ using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
 using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -57,6 +58,15 @@ namespace SpiceSharp.Components
             if (Points != null)
                 return "pwl({0})".FormatString(string.Join(", ", Points));
             return "pwl(null)";
+        }
+
+        /// <inheritdoc/>
+        public IWaveformDescription Clone()
+        {
+            return new Pwl()
+            {
+                Points = (Point[])Points.ToArray().Clone()
+            };
         }
     }
 }

@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Gets or sets the current gain of the source.

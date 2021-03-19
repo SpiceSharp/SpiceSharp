@@ -7,7 +7,7 @@ namespace SpiceSharp.General
     /// A set of instances that can also be found by their type.
     /// </summary>
     /// <typeparam name="V">The base value type.</typeparam>
-    public interface ITypeSet<V> : ICollection<V>, ICloneable
+    public interface ITypeSet<V> : ICollection<V>
     {
         /// <summary>
         /// Occurs if a type could not be found.

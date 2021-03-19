@@ -149,26 +149,8 @@ namespace SpiceSharp
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)_entities).GetEnumerator();
 
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
-        public ICloneable Clone()
-        {
-            var ckt = new Circuit((IEntityCollection)_entities.Clone());
-            return ckt;
-        }
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        public void CopyFrom(ICloneable source)
-        {
-            var src = (Circuit)source;
-            _entities.CopyFrom(src._entities);
-        }
+        /// <inheritdoc/>
+        public IEntityCollection Clone()
+            => new Circuit(_entities.Clone());
     }
 }

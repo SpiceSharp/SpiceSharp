@@ -8,7 +8,7 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class NoiseParameters : ParameterSet
+    public partial class NoiseParameters : ParameterSet, ICloneable<NoiseParameters>
     {
         /// <summary>
         /// Gets or sets the noise output node name.
@@ -54,5 +54,9 @@ namespace SpiceSharp.Simulations
             Output = output;
             OutputRef = reference;
         }
+
+        /// <inheritdoc/>
+        public NoiseParameters Clone()
+            => (NoiseParameters)MemberwiseClone();
     }
 }

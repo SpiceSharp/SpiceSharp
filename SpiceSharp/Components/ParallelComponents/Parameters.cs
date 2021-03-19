@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet, ICloneable<Parameters>
     {
         /// <summary>
         /// Gets or sets the entities that should be run in parallel.
@@ -30,6 +30,16 @@ namespace SpiceSharp.Components.ParallelComponents
         /// </value>
         [ParameterName("workdistributors"), ParameterInfo("Workload distributors by the behavior type.")]
         public Dictionary<Type, IWorkDistributor> WorkDistributors { get; } = new Dictionary<Type, IWorkDistributor>();
+
+        /// <inheritdoc/>
+        public Parameters Clone()
+        {
+            var clone = new Parameters();
+            clone.Entities = Entities?.Clone();
+            foreach (var pair in WorkDistributors)
+                clone.WorkDistributors.Add(pair.Key, pair.Value);
+            return clone;
+        }
 
         /// <summary>
         /// Sets the work distributor for a specified type.

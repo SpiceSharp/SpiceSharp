@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
     /// </summary>
     /// <seealso cref="Mosfets.ModelParameters" />
     [GeneratedParameters]
-    public partial class ModelParameters : Mosfets.ModelParameters
+    public partial class ModelParameters : Mosfets.ModelParameters, ICloneable<ModelParameters>
     {
         /// <summary>
         /// The possible versions used for the implementation.
@@ -149,19 +149,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         public double DelVt0 { get; set; }
 
         /// <inheritdoc/>
-        protected override ICloneable Clone()
-        {
-            // We have some private/protected properties that need to be set manually.
-            var result = (ModelParameters)base.Clone();
-            result.Delta = Delta;
-            return result;
-        }
-
-        /// <inheritdoc/>
-        protected override void CopyFrom(ICloneable source)
-        {
-            base.CopyFrom(source);
-            Delta = ((ModelParameters)source).Delta;
-        }
+        ModelParameters ICloneable<ModelParameters>.Clone()
+            => (ModelParameters)Clone();
     }
 }

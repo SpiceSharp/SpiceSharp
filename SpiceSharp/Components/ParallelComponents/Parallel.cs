@@ -27,14 +27,10 @@ namespace SpiceSharp.Components
     /// <seealso cref="IComponent" />
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ParallelComponents.Parameters"/>
-    public class Parallel : Entity,
+    public class Parallel : Entity<Parameters>,
         IComponent,
-        IParameterized<Parameters>,
         IRuleSubject
     {
-        /// <inheritdoc/>
-        public Parameters Parameters { get; } = new Parameters();
-
         /// <inheritdoc/>
         public string Model { get; set; }
 

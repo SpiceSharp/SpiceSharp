@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Gets or sets the transconductance gain.

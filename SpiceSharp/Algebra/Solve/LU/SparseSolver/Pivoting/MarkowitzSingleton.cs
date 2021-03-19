@@ -10,6 +10,10 @@ namespace SpiceSharp.Algebra.Solve
     public class MarkowitzSingleton<T> : MarkowitzSearchStrategy<T>
     {
         /// <inheritdoc/>
+        public override MarkowitzSearchStrategy<T> Clone()
+            => new MarkowitzSingleton<T>();
+
+        /// <inheritdoc/>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));

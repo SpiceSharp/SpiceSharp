@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class ModelParameters : ParameterSet
+    public partial class ModelParameters : ParameterSet<ModelParameters>
     {
         /// <summary>
         /// Gets the bottom junction capacitance parameter.

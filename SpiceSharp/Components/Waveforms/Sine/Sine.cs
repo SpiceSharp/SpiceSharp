@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="ParameterSet"/>
     /// <seealso cref="IWaveformDescription" />
     [GeneratedParameters]
-    public partial class Sine : ParameterSet,
+    public partial class Sine : ParameterSet<IWaveformDescription>,
         IWaveformDescription
     {
         private double _frequency;

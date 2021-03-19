@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Switches
     /// </summary>
     /// <seealso cref="ModelParameters" />
     [GeneratedParameters]
-    public partial class VoltageModelParameters : ModelParameters
+    public partial class VoltageModelParameters : ModelParameters, ICloneable<VoltageModelParameters>
     {
         /// <summary>
         /// Gets the threshold current.
@@ -21,5 +21,9 @@ namespace SpiceSharp.Components.Switches
         /// </summary>
         [ParameterName("vh"), ParameterInfo("Hysteresis current")]
         public override double Hysteresis { get; set; }
+
+        /// <inheritdoc/>
+        VoltageModelParameters ICloneable<VoltageModelParameters>.Clone()
+            => (VoltageModelParameters)Clone();
     }
 }

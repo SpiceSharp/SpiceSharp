@@ -6,7 +6,7 @@ namespace SpiceSharp.Components.Switches
     /// <summary>
     /// Base parameters for a switch model.
     /// </summary>
-    public class ModelParameters : ParameterSet
+    public class ModelParameters : ParameterSet<ModelParameters>
     {
         /// <summary>
         /// Gets the resistance parameter when closed.

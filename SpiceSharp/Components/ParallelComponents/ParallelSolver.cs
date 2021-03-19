@@ -218,17 +218,5 @@ namespace SpiceSharp.Components.ParallelComponents
 
         /// <inheritdoc/>
         public Func<P> CreatePropertyGetter<P>(string name) => _parent.CreatePropertyGetter<P>(name);
-
-        /// <inheritdoc/>
-        public ICloneable Clone()
-        {
-            throw new NotSupportedException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(Clone)));
-        }
-
-        /// <inheritdoc/>
-        public void CopyFrom(ICloneable source)
-        {
-            throw new NotSupportedException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(CopyFrom)));
-        }
     }
 }

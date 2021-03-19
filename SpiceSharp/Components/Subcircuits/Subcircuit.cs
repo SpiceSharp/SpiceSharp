@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SpiceSharp.Components.Subcircuits;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -15,15 +16,14 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public partial class Subcircuit : Entity,
+    public partial class Subcircuit : Entity, IParameterized<Parameters>,
         IComponent,
-        IParameterized<Parameters>,
         IRuleSubject
     {
         private string[] _connections;
 
         /// <inheritdoc/>
-        public Parameters Parameters { get; } = new Parameters();
+        public Parameters Parameters { get; private set; } = new Parameters();
 
         /// <inheritdoc/>
         public string Model { get; set; }
@@ -71,6 +71,11 @@ namespace SpiceSharp.Components
             Connect(nodes);
         }
 
+        private Subcircuit(string name)
+            : base(name)
+        {
+        }
+
         /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
@@ -116,16 +121,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        protected override void CopyFrom(ICloneable source)
-        {
-            base.CopyFrom(source);
-            var s = (Subcircuit)source;
-            _connections = new string[_connections.Length];
-            for (var i = 0; i < _connections.Length; i++)
-                _connections[i] = s._connections[i];
-        }
-
-        /// <inheritdoc/>
         public void Apply(IRules rules)
         {
             if (Parameters.Definition == null)
@@ -140,6 +135,17 @@ namespace SpiceSharp.Components
                 if (c is IRuleSubject subject)
                     subject.Apply(newRules);
             }
+        }
+
+        /// <inheritdoc/>
+        public override IEntity Clone()
+        {
+            return new Subcircuit(Name)
+            {
+                Parameters = Parameters.Clone(),
+                _connections = (string[])_connections.Clone(),
+                Model = Model
+            };
         }
     }
 }

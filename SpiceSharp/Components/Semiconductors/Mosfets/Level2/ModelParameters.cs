@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// </summary>
     /// <seealso cref="Mosfets.ModelParameters" />
     [GeneratedParameters]
-    public partial class ModelParameters : Mosfets.ModelParameters
+    public partial class ModelParameters : Mosfets.ModelParameters, ICloneable<ModelParameters>
     {
         /// <summary>
         /// Gets the channel length modulation parameter.
@@ -87,5 +87,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
         [ParameterName("xj"), ParameterInfo("Junction depth")]
         [GreaterThanOrEquals(0)]
         private GivenParameter<double> _junctionDepth;
+
+        /// <inheritdoc/>
+        ModelParameters ICloneable<ModelParameters>.Clone() => (ModelParameters)Clone();
     }
 }

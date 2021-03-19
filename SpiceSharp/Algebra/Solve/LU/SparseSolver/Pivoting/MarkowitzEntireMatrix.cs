@@ -30,6 +30,10 @@ namespace SpiceSharp.Algebra.Solve
         private static int _tiesMultiplier = 5;
 
         /// <inheritdoc/>
+        public override MarkowitzSearchStrategy<T> Clone()
+            => (MarkowitzSearchStrategy<T>)MemberwiseClone();
+
+        /// <inheritdoc/>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
         {
             markowitz.ThrowIfNull(nameof(markowitz));

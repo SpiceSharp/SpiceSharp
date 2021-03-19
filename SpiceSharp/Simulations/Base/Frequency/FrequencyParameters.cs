@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class FrequencyParameters : ParameterSet
+    public partial class FrequencyParameters : ParameterSet, ICloneable<FrequencyParameters>
     {
         /// <summary>
         /// Gets or sets a value indicating whether the operation point should be exported.
@@ -67,6 +67,10 @@ namespace SpiceSharp.Simulations
             solver.Parameters.RelativePivotThreshold = RelativePivotThreshold;
             return solver;
         }
+
+        /// <inheritdoc/>
+        public FrequencyParameters Clone()
+            => (FrequencyParameters)MemberwiseClone();
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should be validated.

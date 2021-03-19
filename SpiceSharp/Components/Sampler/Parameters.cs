@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.SamplerBehaviors
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Occurs when data can be exported.

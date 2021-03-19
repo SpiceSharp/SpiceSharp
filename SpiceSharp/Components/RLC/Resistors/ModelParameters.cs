@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class ModelParameters : ParameterSet
+    public partial class ModelParameters : ParameterSet<ModelParameters>
     {
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.

@@ -9,7 +9,7 @@ namespace SpiceSharp.Validation
     /// Validation parameters for <see cref="IComponent"/>. This means interconnected entities.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class ComponentRuleParameters : ParameterSet
+    public class ComponentRuleParameters : ParameterSet, ICloneable<ComponentRuleParameters>
     {
         /// <summary>
         /// Gets the variables.
@@ -37,5 +37,14 @@ namespace SpiceSharp.Validation
             Factory = factory.ThrowIfNull(nameof(factory));
             Comparer = comparer.ThrowIfNull(nameof(comparer));
         }
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// We can't really do a deep clone for this. But both the factory
+        /// and the comparer are supposed to be linking to the same thing
+        /// anyway.
+        /// </remarks>
+        public ComponentRuleParameters Clone()
+            => (ComponentRuleParameters)MemberwiseClone();
     }
 }

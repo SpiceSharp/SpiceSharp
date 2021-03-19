@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// </summary>
     /// <seealso cref="ParameterSet"/>
     [GeneratedParameters]
-    public partial class IndependentSourceParameters : ParameterSet
+    public partial class IndependentSourceParameters : ParameterSet<IndependentSourceParameters>
     {
         /// <summary>
         /// The DC value of the source.
@@ -88,6 +88,14 @@ namespace SpiceSharp.Components.CommonBehaviors
             Phasor = new Complex(
                 AcMagnitude * Math.Cos(phase),
                 AcMagnitude * Math.Sin(phase));
+        }
+
+        /// <inheritdoc/>
+        public override IndependentSourceParameters Clone()
+        {
+            var clone = base.Clone();
+            clone.Waveform = Waveform?.Clone();
+            return clone;
         }
     }
 }

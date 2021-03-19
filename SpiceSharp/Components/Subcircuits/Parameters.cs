@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet, ICloneable<Parameters>
     {
         /// <summary>
         /// Gets or sets the subcircuit definition.
@@ -27,5 +27,13 @@ namespace SpiceSharp.Components.Subcircuits
         /// </value>
         [ParameterName("localsolver"), ParameterInfo("Flag indicating whether or not a local solver should be used.")]
         public bool LocalSolver { get; set; }
+
+        /// <inheritdoc/>
+        public Parameters Clone()
+        {
+            var clone = (Parameters)MemberwiseClone();
+            clone.Definition = Definition?.Clone();
+            return clone;
+        }
     }
 }

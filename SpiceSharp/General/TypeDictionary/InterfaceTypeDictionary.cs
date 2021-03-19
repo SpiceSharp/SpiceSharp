@@ -145,29 +145,5 @@ namespace SpiceSharp.General
             _interfaces.Clear();
             _dictionary.Clear();
         }
-
-        /// <inheritdoc/>
-        ICloneable ICloneable.Clone()
-        {
-            var clone = new InterfaceTypeDictionary<V>();
-            foreach (var pair in _dictionary)
-            {
-                var cloneValue = pair.Value;
-                if (pair.Value is ICloneable cloneable)
-                    cloneValue = (V)cloneable.Clone();
-                clone.Add(pair.Key, cloneValue);
-            }
-            return clone;
-        }
-
-        /// <inheritdoc/>
-        void ICloneable.CopyFrom(ICloneable source)
-        {
-            var src = (InterfaceTypeDictionary<V>)source.ThrowIfNull(nameof(source));
-            _dictionary.Clear();
-            _interfaces.Clear();
-            foreach (var pair in src._dictionary)
-                Add(pair.Key, pair.Value);
-        }
     }
 }

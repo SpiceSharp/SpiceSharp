@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Reflection;
-using System;
+﻿using System;
 using SpiceSharp.Diagnostics;
 
 namespace SpiceSharp.ParameterSets
@@ -16,37 +15,6 @@ namespace SpiceSharp.ParameterSets
     /// <seealso cref="IParameterSet"/>
     public abstract class ParameterSet : IParameterSet
     {
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
-        protected virtual ICloneable Clone()
-        {
-            var clone = (ICloneable)Factory.Get(GetType());
-            clone.CopyFrom(this);
-            return clone;
-        }
-
-        /// <inheritdoc/>
-        ICloneable ICloneable.Clone() => Clone();
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="source"/> does not have the same type.</exception>
-        protected virtual void CopyFrom(ICloneable source)
-        {
-            source.ThrowIfNull(nameof(source));
-            ReflectionHelper.CopyPropertiesAndFields(source, this);
-        }
-
-        /// <inheritdoc/>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
-
         /// <inheritdoc/>
         public virtual void SetParameter<P>(string name, P value)
         {
@@ -126,5 +94,16 @@ namespace SpiceSharp.ParameterSets
                 return eps.GetPropertyGetter(name);
             return null;
         }
+    }
+
+    /// <summary>
+    /// The default implementation for a <see cref="IParameterSet"/>, but which is cloneable
+    /// just by copying its members.
+    /// </summary>
+    /// <typeparam name="P">The parameter set type.</typeparam>
+    public abstract class ParameterSet<P> : ParameterSet, ICloneable<P>
+    {
+        /// <inheritdoc/>
+        public virtual P Clone() => (P)MemberwiseClone();
     }
 }

@@ -8,7 +8,7 @@ namespace SpiceSharp.General
     /// distinguishes itself by supporting for example inheritance on the type.
     /// </summary>
     /// <typeparam name="V">The base type for values in the type dictionary.</typeparam>
-    public interface ITypeDictionary<V> : ICloneable
+    public interface ITypeDictionary<V>
     {
         /// <summary>
         /// Gets all the keys in the dictionary.

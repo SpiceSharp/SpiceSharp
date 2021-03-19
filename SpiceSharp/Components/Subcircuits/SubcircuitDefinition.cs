@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SpiceSharp.Attributes;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -43,5 +44,9 @@ namespace SpiceSharp.Components
             else
                 _pins = Array<string>.Empty();
         }
+
+        /// <inheritdoc/>
+        public ISubcircuitDefinition Clone()
+            => new SubcircuitDefinition(Entities.Clone(), Pins.ToArray());
     }
 }

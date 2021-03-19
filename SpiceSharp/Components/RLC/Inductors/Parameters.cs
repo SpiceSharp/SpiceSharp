@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Inductors
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Gets the inductance parameter.

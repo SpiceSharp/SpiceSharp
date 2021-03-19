@@ -7,8 +7,8 @@ namespace SpiceSharp.Components.Resistors
     /// Parameters for a <see cref="Resistor" />.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-	[GeneratedParameters]
-    public partial class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// The minimum resistance for any resistor.
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.Resistors
         /// The resistor operating temperature in degrees Celsius.
         /// </value>
         [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [GreaterThan(-Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;

@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Reflection;
 using SpiceSharp.Simulations;
 using System;
 
@@ -57,14 +56,6 @@ namespace SpiceSharp.Entities
             return this;
         }
 
-        /// <inheritdoc/>
-        protected override ICloneable Clone()
-        {
-            var clone = (Entity)Factory<string>.Get(GetType(), Name);
-            clone.CopyFrom(this);
-            return clone;
-        }
-
         /// <summary>
         /// Returns a string that represents the current entity.
         /// </summary>
@@ -74,6 +65,39 @@ namespace SpiceSharp.Entities
         public override string ToString()
         {
             return "{0} ({1})".FormatString(Name, GetType().Name);
+        }
+
+        /// <inheritdoc/>
+        public abstract IEntity Clone();
+    }
+
+    /// <summary>
+    /// Base class for any circuit object that can take part in simulations.
+    /// This variant also defines a cloneable parameter set.
+    /// </summary>
+    /// <typeparam name="P">The parameter set type.</typeparam>
+    public abstract class Entity<P> : Entity, IParameterized<P>
+        where P : IParameterSet, ICloneable<P>, new()
+    {
+        /// <inheritdoc/>
+        public P Parameters { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Entity{P}"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        protected Entity(string name)
+            : base(name)
+        {
+            Parameters = new();
+        }
+
+        /// <inheritdoc/>
+        public override IEntity Clone()
+        {
+            var clone = (Entity<P>)MemberwiseClone();
+            clone.Parameters = Parameters.Clone();
+            return clone;
         }
     }
 }

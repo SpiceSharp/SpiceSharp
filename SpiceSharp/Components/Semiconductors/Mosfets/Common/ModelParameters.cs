@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.Mosfets
     /// Common model parameters for mosfets.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public abstract partial class ModelParameters : ParameterSet
+    public abstract partial class ModelParameters : ParameterSet, ICloneable<ModelParameters>
     {
         /// <summary>
         /// Gets or sets the default width for transistors using this model.
@@ -340,6 +340,10 @@ namespace SpiceSharp.Components.Mosfets
                 MosfetType = -1.0;
         }
 
+        /// <inheritdoc/>
+        public virtual ModelParameters Clone()
+            => (ModelParameters)Clone();
+
         /// <summary>
         /// Gets the name of the type.
         /// </summary>
@@ -374,22 +378,5 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("af"), ParameterInfo("Flicker noise exponent")]
         public double FlickerNoiseExponent { get; set; } = 1;
-
-        /// <summary>
-        /// Creates a deep clone of the parameter set.
-        /// </summary>
-        /// <returns>
-        /// A deep clone of the parameter set.
-        /// </returns>
-        protected override ICloneable Clone()
-        {
-            // We have a properties that are only privately settable, so we need to update them manually when cloning.
-            var result = (ModelParameters)base.Clone();
-
-            // Copy the (private/protected) parameters
-            result.MosfetType = MosfetType;
-
-            return result;
-        }
     }
 }

@@ -15,10 +15,10 @@ namespace SpiceSharp.Components.Common
     [BehaviorFor(typeof(ResistorModel), new[] { typeof(Resistors.ModelParameters) })]
     [BehaviorFor(typeof(CapacitorModel), new[] { typeof(Capacitors.ModelParameters) })]
     public class ParameterBehavior<P> : Behavior,
-        IParameterized<P> where P : IParameterSet
+        IParameterized<P> where P : IParameterSet, ICloneable<P>, new()
     {
         /// <inheritdoc/>
-        public P Parameters { get; }
+        public P Parameters { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterBehavior{P}"/> class.

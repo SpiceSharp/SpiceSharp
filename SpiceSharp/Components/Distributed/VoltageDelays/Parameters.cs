@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.VoltageDelays
     /// </summary>
     /// <seealso cref="ParameterSet" />
     [GeneratedParameters]
-    public partial class VoltageDelayParameters : ParameterSet
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Gets or sets the delay in seconds.

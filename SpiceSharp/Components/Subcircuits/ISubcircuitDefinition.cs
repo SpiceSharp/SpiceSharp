@@ -8,7 +8,7 @@ namespace SpiceSharp.Components
     /// Interface that describes an entity collection for a <see cref="Subcircuit"/>.
     /// </summary>
     /// <seealso cref="IParameterSetCollection"/>
-    public interface ISubcircuitDefinition
+    public interface ISubcircuitDefinition : ICloneable<ISubcircuitDefinition>
     {
         /// <summary>
         /// Gets the entities defined in the subcircuit.

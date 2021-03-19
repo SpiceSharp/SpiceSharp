@@ -165,43 +165,6 @@ namespace SpiceSharp.Entities
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        /// <inheritdoc/>
-        ICloneable ICloneable.Clone() => Clone();
-
-        /// <inheritdoc/>
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
-
-        /// <summary>
-        /// Clones the entity collection.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
-        protected virtual ICloneable Clone()
-        {
-            var clone = new EntityCollection(Comparer);
-            foreach (var entity in this)
-                clone.Add((IEntity)entity.Clone());
-            return clone;
-        }
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="source"/> does not have the same type.</exception>
-        protected virtual void CopyFrom(ICloneable source)
-        {
-            source.ThrowIfNull(nameof(source));
-            if (!source.GetType().Equals(GetType()))
-                throw new ArgumentException(Properties.Resources.Reflection_NotMatchingType);
-            var src = (EntityCollection)source;
-            _entities.Clear();
-            foreach (var entity in src._entities.Values)
-                Add(entity);
-        }
-
         /// <summary>
         /// Copies the elements of the collection to an array, starting at a particular array index.
         /// </summary>
@@ -229,5 +192,14 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <param name="args">The <see cref="EntityEventArgs"/> instance containing the event data.</param>
         protected virtual void OnEntityRemoved(EntityEventArgs args) => EntityRemoved?.Invoke(this, args);
+
+        /// <inheritdoc/>
+        public IEntityCollection Clone()
+        {
+            var clone = new EntityCollection(_entities.Comparer);
+            foreach (var entity in _entities.Values)
+                clone.Add(entity);
+            return clone;
+        }
     }
 }

@@ -49,6 +49,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algebra\DenseFactorTests.cs" />
@@ -142,11 +143,9 @@
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  	<ItemGroup>
-		<ProjectReference Include="../SpiceSharpGenerator/SpiceSharpGenerator.csproj"
-					        OutputItemType="Analyzer"
-					        ReferenceOutputAssembly="false">
-			<SetConfiguration>Configuration=Release</SetConfiguration>
-		</ProjectReference>
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../SpiceSharpGenerator/SpiceSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false">
+      <SetConfiguration>Configuration=Release</SetConfiguration>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

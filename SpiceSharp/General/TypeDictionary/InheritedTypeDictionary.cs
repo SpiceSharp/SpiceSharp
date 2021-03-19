@@ -105,37 +105,6 @@ namespace SpiceSharp.General
         public bool Contains(V value) => _values.Contains(value.ThrowIfNull(nameof(value)));
 
         /// <inheritdoc/>
-        ICloneable ICloneable.Clone()
-        {
-            var clone = new InheritedTypeDictionary<V>();
-            foreach (var pair in _dictionary)
-            {
-                // Only add direct elements
-                if (pair.Value.IsDirect)
-                {
-                    var cloned = pair.Value.Value;
-                    if (cloned is ICloneable cloneable)
-                        cloned = (V)cloneable.Clone();
-                    clone.Add(pair.Key, cloned);
-                }
-            }
-            return clone;
-        }
-
-        /// <inheritdoc/>
-        void ICloneable.CopyFrom(ICloneable source)
-        {
-            var src = (InheritedTypeDictionary<V>)source.ThrowIfNull(nameof(source));
-            _dictionary.Clear();
-            _values.Clear();
-            foreach (var pair in src._dictionary)
-            {
-                if (pair.Value.IsDirect)
-                    Add(pair.Key, pair.Value.Value);
-            }
-        }
-
-        /// <inheritdoc/>
         public IEnumerable<V> GetAllValues(Type key)
         {
             key.ThrowIfNull(nameof(key));

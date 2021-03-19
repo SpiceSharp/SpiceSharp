@@ -11,7 +11,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
     [GeneratedParameters]
-    public partial class Pulse : ParameterSet,
+    public partial class Pulse : ParameterSet<IWaveformDescription>,
         IWaveformDescription
     {
         /// <summary>

@@ -166,5 +166,9 @@ namespace SpiceSharp.Algebra.Solve
             }
             return largest;
         }
+
+        /// <inheritdoc/>
+        public override MarkowitzSearchStrategy<T> Clone()
+            => new MarkowitzQuickDiagonal<T>();
     }
 }

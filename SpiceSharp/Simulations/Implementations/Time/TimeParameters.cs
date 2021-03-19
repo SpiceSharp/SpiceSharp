@@ -9,7 +9,7 @@ namespace SpiceSharp.Simulations
     /// A configuration for a <see cref="ITimeSimulation"/> with all the necessary parameters to do a transient analysis.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public abstract partial class TimeParameters : ParameterSet
+    public abstract partial class TimeParameters : ParameterSet, ICloneable<TimeParameters>
     {
         /// <summary>
         /// Gets or sets the start time.
@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The initial conditions.
         /// </value>
-        public Dictionary<string, double> InitialConditions { get; }
+        public Dictionary<string, double> InitialConditions { get; private set; } = new();
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should be validated.
@@ -74,7 +74,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected TimeParameters()
         {
-            InitialConditions = new Dictionary<string, double>();
         }
 
         /// <summary>
@@ -94,5 +93,15 @@ namespace SpiceSharp.Simulations
         /// The integration method.
         /// </returns>
         public abstract IIntegrationMethod Create(IBiasingSimulationState state);
+
+        /// <inheritdoc/>
+        public virtual TimeParameters Clone()
+        {
+            var clone = (TimeParameters)MemberwiseClone();
+            clone.InitialConditions = new(InitialConditions.Comparer);
+            foreach (var ic in InitialConditions)
+                clone.InitialConditions.Add(ic.Key, ic.Value);
+            return clone;
+        }
     }
 }

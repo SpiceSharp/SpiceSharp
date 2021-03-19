@@ -10,7 +10,7 @@ namespace SpiceSharp.Algebra
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="ParameterSet" />
-    public partial class RookPivoting<T> : ParameterSet
+    public partial class RookPivoting<T> : ParameterSet<RookPivoting<T>>
     {
         /// <summary>
         /// Gets the magnitude.

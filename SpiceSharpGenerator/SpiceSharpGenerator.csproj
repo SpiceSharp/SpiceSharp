@@ -3,7 +3,35 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Sven Boulanger</Authors>
+		<Company>SpiceSharp</Company>
+		<Product>SpiceSharp.Generator</Product>
+		<Description>A source generator that is built to help extending the functionality of the SpiceSharp framework.</Description>
+		<PackageIcon>logo_full.png</PackageIcon>
+		<Copyright></Copyright>
+		<RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
+		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="bin\Debug\netstandard2.0\SpiceSharpGenerator.dll" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false">
+			<Pack>True</Pack>
+			<PackagePath>analyzers\dotnet\cs</PackagePath>
+		</None>
+		<None Include="..\docs\api\images\logo_full.png">
+		  <Pack>True</Pack>
+		  <PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />

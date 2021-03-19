@@ -6,10 +6,9 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Template for a collection of <see cref="Entity" />.
     /// </summary>
-    /// <seealso cref="ICloneable" />
     /// <seealso cref="IEnumerable{T}" />
     /// <seealso cref="ICollection{T}" />
-    public interface IEntityCollection : IEnumerable<IEntity>, ICollection<IEntity>, ICloneable
+    public interface IEntityCollection : IEnumerable<IEntity>, ICollection<IEntity>, ICloneable<IEntityCollection>
     {
         /// <summary>
         /// Gets the <see cref="IEntity"/> with the specified name.

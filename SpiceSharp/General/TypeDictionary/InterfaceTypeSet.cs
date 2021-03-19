@@ -25,15 +25,6 @@ namespace SpiceSharp.General
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InterfaceTypeSet{V}"/> class.
-        /// </summary>
-        /// <param name="original">The original.</param>
-        protected InterfaceTypeSet(InterfaceTypeSet<V> original)
-        {
-            _dictionary = (InterfaceTypeDictionary<V>)((ICloneable)original._dictionary).Clone();
-        }
-
-        /// <summary>
         /// Gets the number of elements contained in the set.
         /// </summary>
         public int Count => _dictionary.Count;
@@ -123,16 +114,6 @@ namespace SpiceSharp.General
             }
             value = default;
             return false;
-        }
-
-        /// <inheritdoc/>
-        public virtual ICloneable Clone() => new InterfaceTypeSet<V>(this);
-
-        /// <inheritdoc/>
-        public void CopyFrom(ICloneable source)
-        {
-            var src = (InterfaceTypeSet<V>)source;
-            ((ICloneable)_dictionary).CopyFrom(src._dictionary);
         }
 
         /// <summary>
