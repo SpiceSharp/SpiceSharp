@@ -1,7 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SpiceSharpGenerator
@@ -18,7 +17,6 @@ namespace SpiceSharpGenerator
         }
         private readonly Dictionary<string, int> _nameMap = new();
         private readonly INamedTypeSymbol _parameters;
-        private readonly Dictionary<ITypeSymbol, TypeParametersAndProperties> _members
 #pragma warning disable RS1024 // Compare symbols correctly
         private readonly Dictionary<ITypeSymbol, TypeParametersAndProperties> _members = new(SymbolEqualityComparer.Default);
 #pragma warning restore RS1024 // Compare symbols correctly
