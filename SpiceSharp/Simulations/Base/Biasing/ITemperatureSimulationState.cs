@@ -12,7 +12,7 @@
         /// <value>
         /// The temperature.
         /// </value>
-        double Temperature { get; }
+        double Temperature { get; set; }
 
         /// <summary>
         /// Gets the nominal temperature in Kelvin for the circuit in Kelvin.
@@ -21,6 +21,6 @@
         /// <value>
         /// The nominal temperature.
         /// </value>
-        double NominalTemperature { get; }
+        double NominalTemperature { get; set; }
     }
 }

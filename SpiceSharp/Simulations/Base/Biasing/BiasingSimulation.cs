@@ -105,7 +105,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, you can also create an entity with a high priority that
         /// creates a temperature behavior.
         /// </remarks>
-        public event EventHandler<LoadStateEventArgs> BeforeTemperature;
+        public event EventHandler<TemperatureStateEventArgs> BeforeTemperature;
 
         /// <summary>
         /// Occurs after performing temperature-dependent calculations.
@@ -114,7 +114,7 @@ namespace SpiceSharp.Simulations
         /// For better performance, you can also create an entity with a low priority that
         /// creates a temperature behavior.
         /// </remarks>
-        public event EventHandler<LoadStateEventArgs> AfterTemperature;
+        public event EventHandler<TemperatureStateEventArgs> AfterTemperature;
         #endregion
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         protected void Temperature()
         {
-            var args = new LoadStateEventArgs(_state);
+            var args = new TemperatureStateEventArgs(_temperature);
             OnBeforeTemperature(args);
             foreach (var behavior in _temperatureBehaviors)
                 behavior.Temperature();
@@ -654,13 +654,13 @@ namespace SpiceSharp.Simulations
         /// Raises the <see cref="BeforeTemperature" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnBeforeTemperature(LoadStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
+        protected virtual void OnBeforeTemperature(TemperatureStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="AfterTemperature" /> event.
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAfterTemperature(LoadStateEventArgs args) => AfterTemperature?.Invoke(this, args);
+        protected virtual void OnAfterTemperature(TemperatureStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
 
