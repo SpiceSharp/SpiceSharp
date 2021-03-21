@@ -177,13 +177,14 @@ namespace SpiceSharp.Entities.DependencyInjection
                     ScanAssembly(entityType.GetTypeInfo().Assembly);
                     behaviors = _behaviorDescriptions[entityType];
                 }
-            }
-            if (behaviors != null)
-            {
-                behaviors.Sort(new Comparer());
-                foreach (var behaviorType in behaviors)
-                    resolver.RegisterAfter(behaviorType.Target, behaviorType.Implementation);
-                return resolver;
+
+                if (behaviors != null)
+                {
+                    behaviors.Sort(new Comparer());
+                    foreach (var behaviorType in behaviors)
+                        resolver.RegisterAfter(behaviorType.Target, behaviorType.Implementation);
+                    return resolver;
+                }
             }
             return resolver;
         }

@@ -24,7 +24,7 @@ namespace SpiceSharp.Entities
         /// <value>
         /// The simulation.
         /// </value>
-        protected ISimulation Simulation { get; }
+        public ISimulation Simulation { get; }
 
         /// <summary>
         /// Gets the entity that provides the parameters without exposing the entity itself.
