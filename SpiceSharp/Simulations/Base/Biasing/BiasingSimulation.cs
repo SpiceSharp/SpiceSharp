@@ -653,13 +653,13 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Raises the <see cref="BeforeTemperature" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="TemperatureStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnBeforeTemperature(TemperatureStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
 
         /// <summary>
         /// Raises the <see cref="AfterTemperature" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
+        /// <param name="args">The <see cref="TemperatureStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterTemperature(TemperatureStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
