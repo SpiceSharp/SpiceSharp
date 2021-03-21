@@ -14,7 +14,7 @@ namespace SpiceSharp.Simulations
         public ITemperatureSimulationState State { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LoadStateEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="TemperatureStateEventArgs"/> class.
         /// </summary>
         /// <param name="state">The state.</param>
         public TemperatureStateEventArgs(ITemperatureSimulationState state)
