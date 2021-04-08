@@ -64,11 +64,10 @@ namespace SpiceSharp.Components.VoltageSources
             : base(context)
         {
             context.ThrowIfNull(nameof(context));
-
+            context.TryGetState<IIntegrationMethod>(out _method);
             Parameters = context.GetParameterSet<IndependentSourceParameters>();
             _iteration = context.GetState<IIterationSimulationState>();
-            context.TryGetState(out _method);
-            Waveform = Parameters.Waveform?.Create(_method);
+            Waveform = Parameters.Waveform?.Create(context);
             if (!Parameters.DcValue.Given)
             {
                 // No DC value: either have a transient value or none
@@ -87,7 +86,6 @@ namespace SpiceSharp.Components.VoltageSources
 
             // Connections
             _biasing = context.GetState<IBiasingSimulationState>();
-            context.TryGetState(out _method);
 
             _variables = new OnePort<double>(_biasing, context);
             Branch = _biasing.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);

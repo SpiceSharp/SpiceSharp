@@ -21,7 +21,6 @@ namespace SpiceSharp.Components.Resistors
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
 
-
         /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using System.Linq;
+using SpiceSharp.Entities;
 
 namespace SpiceSharp.Components
 {
@@ -42,8 +43,10 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public IWaveform Create(IIntegrationMethod method)
+        public IWaveform Create(IBindingContext context)
         {
+            IIntegrationMethod method = null;
+            context?.TryGetState<IIntegrationMethod>(out method);
             return new Instance(Points, method);
         }
 

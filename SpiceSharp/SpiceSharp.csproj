@@ -69,9 +69,7 @@
 		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="../SpiceSharpGenerator/SpiceSharpGenerator.csproj"
-					        OutputItemType="Analyzer"
-					        ReferenceOutputAssembly="false">
+		<ProjectReference Include="../SpiceSharpGenerator/SpiceSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false">
 			<SetConfiguration>Configuration=Release</SetConfiguration>
 		</ProjectReference>
 	</ItemGroup>

@@ -68,9 +68,8 @@ namespace SpiceSharp.Components.CurrentSources
             _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
             _variables = new OnePort<double>(_biasing, context);
-
-            context.TryGetState(out _method);
-            Waveform = Parameters.Waveform?.Create(_method);
+            context.TryGetState<IIntegrationMethod>(out _method);
+            Waveform = Parameters.Waveform?.Create(context);
 
             // Give some warnings if no value is given
             if (!Parameters.DcValue.Given)

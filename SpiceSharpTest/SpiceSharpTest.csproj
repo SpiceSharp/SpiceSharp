@@ -108,8 +108,11 @@
     <Compile Include="Simulations\NoiseTests.cs" />
     <Compile Include="Simulations\TransientTests.cs" />
     <Compile Include="Models\WaveformTests.cs" />
+    <Compile Include="Waveforms\AMTests.cs" />
     <Compile Include="Waveforms\PulseTests.cs" />
     <Compile Include="Waveforms\PwlTests.cs" />
+    <Compile Include="Waveforms\SFFMTests.cs" />
+    <Compile Include="Waveforms\SineTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Algebra\Matrices\spice3f5_matrix01.dat">
