@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(ITimeBehavior), 2)]
+    [BehaviorFor(typeof(BipolarJunctionTransistor)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Dynamic,
         ITimeBehavior
     {

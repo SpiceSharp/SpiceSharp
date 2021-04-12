@@ -1,5 +1,6 @@
 using SpiceSharp.ParameterSets;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -7,10 +8,8 @@ namespace SpiceSharp.Algebra.Solve
     /// Markowitz-based pivot search. Quickly search the diagonal for valid pivots.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    [GeneratedParameters]
-    public class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T>
+    public partial class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T>
     {
-        private static int _maxMarkowitzTies = 100, _tiesMultiplier = 5;
         private readonly ISparseMatrixElement<T>[] _tiedElements = new ISparseMatrixElement<T>[MaxMarkowitzTies];
 
         /// <summary>
@@ -27,15 +26,7 @@ namespace SpiceSharp.Algebra.Solve
         /// maximum of this amount of elements.
         /// </remarks>
         [GreaterThan(1)]
-        public static int MaxMarkowitzTies
-        {
-            get => _maxMarkowitzTies;
-            set
-            {
-                Utility.GreaterThan(value, nameof(MaxMarkowitzTies), 1);
-                _maxMarkowitzTies = value;
-            }
-        }
+        private static int _maxMarkowitzTies = 100;
 
         /// <summary>
         /// Gets or sets a heuristic for speeding up pivot searching.
@@ -55,15 +46,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [GreaterThanOrEquals(0)]
-        public static int TiesMultiplier
-        {
-            get => _tiesMultiplier;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(TiesMultiplier), 0);
-                _tiesMultiplier = value;
-            }
-        }
+        private static int _tiesMultiplier = 5;
 
         /// <inheritdoc/>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)
@@ -183,5 +166,9 @@ namespace SpiceSharp.Algebra.Solve
             }
             return largest;
         }
+
+        /// <inheritdoc/>
+        public override MarkowitzSearchStrategy<T> Clone()
+            => new MarkowitzQuickDiagonal<T>();
     }
 }

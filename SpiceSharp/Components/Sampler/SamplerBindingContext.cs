@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
@@ -9,6 +10,7 @@ namespace SpiceSharp.Components.SamplerBehaviors
     /// The binding context for a <see cref="Sampler"/>.
     /// </summary>
     /// <seealso cref="BindingContext"/>
+    [BindingContextFor(typeof(Sampler))]
     public class SamplerBindingContext : BindingContext
     {
         /// <summary>

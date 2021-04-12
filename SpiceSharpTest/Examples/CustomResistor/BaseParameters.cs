@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.NonlinearResistorBehaviors
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
     /// Parameters for a <see cref="NonlinearResistor"/>
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class BaseParameters : ParameterSet
+    [GeneratedParameters]
+    public partial class BaseParameters : ParameterSet<BaseParameters>
     {
         [ParameterName("a")]
         public double A { get; set; } = 1.0e3;

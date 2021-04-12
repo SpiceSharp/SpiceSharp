@@ -10,7 +10,7 @@
         public double Temperature { get; set; }
 
         /// <inheritdoc/>
-        public double NominalTemperature { get; }
+        public double NominalTemperature { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TemperatureSimulationState"/> class.

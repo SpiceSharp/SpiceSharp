@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IAcceptBehavior" />
-    [BehaviorFor(typeof(Subcircuit), typeof(IAcceptBehavior))]
+    [BehaviorFor(typeof(Subcircuit))]
     public class Accept : SubcircuitBehavior<IAcceptBehavior>,
         IAcceptBehavior
     {

@@ -13,13 +13,13 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
-    [BehaviorFor(typeof(Resistor), typeof(IBiasingBehavior), 1)]
-    public class Biasing : Temperature,
+    [BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    [GeneratedParameters]
+    public partial class Biasing : Temperature,
         IBiasingBehavior
     {
         private readonly ElementSet<double> _elements;
         private readonly OnePort<double> _variables;
-
 
         /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Voltage")]

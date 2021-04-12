@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Simulations;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Simulations;
 
 namespace SpiceSharp.Behaviors
 {
@@ -6,6 +7,7 @@ namespace SpiceSharp.Behaviors
     /// A <see cref="IBiasingBehavior"/> that can update after solving an iteration of a <see cref="IBiasingSimulation"/>.
     /// </summary>
     /// <seealso cref="IBehavior" />
+    [SimulationBehavior]
     public interface IBiasingUpdateBehavior : IBehavior
     {
         /// <summary>

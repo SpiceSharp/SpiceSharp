@@ -7,7 +7,7 @@ namespace SpiceSharp.Algebra.Solve
     /// used for implementing the strategy outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract class MarkowitzSearchStrategy<T>
+    public abstract class MarkowitzSearchStrategy<T> : ICloneable<MarkowitzSearchStrategy<T>>
     {
         /// <summary>
         /// Find a pivot in a matrix.
@@ -23,5 +23,8 @@ namespace SpiceSharp.Algebra.Solve
         /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="eliminationStep" /> or <paramref name="max" /> not 1 or higher,
         /// or <paramref name="eliminationStep" /> is higher than <paramref name="max" />.</exception>
         public abstract Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max);
+
+        /// <inheritdoc/>
+        public abstract MarkowitzSearchStrategy<T> Clone();
     }
 }

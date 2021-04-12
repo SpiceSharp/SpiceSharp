@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Behaviors
 {
@@ -7,6 +8,7 @@ namespace SpiceSharp.Behaviors
     /// This behavior is responsible for calculating the DC equivalent behavior of an entity, ie. for biasing the circuit.
     /// </summary>
     /// <seealso cref="IBehavior" />
+    [SimulationBehavior]
     public interface IBiasingBehavior : IBehavior
     {
         /// <summary>

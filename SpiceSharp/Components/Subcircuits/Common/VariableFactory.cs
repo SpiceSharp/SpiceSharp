@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.Subcircuits
             _parent = parent.ThrowIfNull(nameof(parent));
             nodes.ThrowIfNull(nameof(nodes));
 
-            _nodeMap = new Dictionary<string, string>(comparer)
+            _nodeMap = new Dictionary<string, string>(comparer ?? Constants.DefaultComparer)
             {
                 { Constants.Ground, Constants.Ground }
             };

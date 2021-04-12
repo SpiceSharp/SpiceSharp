@@ -85,7 +85,7 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PwlHasManyLinearPoints_Expect_Reference()
         {
-            int n = 10000;
+            var n = 10000;
             var pts = new Point[n];
 
             for (var i = 0; i < n; i++)
@@ -109,7 +109,7 @@ namespace SpiceSharpTest.Waveforms
         [Test]
         public void When_PwlHasManySawPoints_Expect_Reference()
         {
-            int n = 10000;
+            var n = 10000;
             var pts = new Point[n];
 
             for (var i = 0; i < n; i++)
@@ -157,8 +157,8 @@ namespace SpiceSharpTest.Waveforms
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1.3e-6, 10.0);
-            bool wasHit1 = false;
-            bool wasHit2 = false;
+            var wasHit1 = false;
+            var wasHit2 = false;
 
             tran.ExportSimulationData += (sender, args) =>
             {

@@ -1,9 +1,12 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Attributes;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Interface that describes frequency-dependent behaviors.
     /// </summary>
     /// <seealso cref="IBehavior" />
+    [SimulationBehavior]
     public interface IFrequencyBehavior : IBehavior
     {
         /// <summary>

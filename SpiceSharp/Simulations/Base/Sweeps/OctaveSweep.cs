@@ -2,6 +2,7 @@ using SpiceSharp.ParameterSets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -9,7 +10,6 @@ namespace SpiceSharp.Simulations
     /// Class that describes a sweep with a number of points per octave.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
-    [GeneratedParameters]
     public class OctaveSweep : IEnumerable<double>
     {
         private int _pointsPerOctave;

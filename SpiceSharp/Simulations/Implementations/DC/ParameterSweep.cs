@@ -116,5 +116,9 @@ namespace SpiceSharp.Simulations
                 yield return pt;
             }
         }
+
+        /// <inheritdoc/>
+        public ISweep Clone()
+            => (ISweep)MemberwiseClone();
     }
 }

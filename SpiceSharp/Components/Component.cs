@@ -1,5 +1,5 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Entities;
+﻿using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
@@ -18,7 +18,7 @@ namespace SpiceSharp.Components
         IComponent,
         IRuleSubject
     {
-        private readonly string[] _connections;
+        private string[] _connections;
 
         /// <inheritdoc/>
         public IReadOnlyList<string> Nodes => new ReadOnlyCollection<string>(_connections);
@@ -60,24 +60,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        protected override ICloneable Clone()
-        {
-            var clone = (Component)base.Clone();
-            for (var i = 0; i < _connections.Length; i++)
-                clone._connections[i] = _connections[i];
-            return clone;
-        }
-
-        /// <inheritdoc/>
-        protected override void CopyFrom(ICloneable source)
-        {
-            base.CopyFrom(source);
-            var c = (Component)source;
-            for (var i = 0; i < _connections.Length; i++)
-                _connections[i] = c._connections[i];
-        }
-
-        /// <inheritdoc/>
         void IRuleSubject.Apply(IRules rules)
         {
             var p = rules.GetParameterSet<ComponentRuleParameters>();
@@ -101,36 +83,43 @@ namespace SpiceSharp.Components
                 return "{0} {1} {2}".FormatString(Name, string.Join(", ", _connections), Model ?? "");
             return "{0} {1}".FormatString(Name, Model ?? "");
         }
+
+        /// <inheritdoc/>
+        public override IEntity Clone()
+        {
+            var clone = (Component)MemberwiseClone();
+            clone._connections = (string[])_connections.Clone();
+            return clone;
+        }
     }
 
     /// <summary>
-    /// A class that represents a (Spice) component/device.
-    /// This implementation will by default use dependency injection to find behaviors.
+    /// A class that represents a (Spice) component/device with parameters.
     /// </summary>
-    /// <typeparam name="TContext">The type of the context.</typeparam>
-    /// <seealso cref="Entity" />
-    /// <seealso cref="IComponent" />
-    /// <seealso cref="IRuleSubject" />
-    public abstract class Component<TContext> : Component,
-        IEntity<TContext>
-        where TContext : IBindingContext
+    /// <typeparam name="P">The component parameter type.</typeparam>
+    public abstract class Component<P> : Component, IParameterized<P>
+        where P : IParameterSet, ICloneable<P>, new()
     {
+        /// <inheritdoc/>
+        public P Parameters { get; private set; }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Component{TContext}"/> class.
+        /// Initializes a new instance of the <see cref="Component{P}"/> class.
         /// </summary>
-        /// <param name="name">The string of the entity.</param>
+        /// <param name="name">The name.</param>
         /// <param name="nodeCount">The node count.</param>
-        protected Component(string name, int nodeCount) 
+        protected Component(string name, int nodeCount)
             : base(name, nodeCount)
         {
+            Parameters = new();
         }
 
-        /// <inheritdoc />
-        public override void CreateBehaviors(ISimulation simulation)
+        /// <inheritdoc/>
+        public override IEntity Clone()
         {
-            var behaviors = new BehaviorContainer(Name);
-            Entities.DependencyInjection.DI.Resolve(simulation, this, behaviors);
-            simulation.EntityBehaviors.Add(behaviors);
+            var clone = (Component<P>)base.Clone();
+            clone.Parameters = Parameters.Clone();
+            return clone;
         }
     }
 }

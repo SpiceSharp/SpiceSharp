@@ -12,8 +12,9 @@ namespace SpiceSharp.Components.Inductors
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(Inductor), typeof(ITimeBehavior), 2)]
-    public class Time : Biasing,
+    [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(ITimeBehavior))]
+    [GeneratedParameters]
+    public partial class Time : Biasing,
         ITimeBehavior
     {
         private readonly ElementSet<double> _elements;

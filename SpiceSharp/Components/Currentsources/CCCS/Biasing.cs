@@ -14,9 +14,10 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
     /// <seealso cref="Behavior"/>
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="Parameters"/>
-    [BehaviorFor(typeof(CurrentControlledCurrentSource), typeof(IBiasingBehavior))]
-    public class Biasing : Behavior,
+    /// <seealso cref="CurrentControlledCurrentSources.Parameters"/>
+    [BehaviorFor(typeof(CurrentControlledCurrentSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    [GeneratedParameters]
+    public partial class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<Parameters>
     {

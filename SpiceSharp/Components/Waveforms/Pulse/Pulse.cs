@@ -1,6 +1,9 @@
 ﻿using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
+using SpiceSharp.Attributes;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations.IntegrationMethods;
 
 namespace SpiceSharp.Components
 {
@@ -9,7 +12,8 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
-    public partial class Pulse : ParameterSet,
+    [GeneratedParameters]
+    public partial class Pulse : ParameterSet<IWaveformDescription>,
         IWaveformDescription
     {
         /// <summary>
@@ -46,7 +50,8 @@ namespace SpiceSharp.Components
         /// The rise time.
         /// </value>
         [ParameterName("tr"), ParameterInfo("The rise time", Units = "s")]
-        public double RiseTime { get; set; }
+        [GreaterThanOrEquals(0)]
+        private GivenParameter<double> _riseTime;
 
         /// <summary>
         /// Gets or sets the fall time in seconds.
@@ -55,7 +60,8 @@ namespace SpiceSharp.Components
         /// The fall time.
         /// </value>
         [ParameterName("tf"), ParameterInfo("The fall time", Units = "s")]
-        public double FallTime { get; set; }
+        [GreaterThanOrEquals(0)]
+        private GivenParameter<double> _fallTime;
 
         /// <summary>
         /// Gets or sets the width of the pulse in seconds.
@@ -64,7 +70,8 @@ namespace SpiceSharp.Components
         /// The pulse width.
         /// </value>
         [ParameterName("pw"), ParameterInfo("The pulse width", Units = "s")]
-        public double PulseWidth { get; set; } = double.PositiveInfinity;
+        [GreaterThan(0)]
+        private double _pulseWidth = double.PositiveInfinity;
 
         /// <summary>
         /// Gets or sets the period in seconds.
@@ -73,14 +80,15 @@ namespace SpiceSharp.Components
         /// The period.
         /// </value>
         [ParameterName("per"), ParameterInfo("The period", Units = "s")]
-        public double Period { get; set; } = double.PositiveInfinity;
+        [GreaterThan(0)]
+        private double _period = double.PositiveInfinity;
 
         /// <summary>
         /// Sets all the pulse parameters.
         /// </summary>
         /// <param name="pulse">The pulse parameters.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="pulse"/> does not have 1-7 parameters.</exception>
-        [ParameterName("pulse"), ParameterInfo("A vector of all pulse waveform parameters")]
+        [ParameterName("pulse"), ParameterInfo("Specify the waveform as a vector")]
         public void SetPulse(double[] pulse)
         {
             pulse.ThrowIfNotLength(nameof(pulse), 1, 7);
@@ -111,10 +119,28 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public IWaveform Create(IIntegrationMethod method)
+        public IWaveform Create(IBindingContext context)
         {
+            IIntegrationMethod method = null;
+            TimeParameters tp = null;
+            context?.TryGetState(out method);
+            context?.TryGetSimulationParameterSet(out tp);
+            double step = 1.0;
+            if (!RiseTime.Given || !FallTime.Given)
+            {
+                if (tp is SpiceMethod sm)
+                    step = sm.InitialStep;
+                else if (tp != null)
+                    step = tp.StopTime / 50.0;
+            }
             return new Instance(method,
-                InitialValue, PulsedValue, Delay, RiseTime, FallTime, PulseWidth, Period);
+                InitialValue,
+                PulsedValue,
+                Delay,
+                RiseTime.Given ? RiseTime.Value : step,
+                FallTime.Given ? FallTime.Value : step,
+                PulseWidth,
+                Period);
         }
 
         /// <summary>
@@ -153,7 +179,14 @@ namespace SpiceSharp.Components
         /// </returns>
         public override string ToString()
         {
-            return "pulse({0} {1} {2} {3} {4} {5} {6})".FormatString(InitialValue, PulsedValue, Delay, RiseTime, FallTime, PulseWidth, Period);
+            return "pulse({0} {1} {2} {3} {4} {5} {6})".FormatString(
+                InitialValue,
+                PulsedValue,
+                Delay,
+                RiseTime,
+                FallTime,
+                PulseWidth,
+                Period);
         }
     }
 }

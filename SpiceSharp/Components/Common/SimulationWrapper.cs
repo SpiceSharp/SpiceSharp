@@ -147,10 +147,13 @@ namespace SpiceSharp.Components.Common
         public bool UsesBehaviors<B>() where B : IBehavior => Parent.UsesBehaviors<B>();
 
         /// <inheritdoc/>
-        public virtual P GetParameterSet<P>() where P : IParameterSet => Parent.GetParameterSet<P>();
+        public bool UsesBehavior(Type behaviorType) => Parent.UsesBehavior(behaviorType);
 
         /// <inheritdoc/>
-        public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        public virtual P GetParameterSet<P>() where P : IParameterSet, ICloneable<P> => Parent.GetParameterSet<P>();
+
+        /// <inheritdoc/>
+        public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P>
             => Parent.TryGetParameterSet(out value);
 
         /// <inheritdoc/>
@@ -170,17 +173,5 @@ namespace SpiceSharp.Components.Common
 
         /// <inheritdoc/>
         public virtual Func<P> CreatePropertyGetter<P>(string name) => Parent.CreatePropertyGetter<P>(name);
-
-        /// <inheritdoc/>
-        public ICloneable Clone()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <inheritdoc/>
-        public void CopyFrom(ICloneable cloneable)
-        {
-            throw new NotSupportedException();
-        }
     }
 }

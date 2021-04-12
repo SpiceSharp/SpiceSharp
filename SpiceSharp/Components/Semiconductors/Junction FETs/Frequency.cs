@@ -13,8 +13,8 @@ namespace SpiceSharp.Components.JFETs
     /// </summary>
     /// <seealso cref="Biasing" />
     /// <seealso cref="IFrequencyBehavior" />
-    [BehaviorFor(typeof(JFET), typeof(IFrequencyBehavior), 2)]
-    public class FrequencyBehavior : Biasing,
+    [BehaviorFor(typeof(JFET)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
+    public class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;
@@ -64,11 +64,11 @@ namespace SpiceSharp.Components.JFETs
         protected new IVariable<Complex> SourcePrime { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FrequencyBehavior"/> class.
+        /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
-        public FrequencyBehavior(IComponentBindingContext context)
+        public Frequency(IComponentBindingContext context)
             : base(context)
         {
             ComplexState = context.GetState<IComplexSimulationState>();

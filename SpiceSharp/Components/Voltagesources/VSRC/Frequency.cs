@@ -12,11 +12,12 @@ namespace SpiceSharp.Components.VoltageSources
     /// <summary>
     /// AC behavior for <see cref="VoltageSource"/>
     /// </summary>
-    /// <seealso cref="BiasingBehavior"/>
+    /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
-    [BehaviorFor(typeof(VoltageSource), typeof(IFrequencyBehavior), 1)]
-    public class FrequencyBehavior : BiasingBehavior,
+    [BehaviorFor(typeof(VoltageSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
+    [GeneratedParameters]
+    public partial class FrequencyBehavior : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
     {

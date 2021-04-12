@@ -14,8 +14,9 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(Capacitor), typeof(IFrequencyBehavior), 1)]
-    public class Frequency : Temperature,
+    [BehaviorFor(typeof(Capacitor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
+    [GeneratedParameters]
+    public partial class Frequency : Temperature,
         IFrequencyBehavior
     {
         private readonly IComplexSimulationState _complex;

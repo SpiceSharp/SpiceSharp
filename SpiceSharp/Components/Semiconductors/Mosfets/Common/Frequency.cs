@@ -13,9 +13,11 @@ namespace SpiceSharp.Components.Mosfets
     /// </summary>
     /// <seealso cref="Behavior"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(Mosfet1), typeof(IFrequencyBehavior), 1)]
-    [BehaviorFor(typeof(Mosfet2), typeof(IFrequencyBehavior), 1)]
-    [BehaviorFor(typeof(Mosfet3), typeof(IFrequencyBehavior), 1)]
+    [BehaviorFor(typeof(Mosfet1))]
+    [BehaviorFor(typeof(Mosfet2))]
+    [BehaviorFor(typeof(Mosfet3))]
+    [AddBehaviorIfNo(typeof(IFrequencyBehavior))]
+    [BehaviorRequires(typeof(IMosfetBiasingBehavior))]
     public class Frequency : Behavior,
         IFrequencyBehavior
     {

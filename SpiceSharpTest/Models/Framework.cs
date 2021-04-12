@@ -48,6 +48,9 @@ namespace SpiceSharpTest.Models
                 behaviors.Add(new Mapper(_nodes, context));
                 simulation.EntityBehaviors.Add(behaviors);
             }
+
+            public override IEntity Clone()
+                => (IEntity)MemberwiseClone();
         }
 
         /// <summary>

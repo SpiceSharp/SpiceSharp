@@ -14,8 +14,9 @@ namespace SpiceSharp.Components.Inductors
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior" />
     /// <seealso cref="IBranchedBehavior{T}" />
-    [BehaviorFor(typeof(Inductor), typeof(IBiasingBehavior), 1)]
-    public class Biasing : Temperature,
+    [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    [GeneratedParameters]
+    public partial class Biasing : Temperature,
         IBiasingBehavior,
         IBranchedBehavior<double>
     {

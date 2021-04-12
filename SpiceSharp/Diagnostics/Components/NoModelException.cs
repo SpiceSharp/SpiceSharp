@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp.Diagnostics
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp.Diagnostics
     /// An exception thrown if a component does not have a model but expects it.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class NoModelException : SpiceSharpException
     {
         /// <summary>
@@ -31,7 +27,6 @@ namespace SpiceSharp.Diagnostics
         /// </value>
         public virtual Type ModelType { get; } = typeof(void);
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="NoModelException"/> class.
         /// </summary>
@@ -57,7 +52,6 @@ namespace SpiceSharp.Diagnostics
             info.AddValue(nameof(ModelType), ModelType.FullName);
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoModelException"/> class.

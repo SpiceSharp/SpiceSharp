@@ -15,7 +15,7 @@ namespace SpiceSharp.Components.SamplerBehaviors
     /// <seealso cref="Behavior"/>
     /// <seealso cref="ITimeBehavior"/>
     /// <seealso cref="ITruncatingBehavior"/>
-    [BehaviorFor(typeof(Sampler), typeof(ITruncatingBehavior), 1)]
+    [BehaviorFor(typeof(Sampler)), AddBehaviorIfNo(typeof(ITruncatingBehavior))]
     public class Truncating : Behavior,
         ITimeBehavior,
         ITruncatingBehavior

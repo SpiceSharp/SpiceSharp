@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.Bipolars
     /// <summary>
     /// Noise behavior for <see cref="BipolarJunctionTransistor"/>
     /// </summary>
-    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(INoiseBehavior), 3)]
+    [BehaviorFor(typeof(BipolarJunctionTransistor)), AddBehaviorIfNo(typeof(INoiseBehavior))]
     public class Noise : Frequency, INoiseBehavior
     {
         private readonly INoiseSimulationState _noise;

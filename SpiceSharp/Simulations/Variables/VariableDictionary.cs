@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="VariableDictionary{V}"/> class.
         /// </summary>
         public VariableDictionary()
-            : this(EqualityComparer<string>.Default)
+            : this(Constants.DefaultComparer)
         {
         }
 
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
         /// <param name="comparer">The <see cref="IEqualityComparer{T}" /> implementation to use when comparing variable names, or <c>null</c> to use the default <see cref="EqualityComparer{T}"/>.</param>
         public VariableDictionary(IEqualityComparer<string> comparer)
         {
-            _map = new Dictionary<string, V>(comparer);
+            _map = new Dictionary<string, V>(comparer ?? Constants.DefaultComparer);
         }
 
         /// <inheritdoc/>

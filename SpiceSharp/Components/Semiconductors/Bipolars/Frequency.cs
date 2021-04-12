@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.Bipolars
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(IFrequencyBehavior), 2)]
+    [BehaviorFor(typeof(BipolarJunctionTransistor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     public class Frequency : Dynamic,
         IFrequencyBehavior
     {

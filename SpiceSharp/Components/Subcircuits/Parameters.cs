@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Subcircuits
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.Subcircuits
     /// Parameters for a <see cref="Subcircuit"/>.
     /// </summary>
     /// <seealso cref="ParameterSet" />
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet, ICloneable<Parameters>
     {
         /// <summary>
         /// Gets or sets the subcircuit definition.
@@ -25,5 +27,13 @@ namespace SpiceSharp.Components.Subcircuits
         /// </value>
         [ParameterName("localsolver"), ParameterInfo("Flag indicating whether or not a local solver should be used.")]
         public bool LocalSolver { get; set; }
+
+        /// <inheritdoc/>
+        public Parameters Clone()
+        {
+            var clone = (Parameters)MemberwiseClone();
+            clone.Definition = Definition?.Clone();
+            return clone;
+        }
     }
 }

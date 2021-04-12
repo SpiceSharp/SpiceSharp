@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Diagnostics;
+using SpiceSharp.Attributes;
 using System;
 
 namespace SpiceSharp.ParameterSets
@@ -10,8 +11,7 @@ namespace SpiceSharp.ParameterSets
     /// <remarks>
     /// Named parameters or properties are tagged with the attribute <see cref="ParameterNameAttribute"/>.
     /// </remarks>
-    /// <seealso cref="ICloneable" />
-    public interface IParameterSet : ICloneable
+    public interface IParameterSet
     {
         /// <summary>
         /// Sets a parameter in the parameter set of the specified type and with the specified name.

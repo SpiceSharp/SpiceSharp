@@ -13,8 +13,9 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature" />
     /// <seealso cref="ITimeBehavior" />
-    [BehaviorFor(typeof(Capacitor), typeof(ITimeBehavior), 1)]
-    public class Time : Temperature,
+    [BehaviorFor(typeof(Capacitor)), AddBehaviorIfNo(typeof(ITimeBehavior))]
+    [GeneratedParameters]
+    public partial class Time : Temperature,
         IBiasingBehavior,
         ITimeBehavior
     {

@@ -20,8 +20,9 @@ namespace SpiceSharp.Components.CurrentSources
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="IndependentSourceParameters"/>
-    [BehaviorFor(typeof(CurrentSource), typeof(IBiasingBehavior))]
-    public class Biasing : Behavior,
+    [BehaviorFor(typeof(CurrentSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    [GeneratedParameters]
+    public partial class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<IndependentSourceParameters>
     {
@@ -32,7 +33,7 @@ namespace SpiceSharp.Components.CurrentSources
         private readonly ElementSet<double> _elements;
 
         /// <inheritdoc/>
-        public IndependentSourceParameters Parameters { get; }
+        public IndependentSourceParameters Parameters { get; private set; }
 
         /// <summary>
         /// Gets the waveform.
@@ -67,9 +68,8 @@ namespace SpiceSharp.Components.CurrentSources
             _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
             _variables = new OnePort<double>(_biasing, context);
-
-            context.TryGetState(out _method);
-            Waveform = Parameters.Waveform?.Create(_method);
+            context.TryGetState<IIntegrationMethod>(out _method);
+            Waveform = Parameters.Waveform?.Create(context);
 
             // Give some warnings if no value is given
             if (!Parameters.DcValue.Given)

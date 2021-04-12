@@ -1,7 +1,5 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Reflection;
 using SpiceSharp.Simulations;
 using System;
 
@@ -58,14 +56,6 @@ namespace SpiceSharp.Entities
             return this;
         }
 
-        /// <inheritdoc/>
-        protected override ICloneable Clone()
-        {
-            var clone = (Entity)Factory<string>.Get(GetType(), Name);
-            clone.CopyFrom(this);
-            return clone;
-        }
-
         /// <summary>
         /// Returns a string that represents the current entity.
         /// </summary>
@@ -76,35 +66,38 @@ namespace SpiceSharp.Entities
         {
             return "{0} ({1})".FormatString(Name, GetType().Name);
         }
+
+        /// <inheritdoc/>
+        public abstract IEntity Clone();
     }
 
     /// <summary>
     /// Base class for any circuit object that can take part in simulations.
-    /// This implementation will by default use dependency injection for resolving behaviors.
+    /// This variant also defines a cloneable parameter set.
     /// </summary>
-    /// <typeparam name="TContext">The type of the context.</typeparam>
-    /// <seealso cref="ParameterSetCollection" />
-    /// <seealso cref="IEntity" />
-    public abstract class Entity<TContext> : Entity,
-        IEntity<TContext>
-        where TContext : IBindingContext
+    /// <typeparam name="P">The parameter set type.</typeparam>
+    public abstract class Entity<P> : Entity, IParameterized<P>
+        where P : IParameterSet, ICloneable<P>, new()
     {
+        /// <inheritdoc/>
+        public P Parameters { get; private set; }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="Entity{TContext}"/> class.
+        /// Initializes a new instance of the <see cref="Entity{P}"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
-        protected Entity(string name) 
+        protected Entity(string name)
             : base(name)
         {
+            Parameters = new();
         }
 
-        /// <inheritdoc />
-        public override void CreateBehaviors(ISimulation simulation)
+        /// <inheritdoc/>
+        public override IEntity Clone()
         {
-            var behaviors = new BehaviorContainer(Name);
-            DependencyInjection.DI.Resolve(simulation, this, behaviors);
-            simulation.EntityBehaviors.Add(behaviors);
+            var clone = (Entity<P>)MemberwiseClone();
+            clone.Parameters = Parameters.Clone();
+            return clone;
         }
     }
 }

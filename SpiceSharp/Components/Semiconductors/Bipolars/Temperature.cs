@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Bipolars
     /// <seealso cref="ITemperatureBehavior" />
     /// <seealso cref="IParameterized{P}" />
     /// <seealso cref="Bipolars.Parameters"/>
-    [BehaviorFor(typeof(BipolarJunctionTransistor), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(BipolarJunctionTransistor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>

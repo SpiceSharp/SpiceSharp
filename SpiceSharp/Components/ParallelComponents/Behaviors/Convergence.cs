@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Biasing" />
     /// <seealso cref="IConvergenceBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(IConvergenceBehavior), 1)]
+    [BehaviorFor(typeof(Parallel))]
     public partial class Convergence : Biasing,
         IParallelBehavior,
         IConvergenceBehavior

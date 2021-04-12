@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.Diodes
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Diodes.Parameters"/>
-    [BehaviorFor(typeof(Diode), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(Diode)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>

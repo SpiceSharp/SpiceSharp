@@ -13,8 +13,9 @@ namespace SpiceSharp.Components.Resistors
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
-    [BehaviorFor(typeof(Resistor), typeof(ITemperatureBehavior))]
-    public class Temperature : Behavior,
+    [BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
+    [GeneratedParameters]
+    public partial class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>
     {

@@ -12,8 +12,9 @@ namespace SpiceSharp.Components.Resistors
     /// </summary>
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>
-    [BehaviorFor(typeof(Resistor), typeof(INoiseBehavior), 3)]
-    public class Noise : Frequency, INoiseBehavior
+    [BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(INoiseBehavior))]
+    [GeneratedParameters]
+    public partial class Noise : Frequency, INoiseBehavior
     {
         private readonly NoiseThermal _thermal;
 

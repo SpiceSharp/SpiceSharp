@@ -1,9 +1,7 @@
 ﻿using SpiceSharp.Validation;
 using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp.Simulations
 {
@@ -11,9 +9,7 @@ namespace SpiceSharp.Simulations
     /// An exception thrown when a simulation fails its validation.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class ValidationFailedException : SpiceSharpException
     {
         /// <summary>
@@ -24,7 +20,6 @@ namespace SpiceSharp.Simulations
         /// </value>
         public virtual IRules Rules { get; } = null;
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationFailedException"/> class.
         /// </summary>
@@ -45,11 +40,9 @@ namespace SpiceSharp.Simulations
         {
             info.ThrowIfNull(nameof(info));
 
-            // We may add serialization for rules here
-
+            // TODO: We may add serialization for rules here
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationFailedException"/> class.
