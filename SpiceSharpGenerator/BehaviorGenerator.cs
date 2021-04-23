@@ -136,18 +136,8 @@ namespace SpiceSharpGenerator
                 // Get the set of behaviors for this entity
                 var bindingContext = bindingContexts.GetBindingContext(symbol);
                 var factory = new BehaviorFactoryResolver(symbol, behaviorMap[symbol], bindingContext);
-                try
-                {
-                    var code = factory.Create();
-                    context.AddSource(symbol.ToString() + ".Behaviors.cs", code);
-                }
-                catch (CyclicDependencyException)
-                {
-                    var descriptor = new DiagnosticDescriptor(
-                        "SpiceSharp01",
-                        $"{symbol}: The flagged behaviors are cylically dependent.",
-                        ")
-                }
+                var code = factory.Create();
+                context.AddSource(symbol.ToString() + ".Behaviors.cs", code);
             }
         }
         private void CreatePropertyParameterMethods(GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> @classes,
