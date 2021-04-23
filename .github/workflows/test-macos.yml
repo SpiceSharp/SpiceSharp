@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Compile Spice#
-      run: dotnet build SpiceSharp\SpiceSharp.csproj --configuration Debug --no-restore
+      run: dotnet build SpiceSharp/SpiceSharp.csproj --configuration Debug --no-restore
 
     - name: Compile Spice#.Test
-      run: dotnet test SpiceSharpTest\SpiceSharpTest.csproj --configuration Debug --no-restore
+      run: dotnet test SpiceSharpTest/SpiceSharpTest.csproj --configuration Debug --no-restore
