@@ -29,7 +29,3 @@ jobs:
 
     - name: Compile Spice#.Test
       run: dotnet test SpiceSharpTest\SpiceSharpTest.csproj --configuration Debug --no-restore
-      
-    - name: Run tests
-      run: dotnet test SpiceSharpTest/bin/Debug/SpiceSharpTest.dll
-
