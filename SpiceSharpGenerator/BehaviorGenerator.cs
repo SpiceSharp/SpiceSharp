@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using SpiceSharpGenerator.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using ClassDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;
@@ -135,8 +136,18 @@ namespace SpiceSharpGenerator
                 // Get the set of behaviors for this entity
                 var bindingContext = bindingContexts.GetBindingContext(symbol);
                 var factory = new BehaviorFactoryResolver(symbol, behaviorMap[symbol], bindingContext);
-                var code = factory.Create();
-                context.AddSource(symbol.ToString() + ".Behaviors.cs", code);
+                try
+                {
+                    var code = factory.Create();
+                    context.AddSource(symbol.ToString() + ".Behaviors.cs", code);
+                }
+                catch (CyclicDependencyException)
+                {
+                    var descriptor = new DiagnosticDescriptor(
+                        "SpiceSharp01",
+                        $"{symbol}: The flagged behaviors are cylically dependent.",
+                        ")
+                }
             }
         }
         private void CreatePropertyParameterMethods(GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> @classes,
@@ -166,13 +177,13 @@ namespace SpiceSharpGenerator
                     var symbol = model.GetDeclaredSymbol(variable, context.CancellationToken) as IFieldSymbol;
                     var @class = symbol.ContainingType;
                     if (!map.TryGetValue(@class, out var list))
-                    {
+                {
                         list = new List<(IFieldSymbol, SyntaxTriviaList)>();
                         map.Add(@class, list);
                     }
                     list.Add((symbol, field.GetLeadingTrivia()));
                 }
-            }
+                }
             foreach (var pair in map)
             {
                 var factory = new PropertyResolver(pair.Key, pair.Value);
