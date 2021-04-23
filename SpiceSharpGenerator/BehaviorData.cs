@@ -38,7 +38,7 @@ namespace SpiceSharpGenerator
         /// <param name="behavior">The behavior type.</param>
         public BehaviorData(INamedTypeSymbol behavior)
         {
-            Behavior = behavior;
+            Behavior = behavior ?? throw new ArgumentNullException(nameof(behavior));
         }
 
         /// <inheritdoc/>

@@ -76,6 +76,7 @@ namespace SpiceSharpGenerator
 
             var sb = new StringBuilder(32);
             var needsBuilder = true;
+
             foreach (var behavior in _graph.OrderByIndependentFirst())
             {
                 // No behavior needed, but still respect the order!

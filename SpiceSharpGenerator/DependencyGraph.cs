@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpiceSharpGenerator.Diagnostics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -157,7 +158,7 @@ namespace SpiceSharpGenerator
 
             // If there are still edges left, then we have a cyclic dependency
             if (edges.Any())
-                throw new Exception("Cyclic dependency");
+                throw new CyclicDependencyException();
         }
     }
 }
