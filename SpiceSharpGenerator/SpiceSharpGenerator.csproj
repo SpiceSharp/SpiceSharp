@@ -4,7 +4,11 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IncludeSymbols>false</IncludeSymbols>
+		<DevelopmentDependency>true</DevelopmentDependency>
+		<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+
 		<Authors>Sven Boulanger</Authors>
 		<Company>SpiceSharp</Company>
 		<Product>SpiceSharp.Generator</Product>
@@ -16,12 +20,21 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
 		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
+		<PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
+		<Version>1.0.2</Version>
+		<AssemblyVersion>1.0.2.0</AssemblyVersion>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
 	  <None Remove="bin\Debug\netstandard2.0\SpiceSharpGenerator.dll" />
 	</ItemGroup>
-	
+
+	<ItemGroup>
+	  <Compile Remove="bin\**" />
+	  <EmbeddedResource Remove="bin\**" />
+	  <None Remove="bin\**" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false">
 			<Pack>True</Pack>
@@ -34,7 +47,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
 	</ItemGroup>
+
+	<Target Name="GetDependencyTargetPaths">
+		<ItemGroup>
+			<TargetPathWithTargetPlatformMoniker Include="$(PkgBase32768)\lib\netstandard2.0\*.dll" IncludeRuntimeDependency="false" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="PackBuildOutputs" DependsOnTargets="SatelliteDllsProjectOutputGroup;DebugSymbolsProjectOutputGroup">
+		<ItemGroup>
+			<TfmSpecificPackageFile Include="$(TargetDir)\*.dll" PackagePath="analyzers\dotnet\cs" />
+			<TfmSpecificPackageFile Include="$(PkgBase32768)\lib\netstandard2.0\*.dll" PackagePath="analyzers\dotnet\cs" />
+		</ItemGroup>
+	</Target>
 </Project>

@@ -26,15 +26,15 @@ namespace SpiceSharp.Components.Inductors
         /// <inheritdoc/>
         public IVariable<double> Branch { get; }
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Current")]
         public double Current => Branch.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Power")]
         public double Power => -Voltage * Current;
 

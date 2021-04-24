@@ -28,15 +28,15 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// <inheritdoc/>
         public Parameters Parameters { get; }
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]
         public double Voltage => _variables.Right.Positive.Value - _variables.Right.Negative.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
         public double Current => (_variables.Left.Positive.Value - _variables.Left.Negative.Value) * Parameters.Transconductance;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
         public double Power => -Voltage * Current;
 

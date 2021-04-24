@@ -25,11 +25,11 @@ namespace SpiceSharp.Components.Diodes
         /// </summary>
         protected readonly DiodeVariables<Complex> ComplexVariables;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("vd"), ParameterInfo("The complex voltage across the internal diode")]
         public Complex ComplexVoltage => (ComplexVariables.PosPrime.Value - ComplexVariables.Negative.Value) / Parameters.SeriesMultiplier;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("id"), ParameterName("c"), ParameterName("cd"), ParameterInfo("The complex current through the diode")]
         public Complex ComplexCurrent
         {
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.Diodes
             }
         }
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterName("pd"), ParameterInfo("The complex power")]
         public Complex ComplexPower => ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 

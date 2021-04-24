@@ -25,15 +25,15 @@ namespace SpiceSharp.Components.VoltageSources
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex ComplexVoltage => Parameters.Phasor;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => Branch.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex ComplexPower => -Voltage * Complex.Conjugate(Branch.Value);
 
