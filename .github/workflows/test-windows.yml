@@ -1,4 +1,4 @@
-name: Windows Tests
+name: Linux Tests
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -20,9 +20,12 @@ jobs:
       uses: actions/setup-dotnet@master
       with:
         dotnet-version: '5.0.100'
+    
+    - name: Restore dependencies
+      run: dotnet restore
 
     - name: Compile Spice#
-      run: dotnet build SpiceSharp\SpiceSharp.csproj --configuration Debug
+      run: dotnet build SpiceSharp/SpiceSharp.csproj --configuration Debug --no-restore
 
     - name: Compile Spice#.Test
-      run: dotnet test SpiceSharpTest\SpiceSharpTest.csproj --configuration Debug
+      run: dotnet test SpiceSharpTest/SpiceSharpTest.csproj --configuration Debug --no-restore

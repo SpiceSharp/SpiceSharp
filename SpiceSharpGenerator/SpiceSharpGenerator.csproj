@@ -7,7 +7,6 @@
 		<IncludeSymbols>false</IncludeSymbols>
 		<DevelopmentDependency>true</DevelopmentDependency>
 		<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
-		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 
 		<Authors>Sven Boulanger</Authors>
 		<Company>SpiceSharp</Company>
@@ -21,8 +20,8 @@
 		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
 		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
 		<PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
-		<Version>1.0.2</Version>
-		<AssemblyVersion>1.0.2.0</AssemblyVersion>
+		<Version>1.0.3</Version>
+		<AssemblyVersion>1.0.3.0</AssemblyVersion>
 	</PropertyGroup>
 	
 	<ItemGroup>
