@@ -4,10 +4,8 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
-		<IncludeSymbols>false</IncludeSymbols>
 		<DevelopmentDependency>true</DevelopmentDependency>
-		<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
-
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Authors>Sven Boulanger</Authors>
 		<Company>SpiceSharp</Company>
 		<Product>SpiceSharp.Generator</Product>
@@ -19,19 +17,12 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
 		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
-		<PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
 		<Version>1.0.3</Version>
 		<AssemblyVersion>1.0.3.0</AssemblyVersion>
 	</PropertyGroup>
-	
-	<ItemGroup>
-	  <None Remove="bin\Debug\netstandard2.0\SpiceSharpGenerator.dll" />
-	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="bin\**" />
-	  <EmbeddedResource Remove="bin\**" />
-	  <None Remove="bin\**" />
+		<None Remove="bin\Debug\netstandard2.0\SpiceSharpGenerator.dll" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,13 +31,13 @@
 			<PackagePath>analyzers\dotnet\cs</PackagePath>
 		</None>
 		<None Include="..\docs\api\images\logo_full.png">
-		  <Pack>True</Pack>
-		  <PackagePath></PackagePath>
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
 	</ItemGroup>
 </Project>
