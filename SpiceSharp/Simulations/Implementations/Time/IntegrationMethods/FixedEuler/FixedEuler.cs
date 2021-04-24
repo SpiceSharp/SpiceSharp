@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.ParameterSets;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {
@@ -8,6 +9,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
     /// This method is one of the fastest, but can also lead to inaccurate results.
     /// </summary>
     /// <seealso cref="TimeParameters" />
+    [GeneratedParameters]
     public partial class FixedEuler : TimeParameters
     {
         /// <summary>

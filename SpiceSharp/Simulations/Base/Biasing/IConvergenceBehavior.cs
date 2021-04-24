@@ -1,9 +1,12 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Attributes;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Interface for an <see cref="IBiasingBehavior"/> that can check for convergence.
     /// </summary>
     /// <seealso cref="IBiasingBehavior" />
+    [SimulationBehavior]
     public interface IConvergenceBehavior : IBiasingBehavior
     {
         /// <summary>

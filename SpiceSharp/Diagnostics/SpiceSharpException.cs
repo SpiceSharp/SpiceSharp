@@ -1,7 +1,5 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
-#endif
 
 namespace SpiceSharp
 {
@@ -9,12 +7,9 @@ namespace SpiceSharp
     /// An exception for SpiceSharp-related issues.
     /// </summary>
     /// <seealso cref="Exception" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class SpiceSharpException : Exception
     {
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
         /// </summary>
@@ -24,7 +19,6 @@ namespace SpiceSharp
             : base(info, context)
         {
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.

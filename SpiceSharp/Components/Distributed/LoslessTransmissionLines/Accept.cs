@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// </summary>
     /// <seealso cref="Time"/>
     /// <seealso cref="IAcceptBehavior"/>
-    [BehaviorFor(typeof(LosslessTransmissionLine), typeof(IAcceptBehavior), 2)]
+    [BehaviorFor(typeof(LosslessTransmissionLine)), AddBehaviorIfNo(typeof(IAcceptBehavior))]
     public class Accept : Time,
         IAcceptBehavior
     {

@@ -14,19 +14,20 @@ namespace SpiceSharp.Components.CurrentSources
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(CurrentSource), typeof(IFrequencyBehavior), 1)]
-    public class Frequency : Biasing,
+    [BehaviorFor(typeof(CurrentSource)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly IComplexSimulationState _complex;
         private readonly OnePort<Complex> _variables;
         private readonly ElementSet<Complex> _elements;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("Complex voltage")]
         public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("Complex power")]
         public Complex ComplexPower
         {
@@ -37,7 +38,7 @@ namespace SpiceSharp.Components.CurrentSources
             }
         }
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
         public Complex ComplexCurrent => Parameters.Phasor;
 

@@ -8,11 +8,9 @@ namespace SpiceSharp.Entities
     /// <summary>
     /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>.
     /// </summary>
-    /// <seealso cref="ICloneable"/>
     /// <seealso cref="IParameterSetCollection"/>
     public interface IEntity :
-        ICloneable,
-        IParameterSetCollection
+        IParameterSetCollection, ICloneable<IEntity>
     {
         /// <summary>
         /// Gets the name of the entity.
@@ -42,17 +40,5 @@ namespace SpiceSharp.Entities
         /// <exception cref="TypeNotFoundException">Thrown if a required behavior or parameter set could not be found.</exception>
         /// <exception cref="AmbiguousTypeException">Thrown if a behavior or parameter set could not be resolved unambiguously.</exception>
         void CreateBehaviors(ISimulation simulation);
-    }
-
-    /// <summary>
-    /// Interface describing an entity that can provide behaviors to a <see cref="ISimulation"/>. It also declares that the entity
-    /// will be providing a type of binding context to behaviors.
-    /// </summary>
-    /// <typeparam name="TContext">The type of binding context.</typeparam>
-    /// <seealso cref="ICloneable" />
-    /// <seealso cref="IParameterSetCollection" />
-    public interface IEntity<TContext>
-        where TContext : IBindingContext
-    {
     }
 }

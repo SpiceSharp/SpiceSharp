@@ -9,7 +9,6 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IFrequencyUpdateBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(IFrequencyUpdateBehavior))]
     public class FrequencyUpdate : Behavior,
         IParallelBehavior,
         IFrequencyUpdateBehavior

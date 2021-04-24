@@ -124,7 +124,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not greater than <paramref name="limit"/>.</exception>
         public static double GreaterThan(this double value, string name, double limit)
         {
-            if (value < limit)
+            if (value <= limit)
                 throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotGreater.FormatString(limit));
             return value;
         }
@@ -139,7 +139,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not less than <paramref name="limit"/>.</exception>
         public static double LessThan(this double value, string name, double limit)
         {
-            if (value < limit)
+            if (value >= limit)
                 throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotLess.FormatString(limit));
             return value;
         }
@@ -169,7 +169,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not less than or equal to the specified limit.</exception>
         public static double LessThanOrEquals(this double value, string name, double limit)
         {
-            if (value < limit)
+            if (value > limit)
                 throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotLessOrEqual.FormatString(limit));
             return value;
         }
@@ -222,7 +222,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not greater than <paramref name="limit"/>.</exception>
         public static int GreaterThan(this int value, string name, int limit)
         {
-            if (value < limit)
+            if (value <= limit)
                 throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotGreater.FormatString(limit));
             return value;
         }
@@ -237,7 +237,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not less than <paramref name="limit"/>.</exception>
         public static int LessThan(this int value, string name, int limit)
         {
-            if (value < limit)
+            if (value >= limit)
                 throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotLess.FormatString(limit));
             return value;
         }
@@ -267,7 +267,7 @@ namespace SpiceSharp
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not less than or equal to the specified limit.</exception>
         public static int LessThanOrEquals(this int value, string name, int limit)
         {
-            if (value < limit)
+            if (value > limit)
                 throw new ArgumentOutOfRangeException(name, value, Properties.Resources.Parameters_NotLessOrEqual.FormatString(limit));
             return value;
         }

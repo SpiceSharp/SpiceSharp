@@ -1,6 +1,7 @@
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.ObjectModel;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -8,11 +9,8 @@ namespace SpiceSharp.Algebra.Solve
     /// A search strategy based on methods outlined by Markowitz.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    [GeneratedParameters]
-    public class Markowitz<T> : ParameterSet
+    public partial class Markowitz<T> : ParameterSet, ICloneable<Markowitz<T>>
     {
-        private double _absolutePivotThreshold = 1e-13;
-        private double _relativePivotThreshold = 1e-3;
         private int[] _markowitzRow;
         private int[] _markowitzColumn;
         private int[] _markowitzProduct;
@@ -58,7 +56,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The magnitude.
         /// </value>
-        public Func<T, double> Magnitude { get; }
+        public Func<T, double> Magnitude { get; private set; }
 
         /// <summary>
         /// Gets the number of singletons.
@@ -76,15 +74,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
         [GreaterThan(0)]
-        public double RelativePivotThreshold
-        {
-            get => _relativePivotThreshold;
-            set
-            {
-                Utility.GreaterThan(value, nameof(RelativePivotThreshold), 0);
-                _relativePivotThreshold = value;
-            }
-        }
+        private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
         /// Gets or sets the absolute threshold for choosing a pivot.
@@ -97,15 +87,7 @@ namespace SpiceSharp.Algebra.Solve
         /// </exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
         [GreaterThanOrEquals(0)]
-        public double AbsolutePivotThreshold
-        {
-            get => _absolutePivotThreshold;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(AbsolutePivotThreshold), 0);
-                _absolutePivotThreshold = value;
-            }
-        }
+        private double _absolutePivotThreshold = 1e-13;
 
         /// <summary>
         /// Gets the strategies used for finding a pivot.
@@ -129,6 +111,10 @@ namespace SpiceSharp.Algebra.Solve
             Strategies.Add(new MarkowitzQuickDiagonal<T>());
             Strategies.Add(new MarkowitzDiagonal<T>());
             Strategies.Add(new MarkowitzEntireMatrix<T>());
+        }
+
+        private Markowitz()
+        {
         }
 
         /// <summary>
@@ -479,6 +465,22 @@ namespace SpiceSharp.Algebra.Solve
                     return chosen;
             }
             return Pivot<ISparseMatrixElement<T>>.Empty;
+        }
+
+        /// <inheritdoc/>
+        public Markowitz<T> Clone()
+        {
+            var clone = new Markowitz<T>();
+            clone.Magnitude = Magnitude;
+            clone._absolutePivotThreshold = _absolutePivotThreshold;
+            clone._relativePivotThreshold = _relativePivotThreshold;
+            clone.Singletons = Singletons;
+            clone._markowitzRow = (int[])_markowitzRow.Clone();
+            clone._markowitzColumn = (int[])_markowitzColumn.Clone();
+            clone._markowitzProduct = (int[])_markowitzProduct.Clone();
+            foreach (var strategy in Strategies)
+                clone.Strategies.Add(strategy);
+            return clone;
         }
     }
 }

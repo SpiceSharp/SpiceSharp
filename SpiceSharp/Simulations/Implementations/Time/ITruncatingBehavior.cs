@@ -1,8 +1,11 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Attributes;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Describes a class that is capable of truncating a timestep.
     /// </summary>
+    [SimulationBehavior]
     public interface ITruncatingBehavior : IBehavior
     {
         /// <summary>

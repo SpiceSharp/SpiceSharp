@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// An interface that describes a sweep of simulation properties.
     /// </summary>
-    public interface ISweep : IParameterSet
+    public interface ISweep : IParameterSet, ICloneable<ISweep>
     {
         /// <summary>
         /// Gets the name of the sweep.

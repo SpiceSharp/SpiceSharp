@@ -9,7 +9,6 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="ITemperatureBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior,
         IParallelBehavior

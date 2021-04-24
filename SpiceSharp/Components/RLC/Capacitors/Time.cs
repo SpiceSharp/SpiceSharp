@@ -13,8 +13,9 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature" />
     /// <seealso cref="ITimeBehavior" />
-    [BehaviorFor(typeof(Capacitor), typeof(ITimeBehavior), 1)]
-    public class Time : Temperature,
+    [BehaviorFor(typeof(Capacitor)), AddBehaviorIfNo(typeof(ITimeBehavior))]
+    [GeneratedParameters]
+    public partial class Time : Temperature,
         IBiasingBehavior,
         ITimeBehavior
     {
@@ -24,15 +25,15 @@ namespace SpiceSharp.Components.Capacitors
         private readonly ITimeSimulationState _time;
         private readonly OnePort<double> _variables;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("The instantaneous current")]
         public double Current => _qcap.Derivative;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("The instantaneous dissipated power")]
         public double Power => -Current * Voltage;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("The instantaneous voltage")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 

@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Diodes
     /// </summary>
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(Diode), typeof(ITimeBehavior), 2)]
+    [BehaviorFor(typeof(Diode)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Dynamic,
         ITimeBehavior
     {

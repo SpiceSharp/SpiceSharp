@@ -2,6 +2,7 @@ using SpiceSharp.ParameterSets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -9,7 +10,6 @@ namespace SpiceSharp.Simulations
     /// This class implements a sweep with a number of points per decade.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
-    [GeneratedParameters]
     public class DecadeSweep : ParameterSet, IEnumerable<double>
     {
         private int _pointsPerDecade;

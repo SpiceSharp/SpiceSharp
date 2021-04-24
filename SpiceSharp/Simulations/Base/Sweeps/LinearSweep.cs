@@ -2,6 +2,7 @@ using SpiceSharp.ParameterSets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations
 {
@@ -9,7 +10,6 @@ namespace SpiceSharp.Simulations
     /// A class that implements a linear sweep.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
-    [GeneratedParameters]
     public class LinearSweep : IEnumerable<double>
     {
         /// <summary>

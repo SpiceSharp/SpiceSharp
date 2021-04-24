@@ -1,5 +1,6 @@
 using SpiceSharp.ParameterSets;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -7,11 +8,8 @@ namespace SpiceSharp.Algebra.Solve
     /// Markowitz-count based strategy for finding a pivot. Search the complete submatrix.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    [GeneratedParameters]
-    public class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T>
+    public partial class MarkowitzEntireMatrix<T> : MarkowitzSearchStrategy<T>
     {
-        private static int _tiesMultiplier = 5;
-
         /// <summary>
         /// Gets or sets a heuristic for speeding up pivot searching.
         /// </summary>
@@ -29,15 +27,11 @@ namespace SpiceSharp.Algebra.Solve
         /// better.
         /// </remarks>
         [GreaterThanOrEquals(0)]
-        public static int TiesMultiplier
-        {
-            get => _tiesMultiplier;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(TiesMultiplier), 0);
-                _tiesMultiplier = value;
-            }
-        }
+        private static int _tiesMultiplier = 5;
+
+        /// <inheritdoc/>
+        public override MarkowitzSearchStrategy<T> Clone()
+            => (MarkowitzSearchStrategy<T>)MemberwiseClone();
 
         /// <inheritdoc/>
         public override Pivot<ISparseMatrixElement<T>> FindPivot(Markowitz<T> markowitz, ISparseMatrix<T> matrix, int eliminationStep, int max)

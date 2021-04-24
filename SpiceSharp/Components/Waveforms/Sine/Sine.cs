@@ -1,6 +1,8 @@
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
+using SpiceSharp.Attributes;
+using SpiceSharp.Entities;
 
 namespace SpiceSharp.Components
 {
@@ -10,11 +12,9 @@ namespace SpiceSharp.Components
     /// <seealso cref="ParameterSet"/>
     /// <seealso cref="IWaveformDescription" />
     [GeneratedParameters]
-    public partial class Sine : ParameterSet,
+    public partial class Sine : ParameterSet<IWaveformDescription>,
         IWaveformDescription
     {
-        private double _frequency;
-
         /// <summary>
         /// Gets or sets the offset.
         /// </summary>
@@ -41,15 +41,7 @@ namespace SpiceSharp.Components
         /// </value>
         [ParameterName("freq"), ParameterInfo("The frequency in Hz", Units = "Hz")]
         [GreaterThanOrEquals(0)]
-        public double Frequency
-        {
-            get => _frequency;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Frequency), 0);
-                _frequency = value;
-            }
-        }
+        private GivenParameter<double> _frequency;
 
         /// <summary>
         /// Gets or sets the delay of the sine wave in seconds.
@@ -111,8 +103,20 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public IWaveform Create(IIntegrationMethod method)
-            => new Instance(method, Offset, Amplitude, Frequency, Delay, Theta, Phase);
+        public IWaveform Create(IBindingContext context)
+        {
+            IIntegrationMethod method = null;
+            TimeParameters tp = null;
+            context?.TryGetState<IIntegrationMethod>(out method);
+            context?.TryGetSimulationParameterSet<TimeParameters>(out tp);
+            return new Instance(method,
+                Offset,
+                Amplitude,
+                Frequency.Given ? Frequency.Value : 1.0 / (tp?.StopTime ?? 1.0),
+                Delay,
+                Theta,
+                Phase);
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Sine"/> class.
@@ -181,7 +185,13 @@ namespace SpiceSharp.Components
         /// </returns>
         public override string ToString()
         {
-            return "sine({0} {1} {2} {3} {4} {5})".FormatString(Offset, Amplitude, Frequency, Delay, Theta, Phase);
+            return "sine({0} {1} {2} {3} {4} {5})".FormatString(
+                Offset,
+                Amplitude,
+                Frequency.Value,
+                Delay,
+                Theta,
+                Phase);
         }
     }
 }

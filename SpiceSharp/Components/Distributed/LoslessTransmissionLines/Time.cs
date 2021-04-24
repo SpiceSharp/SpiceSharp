@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(LosslessTransmissionLine), typeof(ITimeBehavior), 1)]
+    [BehaviorFor(typeof(LosslessTransmissionLine)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Biasing,
         IBiasingBehavior,
         ITimeBehavior

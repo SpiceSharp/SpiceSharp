@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IFrequencyUpdateBehavior" />
-    [BehaviorFor(typeof(Subcircuit), typeof(IFrequencyUpdateBehavior))]
+    [BehaviorFor(typeof(Subcircuit))]
     public class FrequencyUpdate : SubcircuitBehavior<IFrequencyUpdateBehavior>,
         IFrequencyUpdateBehavior
     {

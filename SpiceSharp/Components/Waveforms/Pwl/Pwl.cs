@@ -2,6 +2,9 @@
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
+using System.Linq;
+using SpiceSharp.Entities;
 
 namespace SpiceSharp.Components
 {
@@ -10,6 +13,7 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="ParameterSet" />
     /// <seealso cref="IWaveformDescription" />
+    [GeneratedParameters]
     public partial class Pwl : ParameterSet,
         IWaveformDescription
     {
@@ -39,8 +43,10 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        public IWaveform Create(IIntegrationMethod method)
+        public IWaveform Create(IBindingContext context)
         {
+            IIntegrationMethod method = null;
+            context?.TryGetState<IIntegrationMethod>(out method);
             return new Instance(Points, method);
         }
 
@@ -55,6 +61,15 @@ namespace SpiceSharp.Components
             if (Points != null)
                 return "pwl({0})".FormatString(string.Join(", ", Points));
             return "pwl(null)";
+        }
+
+        /// <inheritdoc/>
+        public IWaveformDescription Clone()
+        {
+            return new Pwl()
+            {
+                Points = (Point[])Points.ToArray().Clone()
+            };
         }
     }
 }

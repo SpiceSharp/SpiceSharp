@@ -87,7 +87,7 @@ namespace SpiceSharp.Entities
         public ConcurrentEntityCollection(IEqualityComparer<string> comparer)
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, IEntity>(comparer);
+            _entities = new Dictionary<string, IEntity>(comparer ?? Constants.DefaultComparer);
         }
 
         /// <summary>
@@ -294,50 +294,6 @@ namespace SpiceSharp.Entities
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        ICloneable ICloneable.Clone() => Clone();
-        void ICloneable.CopyFrom(ICloneable source) => CopyFrom(source);
-
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>
-        /// The cloned instance.
-        /// </returns>
-        protected virtual ICloneable Clone()
-        {
-            _lock.EnterReadLock();
-            try
-            {
-                var clone = new ConcurrentEntityCollection(Comparer);
-                foreach (var entity in this)
-                    clone.Add((IEntity)entity.Clone());
-                return clone;
-            }
-            finally
-            {
-                _lock.ExitReadLock();
-            }
-        }
-
-        /// <summary>
-        /// Copies the contents of one interface to this one.
-        /// </summary>
-        /// <param name="source">The source parameter.</param>
-        protected virtual void CopyFrom(ICloneable source)
-        {
-            var src = (ConcurrentEntityCollection)source;
-            _lock.EnterWriteLock();
-            try
-            {
-                _entities.Clear();
-                foreach (var entity in src._entities.Values)
-                    _entities.Add(entity.Name, entity);
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
-            }
-        }
 
         void ICollection<IEntity>.CopyTo(IEntity[] array, int arrayIndex)
         {
@@ -361,5 +317,13 @@ namespace SpiceSharp.Entities
         /// </summary>
         protected virtual void OnEntityRemoved(EntityEventArgs args) => EntityRemoved?.Invoke(this, args);
 
+        /// <inheritdoc/>
+        public IEntityCollection Clone()
+        {
+            var clone = new ConcurrentEntityCollection(_entities.Comparer);
+            foreach (var pair in _entities.Values)
+                clone.Add(pair.Clone());
+            return clone;
+        }
     }
 }

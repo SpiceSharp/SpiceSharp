@@ -9,7 +9,6 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IAcceptBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(IAcceptBehavior))]
     public class Accept : Behavior,
         IParallelBehavior,
         IAcceptBehavior

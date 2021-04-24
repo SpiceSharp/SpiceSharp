@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Simulations;
 using System;
@@ -9,6 +10,7 @@ namespace SpiceSharp.Components.Switches
     /// A binding context for a <see cref="CurrentSwitch"/>.
     /// </summary>
     /// <seealso cref="CurrentControlledBindingContext" />
+    [BindingContextFor(typeof(CurrentSwitch))]
     public class CurrentSwitchBindingContext : CurrentControlledBindingContext,
         ISwitchBindingContext
     {

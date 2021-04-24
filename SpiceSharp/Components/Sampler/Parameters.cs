@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using SpiceSharp.Simulations;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.SamplerBehaviors
 {
@@ -9,7 +10,8 @@ namespace SpiceSharp.Components.SamplerBehaviors
     /// The parameters for a <see cref="Sampler"/>.
     /// </summary>
     /// <seealso cref="ParameterSet"/>
-    public class Parameters : ParameterSet
+    [GeneratedParameters]
+    public partial class Parameters : ParameterSet<Parameters>
     {
         /// <summary>
         /// Occurs when data can be exported.
@@ -26,13 +28,14 @@ namespace SpiceSharp.Components.SamplerBehaviors
         public IEnumerable<double> Points { get; set; }
 
         /// <summary>
-        /// Gets or sets the minimum timestep that needs to be guaranteed by the sampler.
+        /// Gets or sets the minimum timestep that needs to be respected by the sampler.
         /// </summary>
         /// <value>
         /// The minimum timestep.
         /// </value>
-        [ParameterName("deltamin"), ParameterInfo("The minimum timestep that needs to be guaranteed by the sampler")]
-        public double MinDelta { get; set; } = 1e-12;
+        [ParameterName("deltamin"), ParameterInfo("The minimum timestep that needs to be respected by the sampler")]
+        [GreaterThan(0)]
+        private double _minDelta = 1e-12;
 
         /// <summary>
         /// Calls the <see cref="ExportSimulationData"/> event.

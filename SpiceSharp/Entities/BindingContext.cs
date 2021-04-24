@@ -3,6 +3,7 @@ using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Entities
 {
@@ -14,6 +15,7 @@ namespace SpiceSharp.Entities
     /// is being created. This makes sure that behaviors are only using the data that matters.
     /// </remarks>
     /// <seealso cref="IBindingContext"/>
+    [BindingContextFor(typeof(Entity))]
     public class BindingContext : IBindingContext
     {
         private readonly Dictionary<IParameterSet, IParameterSet> _cloned;
@@ -51,7 +53,7 @@ namespace SpiceSharp.Entities
         /// </summary>
         /// <typeparam name="P">The parameter set type.</typeparam>
         /// <returns>The parameter set.</returns>
-        public P GetSimulationParameterSet<P>() where P : IParameterSet => Simulation.GetParameterSet<P>();
+        public P GetSimulationParameterSet<P>() where P : IParameterSet, ICloneable<P> => Simulation.GetParameterSet<P>();
 
         /// <summary>
         /// Tries to get a simulation parameter set of the specified type.
@@ -59,7 +61,7 @@ namespace SpiceSharp.Entities
         /// <typeparam name="P">The parameter set type.</typeparam>
         /// <param name="value">The value.</param>
         /// <returns>The parameter set.</returns>
-        public bool TryGetSimulationParameterSet<P>(out P value) where P : IParameterSet => Simulation.TryGetParameterSet(out value);
+        public bool TryGetSimulationParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P> => Simulation.TryGetParameterSet(out value);
 
         /// <summary>
         /// Gets the parameter set of the specified type.
@@ -68,7 +70,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// The parameter set.
         /// </returns>
-        public P GetParameterSet<P>() where P : IParameterSet
+        public P GetParameterSet<P>() where P : IParameterSet, ICloneable<P>
         {
             var value = Entity.GetParameterSet<P>();
 
@@ -95,7 +97,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P>
         {
             if (Entity.TryGetParameterSet(out value))
             {

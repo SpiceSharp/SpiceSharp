@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="ITimeBehavior" />
-    [BehaviorFor(typeof(Subcircuit), typeof(ITimeBehavior), 1)]
+    [BehaviorFor(typeof(Subcircuit))]
     public class Time : Biasing,
         ITimeBehavior
     {

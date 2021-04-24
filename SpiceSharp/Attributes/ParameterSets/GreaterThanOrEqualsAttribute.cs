@@ -1,12 +1,15 @@
 ﻿using System;
 
-namespace SpiceSharp.ParameterSets
+namespace SpiceSharp.Attributes
 {
     /// <summary>
     /// An attribute that indicates a minimum value for a parameter.
     /// </summary>
+    /// <remarks>
+    /// If this attribute is used on a private field, the source generator will automatically generate a property.
+    /// </remarks>
     /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public sealed class GreaterThanOrEqualsAttribute : Attribute
     {
         /// <summary>

@@ -1,7 +1,5 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
-#endif
 
 namespace SpiceSharp.Algebra
 {
@@ -9,12 +7,9 @@ namespace SpiceSharp.Algebra
     /// Sparse matrix exception
     /// </summary>
     /// <seealso cref="Exception" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class AlgebraException : SpiceSharpException
     {
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="SpiceSharpException"/> class.
         /// </summary>
@@ -24,7 +19,6 @@ namespace SpiceSharp.Algebra
             : base(info, context)
         {
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlgebraException"/> class.

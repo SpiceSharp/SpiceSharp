@@ -16,7 +16,7 @@ namespace SpiceSharp.ParameterSets
         IParameterSetCollection
     {
         /// <inheritdoc/>
-        public virtual P GetParameterSet<P>() where P : IParameterSet
+        public virtual P GetParameterSet<P>() where P : IParameterSet, ICloneable<P>
         {
             if (this is IParameterized<P> parameterized)
                 return parameterized.Parameters;
@@ -32,7 +32,7 @@ namespace SpiceSharp.ParameterSets
         }
 
         /// <inheritdoc/>
-        public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        public virtual bool TryGetParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P>
         {
             if (this is IParameterized<P> parameterized)
             {

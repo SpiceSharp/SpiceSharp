@@ -14,23 +14,24 @@ namespace SpiceSharp.Components.Capacitors
     /// </summary>
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IFrequencyBehavior"/>
-    [BehaviorFor(typeof(Capacitor), typeof(IFrequencyBehavior), 1)]
-    public class Frequency : Temperature,
+    [BehaviorFor(typeof(Capacitor)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
+    [GeneratedParameters]
+    public partial class Frequency : Temperature,
         IFrequencyBehavior
     {
         private readonly IComplexSimulationState _complex;
         private readonly ElementSet<Complex> _elements;
         private readonly OnePort<Complex> _variables;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
         [ParameterName("v"), ParameterInfo("The complex voltage")]
         public Complex ComplexVoltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterInfo("The complex current")]
         public Complex ComplexCurrent => ComplexVoltage * _complex.Laplace * Capacitance;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("The complex power")]
         public Complex ComplexPower
         {

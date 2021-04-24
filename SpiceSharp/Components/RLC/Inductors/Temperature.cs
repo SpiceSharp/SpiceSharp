@@ -10,8 +10,9 @@ namespace SpiceSharp.Components.Inductors
     /// </summary>
     /// <seealso cref="Behavior"/>
     /// <seealso cref="ITemperatureBehavior"/>
-    [BehaviorFor(typeof(Inductor), typeof(ITemperatureBehavior))]
-    public class Temperature : Behavior,
+    [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
+    [GeneratedParameters]
+    public partial class Temperature : Behavior,
         ITemperatureBehavior
     {
         /// <summary>

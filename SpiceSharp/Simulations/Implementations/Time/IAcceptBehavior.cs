@@ -1,9 +1,12 @@
-﻿namespace SpiceSharp.Behaviors
+﻿using SpiceSharp.Attributes;
+
+namespace SpiceSharp.Behaviors
 {
     /// <summary>
     /// Behavior that can accept a time point.
     /// </summary>
     /// <seealso cref="IBehavior" />
+    [SimulationBehavior]
     public interface IAcceptBehavior : IBehavior
     {
         /// <summary>

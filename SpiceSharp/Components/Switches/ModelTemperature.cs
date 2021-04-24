@@ -12,10 +12,12 @@ namespace SpiceSharp.Components.Switches
     /// <seealso cref="Behavior" />
     /// <seealso cref="IParameterized{T}" />
     /// <seealso cref="ITemperatureBehavior" />
-    /// <seealso cref="ModelParameters"/>
-    [BehaviorFor(typeof(CurrentSwitchModel), typeof(ITemperatureBehavior))]
-    [BehaviorFor(typeof(VoltageSwitchModel), typeof(ITemperatureBehavior))]
-    public class ModelTemperature : Behavior,
+    /// <seealso cref="VoltageModelParameters"/>
+    [BehaviorFor(typeof(CurrentSwitchModel))]
+    [BehaviorFor(typeof(VoltageSwitchModel))]
+    [AddBehaviorIfNo(typeof(ITemperatureBehavior))]
+    [GeneratedParameters]
+    public partial class ModelTemperature : Behavior,
         IParameterized<ModelParameters>,
         ITemperatureBehavior
     {
@@ -28,6 +30,7 @@ namespace SpiceSharp.Components.Switches
         /// <value>
         /// The on conductance.
         /// </value>
+        [ParameterName("gon"), ParameterInfo("The conductance when on.")]
         public double OnConductance { get; private set; }
 
         /// <summary>
@@ -36,15 +39,8 @@ namespace SpiceSharp.Components.Switches
         /// <value>
         /// The off conductance.
         /// </value>
+        [ParameterName("goff"), ParameterInfo("The conductance when off.")]
         public double OffConductance { get; private set; }
-
-        /// <summary>
-        /// Gets the threshold parameter.
-        /// </summary>
-        /// <value>
-        /// The threshold value.
-        /// </value>
-        public double Threshold { get; private set; }
 
         /// <summary>
         /// Gets the hysteresis parameter.
@@ -68,7 +64,6 @@ namespace SpiceSharp.Components.Switches
         /// <inheritdoc/>
         public void Temperature()
         {
-            Threshold = Parameters.Threshold;
             Hysteresis = Math.Abs(Parameters.Hysteresis);
             OnConductance = 1.0 / Parameters.OnResistance;
             OffConductance = 1.0 / Parameters.OffResistance;

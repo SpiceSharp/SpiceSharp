@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp.General
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp.General
     /// Exception for ambiguous types.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class AmbiguousTypeException : SpiceSharpException
     {
         /// <summary>
@@ -23,7 +19,6 @@ namespace SpiceSharp.General
         /// </value>
         public virtual Type AmbiguousType { get; } = typeof(void);
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.
         /// </summary>
@@ -47,7 +42,6 @@ namespace SpiceSharp.General
             info.AddValue(nameof(AmbiguousType), AmbiguousType.FullName);
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmbiguousTypeException"/> class.

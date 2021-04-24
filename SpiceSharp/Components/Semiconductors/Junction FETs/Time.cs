@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.JFETs
     /// </summary>
     /// <seealso cref="Biasing"/>
     /// <seealso cref="ITimeBehavior"/>
-    [BehaviorFor(typeof(JFET), typeof(ITimeBehavior), 2)]
+    [BehaviorFor(typeof(JFET)), AddBehaviorIfNo(typeof(ITimeBehavior))]
     public class Time : Biasing,
         ITimeBehavior
     {

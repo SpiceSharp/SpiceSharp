@@ -11,7 +11,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="INoiseBehavior" />
-    [BehaviorFor(typeof(Subcircuit), typeof(INoiseBehavior))]
+    [BehaviorFor(typeof(Subcircuit))]
     public class Noise : SubcircuitBehavior<INoiseBehavior>,
         INoiseBehavior
     {

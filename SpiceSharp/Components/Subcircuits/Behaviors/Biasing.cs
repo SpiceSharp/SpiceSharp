@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="IBiasingBehavior" />
     /// <seealso cref="IConvergenceBehavior"/>
-    [BehaviorFor(typeof(Subcircuit), typeof(IBiasingBehavior))]
+    [BehaviorFor(typeof(Subcircuit))]
     public partial class Biasing : SubcircuitBehavior<IBiasingBehavior>,
         IBiasingBehavior,
         IConvergenceBehavior

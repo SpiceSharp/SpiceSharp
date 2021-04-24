@@ -67,18 +67,8 @@ namespace SpiceSharp.Behaviors
             Name = source.ThrowIfNull(nameof(source));
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorContainer"/> class.
-        /// </summary>
-        /// <param name="original">The original.</param>
-        protected BehaviorContainer(BehaviorContainer original)
-            : base(original)
-        {
-            Name = original.Name;
-        }
-
         /// <inheritdoc/>
-        public P GetParameterSet<P>() where P : IParameterSet
+        public P GetParameterSet<P>() where P : IParameterSet, ICloneable<P>
         {
             foreach (var behavior in this)
             {
@@ -89,7 +79,7 @@ namespace SpiceSharp.Behaviors
         }
 
         /// <inheritdoc/>
-        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P>
         {
             foreach (var behavior in this)
             {
@@ -181,9 +171,6 @@ namespace SpiceSharp.Behaviors
             }
             return null;
         }
-
-        /// <inheritdoc/>
-        public override ICloneable Clone() => new BehaviorContainer(this);
 
         /// <inheritdoc/>
         public IBehaviorContainerBuilder<TContext> Build<TContext>(ISimulation simulation, TContext context) where TContext : IBindingContext

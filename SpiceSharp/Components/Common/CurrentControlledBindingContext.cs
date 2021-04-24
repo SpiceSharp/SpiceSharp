@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Attributes;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
 
@@ -9,6 +10,8 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// </summary>
     /// <seealso cref="ComponentBindingContext" />
     /// <seealso cref="ICurrentControlledBindingContext"/>
+    [BindingContextFor(typeof(CurrentControlledCurrentSource))]
+    [BindingContextFor(typeof(CurrentControlledVoltageSource))]
     public class CurrentControlledBindingContext : ComponentBindingContext,
         ICurrentControlledBindingContext
     {

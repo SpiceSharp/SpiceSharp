@@ -44,7 +44,7 @@ namespace SpiceSharp.Entities
         /// <typeparam name="P">The type of parameter set.</typeparam>
         /// <returns>The parameter set.</returns>
         /// <exception cref="ArgumentException">Thrown if the parameter set was not found.</exception>
-        public P GetSimulationParameterSet<P>() where P : IParameterSet;
+        public P GetSimulationParameterSet<P>() where P : IParameterSet, ICloneable<P>;
 
         /// <summary>
         /// Tries to get a simulation parameter set.
@@ -54,7 +54,7 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// <c>true</c> if the parameter set was found; otherwise <c>false</c>.
         /// </returns>
-        public bool TryGetSimulationParameterSet<P>(out P parameters) where P : IParameterSet;
+        public bool TryGetSimulationParameterSet<P>(out P parameters) where P : IParameterSet, ICloneable<P>;
 
         /// <summary>
         /// Gets the parameter set of the specified type.
@@ -64,7 +64,7 @@ namespace SpiceSharp.Entities
         /// The parameter set.
         /// </returns>
         /// <exception cref="ArgumentException">Thrown if the parameter set could not be found.</exception>
-        public P GetParameterSet<P>() where P : IParameterSet;
+        public P GetParameterSet<P>() where P : IParameterSet, ICloneable<P>;
 
         /// <summary>
         /// Tries to get the parameter set of the specified type.
@@ -74,6 +74,6 @@ namespace SpiceSharp.Entities
         /// <returns>
         /// <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
         /// </returns>
-        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet;
+        public bool TryGetParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P>;
     }
 }

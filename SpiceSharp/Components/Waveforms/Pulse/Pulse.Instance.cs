@@ -40,7 +40,7 @@ namespace SpiceSharp.Components
                 // Cache parameter values
                 _v1 = v1;
                 _v2 = v2;
-                _td = td.GreaterThanOrEquals(nameof(td), 0);
+                _td = td;
                 _tr = tr.GreaterThanOrEquals(nameof(tr), 0);
                 _tf = tf.GreaterThanOrEquals(nameof(tf), 0);
                 _pw = pw.GreaterThanOrEquals(nameof(pw), 0);

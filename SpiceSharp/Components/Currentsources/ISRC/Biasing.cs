@@ -20,8 +20,9 @@ namespace SpiceSharp.Components.CurrentSources
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="IndependentSourceParameters"/>
-    [BehaviorFor(typeof(CurrentSource), typeof(IBiasingBehavior))]
-    public class Biasing : Behavior,
+    [BehaviorFor(typeof(CurrentSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
+    [GeneratedParameters]
+    public partial class Biasing : Behavior,
         IBiasingBehavior,
         IParameterized<IndependentSourceParameters>
     {
@@ -32,7 +33,7 @@ namespace SpiceSharp.Components.CurrentSources
         private readonly ElementSet<double> _elements;
 
         /// <inheritdoc/>
-        public IndependentSourceParameters Parameters { get; }
+        public IndependentSourceParameters Parameters { get; private set; }
 
         /// <summary>
         /// Gets the waveform.
@@ -42,15 +43,15 @@ namespace SpiceSharp.Components.CurrentSources
         /// </value>
         public IWaveform Waveform { get; }
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
         public double Voltage => _variables.Positive.Value - _variables.Negative.Value;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
         public double Power => (_variables.Positive.Value - _variables.Negative.Value) * -Current;
 
-        /// <include file='../../Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("c"), ParameterName("i"), ParameterName("i_r"), ParameterInfo("Current through current source")]
         public double Current { get; protected set; }
 
@@ -67,9 +68,8 @@ namespace SpiceSharp.Components.CurrentSources
             _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
             _variables = new OnePort<double>(_biasing, context);
-
-            context.TryGetState(out _method);
-            Waveform = Parameters.Waveform?.Create(_method);
+            context.TryGetState<IIntegrationMethod>(out _method);
+            Waveform = Parameters.Waveform?.Create(context);
 
             // Give some warnings if no value is given
             if (!Parameters.DcValue.Given)

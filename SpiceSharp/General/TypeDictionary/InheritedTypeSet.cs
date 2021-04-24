@@ -13,6 +13,9 @@ namespace SpiceSharp.General
     {
         private readonly InheritedTypeDictionary<V> _dictionary;
 
+        /// <inheritdoc/>
+        public event EventHandler<TypeNotFoundEventArgs<V>> TypeNotFound;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InheritedTypeSet{V}"/> class.
         /// </summary>
@@ -20,16 +23,6 @@ namespace SpiceSharp.General
         {
             _dictionary = new InheritedTypeDictionary<V>();
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InheritedTypeSet{V}"/> class.
-        /// </summary>
-        /// <param name="original">The original.</param>
-        protected InheritedTypeSet(InheritedTypeSet<V> original)
-        {
-            _dictionary = (InheritedTypeDictionary<V>)((ICloneable)original._dictionary).Clone();
-        }
-
 
         /// <summary>
         /// Gets the number of elements contained in the set.
@@ -84,7 +77,17 @@ namespace SpiceSharp.General
         {
             try
             {
-                return (TResult)_dictionary[typeof(TResult)];
+                if (!_dictionary.TryGetValue(typeof(TResult), out V result))
+                {
+                    var args = new TypeNotFoundEventArgs<V>(typeof(TResult));
+                    TypeNotFound?.Invoke(this, args);
+                    if (args.Value is TResult newResult)
+                    {
+                        Add(newResult);
+                        return newResult;
+                    }
+                }
+                return (TResult)result;
             }
             catch (KeyNotFoundException ex)
             {
@@ -111,16 +114,6 @@ namespace SpiceSharp.General
             }
             value = default;
             return false;
-        }
-
-        /// <inheritdoc/>
-        public ICloneable Clone() => new InheritedTypeSet<V>(this);
-
-        /// <inheritdoc/>
-        public void CopyFrom(ICloneable source)
-        {
-            var src = (InheritedTypeSet<V>)source;
-            ((ICloneable)_dictionary).CopyFrom(src._dictionary);
         }
 
         /// <summary>

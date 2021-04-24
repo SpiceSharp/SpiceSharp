@@ -10,7 +10,6 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IBiasingBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(IBiasingBehavior))]
     public partial class Biasing : Behavior,
         IParallelBehavior,
         IBiasingBehavior

@@ -14,7 +14,7 @@ namespace SpiceSharp.Components.JFETs
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="ModelParameters"/>
-    [BehaviorFor(typeof(JFETModel), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(JFETModel)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     public class ModelTemperature : Behavior,
         ITemperatureBehavior,
         IParameterized<ModelParameters>

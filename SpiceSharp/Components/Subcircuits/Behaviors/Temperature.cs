@@ -9,7 +9,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <seealso cref="SubcircuitBehavior{T}" />
     /// <seealso cref="ITemperatureBehavior" />
-    [BehaviorFor(typeof(Subcircuit), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(Subcircuit))]
     public class Temperature : SubcircuitBehavior<ITemperatureBehavior>,
         ITemperatureBehavior
     {

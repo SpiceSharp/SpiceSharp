@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.ParameterSets;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Components.Switches
 {
@@ -6,7 +7,8 @@ namespace SpiceSharp.Components.Switches
     /// Model parameters for a <see cref="CurrentSwitchModel" />.
     /// </summary>
     /// <seealso cref="ModelParameters" />
-    public class CurrentModelParameters : ModelParameters
+    [GeneratedParameters]
+    public partial class CurrentModelParameters : ModelParameters, ICloneable<CurrentModelParameters>
     {
         /// <summary>
         /// Gets the threshold current.
@@ -19,5 +21,9 @@ namespace SpiceSharp.Components.Switches
         /// </summary>
         [ParameterName("ih"), ParameterInfo("Hysteresis current")]
         public override double Hysteresis { get; set; }
+
+        /// <inheritdoc/>
+        CurrentModelParameters ICloneable<CurrentModelParameters>.Clone()
+            => (CurrentModelParameters)Clone();
     }
 }

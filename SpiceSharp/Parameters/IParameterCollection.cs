@@ -22,7 +22,7 @@ namespace SpiceSharp.ParameterSets
         /// The parameter set.
         /// </returns>
         /// <exception cref="TypeNotFoundException">Thrown if the parameter set could not be found.</exception>
-        P GetParameterSet<P>() where P : IParameterSet;
+        P GetParameterSet<P>() where P : IParameterSet, ICloneable<P>;
 
         /// <summary>
         /// Tries to get the parameter set of the specified type.
@@ -32,7 +32,7 @@ namespace SpiceSharp.ParameterSets
         /// <returns>
         ///   <c>true</c> if the parameter set was found; otherwise, <c>false</c>.
         /// </returns>
-        bool TryGetParameterSet<P>(out P value) where P : IParameterSet;
+        bool TryGetParameterSet<P>(out P value) where P : IParameterSet, ICloneable<P>;
 
         /// <summary>
         /// Gets all the parameter sets of this instance.

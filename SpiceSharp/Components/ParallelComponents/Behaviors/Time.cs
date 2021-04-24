@@ -9,8 +9,7 @@ namespace SpiceSharp.Components.ParallelComponents
     /// </summary>
     /// <seealso cref="Convergence" />
     /// <seealso cref="ITimeBehavior" />
-    [BehaviorFor(typeof(Parallel), typeof(ITimeBehavior), 2)]
-    public class Time : Convergence,
+    public class Time : Behavior,
         IParallelBehavior,
         ITimeBehavior
     {
@@ -31,9 +30,8 @@ namespace SpiceSharp.Components.ParallelComponents
         }
 
         /// <inheritdoc />
-        public override void FetchBehaviors(ParallelBindingContext context)
+        public void FetchBehaviors(ParallelBindingContext context)
         {
-            base.FetchBehaviors(context);
             _timeBehaviors = context.GetBehaviors<ITimeBehavior>();
             if (_initWorkload != null)
             {

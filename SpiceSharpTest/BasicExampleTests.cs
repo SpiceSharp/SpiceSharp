@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
-using SpiceSharp.Reflection;
+using SpiceSharp.Documentation;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
@@ -301,7 +301,7 @@ namespace SpiceSharpTest
             foreach (var parameter in entity.Parameters())
             {
                 Console.Write(string.Join(", ", parameter.Names));
-                Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
+                Console.WriteLine($" : {parameter.Description} ({parameter.Member.Name}, {parameter.BaseType.Name})");
             }
             // </example_EntityDocumentation>
 
@@ -313,7 +313,7 @@ namespace SpiceSharpTest
             foreach (var parameter in simulation.Parameters())
             {
                 Console.Write(string.Join(", ", parameter.Names));
-                Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
+                Console.WriteLine($" : {parameter.Description} ({parameter.Member.Name}, {parameter.BaseType.Name})");
             }
             // </example_SimulationDocumentation>
 
@@ -332,7 +332,7 @@ namespace SpiceSharpTest
                 foreach (var parameter in op.EntityBehaviors["V1"].Parameters())
                 {
                     Console.Write(string.Join(", ", parameter.Names));
-                    Console.WriteLine($" : {parameter.Description} ({parameter.ParameterType.Name}, {parameter.PropertyType.Name})");
+                    Console.WriteLine($" : {parameter.Description} ({parameter.Member.Name}, {parameter.BaseType.Name})");
                 }
             };
             op.Run(ckt);

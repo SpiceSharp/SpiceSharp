@@ -1,5 +1,7 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 
 namespace SpiceSharp.Components
 {
@@ -7,15 +9,15 @@ namespace SpiceSharp.Components
     /// A waveform description.
     /// </summary>
     /// <seealso cref="IParameterSet" />
-    public interface IWaveformDescription : IParameterSet
+    public interface IWaveformDescription : IParameterSet, ICloneable<IWaveformDescription>
     {
         /// <summary>
         /// Creates a waveform instance for the specified simulation and entity.
         /// </summary>
-        /// <param name="state">The time simulation state.</param>
+        /// <param name="context">The binding context.</param>
         /// <returns>
         /// The waveform instance.
         /// </returns>
-        IWaveform Create(IIntegrationMethod state);
+        IWaveform Create(IBindingContext context);
     }
 }

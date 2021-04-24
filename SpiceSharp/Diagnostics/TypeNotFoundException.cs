@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp
     /// An exception that is thrown when a problem occurs with the generic type of a method.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class TypeNotFoundException : SpiceSharpException
     {
         /// <summary>
@@ -23,7 +19,6 @@ namespace SpiceSharp
         /// </value>
         public Type Type { get; }
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
         /// </summary>
@@ -47,7 +42,6 @@ namespace SpiceSharp
             info.AddValue(nameof(Type), Type.FullName);
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.

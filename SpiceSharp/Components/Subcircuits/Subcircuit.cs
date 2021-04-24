@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SpiceSharp.Components.Subcircuits;
+using System.Linq;
 
 namespace SpiceSharp.Components
 {
@@ -15,15 +16,14 @@ namespace SpiceSharp.Components
     /// </summary>
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
-    public class Subcircuit : Entity<SubcircuitBindingContext>,
+    public partial class Subcircuit : Entity, IParameterized<Parameters>,
         IComponent,
-        IParameterized<Parameters>,
         IRuleSubject
     {
         private string[] _connections;
 
         /// <inheritdoc/>
-        public Parameters Parameters { get; } = new Parameters();
+        public Parameters Parameters { get; private set; } = new Parameters();
 
         /// <inheritdoc/>
         public string Model { get; set; }
@@ -71,6 +71,11 @@ namespace SpiceSharp.Components
             Connect(nodes);
         }
 
+        private Subcircuit(string name)
+            : base(name)
+        {
+        }
+
         /// <inheritdoc/>
         public override void CreateBehaviors(ISimulation simulation)
         {
@@ -80,7 +85,17 @@ namespace SpiceSharp.Components
                 // Create our local simulation and binding context to allow our behaviors to do stuff
                 var localSim = new SubcircuitSimulation(Name, simulation, Parameters.Definition, NodeMap);
                 var context = new SubcircuitBindingContext(this, localSim, behaviors);
-                Entities.DependencyInjection.DI.Resolve(simulation, this, behaviors, context);
+
+                // Add the necessary behaviors
+                behaviors.Build(simulation, context)
+                    .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
+                    .AddIfNo<IAcceptBehavior>(context => new Accept(context))
+                    .AddIfNo<ITimeBehavior>(context => new Time(context))
+                    .AddIfNo<IBiasingBehavior>(context => new Biasing(context))
+                    .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(context))
+                    .AddIfNo<IFrequencyBehavior>(context => new Frequency(context))
+                    .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(context))
+                    .AddIfNo<INoiseBehavior>(context => new Subcircuits.Noise(context));
 
                 // Run the simulation
                 localSim.Run(Parameters.Definition.Entities);
@@ -106,16 +121,6 @@ namespace SpiceSharp.Components
         }
 
         /// <inheritdoc/>
-        protected override void CopyFrom(ICloneable source)
-        {
-            base.CopyFrom(source);
-            var s = (Subcircuit)source;
-            _connections = new string[_connections.Length];
-            for (var i = 0; i < _connections.Length; i++)
-                _connections[i] = s._connections[i];
-        }
-
-        /// <inheritdoc/>
         public void Apply(IRules rules)
         {
             if (Parameters.Definition == null)
@@ -130,6 +135,17 @@ namespace SpiceSharp.Components
                 if (c is IRuleSubject subject)
                     subject.Apply(newRules);
             }
+        }
+
+        /// <inheritdoc/>
+        public override IEntity Clone()
+        {
+            return new Subcircuit(Name)
+            {
+                Parameters = Parameters.Clone(),
+                _connections = (string[])_connections.Clone(),
+                Model = Model
+            };
         }
     }
 }

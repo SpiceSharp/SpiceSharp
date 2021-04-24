@@ -1,8 +1,6 @@
 ﻿using System;
-#if !NETSTANDARD1_5
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-#endif
 
 namespace SpiceSharp.Algebra
 {
@@ -10,9 +8,7 @@ namespace SpiceSharp.Algebra
     /// Exception thrown when a matrix is singular.
     /// </summary>
     /// <seealso cref="AlgebraException" />
-#if !NETSTANDARD1_5
     [Serializable]
-#endif
     public class SingularException : AlgebraException
     {
         /// <summary>
@@ -20,7 +16,6 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public virtual int Index { get; } = -1;
 
-#if !NETSTANDARD1_5
         /// <summary>
         /// Initializes a new instance of the <see cref="SingularException"/> class.
         /// </summary>
@@ -44,7 +39,6 @@ namespace SpiceSharp.Algebra
             info.AddValue(nameof(Index), Index);
             base.GetObjectData(info, context);
         }
-#endif
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingularException"/> class.

@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.MutualInductances
     /// <seealso cref="ITemperatureBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="MutualInductances.Parameters"/>
-    [BehaviorFor(typeof(MutualInductance), typeof(ITemperatureBehavior))]
+    [BehaviorFor(typeof(MutualInductance)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     public class Temperature : Behavior,
         ITemperatureBehavior,
         IParameterized<Parameters>

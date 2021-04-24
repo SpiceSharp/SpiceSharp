@@ -229,6 +229,7 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", 1.0)
                 );
             var ckt_reference = new Circuit(
+                new Capacitor("C1", "out", "0", 3e-6),
                 new Resistor("R1", "in", "out", 1e3),
                 new VoltageSource("V1", "in", "0", 1.0)
                 );

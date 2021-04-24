@@ -1,5 +1,6 @@
 using SpiceSharp.ParameterSets;
 using System;
+using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Algebra.Solve
 {
@@ -10,38 +11,18 @@ namespace SpiceSharp.Algebra.Solve
     /// <typeparam name="V">The vector type.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IPivotingSolver{M, V, T}" />
-    [GeneratedParameters]
-    public abstract class PivotingSolver<M, V, T> : ParameterSetCollection,
+    public abstract partial class PivotingSolver<M, V, T> : ParameterSetCollection,
         IPivotingSolver<M, V, T>
         where M : IMatrix<T>
         where V : IVector<T>
     {
+        /// <inheritdoc/>
+        [GreaterThanOrEquals(0)]
         private int _pivotSearchReduction = 0;
+
+        /// <inheritdoc/>
+        [GreaterThanOrEquals(0)]
         private int _degeneracy = 0;
-
-        /// <inheritdoc/>
-        [GreaterThanOrEquals(0)]
-        public int Degeneracy
-        {
-            get => _degeneracy;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(Degeneracy), 0);
-                _degeneracy = value;
-            }
-        }
-
-        /// <inheritdoc/>
-        [GreaterThanOrEquals(0)]
-        public int PivotSearchReduction
-        {
-            get => _pivotSearchReduction;
-            set
-            {
-                Utility.GreaterThanOrEquals(value, nameof(PivotSearchReduction), 0);
-                _pivotSearchReduction = value;
-            }
-        }
 
         /// <inheritdoc/>
         public bool IsFactored { get; protected set; }

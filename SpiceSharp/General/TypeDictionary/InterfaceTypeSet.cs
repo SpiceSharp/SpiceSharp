@@ -13,21 +13,15 @@ namespace SpiceSharp.General
     {
         private readonly InterfaceTypeDictionary<V> _dictionary;
 
+        /// <inheritdoc/>
+        public event EventHandler<TypeNotFoundEventArgs<V>> TypeNotFound;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InterfaceTypeSet{V}"/> class.
         /// </summary>
         public InterfaceTypeSet()
         {
             _dictionary = new InterfaceTypeDictionary<V>();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InterfaceTypeSet{V}"/> class.
-        /// </summary>
-        /// <param name="original">The original.</param>
-        protected InterfaceTypeSet(InterfaceTypeSet<V> original)
-        {
-            _dictionary = (InterfaceTypeDictionary<V>)((ICloneable)original._dictionary).Clone();
         }
 
         /// <summary>
@@ -83,7 +77,17 @@ namespace SpiceSharp.General
         {
             try
             {
-                return (TResult)_dictionary[typeof(TResult)];
+                if (!_dictionary.TryGetValue(typeof(TResult), out V result))
+                {
+                    var args = new TypeNotFoundEventArgs<V>(typeof(TResult));
+                    TypeNotFound?.Invoke(this, args);
+                    if (args.Value is TResult newResult)
+                    {
+                        Add(newResult);
+                        return newResult;
+                    }
+                }
+                return (TResult)result;
             }
             catch (KeyNotFoundException ex)
             {
@@ -110,16 +114,6 @@ namespace SpiceSharp.General
             }
             value = default;
             return false;
-        }
-
-        /// <inheritdoc/>
-        public virtual ICloneable Clone() => new InterfaceTypeSet<V>(this);
-
-        /// <inheritdoc/>
-        public void CopyFrom(ICloneable source)
-        {
-            var src = (InterfaceTypeSet<V>)source;
-            ((ICloneable)_dictionary).CopyFrom(src._dictionary);
         }
 
         /// <summary>

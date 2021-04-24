@@ -14,17 +14,17 @@ namespace SpiceSharp.Components.VoltageDelays
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="VoltageDelayParameters"/>
-    [BehaviorFor(typeof(VoltageDelay), typeof(IBiasingBehavior))]
+    /// <seealso cref="Parameters"/>
+    [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
     public class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,
-        IParameterized<VoltageDelayParameters>
+        IParameterized<Parameters>
     {
         private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
         /// <inheritdoc/>
-        public VoltageDelayParameters Parameters { get; }
+        public Parameters Parameters { get; }
 
         /// <inheritdoc/>
         public IVariable<double> Branch { get; }
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.VoltageDelays
             context.ThrowIfNull(nameof(context));
             context.Nodes.CheckNodes(4);
 
-            Parameters = context.GetParameterSet<VoltageDelayParameters>();
+            Parameters = context.GetParameterSet<Parameters>();
             var state = context.GetState<IBiasingSimulationState>();
             _posNode = state.Map[state.GetSharedVariable(context.Nodes[0])];
             _negNode = state.Map[state.GetSharedVariable(context.Nodes[1])];
