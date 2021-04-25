@@ -177,8 +177,8 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The temperature.
         /// </value>
-        [ParameterName("temp"), ParameterName("temperature"), DerivedProperty(), ParameterInfo("The temperature of the circuit in degrees Celsius.")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("temp"), ParameterName("temperature"), ParameterInfo("The temperature of the circuit in degrees Celsius.")]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -200,8 +200,8 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The nominal temperature.
         /// </value>
-        [ParameterName("tnom"), ParameterName("nominaltemperature"), DerivedProperty(), ParameterInfo("The nominal temperature of the circuit in degrees Celsius")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("tnom"), ParameterName("nominaltemperature"), ParameterInfo("The nominal temperature of the circuit in degrees Celsius")]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;

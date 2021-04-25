@@ -44,8 +44,8 @@ namespace SpiceSharp.Components.Diodes
         /// <value>
         /// The temperature in degrees Celsius.
         /// </value>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance temperature", Units = "\u00b0C")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("temp"), ParameterInfo("Instance temperature", Units = "\u00b0C")]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public GivenParameter<double> TemperatureCelsius
         {
             get => new GivenParameter<double>(Temperature - Constants.CelsiusKelvin, Temperature.Given);

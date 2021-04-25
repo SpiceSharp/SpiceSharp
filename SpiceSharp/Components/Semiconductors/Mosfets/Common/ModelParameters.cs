@@ -35,8 +35,8 @@ namespace SpiceSharp.Components.Mosfets
         /// <value>
         /// The nominal temperature in degrees Celsius.
         /// </value>
-        [ParameterName("tnom"), DerivedProperty, ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;

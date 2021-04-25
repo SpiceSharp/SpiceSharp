@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.JFETs
         /// The measurement temperature in degrees celsius.
         /// </value>
         [ParameterName("tnom"), ParameterInfo("Nominal temperature.", Units = "\u00b0C")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;

@@ -44,8 +44,8 @@ namespace SpiceSharp.Components.Resistors
         /// <value>
         /// The resistor operating temperature in degrees Celsius.
         /// </value>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
-        [GreaterThan(-Constants.CelsiusKelvin)]
+        [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
