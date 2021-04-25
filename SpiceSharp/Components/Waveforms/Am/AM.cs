@@ -48,6 +48,12 @@ namespace SpiceSharp.Components
         public double SignalDelay { get; set; }
 
         /// <summary>
+        /// Gets or sets the carrier phase.
+        /// </summary>
+        [ParameterName("phasec"), ParameterInfo("Carrier phsae", Units = "\u00b0")]
+        public double CarrierPhase { get; set; }
+
+        /// <summary>
         /// Gets or sets the signal phase.
         /// </summary>
         [ParameterName("phases"), ParameterInfo("Signal phase", Units = "\u00b0")]
@@ -64,18 +70,21 @@ namespace SpiceSharp.Components
             sffm.ThrowIfNotLength(nameof(sffm), 1, 6);
             switch (sffm.Length)
             {
-                case 6:
-                    SignalPhase = sffm[5];
+                case 7:
+                    SignalPhase = sffm[6];
                     goto case 6;
+                case 6:
+                    CarrierPhase = sffm[5];
+                    goto case 5;
                 case 5:
                     SignalDelay = sffm[4];
-                    goto case 5;
+                    goto case 4;
                 case 4:
                     CarrierFrequency = sffm[3];
-                    goto case 4;
+                    goto case 3;
                 case 3:
                     ModulationFrequency = sffm[2];
-                    goto case 3;
+                    goto case 2;
                 case 2:
                     Offset = sffm[1];
                     goto case 1;
@@ -98,6 +107,7 @@ namespace SpiceSharp.Components
                 ModulationFrequency,
                 CarrierFrequency.Given ? CarrierFrequency.Value : 1.0 / (tp?.StopTime ?? 1.0),
                 SignalDelay,
+                CarrierPhase,
                 SignalPhase);
         }
 
@@ -116,14 +126,16 @@ namespace SpiceSharp.Components
         /// <param name="modulationFrequency">The modulation frequency.</param>
         /// <param name="carrierFrequency">The carrier frequency.</param>
         /// <param name="signalDelay">The signal delay.</param>
+        /// <param name="carrierPhase">The carrier phase.</param>
         /// <param name="signalPhase">The signal phase.</param>
-        public AM(double amplitude, double offset, double modulationFrequency, double carrierFrequency, double signalDelay, double signalPhase)
+        public AM(double amplitude, double offset, double modulationFrequency, double carrierFrequency, double signalDelay, double carrierPhase, double signalPhase)
         {
             Amplitude = amplitude;
             Offset = offset;
             ModulationFrequency = modulationFrequency;
             CarrierFrequency = carrierFrequency;
             SignalDelay = signalDelay;
+            CarrierPhase = carrierPhase;
             SignalPhase = signalPhase;
         }
 
@@ -135,12 +147,13 @@ namespace SpiceSharp.Components
         /// </returns>
         public override string ToString()
         {
-            return "sffm({0} {1} {2} {3} {4} {5})".FormatString(
+            return "am({0} {1} {2} {3} {4} {5} {6})".FormatString(
                 Amplitude,
                 Offset,
                 ModulationFrequency.Value,
                 CarrierFrequency.Value,
                 SignalDelay,
+                CarrierPhase,
                 SignalPhase);
         }
     }

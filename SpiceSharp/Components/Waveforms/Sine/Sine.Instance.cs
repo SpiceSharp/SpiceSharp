@@ -37,6 +37,7 @@ namespace SpiceSharp.Components
                 _theta = theta;
                 _phase = phase * Math.PI / 180;
 
+                // Initialize the value
                 Value = _vo;
             }
 

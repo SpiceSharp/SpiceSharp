@@ -16,8 +16,8 @@ namespace SpiceSharp.Components.Mosfets
         /// <value>
         /// The temperature in degrees celsius.
         /// </value>
-        [ParameterName("temp"), DerivedProperty(), ParameterInfo("Instance operating temperature", Units = "\u00b0C")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C")]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;

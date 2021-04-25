@@ -16,8 +16,8 @@ namespace SpiceSharp.Components.Resistors
         /// <value>
         /// The nominal temperature in degrees Celsius.
         /// </value>
-        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;

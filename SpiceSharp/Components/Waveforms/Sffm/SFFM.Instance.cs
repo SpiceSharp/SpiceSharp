@@ -14,7 +14,7 @@ namespace SpiceSharp.Components
         /// <seealso cref="IWaveform" />
         protected class Instance : IWaveform
         {
-            private readonly double _vo, _va, _fcar, _mdi, _fsig, _pcar, _psig;
+            private readonly double _vo, _va, _fc, _mdi, _fs, _phasec, _phases;
             private readonly IIntegrationMethod _method;
 
             /// <inheritdoc/>
@@ -39,11 +39,14 @@ namespace SpiceSharp.Components
                 _method = method;
                 _vo = offset;
                 _va = amplitude;
-                _fcar = carrierFrequency * Math.PI / 180.0;
+                _fc = carrierFrequency * Math.PI * 2.0;
                 _mdi = modulationIndex;
-                _fsig = signalFrequency * Math.PI / 180.0;
-                _pcar = carrierPhase * Math.PI / 180.0;
-                _psig = signalPhase * Math.PI / 180.0;
+                _fs = signalFrequency * Math.PI * 2.0;
+                _phasec = carrierPhase * Math.PI / 180.0;
+                _phases = signalPhase * Math.PI / 180.0;
+
+                // Initialize the value
+                At(0.0);
             }
 
             /// <summary>
@@ -54,9 +57,8 @@ namespace SpiceSharp.Components
             {
                 // Compute the waveform value
                 Value = _vo + _va *
-                    Math.Sin(
-                        (2.0 * Math.PI * _fcar * time + _pcar) +
-                        _mdi * Math.Sin(2.0 * Math.PI * _fsig * time + _psig));
+                    Math.Sin((_fc * time + _phasec) +
+                    _mdi * Math.Sin(_fs * time + _phases));
             }
 
             /// <inheritdoc/>

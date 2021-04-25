@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.JFETs
         /// The temperature in degrees Celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance temperature", Units = "\u00b0C")]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;

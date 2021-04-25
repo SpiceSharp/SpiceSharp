@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The nominal temperature in degrees Celsius.
         /// </value>
         [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
-        [DerivedProperty(), GreaterThan(Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;

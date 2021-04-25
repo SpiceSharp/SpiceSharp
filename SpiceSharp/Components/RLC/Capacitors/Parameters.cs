@@ -66,7 +66,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The temperature celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
-        [DerivedProperty(), GreaterThan(Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;

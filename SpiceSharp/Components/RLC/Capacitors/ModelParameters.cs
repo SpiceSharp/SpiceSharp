@@ -55,8 +55,8 @@ namespace SpiceSharp.Components.Capacitors
         /// <summary>
         /// Gets or sets the nominal temperature in degrees Celsius.
         /// </summary>
-        [ParameterName("tnom"), DerivedProperty(), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
-        [GreaterThan(Constants.CelsiusKelvin)]
+        [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C", Interesting = false)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;

@@ -17,8 +17,8 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
 		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
-		<Version>1.0.3</Version>
-		<AssemblyVersion>1.0.3.0</AssemblyVersion>
+		<Version>1.0.4</Version>
+		<AssemblyVersion>1.0.4.0</AssemblyVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

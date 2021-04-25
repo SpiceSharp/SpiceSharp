@@ -97,6 +97,7 @@ namespace SpiceSharpGenerator
         {
             var sb = new StringBuilder();
             sb.AppendLine($@"using System;
+using SpiceSharp;
 using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
 using SpiceSharp.ParameterSets;
