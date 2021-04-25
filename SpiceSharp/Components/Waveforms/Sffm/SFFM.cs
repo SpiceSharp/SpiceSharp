@@ -126,13 +126,17 @@ namespace SpiceSharp.Components
         /// <param name="carrierFrequency">The carrier frequency.</param>
         /// <param name="modulationIndex">The modulation index.</param>
         /// <param name="signalFrequency">The signal frequency.</param>
-        public SFFM(double offset, double amplitude, double carrierFrequency, double modulationIndex, double signalFrequency)
+        /// <param name="carrierPhase">The carrier phase.</param>
+        /// <param name="signalPhase">The signal phase.</param>
+        public SFFM(double offset, double amplitude, double carrierFrequency, double modulationIndex, double signalFrequency, double carrierPhase, double signalPhase)
         {
             Offset = offset;
             Amplitude = amplitude;
             CarrierFrequency = carrierFrequency;
             ModulationIndex = modulationIndex;
             SignalFrequency = signalFrequency;
+            CarrierPhase = carrierPhase;
+            SignalPhase = signalPhase;
         }
 
         /// <summary>

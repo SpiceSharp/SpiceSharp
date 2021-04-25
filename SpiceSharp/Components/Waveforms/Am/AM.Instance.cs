@@ -13,7 +13,7 @@ namespace SpiceSharp.Components
         /// <seealso cref="IWaveform" />
         protected class Instance : IWaveform
         {
-            private readonly double _va, _vo, _td, _mf, _fc, _phases;
+            private readonly double _va, _vo, _td, _mf, _fc, _phases, _phasec;
             private readonly IIntegrationMethod _method;
 
             /// <inheritdoc/>
@@ -28,6 +28,7 @@ namespace SpiceSharp.Components
             /// <param name="modulationFrequency">The modulation index.</param>
             /// <param name="carrierFrequency">The carrier frequency.</param>
             /// <param name="signalDelay">The signal delay.</param>
+            /// <param name="carrierPhase">The carrier delay.</param>
             /// <param name="signalPhase">The signal phase.</param>
             public Instance(IIntegrationMethod method,
                 double amplitude,
@@ -35,15 +36,20 @@ namespace SpiceSharp.Components
                 double modulationFrequency,
                 double carrierFrequency,
                 double signalDelay,
+                double carrierPhase,
                 double signalPhase)
             {
                 _method = method;
                 _va = amplitude;
                 _vo = offset;
-                _mf = modulationFrequency * Math.PI / 180.0;
-                _fc = carrierFrequency * Math.PI / 180.0;
+                _mf = modulationFrequency * Math.PI * 2;
+                _fc = carrierFrequency * Math.PI * 2;
                 _td = signalDelay;
+                _phasec = carrierPhase * Math.PI / 180.0;
                 _phases = signalPhase * Math.PI / 180.0;
+
+                // Initialize the value
+                At(0.0);
             }
 
             /// <summary>
@@ -58,8 +64,8 @@ namespace SpiceSharp.Components
                 else
                 {
                     // Compute waveform value
-                    Value = _va * (_vo + Math.Sin(2.0 * Math.PI * _mf * time + _phases)) *
-                        Math.Sin(2.0 * Math.PI * _fc * time + _phases);
+                    Value = _va * (_vo + Math.Sin(_mf * time + _phases)) *
+                        Math.Sin(_fc * time + _phasec);
                 }
             }
 
