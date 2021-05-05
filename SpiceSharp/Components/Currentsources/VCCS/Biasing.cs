@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
-            var value = Parameters.Transconductance;
+            var value = Parameters.Transconductance * Parameters.ParallelMultiplier;
             _elements.Add(value, -value, -value, value);
         }
     }

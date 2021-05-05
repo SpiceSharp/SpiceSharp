@@ -71,6 +71,16 @@ namespace SpiceSharp.Components.Bipolars
         public GivenParameter<double> InitialVoltageCe { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of bipolar transistors in parallel.
+        /// </summary>
+        /// <value>
+        /// The number of bipolar transistors in parallel.
+        /// </value>
+        [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        [GreaterThanOrEquals(0)]
+        private double _parallelMultiplier = 1.0;
+
+        /// <summary>
         /// Set initial conditions of the device.
         /// </summary>
         /// <param name="value">The initial voltages (Vce, Vbe) or just (Vbe).</param>

@@ -314,5 +314,62 @@ namespace SpiceSharpTest.Models
             s.SetParameter("off", true);
             Assert.AreEqual(false, p.ZeroState);
         }
+
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch"),
+                CreateCurrentSwitch("S2", "out", "0", "V1", "myswitch"),
+                CreateCurrentSwitchModel("myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001"),
+                new CurrentSource("I1", "0", "in", 0.0),
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1e3)
+                );
+            var ckt_act = new Circuit(
+                CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch")
+                    .SetParameter("m", 2.0),
+                CreateCurrentSwitchModel("myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001"),
+                new CurrentSource("I1", "0", "in", 0.0),
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1e3)
+                );
+
+            var dc = new DC("dc", "I1", 0.0, 1.0, 0.1);
+            var exports = new[] { new RealVoltageExport(dc, "out") };
+            Compare(dc, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
+        {
+            var ckt_ref = new Circuit(
+                new CurrentSource("I1", "0", "in", -1),
+                new VoltageSource("V1", "in", "0", 0),
+                CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch"),
+                CreateCurrentSwitch("S2", "out", "0", "V1", "myswitch"),
+                new VoltageSource("Vdd", "vdd", "0", 5).SetParameter("acmag", 1.0),
+                new Resistor("R1", "out", "vdd", 1e3),
+                CreateCurrentSwitchModel("myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001")
+                );
+            var ckt_act = new Circuit(
+                new CurrentSource("I1", "0", "in", -1),
+                new VoltageSource("V1", "in", "0", 0),
+                CreateCurrentSwitch("S1", "out", "0", "V1", "myswitch")
+                    .SetParameter("m", 2.0),
+                new VoltageSource("Vdd", "vdd", "0", 5).SetParameter("acmag", 1.0),
+                new Resistor("R1", "out", "vdd", 1e3),
+                CreateCurrentSwitchModel("myswitch", "IT=0.5 RON=1 ROFF=1e3 IH=0.2001")
+                );
+
+            var ac = new AC("ac", new DecadeSweep(1, 1e6, 2));
+            var exports = new[] { new ComplexVoltageExport(ac, "out") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
@@ -237,6 +238,7 @@ namespace SpiceSharpTest.Models
                 new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
             var dc = new DC("dc", "V1", -1, 1, 0.1);
+            dc.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var exports = new IExport<double>[] { new RealCurrentExport(dc, "V1") };
 
             Compare(dc, cktReference, cktActual, exports);
@@ -255,6 +257,7 @@ namespace SpiceSharpTest.Models
                 new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
             var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 5));
+            ac.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var exports = new IExport<Complex>[] { new ComplexCurrentExport(ac, "V1") };
 
             Compare(ac, cktReference, cktActual, exports);
@@ -276,6 +279,7 @@ namespace SpiceSharpTest.Models
                 new Diode("D1", "out", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
             var noise = new Noise("noise", "V1", "out", new DecadeSweep(0.1, 1e6, 5));
+            noise.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);
@@ -291,28 +295,34 @@ namespace SpiceSharpTest.Models
              */
             // Build circuit
             var model = CreateDiodeModel("1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9");
-            var cktReference = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
-                new VoltageSource("Vsupply", "vdd", "0", 5.0),
-                new Resistor("R1", "vdd", "out", 10.0e3),
-                new Resistor("R2", "out", "0", 10.0e3),
-                model
-            );
-            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "out", 3, 2);
-            var cktActual = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
-                new VoltageSource("Vsupply", "vdd", "0", 5.0),
-                new Resistor("R1", "vdd", "out", 10.0e3),
-                new Resistor("R2", "out", "0", 10.0e3),
+            var ckt = new Circuit(
+                new VoltageSource("V1r", "inr", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupplyr", "vddr", "0", 5.0),
+                new Resistor("R1r", "vddr", "outr", 10.0e3),
+                new Resistor("R2r", "outr", "0", 10.0e3),
+                new VoltageSource("V1a", "ina", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupplya", "vdda", "0", 5.0),
+                new Resistor("R1a", "vdda", "outa", 10.0e3),
+                new Resistor("R2a", "outa", "0", 10.0e3),
                 model,
-                new Diode("D1", "in", "out", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+                new Diode("D1", "ina", "outa", model.Name)
+                    .SetParameter("m", 3.0)
+                    .SetParameter("n", 2.0));
+            ParallelSeries(ckt, name => new Diode(name, "", "", model.Name), "inr", "outr", 3, 2);
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 10e-6);
-            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
-            Compare(tran, cktReference, cktActual, exports);
-            DestroyExports(exports);
+            tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var v_ref = new RealVoltageExport(tran, "outr");
+            var v_act = new RealVoltageExport(tran, "outa");
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                var tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
+                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
+            };
+            tran.Run(ckt);
+            v_ref.Destroy();
+            v_act.Destroy();
         }
-
     }
 }

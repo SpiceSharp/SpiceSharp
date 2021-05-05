@@ -66,6 +66,7 @@ namespace SpiceSharp.Components.Switches
         {
             // Get the current state
             var gNow = CurrentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
+            gNow *= Parameters.ParallelMultiplier;
 
             // Load the Y-matrix
             _elements.Add(gNow, -gNow, -gNow, gNow);

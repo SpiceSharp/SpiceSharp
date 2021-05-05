@@ -79,6 +79,16 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         public double Admittance { get; private set; }
 
         /// <summary>
+        /// Gets or sets the number of transmission lines in parallel.
+        /// </summary>
+        /// <value>
+        /// The number of transmission lines in parallel.
+        /// </value>
+        [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        [GreaterThanOrEquals(0)]
+        private double _parallelMultiplier = 1.0;
+
+        /// <summary>
         /// Method for calculating the default values of derived parameters.
         /// </summary>
         public void CalculateDefaults()

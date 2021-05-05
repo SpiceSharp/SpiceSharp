@@ -2,6 +2,7 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
@@ -423,6 +424,142 @@ namespace SpiceSharpTest.Models
             // Disable source stepping and see if it converges
             // op.BiasingParameters.SourceSteps = 0;
             op.Run(ckt);
+        }
+
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
+        {
+            // Create circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5),
+                new Resistor("R1", "out", "vdd", 1.0e3),
+                CreateMOS1("M1", "out", "in", "0", "0", "MM"),
+                CreateMOS1("M2", "out", "in", "0", "0", "MM"),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                );
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5),
+                new Resistor("R1", "out", "vdd", 1.0e3),
+                CreateMOS1("M1", "out", "in", "0", "0", "MM")
+                    .SetParameter("m", 2.0),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                );
+
+            // Create simulation
+            var dc = new DC("dc", "V1", 0.0, 5.0, 0.1);
+            dc.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new[] { new RealVoltageExport(dc, "out") };
+            Compare(dc, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierTransient_Expect_Reference()
+        {
+            // Create circuit
+            // WARNING: We simulate both possibilities together, because the
+            // timestep varies if we split them due to different timestep truncation.
+            var ckt = new Circuit(
+                new VoltageSource("V1r", "inr", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupplyr", "vddr", "0", 5),
+                new Resistor("R1r", "outr", "vddr", 1.0e3),
+                CreateMOS1("M1r", "outr", "inr", "0", "0", "MM"),
+                CreateMOS1("M2r", "outr", "inr", "0", "0", "MM"),
+
+                new VoltageSource("V1a", "ina", "0", new Pulse(1, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupplya", "vdda", "0", 5),
+                new Resistor("R1a", "outa", "vdda", 1.0e3),
+                CreateMOS1("M1a", "outa", "ina", "0", "0", "MM")
+                    .SetParameter("m", 2.0),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                );
+
+            // Create simulation
+            var tran = new Transient("tran", 1e-9, 10e-6);
+            tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var v_ref = new RealVoltageExport(tran, "outr");
+            var v_act = new RealVoltageExport(tran, "outa");
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                var tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
+                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
+            };
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierNoise_Expect_Reference()
+        {
+            // Create circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10e3),
+                new Resistor("R2", "out", "g", 10e3),
+                new Capacitor("Cin", "in", "g", 1e-6),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM")
+                    .SetParameter("w", 100e-6)
+                    .SetParameter("l", 100e-6),
+                CreateMOS1("M2", "out", "g", "0", "0", "MM")
+                    .SetParameter("w", 100e-6)
+                    .SetParameter("l", 100e-6),
+                CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
+                );
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10e3),
+                new Resistor("R2", "out", "g", 10e3),
+                new Capacitor("Cin", "in", "g", 1e-6),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM")
+                    .SetParameter("w", 100e-6)
+                    .SetParameter("l", 100e-6)
+                    .SetParameter("m", 2.0),
+                CreateMOS1Model("MM", "IS = 1e-32 VTO = 3.03646 LAMBDA = 0 KP = 5.28747 CGSO = 6.5761e-06 CGDO = 1e-11 KF = 1e-25")
+                );
+
+            // Create simulation, exports and references
+            var noise = new Noise("noise", "V1", "out", new DecadeSweep(10, 10e9, 10));
+            noise.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
+            Compare(noise, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
+        {
+            // Build circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "out", "g", 10.0e3),
+                new Capacitor("Cin", "in", "g", 1e-6),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM"),
+                CreateMOS1("M2", "out", "g", "0", "0", "MM"),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                );
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "out", "g", 10.0e3),
+                new Capacitor("Cin", "in", "g", 1e-6),
+                CreateMOS1("M1", "out", "g", "0", "0", "MM").SetParameter("m", 2.0),
+                CreateMOS1Model("MM", "IS=1e-32 VTO=3.03646 LAMBDA=0 KP=5.28747 CGSO=6.5761e-06 CGDO=1e-11")
+                );
+
+            // Create simulation
+            var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
+            ac.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new[] { new ComplexVoltageExport(ac, "out") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
         }
     }
 }

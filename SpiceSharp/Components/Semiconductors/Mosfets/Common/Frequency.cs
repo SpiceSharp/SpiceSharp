@@ -91,9 +91,9 @@ namespace SpiceSharp.Components.Mosfets
             }
 
             // Charge oriented model parameters
-            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Behavior.Parameters.Width;
-            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor * Behavior.Parameters.Width;
-            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Behavior.Properties.EffectiveLength;
+            var gateSourceOverlapCap = ModelParameters.GateSourceOverlapCapFactor * Behavior.Parameters.ParallelMultiplier * Behavior.Parameters.Width;
+            var gateDrainOverlapCap = ModelParameters.GateDrainOverlapCapFactor  * Behavior.Parameters.ParallelMultiplier * Behavior.Parameters.Width;
+            var gateBulkOverlapCap = ModelParameters.GateBulkOverlapCapFactor * Behavior.Parameters.ParallelMultiplier * Behavior.Properties.EffectiveLength;
 
             // Meyer"s model parameters
             var capgs = _charges.Cgs * 2 + gateSourceOverlapCap;

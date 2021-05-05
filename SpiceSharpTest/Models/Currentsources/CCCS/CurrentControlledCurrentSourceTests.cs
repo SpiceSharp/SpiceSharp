@@ -4,6 +4,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
@@ -76,84 +77,50 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual("out", ((FloatingNodeRuleViolation)violation).FloatingVariable.Name);
         }
 
-        /*
-        [TestCaseSource(nameof(Biasing))]
-        public void When_BiasingBehavior_Expect_Reference(Proxy<ICurrentControlledBindingContext> context, double[] expected)
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
         {
-            var behavior = new BiasingBehavior("F1", context.Value);
-            ((IBiasingBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Resistor("Rref", "in", "0", 1.0),
+                new CurrentControlledCurrentSource("F1", "ref", "0", "V1", 1.0),
+                new CurrentControlledCurrentSource("F2", "ref", "0", "V1", 1.0),
+                new Resistor("R1", "ref", "0", 1.0));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Resistor("Rref", "in", "0", 1.0),
+                new CurrentControlledCurrentSource("F1", "ref", "0", "V1", 1.0)
+                    .SetParameter("m", 2.0),
+                new Resistor("R1", "ref", "0", 1.0));
+
+            var op = new OP("op");
+            var exports = new[] { new RealVoltageExport(op, "ref") };
+            Compare(op, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
         }
 
-        [TestCaseSource(nameof(Frequency))]
-        public void When_FrequencyBehavior_Expect_Reference(Proxy<ICurrentControlledBindingContext> context, Complex[] expected)
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
         {
-            var behavior = new FrequencyBehavior("F1", context.Value);
-            ((IFrequencyBehavior)behavior).InitializeParameters();
-            ((IFrequencyBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
-        }
-        [TestCaseSource(nameof(Rules))]
-        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
-        {
-            ckt.Validate(rules);
-            Assert.AreEqual(violations.Length, rules.ViolationCount);
-            int index = 0;
-            foreach (var violation in rules.Violations)
-                Assert.AreEqual(violations[index++], violation.GetType());
-        }
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0)
+                    .SetParameter("ac", new[] { 1.0, 1.0 }),
+                new Resistor("Rref", "in", "0", 1.0),
+                new CurrentControlledCurrentSource("F1", "out", "0", "V1", 1.0),
+                new CurrentControlledCurrentSource("F2", "out", "0", "V1", 1.0),
+                new Resistor("R2", "out", "0", 1.0));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0)
+                    .SetParameter("ac", new[] { 1.0, 1.0 }),
+                new Resistor("Rref", "in", "0", 1.0),
+                new CurrentControlledCurrentSource("F1", "out", "0", "V1", 1.0)
+                    .SetParameter("m", 2.0),
+                new Resistor("R2", "out", "0", 1.0));
 
-        public static IEnumerable<TestCaseData> Biasing
-        {
-            get
-            {
-                ICurrentControlledBindingContext context;
-
-                // Simple DC
-                context = Substitute.For<ICurrentControlledBindingContext>()
-                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", Units.Ampere))
-                    .Bias().Parameter(new BaseParameters { Coefficient = 1 });
-                yield return new TestCaseData(context.AsProxy(), new[]
-                    {
-                        double.NaN, double.NaN, 1.0, double.NaN,
-                        double.NaN, double.NaN, -1.0, double.NaN,
-                        double.NaN, double.NaN, double.NaN, double.NaN // No voltage source
-                    })
-                    .SetName("{m}(DC)");
-            }
+            var ac = new AC("ac");
+            var exports = new[] { new ComplexVoltageExport(ac, "out") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
         }
-        public static IEnumerable<TestCaseData> Frequency
-        {
-            get
-            {
-                ICurrentControlledBindingContext context;
-                var ibr = new Variable("branch", Units.Ampere);
-
-                // Simple DC
-                context = Substitute.For<ICurrentControlledBindingContext>()
-                    .Nodes("a", "b").BranchControlled(new Variable("controlbranch", Units.Ampere)).Frequency()
-                    .Parameter(new BaseParameters { Coefficient = 1 });
-                yield return new TestCaseData(context.AsProxy(), new Complex[]
-                    {
-                        double.NaN, double.NaN, 1.0, double.NaN,
-                        double.NaN, double.NaN, -1.0, double.NaN,
-                        double.NaN, double.NaN, double.NaN, double.NaN // No voltage source
-                    })
-                    .SetName("{m}(AC)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Rules
-        {
-            get
-            {
-                ComponentRuleParameters parameters;
-
-                yield return new TestCaseData(
-                    new Circuit(new CurrentControlledCurrentSource("F1", "out", "0", "V1", 1.0)),
-                    new ComponentRules(parameters = new ComponentRuleParameters(), new FloatingNodeRule(parameters.Variables.Ground)),
-                    new[] { typeof(FloatingNodeRuleViolation) });
-            }
-        }
-        */
     }
 }

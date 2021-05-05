@@ -139,30 +139,31 @@ namespace SpiceSharp.Components.Bipolars
             var xccs = CapCs * cstate.Laplace;
             var xcmcb = Geqcb * cstate.Laplace;
 
+            var m = Parameters.ParallelMultiplier;
             _elements.Add(
-                gcpr,
-                gx + xcbx,
-                gepr,
-                gmu + go + gcpr + xcmu + xccs + xcbx,
-                gx + gpi + gmu + xcpi + xcmu + xcmcb,
-                gpi + gepr + gm + go + xcpi,
-                -gcpr,
-                -gx,
-                -gepr,
-                -gcpr,
-                -gmu + gm - xcmu,
-                -gm - go,
-                -gx,
-                -gmu - xcmu - xcmcb,
-                -gpi - xcpi,
-                -gepr,
-                -go + xcmcb,
-                -gpi - gm - xcpi - xcmcb,
-                xccs,
-                -xccs,
-                -xccs,
-                -xcbx,
-                -xcbx);
+                gcpr * m,
+                (gx + xcbx) * m,
+                gepr * m,
+                (gmu + go + gcpr + xcmu + xccs + xcbx) * m,
+                (gx + gpi + gmu + xcpi + xcmu + xcmcb) * m,
+                (gpi + gepr + gm + go + xcpi) * m,
+                -gcpr * m,
+                -gx * m,
+                -gepr * m,
+                -gcpr * m,
+                (-gmu + gm - xcmu) * m,
+                (-gm - go) * m,
+                -gx * m,
+                (-gmu - xcmu - xcmcb) * m,
+                (-gpi - xcpi) * m,
+                -gepr * m,
+                (-go + xcmcb) * m,
+                (-gpi - gm - xcpi - xcmcb) * m,
+                xccs * m,
+                -xccs * m,
+                -xccs * m,
+                -xcbx * m,
+                -xcbx * m);
         }
     }
 }

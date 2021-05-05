@@ -347,5 +347,69 @@ namespace SpiceSharpTest.Models
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 2e-6, 1e-9, 1e-9, 5e-6, 10e-6)),
+                new Resistor("Rsource", "in", "a", 100),
+                new Resistor("Rfix1", "a_i1", "a", 2e-9), // This is to avoid the voltage loop creates by shorting two transmission lines
+                new LosslessTransmissionLine("T1", "a_i1", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5),
+                new Resistor("Rfix2", "a_i2", "a", 2e-9),
+                new LosslessTransmissionLine("T2", "a_i2", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5),
+                new Resistor("Rload", "b", "0", 100));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 2e-6, 1e-9, 1e-9, 5e-6, 10e-6)),
+                new Resistor("Rsource", "in", "a", 100),
+                new Resistor("Rfix1", "a_i1", "a", 2e-9), // This is to avoid the voltage loop creates by shorting two transmission lines
+                new LosslessTransmissionLine("T1", "a_i1", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5),
+                new Resistor("Rfix2", "a_i2", "a", 2e-9),
+                new LosslessTransmissionLine("T2", "a_i2", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5),
+                new Resistor("Rload", "b", "0", 100));
+
+            // Build the simulation
+            var tran = new Transient("tran", 1e-6, 20e-6);
+            CompareAbsTol = 1e-6; // Relaxing constraints, I believe this is because the match is not "perfect" with the series resistor
+            var exports = new[] { new RealVoltageExport(tran, "a"), new RealVoltageExport(tran, "b") };
+            Compare(tran, ckt_ref, ckt_act, exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 2e-6, 1e-9, 1e-9, 5e-6, 10e-6))
+                    .SetParameter("acmag", 1.0),
+                new Resistor("Rsource", "in", "a", 100),
+                new Resistor("Rfix1", "a_i1", "a", 2e-9), // This is to avoid the voltage loop creates by shorting two transmission lines
+                new LosslessTransmissionLine("T1", "a_i1", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5),
+                new Resistor("Rfix2", "a_i2", "a", 2e-9),
+                new LosslessTransmissionLine("T2", "a_i2", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5),
+                new Resistor("Rload", "b", "0", 100));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(1, 5, 2e-6, 1e-9, 1e-9, 5e-6, 10e-6))
+                    .SetParameter("acmag", 1.0),
+                new Resistor("Rsource", "in", "a", 100),
+                new Resistor("Rfix1", "a_i1", "a", 1e-9),
+                new LosslessTransmissionLine("T1", "a_i1", "0", "b", "0", 50.0, 1e-6)
+                    .SetParameter("reltol", 0.5)
+                    .SetParameter("m", 2.0),
+                new Resistor("Rload", "b", "0", 100));
+
+            // Build the simulation
+            var ac = new AC("tran", new DecadeSweep(0.1, 1e8, 5));
+            CompareAbsTol = 1e-6; // Relaxing constraints, I believe this is because the match is not "perfect" with the series resistor
+            var exports = new[] { new ComplexVoltageExport(ac, "a"), new ComplexVoltageExport(ac, "b") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+        }
     }
 }

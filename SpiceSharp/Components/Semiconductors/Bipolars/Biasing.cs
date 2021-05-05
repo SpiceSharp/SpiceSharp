@@ -405,13 +405,14 @@ namespace SpiceSharp.Components.Bipolars
             var ceqbe = ModelParameters.BipolarType * (cc + cb - vbe * (gm + go + gpi) + vbc * go);
             var ceqbc = ModelParameters.BipolarType * (-cc + vbe * (gm + go) - vbc * (gmu + go));
 
+            var m = Parameters.ParallelMultiplier;
             _elements.Add(
                 // Y-matrix
-                gcpr, gx, gepr, gmu + go + gcpr, gx + gpi + gmu, gpi + gepr + gm + go,
-                -gcpr, -gx, -gepr, -gcpr, -gmu + gm, -gm - go, -gx, -gmu, -gpi, -gepr, -go,
-                -gpi - gm,
+                gcpr * m, gx * m, gepr * m, (gmu + go + gcpr) * m, (gx + gpi + gmu) * m, (gpi + gepr + gm + go) * m,
+                -gcpr * m, -gx * m, -gepr * m, -gcpr * m, (-gmu + gm) * m, (-gm - go) * m, -gx * m, -gmu * m, -gpi * m,
+                -gepr * m, -go * m, (-gpi - gm) * m,
                 // RHS vector
-                ceqbc, -ceqbe - ceqbc, ceqbe);
+                ceqbc * m, (-ceqbe - ceqbc) * m, ceqbe * m);
         }
 
         /// <inheritdoc/>

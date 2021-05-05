@@ -329,5 +329,59 @@ namespace SpiceSharpTest.Models
             Assert.IsInstanceOf<FloatingNodeRuleViolation>(violation);
             Assert.AreEqual("in", ((FloatingNodeRuleViolation)violation).FloatingVariable.Name);
         }
+
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch"),
+                CreateVoltageSwitch("S2", "out", "0", "in", "0", "myswitch"),
+                CreateVoltageSwitchModel("myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001"),
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1e3)
+                );
+            var ckt_act = new Circuit(
+                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch")
+                    .SetParameter("m", 2.0),
+                CreateVoltageSwitchModel("myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001"),
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1e3)
+                );
+
+            var dc = new DC("dc", "V1", 0.0, 1.0, 0.1);
+            var exports = new[] { new RealVoltageExport(dc, "out") };
+            Compare(dc, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch"),
+                CreateVoltageSwitch("S2", "out", "0", "in", "0", "myswitch"),
+                CreateVoltageSwitchModel("myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001"),
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1e3)
+                );
+            var ckt_act = new Circuit(
+                CreateVoltageSwitch("S1", "out", "0", "in", "0", "myswitch")
+                    .SetParameter("m", 2.0),
+                CreateVoltageSwitchModel("myswitch", "VT=0.5 RON=1 ROFF=1e3 VH=0.2001"),
+                new VoltageSource("V1", "in", "0", 0),
+                new VoltageSource("V2", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1e3)
+                );
+
+            var ac = new AC("ac", new DecadeSweep(1, 1e6, 2));
+            var exports = new[] { new ComplexVoltageExport(ac, "out") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
     }
 }
