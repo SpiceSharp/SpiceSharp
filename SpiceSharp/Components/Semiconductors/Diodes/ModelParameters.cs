@@ -140,8 +140,7 @@ namespace SpiceSharp.Components.Diodes
         /// The breakdown voltage.
         /// </value>
         [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage", Units = "V")]
-        [LessThan(0)]
-        private GivenParameter<double> _breakdownVoltage = new GivenParameter<double>(-1.0, false);
+        public GivenParameter<double> BreakdownVoltage { get; set; } = new GivenParameter<double>(-1.0, false);
 
         /// <summary>
         /// Gets the current at the reverse breakdown voltage.
@@ -150,8 +149,7 @@ namespace SpiceSharp.Components.Diodes
         /// The breakdown current.
         /// </value>
         [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage", Units = "A")]
-        [GreaterThan(0)]
-        private double _breakdownCurrent = 1e-3;
+        public double BreakdownCurrent { get; set; } = 1e-3;
 
         /// <summary>
         /// Gets or sets the flicker noise coefficient.
