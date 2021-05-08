@@ -2,6 +2,7 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
+using System;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models
@@ -237,6 +238,7 @@ namespace SpiceSharpTest.Models
                 new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
             var dc = new DC("dc", "V1", -1, 1, 0.1);
+            dc.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var exports = new IExport<double>[] { new RealCurrentExport(dc, "V1") };
 
             Compare(dc, cktReference, cktActual, exports);
@@ -255,6 +257,7 @@ namespace SpiceSharpTest.Models
                 new Diode("D1", "in", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
             var ac = new AC("ac", new DecadeSweep(0.1, 1e6, 5));
+            ac.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var exports = new IExport<Complex>[] { new ComplexCurrentExport(ac, "V1") };
 
             Compare(ac, cktReference, cktActual, exports);
@@ -276,6 +279,7 @@ namespace SpiceSharpTest.Models
                 new Diode("D1", "out", "0", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
 
             var noise = new Noise("noise", "V1", "out", new DecadeSweep(0.1, 1e6, 5));
+            noise.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var exports = new IExport<double>[] { new InputNoiseDensityExport(noise), new OutputNoiseDensityExport(noise) };
 
             Compare(noise, cktReference, cktActual, exports);
@@ -291,28 +295,95 @@ namespace SpiceSharpTest.Models
              */
             // Build circuit
             var model = CreateDiodeModel("1N914", "Is = 2.52e-9 Rs = 0.568 N = 1.752 Cjo = 4e-12 M = 0.4 tt = 20e-9");
-            var cktReference = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
-                new VoltageSource("Vsupply", "vdd", "0", 5.0),
-                new Resistor("R1", "vdd", "out", 10.0e3),
-                new Resistor("R2", "out", "0", 10.0e3),
-                model
-            );
-            ParallelSeries(cktReference, name => new Diode(name, "", "", model.Name), "in", "out", 3, 2);
-            var cktActual = new Circuit(
-                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
-                new VoltageSource("Vsupply", "vdd", "0", 5.0),
-                new Resistor("R1", "vdd", "out", 10.0e3),
-                new Resistor("R2", "out", "0", 10.0e3),
+            var ckt = new Circuit(
+                new VoltageSource("V1r", "inr", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupplyr", "vddr", "0", 5.0),
+                new Resistor("R1r", "vddr", "outr", 10.0e3),
+                new Resistor("R2r", "outr", "0", 10.0e3),
+                new VoltageSource("V1a", "ina", "0", new Pulse(0, 5, 1e-6, 10e-9, 10e-9, 1e-6, 2e-6)),
+                new VoltageSource("Vsupplya", "vdda", "0", 5.0),
+                new Resistor("R1a", "vdda", "outa", 10.0e3),
+                new Resistor("R2a", "outa", "0", 10.0e3),
                 model,
-                new Diode("D1", "in", "out", model.Name).SetParameter("m", 3.0).SetParameter("n", 2.0));
+                new Diode("D1", "ina", "outa", model.Name)
+                    .SetParameter("m", 3.0)
+                    .SetParameter("n", 2.0));
+            ParallelSeries(ckt, name => new Diode(name, "", "", model.Name), "inr", "outr", 3, 2);
 
             // Create simulation
             var tran = new Transient("tran", 1e-9, 10e-6);
-            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
-            Compare(tran, cktReference, cktActual, exports);
-            DestroyExports(exports);
+            tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var v_ref = new RealVoltageExport(tran, "outr");
+            var v_act = new RealVoltageExport(tran, "outa");
+            tran.ExportSimulationData += (sender, args) =>
+            {
+                var tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
+                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
+            };
+            tran.Run(ckt);
+            v_ref.Destroy();
+            v_act.Destroy();
         }
 
+        [Test]
+        public void When_Breakdown_Expect_Reference()
+        {
+            // Source: https://www.el-component.com/diodes/1n4148
+            var model = CreateDiodeModel("1N4148", "IS=4.352E-9 N=1.906 BV=110 IBV=0.0001 RS=0.6458 CJO=7.048E-13 VJ=0.869 M=0.03 FC=0.5 TT=3.48E-9");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "a", "0", 0.0),
+                CreateDiode("D1", "a", "0", "1N4148"),
+                model);
+
+            // Sweep
+            var dc = new DC("dc", "V1", -111.0, 1.0, 0.5);
+            var exports = new[] { new RealCurrentExport(dc, "V1") };
+            var references = new[]
+            {
+                new[]
+                {
+                    0.522401721734752, 0.0157009009533624, 7.59356510116049E-07, 4.46149783783767E-09, 4.46101466877735E-09, 4.4605030780076E-09,
+                    4.45999148723786E-09, 4.45950831817754E-09, 4.45902514911722E-09, 4.45851355834748E-09, 4.45800196757773E-09, 4.45749037680798E-09,
+                    4.45700720774767E-09, 4.45649561697792E-09, 4.4560124479176E-09, 4.45550085714785E-09, 4.45498926637811E-09, 4.45450609731779E-09,
+                    4.45399450654804E-09, 4.45351133748773E-09, 4.45299974671798E-09, 4.45248815594823E-09, 4.45200498688791E-09, 4.4515218178276E-09,
+                    4.45101022705785E-09, 4.45047021457867E-09, 4.45001546722779E-09, 4.44950387645804E-09, 4.44899228568829E-09, 4.44850911662797E-09,
+                    4.44802594756766E-09, 4.44751435679791E-09, 4.44700276602816E-09, 4.44651959696785E-09, 4.4460080061981E-09, 4.44552483713778E-09,
+                    4.4449848246586E-09, 4.44450165559829E-09, 4.44399006482854E-09, 4.44350689576822E-09, 4.44302372670791E-09, 4.44251213593816E-09,
+                    4.44200054516841E-09, 4.44148895439866E-09, 4.44100578533835E-09, 4.44052261627803E-09, 4.43998260379885E-09, 4.43949943473854E-09,
+                    4.43901626567822E-09, 4.43850467490847E-09, 4.43802150584816E-09, 4.43750991507841E-09, 4.43699832430866E-09, 4.43651515524834E-09,
+                    4.4360035644786E-09, 4.43552039541828E-09, 4.4349803829391E-09, 4.43449721387879E-09, 4.43401404481847E-09, 4.43350245404872E-09,
+                    4.43300507413369E-09, 4.43249348336394E-09, 4.43201031430362E-09, 4.43149872353388E-09, 4.43100134361885E-09, 4.4304897528491E-09,
+                    4.43000658378878E-09, 4.42950920387375E-09, 4.428997613104E-09, 4.42851444404369E-09, 4.42800285327394E-09, 4.42750547335891E-09,
+                    4.42700809344387E-09, 4.42651071352884E-09, 4.42599912275909E-09, 4.42548753198935E-09, 4.42501857378375E-09, 4.42452119386871E-09,
+                    4.42399539224425E-09, 4.42349801232922E-09, 4.4230148432689E-09, 4.42251746335387E-09, 4.42200587258412E-09, 4.42149428181438E-09,
+                    4.42101111275406E-09, 4.42051373283903E-09, 4.42000214206928E-09, 4.41950476215425E-09, 4.41900738223922E-09, 4.41849579146947E-09,
+                    4.41799841155444E-09, 4.41751524249412E-09, 4.41700365172437E-09, 4.41649206095462E-09, 4.41599468103959E-09, 4.41549730112456E-09,
+                    4.41499992120953E-09, 4.41451675214921E-09, 4.41399095052475E-09, 4.41350778146443E-09, 4.41299619069468E-09, 4.41249881077965E-09,
+                    4.41200143086462E-09, 4.41150405094959E-09, 4.41100667103456E-09, 4.41050929111952E-09, 4.40999770034978E-09, 4.40950032043474E-09,
+                    4.40901715137443E-09, 4.40850556060468E-09, 4.40800818068965E-09, 4.4074965899199E-09, 4.40699921000487E-09, 4.40651604094455E-09,
+                    4.40600445017481E-09, 4.40550707025977E-09, 4.40500969034474E-09, 4.40449809957499E-09, 4.40400071965996E-09, 4.40350333974493E-09,
+                    4.4030059598299E-09, 4.40249436906015E-09, 4.40201119999983E-09, 4.40149960923009E-09, 4.40101644016977E-09, 4.40050484940002E-09,
+                    4.40000746948499E-09, 4.39949587871524E-09, 4.39899849880021E-09, 4.39850111888518E-09, 4.39800373897015E-09, 4.39750635905511E-09,
+                    4.39699476828537E-09, 4.39651159922505E-09, 4.3960000084553E-09, 4.39551683939499E-09, 4.39499103777052E-09, 4.39449365785549E-09,
+                    4.39399627794046E-09, 4.39349889802543E-09, 4.39300862353775E-09, 4.39250413819536E-09, 4.39200675828033E-09, 4.39150227293794E-09,
+                    4.39100489302291E-09, 4.39050040768052E-09, 4.39000302776549E-09, 4.38950564785046E-09, 4.38900826793542E-09, 4.38851088802039E-09,
+                    4.388006402678E-09, 4.38750902276297E-09, 4.38699743199322E-09, 4.38650715750555E-09, 4.38600267216316E-09, 4.38550529224813E-09,
+                    4.38500080690574E-09, 4.3845034269907E-09, 4.38399894164831E-09, 4.38349445630593E-09, 4.38299707639089E-09, 4.38249969647586E-09,
+                    4.38199521113347E-09, 4.3815049366458E-09, 4.38100045130341E-09, 4.38050307138838E-09, 4.37999858604599E-09, 4.3794941007036E-09,
+                    4.37899672078856E-09, 4.37849223544617E-09, 4.37799485553114E-09, 4.37749747561611E-09, 4.37700009570108E-09, 4.37650271578605E-09,
+                    4.37599823044366E-09, 4.37550085052862E-09, 4.37500347061359E-09, 4.3744989852712E-09, 4.37399449992881E-09, 4.37349712001378E-09,
+                    4.37299263467139E-09, 4.37250236018372E-09, 4.37199787484133E-09, 4.37149694221262E-09, 4.37099956229758E-09, 4.37049507695519E-09,
+                    4.36999769704016E-09, 4.36949676441145E-09, 4.36899938449642E-09, 4.36849845186771E-09, 4.36800107195268E-09, 4.36750013932397E-09,
+                    4.36699920669525E-09, 4.36650182678022E-09, 4.36600089415151E-09, 4.3654999615228E-09, 4.36499902889409E-09, 4.36449809626538E-09,
+                    4.36399716363667E-09, 4.36349623100796E-09, 4.36299529837925E-09, 4.36249436575054E-09, 4.36200053854918E-09, 4.36149960592047E-09,
+                    4.3610004496486E-09, 4.36049596430621E-09, 4.36000036074802E-09, 4.35949765176247E-09, 4.3589984954906E-09, 4.35849756286188E-09,
+                    4.35799840659001E-09, 4.35749569760446E-09, 4.35699565315417E-09, 4.35649383234704E-09, 4.35598845882623E-09, 4.35548397348384E-09,
+                    4.35497415907093E-09, 4.35445457469541E-09, 4.35391234177018E-09, 4.35329239323323E-09, 4.3522991877154E-09, 4.34689306771929E-09,
+                    -3.14063441399642E-22, -0.000110384655194973, -0.2012126027243
+                }
+            };
+            AnalyzeDC(dc, ckt, exports, references);
+            DestroyExports(exports);
+        }
     }
 }

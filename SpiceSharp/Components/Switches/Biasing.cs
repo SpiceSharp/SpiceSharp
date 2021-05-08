@@ -177,6 +177,7 @@ namespace SpiceSharp.Components.Switches
 
             // Get the current conduction
             var gNow = currentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
+            gNow *= Parameters.ParallelMultiplier;
             Conductance = gNow;
 
             // Load the Y-matrix

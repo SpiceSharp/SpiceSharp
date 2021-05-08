@@ -634,5 +634,62 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "g", "0", 0.5)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V2", "d", "0", 2.0),
+                CreateJFET("J1", "d", "g", "0", "JX"),
+                CreateJFET("J2", "d", "g", "0", "JX"),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
+            );
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "g", "0", 0.5)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V2", "d", "0", 2.0),
+                CreateJFET("J1", "d", "g", "0", "JX")
+                    .SetParameter("m", 2.0),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
+            );
+
+            var op = new OP("op");
+            op.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new[] { new RealCurrentExport(op, "V1"), new RealCurrentExport(op, "V2") };
+            Compare(op, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
+        {
+            // Build the circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "g", "0", 0.5)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V2", "d", "0", 2.0),
+                CreateJFET("J1", "d", "g", "0", "JX"),
+                CreateJFET("J2", "d", "g", "0", "JX"),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
+            );
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "g", "0", 0.5)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("V2", "d", "0", 2.0),
+                CreateJFET("J1", "d", "g", "0", "JX")
+                    .SetParameter("m", 2.0),
+                CreateJFETModel("JX", "IS=1.500E-12 BETA=696.7E-6 VTO=-0.241 CGS=1e-12 CGD=5e-12")
+            );
+
+            // Create the simulation
+            var ac = new AC("ac", new DecadeSweep(0.1, 10e9, 10));
+            ac.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new[] { new ComplexCurrentExport(ac, "V1"), new ComplexCurrentExport(ac, "V2") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
     }
 }

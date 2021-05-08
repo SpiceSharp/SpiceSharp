@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
@@ -183,6 +184,26 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
             Assert.Throws<NoEquivalentSubcircuitException>(() => op.Run(ckt));
+        }
+
+        [Test]
+        public void When_SubcircuitAccess_Expect_Reference()
+        {
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "c", 1e3)), "a", "c");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10.0),
+                new Subcircuit("X1", subckt, "in", "out"),
+                new Subcircuit("X2", subckt, "out", "0"));
+
+            var op = new OP("op");
+            op.Run(ckt);
+            var behaviors = op.EntityBehaviors["X2"].GetValue<SpiceSharp.Components.Subcircuits.EntitiesBehavior>();
+            Assert.AreEqual(10.0 / 4.0, behaviors.LocalBehaviors["R2"].GetProperty<double>("v"), 1e-12);
+
+            var state = behaviors.GetState<IBiasingSimulationState>();
+            Assert.AreEqual(10.0 / 4.0, state.Solution[state.Map[state.GetSharedVariable("b")]], 1e-12);
         }
     }
 }

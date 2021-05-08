@@ -104,9 +104,11 @@
     <Compile Include="Simulations\ACTests.cs" />
     <Compile Include="Simulations\ConcurrentSimulationsTests.cs" />
     <Compile Include="Simulations\DCTests.cs" />
+    <Compile Include="Simulations\DecadeSweepTests.cs" />
     <Compile Include="Simulations\DerivativeTester.cs" />
     <Compile Include="Simulations\IntegralTester.cs" />
     <Compile Include="Simulations\NoiseTests.cs" />
+    <Compile Include="Simulations\OctaveSweepTests.cs" />
     <Compile Include="Simulations\TransientTests.cs" />
     <Compile Include="Models\WaveformTests.cs" />
     <Compile Include="Waveforms\AMTests.cs" />

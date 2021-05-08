@@ -71,6 +71,16 @@ namespace SpiceSharp.Components.JFETs
         public bool Off { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of JFETs in parallel.
+        /// </summary>
+        /// <value>
+        /// The number of JFETs in parallel.
+        /// </value>
+        [ParameterName("m"), ParameterInfo("Parallel multiplier")]
+        [GreaterThanOrEquals(0)]
+        private double _parallelMultiplier = 1.0;
+
+        /// <summary>
         /// Sets the initial conditions of the JFET.
         /// </summary>
         /// <param name="ic">The initial conditions.</param>

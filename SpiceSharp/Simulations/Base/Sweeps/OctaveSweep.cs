@@ -3,16 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SpiceSharp.Attributes;
+using SpiceSharp.Simulations.Sweeps;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// Class that describes a sweep with a number of points per octave.
+    /// This class implements a sweep with a number of points per decade.
     /// </summary>
     /// <seealso cref="IEnumerable{T}" />
-    public class OctaveSweep : IEnumerable<double>
+    [GeneratedParameters]
+    public partial class OctaveSweep : GeometricProgression
     {
-        private int _pointsPerOctave;
+        // ln(2)
+        private const double LogOctave = 0.69314718055994530941723212145818;
+        private double _r = 2.0;
 
         /// <summary>
         /// Gets or sets the initial.
@@ -32,89 +36,49 @@ namespace SpiceSharp.Simulations
         [ParameterName("stop"), ParameterName("final"), ParameterInfo("The final frequency of the sweep.")]
         public double Final { get; set; }
 
+        /// <inheritdoc/>
+        protected override double A => Initial;
+
+        /// <inheritdoc/>
+        protected override double R => _r;
+
+        /// <inheritdoc/>
+        protected override int N
+        {
+            get
+            {
+                double n = Math.Log(Final / Initial) / Math.Log(_r);
+                if (double.IsNaN(n) || double.IsInfinity(n))
+                    throw new ArgumentException(Properties.Resources.Sweeps_Unreachable.FormatString(Final));
+                return (int)Math.Round(n);
+            }
+        }
+
         /// <summary>
         /// Gets or sets the points per decade.
         /// </summary>
         /// <value>
         /// The points per decade.
         /// </value>
+        [ParameterName("n"), ParameterName("steps"), ParameterInfo("The number of points per octave")]
         [GreaterThan(0)]
         public int PointsPerOctave
         {
-            get => _pointsPerOctave;
-            set
-            {
-                Utility.GreaterThan(value, nameof(PointsPerOctave), 0);
-                _pointsPerOctave = value;
-            }
+            get => (int)Math.Round(LogOctave / Math.Log(_r));
+            set => _r = Math.Exp(LogOctave / value);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OctaveSweep"/> class.
+        /// Initializes a new instance of the <see cref="DecadeSweep"/> class.
         /// </summary>
         /// <param name="initial">The initial value.</param>
         /// <param name="final">The final value.</param>
-        /// <param name="pointsPerOctave">The number of points per octave.</param>
+        /// <param name="pointsPerOctave">The number of points per decade.</param>
         public OctaveSweep(double initial, double final, int pointsPerOctave)
         {
             Initial = initial;
             Final = final;
             PointsPerOctave = pointsPerOctave;
         }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// An enumerator that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<double> GetEnumerator()
-        {
-            if (Final.Equals(Initial))
-            {
-                yield return Initial;
-                yield break;
-            }
-
-            var delta = Math.Exp(Math.Log(10.0) / _pointsPerOctave);
-            double current = Initial;
-            double stop = Final * Math.Sqrt(delta);
-            if (Final < Initial)
-            {
-                if (Initial > 0)
-                {
-                    throw new SpiceSharpException("{0} ({1}): {2}".FormatString(
-                        nameof(Initial), Initial,
-                        Properties.Resources.Parameters_NotGreater.FormatString(0)));
-                }
-                while (current <= stop)
-                {
-                    yield return current;
-                    current *= delta;
-                }
-            }
-            else
-            {
-                if (Initial < 0)
-                {
-                    throw new SpiceSharpException("{0} ({1}): {2}".FormatString(
-                        nameof(Initial), Initial,
-                        Properties.Resources.Parameters_NotLess.FormatString(0)));
-                }
-                while (current >= stop)
-                {
-                    yield return current;
-                    current *= delta;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through a collection.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

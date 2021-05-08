@@ -92,80 +92,46 @@ namespace SpiceSharpTest.Models
             Assert.AreEqual("in", ((FloatingNodeRuleViolation)violations[1]).FloatingVariable.Name);
         }
 
-        /*
-        [TestCaseSource(nameof(Biasing))]
-        public void When_BiasingBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, double[] expected)
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
         {
-            var behavior = new BiasingBehavior("E1", context.Value);
-            ((IBiasingBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IBiasingSimulationState>().Solver, expected);
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new VoltageControlledCurrentSource("F1", "ref", "0", "in", "0", 1.0),
+                new VoltageControlledCurrentSource("F2", "ref", "0", "in", "0", 1.0),
+                new Resistor("R1", "ref", "0", 1.0));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0),
+                new VoltageControlledCurrentSource("F1", "ref", "0", "in", "0", 1.0)
+                    .SetParameter("m", 2.0),
+                new Resistor("R1", "ref", "0", 1.0));
+
+            var op = new OP("op");
+            var exports = new[] { new RealVoltageExport(op, "ref") };
+            Compare(op, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
         }
 
-        [TestCaseSource(nameof(Frequency))]
-        public void When_FrequencyBehavior_Expect_Reference(Proxy<IComponentBindingContext> context, Complex[] expected)
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
         {
-            var behavior = new FrequencyBehavior("E1", context.Value);
-            ((IFrequencyBehavior)behavior).InitializeParameters();
-            ((IFrequencyBehavior)behavior).Load();
-            Check.Solver(context.Value.GetState<IComplexSimulationState>().Solver, expected);
-        }
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0)
+                    .SetParameter("ac", new[] { 1.0, 1.0 }),
+                new VoltageControlledCurrentSource("F1", "ref", "0", "in", "0", 1.0),
+                new VoltageControlledCurrentSource("F2", "ref", "0", "in", "0", 1.0),
+                new Resistor("R1", "ref", "0", 1.0));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 1.0)
+                    .SetParameter("ac", new[] { 1.0, 1.0 }),
+                new VoltageControlledCurrentSource("F1", "ref", "0", "in", "0", 1.0)
+                    .SetParameter("m", 2.0),
+                new Resistor("R1", "ref", "0", 1.0));
 
-        [TestCaseSource(nameof(Rules))]
-        public void When_Rules_Expect_Reference(Circuit ckt, ComponentRules rules, Type[] violations)
-        {
-            ckt.Validate(rules);
-            Assert.AreEqual(violations.Length, rules.ViolationCount);
-            int index = 0;
-            foreach (var violation in rules.Violations)
-                Assert.AreEqual(violations[index++], violation.GetType());
+            var ac = new AC("ac");
+            var exports = new[] { new ComplexVoltageExport(ac, "ref") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
         }
-
-        public static IEnumerable<TestCaseData> Biasing
-        {
-            get
-            {
-                IComponentBindingContext context;
-
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b", "c", "d").Bias().Parameter(new BaseParameters { Coefficient = 2 });
-                yield return new TestCaseData(context.AsProxy(), new double[]
-                    {
-                        double.NaN, double.NaN, 2.0, -2.0, double.NaN,
-                        double.NaN, double.NaN, -2.0, 2.0, double.NaN,
-                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,
-                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN
-                    }).SetName("{m}(DC)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Frequency
-        {
-            get
-            {
-                IComponentBindingContext context;
-
-                context = Substitute.For<IComponentBindingContext>()
-                    .Nodes("a", "b", "c", "d").Frequency().Parameter(new BaseParameters { Coefficient = 2 });
-                yield return new TestCaseData(context.AsProxy(), new Complex[]
-                    {
-                        double.NaN, double.NaN, 2.0, -2.0, double.NaN,
-                        double.NaN, double.NaN, -2.0, 2.0, double.NaN,
-                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN,
-                        double.NaN, double.NaN, double.NaN, double.NaN, double.NaN
-                    }).SetName("{m}(AC)");
-            }
-        }
-        public static IEnumerable<TestCaseData> Rules
-        {
-            get
-            {
-                ComponentRuleParameters parameters;
-
-                yield return new TestCaseData(
-                    new Circuit(new VoltageControlledCurrentSource("H1", "out", "0", "inp", "inn", 1.0)),
-                    new ComponentRules(parameters = new ComponentRuleParameters(), new FloatingNodeRule(parameters.Variables.Ground)),
-                    new[] { typeof(FloatingNodeRuleViolation), typeof(FloatingNodeRuleViolation), typeof(FloatingNodeRuleViolation) });
-            }
-        }
-        */
     }
 }

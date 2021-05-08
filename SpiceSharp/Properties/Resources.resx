@@ -303,6 +303,12 @@
   <data name="Sweeps.PointsTooSmall" xml:space="preserve">
     <value>The number of points should be greater than 0.</value>
   </data>
+  <data name="Sweeps.Unreachable" xml:space="preserve">
+    <value>Cannot reach the end {0} with the current sweep settings.</value>
+  </data>
+  <data name="Sweeps.ZeroTarget" xml:space="preserve">
+    <value>A logarithmic sweep cannot start or stop at a value of 0.</value>
+  </data>
   <data name="TypeAlreadyExists" xml:space="preserve">
     <value>A value of type {0} already exists.</value>
   </data>

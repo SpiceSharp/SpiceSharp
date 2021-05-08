@@ -250,5 +250,109 @@ namespace SpiceSharpTest.Models
             op.Run(ckt);
             ac.Run(ckt);
         }
+
+
+        [Test]
+        public void When_ParallelMultiplier_Expect_Reference()
+        {
+            // Create circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "in", "b", 1.0e3),
+                CreateBJT("Q1", "out", "b", "0", "0", "mjd44h11"),
+                CreateBJT("Q2", "out", "b", "0", "0", "mjd44h11"),
+                CreateBJTModel("mjd44h11", string.Join(" ",
+                    "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
+                    "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
+                    "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
+                    "NC = 1.00046 RB = 1.35729 IRB = 0.1 RBM = 0.1",
+                    "RE = 0.0001 RC = 0.037687 XTB = 0.90331 XTI = 1",
+                    "EG = 1.20459 CJE = 3.02297e-09 VJE = 0.649408 MJE = 0.351062",
+                    "TF = 2.93022e-09 XTF = 1.5 VTF = 1.00001 ITF = 0.999997",
+                    "CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
+                    "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
+                    "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1")));
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-9, 0.5e-6, 2e-6, 6e-6)),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 10.0e3),
+                new Resistor("R2", "in", "b", 1.0e3),
+                CreateBJT("Q1", "out", "b", "0", "0", "mjd44h11")
+                    .SetParameter("m", 2.0),
+                CreateBJTModel("mjd44h11", string.Join(" ",
+                    "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
+                    "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
+                    "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
+                    "NC = 1.00046 RB = 1.35729 IRB = 0.1 RBM = 0.1",
+                    "RE = 0.0001 RC = 0.037687 XTB = 0.90331 XTI = 1",
+                    "EG = 1.20459 CJE = 3.02297e-09 VJE = 0.649408 MJE = 0.351062",
+                    "TF = 2.93022e-09 XTF = 1.5 VTF = 1.00001 ITF = 0.999997",
+                    "CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
+                    "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
+                    "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1")));
+
+            // Create simulation
+            var tran = new Transient("tran", 1e-9, 10e-6);
+            tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new[] { new RealVoltageExport(tran, "out") };
+            Compare(tran, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
+
+        [Test]
+        public void When_ParallelMultiplierAC_Expect_Reference()
+        {
+            // Build circuit
+            var ckt_ref = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1.0e3),
+                new Resistor("R2", "out", "b", 10.0e3),
+                new Capacitor("Cin", "in", "b", 1e-6),
+                CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11"),
+                CreateBJT("Q2", "c", "b", "0", "0", "mjd44h11"),
+                CreateBJTModel("mjd44h11", string.Join(" ",
+                    "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
+                    "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
+                    "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
+                    "NC = 1.00046 RB = 1.35729 IRB = 0.1 RBM = 0.1",
+                    "RE = 0.0001 RC = 0.037687 XTB = 0.90331 XTI = 1",
+                    "EG = 1.20459 CJE = 3.02297e-09 VJE = 0.649408 MJE = 0.351062",
+                    "TF = 2.93022e-09 XTF = 1.5 VTF = 1.00001 ITF = 0.999997",
+                    "CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
+                    "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
+                    "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1")));
+            // Build circuit
+            var ckt_act = new Circuit(
+                new VoltageSource("V1", "in", "0", 0.0)
+                    .SetParameter("acmag", 1.0),
+                new VoltageSource("Vsupply", "vdd", "0", 5.0),
+                new Resistor("R1", "vdd", "out", 1.0e3),
+                new Resistor("R2", "out", "b", 10.0e3),
+                new Capacitor("Cin", "in", "b", 1e-6),
+                CreateBJT("Q1", "c", "b", "0", "0", "mjd44h11")
+                    .SetParameter("m", 2.0),
+                CreateBJTModel("mjd44h11", string.Join(" ",
+                    "IS = 1.45468e-14 BF = 135.617 NF = 0.85 VAF = 10",
+                    "IKF = 5.15565 ISE = 2.02483e-13 NE = 3.99964 BR = 13.5617",
+                    "NR = 0.847424 VAR = 100 IKR = 8.44427 ISC = 1.86663e-13",
+                    "NC = 1.00046 RB = 1.35729 IRB = 0.1 RBM = 0.1",
+                    "RE = 0.0001 RC = 0.037687 XTB = 0.90331 XTI = 1",
+                    "EG = 1.20459 CJE = 3.02297e-09 VJE = 0.649408 MJE = 0.351062",
+                    "TF = 2.93022e-09 XTF = 1.5 VTF = 1.00001 ITF = 0.999997",
+                    "CJC = 3.0004e-10 VJC = 0.600008 MJC = 0.409966 XCJC = 0.8",
+                    "FC = 0.533878 CJS = 0 VJS = 0.75 MJS = 0.5",
+                    "TR = 2.73328e-08 PTF = 0 KF = 0 AF = 1")));
+
+            // Create simulation
+            var ac = new AC("ac", new DecadeSweep(10, 10e9, 5));
+            ac.BiasingParameters.Gmin = 0.0; // May interfere with comparison
+            var exports = new[] { new ComplexVoltageExport(ac, "out") };
+            Compare(ac, ckt_ref, ckt_act, exports);
+            DestroyExports(exports);
+        }
     }
 }

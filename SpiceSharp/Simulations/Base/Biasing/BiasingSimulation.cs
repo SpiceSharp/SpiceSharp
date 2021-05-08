@@ -421,7 +421,12 @@ namespace SpiceSharp.Simulations
                         {
                             var eliminated = solver.OrderAndFactor();
                             if (eliminated < solver.Size)
-                                throw new SingularException(eliminated + 1);
+                            {
+                                // We should avoid throwing an exception here, because this may just be a starting
+                                // error...
+                                SpiceSharpWarning.Warning(this, Properties.Resources.Algebra_SingularMatrixIndexed.FormatString(eliminated + 1));
+                                return false;
+                            }
                             _shouldReorder = false;
                         }
                         finally

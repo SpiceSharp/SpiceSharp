@@ -148,22 +148,23 @@ namespace SpiceSharp.Components.JFETs
             var ggd = Ggd;
             var xgd = CapGd * omega;
 
+            var m = Parameters.ParallelMultiplier;
             ComplexElements.Add(
-                gdpr,
-                new Complex(ggd + ggs, xgd + xgs),
-                gspr,
-                new Complex(gdpr + gds + ggd, xgd),
-                new Complex(gspr + gds + gm + ggs, xgs),
-                -gdpr,
-                -new Complex(ggd, xgd),
-                -new Complex(ggs, xgs),
-                -gspr,
-                -gdpr,
-                new Complex(-ggd + gm, -xgd),
-                (-gds - gm),
-                -new Complex(ggs + gm, xgs),
-                -gspr,
-                -gds);
+                gdpr * m,
+                new Complex(ggd + ggs, xgd + xgs) * m,
+                gspr * m,
+                new Complex(gdpr + gds + ggd, xgd) * m,
+                new Complex(gspr + gds + gm + ggs, xgs) * m,
+                -gdpr * m,
+                -new Complex(ggd, xgd) * m,
+                -new Complex(ggs, xgs) * m,
+                -gspr * m,
+                -gdpr * m,
+                new Complex(-ggd + gm, -xgd) * m,
+                (-gds - gm) * m,
+                -new Complex(ggs + gm, xgs) * m,
+                -gspr * m,
+                -gds * m);
         }
     }
 }

@@ -89,7 +89,6 @@ namespace SpiceSharp.Components.Mosfets.Level3
                  Math.Exp(ModelParameters.FlickerNoiseExponent *
                  Math.Log(Math.Max(Math.Abs(Behavior.Id), 1e-38))) /
                  (_state.Point.Value.Frequency * Behavior.Parameters.Width *
-                 Behavior.Parameters.ParallelMultiplier *
                  (Behavior.Parameters.Length - 2 * ModelParameters.LateralDiffusion) *
                  _properties.OxideCapFactor * _properties.OxideCapFactor));
         }

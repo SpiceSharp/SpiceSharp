@@ -176,24 +176,25 @@ namespace SpiceSharp.Components.Diodes
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (ModelParameters.BreakdownVoltage.Given)
             {
-                double cbv = ModelParameters.BreakdownCurrent;
+                double vbv = Math.Abs(ModelParameters.BreakdownVoltage);
+                double cbv = Math.Abs(ModelParameters.BreakdownCurrent);
                 double xbv;
-                if (cbv < TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt)
+                if (cbv < TempSaturationCurrent * vbv / Vt)
                 {
-                    cbv = TempSaturationCurrent * ModelParameters.BreakdownVoltage / Vt;
+                    cbv = TempSaturationCurrent * vbv / Vt;
                     SpiceSharpWarning.Warning(this,
                         Properties.Resources.Diodes_BreakdownCurrentIncreased.FormatString(Name, cbv));
-                    xbv = ModelParameters.BreakdownVoltage;
+                    xbv = vbv;
                 }
                 else
                 {
                     var tol = BiasingParameters.RelativeTolerance * cbv;
-                    xbv = ModelParameters.BreakdownVoltage - Vt * Math.Log(1 + cbv / TempSaturationCurrent);
+                    xbv = vbv - Vt * Math.Log(1 + cbv / TempSaturationCurrent);
                     int iter;
                     for (iter = 0; iter < 25; iter++)
                     {
-                        xbv = ModelParameters.BreakdownVoltage - Vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / Vt);
-                        xcbv = TempSaturationCurrent * (Math.Exp((ModelParameters.BreakdownVoltage - xbv) / Vt) - 1 + xbv / Vt);
+                        xbv = vbv - Vt * Math.Log(cbv / TempSaturationCurrent + 1 - xbv / Vt);
+                        xcbv = TempSaturationCurrent * (Math.Exp((vbv - xbv) / Vt) - 1 + xbv / Vt);
                         if (Math.Abs(xcbv - cbv) <= tol)
                             break;
                     }

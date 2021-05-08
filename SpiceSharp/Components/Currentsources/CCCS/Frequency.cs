@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
 
         void IFrequencyBehavior.Load()
         {
-            var value = Parameters.Coefficient;
+            var value = Parameters.Coefficient * Parameters.ParallelMultiplier;
             _elements.Add(value, -value);
         }
     }

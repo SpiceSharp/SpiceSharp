@@ -87,6 +87,7 @@ namespace SpiceSharp.Components
                 var context = new SubcircuitBindingContext(this, localSim, behaviors);
 
                 // Add the necessary behaviors
+                behaviors.Add(new EntitiesBehavior(context));
                 behaviors.Build(simulation, context)
                     .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
                     .AddIfNo<IAcceptBehavior>(context => new Accept(context))

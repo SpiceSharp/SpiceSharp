@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.Switches
         }
 
         /// <summary>
-        /// Set the switch initially to non-conducting.
+        /// Sets the switch initially to non-conducting.
         /// </summary>
         /// <param name="flag">If <c>true</c>, the switch will be initially off.</param>
         [ParameterName("off"), ParameterInfo("Initially open")]
@@ -31,6 +31,13 @@ namespace SpiceSharp.Components.Switches
             if (flag)
                 ZeroState = false;
         }
+
+        /// <summary>
+        /// Gets or sets the multiplier.
+        /// </summary>
+        [ParameterName("m"), ParameterInfo("The parallel multiplier")]
+        [GreaterThan(0.0)]
+        private double _parallelMultiplier = 1.0;
 
         /// <summary>
         /// Gets or sets initial state.

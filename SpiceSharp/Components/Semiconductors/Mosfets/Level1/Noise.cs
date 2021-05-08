@@ -92,11 +92,12 @@ namespace SpiceSharp.Components.Mosfets.Level1
             _rd.Compute(Behavior.Properties.DrainConductance, Behavior.Parameters.Temperature);
             _rs.Compute(Behavior.Properties.SourceConductance, Behavior.Parameters.Temperature);
             _id.Compute(2.0 / 3.0 * Math.Abs(Behavior.Gm), Behavior.Parameters.Temperature);
-            _flicker.Compute(ModelParameters.FlickerNoiseCoefficient *
-                 Math.Exp(ModelParameters.FlickerNoiseExponent *
-                 Math.Log(Math.Max(Math.Abs(Behavior.Id), 1e-38))) /
-                 (_state.Point.Value.Frequency * Behavior.Parameters.Width * Behavior.Parameters.ParallelMultiplier *
-                 (Behavior.Parameters.Length - 2 * ModelParameters.LateralDiffusion) * coxSquared));
+            _flicker.Compute(
+                ModelParameters.FlickerNoiseCoefficient *
+                Math.Exp(ModelParameters.FlickerNoiseExponent *
+                Math.Log(Math.Max(Math.Abs(Behavior.Id), 1e-38))) /
+                (_state.Point.Value.Frequency * Behavior.Parameters.Width *
+                (Behavior.Parameters.Length - 2 * ModelParameters.LateralDiffusion) * coxSquared));
         }
     }
 }

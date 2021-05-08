@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
 
         void IBiasingBehavior.Load()
         {
-            var value = Parameters.Coefficient;
+            var value = Parameters.Coefficient * Parameters.ParallelMultiplier;
             _elements.Add(value, -value);
         }
     }

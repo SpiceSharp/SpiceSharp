@@ -24,7 +24,7 @@ namespace SpiceSharp.Components.CurrentSources
     [GeneratedParameters]
     public partial class Biasing : Behavior,
         IBiasingBehavior,
-        IParameterized<IndependentSourceParameters>
+        IParameterized<Parameters>
     {
         private readonly IBiasingSimulationState _biasing;
         private readonly IIntegrationMethod _method;
@@ -33,7 +33,7 @@ namespace SpiceSharp.Components.CurrentSources
         private readonly ElementSet<double> _elements;
 
         /// <inheritdoc/>
-        public IndependentSourceParameters Parameters { get; private set; }
+        public Parameters Parameters { get; private set; }
 
         /// <summary>
         /// Gets the waveform.
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.CurrentSources
         {
             context.ThrowIfNull(nameof(context));
 
-            Parameters = context.GetParameterSet<IndependentSourceParameters>();
+            Parameters = context.GetParameterSet<Parameters>();
             _biasing = context.GetState<IBiasingSimulationState>();
             _iteration = context.GetState<IIterationSimulationState>();
             _variables = new OnePort<double>(_biasing, context);
@@ -103,6 +103,7 @@ namespace SpiceSharp.Components.CurrentSources
                 // AC or DC analysis use the DC value
                 value = Parameters.DcValue * _iteration.SourceFactor;
             }
+            value *= Parameters.ParallelMultiplier;
 
             // NOTE: Spice 3f5's documentation is IXXXX POS NEG VALUE but in the code it is IXXXX NEG POS VALUE
             // I solved it by inverting the current when loading the rhs vector

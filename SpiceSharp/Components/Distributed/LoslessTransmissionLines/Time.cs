@@ -54,15 +54,17 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
             var sol = BiasingState.Solution;
 
             // Calculate the inputs
-            var input1 = sol[_pos2] - sol[_neg2] + Parameters.Impedance * sol[_br2];
-            var input2 = sol[_pos1] - sol[_neg1] + Parameters.Impedance * sol[_br1];
+            var z = Parameters.Impedance / Parameters.ParallelMultiplier;
+            var input1 = sol[_pos2] - sol[_neg2] + z * sol[_br2];
+            var input2 = sol[_pos1] - sol[_neg1] + z * sol[_br1];
             Signals.SetProbedValues(input1, input2);
         }
 
         /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
-            var y = Parameters.Admittance;
+            var m = Parameters.ParallelMultiplier;
+            var y = Parameters.Admittance * m;
             if (_time.UseDc)
             {
                 BiasingElements.Add(
@@ -82,8 +84,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
             var sol = BiasingState.Solution;
 
             // Calculate inputs
-            var input1 = sol[_pos2] - sol[_neg2] + Parameters.Impedance * sol[_br2];
-            var input2 = sol[_pos1] - sol[_neg1] + Parameters.Impedance * sol[_br1];
+            var z = Parameters.Impedance / m;
+            var input1 = sol[_pos2] - sol[_neg2] + z * sol[_br2];
+            var input2 = sol[_pos1] - sol[_neg1] + z * sol[_br1];
             Signals.SetProbedValues(input1, input2);
 
             // Update the branch equations

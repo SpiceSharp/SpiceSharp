@@ -20,6 +20,11 @@ namespace SpiceSharp.Components.Subcircuits
         public IReadOnlyList<Bridge<string>> Bridges => ((SubcircuitSimulation)Simulation).Nodes;
 
         /// <summary>
+        /// Gets the current simulation entity behaviors.
+        /// </summary>
+        public IBehaviorContainerCollection LocalBehaviors => Simulation.EntityBehaviors;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubcircuitBindingContext"/> class.
         /// </summary>
         /// <param name="component">The component creating the behavior.</param>
