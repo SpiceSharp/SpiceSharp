@@ -176,7 +176,7 @@ namespace SpiceSharp.Components.Diodes
             // and now to copute the breakdown voltage, again, using temperature adjusted basic parameters
             if (ModelParameters.BreakdownVoltage.Given)
             {
-                double vbv = -Math.Abs(ModelParameters.BreakdownVoltage);
+                double vbv = Math.Abs(ModelParameters.BreakdownVoltage);
                 double cbv = Math.Abs(ModelParameters.BreakdownCurrent);
                 double xbv;
                 if (cbv < TempSaturationCurrent * vbv / Vt)
