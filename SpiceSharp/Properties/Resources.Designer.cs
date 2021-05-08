@@ -10,7 +10,6 @@
 
 namespace SpiceSharp.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace SpiceSharp.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SpiceSharp.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SpiceSharp.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -616,6 +615,24 @@ namespace SpiceSharp.Properties {
         public static string Sweeps_PointsTooSmall {
             get {
                 return ResourceManager.GetString("Sweeps.PointsTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot reach the end {0} with the current sweep settings..
+        /// </summary>
+        public static string Sweeps_Unreachable {
+            get {
+                return ResourceManager.GetString("Sweeps.Unreachable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A logarithmic sweep cannot start or stop at a value of 0..
+        /// </summary>
+        public static string Sweeps_ZeroTarget {
+            get {
+                return ResourceManager.GetString("Sweeps.ZeroTarget", resourceCulture);
             }
         }
         
