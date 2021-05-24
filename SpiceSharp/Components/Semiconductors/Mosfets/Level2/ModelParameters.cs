@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The channel length modulation parameter.
         /// </value>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _lambda;
 
         /// <summary>
@@ -27,7 +27,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The width effect on the threshold voltage.
         /// </value>
         [ParameterName("delta"), ParameterInfo("Width effect on threshold")]
-        public GivenParameter<double> NarrowFactor { get; set; }
+        [Finite]
+        private GivenParameter<double> _narrowFactor;
 
         /// <summary>
         /// Gets or sets the critical field for mobility degradation.
@@ -36,7 +37,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The critical field for mobility degradation.
         /// </value>
         [ParameterName("ucrit"), ParameterInfo("Crit. field for mob. degradation")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _criticalField = new GivenParameter<double>(1e4, false);
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The critical field exponent for mobility degradation.
         /// </value>
         [ParameterName("uexp"), ParameterInfo("Crit. field exp for mob. deg.")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _criticalFieldExp;
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The total channel charge coefficient.
         /// </value>
         [ParameterName("neff"), ParameterInfo("Total channel charge coeff.")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _channelCharge = new GivenParameter<double>(1, false);
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The fast surface state density.
         /// </value>
         [ParameterName("nfs"), ParameterInfo("Fast surface state density")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _fastSurfaceStateDensity;
 
         /// <summary>
@@ -76,7 +77,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The maximum drift velocity.
         /// </value>
         [ParameterName("vmax"), ParameterInfo("Maximum carrier drift velocity")]
-        public GivenParameter<double> MaxDriftVelocity { get; set; }
+        [Finite]
+        private GivenParameter<double> _maxDriftVelocity;
 
         /// <summary>
         /// Gets the junction depth.
@@ -85,7 +87,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// The junction depth.
         /// </value>
         [ParameterName("xj"), ParameterInfo("Junction depth")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _junctionDepth;
 
         /// <inheritdoc/>

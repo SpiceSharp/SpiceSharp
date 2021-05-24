@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The capacitance.
         /// </value>
         [ParameterName("capacitance"), ParameterInfo("Device capacitance", Units = "F", IsPrincipal = true)]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _capacitance = new GivenParameter<double>();
 
         /// <summary>
@@ -27,7 +27,8 @@ namespace SpiceSharp.Components.Capacitors
         /// The initial voltage.
         /// </value>
         [ParameterName("ic"), ParameterInfo("Initial capacitor voltage", Units = "V", Interesting = false)]
-        public GivenParameter<double> InitialCondition { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialCondition;
 
         /// <summary>
         /// Gets the width of the capacitor.
@@ -36,7 +37,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The width of the capacitor.
         /// </value>
         [ParameterName("w"), ParameterInfo("Device width", Units = "m", Interesting = false)]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _width = new GivenParameter<double>();
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The length of the capacitor.
         /// </value>
         [ParameterName("l"), ParameterInfo("Device length", Units = "m", Interesting = false)]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _length = new GivenParameter<double>();
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The parallel multiplier.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace SpiceSharp.Components.Capacitors
         /// The temperature celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -79,7 +80,7 @@ namespace SpiceSharp.Components.Capacitors
         /// <value>
         /// The temperature in Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
     }
 }

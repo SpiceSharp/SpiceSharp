@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.JFETs
         /// The measurement temperature in degrees celsius.
         /// </value>
         [ParameterName("tnom"), ParameterInfo("Nominal temperature.", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.JFETs
         /// <value>
         /// The measurement temperature in Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(300.15, false);
 
         /// <summary>
@@ -40,7 +40,8 @@ namespace SpiceSharp.Components.JFETs
         /// The threshold voltage.
         /// </value>
         [ParameterName("vt0"), ParameterName("vto"), ParameterInfo("Threshold voltage", Units = "V")]
-        public double Threshold { get; set; } = -2;
+        [Finite]
+        private double _threshold = -2;
 
         /// <summary>
         /// Gets or sets the transconductance.
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components.JFETs
         /// The transconductance.
         /// </value>
         [ParameterName("beta"), ParameterInfo("Transconductance parameter", Units = "\u03a9^-1")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _beta = 1e-4;
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace SpiceSharp.Components.JFETs
         /// The channel length modulation parameter.
         /// </value>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation parameter", Units = "V^-1")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _lModulation;
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace SpiceSharp.Components.JFETs
         /// The drain resistance.
         /// </value>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _drainResistance;
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace SpiceSharp.Components.JFETs
         /// The source resistance.
         /// </value>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _sourceResistance;
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace SpiceSharp.Components.JFETs
         /// The gate-source junction capacitance.
         /// </value>
         [ParameterName("cgs"), ParameterInfo("G-S junction capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _capGs;
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace SpiceSharp.Components.JFETs
         /// The gate-drain junction capacitance.
         /// </value>
         [ParameterName("cgd"), ParameterInfo("G-D junction capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _capGd;
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace SpiceSharp.Components.JFETs
         /// The gate junction potential.
         /// </value>
         [ParameterName("pb"), ParameterInfo("Gate junction potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _gatePotential = 1;
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace SpiceSharp.Components.JFETs
         /// The gate saturation current.
         /// </value>
         [ParameterName("is"), ParameterInfo("Gate junction saturation current", Units = "A")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _gateSaturationCurrent = 1e-14;
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace SpiceSharp.Components.JFETs
         /// The doping tail parameter.
         /// </value>
         [ParameterName("b"), ParameterInfo("Doping tail parameter")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _b = 1;
 
         /// <summary>
@@ -212,7 +213,8 @@ namespace SpiceSharp.Components.JFETs
         /// The flicker noise coefficient.
         /// </value>
         [ParameterName("kf"), ParameterInfo("Flicker noise coefficient")]
-        public double FnCoefficient { get; set; }
+        [Finite]
+        private double _fnCoefficient;
 
         /// <summary>
         /// Gets or sets the flicker noise exponent.
@@ -221,7 +223,8 @@ namespace SpiceSharp.Components.JFETs
         /// The flicker noise exponent.
         /// </value>
         [ParameterName("af"), ParameterInfo("Flicker noise exponent")]
-        public double FnExponent { get; set; } = 1;
+        [Finite]
+        private double _fnExponent = 1;
 
         /// <inheritdoc/>
         public void CalculateDefaults()

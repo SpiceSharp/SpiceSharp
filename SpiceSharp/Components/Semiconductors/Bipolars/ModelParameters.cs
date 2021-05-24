@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The nominal temperature in degrees Celsius.
         /// </value>
         [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.Bipolars
         /// <value>
         /// The nominal temperature in degrees Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The saturation current.
         /// </value>
         [ParameterName("is"), ParameterInfo("Saturation Current", Units = "A")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _satCur = 1e-16;
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The ideal forward beta parameter.
         /// </value>
         [ParameterName("bf"), ParameterInfo("Ideal forward beta")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _betaF = 100;
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The forward emission coefficient.
         /// </value>
         [ParameterName("nf"), ParameterInfo("Forward emission coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _emissionCoefficientForward = 1;
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The forward Early voltage.
         /// </value>
         [ParameterName("vaf"), ParameterName("va"), ParameterInfo("Forward Early voltage", Units = "V")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _earlyVoltageForward;
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The forward beta roll-off corner current.
         /// </value>
         [ParameterName("ikf"), ParameterName("ik"), ParameterInfo("Forward beta roll-off corner current")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _rollOffForward;
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-emitter leakage saturation current.
         /// </value>
         [ParameterName("ise"), ParameterInfo("B-E leakage saturation current", Units = "A")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _leakBeCurrent;
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-emitter emission coefficient.
         /// </value>
         [ParameterName("ne"), ParameterInfo("B-E leakage emission coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _leakBeEmissionCoefficient = 1.5;
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The ideal reverse beta parameter.
         /// </value>
         [ParameterName("br"), ParameterInfo("Ideal reverse beta")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _betaR = 1;
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The reverse emission coefficient.
         /// </value>
         [ParameterName("nr"), ParameterInfo("Reverse emission coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _emissionCoefficientReverse = 1;
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The reverse Early voltage.
         /// </value>
         [ParameterName("var"), ParameterName("vb"), ParameterInfo("Reverse Early voltage", Units = "V")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _earlyVoltageReverse;
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The reverse beta roll-off corner current.
         /// </value>
         [ParameterName("ikr"), ParameterInfo("reverse beta roll-off corner current")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _rollOffReverse;
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-collector saturation current.
         /// </value>
         [ParameterName("isc"), ParameterInfo("B-C leakage saturation current", Units = "A")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _leakBcCurrent;
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-collector emission coefficient.
         /// </value>
         [ParameterName("nc"), ParameterInfo("B-C leakage emission coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _leakBcEmissionCoefficient = 2;
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The zero-bias base resistance.
         /// </value>
         [ParameterName("rb"), ParameterInfo("Zero bias base resistance")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _baseResist;
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The current for base resistance = (rb + rbm) / 2.
         /// </value>
         [ParameterName("irb"), ParameterInfo("Current for base resistance=(rb+rbm)/2", Units = "A")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _baseCurrentHalfResist;
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The minimum base resistance.
         /// </value>
         [ParameterName("rbm"), ParameterInfo("Minimum base resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _minimumBaseResistance;
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The emitter resistance.
         /// </value>
         [ParameterName("re"), ParameterInfo("Emitter resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _emitterResistance;
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The collector resistance.
         /// </value>
         [ParameterName("rc"), ParameterInfo("Collector resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _collectorResistance;
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The zero-bias base-emitter depletion capacitance.
         /// </value>
         [ParameterName("cje"), ParameterInfo("Zero bias B-E depletion capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _depletionCapBe;
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace SpiceSharp.Components.Bipolars
         /// Gets or sets the base-emitter built-in potential.
         /// </value>
         [ParameterName("vje"), ParameterName("pe"), ParameterInfo("B-E built in potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _potentialBe = 0.75;
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-emitter junction grading coefficient.
         /// </value>
         [ParameterName("mje"), ParameterName("me"), ParameterInfo("B-E junction grading coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _junctionExpBe = 0.33;
 
         /// <summary>
@@ -307,7 +307,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The ideal forward transit time.
         /// </value>
         [ParameterName("tf"), ParameterInfo("Ideal forward transit time", Units = "s")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _transitTimeForward;
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The coefficient for bias dependence of the forward transit time.
         /// </value>
         [ParameterName("xtf"), ParameterInfo("Coefficient for bias dependence of TF")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _transitTimeBiasCoefficientForward;
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The voltage giving the base-collector voltage dependence of the forward transit time.
         /// </value>
         [ParameterName("vtf"), ParameterInfo("Voltage giving VBC dependence of TF")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _transitTimeForwardVoltageBc;
 
         /// <summary>
@@ -337,7 +337,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The high-current dependence of the forward transit time.
         /// </value>
         [ParameterName("itf"), ParameterInfo("High current dependence of TF")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _transitTimeHighCurrentForward;
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The excess phase.
         /// </value>
         [ParameterName("ptf"), ParameterInfo("Excess phase")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _excessPhase;
 
         /// <summary>
@@ -357,7 +357,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The zero-bias base-collector depletion capacitance.
         /// </value>
         [ParameterName("cjc"), ParameterInfo("Zero bias B-C depletion capacitance")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _depletionCapBc;
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-collector built-in potential.
         /// </value>
         [ParameterName("vjc"), ParameterName("pc"), ParameterInfo("B-C built in potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _potentialBc = 0.75;
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The base-collector junction grading coefficient.
         /// </value>
         [ParameterName("mjc"), ParameterName("mc"), ParameterInfo("B-C junction grading coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _junctionExpBc = 0.33;
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The fraction of base-collector capacitance to the internal base.
         /// </value>
         [ParameterName("xcjc"), ParameterInfo("Fraction of B-C cap to internal base")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _baseFractionBcCap = 1.0;
 
         /// <summary>
@@ -397,7 +397,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The ideal reverse transit time.
         /// </value>
         [ParameterName("tr"), ParameterInfo("Ideal reverse transit time", Units = "s")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _transitTimeReverse;
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The zero-bias collector-substrate capacitance.
         /// </value>
         [ParameterName("cjs"), ParameterName("ccs"), ParameterInfo("Zero bias C-S capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _capCs;
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The substrate junction built-in potential.
         /// </value>
         [ParameterName("vjs"), ParameterName("ps"), ParameterInfo("Substrate junction built-in potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _potentialSubstrate = 0.75;
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The substrate junction grading coefficient.
         /// </value>
         [ParameterName("mjs"), ParameterName("ms"), ParameterInfo("Substrate junction grading coefficient")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _exponentialSubstrate;
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The forward and reverse beta temperature exponent.
         /// </value>
         [ParameterName("xtb"), ParameterInfo("Forward and reverse beta temperature exponent")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _betaExponent;
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The energy gap for saturation current temperature dependency.
         /// </value>
         [ParameterName("eg"), ParameterInfo("Energy gap for IS temperature dependency")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _energyGap = 1.11;
 
         /// <summary>
@@ -457,7 +457,8 @@ namespace SpiceSharp.Components.Bipolars
         /// The temperature exponent for the saturation current.
         /// </value>
         [ParameterName("xti"), ParameterInfo("Temperature exponent for IS")]
-        public double TempExpIs { get; set; } = 3;
+        [Finite]
+        private double _tempExpIs = 3;
 
         /// <summary>
         /// Gets the forward bias junction fit parameter.
@@ -475,7 +476,7 @@ namespace SpiceSharp.Components.Bipolars
         /// <value>
         /// The scaling parameter c2.
         /// </value>
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _c2;
 
         /// <summary>
@@ -484,7 +485,7 @@ namespace SpiceSharp.Components.Bipolars
         /// <value>
         /// The scaling parameter c4.
         /// </value>
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _c4;
 
         /// <summary>
@@ -494,7 +495,8 @@ namespace SpiceSharp.Components.Bipolars
         /// The flicker noise coefficient.
         /// </value>
         [ParameterName("kf"), ParameterInfo("Flicker Noise Coefficient")]
-        public double FlickerNoiseCoefficient { get; set; }
+        [Finite]
+        private double _flickerNoiseCoefficient;
 
         /// <summary>
         /// Gets or sets the flicker noise exponent.
@@ -503,6 +505,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The flicker noise exponent.
         /// </value>
         [ParameterName("af"), ParameterInfo("Flicker Noise Exponent")]
-        public double FlickerNoiseExponent { get; set; } = 1;
+        [Finite]
+        private double _flickerNoiseExponent = 1;
     }
 }

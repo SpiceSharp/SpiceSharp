@@ -28,7 +28,7 @@ namespace SpiceSharp.Algebra
         /// </value>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is not greater than 0.</exception>
         [ParameterName("pivrel"), ParameterInfo("The relative threshold for validating pivots")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _relativePivotThreshold = 1e-3;
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace SpiceSharp.Algebra
         /// </value>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
         [ParameterName("pivtol"), ParameterInfo("The absolute threshold for validating pivots")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _absolutePivotThreshold = 1e-13;
 
         /// <summary>

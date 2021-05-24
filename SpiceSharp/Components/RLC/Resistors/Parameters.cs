@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.Resistors
         /// <value>
         /// The temperature of the resistor.
         /// </value>
-        [GreaterThanOrEquals(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.Resistors
         /// If a 0 Ohm resistance is wanted, consider using an ideal voltage source instead.
         /// </remarks>
         [ParameterName("resistance"), ParameterName("r"), ParameterInfo("Resistance", Units = "\u03a9", IsPrincipal = true)]
-        [GreaterThanOrEquals(0), LowerLimit(MinimumResistance)]
+        [GreaterThanOrEquals(0), LowerLimit(MinimumResistance), Finite]
         private GivenParameter<double> _resistance;
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.Resistors
         /// The resistor operating temperature in degrees Celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C", Interesting = false)]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.Resistors
         /// The width of the resistor.
         /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _width = new GivenParameter<double>(1.0, false);
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SpiceSharp.Components.Resistors
         /// The length of the resistor.
         /// </value>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _length;
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace SpiceSharp.Components.Resistors
         /// The number of resistors in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SpiceSharp.Components.Resistors
         /// The number of resistors in series.
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _seriesMultiplier = 1.0;
     }
 }

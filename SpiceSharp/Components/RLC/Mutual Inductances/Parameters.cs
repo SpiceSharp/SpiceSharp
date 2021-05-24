@@ -21,6 +21,7 @@ namespace SpiceSharp.Components.MutualInductances
         /// the inductors. The mutual inductance can be computed using M = k*sqrt(L1*L2).
         /// </remarks>
         [ParameterName("k"), ParameterName("coefficient"), ParameterInfo("Coupling coefficient", IsPrincipal = true)]
-        public GivenParameter<double> Coupling { get; set; }
+        [Finite]
+        private GivenParameter<double> _coupling;
     }
 }

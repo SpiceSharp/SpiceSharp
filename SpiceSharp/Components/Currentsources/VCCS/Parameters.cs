@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// The transconductance gain..
         /// </value>
         [ParameterName("gain"), ParameterInfo("Transconductance of the source (gain)", Units = "\u03a9^-1")]
-        public double Transconductance { get; set; }
+        [Finite]
+        private double _transconductance;
 
         /// <summary>
         /// Gets or sets the number of current sources in parallel.
@@ -26,7 +27,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// The number of current sources in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
     }
 }

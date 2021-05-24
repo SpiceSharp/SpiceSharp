@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.VoltageDelays
         /// The delay.
         /// </value>
         [ParameterName("delay"), ParameterName("td"), ParameterInfo("The delay.", Units = "s")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _delay;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.VoltageDelays
         /// The relative tolerance.
         /// </value>
         [ParameterName("reltol"), ParameterInfo("The relative tolerance used to decide on adding a breakpoint.")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _relativeTolerance = 1.0;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.VoltageDelays
         /// The absolute tolerance.
         /// </value>
         [ParameterName("abstol"), ParameterInfo("The absolute tolerance used to decide on adding a breakpoint.")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _absoluteTolerance = 1.0;
     }
 }

@@ -19,7 +19,8 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// The DC value.
         /// </value>
         [ParameterName("dc"), ParameterInfo("D.C. source value")]
-        public GivenParameter<double> DcValue { get; set; }
+        [Finite]
+        private GivenParameter<double> _dcValue;
 
         /// <summary>
         /// Gets or sets the waveform description.
@@ -37,7 +38,8 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// The small-signal magnitude.
         /// </value>
         [ParameterName("acmag"), ParameterInfo("AC magnitude value")]
-        public double AcMagnitude { get; set; }
+        [Finite]
+        private double _acMagnitude;
 
         /// <summary>
         /// Small-signal phase.
@@ -46,7 +48,8 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// The small-signal phase.
         /// </value>
         [ParameterName("acphase"), ParameterInfo("AC phase value")]
-        public double AcPhase { get; set; }
+        [Finite]
+        private double _acPhase;
 
         /// <summary>
         /// Sets the small-signal parameters of the source.

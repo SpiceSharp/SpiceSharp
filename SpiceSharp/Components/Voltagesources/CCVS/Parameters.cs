@@ -17,6 +17,7 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSources
         /// The transresistance gain.
         /// </value>
         [ParameterName("gain"), ParameterInfo("Transresistance (gain)")]
-        public double Coefficient { get; set; }
+        [Finite]
+        private double _coefficient;
     }
 }

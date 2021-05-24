@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
         /// The current gain.
         /// </value>
         [ParameterName("gain"), ParameterInfo("Gain of the source")]
-        public double Coefficient { get; set; }
+        [Finite]
+        private double _coefficient;
 
         /// <summary>
         /// Gets or sets the number of resistors in parallel.
@@ -26,7 +27,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
         /// The number of resistors in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
     }
 }
