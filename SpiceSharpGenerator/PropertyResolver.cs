@@ -64,6 +64,8 @@ namespace SpiceSharpGenerator
                         checks.Add($"value = Utility.LowerLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("UpperLimitAttribute"))
                         checks.Add($"value = Utility.UpperLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                    else if (attribute.IsAttribute("FiniteAttribute"))
+                        checks.Add($"Utility.Finite(value, nameof({name}));");
                     if (isFirst)
                         isFirst = false;
                     else

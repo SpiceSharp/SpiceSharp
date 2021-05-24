@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The default width for transistors.
         /// </value>
         [ParameterName("w"), ParameterInfo("The default width for transistors using this model", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _width = 1e-4;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The default length for transistors.
         /// </value>
         [ParameterName("l"), ParameterInfo("The default length for transistors using this model", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _length = 1e-4;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The nominal temperature in degrees Celsius.
         /// </value>
         [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -50,7 +50,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The base threshold voltage.
         /// </value>
         [ParameterName("vto"), ParameterName("vt0"), ParameterInfo("Threshold voltage", Units = "V")]
-        public GivenParameter<double> Vt0 { get; set; }
+        [Finite]
+        private GivenParameter<double> _vt0;
 
         /// <summary>
         /// Gets or sets the transconductance.
@@ -59,7 +60,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The transconductance.
         /// </value>
         [ParameterName("kp"), ParameterInfo("Transconductance parameter", Units = "A/V^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _transconductance = new GivenParameter<double>(2e-5, false);
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk threshold parameter.
         /// </value>
         [ParameterName("gamma"), ParameterInfo("Bulk threshold parameter", Units = "V^0.5")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _gamma;
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The surface potential.
         /// </value>
         [ParameterName("phi"), ParameterInfo("Surface potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _phi = new GivenParameter<double>(0.6, false);
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The drain ohmic resistance.
         /// </value>
         [ParameterName("rd"), ParameterInfo("Drain ohmic resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _drainResistance;
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The source ohmic resistance.
         /// </value>
         [ParameterName("rs"), ParameterInfo("Source ohmic resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _sourceResistance;
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk-drain junction capacitance.
         /// </value>
         [ParameterName("cbd"), ParameterInfo("B-D junction capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _capBd;
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk-source junction capacitance
         /// </value>
         [ParameterName("cbs"), ParameterInfo("B-S junction capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _capBs;
 
         /// <summary>
@@ -129,7 +130,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk junction saturation current.
         /// </value>
         [ParameterName("is"), ParameterInfo("Bulk junction saturation current", Units = "A")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _junctionSatCur = 1e-14;
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk junction potential.
         /// </value>
         [ParameterName("pb"), ParameterInfo("Bulk junction potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _bulkJunctionPotential = 0.8;
 
         /// <summary>
@@ -149,7 +150,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The gate-source overlap capacitance.
         /// </value>
         [ParameterName("cgso"), ParameterInfo("Gate-source overlap cap.", Units = "F/m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _gateSourceOverlapCapFactor;
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The gate-drain overlap capacitance.
         /// </value>
         [ParameterName("cgdo"), ParameterInfo("Gate-drain overlap cap.", Units = "F/m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _gateDrainOverlapCapFactor;
 
         /// <summary>
@@ -169,7 +170,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The gate-bulk overlap capacitance.
         /// </value>
         [ParameterName("cgbo"), ParameterInfo("Gate-bulk overlap cap.", Units = "F/m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _gateBulkOverlapCapFactor;
 
         /// <summary>
@@ -179,7 +180,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bottom junction capacitance per area.
         /// </value>
         [ParameterName("cj"), ParameterInfo("Bottom junction cap. per area", Units = "F/m^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _bulkCapFactor;
 
         /// <summary>
@@ -189,7 +190,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk junction bottom grading coefficient.
         /// </value>
         [ParameterName("mj"), ParameterInfo("Bottom grading coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _bulkJunctionBotGradingCoefficient = 0.5;
 
         /// <summary>
@@ -199,7 +200,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The sidewall capacitance.
         /// </value>
         [ParameterName("cjsw"), ParameterInfo("Side junction cap. per area", Units = "F/m^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _sidewallCapFactor;
 
         /// <summary>
@@ -209,7 +210,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk junction side grading coefficient.
         /// </value>
         [ParameterName("mjsw"), ParameterInfo("Side grading coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _bulkJunctionSideGradingCoefficient = 0.33;
 
         /// <summary>
@@ -219,7 +220,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The bulk junction saturation current density.
         /// </value>
         [ParameterName("js"), ParameterInfo("Bulk jct. sat. current density", Units = "A/m^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _junctionSatCurDensity;
 
         /// <summary>
@@ -229,7 +230,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The oxide thickness.
         /// </value>
         [ParameterName("tox"), ParameterInfo("Oxide thickness", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _oxideThickness = new GivenParameter<double>(1e-7, false);
 
         /// <summary>
@@ -239,7 +240,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The lateral diffusion.
         /// </value>
         [ParameterName("ld"), ParameterInfo("Lateral diffusion", Units = "m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _lateralDiffusion;
 
         /// <summary>
@@ -249,7 +250,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The sheet resistance.
         /// </value>
         [ParameterName("rsh"), ParameterInfo("Sheet resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _sheetResistance;
 
         /// <summary>
@@ -259,7 +260,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The surface mobility.
         /// </value>
         [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility", Units = "V/cm")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _surfaceMobility = new GivenParameter<double>(600, false);
 
         /// <summary>
@@ -269,7 +270,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The forward bias junction fitting parameter.
         /// </value>
         [ParameterName("fc"), ParameterInfo("Forward bias jct. fit parm.")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _forwardCapDepletionCoefficient = 0.5;
 
         /// <summary>
@@ -279,7 +280,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The type of the gate.
         /// </value>
         [ParameterName("tpg"), ParameterInfo("Gate type")]
-        public GivenParameter<double> GateType { get; set; } = new GivenParameter<double>(1, false);
+        [Finite]
+        private GivenParameter<double> _gateType = new GivenParameter<double>(1, false);
 
         /// <summary>
         /// Gets or sets the substrate doping level.
@@ -288,7 +290,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The substrate doping level.
         /// </value>
         [ParameterName("nsub"), ParameterInfo("Substrate doping")]
-        [GreaterThan(1.45e10)]
+        [GreaterThan(1.45e10), Finite]
         private GivenParameter<double> _substrateDoping = new GivenParameter<double>(2e10, false); // Value isn't used...
 
         /// <summary>
@@ -298,7 +300,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The surface state density.
         /// </value>
         [ParameterName("nss"), ParameterInfo("Surface state density")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _surfaceStateDensity;
 
         /// <summary>
@@ -307,7 +309,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <value>
         /// The nominal temperature in Kelvin.
         /// </value>
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
@@ -368,7 +370,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The flicker noise coefficient.
         /// </value>
         [ParameterName("kf"), ParameterInfo("Flicker noise coefficient")]
-        public double FlickerNoiseCoefficient { get; set; }
+        [Finite]
+        private double _flickerNoiseCoefficient;
 
         /// <summary>
         /// Gets or sets the flicker-noise exponent parameter.
@@ -377,6 +380,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The flicker noise exponent.
         /// </value>
         [ParameterName("af"), ParameterInfo("Flicker noise exponent")]
-        public double FlickerNoiseExponent { get; set; } = 1;
+        [Finite]
+        private double _flickerNoiseExponent = 1;
     }
 }

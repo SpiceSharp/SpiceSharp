@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The temperature in degrees celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance operating temperature", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <value>
         /// The temperature in Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
@@ -40,7 +40,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The temperature difference.
         /// </value>
         [ParameterName("dtemp"), ParameterInfo("The instance temperature difference", Units = "\u00b0C")]
-        public double DeltaTemperature { get; set; }
+        [Finite]
+        private double _deltaTemperature;
 
         /// <summary>
         /// Gets or sets the mosfet width.
@@ -49,7 +50,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The mosfet width.
         /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _width = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The mosfet length.
         /// </value>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _length = new GivenParameter<double>(1e-4, false);
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The source layout area.
         /// </value>
         [ParameterName("as"), ParameterInfo("Source area", Units = "m^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _sourceArea;
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The drain layout area.
         /// </value>
         [ParameterName("ad"), ParameterInfo("Drain area", Units = "m^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _drainArea;
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The source layout perimeter.
         /// </value>
         [ParameterName("ps"), ParameterInfo("Source perimeter", Units = "m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _sourcePerimeter;
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The drain layout perimeter.
         /// </value>
         [ParameterName("pd"), ParameterInfo("Drain perimeter", Units = "m")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _drainPerimeter;
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace SpiceSharp.Components.Mosfets
         /// Used in conjunction with the sheet resistance.
         /// </summary>
         [ParameterName("nrs"), ParameterInfo("Source squares")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _sourceSquares = 1;
 
         /// <summary>
@@ -115,7 +116,7 @@ namespace SpiceSharp.Components.Mosfets
         /// Used in conjunction with the sheet resistance.
         /// </summary>
         [ParameterName("nrd"), ParameterInfo("Drain squares")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _drainSquares = 1;
 
         /// <summary>
@@ -131,7 +132,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial bulk-source voltage.
         /// </value>
         [ParameterName("icvbs"), ParameterInfo("Initial B-S voltage", Units = "V")]
-        public GivenParameter<double> InitialVbs { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVbs;
 
         /// <summary>
         /// Gets or sets the initial drain-source voltage.
@@ -140,7 +142,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial drain-source voltage.
         /// </value>
         [ParameterName("icvds"), ParameterInfo("Initial D-S voltage", Units = "V")]
-        public GivenParameter<double> InitialVds { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVds;
 
         /// <summary>
         /// Gets or sets the initial gate-source voltage.
@@ -149,7 +152,8 @@ namespace SpiceSharp.Components.Mosfets
         /// The initial gate-source voltage.
         /// </value>
         [ParameterName("icvgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
-        public GivenParameter<double> InitialVgs { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVgs;
 
         /// <summary>
         /// Gets or sets the parallel multplier (the number of transistors in parallel).
@@ -158,7 +162,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The parallel multplier.
         /// </value>
         [ParameterName("m"), ParameterInfo("The parallel multiplier")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>

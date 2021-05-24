@@ -17,6 +17,7 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
         /// The voltage gain.
         /// </value>
         [ParameterName("gain"), ParameterInfo("Voltage gain")]
-        public double Coefficient { get; set; }
+        [Finite]
+        private double _coefficient;
     }
 }

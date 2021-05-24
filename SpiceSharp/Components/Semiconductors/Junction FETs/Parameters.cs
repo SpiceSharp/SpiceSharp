@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.JFETs
         /// The temperature in degrees Celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance temperature", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.JFETs
         /// <value>
         /// The temperature in degrees Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _temperature = new GivenParameter<double>(300.15, false);
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.JFETs
         /// The area.
         /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _area = 1;
 
         /// <summary>
@@ -50,7 +50,8 @@ namespace SpiceSharp.Components.JFETs
         /// The initial drain-source voltage.
         /// </value>
         [ParameterName("ic-vds"), ParameterInfo("Initial D-S voltage", Units = "V")]
-        public GivenParameter<double> InitialVds { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVds;
 
         /// <summary>
         /// Gets or sets the initial gate-source voltage.
@@ -59,7 +60,8 @@ namespace SpiceSharp.Components.JFETs
         /// The initial gate-source voltage.
         /// </value>
         [ParameterName("ic-vgs"), ParameterInfo("Initial G-S voltage", Units = "V")]
-        public GivenParameter<double> InitialVgs { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVgs;
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is off.
@@ -77,7 +79,7 @@ namespace SpiceSharp.Components.JFETs
         /// The number of JFETs in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>

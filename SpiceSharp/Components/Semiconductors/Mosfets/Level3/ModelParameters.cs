@@ -54,7 +54,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The drain-source voltage dependence of the threshold voltage.
         /// </value>
         [ParameterName("eta"), ParameterInfo("Vds dependence of threshold voltage")]
-        public GivenParameter<double> Eta { get; set; }
+        [Finite]
+        private GivenParameter<double> _eta;
 
         /// <summary>
         /// Gets the kappa parameter.
@@ -63,7 +64,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The kappa-parameter.
         /// </value>
         [ParameterName("kappa"), ParameterInfo("Kappa")]
-        public GivenParameter<double> Kappa { get; set; } = new GivenParameter<double>(0.2, false);
+        [Finite]
+        private GivenParameter<double> _kappa = new GivenParameter<double>(0.2, false);
 
         /// <summary>
         /// Gets or sets the gate-source voltage dependence on mobility.
@@ -72,7 +74,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The gate-source voltage dependence on mobility.
         /// </value>
         [ParameterName("theta"), ParameterInfo("Vgs dependence on mobility")]
-        public GivenParameter<double> Theta { get; set; }
+        [Finite]
+        private GivenParameter<double> _theta;
 
         /// <summary>
         /// Gets or sets the fast surface state density.
@@ -81,7 +84,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The fast surface state density.
         /// </value>
         [ParameterName("nfs"), ParameterInfo("Fast surface state density")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _fastSurfaceStateDensity;
 
         /// <summary>
@@ -91,7 +94,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The maximum drift velocity.
         /// </value>
         [ParameterName("vmax"), ParameterInfo("Maximum carrier drift velocity")]
-        public GivenParameter<double> MaxDriftVelocity { get; set; }
+        [Finite]
+        private GivenParameter<double> _maxDriftVelocity;
 
         /// <summary>
         /// Gets or sets the junction depth.
@@ -100,7 +104,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The junction depth.
         /// </value>
         [ParameterName("xj"), ParameterInfo("Junction depth")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _junctionDepth;
 
         /// <summary>
@@ -110,7 +114,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The width effect on the threshold voltage.
         /// </value>
         [ParameterName("delta"), ParameterInfo("Width effect on threshold")]
-        public double Delta { get; set; }
+        [Finite]
+        private double _delta;
 
         /// <summary>
         /// Gets or sets the length mask adjustment.
@@ -119,7 +124,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The length mask adjustment.
         /// </value>
         [ParameterName("xl"), ParameterInfo("Length mask adjustment", Units = "m")]
-        public double LengthAdjust { get; set; }
+        [Finite]
+        private double _lengthAdjust;
 
         /// <summary>
         /// Gets or sets the width narrowing due to diffusion.
@@ -128,7 +134,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The width narrowing.
         /// </value>
         [ParameterName("wd"), ParameterInfo("Width narrowing due to diffusion", Units = "m")]
-        public double WidthNarrow { get; set; }
+        [Finite]
+        private double _widthNarrow;
 
         /// <summary>
         /// Gets or sets the width mask adjustment.
@@ -137,7 +144,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The width mask adjustment.
         /// </value>
         [ParameterName("xw"), ParameterInfo("Width mask adjustment", Units = "m")]
-        public double WidthAdjust { get; set; }
+        [Finite]
+        private double _widthAdjust;
 
         /// <summary>
         /// Gets or sets the threshold voltage adjustment.
@@ -146,7 +154,8 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// The threshold voltage adjustment.
         /// </value>
         [ParameterName("delvt0"), ParameterInfo("Threshold voltage adjust")]
-        public double DelVt0 { get; set; }
+        [Finite]
+        private double _delVt0;
 
         /// <inheritdoc/>
         ModelParameters ICloneable<ModelParameters>.Clone()

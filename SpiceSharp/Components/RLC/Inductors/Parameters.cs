@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.Inductors
         /// The inductance.
         /// </value>
         [ParameterName("inductance"), ParameterInfo("Inductance of the inductor", Units = "H", IsPrincipal = true)]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _inductance;
 
         /// <summary>
@@ -27,7 +27,8 @@ namespace SpiceSharp.Components.Inductors
         /// The initial current.
         /// </value>
         [ParameterName("ic"), ParameterInfo("Initial current through the inductor", Units = "V", Interesting = false)]
-        public GivenParameter<double> InitialCondition { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialCondition;
 
         /// <summary>
         /// Gets or sets the parallel multiplier.
@@ -36,7 +37,7 @@ namespace SpiceSharp.Components.Inductors
         /// The parallel multiplier.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace SpiceSharp.Components.Inductors
         /// The series multiplier.
         /// </value>
         [ParameterName("n"), ParameterInfo("Series multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _seriesMultiplier = 1.0;
     }
 }

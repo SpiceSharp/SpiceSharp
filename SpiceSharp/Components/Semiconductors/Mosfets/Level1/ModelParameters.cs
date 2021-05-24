@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.Mosfets.Level1
         /// The channel length modulation parameter.
         /// </value>
         [ParameterName("lambda"), ParameterInfo("Channel length modulation")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _lambda;
 
         /// <inheritdoc/>

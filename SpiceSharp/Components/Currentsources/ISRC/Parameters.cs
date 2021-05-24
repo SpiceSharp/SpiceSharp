@@ -19,7 +19,7 @@ namespace SpiceSharp.Components.CurrentSources
         /// The number of current sources in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <inheritdoc/>

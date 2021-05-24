@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The temperature in degrees Celsius.
         /// </value>
         [ParameterName("temp"), ParameterInfo("Instance temperature", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double TemperatureCelsius
         {
             get => Temperature - Constants.CelsiusKelvin;
@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.Bipolars
         /// <value>
         /// The temperature in degrees Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The area of the transistor.
         /// </value>
         [ParameterName("area"), ParameterInfo("Area factor", Units = "m^2")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _area = 1;
 
         /// <summary>
@@ -59,7 +59,8 @@ namespace SpiceSharp.Components.Bipolars
         /// The initial base-emitter voltage.
         /// </value>
         [ParameterName("icvbe"), ParameterInfo("Initial B-E voltage", Units = "V")]
-        public GivenParameter<double> InitialVoltageBe { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVoltageBe;
 
         /// <summary>
         /// Gets the initial collector-emitter voltage parameter.
@@ -68,7 +69,8 @@ namespace SpiceSharp.Components.Bipolars
         /// The initial collector-emitter voltage.
         /// </value>
         [ParameterName("icvce"), ParameterInfo("Initial C-E voltage", Units = "V")]
-        public GivenParameter<double> InitialVoltageCe { get; set; }
+        [Finite]
+        private GivenParameter<double> _initialVoltageCe;
 
         /// <summary>
         /// Gets or sets the number of bipolar transistors in parallel.
@@ -77,7 +79,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The number of bipolar transistors in parallel.
         /// </value>
         [ParameterName("m"), ParameterInfo("Parallel multiplier")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>

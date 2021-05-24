@@ -327,6 +327,21 @@ namespace SpiceSharp
         }
 
         /// <summary>
+        /// Requires the value to be both a number and finite.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="name">The name of the property.</param>
+        /// <returns>The value.</returns>
+        public static double Finite(this double value, string name)
+        {
+            if (double.IsNaN(value))
+                throw new ArgumentException(Properties.Resources.Parameters_IsNaN, name);
+            if (double.IsInfinity(value))
+                throw new ArgumentException(Properties.Resources.Parameters_Finite, name);
+            return value;
+        }
+
+        /// <summary>
         /// Checks the number of specified nodes.
         /// </summary>
         /// <param name="nodes">The nodes.</param>

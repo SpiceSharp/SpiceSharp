@@ -195,6 +195,12 @@
   <data name="Parameters.ArgumentCountMismatch" xml:space="preserve">
     <value>Expected {2} arguments for {0}, but {1} were passed.</value>
   </data>
+  <data name="Parameters.Finite" xml:space="preserve">
+    <value>The parameter value should be finite.</value>
+  </data>
+  <data name="Parameters.IsNaN" xml:space="preserve">
+    <value>The parameter value should be a number but was NaN.</value>
+  </data>
   <data name="Parameters.IsZero" xml:space="preserve">
     <value>The parameter cannot be zero.</value>
   </data>

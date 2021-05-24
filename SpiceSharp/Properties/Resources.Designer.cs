@@ -295,6 +295,24 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The parameter value should be finite..
+        /// </summary>
+        public static string Parameters_Finite {
+            get {
+                return ResourceManager.GetString("Parameters.Finite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parameter value should be a number but was NaN..
+        /// </summary>
+        public static string Parameters_IsNaN {
+            get {
+                return ResourceManager.GetString("Parameters.IsNaN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The parameter cannot be zero..
         /// </summary>
         public static string Parameters_IsZero {

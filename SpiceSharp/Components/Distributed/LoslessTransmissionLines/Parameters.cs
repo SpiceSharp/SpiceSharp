@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The characteristic impedance.
         /// </value>
         [ParameterName("z0"), ParameterName("zo"), ParameterInfo("Characteristic impedance", Units = "\u03a9")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _impedance = 50.0;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The frequency specification.
         /// </value>
         [ParameterName("f"), ParameterInfo("Frequency", Units = "Hz")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _frequency = 1.0e9;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The delay.
         /// </value>
         [ParameterName("td"), ParameterInfo("Transmission delay", Units = "s")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private GivenParameter<double> _delay;
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The normalized length.
         /// </value>
         [ParameterName("nl"), ParameterInfo("Normalized length at the given frequency")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _normalizedLength = 0.25;
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The relative tolerance.
         /// </value>
         [ParameterName("reltol"), ParameterInfo("The relative tolerance used to decide on adding a breakpoint.")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _relativeTolerance = 1.0;
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The absolute tolerance.
         /// </value>
         [ParameterName("abstol"), ParameterInfo("The absolute tolerance used to decide on adding a breakpoint.")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _absoluteTolerance = 1.0;
 
         /// <summary>

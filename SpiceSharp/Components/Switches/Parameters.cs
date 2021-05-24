@@ -36,7 +36,7 @@ namespace SpiceSharp.Components.Switches
         /// Gets or sets the multiplier.
         /// </summary>
         [ParameterName("m"), ParameterInfo("The parallel multiplier")]
-        [GreaterThan(0.0)]
+        [GreaterThan(0.0), Finite]
         private double _parallelMultiplier = 1.0;
 
         /// <summary>

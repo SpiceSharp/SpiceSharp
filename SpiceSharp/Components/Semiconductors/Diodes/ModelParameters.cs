@@ -17,7 +17,7 @@ namespace SpiceSharp.Components.Diodes
         /// The saturation current.
         /// </value>
         [ParameterName("is"), ParameterInfo("Saturation current", Units = "A")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _saturationCurrent = 1e-14;
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace SpiceSharp.Components.Diodes
         /// The nominal temperature in degrees Celsius.
         /// </value>
         [ParameterName("tnom"), ParameterInfo("Parameter measurement temperature", Units = "\u00b0C")]
-        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin)]
+        [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public double NominalTemperatureCelsius
         {
             get => NominalTemperature - Constants.CelsiusKelvin;
@@ -40,7 +40,7 @@ namespace SpiceSharp.Components.Diodes
         /// <value>
         /// The nominal temperature in degrees Kelvin.
         /// </value>
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.Diodes
         /// The ohmic resistance.
         /// </value>
         [ParameterName("rs"), ParameterInfo("Ohmic resistance", Units = "\u03a9")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _resistance;
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.Diodes
         /// The emission coefficient.
         /// </value>
         [ParameterName("n"), ParameterInfo("Emission Coefficient")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _emissionCoefficient = 1;
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.Diodes
         /// The transit time.
         /// </value>
         [ParameterName("tt"), ParameterInfo("Transit Time", Units = "s")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _transitTime;
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpiceSharp.Components.Diodes
         /// The junction capacitance.
         /// </value>
         [ParameterName("cjo"), ParameterName("cj0"), ParameterInfo("Junction capacitance", Units = "F")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _junctionCap;
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace SpiceSharp.Components.Diodes
         /// The junction built-in potential.
         /// </value>
         [ParameterName("vj"), ParameterInfo("Junction potential", Units = "V")]
-        [GreaterThan(0)]
+        [GreaterThan(0), Finite]
         private double _junctionPotential = 1;
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SpiceSharp.Components.Diodes
         /// The grading coefficient.
         /// </value>
         [ParameterName("m"), ParameterInfo("Grading coefficient")]
-        [GreaterThan(0), UpperLimit(0.9)]
+        [GreaterThan(0), UpperLimit(0.9), Finite]
         private double _gradingCoefficient = 0.5;
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.Diodes
         /// The activation energy.
         /// </value>
         [ParameterName("eg"), ParameterInfo("Activation energy", Units = "eV")]
-        [GreaterThan(0), LowerLimit(0.1)]
+        [GreaterThan(0), LowerLimit(0.1), Finite]
         private double _activationEnergy = 1.11;
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace SpiceSharp.Components.Diodes
         /// The saturation current temperature exponent.
         /// </value>
         [ParameterName("xti"), ParameterInfo("Saturation current temperature exponent")]
-        [GreaterThanOrEquals(0)]
+        [GreaterThanOrEquals(0), Finite]
         private double _saturationCurrentExp = 3;
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace SpiceSharp.Components.Diodes
         /// The forward bias junction fit parameter.
         /// </value>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
-        [GreaterThan(0), UpperLimit(0.95)]
+        [GreaterThan(0), UpperLimit(0.95), Finite]
         private double _depletionCapCoefficient = 0.5;
 
         /// <summary>
@@ -140,7 +140,8 @@ namespace SpiceSharp.Components.Diodes
         /// The breakdown voltage.
         /// </value>
         [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage", Units = "V")]
-        public GivenParameter<double> BreakdownVoltage { get; set; } = new GivenParameter<double>(-1.0, false);
+        [Finite]
+        private GivenParameter<double> _breakdownVoltage = new GivenParameter<double>(-1.0, false);
 
         /// <summary>
         /// Gets the current at the reverse breakdown voltage.
@@ -149,7 +150,8 @@ namespace SpiceSharp.Components.Diodes
         /// The breakdown current.
         /// </value>
         [ParameterName("ibv"), ParameterInfo("Current at reverse breakdown voltage", Units = "A")]
-        public double BreakdownCurrent { get; set; } = 1e-3;
+        [Finite]
+        private double _breakdownCurrent = 1e-3;
 
         /// <summary>
         /// Gets or sets the flicker noise coefficient.
@@ -158,7 +160,8 @@ namespace SpiceSharp.Components.Diodes
         /// The flicker noise coefficient.
         /// </value>
         [ParameterName("kf"), ParameterInfo("flicker noise coefficient")]
-        public double FlickerNoiseCoefficient { get; set; }
+        [Finite]
+        private double _flickerNoiseCoefficient;
 
         /// <summary>
         /// Gets or sets the flicker noise exponent.
@@ -167,6 +170,7 @@ namespace SpiceSharp.Components.Diodes
         /// The flicker noise exponent.
         /// </value>
         [ParameterName("af"), ParameterInfo("flicker noise exponent")]
-        public double FlickerNoiseExponent { get; set; } = 1;
+        [Finite]
+        private double _flickerNoiseExponent = 1;
     }
 }
