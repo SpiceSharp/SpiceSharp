@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace SpiceSharp.Components.Distributed
 {
     /// <summary>
-    /// This class will keep track of a signal and can calculate the delayed version of it.
+    /// This class will keep track of one or more signals and can calculate the delayed version of it.
     /// </summary>
     public class DelayedSignal
     {
@@ -39,7 +39,7 @@ namespace SpiceSharp.Components.Distributed
         public int Size { get; }
 
         /// <summary>
-        /// Gets or sets the value with the specified index.
+        /// Gets the current value with the specified index.
         /// </summary>
         /// <value>
         /// The value.
@@ -47,6 +47,11 @@ namespace SpiceSharp.Components.Distributed
         /// <param name="index">The index.</param>
         /// <returns>The value.</returns>
         public double this[int index] => _values[index];
+
+        /// <summary>
+        /// The derivative of the delayed signal with respect to the input.
+        /// </summary>
+        public double InputDerivative { get; private set; }
 
         /// <summary>
         /// Gets the values at the probed point.
@@ -81,6 +86,7 @@ namespace SpiceSharp.Components.Distributed
         public void Probe(double time, bool breakpoint)
         {
             var refTime = time - Delay;
+            InputDerivative = 0.0;
 
             // Store the probe value
             _probed.Time = time;
@@ -100,6 +106,8 @@ namespace SpiceSharp.Components.Distributed
                 {
                     for (var i = 0; i < Size; i++)
                         _values[i] = _reference.Values[i];
+                    if (_reference == _probed)
+                        InputDerivative = 1.0;
                 }
                 else
                 {
@@ -107,6 +115,8 @@ namespace SpiceSharp.Components.Distributed
                     var f2 = (refTime - _reference.Older.Time) / (_reference.Time - _reference.Older.Time);
                     for (var i = 0; i < Size; i++)
                         _values[i] = f1 * _reference.Older.Values[i] + f2 * _reference.Values[i];
+                    if (_reference == _probed)
+                        InputDerivative = f2;
                 }
             }
             else
@@ -114,13 +124,17 @@ namespace SpiceSharp.Components.Distributed
                 // Do cubic interpolation if possible, else use linear interpolation
                 if (breakpoint || _reference.Older == null)
                 {
+                    // Linear interpolation
                     var f1 = (refTime - _reference.Newer.Time) / (_reference.Time - _reference.Newer.Time);
                     var f2 = (refTime - _reference.Time) / (_reference.Newer.Time - _reference.Time);
                     for (var i = 0; i < Size; i++)
                         _values[i] = f1 * _reference.Values[i] + f2 * _reference.Newer.Values[i];
+                    if (_reference.Newer == _probed)
+                        InputDerivative = f2;
                 }
                 else
                 {
+                    // Cubic interpolation
                     var f1 = (refTime - _reference.Time) * (refTime - _reference.Newer.Time) /
                              (_reference.Older.Time - _reference.Time) /
                              (_reference.Older.Time - _reference.Newer.Time);
@@ -135,6 +149,8 @@ namespace SpiceSharp.Components.Distributed
                                     f2 * _reference.Values[i] +
                                     f3 * _reference.Newer.Values[i];
                     }
+                    if (_reference == _probed)
+                        InputDerivative = f3;
                 }
             }
         }

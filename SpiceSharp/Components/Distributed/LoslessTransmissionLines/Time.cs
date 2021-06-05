@@ -44,7 +44,14 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
             _neg2 = BiasingState.Map[BiasingState.GetSharedVariable(context.Nodes[3])];
             _br1 = BiasingState.Map[Branch1];
             _br2 = BiasingState.Map[Branch2];
-            _elements = new ElementSet<double>(BiasingState.Solver, null, new[] { _br1, _br2 });
+            _elements = new ElementSet<double>(BiasingState.Solver, new[] {
+                new MatrixLocation(_br1, _pos2),
+                new MatrixLocation(_br1, _neg2),
+                new MatrixLocation(_br1, _br2),
+                new MatrixLocation(_br2, _pos1),
+                new MatrixLocation(_br2, _neg1),
+                new MatrixLocation(_br2, _br1)
+            }, new[] { _br1, _br2 });
             Signals = new DelayedSignal(2, Parameters.Delay);
         }
 
@@ -65,6 +72,15 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         {
             var m = Parameters.ParallelMultiplier;
             var y = Parameters.Admittance * m;
+            var sol = BiasingState.Solution;
+
+            // Calculate inputs
+            var z = Parameters.Impedance / m;
+            var input1 = sol[_pos2] - sol[_neg2] + z * sol[_br2];
+            var input2 = sol[_pos1] - sol[_neg1] + z * sol[_br1];
+            Signals.SetProbedValues(input1, input2);
+
+            // Apply contributions to the Y-matrix and right-hand side vector
             if (_time.UseDc)
             {
                 BiasingElements.Add(
@@ -80,17 +96,12 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
                     y, -y, -y, y, 1, 1, -1, -1
                     );
             }
-
-            var sol = BiasingState.Solution;
-
-            // Calculate inputs
-            var z = Parameters.Impedance / m;
-            var input1 = sol[_pos2] - sol[_neg2] + z * sol[_br2];
-            var input2 = sol[_pos1] - sol[_neg1] + z * sol[_br1];
-            Signals.SetProbedValues(input1, input2);
-
-            // Update the branch equations
-            _elements.Add(Signals.Values[0], Signals.Values[1]);
+            double c = Signals.InputDerivative;
+            double d = -c * z;
+            _elements.Add(
+                -c, c, d,
+                -c, c, d,
+                Signals.Values[0], Signals.Values[1]);
         }
     }
 }

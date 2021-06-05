@@ -15,7 +15,7 @@ jobs:
     - name: Setup dotnet tooling
       uses: actions/setup-dotnet@master
       with:
-        dotnet-version: '5.0.100'
+        dotnet-version: '5.0.x'
     
     - name: Restore dependencies
       run: dotnet restore
