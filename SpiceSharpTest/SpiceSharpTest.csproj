@@ -63,6 +63,9 @@
     <Compile Include="Examples\CustomResistor\NonlinearResistor.cs" />
     <Compile Include="Examples\CustomResistor\BiasingBehavior.cs" />
     <Compile Include="Examples\CustomResistor\NonlinearResistorTests.cs" />
+    <Compile Include="Examples\SimpleDiode\DiodeBiasing.cs" />
+    <Compile Include="Examples\SimpleDiode\DiodeParameters.cs" />
+    <Compile Include="Examples\SimpleDiode\DiodeTemperature.cs" />
     <Compile Include="General\GeneratorTests.cs" />
     <Compile Include="General\InheritedTypeDictionaryTests.cs" />
     <Compile Include="Helper.cs" />

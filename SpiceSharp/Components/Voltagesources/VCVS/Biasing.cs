@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="VoltageControlledVoltageSources.Parameters"/>
     [BehaviorFor(typeof(VoltageControlledVoltageSource)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Behavior,
+    [GeneratedParameters]
+    public partial class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,
         IParameterized<Parameters>
@@ -30,15 +31,15 @@ namespace SpiceSharp.Components.VoltageControlledVoltageSources
         public Parameters Parameters { get; }
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
-        [ParameterName("i"), ParameterInfo("Output current")]
+        [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Output current")]
         public double Current => Branch.Value;
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
-        [ParameterName("v"), ParameterInfo("Output current")]
+        [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Output current")]
         public double Voltage => _variables.Right.Positive.Value - _variables.Right.Negative.Value;
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
-        [ParameterName("p"), ParameterInfo("Power")]
+        [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power")]
         public double Power => -Voltage * Current;
 
         /// <inheritdoc/>

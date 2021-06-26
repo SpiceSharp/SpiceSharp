@@ -18,7 +18,8 @@ namespace SpiceSharp.Components.Mosfets
     [BehaviorFor(typeof(Mosfet3))]
     [AddBehaviorIfNo(typeof(IFrequencyBehavior))]
     [BehaviorRequires(typeof(IMosfetBiasingBehavior))]
-    public class Frequency : Behavior,
+    [GeneratedParameters]
+    public partial class Frequency : Behavior,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;

@@ -45,6 +45,24 @@ namespace SpiceSharp.Components.Bipolars
         protected new IVariable<Complex> EmitterPrime { get; private set; }
 
         /// <summary>
+        /// Gets the base-emitter voltage.
+        /// </summary>
+        /// <value>
+        /// The base-emitter voltage.
+        /// </value>
+        [ParameterName("vbe"), ParameterInfo("Complex B-E voltage")]
+        public Complex ComplexVoltageBe => _complex.Solution[_basePrimeNode] - _complex.Solution[_emitterPrimeNode];
+
+        /// <summary>
+        /// Gets the base-collector voltage.
+        /// </summary>
+        /// <value>
+        /// The base-collector voltage.
+        /// </value>
+        [ParameterName("vbc"), ParameterInfo("Complex B-C voltage")]
+        public Complex ComplexVoltageBc => _complex.Solution[_basePrimeNode] - _complex.Solution[_collectorPrimeNode];
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
         /// </summary>
         /// <param name="context">The context.</param>

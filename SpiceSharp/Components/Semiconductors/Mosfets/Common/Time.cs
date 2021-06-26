@@ -17,7 +17,8 @@ namespace SpiceSharp.Components.Mosfets
     [BehaviorFor(typeof(Mosfet3))]
     [AddBehaviorIfNo(typeof(ITimeBehavior))]
     [BehaviorRequires(typeof(IMosfetBiasingBehavior))]
-    public class Time : Behavior,
+    [GeneratedParameters]
+    public partial class Time : Behavior,
         ITimeBehavior
     {
         private readonly ITimeSimulationState _time;

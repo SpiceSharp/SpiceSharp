@@ -14,7 +14,8 @@ namespace SpiceSharp.Components.Diodes
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="IFrequencyBehavior"/>
     [BehaviorFor(typeof(Diode)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Dynamic,
+    [GeneratedParameters]
+    public partial class Frequency : Dynamic,
         IFrequencyBehavior
     {
         private readonly ElementSet<Complex> _elements;

@@ -251,7 +251,6 @@ namespace SpiceSharpTest.Models
             ac.Run(ckt);
         }
 
-
         [Test]
         public void When_ParallelMultiplier_Expect_Reference()
         {

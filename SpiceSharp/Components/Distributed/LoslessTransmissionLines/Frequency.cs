@@ -13,7 +13,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// <seealso cref="Biasing"/>
     /// <seealso cref="IFrequencyBehavior"/>
     [BehaviorFor(typeof(LosslessTransmissionLine)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly int _pos1, _neg1, _pos2, _neg2, _int1, _int2, _br1, _br2;
@@ -51,6 +52,61 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The right branch.
         /// </value>
         protected new IVariable<Complex> Branch2 { get; }
+
+        /// <summary>
+        /// Gets the voltage on side 1.
+        /// </summary>
+        /// <value>
+        /// The voltage on side 1.
+        /// </value>
+        [ParameterName("v1"), ParameterName("v1_r"), ParameterInfo("Voltage 1")]
+        public Complex ComplexVoltage1 => _complex.Solution[_pos1] - _complex.Solution[_neg1];
+
+        /// <summary>
+        /// Gets the voltage on side 2.
+        /// </summary>
+        /// <value>
+        /// The voltage on side 2.
+        /// </value>
+        [ParameterName("v2"), ParameterName("v2_r"), ParameterInfo("Voltage 2")]
+        public Complex ComplexVoltage2 => _complex.Solution[_pos2] - _complex.Solution[_neg2];
+
+        /// <summary>
+        /// Gets the current on side 1.
+        /// </summary>
+        /// <value>
+        /// The current on side 1.
+        /// </value>
+        [ParameterName("i1"), ParameterName("c1"), ParameterName("i1_r"), ParameterInfo("Current 1")]
+        public Complex ComplexCurrent1 => _complex.Solution[_br1];
+
+        /// <summary>
+        /// Gets the current on side 2.
+        /// </summary>
+        /// <value>
+        /// The current on side 2.
+        /// </value>
+        [ParameterName("i2"), ParameterName("c2"), ParameterName("i2_r"), ParameterInfo("Current 2")]
+        public Complex ComplexCurrent2 => _complex.Solution[_br2];
+
+        /// <summary>
+        /// Gets the power on side 1.
+        /// </summary>
+        /// <value>
+        /// The power on side 1.
+        /// </value>
+        [ParameterName("p1"), ParameterName("p1_r"), ParameterInfo("Power 1")]
+        public Complex ComplexPower1 => -Voltage1 * Current1;
+
+        /// <summary>
+        /// Gets the power on side 2.
+        /// </summary>
+        /// <value>
+        /// The power on side 2.
+        /// </value>
+        [ParameterName("p2"), ParameterName("p2_r"), ParameterInfo("Power 2")]
+        public Complex ComplexPower2 => -Voltage1 * Current1;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency" /> class.
