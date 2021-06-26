@@ -28,6 +28,34 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
+        public void When_GetPropertyOP_Expect_Reference()
+        {
+            // https://github.com/SpiceSharp/SpiceSharp/issues/169
+            var dModel = new DiodeModel("test");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "a", "0", 0),
+                new Resistor("R1", "b", "0", 1000),
+                new Diode("LED", "a", "b", "test"),
+                dModel
+                );
+
+            var dc = new DC("DC", "V1", -3.0, 3.0, 0.1);
+
+            var voltageExport = new RealPropertyExport(dc, "LED", "v");
+
+            dc.ExportSimulationData += (sender, args) =>
+            {
+                var voltage = voltageExport.Value;
+                var voltage2 = args.GetVoltage("a") - args.GetVoltage("b");
+
+                // Because the property is always one iteration behind on the current solution, we relax the error a little bit
+                double tol = Math.Max(Math.Abs(voltage), Math.Abs(voltage2)) * RelTol + 1e-9;
+                Assert.AreEqual(voltage2, voltage, tol);
+            };
+            dc.Run(ckt);
+        }
+
+        [Test]
         public void When_SimpleDC_Expect_Spice3f5Reference()
         {
             /*
