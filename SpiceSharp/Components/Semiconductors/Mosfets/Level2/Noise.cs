@@ -13,7 +13,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
     /// <seealso cref="Frequency"/>
     /// <seealso cref="INoiseBehavior"/>
     [BehaviorFor(typeof(Mosfet2)), AddBehaviorIfNo(typeof(INoiseBehavior)), BehaviorRequires(typeof(IMosfetBiasingBehavior))]
-    public class Noise : Frequency,
+    [GeneratedParameters]
+    public partial class Noise : Frequency,
         INoiseBehavior
     {
         private readonly INoiseSimulationState _state;

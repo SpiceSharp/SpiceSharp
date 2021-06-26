@@ -12,7 +12,8 @@ namespace SpiceSharp.Components.Diodes
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
     [BehaviorFor(typeof(Diode)), AddBehaviorIfNo(typeof(ITimeBehavior))]
-    public class Time : Dynamic,
+    [GeneratedParameters]
+    public partial class Time : Dynamic,
         ITimeBehavior
     {
         private readonly IDerivative _capCharge;

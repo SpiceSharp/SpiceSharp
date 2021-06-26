@@ -15,7 +15,8 @@ namespace SpiceSharp.Components.Bipolars
     /// <seealso cref="IBiasingBehavior"/>
     /// <seealso cref="IConvergenceBehavior"/>
     [BehaviorFor(typeof(BipolarJunctionTransistor)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Temperature,
+    [GeneratedParameters]
+    public partial class Biasing : Temperature,
         IBiasingBehavior,
         IConvergenceBehavior
     {

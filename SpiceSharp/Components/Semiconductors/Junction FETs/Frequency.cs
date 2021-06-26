@@ -14,7 +14,8 @@ namespace SpiceSharp.Components.JFETs
     /// <seealso cref="Biasing" />
     /// <seealso cref="IFrequencyBehavior" />
     [BehaviorFor(typeof(JFET)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior
     {
         private readonly int _drainNode, _gateNode, _sourceNode, _drainPrimeNode, _sourcePrimeNode;

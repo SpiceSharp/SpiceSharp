@@ -4,6 +4,7 @@ using SpiceSharp.Simulations;
 using System.Numerics;
 using System;
 using SpiceSharp.Attributes;
+using SpiceSharp.Components.CommonBehaviors;
 
 namespace SpiceSharp.Components.VoltageDelays
 {
@@ -14,16 +15,29 @@ namespace SpiceSharp.Components.VoltageDelays
     /// <seealso cref="IFrequencyBehavior"/>
     /// <seealso cref="IBranchedBehavior{T}"/>
     [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IFrequencyBehavior))]
-    public class Frequency : Biasing,
+    [GeneratedParameters]
+    public partial class Frequency : Biasing,
         IFrequencyBehavior,
         IBranchedBehavior<Complex>
     {
+        private readonly TwoPort<Complex> _variables;
         private readonly ElementSet<Complex> _elements;
         private readonly IComplexSimulationState _complex;
-        private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
 
         /// <inheritdoc/>
         public new IVariable<Complex> Branch { get; }
+
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Voltage/*'/>
+        [ParameterName("v"), ParameterName("v_c"), ParameterInfo("Complex voltage")]
+        public Complex ComplexVoltage => _variables.Right.Positive.Value - _variables.Right.Negative.Value;
+
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
+        [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
+        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
+
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
+        [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
+        public Complex ComplexCurrent => Branch.Value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.
@@ -35,20 +49,21 @@ namespace SpiceSharp.Components.VoltageDelays
         {
             _complex = context.GetState<IComplexSimulationState>();
 
-            _posNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[0])];
-            _negNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[1])];
-            _contPosNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[2])];
-            _contNegNode = _complex.Map[_complex.GetSharedVariable(context.Nodes[3])];
+            _variables = new TwoPort<Complex>(_complex, context);
+            int posNode = _complex.Map[_variables.Right.Positive];
+            int negNode = _complex.Map[_variables.Right.Negative];
+            int contPosNode = _complex.Map[_variables.Left.Positive];
+            int contNegNode = _complex.Map[_variables.Left.Negative];
             Branch = _complex.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
-            _branchEq = _complex.Map[Branch];
+            int branchEq = _complex.Map[Branch];
 
             _elements = new ElementSet<Complex>(_complex.Solver, new[] {
-                        new MatrixLocation(_posNode, _branchEq),
-                        new MatrixLocation(_negNode, _branchEq),
-                        new MatrixLocation(_branchEq, _posNode),
-                        new MatrixLocation(_branchEq, _negNode),
-                        new MatrixLocation(_branchEq, _contPosNode),
-                        new MatrixLocation(_branchEq, _contNegNode)
+                        new MatrixLocation(posNode, branchEq),
+                        new MatrixLocation(negNode, branchEq),
+                        new MatrixLocation(branchEq, posNode),
+                        new MatrixLocation(branchEq, negNode),
+                        new MatrixLocation(branchEq, contPosNode),
+                        new MatrixLocation(branchEq, contNegNode)
                     });
         }
 

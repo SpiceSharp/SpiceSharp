@@ -12,7 +12,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
     /// <seealso cref="Time"/>
     /// <seealso cref="IAcceptBehavior"/>
     [BehaviorFor(typeof(LosslessTransmissionLine)), AddBehaviorIfNo(typeof(IAcceptBehavior))]
-    public class Accept : Time,
+    [GeneratedParameters]
+    public partial class Accept : Time,
         IAcceptBehavior
     {
         private double _oldSlope1, _oldSlope2;

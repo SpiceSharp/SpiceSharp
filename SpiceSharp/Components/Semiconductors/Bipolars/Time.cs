@@ -14,7 +14,8 @@ namespace SpiceSharp.Components.Bipolars
     /// <seealso cref="Dynamic"/>
     /// <seealso cref="ITimeBehavior"/>
     [BehaviorFor(typeof(BipolarJunctionTransistor)), AddBehaviorIfNo(typeof(ITimeBehavior))]
-    public class Time : Dynamic,
+    [GeneratedParameters]
+    public partial class Time : Dynamic,
         ITimeBehavior
     {
         private readonly IDerivative _biasingStateChargeBe, _biasingStateChargeBc, _biasingStateChargeCs, _biasingStateChargeBx;

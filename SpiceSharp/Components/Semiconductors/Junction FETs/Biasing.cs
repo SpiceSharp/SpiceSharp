@@ -15,7 +15,8 @@ namespace SpiceSharp.Components.JFETs
     /// <seealso cref="Temperature"/>
     /// <seealso cref="IBiasingBehavior"/>
     [BehaviorFor(typeof(JFET)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Temperature,
+    [GeneratedParameters]
+    public partial class Biasing : Temperature,
         IBiasingBehavior
     {
         private readonly IIntegrationMethod _method;

@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
@@ -16,12 +17,16 @@ namespace SpiceSharp.Components.VoltageDelays
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
     [BehaviorFor(typeof(VoltageDelay)), AddBehaviorIfNo(typeof(IBiasingBehavior))]
-    public class Biasing : Behavior,
+    [GeneratedParameters]
+    public partial class Biasing : Behavior,
         IBiasingBehavior,
         IBranchedBehavior<double>,
         IParameterized<Parameters>
     {
-        private readonly int _posNode, _negNode, _contPosNode, _contNegNode, _branchEq;
+        /// <summary>
+        /// Gets the variables.
+        /// </summary>
+        protected TwoPort<double> Variables { get; }
 
         /// <inheritdoc/>
         public Parameters Parameters { get; }
@@ -37,6 +42,18 @@ namespace SpiceSharp.Components.VoltageDelays
         /// </value>
         protected ElementSet<double> BiasingElements { get; }
 
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
+        [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage accross the supply")]
+        public double Voltage => Variables.Right.Positive.Value - Variables.Right.Negative.Value;
+
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Power/*'/>
+        [ParameterName("p"), ParameterName("p_r"), ParameterInfo("Power supplied by the source")]
+        public double Power => Voltage * -Current;
+
+        /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
+        [ParameterName("c"), ParameterName("i"), ParameterName("i_r"), ParameterInfo("Current through current source")]
+        public double Current => Branch.Value;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
         /// </summary>
@@ -50,20 +67,21 @@ namespace SpiceSharp.Components.VoltageDelays
 
             Parameters = context.GetParameterSet<Parameters>();
             var state = context.GetState<IBiasingSimulationState>();
-            _posNode = state.Map[state.GetSharedVariable(context.Nodes[0])];
-            _negNode = state.Map[state.GetSharedVariable(context.Nodes[1])];
-            _contPosNode = state.Map[state.GetSharedVariable(context.Nodes[2])];
-            _contNegNode = state.Map[state.GetSharedVariable(context.Nodes[3])];
+            Variables = new TwoPort<double>(state, context);
+            int posNode = state.Map[Variables.Right.Positive];
+            int negNode = state.Map[Variables.Right.Negative];
+            int contPosNode = state.Map[Variables.Left.Positive];
+            int contNegNode = state.Map[Variables.Left.Negative];
             Branch = state.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
-            _branchEq = state.Map[Branch];
+            int branchEq = state.Map[Branch];
 
             BiasingElements = new ElementSet<double>(state.Solver, new[] {
-                        new MatrixLocation(_posNode, _branchEq),
-                        new MatrixLocation(_negNode, _branchEq),
-                        new MatrixLocation(_branchEq, _posNode),
-                        new MatrixLocation(_branchEq, _negNode),
-                        new MatrixLocation(_branchEq, _contPosNode),
-                        new MatrixLocation(_branchEq, _contNegNode)
+                        new MatrixLocation(posNode, branchEq),
+                        new MatrixLocation(negNode, branchEq),
+                        new MatrixLocation(branchEq, posNode),
+                        new MatrixLocation(branchEq, negNode),
+                        new MatrixLocation(branchEq, contPosNode),
+                        new MatrixLocation(branchEq, contNegNode)
                     });
         }
 
