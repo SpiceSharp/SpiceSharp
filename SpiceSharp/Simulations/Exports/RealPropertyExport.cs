@@ -1,4 +1,5 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Subcircuits;
 using SpiceSharp.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -25,13 +26,13 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="entityPath">The path to the name of the entity.</param>
+        /// <param name="entityName">The name of the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
-        public RealPropertyExport(IEventfulSimulation simulation, string entityPath, string propertyName)
+        public RealPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
-            entityPath.ThrowIfNull(nameof(entityPath));
-            EntityPath = new List<string> { entityPath };
+            entityName.ThrowIfNull(nameof(entityName));
+            EntityPath = new[] { entityName };
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 
@@ -39,7 +40,7 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="entityPath">The subcircuit list of the entity.</param>
+        /// <param name="entityPath">The path to the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
         public RealPropertyExport(IEventfulSimulation simulation, string[] entityPath, string propertyName)
             : base(simulation)
@@ -66,13 +67,14 @@ namespace SpiceSharp.Simulations
             for (int i = 1; i < EntityPath.Count; i++)
             {
                 string nextComponentName = EntityPath[i];
+
                 // Keep track of the behaviors one level deeper
                 var subBehaviors = new HashSet<IBehavior>();
 
                 // Go through all the behaviors of the previously found level, and collect the new set of behaviors
                 foreach (var behavior in behaviors)
                 {
-                    if (behavior is SpiceSharp.Components.Subcircuits.EntitiesBehavior subcktBehavior)
+                    if (behavior is EntitiesBehavior subcktBehavior)
                     {
                         // Add all the behaviors in this one to the new level of found behaviors
                         if (subcktBehavior.LocalBehaviors.TryGetBehaviors(nextComponentName, out IBehaviorContainer behaviorContainer))

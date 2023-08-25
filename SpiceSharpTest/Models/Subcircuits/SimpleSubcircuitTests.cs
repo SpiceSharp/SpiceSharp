@@ -32,6 +32,7 @@ namespace SpiceSharpTest.Models
             IEnumerable<double> references = new double[] { 2.5 };
             AnalyzeOp(op, ckt, exports, references);
         }
+
         [Test]
         public void When_SimpleSubcircuit_Measure_Subcircuit_Current()
         {
@@ -53,8 +54,9 @@ namespace SpiceSharpTest.Models
             IEnumerable<double> references = new double[] { 5 / 2e3 };
             AnalyzeOp(op, ckt, exports, references);
         }
+
         [Test]
-        public void When_SimpleSubcircuit_Measure_Multi_Subcircuit_Current()
+        public void When_SimpleSubcircuit_Measure_Multi_Subcircuit_Current_Expect_Reference()
         {
             // Define the subcircuit
             var subckt1 = new SubcircuitDefinition(new Circuit(
@@ -78,8 +80,9 @@ namespace SpiceSharpTest.Models
             IEnumerable<double> references = new double[] { 5 / 2e3 };
             AnalyzeOp(op, ckt, exports, references);
         }
+
         [Test]
-        public void When_SimpleSubcircuit_Measure_Multi_Subcircuit_Current2()
+        public void When_SimpleSubcircuit_Measure_Multi_Subcircuit_Current2_Expect_Reference()
         {
             // Define the subcircuit
             var subckt1 = new SubcircuitDefinition(new Circuit(
@@ -109,7 +112,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_SimpleSubcircuit_DC_Measure_Multi_Subcircuit()
+        public void When_SimpleSubcircuit_DC_Measure_Multi_Subcircuit_Expect_Reference()
         {
             // Define the subcircuit
             var subckt1 = new SubcircuitDefinition(new Circuit(
@@ -136,8 +139,12 @@ namespace SpiceSharpTest.Models
             string[] subcircuitOutput = { "X1", "Vdiv", "R2" };
 
             // Create exports
-            IExport<double>[] exports = { new RealPropertyExport(dc, "V1", "v"), new RealPropertyExport(dc, subcircuitOutput, "v"), new RealPropertyExport(dc, subcircuitOutput, "i"),
-                                            new RealPropertyExport(dc, subcircuitOutput, "resistance")};
+            IExport<double>[] exports = {
+                new RealPropertyExport(dc, "V1", "v"),
+                new RealPropertyExport(dc, subcircuitOutput, "v"),
+                new RealPropertyExport(dc, subcircuitOutput, "i"),
+                new RealPropertyExport(dc, subcircuitOutput, "resistance")
+            };
 
             double[][] references =
             {
@@ -151,8 +158,9 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
             DestroyExports(exports);
         }
+
         [Test]
-        public void When_SimpleSubcircuit_Tran_Measure_Multi_Subcircuit()
+        public void When_SimpleSubcircuit_Tran_Measure_Multi_Subcircuit_Expect_Reference()
         {
             // Define the subcircuit
             var subckt1 = new SubcircuitDefinition(new Circuit(
@@ -198,6 +206,44 @@ namespace SpiceSharpTest.Models
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
 
+        }
+
+        [Test]
+        public void When_SimpleSubcircuit_Ac_Measure_Multi_Subcircuit_Expect_Reference()
+        {
+            // Define the subcircuit
+            var subckt1 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a");
+
+            // board level
+            var subckt2 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "in", "0", 1),//same name to make sure it finds correct R1
+                new Subcircuit("Vdiv", subckt1).Connect("in")),
+                "in");
+
+            //connect voltage source to board
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 5.0).SetParameter("acmag", 1.0),
+                new Subcircuit("X1", subckt2).Connect("in"));
+
+            // Create a DC simulation that sweeps V1 from 1V to 2V in steps of 1V
+            var ac = new AC("AC 1", new DecadeSweep(0.1, 1e6, 2));
+
+            // Create exports
+            IExport<Complex>[] exports = {
+                new ComplexPropertyExport(ac, new[] { "X1", "Vdiv", "R2" }, "i")
+                };
+
+            Complex[][] references =
+            {
+                new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
+            };
+
+            // Run test
+            AnalyzeAC(ac, ckt, exports, references);
+            DestroyExports(exports);
         }
 
         [Test]

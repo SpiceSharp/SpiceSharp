@@ -1,5 +1,8 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Subcircuits;
+using SpiceSharp.Diagnostics;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -13,7 +16,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the name of the entity.
         /// </summary>
-        public string EntityName { get; }
+        public IReadOnlyList<string> EntityPath { get; }
 
         /// <summary>
         /// Gets the property name.
@@ -29,7 +32,24 @@ namespace SpiceSharp.Simulations
         public ComplexPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
-            EntityName = entityName.ThrowIfNull(nameof(entityName));
+            entityName.ThrowIfNull(nameof(entityName));
+            EntityPath = new[] { entityName };
+            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexPropertyExport"/>.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entityPath">The path to the entity.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public ComplexPropertyExport(IEventfulSimulation simulation, string[] entityPath, string propertyName)
+            : base(simulation)
+        {
+            if (entityPath == null || entityPath.Length == 0)
+                throw new ArgumentNullException("entityPath cannot be null or empty.", nameof(entityPath));
+            EntityPath = new List<string>(entityPath);
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 
@@ -40,18 +60,46 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            e.ThrowIfNull(nameof(e));
+            var behaviors = new HashSet<IBehavior>();
+            foreach (var behavior in Simulation.EntityBehaviors[EntityPath[0]])
+                behaviors.Add(behavior);
 
-            Func<Complex> extractor = null;
-            var eb = Simulation.EntityBehaviors[EntityName];
+            for (int i = 1; i < EntityPath.Count; i++)
+            {
+                string nextComponentName = EntityPath[i];
 
-            // Get the necessary behaviors in order of importance
-            // 1) First the frequency analysis analysis
-            if (eb.TryGetValue<IFrequencyBehavior>(out var behavior))
-                extractor = behavior.CreatePropertyGetter<Complex>(PropertyName);
+                // Keep track of the behaviors one level deeper
+                var subBehaviors = new HashSet<IBehavior>();
 
-            // There are currently no other behaviors that export complex numbers
-            Extractor = extractor;
+                // Go through all the behaviors of the previously found level, and collect the new set of behaviors.
+                foreach (var behavior in behaviors)
+                {
+                    if (behavior is EntitiesBehavior subcktBehavior &&
+                        subcktBehavior.LocalBehaviors.TryGetBehaviors(nextComponentName, out var behaviorContainer))
+                    {
+                        foreach (var subBehavior in behaviorContainer)
+                            subBehaviors.Add(subBehavior);
+                    }
+                }
+
+                // If we didn't find any new behaviors, then that means that the last level was not a subcircuit
+                if (subBehaviors.Count == 0)
+                    throw new SpiceSharpException($"Entity {EntityPath[i - 1]} is not a subcircuit.");
+                behaviors = subBehaviors;
+            }
+
+
+            // We have found all the behaviors for the relevant entity path, let's now find the property
+            // This code is basically identical to how it is implemented for BehaviorContainer
+            foreach (var behavior in behaviors)
+            {
+                Extractor = behavior.CreatePropertyGetter<Complex>(PropertyName);
+                if (Extractor != null)
+                    return; // Success
+            }
+
+            // If we reached this part, then none of the behaviors have defined the property...
+            throw new ParameterNotFoundException(this, PropertyName, typeof(Complex));
         }
     }
 }
