@@ -75,14 +75,11 @@ namespace SpiceSharp.Simulations
                     if (behavior is SpiceSharp.Components.Subcircuits.EntitiesBehavior subcktBehavior)
                     {
                         // Add all the behaviors in this one to the new level of found behaviors
-                        foreach (var behaviorContainer in subcktBehavior.LocalBehaviors)
+                        if (subcktBehavior.LocalBehaviors.TryGetBehaviors(nextComponentName, out IBehaviorContainer behaviorContainer))
                         {
-                            if (behaviorContainer.Name == nextComponentName)//only add behaviors that are part of path 
+                            foreach (var subBehavior in behaviorContainer)
                             {
-                                foreach (var subBehavior in behaviorContainer)
-                                {
-                                    subBehaviors.Add(subBehavior);
-                                }
+                                subBehaviors.Add(subBehavior);
                             }
                         }
                     }
