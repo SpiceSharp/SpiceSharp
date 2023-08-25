@@ -61,7 +61,8 @@ namespace SpiceSharpTest.Models
             // Define the subcircuit
             var subckt1 = new SubcircuitDefinition(new Circuit(
                 new Resistor("R1", "a", "b", 1e3),
-                new Resistor("R2", "b", "0", 1e3)),
+                new Resistor("R2", "b", "c", 1e3),
+                new VoltageSource("V1", "c", "0", 0.0)),
                 "a");
 
             // just another wrapper
@@ -75,9 +76,11 @@ namespace SpiceSharpTest.Models
 
             // Simulate the circuit
             var op = new OP("op");
-            string[] subcircuitCurrent = { "X1", "Vdiv", "R1" };
-            IExport<double>[] exports = new[] { new RealPropertyExport(op, subcircuitCurrent, "i") };
-            IEnumerable<double> references = new double[] { 5 / 2e3 };
+            var exports = new IExport<double>[] {
+                new RealPropertyExport(op, new[] { "X1", "Vdiv", "R1" }, "i"),
+                new RealCurrentExport(op, new[] { "X1", "Vdiv", "V1" })
+            };
+            IEnumerable<double> references = new double[] { 5 / 2e3, 5 / 2e3 };
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -209,12 +212,13 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_SimpleSubcircuit_Ac_Measure_Multi_Subcircuit_Expect_Reference()
+        public void When_SimpleSubcircuit_AC_Measure_Multi_Subcircuit_Expect_Reference()
         {
             // Define the subcircuit
             var subckt1 = new SubcircuitDefinition(new Circuit(
                 new Resistor("R1", "a", "b", 1e3),
-                new Resistor("R2", "b", "0", 1e3)),
+                new Resistor("R2", "b", "c", 1e3),
+                new VoltageSource("V1", "c", "0", 0.0)),
                 "a");
 
             // board level
@@ -233,11 +237,13 @@ namespace SpiceSharpTest.Models
 
             // Create exports
             IExport<Complex>[] exports = {
-                new ComplexPropertyExport(ac, new[] { "X1", "Vdiv", "R2" }, "i")
+                new ComplexPropertyExport(ac, new[] { "X1", "Vdiv", "R2" }, "i"),
+                new ComplexCurrentExport(ac, new[] { "X1", "Vdiv", "V1" })
                 };
 
             Complex[][] references =
             {
+                new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
                 new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
             };
 

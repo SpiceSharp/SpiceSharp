@@ -46,7 +46,7 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             if (entityPath == null || entityPath.Length == 0)
-                throw new ArgumentNullException("entityPath cannot be null or empty.", nameof(entityPath));
+                throw new ArgumentNullException(nameof(entityPath), "entityPath cannot be null or empty.");
             EntityPath = new List<string>(entityPath);
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
@@ -66,8 +66,6 @@ namespace SpiceSharp.Simulations
             // For every subsequent name in the path, we need to collect the next set of behaviors
             for (int i = 1; i < EntityPath.Count; i++)
             {
-                string nextComponentName = EntityPath[i];
-
                 // Keep track of the behaviors one level deeper
                 var subBehaviors = new HashSet<IBehavior>();
 
@@ -77,12 +75,10 @@ namespace SpiceSharp.Simulations
                     if (behavior is EntitiesBehavior subcktBehavior)
                     {
                         // Add all the behaviors in this one to the new level of found behaviors
-                        if (subcktBehavior.LocalBehaviors.TryGetBehaviors(nextComponentName, out IBehaviorContainer behaviorContainer))
+                        if (subcktBehavior.LocalBehaviors.TryGetBehaviors(EntityPath[i], out IBehaviorContainer behaviorContainer))
                         {
                             foreach (var subBehavior in behaviorContainer)
-                            {
                                 subBehaviors.Add(subBehavior);
-                            }
                         }
                     }
                 }

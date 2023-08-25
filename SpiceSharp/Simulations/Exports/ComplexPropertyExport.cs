@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             if (entityPath == null || entityPath.Length == 0)
-                throw new ArgumentNullException("entityPath cannot be null or empty.", nameof(entityPath));
+                throw new ArgumentNullException(nameof(entityPath), "entityPath cannot be null or empty.");
             EntityPath = new List<string>(entityPath);
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
