@@ -32,6 +32,173 @@ namespace SpiceSharpTest.Models
             IEnumerable<double> references = new double[] { 2.5 };
             AnalyzeOp(op, ckt, exports, references);
         }
+        [Test]
+        public void When_SimpleSubcircuit_Measure_Subcircuit_Current()
+        {
+            // Define the subcircuit
+            var subckt = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a", "b");
+
+            // Define the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 5.0),
+                new Subcircuit("X1", subckt).Connect("in", "out"));
+
+            // Simulate the circuit
+            var op = new OP("op");
+            string[] subcircuitCurrent = { "X1", "R1" };
+            IExport<double>[] exports = new[] { new RealPropertyExport(op, subcircuitCurrent, "i") };
+            IEnumerable<double> references = new double[] { 5 / 2e3 };
+            AnalyzeOp(op, ckt, exports, references);
+        }
+        [Test]
+        public void When_SimpleSubcircuit_Measure_Multi_Subcircuit_Current()
+        {
+            // Define the subcircuit
+            var subckt1 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a");
+
+            // just another wrapper
+            var subckt2 = new SubcircuitDefinition(new Circuit(
+                new Subcircuit("Vdiv", subckt1).Connect("in")),
+                "in");
+
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 5.0),
+                new Subcircuit("X1", subckt2).Connect("in"));
+
+            // Simulate the circuit
+            var op = new OP("op");
+            string[] subcircuitCurrent = { "X1", "Vdiv", "R1" };
+            IExport<double>[] exports = new[] { new RealPropertyExport(op, subcircuitCurrent, "i") };
+            IEnumerable<double> references = new double[] { 5 / 2e3 };
+            AnalyzeOp(op, ckt, exports, references);
+        }
+        [Test]
+        public void When_SimpleSubcircuit_Measure_Multi_Subcircuit_Current2()
+        {
+            // Define the subcircuit
+            var subckt1 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a");
+
+            // board level
+            var subckt2 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "in", "0", 1),//same name to make sure it finds correct R1
+                new Subcircuit("Vdiv", subckt1).Connect("in")),
+                "in");
+
+            //connect voltage source to board
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 5.0),
+                new Subcircuit("X1", subckt2).Connect("in"));
+
+            // Simulate the circuit
+            var op = new OP("op");
+            string[] subcircuitCurrent1 = { "X1", "Vdiv", "R1" };
+            string[] subcircuitCurrent2 = { "X1", "R1" };
+            string[] subcircuitVoltage1 = { "X1", "Vdiv", "R2" };//get voltage across R2
+            IExport<double>[] exports = new[] { new RealPropertyExport(op, subcircuitCurrent1, "i"), new RealPropertyExport(op, subcircuitCurrent2, "i"), new RealPropertyExport(op, subcircuitVoltage1, "v") };
+            IEnumerable<double> references = new double[] { 5 / 2e3, 5, 2.5 };
+            AnalyzeOp(op, ckt, exports, references);
+        }
+
+        [Test]
+        public void When_SimpleSubcircuit_DC_Measure_Multi_Subcircuit()
+        {
+            // Define the subcircuit
+            var subckt1 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a");
+
+            // board level
+            var subckt2 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "in", "0", 1),//same name to make sure it finds correct R1
+                new Subcircuit("Vdiv", subckt1).Connect("in")),
+                "in");
+
+            //connect voltage source to board
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 5.0),
+                new Subcircuit("X1", subckt2).Connect("in"));
+
+            // <example01_simulate2>
+            // Create a DC simulation that sweeps V1 from 1V to 2V in steps of 1V
+            var dc = new DC("DC 1", "V1", 1.0,2.0,1.0);
+
+            // Create exports
+            string[] subcircuitOutput = { "X1", "Vdiv", "R2" };
+
+            // Create exports
+            IExport<double>[] exports = { new RealPropertyExport(dc, "V1", "v"), new RealPropertyExport(dc, subcircuitOutput, "v"), new RealPropertyExport(dc, subcircuitOutput, "i"),
+                                            new RealPropertyExport(dc, subcircuitOutput, "resistance")};
+
+            double[][] references =
+            {
+                new[] { 1.0, 2.0 },
+                new[] { 0.5, 1.0 },
+                new[] { 1/2e3, 2/2e3},
+                new[] { 1e3, 1e3},
+            };
+
+            // Run test
+            AnalyzeDC(dc, ckt, exports, references);
+            DestroyExports(exports);
+        }
+        [Test]
+        public void When_SimpleSubcircuit_Tran_Measure_Multi_Subcircuit()
+        {
+            // Define the subcircuit
+            var subckt1 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "a", "b", 1e3),
+                new Resistor("R2", "b", "0", 1e3)),
+                "a");
+
+            // board level
+            var subckt2 = new SubcircuitDefinition(new Circuit(
+                new Resistor("R1", "in", "0", 1),//same name to make sure it finds correct R1
+                new Subcircuit("Vdiv", subckt1).Connect("in")),
+                "in");
+
+            //connect voltage source to board
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 5.0),
+                new Subcircuit("X1", subckt2).Connect("in"));
+
+            // <example01_simulate2>
+            var tran = new Transient("transient", 1e-9, 2e-11);
+
+            // Create exports
+            string[] subcircuitOutput = { "X1", "Vdiv", "R2" };
+
+            // Create exports
+            IExport<double>[] exports = { new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
+                                        new RealPropertyExport(tran, "V1", "v"),
+                                        new RealPropertyExport(tran, subcircuitOutput, "v"),
+                                        new RealPropertyExport(tran, subcircuitOutput, "i"),
+                                        new RealPropertyExport(tran, subcircuitOutput, "resistance")
+                                        };
+
+            // Create references
+            IEnumerable<Func<double, double>> references = new Func<double, double>[] {
+                t => t,
+                t => 5.0,
+                t => 2.5,
+                t => 5/2e3,
+                t => 1e3,
+            };
+
+            // Run test
+            AnalyzeTransient(tran, ckt, exports, references);
+            DestroyExports(exports);
+
+        }
 
         [Test]
         public void When_RecursiveSubcircuit_Expect_Reference()
