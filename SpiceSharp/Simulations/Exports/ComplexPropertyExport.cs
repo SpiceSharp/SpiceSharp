@@ -3,6 +3,7 @@ using SpiceSharp.Components.Subcircuits;
 using SpiceSharp.Diagnostics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -44,12 +45,10 @@ namespace SpiceSharp.Simulations
         /// <param name="entityPath">The path to the entity.</param>
         /// <param name="propertyName">The name of the property.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ComplexPropertyExport(IEventfulSimulation simulation, string[] entityPath, string propertyName)
+        public ComplexPropertyExport(IEventfulSimulation simulation, IEnumerable<string> entityPath, string propertyName)
             : base(simulation)
         {
-            if (entityPath == null || entityPath.Length == 0)
-                throw new ArgumentNullException(nameof(entityPath), "entityPath cannot be null or empty.");
-            EntityPath = new List<string>(entityPath);
+            EntityPath = entityPath.ThrowIfEmpty(nameof(entityPath)).ToArray();
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 

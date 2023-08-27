@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace SpiceSharp
 {
@@ -52,14 +53,27 @@ namespace SpiceSharp
         /// <typeparam name="T">The base type.</typeparam>
         /// <param name="source">The object.</param>
         /// <param name="name">The parameter name.</param>
-        /// <returns>
-        /// The original object.
-        /// </returns>
+        /// <returns>The original object.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
         public static T ThrowIfNull<T>(this T source, string name)
         {
             if (source == null)
                 throw new ArgumentNullException(name);
+            return source;
+        }
+
+        /// <summary>
+        /// Throws an exception if the enumerable is null or empty.
+        /// </summary>
+        /// <typeparam name="T">The base type.</typeparam>
+        /// <param name="source">The object.</param>
+        /// <param name="name">The parameter name.</param>
+        /// <returns>The original object.</returns>
+        /// <exception cref="ArgumentException"><paramref name="source"/> is <c>null</c> or empty.</exception>
+        public static IEnumerable<T> ThrowIfEmpty<T>(this IEnumerable<T> source, string name)
+        {
+            if (source == null || !source.Any())
+                throw new ArgumentException(name + " cannot be null or empty.", name);
             return source;
         }
 

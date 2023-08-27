@@ -3,6 +3,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Components.Subcircuits;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -35,13 +36,11 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="sourcePath">The source name.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public ComplexCurrentExport(IFrequencySimulation simulation, string[] sourcePath)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>, or if <paramref name="sourcePath"/> is <c>null</c> or empty.</exception>
+        public ComplexCurrentExport(IFrequencySimulation simulation, IEnumerable<string> sourcePath)
             : base(simulation)
         {
-            if (sourcePath == null || sourcePath.Length == 0)
-                throw new ArgumentNullException(nameof(sourcePath), "sourcePath cannot be null or empty.");
-            SourcePath = new List<string>(sourcePath);
+            SourcePath = sourcePath.ThrowIfEmpty(nameof(sourcePath)).ToArray();
         }
 
         /// <summary>

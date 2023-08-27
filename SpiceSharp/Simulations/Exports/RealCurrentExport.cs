@@ -3,6 +3,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Components.Subcircuits;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -34,12 +35,10 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="sourcePath">The path to the source that defines a current.</param>
-        public RealCurrentExport(IBiasingSimulation simulation, string[] sourcePath)
+        public RealCurrentExport(IBiasingSimulation simulation, IEnumerable<string> sourcePath)
             : base(simulation)
         {
-            if (sourcePath == null || sourcePath.Length == 0)
-                throw new ArgumentNullException(nameof(sourcePath), "sourcePath cannot be null or empty");
-            SourcePath = new List<string>(sourcePath);
+            SourcePath = sourcePath.ThrowIfEmpty(nameof(sourcePath)).ToArray();
         }
 
         /// <summary>

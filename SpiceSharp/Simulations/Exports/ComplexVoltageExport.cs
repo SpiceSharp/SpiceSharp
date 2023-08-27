@@ -1,6 +1,7 @@
 ﻿using SpiceSharp.Components.Subcircuits;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -63,12 +64,12 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNodePath">The node path.</param>
-        public ComplexVoltageExport(IFrequencySimulation simulation, string[] posNodePath)
+        public ComplexVoltageExport(IFrequencySimulation simulation, IEnumerable<string> posNodePath)
             : base(simulation)
         {
-            if (posNodePath == null || posNodePath.Length == 0)
+            PosNodePath = posNodePath.ThrowIfEmpty(nameof(posNodePath)).ToArray();
+            if (PosNodePath.Count == 0)
                 throw new ArgumentNullException(nameof(posNodePath), "posNodePath cannot be null or empty.");
-            PosNodePath = new List<string>(posNodePath);
             NegNodePath = null;
         }
 
@@ -95,17 +96,13 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="posNodePath">The positive node path.</param>
         /// <param name="negNodePath">The negative node path.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public ComplexVoltageExport(IFrequencySimulation simulation, string[] posNodePath, string[] negNodePath)
+        public ComplexVoltageExport(IFrequencySimulation simulation, IEnumerable<string> posNodePath, IEnumerable<string> negNodePath)
             : base(simulation)
         {
-            if (posNodePath == null || posNodePath.Length == 0)
-                throw new ArgumentNullException(nameof(posNodePath), "posNodePath cannot be null or empty.");
-            PosNodePath = new List<string>(posNodePath);
-            if (negNodePath == null || negNodePath.Length == 0)
+            PosNodePath = posNodePath.ThrowIfEmpty(nameof(posNodePath)).ToArray();
+            NegNodePath = negNodePath?.ToArray();
+            if (NegNodePath != null && NegNodePath.Count == 0)
                 NegNodePath = null;
-            else
-                NegNodePath = new List<string>(NegNodePath);
         }
 
         /// <summary>
