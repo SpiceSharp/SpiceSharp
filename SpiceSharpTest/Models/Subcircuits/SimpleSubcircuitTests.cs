@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Models
         }
 
         [Test]
-        public void When_SimpleSubcircuit_Measure_Subcircuit_Current()
+        public void When_SimpleSubcircuit_Measure_Subcircuit_Current_Expect_Reference()
         {
             // Define the subcircuit
             var subckt = new SubcircuitDefinition(new Circuit(
@@ -49,9 +49,8 @@ namespace SpiceSharpTest.Models
 
             // Simulate the circuit
             var op = new OP("op");
-            string[] subcircuitCurrent = { "X1", "R1" };
-            IExport<double>[] exports = new[] { new RealPropertyExport(op, subcircuitCurrent, "i") };
-            IEnumerable<double> references = new double[] { 5 / 2e3 };
+            IExport<double>[] exports = new[] { new RealPropertyExport(op, new[] { "X1", "R1" }, "i") };
+            IEnumerable<double> references = new double[] { 5.0 / 2e3 };
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -80,7 +79,7 @@ namespace SpiceSharpTest.Models
                 new RealPropertyExport(op, new[] { "X1", "Vdiv", "R1" }, "i"),
                 new RealCurrentExport(op, new[] { "X1", "Vdiv", "V1" })
             };
-            IEnumerable<double> references = new double[] { 5 / 2e3, 5 / 2e3 };
+            IEnumerable<double> references = new double[] { 5.0 / 2e3, 5.0 / 2e3 };
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -112,7 +111,7 @@ namespace SpiceSharpTest.Models
                 new RealPropertyExport(op, new[] { "X1", "Vdiv", "R2" }, "v"),
                 new RealVoltageExport(op, new[] { "X1", "Vdiv", "b" }),
             };
-            IEnumerable<double> references = new double[] { 5 / 2e3, 5, 2.5, 2.5 };
+            IEnumerable<double> references = new double[] { 5.0 / 2e3, 5.0, 2.5, 2.5 };
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -298,8 +297,11 @@ namespace SpiceSharpTest.Models
                     .SetParameter("localsolver", true));
 
             var op = new OP("op");
-            IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
-            IEnumerable<double> references = new double[] { 0.5 };
+            IExport<double>[] exports = new[] {
+                new RealVoltageExport(op, "out"),
+                new RealVoltageExport(op, new[] { "X1", "b" }),
+            };
+            IEnumerable<double> references = new double[] { 0.5, 0.5 };
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -318,8 +320,11 @@ namespace SpiceSharpTest.Models
                     .SetParameter("localsolver", true));
 
             var ac = new AC("ac", new DecadeSweep(1, 100, 3));
-            IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
-            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5 };
+            IExport<Complex>[] exports = new[] {
+                new ComplexVoltageExport(ac, "out"),
+                new ComplexVoltageExport(ac, new[] { "X1", "b" })
+            };
+            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5, f => 0.5 };
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }

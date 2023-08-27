@@ -37,9 +37,6 @@ namespace SpiceSharp.Components.Subcircuits
                 : base(name, parent, solver)
             {
             }
-
-            /// <inheritdoc/>
-            public override bool Apply() => base.Apply();
         }
     }
 }
