@@ -48,40 +48,17 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            var behaviors = new HashSet<IBehavior>();
-            foreach (var behavior in Simulation.EntityBehaviors[SourcePath[0]])
-                behaviors.Add(behavior);
-
+            var behaviorContainer = Simulation.EntityBehaviors[SourcePath[0]];
             for (int i = 1; i < SourcePath.Count; i++)
             {
-                string nextComponentName = SourcePath[i];
-
-                var subBehaviors = new HashSet<IBehavior>();
-                foreach (var behavior in behaviors)
-                {
-                    if (behavior is EntitiesBehavior entitiesBehavior &&
-                        entitiesBehavior.LocalBehaviors.TryGetBehaviors(SourcePath[i], out var behaviorContainer))
-                    {
-                        foreach (var subBehavior in behaviorContainer)
-                            subBehaviors.Add(subBehavior);
-                    }
-                }
-
-                // If we didn't find any new behaviors, then that means that the last level was not a subcircuit
-                if (subBehaviors.Count == 0)
-                    throw new SpiceSharpException($"Entity {SourcePath[i - 1]} is not a subcircuit.");
-                behaviors = subBehaviors;
+                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                behaviorContainer = behavior.LocalBehaviors[SourcePath[i]];
             }
 
             // Find a branched behavior for the current
-            foreach (var behavior in behaviors)
-            {
-                if (behavior is IBranchedBehavior<double> branchedBehavior)
-                {
-                    var branch = branchedBehavior.Branch;
-                    Extractor = () => branch.Value;
-                }
-            }
+            var branchedBehavior = behaviorContainer.GetValue<IBranchedBehavior<double>>();
+            var branch = branchedBehavior.Branch;
+            Extractor = () => branch.Value;
         }
     }
 }
