@@ -21,6 +21,11 @@ namespace SpiceSharp.Components.Subcircuits
         private readonly LocalSimulationState _state;
 
         /// <summary>
+        /// Gets the biasing simulation state.
+        /// </summary>
+        public IBiasingSimulationState State { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Biasing" /> class.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -31,12 +36,10 @@ namespace SpiceSharp.Components.Subcircuits
             var parameters = context.GetParameterSet<Parameters>();
             var parent = context.GetState<IBiasingSimulationState>();
             if (parameters.LocalSolver)
-            {
-                _state = new LocalSimulationState(Name, parent, new SparseRealSolver());
-                context.AddLocalState<IBiasingSimulationState>(_state);
-            }
+                State = _state = new LocalSimulationState(Name, parent, new SparseRealSolver());
             else
-                context.AddLocalState<IBiasingSimulationState>(new FlatSimulationState(Name, parent, context.Bridges));
+                State = new FlatSimulationState(Name, parent, context.Bridges);
+            context.AddLocalState(State);
         }
 
         /// <inheritdoc/>

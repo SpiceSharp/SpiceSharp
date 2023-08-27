@@ -18,6 +18,11 @@ namespace SpiceSharp.Components.Subcircuits
         private readonly LocalSimulationState _state;
 
         /// <summary>
+        /// Gets the complex simulation state.
+        /// </summary>
+        public IComplexSimulationState State { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Frequency" /> class.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -28,12 +33,10 @@ namespace SpiceSharp.Components.Subcircuits
             var parameters = context.GetParameterSet<Parameters>();
             var parent = context.GetState<IComplexSimulationState>();
             if (parameters.LocalSolver)
-            {
-                _state = new LocalSimulationState(Name, parent, new SparseComplexSolver());
-                context.AddLocalState<IComplexSimulationState>(_state);
-            }
+                State = _state = new LocalSimulationState(Name, parent, new SparseComplexSolver());
             else
-                context.AddLocalState<IComplexSimulationState>(new FlatSimulationState(Name, parent, context.Bridges));
+                State = new FlatSimulationState(Name, parent, context.Bridges);
+            context.AddLocalState(State);
         }
 
         /// <inheritdoc/>

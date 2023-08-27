@@ -106,11 +106,13 @@ namespace SpiceSharpTest.Models
 
             // Simulate the circuit
             var op = new OP("op");
-            string[] subcircuitCurrent1 = { "X1", "Vdiv", "R1" };
-            string[] subcircuitCurrent2 = { "X1", "R1" };
-            string[] subcircuitVoltage1 = { "X1", "Vdiv", "R2" };//get voltage across R2
-            IExport<double>[] exports = new[] { new RealPropertyExport(op, subcircuitCurrent1, "i"), new RealPropertyExport(op, subcircuitCurrent2, "i"), new RealPropertyExport(op, subcircuitVoltage1, "v") };
-            IEnumerable<double> references = new double[] { 5 / 2e3, 5, 2.5 };
+            var exports = new IExport<double>[] {
+                new RealPropertyExport(op, new[] { "X1", "Vdiv", "R1" }, "i"),
+                new RealPropertyExport(op, new[] { "X1", "R1" }, "i"),
+                new RealPropertyExport(op, new[] { "X1", "Vdiv", "R2" }, "v"),
+                new RealVoltageExport(op, new[] { "X1", "Vdiv", "b" }),
+            };
+            IEnumerable<double> references = new double[] { 5 / 2e3, 5, 2.5, 2.5 };
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -238,13 +240,15 @@ namespace SpiceSharpTest.Models
             // Create exports
             IExport<Complex>[] exports = {
                 new ComplexPropertyExport(ac, new[] { "X1", "Vdiv", "R2" }, "i"),
-                new ComplexCurrentExport(ac, new[] { "X1", "Vdiv", "V1" })
+                new ComplexCurrentExport(ac, new[] { "X1", "Vdiv", "V1" }),
+                new ComplexVoltageExport(ac, new[] { "X1", "Vdiv", "b" }),
                 };
 
             Complex[][] references =
             {
                 new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
                 new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
+                new Complex[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 },
             };
 
             // Run test
