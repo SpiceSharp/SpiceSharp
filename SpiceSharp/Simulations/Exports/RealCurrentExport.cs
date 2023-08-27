@@ -1,5 +1,9 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Components.Subcircuits;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -12,12 +16,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the name of the voltage source.
         /// </summary>
-        public string Source { get; }
-
-        /// <summary>
-        /// Gets the index of the variable in the solver.
-        /// </summary>
-        public int Index { get; private set; }
+        public IReadOnlyList<string> SourcePath { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
@@ -27,8 +26,19 @@ namespace SpiceSharp.Simulations
         public RealCurrentExport(IBiasingSimulation simulation, string source)
             : base(simulation)
         {
-            Source = source.ThrowIfNull(nameof(source));
-            Index = -1;
+            source.ThrowIfNull(nameof(source));
+            SourcePath = new[] { source };
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="sourcePath">The path to the source that defines a current.</param>
+        public RealCurrentExport(IBiasingSimulation simulation, IEnumerable<string> sourcePath)
+            : base(simulation)
+        {
+            SourcePath = sourcePath.ThrowIfEmpty(nameof(sourcePath)).ToArray();
         }
 
         /// <summary>
@@ -38,25 +48,17 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
+            var behaviorContainer = Simulation.EntityBehaviors[SourcePath[0]];
+            for (int i = 1; i < SourcePath.Count; i++)
             {
-                if (ebd.TryGetValue<IBranchedBehavior<double>>(out var behavior))
-                {
-                    var branch = behavior.Branch;
-                    Extractor = () => branch.Value;
-                }
+                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                behaviorContainer = behavior.LocalBehaviors[SourcePath[i]];
             }
-        }
 
-        /// <summary>
-        /// Finalizes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">the <see cref="EventArgs"/> instance containing the event data.</param>
-        protected override void Finalize(object sender, EventArgs e)
-        {
-            base.Finalize(sender, e);
-            Index = -1;
+            // Find a branched behavior for the current
+            var branchedBehavior = behaviorContainer.GetValue<IBranchedBehavior<double>>();
+            var branch = branchedBehavior.Branch;
+            Extractor = () => branch.Value;
         }
     }
 }

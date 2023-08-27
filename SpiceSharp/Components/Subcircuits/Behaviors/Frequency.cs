@@ -13,9 +13,15 @@ namespace SpiceSharp.Components.Subcircuits
     /// <seealso cref="IFrequencyBehavior" />
     [BehaviorFor(typeof(Subcircuit))]
     public partial class Frequency : SubcircuitBehavior<IFrequencyBehavior>,
-        IFrequencyBehavior
+        IFrequencyBehavior,
+        IFrequencyUpdateBehavior
     {
         private readonly LocalSimulationState _state;
+
+        /// <summary>
+        /// Gets the frequency update behaviors in the subcircuit.
+        /// </summary>
+        protected BehaviorList<IFrequencyUpdateBehavior> UpdateBehaviors { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency" /> class.
@@ -26,6 +32,7 @@ namespace SpiceSharp.Components.Subcircuits
             : base(context)
         {
             var parameters = context.GetParameterSet<Parameters>();
+            UpdateBehaviors = context.GetBehaviors<IFrequencyUpdateBehavior>();
             var parent = context.GetState<IComplexSimulationState>();
             if (parameters.LocalSolver)
             {
@@ -70,6 +77,14 @@ namespace SpiceSharp.Components.Subcircuits
                 foreach (var behavior in Behaviors)
                     behavior.Load();
             }
+        }
+
+        /// <inheritdoc />
+        public void Update()
+        {
+            _state?.Update();
+            foreach (var behavior in UpdateBehaviors)
+                behavior.Update();
         }
     }
 }

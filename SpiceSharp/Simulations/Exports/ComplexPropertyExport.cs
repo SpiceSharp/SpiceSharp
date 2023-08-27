@@ -1,5 +1,9 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Subcircuits;
+using SpiceSharp.Diagnostics;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -13,7 +17,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the name of the entity.
         /// </summary>
-        public string EntityName { get; }
+        public IReadOnlyList<string> EntityPath { get; }
 
         /// <summary>
         /// Gets the property name.
@@ -29,7 +33,22 @@ namespace SpiceSharp.Simulations
         public ComplexPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
-            EntityName = entityName.ThrowIfNull(nameof(entityName));
+            entityName.ThrowIfNull(nameof(entityName));
+            EntityPath = new[] { entityName };
+            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexPropertyExport"/>.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entityPath">The path to the entity.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public ComplexPropertyExport(IEventfulSimulation simulation, IEnumerable<string> entityPath, string propertyName)
+            : base(simulation)
+        {
+            EntityPath = entityPath.ThrowIfEmpty(nameof(entityPath)).ToArray();
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 
@@ -40,18 +59,13 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            e.ThrowIfNull(nameof(e));
-
-            Func<Complex> extractor = null;
-            var eb = Simulation.EntityBehaviors[EntityName];
-
-            // Get the necessary behaviors in order of importance
-            // 1) First the frequency analysis analysis
-            if (eb.TryGetValue<IFrequencyBehavior>(out var behavior))
-                extractor = behavior.CreatePropertyGetter<Complex>(PropertyName);
-
-            // There are currently no other behaviors that export complex numbers
-            Extractor = extractor;
+            var behaviorContainer = Simulation.EntityBehaviors[EntityPath[0]];
+            for (int i = 1; i < EntityPath.Count; i++)
+            {
+                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                behaviorContainer = behavior.LocalBehaviors[EntityPath[i]];
+            }
+            Extractor = behaviorContainer.CreatePropertyGetter<Complex>(PropertyName);
         }
     }
 }

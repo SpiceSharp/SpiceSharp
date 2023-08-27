@@ -15,10 +15,16 @@ namespace SpiceSharp.Components.Subcircuits
     [BehaviorFor(typeof(Subcircuit))]
     public partial class Biasing : SubcircuitBehavior<IBiasingBehavior>,
         IBiasingBehavior,
+        IBiasingUpdateBehavior,
         IConvergenceBehavior
     {
         private BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
         private readonly LocalSimulationState _state;
+
+        /// <summary>
+        /// Gets the update behaviors.
+        /// </summary>
+        protected BehaviorList<IBiasingUpdateBehavior> UpdateBehaviors { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing" /> class.
@@ -29,6 +35,7 @@ namespace SpiceSharp.Components.Subcircuits
             : base(context)
         {
             var parameters = context.GetParameterSet<Parameters>();
+            UpdateBehaviors = context.GetBehaviors<IBiasingUpdateBehavior>();
             var parent = context.GetState<IBiasingSimulationState>();
             if (parameters.LocalSolver)
             {
@@ -81,6 +88,14 @@ namespace SpiceSharp.Components.Subcircuits
             foreach (var behavior in _convergenceBehaviors)
                 result &= behavior.IsConvergent();
             return result;
+        }
+
+        /// <inheritdoc />
+        public void Update()
+        {
+            _state?.Update();
+            foreach (var behavior in UpdateBehaviors)
+                behavior.Update();
         }
     }
 }

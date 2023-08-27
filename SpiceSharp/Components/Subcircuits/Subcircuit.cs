@@ -93,9 +93,7 @@ namespace SpiceSharp.Components
                     .AddIfNo<IAcceptBehavior>(context => new Accept(context))
                     .AddIfNo<ITimeBehavior>(context => new Time(context))
                     .AddIfNo<IBiasingBehavior>(context => new Biasing(context))
-                    .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(context))
                     .AddIfNo<IFrequencyBehavior>(context => new Frequency(context))
-                    .AddIfNo<IFrequencyUpdateBehavior>(context => new FrequencyUpdate(context))
                     .AddIfNo<INoiseBehavior>(context => new Subcircuits.Noise(context));
 
                 // Run the simulation

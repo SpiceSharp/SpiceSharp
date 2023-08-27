@@ -1,5 +1,9 @@
-﻿using SpiceSharp.Components;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Components.Subcircuits;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -13,23 +17,30 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the name of the voltage source.
         /// </summary>
-        public string Source { get; }
+        public IReadOnlyList<string> SourcePath { get; }
 
         /// <summary>
-        /// Gets the index in the of the current variable.
-        /// </summary>
-        public int Index { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
+        /// Initializes a new instance of the <see cref="ComplexCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source name.</param>
         public ComplexCurrentExport(IFrequencySimulation simulation, string source)
             : base(simulation)
         {
-            Source = source.ThrowIfNull(nameof(source));
-            Index = -1;
+            source.ThrowIfNull(nameof(source));
+            SourcePath = new[] { source };
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComplexCurrentExport"/> class.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="sourcePath">The source name.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>, or if <paramref name="sourcePath"/> is <c>null</c> or empty.</exception>
+        public ComplexCurrentExport(IFrequencySimulation simulation, IEnumerable<string> sourcePath)
+            : base(simulation)
+        {
+            SourcePath = sourcePath.ThrowIfEmpty(nameof(sourcePath)).ToArray();
         }
 
         /// <summary>
@@ -39,26 +50,17 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            var state = Simulation.GetState<IComplexSimulationState>();
-            if (Simulation.EntityBehaviors.TryGetBehaviors(Source, out var ebd))
+            var behaviorContainer = Simulation.EntityBehaviors[SourcePath[0]];
+            for (int i = 1; i < SourcePath.Count; i++)
             {
-                if (ebd.TryGetValue<IBranchedBehavior<Complex>>(out var behavior))
-                {
-                    Index = state.Map[behavior.Branch];
-                    Extractor = () => state.Solution[Index];
-                }
+                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                behaviorContainer = behavior.LocalBehaviors[SourcePath[i]];
             }
-        }
 
-        /// <summary>
-        /// Finalizes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected override void Finalize(object sender, EventArgs e)
-        {
-            base.Finalize(sender, e);
-            Index = -1;
+            // Find a branched behavior for the current
+            var branchedBehavior = behaviorContainer.GetValue<IBranchedBehavior<Complex>>();
+            var branch = branchedBehavior.Branch;
+            Extractor = () => branch.Value;
         }
     }
 }

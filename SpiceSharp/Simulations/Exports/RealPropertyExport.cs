@@ -1,4 +1,9 @@
-﻿using System;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Subcircuits;
+using SpiceSharp.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -9,9 +14,9 @@ namespace SpiceSharp.Simulations
     public class RealPropertyExport : Export<IEventfulSimulation, double>
     {
         /// <summary>
-        /// Gets the name of the entity.
+        /// Gets the path to the name of the entity.
         /// </summary>
-        public string EntityName { get; }
+        public IReadOnlyList<string> EntityPath { get; }
 
         /// <summary>
         /// Gets the name of the property.
@@ -27,7 +32,21 @@ namespace SpiceSharp.Simulations
         public RealPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
             : base(simulation)
         {
-            EntityName = entityName.ThrowIfNull(nameof(entityName));
+            entityName.ThrowIfNull(nameof(entityName));
+            EntityPath = new[] { entityName };
+            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
+        /// </summary>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="entityPath">The path to the entity.</param>
+        /// <param name="propertyName">The name of the property.</param>
+        public RealPropertyExport(IEventfulSimulation simulation, IEnumerable<string> entityPath, string propertyName)
+            : base(simulation)
+        {
+            EntityPath = entityPath.ThrowIfEmpty(nameof(entityPath)).ToArray();
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 
@@ -38,10 +57,13 @@ namespace SpiceSharp.Simulations
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
-            e.ThrowIfNull(nameof(e));
-            var eb = Simulation.EntityBehaviors[EntityName];
-            if (eb != null)
-                Extractor = eb.CreatePropertyGetter<double>(PropertyName);
+            var behaviorContainer = Simulation.EntityBehaviors[EntityPath[0]];
+            for (int i = 1; i < EntityPath.Count; i++)
+            {
+                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                behaviorContainer = behavior.LocalBehaviors[EntityPath[i]];
+            }
+            Extractor = behaviorContainer.CreatePropertyGetter<double>(PropertyName);
         }
     }
 }
