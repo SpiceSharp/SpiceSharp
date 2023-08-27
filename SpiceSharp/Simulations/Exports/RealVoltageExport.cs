@@ -103,21 +103,10 @@ namespace SpiceSharp.Simulations
             IBiasingSimulationState state;
             if (path.Count > 1)
             {
-                var behaviorCollection = Simulation.EntityBehaviors;
-                for (int i = 0; i < last - 1; i++)
-                {
-                    var container = behaviorCollection[path[i]];
-                    foreach (var behavior in container)
-                    {
-                        if (behavior is EntitiesBehavior entitiesBehavior)
-                        {
-                            behaviorCollection = entitiesBehavior.LocalBehaviors;
-                            break;
-                        }
-                    }
-                }
-                var frequency = behaviorCollection[path[last - 1]].GetValue<Components.Subcircuits.Biasing>();
-                state = frequency.State;
+                var entitiesBehavior = Simulation.EntityBehaviors[path[0]].GetValue<EntitiesBehavior>();
+                for (int i = 1; i < last; i++)
+                    entitiesBehavior = entitiesBehavior.LocalBehaviors[path[i]].GetValue<EntitiesBehavior>();;
+                state = entitiesBehavior.GetState<IBiasingSimulationState>();
             }
             else
                 state = Simulation.GetState<IBiasingSimulationState>();

@@ -22,11 +22,6 @@ namespace SpiceSharp.Components.Subcircuits
         private readonly LocalSimulationState _state;
 
         /// <summary>
-        /// Gets the biasing simulation state.
-        /// </summary>
-        public IBiasingSimulationState State { get; }
-
-        /// <summary>
         /// Gets the update behaviors.
         /// </summary>
         protected BehaviorList<IBiasingUpdateBehavior> UpdateBehaviors { get; private set; }
@@ -43,10 +38,12 @@ namespace SpiceSharp.Components.Subcircuits
             UpdateBehaviors = context.GetBehaviors<IBiasingUpdateBehavior>();
             var parent = context.GetState<IBiasingSimulationState>();
             if (parameters.LocalSolver)
-                State = _state = new LocalSimulationState(Name, parent, new SparseRealSolver());
+            {
+                _state = new LocalSimulationState(Name, parent, new SparseRealSolver());
+                context.AddLocalState<IBiasingSimulationState>(_state);
+            }
             else
-                State = new FlatSimulationState(Name, parent, context.Bridges);
-            context.AddLocalState(State);
+                context.AddLocalState<IBiasingSimulationState>(new FlatSimulationState(Name, parent, context.Bridges));
         }
 
         /// <inheritdoc/>

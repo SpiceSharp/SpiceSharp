@@ -19,11 +19,6 @@ namespace SpiceSharp.Components.Subcircuits
         private readonly LocalSimulationState _state;
 
         /// <summary>
-        /// Gets the complex simulation state.
-        /// </summary>
-        public IComplexSimulationState State { get; }
-
-        /// <summary>
         /// Gets the frequency update behaviors in the subcircuit.
         /// </summary>
         protected BehaviorList<IFrequencyUpdateBehavior> UpdateBehaviors { get; private set; }
@@ -40,10 +35,12 @@ namespace SpiceSharp.Components.Subcircuits
             UpdateBehaviors = context.GetBehaviors<IFrequencyUpdateBehavior>();
             var parent = context.GetState<IComplexSimulationState>();
             if (parameters.LocalSolver)
-                State = _state = new LocalSimulationState(Name, parent, new SparseComplexSolver());
+            {
+                _state = new LocalSimulationState(Name, parent, new SparseComplexSolver());
+                context.AddLocalState<IComplexSimulationState>(_state);
+            }
             else
-                State = new FlatSimulationState(Name, parent, context.Bridges);
-            context.AddLocalState(State);
+                context.AddLocalState<IComplexSimulationState>(new FlatSimulationState(Name, parent, context.Bridges));
         }
 
         /// <inheritdoc/>
