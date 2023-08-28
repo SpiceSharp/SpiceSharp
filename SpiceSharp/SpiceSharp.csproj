@@ -9,13 +9,13 @@
 		<PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
 		<PackageLicenseUrl></PackageLicenseUrl>
 		<RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
-		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
-		<AssemblyVersion>3.1.5.0</AssemblyVersion>
+		<PackageTags>circuit electronics netlist spice simulator simulation ode solver design</PackageTags>
+		<AssemblyVersion>3.1.6.0</AssemblyVersion>
 		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Company />
 		<NeutralLanguage>en</NeutralLanguage>
-		<FileVersion>3.1.5.0</FileVersion>
+		<FileVersion>3.1.6.0</FileVersion>
 		<DebugType>full</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
