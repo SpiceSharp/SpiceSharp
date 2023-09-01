@@ -10,6 +10,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// An <see cref="IDerivative"/> for <see cref="Trapezoidal"/>.
             /// </summary>
             /// <seealso cref="IDerivative" />
+            /// <seealso cref="ITruncatable"/>
             protected class DerivativeInstance : IDerivative, ITruncatable
             {
                 private readonly int _index;

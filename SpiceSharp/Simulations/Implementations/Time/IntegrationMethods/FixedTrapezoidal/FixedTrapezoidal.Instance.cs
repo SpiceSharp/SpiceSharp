@@ -4,52 +4,54 @@ using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {
-    public partial class FixedEuler
+    public partial class FixedTrapezoidal
     {
         /// <summary>
-        /// An <see cref="IIntegrationMethod"/> for <see cref="FixedEuler"/>.
+        /// An <see cref="IIntegrationMethod"/> for <see cref="FixedTrapezoidal"/>.
         /// </summary>
-        /// <seealso cref="IIntegrationMethod" />
+        /// <seealso cref="IIntegrationMethod"/>
         protected partial class Instance : IIntegrationMethod
         {
-            private readonly FixedEuler _parameters;
+            private readonly FixedTrapezoidal _parameters;
             private int _stateValues = 0;
-            private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(2);
+            private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(3);
             private readonly List<IIntegrationState> _registeredStates = new List<IIntegrationState>();
+            private readonly double _xmu;
+            private double _ag0, _ag1;
 
-            /// <inheritdoc/>
-            public int MaxOrder => 1;
+            /// <inheritdoc />
+            public int MaxOrder => 2;
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public int Order { get; set; }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public double BaseTime { get; private set; }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public double Time { get; private set; }
 
-            /// <inheritdoc/>
-            public double Slope { get; private set; }
+            /// <inheritdoc />
+            public double Slope => _ag0;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="Instance"/> class.
+            /// Creates a new <see cref="Instance"/>.
             /// </summary>
             /// <param name="parameters">The parameters.</param>
-            public Instance(FixedEuler parameters)
+            public Instance(FixedTrapezoidal parameters)
             {
                 _parameters = parameters.ThrowIfNull(nameof(parameters));
-                Slope = 1.0 / _parameters.Step;
+                _xmu = parameters.Xmu;
                 Order = 1;
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public void RegisterState(IIntegrationState state)
             {
                 _registeredStates.Add(state);
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public IDerivative CreateDerivative(bool track = true)
             {
                 var result = new DerivativeInstance(this, _stateValues + 1);
@@ -57,7 +59,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 return result;
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public IIntegral CreateIntegral(bool track = true)
             {
                 var result = new IntegralInstance(this, _stateValues + 1);
@@ -71,7 +73,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <inheritdoc/>
             public double GetPreviousTimestep(int index) => _parameters.Step;
 
-            /// <inheritdoc/>
+
+            /// <inheritdoc />
             public void Initialize()
             {
                 Time = 0.0;
@@ -81,30 +84,45 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 _states.Set(i => new DenseVector<double>(_stateValues));
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public void Prepare()
             {
                 _states.Accept();
                 BaseTime = Time;
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public void Probe()
             {
                 Time = BaseTime + _parameters.Step;
-                Slope = 1.0 / _parameters.Step;
+
+                switch (Order)
+                {
+                    case 1:
+                        _ag0 = 1.0 / _parameters.Step;
+                        _ag1 = -1.0 / _parameters.Step;
+                        break;
+
+                    case 2:
+                        _ag0 = 1.0 / _parameters.Step / (1.0 - _xmu);
+                        _ag1 = _xmu / (1.0 - _xmu);
+                        break;
+                }
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             /// <remarks>
-            /// This method ignores any timesteps!
+            /// This method ignores any variable timesteps!
             /// </remarks>
             public bool Evaluate(double maxTimestep)
             {
+                // We have two orders to play with, so increase if possible
+                if (Order < MaxOrder)
+                    Order++;
                 return true;
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public void Accept()
             {
                 if (BaseTime.Equals(0.0))
@@ -116,15 +134,15 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     state.Accept();
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             public void Reject()
             {
                 throw new TimestepTooSmallException(0.0, BaseTime);
             }
 
-            /// <inheritdoc/>
+            /// <inheritdoc />
             /// <remarks>
-            /// This method ignores any timesteps!
+            /// This method ignores any variable timesteps!
             /// </remarks>
             public void Truncate(double maxTimestep)
             {

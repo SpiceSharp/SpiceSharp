@@ -129,6 +129,23 @@ namespace SpiceSharpTest.Simulations
         }
 
         [Test]
+        public void When_FixedTrapezoidal_Expect_NoException()
+        {
+            // Create a circuit with a nonlinear component
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-6, 1e-6, 1e-6, 1e-5, 2e-5)),
+                new NonlinearResistor("NLR1", "in", "out")
+                    .SetParameter("a", 100.0)
+                    .SetParameter("b", 0.7),
+                new Capacitor("C1", "out", "0", 1.0e-9)
+                );
+
+            // Create a transient analysis using Backward Euler with fixed timesteps
+            var tran = new Transient("tran", new FixedTrapezoidal { Step = 1e-7, StopTime = 10e-5 });
+            tran.Run(ckt);
+        }
+
+        [Test]
         public void When_FixedEulerDerivative_Expect_Reference()
         {
             // Test a single derivative state
@@ -139,8 +156,24 @@ namespace SpiceSharpTest.Simulations
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
 
-                // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
+                // Fixed Euler has the worst accuracy, relaxed errors.
                 new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-1));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_FixedTrapezoidalDerivative_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new FixedTrapezoidal { Step = 1e-7, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Fixed Euler has the worst accuracy, relaxed errors.
+                new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-4, 1e-6));
             tran.Run(ckt);
         }
 
@@ -155,8 +188,24 @@ namespace SpiceSharpTest.Simulations
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
 
-                // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
+                // Fixed Euler has the worst accuracy, relaxed errors.
                 new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-3, 1e-8));
+            tran.Run(ckt);
+        }
+
+        [Test]
+        public void When_FixedTrapezoidalIntegral_Expect_Reference()
+        {
+            // Test a single derivative state
+            var f = 100.0;
+            var w = 2 * Math.PI * f;
+
+            var tran = new Transient("tran", new FixedTrapezoidal { Step = 1e-7, StopTime = 1 / f });
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", new Sine(0, 1, f)),
+
+                // Fixed trapezoidal has worse accuracy, relaxed errors.
+                new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-4, 1e-6));
             tran.Run(ckt);
         }
 
