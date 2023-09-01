@@ -11,7 +11,7 @@ namespace SpiceSharp.ParameterSets
     /// also makes the collection itself an <see cref="IParameterSet"/>.
     /// </summary>
     /// <seealso cref="IParameterSetCollection" />
-    /// <seealso cref="IParameterSet" />
+    /// <seealso cref="ParameterSet" />
     public class ParameterSetCollection : ParameterSet,
         IParameterSetCollection
     {

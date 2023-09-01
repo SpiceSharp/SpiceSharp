@@ -2,20 +2,20 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0</TargetFrameworks>
-		<Version>3.1.6</Version>
+		<Version>3.1.7</Version>
 		<Authors>Sven Boulanger</Authors>
 		<Title>Spice#</Title>
 		<Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
 		<PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
 		<PackageLicenseUrl></PackageLicenseUrl>
 		<RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
-		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
-		<AssemblyVersion>3.1.5.0</AssemblyVersion>
+		<PackageTags>circuit electronics netlist spice simulator simulation ode solver design</PackageTags>
+		<AssemblyVersion>3.1.7.0</AssemblyVersion>
 		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Company />
 		<NeutralLanguage>en</NeutralLanguage>
-		<FileVersion>3.1.5.0</FileVersion>
+		<FileVersion>3.1.7.0</FileVersion>
 		<DebugType>full</DebugType>
 		<DebugSymbols>true</DebugSymbols>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,6 +23,7 @@
 		<LangVersion>latest</LangVersion>
 		<PackageIcon>logo_full.png</PackageIcon>
 		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.5|AnyCPU'">
@@ -66,6 +67,10 @@
 		<None Include="..\docs\api\images\logo_full.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
 	<ItemGroup>

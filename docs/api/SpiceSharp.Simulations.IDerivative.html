@@ -1,17 +1,17 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Interface IDerivative
-   </title>
+ </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Interface IDerivative
-   ">
-    <meta name="generator" content="docfx 2.52.0.0">
-    
+ ">
+    <meta name="generator" content="docfx ">
+  
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
@@ -20,13 +20,13 @@
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    
-    
-    
+  
+  
+  
   </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
               </a>
@@ -50,7 +50,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -60,7 +60,7 @@
         </div>
       </header>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -70,32 +70,34 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="SpiceSharp.Simulations.IDerivative">
-  
-  
+
+
+
   <h1 id="SpiceSharp_Simulations_IDerivative" data-uid="SpiceSharp.Simulations.IDerivative" class="text-break">Interface IDerivative
-  </h1>
-  <div class="markdown level0 summary"><p>Describes a state with a value and its derivative.</p>
+</h1>
+  <div class="markdown level0 summary"><p>Describes a state with a value that can also calculate the
+derivative with respect to time.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.Simulations.html">SpiceSharp.Simulations</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.html">SpiceSharp</a>.<a class="xref" href="SpiceSharp.Simulations.html">Simulations</a></h6>
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_IDerivative_syntax">Syntax</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public interface IDerivative</code></pre>
   </div>
   <h3 id="properties">Properties
-  </h3>
+</h3>
   <a id="SpiceSharp_Simulations_IDerivative_Derivative_" data-uid="SpiceSharp.Simulations.IDerivative.Derivative*"></a>
   <h4 id="SpiceSharp_Simulations_IDerivative_Derivative" data-uid="SpiceSharp.Simulations.IDerivative.Derivative">Derivative</h4>
   <div class="markdown level1 summary"><p>Gets the current derivative.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">double Derivative { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -104,7 +106,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><p>The derivative.</p>
 </td>
       </tr>
@@ -115,12 +117,12 @@
   <div class="markdown level1 summary"><p>Gets or sets the current value.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">double Value { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -129,26 +131,35 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><p>The value.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
-  </h3>
+</h3>
+  <a id="SpiceSharp_Simulations_IDerivative_Derive_" data-uid="SpiceSharp.Simulations.IDerivative.Derive*"></a>
+  <h4 id="SpiceSharp_Simulations_IDerivative_Derive" data-uid="SpiceSharp.Simulations.IDerivative.Derive">Derive()</h4>
+  <div class="markdown level1 summary"><p>Integrates the state (calculates the derivative from the value).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Derive()</code></pre>
+  </div>
   <a id="SpiceSharp_Simulations_IDerivative_GetContributions_" data-uid="SpiceSharp.Simulations.IDerivative.GetContributions*"></a>
-  <h4 id="SpiceSharp_Simulations_IDerivative_GetContributions_System_Double_" data-uid="SpiceSharp.Simulations.IDerivative.GetContributions(System.Double)">GetContributions(Double)</h4>
+  <h4 id="SpiceSharp_Simulations_IDerivative_GetContributions_System_Double_" data-uid="SpiceSharp.Simulations.IDerivative.GetContributions(System.Double)">GetContributions(double)</h4>
   <div class="markdown level1 summary"><p>Gets the Y-matrix value and Rhs-vector contributions for the derived quantity.
 The relationship is assumed to be linear.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">JacobianInfo GetContributions(double coefficient)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -158,7 +169,7 @@ The relationship is assumed to be linear.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><span class="parametername">coefficient</span></td>
         <td><p>The coefficient of the quantity that is derived.</p>
 </td>
@@ -166,7 +177,7 @@ The relationship is assumed to be linear.</p>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -182,16 +193,16 @@ The relationship is assumed to be linear.</p>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_IDerivative_GetContributions_" data-uid="SpiceSharp.Simulations.IDerivative.GetContributions*"></a>
-  <h4 id="SpiceSharp_Simulations_IDerivative_GetContributions_System_Double_System_Double_" data-uid="SpiceSharp.Simulations.IDerivative.GetContributions(System.Double,System.Double)">GetContributions(Double, Double)</h4>
+  <h4 id="SpiceSharp_Simulations_IDerivative_GetContributions_System_Double_System_Double_" data-uid="SpiceSharp.Simulations.IDerivative.GetContributions(System.Double,System.Double)">GetContributions(double, double)</h4>
   <div class="markdown level1 summary"><p>Gets the Y-matrix value and Rhs-vector contributions for the derived quantity.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">JacobianInfo GetContributions(double coefficient, double currentValue)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -201,13 +212,13 @@ The relationship is assumed to be linear.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><span class="parametername">coefficient</span></td>
         <td><p>The coefficient of the quantity that is derived.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><span class="parametername">currentValue</span></td>
         <td><p>The current value of the derived state.</p>
 </td>
@@ -215,7 +226,7 @@ The relationship is assumed to be linear.</p>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -231,16 +242,16 @@ The relationship is assumed to be linear.</p>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_IDerivative_GetPreviousDerivative_" data-uid="SpiceSharp.Simulations.IDerivative.GetPreviousDerivative*"></a>
-  <h4 id="SpiceSharp_Simulations_IDerivative_GetPreviousDerivative_System_Int32_" data-uid="SpiceSharp.Simulations.IDerivative.GetPreviousDerivative(System.Int32)">GetPreviousDerivative(Int32)</h4>
+  <h4 id="SpiceSharp_Simulations_IDerivative_GetPreviousDerivative_System_Int32_" data-uid="SpiceSharp.Simulations.IDerivative.GetPreviousDerivative(System.Int32)">GetPreviousDerivative(int)</h4>
   <div class="markdown level1 summary"><p>Gets a previous derivative. An index of 0 indicates the current value.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">double GetPreviousDerivative(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -250,7 +261,7 @@ The relationship is assumed to be linear.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
         <td><span class="parametername">index</span></td>
         <td><p>The number of points to go back in time.</p>
 </td>
@@ -258,7 +269,7 @@ The relationship is assumed to be linear.</p>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -267,23 +278,23 @@ The relationship is assumed to be linear.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><p>The previous derivative.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <a id="SpiceSharp_Simulations_IDerivative_GetPreviousValue_" data-uid="SpiceSharp.Simulations.IDerivative.GetPreviousValue*"></a>
-  <h4 id="SpiceSharp_Simulations_IDerivative_GetPreviousValue_System_Int32_" data-uid="SpiceSharp.Simulations.IDerivative.GetPreviousValue(System.Int32)">GetPreviousValue(Int32)</h4>
+  <h4 id="SpiceSharp_Simulations_IDerivative_GetPreviousValue_System_Int32_" data-uid="SpiceSharp.Simulations.IDerivative.GetPreviousValue(System.Int32)">GetPreviousValue(int)</h4>
   <div class="markdown level1 summary"><p>Gets a previous value. An index of 0 indicates the current value.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">double GetPreviousValue(int index)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -293,7 +304,7 @@ The relationship is assumed to be linear.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
         <td><span class="parametername">index</span></td>
         <td><p>The index.</p>
 </td>
@@ -301,7 +312,7 @@ The relationship is assumed to be linear.</p>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-bordered table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -310,38 +321,31 @@ The relationship is assumed to be linear.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Double</span></td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
         <td><p>The previous value.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_IDerivative_Integrate_" data-uid="SpiceSharp.Simulations.IDerivative.Integrate*"></a>
-  <h4 id="SpiceSharp_Simulations_IDerivative_Integrate" data-uid="SpiceSharp.Simulations.IDerivative.Integrate">Integrate()</h4>
-  <div class="markdown level1 summary"><p>Integrates the state (calculates the derivative).</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Integrate()</code></pre>
-  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, String)</a>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
   </div>
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -349,14 +353,14 @@ The relationship is assumed to be linear.</p>
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            
-            <span>Generated by <strong>DocFX</strong></span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
   </body>

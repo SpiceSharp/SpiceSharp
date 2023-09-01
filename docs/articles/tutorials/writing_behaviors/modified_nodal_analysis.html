@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Modified Nodal Analysis </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Modified Nodal Analysis ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="modified-nodal-analysis">Modified Nodal Analysis</h1>
+
+<p>Before starting to build custom components, it is first important to discuss how the simulator solves the node voltages of a circuit. This is done using a modified nodal analysis.</p>
+<h2 id="nodal-analysis">Nodal Analysis</h2>
+<p>Regular <em>nodal analysis</em> works by describing Kirchoff's Current Laws (KCL) in each and every node of the circuit. Let's take a look at the following circuit.</p>
+<p align="center"><img src="images/example_circuit_mna.svg" alt="Example circuit"></p>
+<p>This circuit contains two types of elements:</p>
+<ul>
+<li><em>Current sources</em> do not care about the voltage across them and will always drive the specified current.</li>
+<li><em>Resistors</em> obey Ohm's law, such that \(v_R = R\cdot i_R\).</li>
+</ul>
+<p><em>Kirchoff's Current Law</em> states that the <em>sum</em> of all <em>currents</em> in every <em>node</em> has to equal <em>zero</em>. In this circuit, we have 3 nodes, and so we get a system of 3 equations:</p>
+<p><span class="math">\(\left\{\begin{matrix} &amp; -1A + \frac{v_1 - v_2}{5\Omega} = 0 \\ &amp; \frac{v_2 - v_1}{5\Omega} + \frac{v_2}{10\Omega} + \frac{v_2 - v_3}{7\Omega} = 0 \\ &amp; \frac{v_3 - v_2}{7\Omega} - 1.5A = 0 \end{matrix}\right.\)</span></p>
+<p>This can conveniently be written in matrix formulation as well:</p>
+<p>$$\begin{pmatrix}
+\frac{1}{5\Omega} &amp; -\frac{1}{5\Omega} &amp; 0 \\
+-\frac{1}{5\Omega} &amp; \frac{1}{5\Omega}+\frac{1}{7\Omega}+\frac{1}{10\Omega} &amp; -\frac{1}{7\Omega} \\
+0 &amp; -\frac{1}{7\Omega} &amp; \frac{1}{7\Omega}
+\end{pmatrix}
+\begin{pmatrix}
+v_1 \\
+v_2 \\
+v_3
+\end{pmatrix} =
+\begin{pmatrix}
+1A \\
+0 \\
+1.5A
+\end{pmatrix}$$</p>
+<p>The 3x3 matrix on the left is called the <em>admittance matrix</em>, while the vector on the right is the current vector. Pretty much <em>all</em> circuit simulation software will formulate a problem in terms of a <em>matrix</em> and a <em>vector</em>, for which the simulator will then solve \(G\cdot v = i\).</p>
+<h2 id="modified-nodal-analysis-1">Modified Nodal Analysis</h2>
+<p>What happens if we introduce a <em>voltage source</em> into the circuit?</p>
+<p align="center"><img src="images/example_circuit_mna_2.svg" alt="Example circuit"></p>
+<p>We can't use the KCL equation now, because it is in the nature of a voltage source to <em>not care</em> about currents! This is where we get creative. We define a new unknown variable, the current through the voltage source \(i_V\). We also add the equation of the voltage source to the system of equations:</p>
+<p><span class="math">\(v_1 = 1V\)</span></p>
+<p>And what we find is the useful result: we can combine it all using a matrix and vector again!</p>
+<p>$$\begin{pmatrix}
+\frac{1}{5\Omega} &amp; -\frac{1}{5\Omega} &amp; 0 &amp; 1\\
+-\frac{1}{5\Omega} &amp; \frac{1}{5\Omega} + \frac{1}{10\Omega} + \frac{1}{7\Omega} &amp; -\frac{1}{7\Omega} &amp; 0\\
+0 &amp; -\frac{1}{7\Omega} &amp; \frac{1}{7\Omega} &amp; 0\\
+1 &amp; 0 &amp; 0 &amp; 0
+\end{pmatrix}
+\begin{pmatrix}
+v_1 \\
+v_2 \\
+v_3 \\
+i_V
+\end{pmatrix} =
+\begin{pmatrix}
+0 \\
+0 \\
+1.5A \\
+1V
+\end{pmatrix}$$</p>
+<p>We notice the following:</p>
+<ul>
+<li>We added an unknown <em>current</em>. For <em>regular</em> Nodal Analysis, the unknowns were always a <em>voltage</em>.</li>
+<li>The circuit got <em>larger</em> because we added a voltage source. While this may not be desirable when working out the equations by hand, a simulator will not really feel the difference.</li>
+<li>Each component in the circuit has its own unique contribution to the admittance matrix and current vector. This is a direct consequence of KCL that says that the <strong>sum</strong> of currents needs to total to 0. In fact, the resistors only affect the elements to which they are connected to - ie. the nodes where they push in or take away current. For example, the 5 ohm resistor only affects the rows and columns of \(v_1\) and \(v_2\). This turns out to be an important general property! A Spice simulator will give the matrix and vector to each component, and the component will <em>stamp</em> the matrix and vector with contributions that depend <em>only</em> on that component!</li>
+</ul>
+<h2 id="nonlinear-components">Nonlinear components</h2>
+<p>The electronics world is littered with so-called nonlinear components. These are components where the currents and voltages do not relate <em>linearly</em>, but are often connected in complex ways.</p>
+<p>A resistor is a <em>linear</em> component, because the current and voltage are connected via Ohm's law: <span class="math">\(v = R\cdot i\)</span>. However, a diode is a <em>non-linear</em> component, because the diode current depends on the diode voltage following the equation <span class="math">\(i = I_{ss}(e^{qV/\eta kT} - 1)\)</span>.</p>
+<p>In order to solve a circuit with nonlinear components, we have to resort to <em>iterative</em> algorithms. Spice-based simulators almost exclusively use the <strong>Newton-Raphson</strong> algorithm. This algorithm tries to solve, generally speaking, the following problem:</p>
+<p>$$\left\{\begin{matrix}
+f_1(x_1, x_2, ..., x_n) &amp;= 0 \\
+\vdots &amp;= 0 \\
+f_n(x_1, x_2, ..., x_n) &amp;= 0 \\
+\end{matrix}\right. $$</p>
+<p>The notations in bold have multiple elements.</p>
+<p>For this problem, the functions <span class="math">\(f_1, f_2, ..., f_n\)</span> do <em>not</em> have to be linear! The algorithm then shows that, starting from an initial vector <span class="math">\(\pmb x^{(0)}\)</span>, a <em>new</em> vector, <span class="math">\(\pmb x^{(1)}\)</span> can be approximated that is <em>closer</em> to the real solution. The new solution <span class="math">\(x^{(1)}\)</span> can be found by solving the following set of equations.</p>
+<p><span class="math">\(\pmb J(\pmb x^{(0)})\cdot\Delta\pmb x^{(1)} = -\pmb F(\pmb x^{(0)}) \Rightarrow \pmb x^{(1)} = \pmb x^{(0)}+\Delta\pmb x^{(1)}\)</span></p>
+<p>Where <span class="math">\(\pmb J(x^{(0)})\)</span> is called the <em>Jacobian</em>, which is</p>
+<p>$$\pmb J(\pmb x) =
+\begin{pmatrix}
+\frac{\partial f_1}{\partial x_1} &amp; \frac{\partial f_1}{\partial x_2} &amp; \dots &amp; \frac{\partial f_1}{x_n} \\
+\frac{\partial f_2}{\partial x_1} &amp; \frac{\partial f_2}{\partial x_2} &amp; \dots &amp; \frac{\partial f_2}{x_n} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\frac{\partial f_n}{\partial x_1} &amp; \frac{\partial f_n}{\partial x_2} &amp; \dots &amp; \frac{\partial f_n}{x_n}
+\end{pmatrix}$$</p>
+<p>We can repeat the process using \(\pmb x^{(1)}\) as a starting solution, to get even <em>closer</em> to the real position. As we repeat this algorithm, the solution will <em>converge</em> to the real solution. Once our solution is almost indistinguishably close to the real solution, we accept it as our final solution.</p>
+<p>One more thing to note is that Spice will modify the algorithm a tiny bit.</p>
+<p>$$\begin{aligned}
+\pmb J(\pmb x^{(0)})\cdot\Delta\pmb x^{(k+1)} &amp; = -\pmb F(\pmb x^{(k)}) \\
+&amp; \Downarrow \\
+\pmb J(\pmb x^{(k)})\cdot\left(\pmb x^{(k+1)}-\pmb x^{(k)}\right) &amp; = -\pmb F(\pmb x^{(k)}) \\
+&amp; \Downarrow \\
+\pmb J(\pmb x^{(k)})\cdot \pmb x^{(k+1)} &amp; = -\pmb F(\pmb x^{(k)}) + \pmb J(\pmb x^{(k)})\cdot\pmb x^{(k)} \
+\end{aligned}$$</p>
+<p>The <em>Jacobian</em> is from here on out called the <em>Y-matrix</em>. Everything on the right of the equation is called the <em>Right-Hand Side vector</em> (RHS vector). This formulation allows us to immediately calculate the <em>next</em> solution rather than the increment to find the next solution.</p>
+<h2 id="how-spice-does-it">How Spice# does it</h2>
+<p>Spice# will give each behavior the chance to add contributions to the allocated elements when computing a new iteration. This is called <em>loading</em> the Y-matrix and RHS-vector. After all components have loaded the matrix and vector, the simulator will solve the system of equations to find the solution for this iteration.</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,17 +1,17 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Namespace SpiceSharp.Components
-   </title>
+ </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace SpiceSharp.Components
-   ">
-    <meta name="generator" content="docfx 2.52.0.0">
-    
+ ">
+    <meta name="generator" content="docfx ">
+  
     <link rel="shortcut icon" href="../api/images/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
@@ -20,13 +20,13 @@
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-    
-    
-    
+  
+  
+  
   </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
               </a>
@@ -50,7 +50,7 @@
             </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -60,7 +60,7 @@
         </div>
       </header>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -70,14 +70,21 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="SpiceSharp.Components">
-  
+
   <h1 id="SpiceSharp_Components" data-uid="SpiceSharp.Components" class="text-break">Namespace SpiceSharp.Components
-  </h1>
+</h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
-    <h3 id="classes">Classes
-  </h3>
+    <h3 id="classes">
+Classes
+</h3>
+      <h4><a class="xref" href="SpiceSharp.Components.AM.html">AM</a></h4>
+      <section><p>This class implements an amplitude-modulated waveform.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.AM.Instance.html">AM.Instance</a></h4>
+      <section><p>The instance for a SFFM waveform.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Components.BipolarJunctionTransistor.html">BipolarJunctionTransistor</a></h4>
       <section><p>A bipolar junction transistor (BJT).</p>
 </section>
@@ -93,12 +100,11 @@
       <h4><a class="xref" href="SpiceSharp.Components.Component.html">Component</a></h4>
       <section><p>A class that represents a (Spice) component/device.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Components.Component-1.html">Component&lt;TContext&gt;</a></h4>
-      <section><p>A class that represents a (Spice) component/device.
-This implementation will by default use dependency injection to find behaviors.</p>
-</section>
       <h4><a class="xref" href="SpiceSharp.Components.ComponentBindingContext.html">ComponentBindingContext</a></h4>
       <section><p>Context for binding an <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a> created by an <a class="xref" href="SpiceSharp.Components.IComponent.html">IComponent</a> to an <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Component-1.html">Component&lt;P&gt;</a></h4>
+      <section><p>A class that represents a (Spice) component/device with parameters.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Components.CurrentControlledCurrentSource.html">CurrentControlledCurrentSource</a></h4>
       <section><p>A current-controlled current source.</p>
@@ -178,6 +184,16 @@ This implementation will by default use dependency injection to find behaviors.<
       <h4><a class="xref" href="SpiceSharp.Components.ResistorModel.html">ResistorModel</a></h4>
       <section><p>A model for semiconductor <a class="xref" href="SpiceSharp.Components.Resistor.html">Resistor</a></p>
 </section>
+      <h4><a class="xref" href="SpiceSharp.Components.SFFM.html">SFFM</a></h4>
+      <section><p>This class implements a single-frequency FM waveform.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.SFFM.Instance.html">SFFM.Instance</a></h4>
+      <section><p>The instance for a SFFM waveform.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Components.Sampler.html">Sampler</a></h4>
+      <section><p>A sampler that forces a time simulation to hit certain time-points
+using timestep truncation.</p>
+</section>
       <h4><a class="xref" href="SpiceSharp.Components.Sine.html">Sine</a></h4>
       <section><p>This class describes a sine wave.</p>
 </section>
@@ -208,13 +224,15 @@ This implementation will by default use dependency injection to find behaviors.<
       <h4><a class="xref" href="SpiceSharp.Components.VoltageSwitchModel.html">VoltageSwitchModel</a></h4>
       <section><p>A model for a <a class="xref" href="SpiceSharp.Components.VoltageSwitch.html">VoltageSwitch</a></p>
 </section>
-    <h3 id="structs">Structs
-  </h3>
+    <h3 id="structs">
+Structs
+</h3>
       <h4><a class="xref" href="SpiceSharp.Components.Point.html">Point</a></h4>
       <section><p>Represents a point for a <a class="xref" href="SpiceSharp.Components.Pwl.html">Pwl</a>.</p>
 </section>
-    <h3 id="interfaces">Interfaces
-  </h3>
+    <h3 id="interfaces">
+Interfaces
+</h3>
       <h4><a class="xref" href="SpiceSharp.Components.IBranchedBehavior-1.html">IBranchedBehavior&lt;T&gt;</a></h4>
       <section><p>An interface describing a behavior with a branch equation.</p>
 </section>
@@ -242,19 +260,22 @@ This implementation will by default use dependency injection to find behaviors.<
       <h4><a class="xref" href="SpiceSharp.Components.IWorkDistributor-1.html">IWorkDistributor&lt;R&gt;</a></h4>
       <section><p>A distributor of work that can be done in parallel while needing to return a value.</p>
 </section>
+
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -262,14 +283,14 @@ This implementation will by default use dependency injection to find behaviors.<
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            
-            <span>Generated by <strong>DocFX</strong></span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
   </body>

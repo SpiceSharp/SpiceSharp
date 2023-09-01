@@ -1,0 +1,592 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class AM
+ </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class AM
+ ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Components.AM">
+
+
+
+  <h1 id="SpiceSharp_Components_AM" data-uid="SpiceSharp.Components.AM" class="text-break">Class AM
+</h1>
+  <div class="markdown level0 summary"><p>This class implements an amplitude-modulated waveform.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html">ParameterSet</a></div>
+    <div class="level2"><a class="xref" href="SpiceSharp.ParameterSets.ParameterSet-1.html">ParameterSet</a>&lt;<a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>&gt;</div>
+    <div class="level3"><span class="xref">AM</span></div>
+  </div>
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a></div>
+    <div><a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable</a>&lt;<a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>[]&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet</a>&lt;<a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet</a>&lt;<a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;&gt;</div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet-1.html#SpiceSharp_ParameterSets_ParameterSet_1_Clone">ParameterSet&lt;IWaveformDescription&gt;.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_SetParameter__1_System_String___0_">ParameterSet.SetParameter&lt;P&gt;(string, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TrySetParameter__1_System_String___0_">ParameterSet.TrySetParameter&lt;P&gt;(string, P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_GetProperty__1_System_String_">ParameterSet.GetProperty&lt;P&gt;(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_TryGetProperty__1_System_String___0__">ParameterSet.TryGetProperty&lt;P&gt;(string, out P)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreateParameterSetter__1_System_String_">ParameterSet.CreateParameterSetter&lt;P&gt;(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.ParameterSet.html#SpiceSharp_ParameterSets_ParameterSet_CreatePropertyGetter__1_System_String_">ParameterSet.CreatePropertyGetter&lt;P&gt;(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.html">SpiceSharp</a>.<a class="xref" href="SpiceSharp.Components.html">Components</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Components_AM_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class AM : ParameterSet&lt;IWaveformDescription&gt;, IWaveformDescription, ICloneable&lt;IWaveformDescription&gt;, IImportParameterSet&lt;double&gt;, IExportPropertySet&lt;double&gt;, IImportParameterSet&lt;double[]&gt;, IImportParameterSet&lt;GivenParameter&lt;double&gt;&gt;, IExportPropertySet&lt;GivenParameter&lt;double&gt;&gt;, IParameterSet</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <a id="SpiceSharp_Components_AM__ctor_" data-uid="SpiceSharp.Components.AM.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_AM__ctor" data-uid="SpiceSharp.Components.AM.#ctor">AM()</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.SFFM.html">SFFM</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AM()</code></pre>
+  </div>
+  <a id="SpiceSharp_Components_AM__ctor_" data-uid="SpiceSharp.Components.AM.#ctor*"></a>
+  <h4 id="SpiceSharp_Components_AM__ctor_System_Double_System_Double_System_Double_System_Double_System_Double_System_Double_System_Double_" data-uid="SpiceSharp.Components.AM.#ctor(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">AM(double, double, double, double, double, double, double)</h4>
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Components.SFFM.html">SFFM</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AM(double amplitude, double offset, double modulationFrequency, double carrierFrequency, double signalDelay, double carrierPhase, double signalPhase)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">amplitude</span></td>
+        <td><p>The amplitude value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>The offset value.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">modulationFrequency</span></td>
+        <td><p>The modulation frequency.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">carrierFrequency</span></td>
+        <td><p>The carrier frequency.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">signalDelay</span></td>
+        <td><p>The signal delay.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">carrierPhase</span></td>
+        <td><p>The carrier phase.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">signalPhase</span></td>
+        <td><p>The signal phase.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <a id="SpiceSharp_Components_AM_Amplitude_" data-uid="SpiceSharp.Components.AM.Amplitude*"></a>
+  <h4 id="SpiceSharp_Components_AM_Amplitude" data-uid="SpiceSharp.Components.AM.Amplitude">Amplitude</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the amplitude value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;va&quot;)]
+[ParameterInfo(&quot;Amplitude&quot;)]
+public double Amplitude { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_CarrierFrequency_" data-uid="SpiceSharp.Components.AM.CarrierFrequency*"></a>
+  <h4 id="SpiceSharp_Components_AM_CarrierFrequency" data-uid="SpiceSharp.Components.AM.CarrierFrequency">CarrierFrequency</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the signal frequency.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;fc&quot;)]
+[ParameterInfo(&quot;Carrier frequency&quot;, Units = &quot;Hz&quot;)]
+[GreaterThanOrEquals(0)]
+public GivenParameter&lt;double&gt; CarrierFrequency { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_CarrierPhase_" data-uid="SpiceSharp.Components.AM.CarrierPhase*"></a>
+  <h4 id="SpiceSharp_Components_AM_CarrierPhase" data-uid="SpiceSharp.Components.AM.CarrierPhase">CarrierPhase</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the carrier phase.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;phasec&quot;)]
+[ParameterInfo(&quot;Carrier phsae&quot;, Units = &quot;&#176;&quot;)]
+public double CarrierPhase { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_ModulationFrequency_" data-uid="SpiceSharp.Components.AM.ModulationFrequency*"></a>
+  <h4 id="SpiceSharp_Components_AM_ModulationFrequency" data-uid="SpiceSharp.Components.AM.ModulationFrequency">ModulationFrequency</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the carrier frequency.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;mf&quot;)]
+[ParameterInfo(&quot;Modulation frequency&quot;, Units = &quot;Hz&quot;)]
+[GreaterThanOrEquals(0)]
+public GivenParameter&lt;double&gt; ModulationFrequency { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_Offset_" data-uid="SpiceSharp.Components.AM.Offset*"></a>
+  <h4 id="SpiceSharp_Components_AM_Offset" data-uid="SpiceSharp.Components.AM.Offset">Offset</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the offset value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;vo&quot;)]
+[ParameterInfo(&quot;DC offset&quot;)]
+public double Offset { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_SignalDelay_" data-uid="SpiceSharp.Components.AM.SignalDelay*"></a>
+  <h4 id="SpiceSharp_Components_AM_SignalDelay" data-uid="SpiceSharp.Components.AM.SignalDelay">SignalDelay</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the signal delay.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;td&quot;)]
+[ParameterInfo(&quot;Signal delay&quot;, Units = &quot;s&quot;)]
+public double SignalDelay { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_SignalPhase_" data-uid="SpiceSharp.Components.AM.SignalPhase*"></a>
+  <h4 id="SpiceSharp_Components_AM_SignalPhase" data-uid="SpiceSharp.Components.AM.SignalPhase">SignalPhase</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the signal phase.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;phases&quot;)]
+[ParameterInfo(&quot;Signal phase&quot;, Units = &quot;&#176;&quot;)]
+public double SignalPhase { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <a id="SpiceSharp_Components_AM_Create_" data-uid="SpiceSharp.Components.AM.Create*"></a>
+  <h4 id="SpiceSharp_Components_AM_Create_SpiceSharp_Entities_IBindingContext_" data-uid="SpiceSharp.Components.AM.Create(SpiceSharp.Entities.IBindingContext)">Create(IBindingContext)</h4>
+  <div class="markdown level1 summary"><p>Creates a waveform instance for the specified simulation and entity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IWaveform Create(IBindingContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IBindingContext.html">IBindingContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>The binding context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Components.IWaveform.html">IWaveform</a></td>
+        <td><p>The waveform instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_SetSffm_" data-uid="SpiceSharp.Components.AM.SetSffm*"></a>
+  <h4 id="SpiceSharp_Components_AM_SetSffm_System_Double___" data-uid="SpiceSharp.Components.AM.SetSffm(System.Double[])">SetSffm(double[])</h4>
+  <div class="markdown level1 summary"><p>Sets all SFFM parameters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[ParameterName(&quot;sffm&quot;)]
+[ParameterInfo(&quot;Specify the waveform as a vector&quot;)]
+public void SetSffm(double[] sffm)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>[]</td>
+        <td><span class="parametername">sffm</span></td>
+        <td><p>The SFFM parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if <code class="paramref">sffm</code> does not have 1 - 5 parameters.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Components_AM_ToString_" data-uid="SpiceSharp.Components.AM.ToString*"></a>
+  <h4 id="SpiceSharp_Components_AM_ToString" data-uid="SpiceSharp.Components.AM.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Returns a string that represents the current single-frequency FM waveform.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><p>A string that represents the current SFFM.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.IWaveformDescription.html">IWaveformDescription</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ICloneable-1.html">ICloneable&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IImportParameterSet-1.html">IImportParameterSet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet&lt;P&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Documentation.Documentation.html#SpiceSharp_Documentation_Documentation_ParameterValues__1_SpiceSharp_ParameterSets_IParameterSet_System_Boolean_">Documentation.ParameterValues&lt;T&gt;(IParameterSet, bool)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Documentation.Documentation.html#SpiceSharp_Documentation_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSet_">Documentation.Parameters(IParameterSet)</a>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

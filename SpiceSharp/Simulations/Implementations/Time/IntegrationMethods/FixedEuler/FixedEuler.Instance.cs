@@ -30,7 +30,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             public double Time { get; private set; }
 
             /// <inheritdoc/>
-            public double Slope { get; }
+            public double Slope { get; private set; }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance"/> class.
@@ -92,6 +92,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             public void Probe()
             {
                 Time = BaseTime + _parameters.Step;
+                Slope = 1.0 / _parameters.Step;
             }
 
             /// <inheritdoc/>

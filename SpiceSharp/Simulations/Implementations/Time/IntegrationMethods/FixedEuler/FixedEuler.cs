@@ -1,22 +1,22 @@
-﻿using SpiceSharp.ParameterSets;
-using System;
+﻿using System;
 using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {
     /// <summary>
     /// A configuration that allows doing transient analysis using a fixed-timestep backward Euler integration method.
-    /// This method is one of the fastest, but can also lead to inaccurate results.
+    /// This method is one of the fastest, but can also lead to more inaccurate results.
+    /// Reducing the timestep will improve the truncation errors, but can worsen numerical accuracy.
     /// </summary>
     /// <seealso cref="TimeParameters" />
     [GeneratedParameters]
     public partial class FixedEuler : TimeParameters
     {
         /// <summary>
-        /// Gets or sets the step.
+        /// Gets or sets the timestep.
         /// </summary>
         /// <value>
-        /// The step.
+        /// The timestep.
         /// </value>
         /// <exception cref="ArgumentException">Thrown if the timestep is negative or zero.</exception>
         [ParameterName("step"), ParameterInfo("The fixed timestep used.")]

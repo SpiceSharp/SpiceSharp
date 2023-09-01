@@ -10,10 +10,9 @@ $$\frac{v_A - v_B}{R} = i_R$$
 
 The resistor current \\(i_R\\) will flow *out* of node A, and *into* node B, so we have contributions to row A and row B:
 
-$$
-\begin{aligned}
+$$\begin{aligned}
 f_A(...,v_A,...,v_B,...) = +i_R &=& \frac{1}{R}v_A &-\frac{1}{R}v_B\\\\
-f_B(...,v_A,...,v_B,...) = -i_R &=& -\frac{1}{R}v_A &+\frac{1}{R}v_B 
+f_B(...,v_A,...,v_B,...) = -i_R &=& -\frac{1}{R}v_A &+\frac{1}{R}v_B\\
 \end{aligned}$$
 
 Our convention is that a current flowing *out* of a node is *positive*. Now we can compute the contributions to the *Y-matrix*:
@@ -29,10 +28,10 @@ All other *Y-matrix* contributions are 0. Similarly, we calculate the contributi
 
 $$\begin{aligned}
 RHS_A &= \pmb J_A\pmb x^{(k)} - f_A(...,v_A^{(k)},...,v_B^{(k)},...)\\\\
-&=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right )\\\\
+&=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right)\\\\
 &=0\\\\
 RHS_B &= \pmb J_B\pmb x^{(k)} - f_B(...,v_A^{(k)},...,v_B^{(k)},...)\\\\
-&=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right )\\\\
+&=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right)\\\\
 &=0
 \end{aligned}$$
 

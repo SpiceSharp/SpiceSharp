@@ -3,14 +3,11 @@
     {
       "src": [
         {
-          "files": [ "SpiceSharp/bin/Debug/net45/*.dll" ]
+          "files": [ "SpiceSharp/SpiceSharp.csproj" ]
         }
       ],
       "force": false,
-      "dest": "SpiceSharp/bin/api",
-	    "properties": {
-		    "TargetFramework": "net45"
-	    }
+      "dest": "SpiceSharp/bin/api"
 	  }
   ],
   "build": {

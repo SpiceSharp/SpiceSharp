@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="example_circuit_mna_res.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg3109"
+   version="1.1"
+   viewBox="0 0 32.561665 54.549229"
+   height="54.549229mm"
+   width="32.561665mm">
+  <defs
+     id="defs3103">
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="Arrow1Mend"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000001;fill-opacity:1;fill-rule:evenodd;stroke:#000001;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 Z"
+         id="path3749" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-x="-7"
+     inkscape:window-height="1008"
+     inkscape:window-width="980"
+     fit-margin-bottom="5"
+     fit-margin-right="5"
+     fit-margin-left="5"
+     fit-margin-top="5"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="134.47009"
+     inkscape:cx="107.32012"
+     inkscape:zoom="2.8321734"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata3106">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-41.178768,-96.383551)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       id="path2878"
+       style="fill:none;stroke:#000000;stroke-width:0.926042;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 60.72519,131.46712 V 128.689 l 1.85208,-0.92604 -3.70417,-1.85209 3.70417,-1.85208 -3.70417,-1.85208 3.70417,-1.85209 -3.70417,-1.85208 1.85209,-0.92604 v -2.77813"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;line-height:1.25;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583px"
+       x="64.551193"
+       y="125.16859"
+       id="text3043"><tspan
+         style="stroke-width:0.264583px"
+         sodipodi:role="line"
+         id="tspan3041"
+         x="64.551193"
+         y="125.16859">R</tspan></text>
+    <g
+       id="g1080"
+       transform="matrix(0,0.26458333,-0.26458333,0,196.83126,96.277537)">
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path7873"
+         d="M 70,514.41665 H 54.25"
+         style="fill:none;stroke:#000000;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         r="5.25"
+         cy="514.41663"
+         cx="49"
+         id="path1076"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       transform="matrix(0,-0.26458333,0.26458333,0,-75.38088,149.98795)"
+       id="g3718">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 70,514.41665 H 54.25"
+         id="path3714"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
+      <circle
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="circle3716"
+         cx="49"
+         cy="514.41663"
+         r="5.25" />
+    </g>
+    <text
+       id="text3722"
+       y="103.04292"
+       x="57.26683"
+       style="font-size:7.05556px;line-height:1.25;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583px"
+       xml:space="preserve"><tspan
+         style="font-size:7.05556px;stroke-width:0.264583px"
+         y="103.04292"
+         x="57.26683"
+         id="tspan3720"
+         sodipodi:role="line">v<tspan
+   id="tspan4018"
+   style="font-size:65%;baseline-shift:sub">A</tspan></tspan></text>
+    <text
+       id="text3726"
+       y="144.52167"
+       x="58.294456"
+       style="font-size:7.05556px;line-height:1.25;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583px"
+       xml:space="preserve"><tspan
+         style="font-size:7.05556px;baseline-shift:baseline;stroke-width:0.264583px"
+         y="144.52167"
+         x="58.294456"
+         id="tspan3724"
+         sodipodi:role="line">v<tspan
+   id="tspan4020"
+   style="font-size:65%;baseline-shift:sub">B</tspan></tspan></text>
+    <text
+       id="text3734"
+       y="123.22177"
+       x="45.682674"
+       style="font-size:7.05556px;line-height:1.25;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';letter-spacing:0px;word-spacing:0px;fill:#000000;stroke-width:0.264583px"
+       xml:space="preserve"><tspan
+         style="font-size:7.05556px;stroke-width:0.264583px"
+         y="123.22177"
+         x="45.682674"
+         id="tspan3732"
+         sodipodi:role="line">i<tspan
+   id="tspan4022"
+   style="font-size:65%;baseline-shift:sub">R</tspan></tspan></text>
+    <path
+       id="path3738"
+       d="m 53.903686,116.58891 v 12.7052"
+       style="fill:none;stroke:#000001;stroke-width:0.926;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#Arrow1Mend)" />
+  </g>
+</svg>

@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Temperature-dependent behaviors </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Temperature-dependent behaviors ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="temperature-dependent-behaviors">Temperature-dependent behaviors</h1>
+
+<p>Temperature-dependent behaviors implement the <strong><a class="xref" href="../../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong> interface. It should contain any calculations that - as the name implies - are temperature-dependent.</p>
+<p>This behavior can also be used to calculate properties that would otherwise be done inside much more frequently executed methods. Any expensive calculations that are not necessary inside other behaviors can be added to here.</p>
+<h2 id="example---a-diode">Example - A diode</h2>
+<p>How would we create a temperature-dependent behavior for our diode model?</p>
+<p align="center"><img src="images/example_circuit_mna_dio.svg" alt="Diode definition" width="100px"></p>
+<p><span class="math">\(i_D = I_{SS}\left(e^\frac{v_A-v_B}{\eta V_T}\right)\)</span></p>
+<p>We can see in the denominator that the multiplication of <span class="math">\(\eta\)</span> and <span class="math">\(V_T = \frac{k\cdot T}{q}\)</span> can be computed in the temperature-dependent behavior, because it is temperature-dependent and doesn't need to be re-evaluated every time the current/voltage changes.</p>
+<pre><code class="lang-csharp" name="Circuit">using SpiceSharp;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.Simulations;
+
+namespace SpiceSharpTest.DiodeBehaviors
+{
+    /// &lt;summary&gt;
+    /// Temperature-dependent behavior for a diode.
+    /// &lt;/summary&gt;
+    public class DiodeTemperature : Behavior, ITemperatureBehavior
+    {
+        private readonly ITemperatureSimulationState _temperatureState;
+
+        /// &lt;summary&gt;
+        /// Gets the diode parameters.
+        /// &lt;/summary&gt;
+        protected DiodeParameters Parameters { get; }
+
+        /// &lt;summary&gt;
+        /// Gets the denominator in the exponent.
+        /// &lt;/summary&gt;
+        protected double Vte { get; private set; }
+
+        /// &lt;summary&gt;
+        /// Creates a new temperature-dependent behavior
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;context&quot;&gt;&lt;/param&gt;
+        public DiodeTemperature(IBindingContext context)
+            : base(context)
+        {
+            Parameters = context.GetParameterSet&lt;DiodeParameters&gt;();
+            _temperatureState = context.GetState&lt;ITemperatureSimulationState&gt;();
+        }
+
+        /// &lt;summary&gt;
+        /// Calculates temperature-dependent properties.
+        /// &lt;/summary&gt;
+        public void Temperature()
+        {
+            Vte = Parameters.Eta * Constants.KOverQ * _temperatureState.Temperature;
+        }
+    }
+}
+</code></pre>
+<p>The first thing to look at is the constructor. It accepts an <em><a class="xref" href="../../../api/SpiceSharp.Entities.IBindingContext.html">IBindingContext</a></em>. This interface provides access to:</p>
+<ul>
+<li>The entity or component parameters. In this case, we extract the diode parameters that we created ourselves. This method will throw an exception if the parameters don't exist.</li>
+<li>The simulation states. In this case we are interested in the simulation state that deals with temperature, meaning the <em><a class="xref" href="../../../api/SpiceSharp.Simulations.ITemperatureSimulationState.html">ITemperatureSimulationState</a></em>.</li>
+</ul>
+<p>This temperature-dependent behaviors can serve as a base for other behaviors that can implement it, so I decided to have them protected. The other behaviors don't really need to deal with temperature, so I kept the simulation state private.</p>
+<p>The only method in the class is fairly straight-forward. It is and should be called whenever the temperature changes, and it simply calculates the denominator of our diode equation.</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

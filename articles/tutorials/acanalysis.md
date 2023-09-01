@@ -32,6 +32,6 @@ C1 out 0 1u
 .END
 ```
 
-Plotting the output amplitude in decibels gives the following low-pass filter characteristic, neatly showing the bandwidth to be a bit higher than 10Hz (the exact \(f_{-3dB} = 15.915Hz\)).
+Plotting the output amplitude in decibels gives the following low-pass filter characteristic, neatly showing the bandwidth to be a bit higher than 10Hz (the exact $f_{-3dB} = 15.915Hz$).
 
 <p align="center"><img src="images/example_ACgraph.svg" /></p>
