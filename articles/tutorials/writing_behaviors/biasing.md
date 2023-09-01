@@ -34,7 +34,7 @@ The actual implementation looks like this:
 
 [!code-csharp[Circuit](../../../SpiceSharpTest/Examples/SimpleDiode/DiodeBiasing.cs)]
 
-Rather than an *[IBindingContext](xref:SpiceSharp.Elements.IBindingContext)*, we now use an *[IComponentBindingContext](xref:SpiceSharp.Components.IComponentBindingContext)*, which also contains information about the nodes our component is connected to!
+Rather than an *[IBindingContext](xref:SpiceSharp.Entities.IBindingContext)*, we now use an *[IComponentBindingContext](xref:SpiceSharp.Components.IComponentBindingContext)*, which also contains information about the nodes our component is connected to!
 
 First, we want to have access to the *[IBiasingSimulationState](xref:SpiceSharp.Simulations.IBiasingSimulationState)*, which keeps track of these node voltages, and also contains the solver used to solve the KCL equations (or other equations for that matter). From this simulation state, we ask for the shared variable (our node voltages), and use those variables to get some elements inside the Y-matrix and RHS-vector.
 

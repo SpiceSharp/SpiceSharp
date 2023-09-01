@@ -1,0 +1,13 @@
+- name: Custom models
+  href: custom_models.md
+  items:
+  - name: Modified Nodal Analysis
+    href: modified_nodal_analysis.md
+  - name: Biasing behaviors
+    href: biasing.md
+  - name: Parameters
+    href: parameters.md
+  - name: Example - resistor
+    href: example_resistor.md
+  - name: Example - diode
+    href: example_diode.md

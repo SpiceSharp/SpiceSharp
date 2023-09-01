@@ -5,5 +5,5 @@
   href: structure/toc.yml
   topicHref: structure/flow.md
 - name: Custom components
-  href: custom_components/toc.yml
-  topicHref: custom_components/custom_models.md
+  href: tutorials/writing_behaviors/toc.yml
+  topicHref: tutorials/writing_behaviors/custom_models.md

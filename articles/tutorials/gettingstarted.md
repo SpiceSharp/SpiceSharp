@@ -22,7 +22,7 @@ Let's start with a very simple circuit known as a *resistive voltage divider*. T
 
 The output voltage of this circuit is 2/3 times the input voltage for those wondering.
 
-The components are stored in a **[Circuit](xref:SpiceSharp.Circuit)**. This is a container for so-called entities (**[IEntity](xref:SpiceSharp.Entities.IEntity)**), which is the term for anything that can affect simulations. The **[Circuit](xref:SpiceSharp.Circuit)** is defined in the namespace *@SpiceSharp*, while all default components are typically specified in the namespace *@SpiceSharp.Components*.
+The components are stored in a **[Circuit](xref:SpiceSharp.Circuit)**. This is a container for so-called entities (**[IEntity](xref:SpiceSharp.Entities.IEntity)**), which is the term for anything that can affect simulations. The **[Circuit](xref:SpiceSharp.Circuit)** is defined in the namespace *[SpiceSharp](xref:SpiceSharp)*, while all default components are typically specified in the namespace *[SpiceSharp.Components](xref:SpiceSharp.Components)*.
 
 [!code-csharp[Circuit](../../SpiceSharpTest/BasicExampleTests.cs#example01_build)]
 

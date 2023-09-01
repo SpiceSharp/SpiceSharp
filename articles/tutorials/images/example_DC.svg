@@ -1,10 +1,26 @@
-<?xml version="1.0" encoding="utf-16"?><svg width="480" height="237" viewBox="-47.6 -21.19 96 47.48" xmlns="http://www.w3.org/2000/svg"><style>path, polyline, line, circle, polygon {
+<?xml version="1.0" encoding="utf-8"?><svg xmlns:sc="https://github.com/svenboulanger/SimpleCircuit" width="400" height="310" viewBox="-17.4 -12 80.76 62.8" xmlns="http://www.w3.org/2000/svg"><style>path, polyline, line, circle, polygon {
     stroke: black;
     stroke-width: 0.5pt;
     fill: none;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
-.point circle { fill: black; }
+.diagram path, .diagram circle, .diagram polygon { fill: white; }
 .plane { stroke-width: 1pt; }
-text { font-family: Tahoma, Verdana, Segoe, sans-serif; }</style><g id="gnd1" class="ground"><path d="M -28.6 18.29 L -28.6 21.29 M -33.6 21.29 L -23.6 21.29 M -31.6 23.29 L -25.6 23.29 M -29.6 25.29 L -27.6 25.29" /></g><g id="V1" class="voltagesource"><circle cx="-28.6" cy="5.916" r="6" /><path d="M -28.6 13.92 L -28.6 11.92 M -29.6 8.916 L -27.6 8.916 M -29.6 2.916 L -27.6 2.916 M -28.6 3.916 L -28.6 1.916 M -28.6 -0.08434 L -28.6 -2.084" /><text text-anchor="end" x="-36.6" y="5.916" font-size="4pt"><tspan y="7.236" x="-36.6">Vgs</tspan></text></g><g id="Mn1" class="nmos"><path d="M -8.6 -6.461 L -6.6 -6.461 M -6.6 -0.4613 L -6.6 -12.46 M -4.6 -0.4613 L -4.6 -12.46" /><polyline points="-0.6,1.539 -0.6,-2.461 -4.6,-2.461" /><polyline points="-0.6,-14.46 -0.6,-10.46 -4.6,-10.46" /><line x1="-4.6" y1="-6.461" x2="-0.6" y2="-6.461" /><text text-anchor="start" x="2.4" y="-3.461" font-size="4pt"><tspan y="0.5387" x="2.4">M1</tspan></text></g><g id="X:86" class="point" /><g id="V2" class="voltagesource"><circle cx="29.4" cy="-0.9466" r="6" /><path d="M 29.4 7.053 L 29.4 5.053 M 30.4 2.053 L 28.4 2.053 M 30.4 -3.947 L 28.4 -3.947 M 29.4 -2.947 L 29.4 -4.947 M 29.4 -6.947 L 29.4 -8.947" /><text text-anchor="start" x="37.4" y="-0.9466" font-size="4pt"><tspan y="0.3734" x="37.4">Vds</tspan></text></g><g id="X:87" class="point" /><g id="X:88" class="point" /><g id="gnd2" class="ground"><path d="M 29.4 18.29 L 29.4 21.29 M 24.4 21.29 L 34.4 21.29 M 26.4 23.29 L 32.4 23.29 M 28.4 25.29 L 30.4 25.29" /></g><g id="gnd3" class="ground"><path d="M -0.6 18.29 L -0.6 21.29 M -5.6 21.29 L 4.4 21.29 M -3.6 23.29 L 2.4 23.29 M -1.6 25.29 L 0.4 25.29" /></g><g id="X:89" class="point" /><polyline points="-28.6,18.29 -28.6,13.92" class="wire" id="W1" /><polyline points="-28.6,-2.084 -28.6,-6.461 -8.6,-6.461" class="wire" id="W2" /><polyline points="-0.6,-14.46 -0.6,-20.19 29.4,-20.19 29.4,-8.947" class="wire" id="W3" /><polyline points="29.4,7.053 29.4,18.29" class="wire" id="W4" /><polyline points="-0.6,1.539 -0.6,18.29" class="wire" id="W5" /><polyline points="-0.6,-6.461 -0.6,-6.461 -0.6,1.539" class="wire" id="W6" /></svg>
+.battery .neg { stroke-width: 0.75pt; }
+text { font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 4pt; }
+.small tspan { font-size: 0.8em; }
+.text-stroke { stroke-width: 0.025em; }
+.text-symbol { fill: black; stroke: none; }
+.marker { fill: black; }
+.marker.erd { fill: white; }
+.dotted { stroke-dasharray: 0.5 2; }
+.dashed { stroke-dasharray: 2 2; }
+</style><metadata><sc:version>1.2.5.0</sc:version></metadata><metadata><sc:script><![CDATA[
+GND <u> Vgs("V_gs") <u r> [g]NMOS1("M_1")
+NMOS1[s] <d> GND
+NMOS1[b] <r +20 d> GND
+GND <u> Vds("V_ds", flip) <u l arrow> Xds("I_ds") <l +20 d> [d]NMOS1
+- Xds.angle = 90
+(y GND)
+]]></sc:script></metadata><g class="wire" id="w-1"><path class="wire" d="M0 45.8 v-9.914" /></g><g class="wire" id="w-2"><path class="wire" d="M0 23.89 v-9.914 h9.99" /></g><g class="wire" id="w-3"><path class="wire" d="M15.99 17.97 v27.83" /></g><g class="wire" id="w-4"><path class="wire" d="M11.99 13.97 h19.98 v31.83" /></g><g class="wire" id="w-5"><path class="wire" d="M45.96 45.8 v-16.9" /></g><g class="wire" id="w-6"><path class="wire" d="M45.96 16.9 v-16.9 h-9.99" /><polygon class="marker arrow" points="38.47,1 35.97,-0 38.47,-1" /></g><g class="wire" id="w-7"><path class="wire" d="M35.97 -0 h-19.98 v9.973" /></g><g class="ground" id="GND-1"><path d="M-5 45.8 h10 M-3 47.8 h6 M-1 49.8 h2" /></g><g class="vs" id="Vgs"><circle cx="0" cy="29.89" r="6" /><g class="signs"><path class="plus" d="M-1 26.89 h2 M0 27.89 v-2" /><line x1="-1" y1="32.89" x2="1" y2="32.89" class="minus" /></g><text><tspan text-anchor="end" x="-8" y="30.89"><tspan>V</tspan><tspan dy="0.5em" style="font-size: 0.75em">gs</tspan></tspan></text></g><g class="nmos" id="NMOS1"><path class="gate" d="M11.99 19.97 v-12 M9.99 19.97 v-12" /><line x1="15.99" y1="17.97" x2="11.99" y2="17.97" class="source" /><line x1="15.99" y1="9.973" x2="11.99" y2="9.973" class="drain" /><text><tspan text-anchor="start" x="18.99" y="21.97"><tspan>M</tspan><tspan dy="0.5em" style="font-size: 0.75em">1</tspan></tspan></text></g><g class="ground" id="GND-2"><path d="M10.99 45.8 h10 M12.99 47.8 h6 M14.99 49.8 h2" /></g><g class="ground" id="GND-3"><path d="M26.97 45.8 h10 M28.97 47.8 h6 M30.97 49.8 h2" /></g><g class="ground" id="GND-4"><path d="M40.96 45.8 h10 M42.96 47.8 h6 M44.96 49.8 h2" /></g><g class="vs flip" id="Vds"><circle cx="45.96" cy="22.9" r="6" /><g class="signs"><path class="plus" d="M46.96 19.9 h-2 M45.96 20.9 v-2" /><line x1="46.96" y1="25.9" x2="44.96" y2="25.9" class="minus" /></g><text><tspan text-anchor="start" x="53.96" y="23.9"><tspan>V</tspan><tspan dy="0.5em" style="font-size: 0.75em">ds</tspan></tspan></text></g><g class="point dot" id="Xds"><text><tspan text-anchor="middle" x="35.97" y="-6"><tspan>I</tspan><tspan dy="0.5em" style="font-size: 0.75em">ds</tspan></tspan></text></g></svg>

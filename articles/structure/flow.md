@@ -38,7 +38,7 @@ For example, the parameters of a resistor are defined in @SpiceSharp.Components.
 
 It is possible to set the resistance of the resistor simply by using any of the following methods:
 
-```
+```csharp
 // Set resistance straight from the constructor to 1kOhm
 var resistor = new Resistor("R1", "a", "b", 1e3);
 

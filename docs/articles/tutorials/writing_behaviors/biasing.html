@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Biasing behaviors </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Biasing behaviors ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="biasing-behaviors">Biasing behaviors</h1>
+
+<p>Biasing behaviors describe the DC operation. That means, no time-dependent or frequency-dependent calculations need to be done here (although they can). This behavior is described by the <em><a class="xref" href="../../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></em>.</p>
+<p>In order to understand what happens in this behavior, you need to understand what <em><a href="modified_nodal_analysis.html">Modified Nodal Analysis (MNA)</a></em> is.</p>
+<p>In general, what we need to do is gain access to the Y-matrix (the Jacobian), and the right-hand side vector. Then we need to find out which row represents the KCL equation that we need. Then, we need to calculate the current-contributions to it.</p>
+<p>To summarize, we are interested in both the current, and the derivatives of that current to any other variable that needs to be solved (usually the voltages). So if we have a current <span class="math">\(i_A\)</span> that flows <em>into</em> node A and depends on some voltages <span class="math">\(v_1, v_2, ...\)</span>, then we need to know</p>
+<ul>
+<li>All partial derivatives of <span class="math">\(i_A\)</span> with respect to all the unknown voltages (<span class="math">\(\frac{\partial i_A}{\partial v_i}\)</span>).</li>
+<li>Of course the actual current (using all those voltage).</li>
+</ul>
+<p>While loading, we then need to <em>load</em> the Y-matrix as follows:</p>
+<ul>
+<li><span class="math">\(Y_{A,i} = \frac{\partial i_A}{\partial v_i}\)</span></li>
+<li><span class="math">\(rhs_i = i_A - \Sigma_i \frac{\partial i_A}{\partial v_i}\cdot v_i = i_A - \Sigma_i Y_{A,i}\cdot v_i\)</span></li>
+</ul>
+<p>This is probably one of the trickiest parts to understand and implement, but it is also the part where all the magic happens!</p>
+<h2 id="example---a-diode">Example - A diode</h2>
+<p>We calculate these derivatives for our diode example.</p>
+<p align="center"><img src="images/example_circuit_mna_dio.svg" alt="Diode definition" width="100px"></p>
+<p><span class="math">\(i_D = I_{SS}\left(e^\frac{v_A-v_B}{\eta V_T}\right)\)</span></p>
+<p>The current depends on two voltage, <span class="math">\(v_A\)</span> and <span class="math">\(v_B\)</span>. So we need to calculate the derivative of <span class="math">\(i_D\)</span> with respect to those two voltage. We find:</p>
+<p><span class="math">\(\frac{\partial i_D}{\partial v_A} = -\frac{\partial i_D}{\partial v_B} = \frac{i_D}{\eta \cdot V_T}\)</span></p>
+<p>The actual implementation looks like this:</p>
+<pre><code class="lang-csharp" name="Circuit">using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
+using SpiceSharp.Components;
+using SpiceSharp.Simulations;
+using System;
+
+namespace SpiceSharpTest.DiodeBehaviors
+{
+    /// &lt;summary&gt;
+    /// Biasing behavior for a diode.
+    /// &lt;/summary&gt;
+    public class DiodeBiasing : DiodeTemperature, IBiasingBehavior
+    {
+        private readonly IVariable&lt;double&gt; _variableA, _variableB;
+        private readonly ElementSet&lt;double&gt; _elements;
+
+        /// &lt;summary&gt;
+        /// Creates a new diode biasing behavior.
+        /// &lt;/summary&gt;
+        /// &lt;param name=&quot;context&quot;&gt;&lt;/param&gt;
+        public DiodeBiasing(IComponentBindingContext context)
+            : base(context)
+        {
+            var biasingState = context.GetState&lt;IBiasingSimulationState&gt;();
+
+            // Get the variables that our diode is connected to
+            _variableA = biasingState.GetSharedVariable(context.Nodes[0]);
+            _variableB = biasingState.GetSharedVariable(context.Nodes[1]);
+
+            // Get the rows in the solver that represent the KCL equations
+            var rowA = biasingState.Map[_variableA];
+            var rowB = biasingState.Map[_variableB];
+            _elements = new ElementSet&lt;double&gt;(biasingState.Solver,
+                new MatrixLocation[]
+                {
+                    // The Y-matrix elements
+                    new MatrixLocation(rowA, rowA),
+                    new MatrixLocation(rowA, rowB),
+                    new MatrixLocation(rowB, rowA),
+                    new MatrixLocation(rowB, rowB)
+                },
+                new int[] {
+                    // The right-hand side vector elements
+                    rowA,
+                    rowB
+                });
+
+        }
+
+        /// &lt;summary&gt;
+        /// Loads the Y-matrix and right-hand side vector.
+        /// &lt;/summary&gt;
+        public void Load()
+        {
+            // Let us calculate the derivatives and the current
+            double voltage = _variableA.Value - _variableB.Value;
+            double current = Parameters.Iss * (Math.Exp(voltage / Vte) - 1.0);
+            double derivative = current / Vte;
+
+            // Load the Y-matrix and RHS vector
+            double rhs = current - voltage * derivative;
+            _elements.Add(
+                // Y-matrix contributions
+                derivative, -derivative,
+                -derivative, derivative,
+                // RHS vector contributions
+                -rhs, rhs);
+        }
+    }
+}
+</code></pre>
+<p>Rather than an <em><a class="xref" href="../../../api/SpiceSharp.Entities.IBindingContext.html">IBindingContext</a></em>, we now use an <em><a class="xref" href="../../../api/SpiceSharp.Components.IComponentBindingContext.html">IComponentBindingContext</a></em>, which also contains information about the nodes our component is connected to!</p>
+<p>First, we want to have access to the <em><a class="xref" href="../../../api/SpiceSharp.Simulations.IBiasingSimulationState.html">IBiasingSimulationState</a></em>, which keeps track of these node voltages, and also contains the solver used to solve the KCL equations (or other equations for that matter). From this simulation state, we ask for the shared variable (our node voltages), and use those variables to get some elements inside the Y-matrix and RHS-vector.</p>
+<p>We need 6 elements in total:</p>
+<ul>
+<li><span class="math">\(Y_{A,A} = \frac{\partial i_A}{\partial v_A}\)</span></li>
+<li><span class="math">\(Y_{A,B} = \frac{\partial i_A}{\partial v_B}\)</span></li>
+<li><span class="math">\(Y_{B,A} = \frac{\partial i_B}{\partial v_A}\)</span></li>
+<li><span class="math">\(Y_{B,B} = \frac{\partial i_B}{\partial v_B}\)</span></li>
+<li><span class="math">\(RHS_A = i_A - \frac{\partial i_A}{\partial v_A}\cdot v_A - \frac{\partial i_A}{\partial v_B}\cdot v_B\)</span></li>
+<li><span class="math">\(RHS_B = i_B - \frac{\partial i_B}{\partial v_A}\cdot v_A - \frac{\partial i_B}{\partial v_B}\cdot v_B\)</span></li>
+</ul>
+<p>Since <span class="math">\(i_B = -i_A = i_D\)</span>, and since <span class="math">\(\frac{\partial i_A}{\partial v_A} = \frac{\partial i_B}{\partial v_B} = -\frac{\partial i_A}{\partial v_B} = -\frac{\partial i_B}{\partial v_A} = \frac{i_D}{\eta\cdot V_T} = g\)</span>, the result is actually a bit simpler to write:</p>
+<ul>
+<li><span class="math">\(Y_{A,A} = g\)</span></li>
+<li><span class="math">\(Y_{A,B} = -g\)</span></li>
+<li><span class="math">\(Y_{B,A} = -g\)</span></li>
+<li><span class="math">\(Y_{B,B} = g\)</span></li>
+<li><span class="math">\(RHS_A = -(i_D - g\cdot (v_A-v_B))\)</span></li>
+<li><span class="math">\(RHS_B = i_D - g\cdot (v_A-v_B)\)</span></li>
+</ul>
+<p>These 6 contributions are potentially computed many times, given that the simulation will converge <em>iteratively</em> to a solution. So it is best that you try to keep the calculation time of these contributions to the Y-matrix and RHS-vector as fast as possible. Of course, this also depends on how accurate you want the model to be. The more modern transistor models for example, quickly need multiple pages of code to just model its behavior accurately.</p>
+<p>Also note that we are using the property <code>Vte</code>, which was calculated by the temperature behavior to avoid some computation time in this heavily used loading method.</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

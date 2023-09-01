@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IIntegral
+ </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IIntegral
+ ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Simulations.IIntegral">
+
+
+
+  <h1 id="SpiceSharp_Simulations_IIntegral" data-uid="SpiceSharp.Simulations.IIntegral" class="text-break">Interface IIntegral
+</h1>
+  <div class="markdown level0 summary"><p>Describes a state with a derivative that can also calculate the
+integrated value with respect tjo time.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.html">SpiceSharp</a>.<a class="xref" href="SpiceSharp.Simulations.html">Simulations</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Simulations_IIntegral_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IIntegral</code></pre>
+  </div>
+  <h3 id="properties">Properties
+</h3>
+  <a id="SpiceSharp_Simulations_IIntegral_Derivative_" data-uid="SpiceSharp.Simulations.IIntegral.Derivative*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_Derivative" data-uid="SpiceSharp.Simulations.IIntegral.Derivative">Derivative</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the current derivative.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double Derivative { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>The derivative.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_IIntegral_Value_" data-uid="SpiceSharp.Simulations.IIntegral.Value*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_Value" data-uid="SpiceSharp.Simulations.IIntegral.Value">Value</h4>
+  <div class="markdown level1 summary"><p>Gets the current value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double Value { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>The value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <a id="SpiceSharp_Simulations_IIntegral_GetContributions_" data-uid="SpiceSharp.Simulations.IIntegral.GetContributions*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_GetContributions_System_Double_" data-uid="SpiceSharp.Simulations.IIntegral.GetContributions(System.Double)">GetContributions(double)</h4>
+  <div class="markdown level1 summary"><p>Gets the Y-matrix value and Rhs-vector contributions for the derived quantity.
+The relationship is assumed to be linear.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">JacobianInfo GetContributions(double coefficient)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">coefficient</span></td>
+        <td><p>The coefficient of the quantity that is integrated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.JacobianInfo.html">JacobianInfo</a></td>
+        <td><p>The information for filling in the Y-matrix and Rhs-vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_IIntegral_GetContributions_" data-uid="SpiceSharp.Simulations.IIntegral.GetContributions*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_GetContributions_System_Double_System_Double_" data-uid="SpiceSharp.Simulations.IIntegral.GetContributions(System.Double,System.Double)">GetContributions(double, double)</h4>
+  <div class="markdown level1 summary"><p>Gets the Y-matrix value and Rhs-vector contributions for the integrated quantity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">JacobianInfo GetContributions(double coefficient, double currentValue)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">coefficient</span></td>
+        <td><p>The coefficient of the quantity that is integrated.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">currentValue</span></td>
+        <td><p>The current value of the integrated state.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.JacobianInfo.html">JacobianInfo</a></td>
+        <td><p>The information for fijlling in the Y-matrix and Rhs-vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_IIntegral_GetPreviousDerivative_" data-uid="SpiceSharp.Simulations.IIntegral.GetPreviousDerivative*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_GetPreviousDerivative_System_Int32_" data-uid="SpiceSharp.Simulations.IIntegral.GetPreviousDerivative(System.Int32)">GetPreviousDerivative(int)</h4>
+  <div class="markdown level1 summary"><p>Gets a previous derivative. An index of 0 indicates the current derivative.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double GetPreviousDerivative(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The number of points to go back in time.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>The previous value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_IIntegral_GetPreviousValue_" data-uid="SpiceSharp.Simulations.IIntegral.GetPreviousValue*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_GetPreviousValue_System_Int32_" data-uid="SpiceSharp.Simulations.IIntegral.GetPreviousValue(System.Int32)">GetPreviousValue(int)</h4>
+  <div class="markdown level1 summary"><p>Gets a previous value. An index of 0 indicates the current value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">double GetPreviousValue(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The number of points to go back in time.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>The previous value.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_IIntegral_Integrate_" data-uid="SpiceSharp.Simulations.IIntegral.Integrate*"></a>
+  <h4 id="SpiceSharp_Simulations_IIntegral_Integrate" data-uid="SpiceSharp.Simulations.IIntegral.Integrate">Integrate()</h4>
+  <div class="markdown level1 summary"><p>Integrates the state (calculates the value from the derivative).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Integrate()</code></pre>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
+  </div>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

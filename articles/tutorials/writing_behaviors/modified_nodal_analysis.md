@@ -20,18 +20,18 @@ $$\left\{\begin{matrix} & -1A + \frac{v_1 - v_2}{5\Omega} = 0 \\ & \frac{v_2 - v
 This can conveniently be written in matrix formulation as well:
 
 $$\begin{pmatrix}
-  \frac{1}{5\Omega} & -\frac{1}{5\Omega} & 0 \\
-  -\frac{1}{5\Omega} & \frac{1}{5\Omega}+\frac{1}{7\Omega}+\frac{1}{10\Omega} & -\frac{1}{7\Omega} \\
+  \frac{1}{5\Omega} & -\frac{1}{5\Omega} & 0 \\\\
+  -\frac{1}{5\Omega} & \frac{1}{5\Omega}+\frac{1}{7\Omega}+\frac{1}{10\Omega} & -\frac{1}{7\Omega} \\\\
   0 & -\frac{1}{7\Omega} & \frac{1}{7\Omega}
 \end{pmatrix}
 \begin{pmatrix}
-  v_1 \\
-  v_2 \\
+  v_1 \\\\
+  v_2 \\\\
   v_3
 \end{pmatrix} = 
 \begin{pmatrix}
-  1A \\
-  0 \\
+  1A \\\\
+  0 \\\\
   1.5A
 \end{pmatrix}$$
 
@@ -50,21 +50,21 @@ $$v_1 = 1V$$
 And what we find is the useful result: we can combine it all using a matrix and vector again!
 
 $$\begin{pmatrix}
-  \frac{1}{5\Omega} & -\frac{1}{5\Omega} & 0 & 1 \\
-  -\frac{1}{5\Omega} & \frac{1}{5\Omega} + \frac{1}{10\Omega} + \frac{1}{7\Omega} & -\frac{1}{7\Omega} & 0 \\
-  0 & -\frac{1}{7\Omega} & \frac{1}{7\Omega} & 0 \\
+  \frac{1}{5\Omega} & -\frac{1}{5\Omega} & 0 & 1\\\\
+  -\frac{1}{5\Omega} & \frac{1}{5\Omega} + \frac{1}{10\Omega} + \frac{1}{7\Omega} & -\frac{1}{7\Omega} & 0\\\\
+  0 & -\frac{1}{7\Omega} & \frac{1}{7\Omega} & 0\\\\
   1 & 0 & 0 & 0
 \end{pmatrix}
 \begin{pmatrix} 
-  v_1 \\
-  v_2 \\
-  v_3 \\
+  v_1 \\\\
+  v_2 \\\\
+  v_3 \\\\
   i_V
 \end{pmatrix} = 
 \begin{pmatrix}
-  0 \\
-  0 \\
-  1.5A \\
+  0 \\\\
+  0 \\\\
+  1.5A \\\\
   1V
 \end{pmatrix}$$
 
@@ -81,14 +81,11 @@ A resistor is a *linear* component, because the current and voltage are connecte
 
 In order to solve a circuit with nonlinear components, we have to resort to *iterative* algorithms. Spice-based simulators almost exclusively use the **Newton-Raphson** algorithm. This algorithm tries to solve, generally speaking, the following problem:
 
-$$\left\{
-  \begin{matrix}
-    f_1(x_1, x_2, ..., x_n) & = 0 \\
-    \vdots & = 0 \\
-    f_n(x_1, x_2, ..., x_n) & = 0
-  \end{matrix}\right. \\
-  \text{or} \\
-  \pmb F(\pmb X) = 0$$
+$$\left\\{\begin{matrix}
+f_1(x_1, x_2, ..., x_n) &= 0 \\\\
+\vdots &= 0 \\\\
+f_n(x_1, x_2, ..., x_n) &= 0 \\\\
+\end{matrix}\right. $$
 
 The notations in bold have multiple elements.
 
@@ -100,9 +97,9 @@ Where $\pmb J(x^{(0)})$ is called the *Jacobian*, which is
 
 $$\pmb J(\pmb x) = 
 \begin{pmatrix} 
-  \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \dots & \frac{\partial f_1}{x_n} \\
-  \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \dots & \frac{\partial f_2}{x_n} \\
-  \vdots & \vdots & \ddots & \vdots \\
+  \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \dots & \frac{\partial f_1}{x_n} \\\\
+  \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \dots & \frac{\partial f_2}{x_n} \\\\
+  \vdots & \vdots & \ddots & \vdots \\\\
   \frac{\partial f_n}{\partial x_1} & \frac{\partial f_n}{\partial x_2} & \dots & \frac{\partial f_n}{x_n}
 \end{pmatrix}$$
 
@@ -110,13 +107,12 @@ We can repeat the process using \\(\pmb x^{(1)}\\) as a starting solution, to ge
 
 One more thing to note is that Spice will modify the algorithm a tiny bit.
 
-$$
-\begin{aligned}
-\pmb J(\pmb x^{(0)})\cdot\Delta\pmb x^{(k+1)} &= -\pmb F(\pmb x^{(k)}) \\
-& \Downarrow \\
-\pmb J(\pmb x^{(k)})\cdot\left(\pmb x^{(k+1)}-\pmb x^{(k)}\right) &= -\pmb F(\pmb x^{(k)}) \\
-& \Downarrow \\
-\pmb J(\pmb x^{(k)})\cdot \pmb x^{(k+1)} &= -\pmb F(\pmb x^{(k)}) + \pmb J(\pmb x^{(k)})\cdot\pmb x^{(k)}
+$$\begin{aligned}
+\pmb J(\pmb x^{(0)})\cdot\Delta\pmb x^{(k+1)} & = -\pmb F(\pmb x^{(k)}) \\\\
+& \Downarrow \\\\
+\pmb J(\pmb x^{(k)})\cdot\left(\pmb x^{(k+1)}-\pmb x^{(k)}\right) & = -\pmb F(\pmb x^{(k)}) \\\\
+& \Downarrow \\\\
+\pmb J(\pmb x^{(k)})\cdot \pmb x^{(k+1)} & = -\pmb F(\pmb x^{(k)}) + \pmb J(\pmb x^{(k)})\cdot\pmb x^{(k)} \\
 \end{aligned}$$
 
 The *Jacobian* is from here on out called the *Y-matrix*. Everything on the right of the equation is called the *Right-Hand Side vector* (RHS vector). This formulation allows us to immediately calculate the *next* solution rather than the increment to find the next solution.
