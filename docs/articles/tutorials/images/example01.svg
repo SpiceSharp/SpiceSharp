@@ -1,23 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><svg xmlns:sc="https://github.com/svenboulanger/SimpleCircuit" width="405" height="345" viewBox="-16.19 -1 81.73 69.86" xmlns="http://www.w3.org/2000/svg"><style>path, polyline, line, circle, polygon {
+<?xml version="1.0" encoding="utf-8"?><svg xmlns:sc="https://github.com/svenboulanger/SimpleCircuit" width="395" height="345" viewBox="-14 -1 79.73 69.99" xmlns="http://www.w3.org/2000/svg"><style>g {
     stroke: black;
     stroke-width: 0.5pt;
     fill: none;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
-.diagram path, .diagram circle, .diagram polygon { fill: white; }
-.plane { stroke-width: 1pt; }
-.battery .neg { stroke-width: 0.75pt; }
-text { font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 4pt; }
-.small tspan { font-size: 0.8em; }
-.text-stroke { stroke-width: 0.025em; }
-.text-symbol { fill: black; stroke: none; }
-.marker { fill: black; }
-.marker.erd { fill: white; }
-.dotted { stroke-dasharray: 0.5 2; }
-.dashed { stroke-dasharray: 2 2; }
-</style><metadata><sc:version>1.2.5.0</sc:version></metadata><metadata><sc:script><![CDATA[
-GND <u> V1("V_1") <u r +40 d> R1("R_1\n10k&#937;") <d x d> R2("R_2\n10k&#937;") <d> GND
+text { fill: black; stroke: none; }
+.marker { fill: black; }</style><metadata><sc:version>1.8.2.0</sc:version></metadata><metadata><sc:script><![CDATA[
+GND <u> V1("V_1") <u r +40 d> R1("R_1\n10k&#937;") <d x d> R2("R_2\n20k&#937;") <d> GND
 (y GND)
 X <r> T("V_out")
-]]></sc:script></metadata><g class="wire" id="w-1"><path class="wire" d="M0 63.86 v-25.93" /></g><g class="wire" id="w-2"><path class="wire" d="M0 25.93 v-25.93 h39.96 v9.964" /></g><g class="wire" id="w-3"><path class="wire" d="M39.96 21.96 v9.964" /></g><g class="wire" id="w-4"><path class="wire" d="M39.96 31.93 v9.964" /></g><g class="wire" id="w-5"><path class="wire" d="M39.96 53.89 v9.964" /></g><g class="wire" id="w-6"><path class="wire" d="M39.96 31.93 h9.99" /></g><g class="ground" id="GND-1"><path d="M-5 63.86 h10 M-3 65.86 h6 M-1 67.86 h2" /></g><g class="vs" id="V1"><circle cx="0" cy="31.93" r="6" /><g class="signs"><path class="plus" d="M-1 28.93 h2 M0 29.93 v-2" /><line x1="-1" y1="34.93" x2="1" y2="34.93" class="minus" /></g><text><tspan text-anchor="end" x="-8" y="32.93"><tspan>V</tspan><tspan dy="0.5em" style="font-size: 0.75em">1</tspan></tspan></text></g><g class="resistor" id="R1"><polyline points="39.96,9.964 43.96,10.96 35.96,12.96 43.96,14.96 35.96,16.96 43.96,18.96 35.96,20.96 39.96,21.96" /><text class="lbl"><tspan text-anchor="start" x="45.96" y="13.86"><tspan>R</tspan><tspan dy="0.5em" style="font-size: 0.75em">1</tspan></tspan><tspan text-anchor="start" x="45.96" y="22.06"><tspan>10kΩ</tspan></tspan></text></g><g class="point dot" id="X-Q1"><circle cx="39.96" cy="31.93" r="1" class="marker dot wire" /></g><g class="resistor" id="R2"><polyline points="39.96,41.89 43.96,42.89 35.96,44.89 43.96,46.89 35.96,48.89 43.96,50.89 35.96,52.89 39.96,53.89" /><text class="lbl"><tspan text-anchor="start" x="45.96" y="45.79"><tspan>R</tspan><tspan dy="0.5em" style="font-size: 0.75em">2</tspan></tspan><tspan text-anchor="start" x="45.96" y="53.99"><tspan>10kΩ</tspan></tspan></text></g><g class="ground" id="GND-2"><path d="M34.96 63.86 h10 M36.96 65.86 h6 M38.96 67.86 h2" /></g><g class="terminal" id="T-3"><circle cx="51.45" cy="31.93" r="1.5" class="terminal" /><text><tspan text-anchor="start" x="53.95" y="32.93"><tspan>V</tspan><tspan dy="0.5em" style="font-size: 0.75em">out</tspan></tspan></text></g></svg>
+
+]]></sc:script></metadata><g class="wire" id="w-1"><path class="wire" d="M0,63.99 v-25.99" /></g><g class="wire" id="w-2"><path class="wire" d="M0,25.99 v-25.99 h40 v10" /></g><g class="wire" id="w-3"><path class="wire" d="M40,22 v10" /></g><g class="wire" id="w-4"><path class="wire" d="M40,31.99 v10" /></g><g class="wire" id="w-5"><path class="wire" d="M40,53.99 v10" /></g><g class="wire" id="w-6"><path class="wire" d="M40,31.99 h10" /></g><g class="ground" id="GND-1"><path d="M-5,63.99 h10 M-3,65.99 h6 M-1,67.99 h2" /></g><g class="vs" id="V1"><circle cx="0" cy="31.99" r="6" /><g class="signs"><path class="plus" d="M-1,28.99 h2 M0,29.99 v-2" /><line x1="-1" y1="34.99" x2="1" y2="34.99" class="minus" /></g><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="-13" y="33.44">V</tspan><tspan style="font-family:Arial;font-size:3.2pt;" x="-9" y="34.54">1</tspan></text></g><g class="resistor" id="R1"><polyline points="40,10 44,11 36,13 44,15 36,17 44,19 36,21 40,22" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="45" y="15">R</tspan><tspan style="font-family:Arial;font-size:3.2pt;" x="49" y="16.1">1</tspan><tspan style="font-family:Arial;font-size:4pt;" x="45" y="21">10kΩ</tspan></text></g><g class="point dot" id="X-Q1"><circle cx="40" cy="31.99" r="1" class="marker dot wire" /></g><g class="resistor" id="R2"><polyline points="40,41.99 44,42.99 36,44.99 44,46.99 36,48.99 44,50.99 36,52.99 40,53.99" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="45" y="46.99">R</tspan><tspan style="font-family:Arial;font-size:3.2pt;" x="49" y="48.09">2</tspan><tspan style="font-family:Arial;font-size:4pt;" x="45" y="52.99">20kΩ</tspan></text></g><g class="ground" id="GND-2"><path d="M35,63.99 h10 M37,65.99 h6 M39,67.99 h2" /></g><g class="terminal" id="T-3"><circle cx="51.5" cy="31.99" r="1.5" class="terminal" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="54" y="33.44">V</tspan><tspan style="font-family:Arial;font-size:3.2pt;" x="58" y="34.54">out</tspan></text></g></svg>

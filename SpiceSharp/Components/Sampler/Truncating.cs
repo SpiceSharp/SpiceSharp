@@ -1,5 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
 
@@ -15,15 +16,19 @@ namespace SpiceSharp.Components.SamplerBehaviors
     /// <seealso cref="Behavior"/>
     /// <seealso cref="ITimeBehavior"/>
     /// <seealso cref="ITruncatingBehavior"/>
+    /// <seealso cref="IParameterized{P}"/>
     [BehaviorFor(typeof(Sampler)), AddBehaviorIfNo(typeof(ITruncatingBehavior))]
     public class Truncating : Behavior,
         ITimeBehavior,
-        ITruncatingBehavior
+        ITruncatingBehavior,
+        IParameterized<Parameters>
     {
-        private readonly Parameters _parameters;
         private readonly IIntegrationMethod _method;
         private readonly IEnumerator<double> _points;
         private bool _continue;
+
+        /// <inheritdoc />
+        public Parameters Parameters { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Truncating"/> class.
@@ -32,16 +37,16 @@ namespace SpiceSharp.Components.SamplerBehaviors
         public Truncating(SamplerBindingContext context)
             : base(context)
         {
-            _parameters = context.GetParameterSet<Parameters>();
+            Parameters = context.GetParameterSet<Parameters>();
             _method = context.GetState<IIntegrationMethod>();
-            _points = _parameters.Points.GetEnumerator();
+            _points = Parameters.Points.GetEnumerator();
             _continue = _points.MoveNext();
 
             // Register to the export event
             context.RegisterToExportEvent(OnExportSimulationData);
 
             // Find the first timepoint that is eligible for targeting
-            while (_continue && _points.Current < -_parameters.MinDelta)
+            while (_continue && _points.Current < -Parameters.MinDelta)
                 _continue = _points.MoveNext();
         }
 
@@ -62,13 +67,13 @@ namespace SpiceSharp.Components.SamplerBehaviors
                 return;
 
             // If time has caught up with the currently targeted point, let's export it ourselves!
-            if (_method.Time > _points.Current - _parameters.MinDelta)
+            if (_method.Time > _points.Current - Parameters.MinDelta)
             {
                 // Pass it through
-                _parameters.Export(sender, args);
+                Parameters.Export(sender, args);
 
                 // Find the next point that is eligible for targetting
-                while (_continue && _points.Current < _method.Time + _parameters.MinDelta)
+                while (_continue && _points.Current < _method.Time + Parameters.MinDelta)
                     _continue = _points.MoveNext();
             }
         }

@@ -13,7 +13,8 @@ namespace SpiceSharp.Components.Inductors
     [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
     [GeneratedParameters]
     public partial class Temperature : Behavior,
-        ITemperatureBehavior
+        ITemperatureBehavior,
+        IParameterized<Parameters>
     {
         /// <summary>
         /// Gets the inductance of the inductor.
