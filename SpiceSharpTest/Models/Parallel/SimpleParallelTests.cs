@@ -3,6 +3,7 @@ using SpiceSharp;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components;
 using SpiceSharp.Components.ParallelComponents;
+using SpiceSharp.Entities;
 using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
@@ -99,6 +100,111 @@ namespace SpiceSharpTest.Models
             var references = new Func<double, double>[] { time => 1.0 };
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
+        }
+
+        [Test]
+        public void TestParallelSolve()
+        {
+            // Raised by sudsy - GitHub discussion #225
+            // Modified
+            int childCircuits = 72;
+            int parentCircuits = 28;
+            double I01 = 0.00000000001;
+            int m1 = 1;
+            int ILbase = 8;
+            double ILvary = 0.1;
+            double Rs = 0.0025;
+            int Rsh = 150;
+
+            var r = new Random(); // Should be declared at the topmost level
+            var parallelComponents = new List<IEntity>();
+
+            for (int parentCircuitIndex = 0; parentCircuitIndex < parentCircuits; parentCircuitIndex++)
+            {
+                string parentCircuitID = "ParentCircuit_" + parentCircuitIndex.ToString();
+                string parentN1 = parentCircuitIndex.ToString() + "_" + "0";
+                string parentN2 = parentCircuitIndex.ToString() + "_" + "1";
+                string parentN3 = (parentCircuitIndex + 1).ToString() + "_" + "0";
+
+                List<IEntity> parentEntities = new List<IEntity>();
+
+                for (int childIndex = 0; childIndex < childCircuits; childIndex++)
+                {
+                    string childCircuitID = "Child_" + childIndex.ToString();
+                    string Node1 = "CN_" + childIndex.ToString();
+                    string Node2 = "CN_" + (childIndex + 1).ToString();
+
+                    var scDef = new SubcircuitDefinition(new EntityCollection(), new string[] { "posTerm", "negTerm" });
+
+                    var diodeModel = new DiodeModel("J1Diode");
+                    diodeModel.Parameters.SaturationCurrent = I01;
+                    diodeModel.Parameters.EmissionCoefficient = m1;
+                    scDef.Entities.Add(diodeModel);
+                    var newDiode = new Diode("D1", "1", "negTerm", "J1Diode");
+                    scDef.Entities.Add(newDiode);
+                    double IL = ILbase + (ILvary * r.NextDouble()) - (ILvary * r.NextDouble());
+                    scDef.Entities.Add(new CurrentSource("iL", "negTerm", "1", IL));
+                    scDef.Entities.Add(new Resistor("RS", "1", "posTerm", Rs));
+                    scDef.Entities.Add(new Resistor("RSH", "1", "negTerm", Rsh));
+
+                    var scCircuit = new Subcircuit(childCircuitID, scDef, new string[] { Node1, Node2 });
+                    parentEntities.Add(scCircuit);
+                }
+
+                parentEntities.Add(new VoltageSource("Vterm1", "CN_0", "parent_terminal_pos", 0));
+                parentEntities.Add(new VoltageSource("Vterm2", "CN_" + (childCircuits).ToString(), "parent_terminal_neg", 0));
+
+                var newSubCircuitParentDef = new SubcircuitDefinition(new EntityCollection(), new string[] { "parent_terminal_pos", "parent_terminal_neg" });
+
+                foreach (var item in parentEntities)
+                {
+                    newSubCircuitParentDef.Entities.Add(item);
+                }
+
+                var newSubCircuit = new Subcircuit(parentCircuitID, newSubCircuitParentDef, new string[] { parentN2, parentN3 });
+                newSubCircuit.Parameters.LocalSolver = true;
+                parallelComponents.Add(newSubCircuit);
+                parallelComponents.Add(new Resistor("R" + parentCircuitIndex.ToString(), parentN1, parentN2, 1));
+            }
+
+            string lastNodeName = parentCircuits.ToString() + "_" + "0";
+            parallelComponents.Add(new VoltageSource("Vterm1", "0_0", "parallel_terminal_pos", 0));
+            parallelComponents.Add(new VoltageSource("Vterm2", lastNodeName, "parallel_terminal_neg", 0));
+
+            var solveCirc = new Circuit();
+            var newParallel = new Parallel("PL1", parallelComponents);
+            var workDistributor = new TPLWorkDistributor();
+            newParallel.SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingBehavior), workDistributor));
+            solveCirc.Add(newParallel);
+
+            // Ground the negative lead (will not work without something grounded)
+            solveCirc.Add(new Resistor("Rgnd", "parallel_terminal_neg", "0", 0));
+            // Define the vterm for solving
+            solveCirc.Add(new VoltageSource("vterm", "parallel_terminal_pos", "parallel_terminal_neg", 0));
+
+            var dc = new DC("DC1", "vterm", 0, parentCircuits * 55, parentCircuits * 55 / 100);
+
+            var currentExport = new RealCurrentExport(dc, "vterm");
+
+            double maxPower = 0.0;
+
+            dc.ExportSimulationData += (sender, args) =>
+            {
+                double input = args.GetVoltage("parallel_terminal_pos");
+                double output = currentExport.Value;
+
+                double power = input * output;
+                if (power > maxPower)
+                {
+                    maxPower = power;
+                }
+
+            };
+
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            dc.Run(solveCirc);
+            watch.Stop();
+            Assert.AreNotEqual(0.0, maxPower);
         }
 
         public static IEnumerable<TestCaseData> WorkDistributor
