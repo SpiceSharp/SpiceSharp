@@ -21,7 +21,7 @@ namespace SpiceSharpTest.Models
                 new Parallel("PC1",
                     new Resistor("R1", "in", "out", 1e3),
                     new Resistor("R2", "out", "0", 1e3))
-                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingSimulation), workDistributor))
+                    .SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingBehavior), workDistributor))
                 );
 
             var op = new OP("op");
