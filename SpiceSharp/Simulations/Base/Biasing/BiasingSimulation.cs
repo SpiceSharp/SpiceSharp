@@ -668,54 +668,5 @@ namespace SpiceSharp.Simulations
         protected virtual void OnAfterTemperature(TemperatureStateEventArgs args) => AfterTemperature?.Invoke(this, args);
 
         #endregion
-
-#if DEBUG        
-        /// <summary>
-        /// Prints the current solver to the output stream. If <c>null</c>, the console output is used instead.
-        /// </summary>
-        public string PrintSolver()
-        {
-            var writer = new StringWriter();
-
-            // Make a list of all our variables
-            var variables = new string[_state.Solver.Size + 1];
-            var columnWidths = new int[_state.Solver.Size + 1];
-            var leadWidth = 0;
-            foreach (var p in _state.Map)
-            {
-                if (p.Key.Unit == Units.Volt)
-                    variables[p.Value] = @"V({0})".FormatString(p.Key.Name);
-                else if (p.Key.Unit == Units.Ampere)
-                    variables[p.Value] = @"I({0})".FormatString(p.Key.Name);
-                else
-                    variables[p.Value] = @"?({0})".FormatString(p.Key.Name);
-                columnWidths[p.Value] = Math.Max(variables[p.Value].Length, 6);
-                leadWidth = Math.Max(leadWidth, columnWidths[p.Value]);
-            }
-
-            // Write our columns
-            writer.Write(new string(' ', leadWidth + 1));
-            for (var i = 1; i < variables.Length; i++)
-                writer.Write($"{{0,{columnWidths[i] + 1}}}".FormatString(variables[i]));
-            writer.WriteLine();
-
-            // Write each row in the solver
-            for (var row = 1; row < variables.Length; row++)
-            {
-                writer.Write($"{{0,{leadWidth + 1}}}".FormatString(variables[row]));
-                for (var col = 1; col < variables.Length; col++)
-                {
-                    var elt = _state.Solver.FindElement(new MatrixLocation(row, col));
-                    var value = elt?.Value.ToString("g6") ?? ".";
-                    writer.Write($"{{0,{columnWidths[col] + 1}:g}}".FormatString(value));
-                }
-                var rhsElt = _state.Solver.FindElement(row);
-                var rhsValue = rhsElt?.Value.ToString("g6") ?? ".";
-                writer.WriteLine("{0,7}".FormatString(rhsValue));
-            }
-
-            return writer.ToString();
-        }
-#endif
     }
 }

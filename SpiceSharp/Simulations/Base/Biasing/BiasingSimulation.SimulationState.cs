@@ -10,9 +10,17 @@ namespace SpiceSharp.Simulations
         private class SimulationState : VariableDictionary<IVariable<double>>, IBiasingSimulationState
         {
             private readonly VariableMap _map;
+
+            /// <inheritdoc />
             public IVector<double> Solution { get; private set; }
+
+            /// <inheritdoc />
             public IVector<double> OldSolution { get; private set; }
+
+            /// <inheritdoc />
             public IVariableMap Map => _map;
+
+            /// <inheritdoc />
             public ISparsePivotingSolver<double> Solver { get; }
 
             /// <summary>
@@ -31,6 +39,7 @@ namespace SpiceSharp.Simulations
                 Add(Constants.Ground, gnd);
             }
 
+            /// <inheritdoc />
             public IVariable<double> GetSharedVariable(string name)
             {
                 name.ThrowIfNull(nameof(name));
@@ -43,6 +52,7 @@ namespace SpiceSharp.Simulations
                 return result;
             }
 
+            /// <inheritdoc />
             public IVariable<double> CreatePrivateVariable(string name, IUnit unit)
             {
                 var index = _map.Count;
@@ -51,6 +61,9 @@ namespace SpiceSharp.Simulations
                 return result;
             }
 
+            /// <summary>
+            /// Creates the vectors for the state.
+            /// </summary>
             public void Setup()
             {
                 // Initialize all matrices
@@ -59,6 +72,9 @@ namespace SpiceSharp.Simulations
                 Solver.Reset();
             }
 
+            /// <summary>
+            /// Stores the last solution.
+            /// </summary>
             public void StoreSolution()
             {
                 var tmp = OldSolution;

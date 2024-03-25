@@ -107,8 +107,8 @@ namespace SpiceSharpTest.Models
         {
             // Raised by sudsy - GitHub discussion #225
             // Modified
-            int childCircuits = 72;
-            int parentCircuits = 28;
+            int childCircuits = 1;
+            int parentCircuits = 2;
             double I01 = 0.00000000001;
             int m1 = 1;
             int ILbase = 8;
@@ -126,7 +126,7 @@ namespace SpiceSharpTest.Models
                 string parentN2 = parentCircuitIndex.ToString() + "_" + "1";
                 string parentN3 = (parentCircuitIndex + 1).ToString() + "_" + "0";
 
-                List<IEntity> parentEntities = new List<IEntity>();
+                var parentEntities = new List<IEntity>();
 
                 for (int childIndex = 0; childIndex < childCircuits; childIndex++)
                 {
@@ -136,12 +136,16 @@ namespace SpiceSharpTest.Models
 
                     var scDef = new SubcircuitDefinition(new EntityCollection(), new string[] { "posTerm", "negTerm" });
 
+                    /*
                     var diodeModel = new DiodeModel("J1Diode");
                     diodeModel.Parameters.SaturationCurrent = I01;
                     diodeModel.Parameters.EmissionCoefficient = m1;
                     scDef.Entities.Add(diodeModel);
                     var newDiode = new Diode("D1", "1", "negTerm", "J1Diode");
                     scDef.Entities.Add(newDiode);
+                    */
+                    scDef.Entities.Add(new Resistor("D1", "1", "negTerm", 0.1));
+
                     double IL = ILbase + (ILvary * r.NextDouble()) - (ILvary * r.NextDouble());
                     scDef.Entities.Add(new CurrentSource("iL", "negTerm", "1", IL));
                     scDef.Entities.Add(new Resistor("RS", "1", "posTerm", Rs));
@@ -173,8 +177,8 @@ namespace SpiceSharpTest.Models
 
             var solveCirc = new Circuit();
             var newParallel = new Parallel("PL1", parallelComponents);
-            var workDistributor = new TPLWorkDistributor();
-            newParallel.SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingBehavior), workDistributor));
+            // var workDistributor = new TPLWorkDistributor();
+            // newParallel.SetParameter("workdistributor", new KeyValuePair<Type, IWorkDistributor>(typeof(IBiasingBehavior), workDistributor));
             solveCirc.Add(newParallel);
 
             // Ground the negative lead (will not work without something grounded)

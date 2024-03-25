@@ -1,7 +1,11 @@
-﻿using System;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace SpiceSharp
 {
@@ -374,5 +378,87 @@ namespace SpiceSharp
                 node.ThrowIfNull(nameof(node));
             return nodes;
         }
+
+#if DEBUG
+        /// <summary>
+        /// Prints a solver to a string.
+        /// </summary>
+        /// <param name="state">The solver simulation state.</param>
+        /// <returns>The string that represents the solver state.</returns>
+        public static string Print<T>(this ISolverSimulationState<T> state)
+        {
+            var writer = new StringWriter();
+
+            // Make a list of all our variables and initialize the column widths
+            int n = state.Solver.Size;
+            var variables = new string[n];
+            var elements = new string[n * (n + 1)];
+            var columnWidths = new int[n + 1];
+            var leadWidth = 0;
+            foreach (var p in state.Map)
+            {
+                var index = p.Value - 1;
+                if (index < 0)
+                    continue; // Ground node
+                if (p.Key.Unit == Units.Volt)
+                    variables[index] = @"V({0})".FormatString(p.Key.Name);
+                else if (p.Key.Unit == Units.Ampere)
+                    variables[index] = @"I({0})".FormatString(p.Key.Name);
+                else
+                    variables[index] = @"?({0})".FormatString(p.Key.Name);
+                columnWidths[index] = Math.Max(variables[index].Length + 1, 6);
+                leadWidth = Math.Max(leadWidth, columnWidths[index]);
+            }
+            columnWidths[n] = 6;
+
+            // Determine the elements formatting and the widths
+            for (var row = 0; row < n; row++)
+            {
+                // Matrix elements
+                for (var col = 0; col < n; col++)
+                {
+                    var index = row * (n + 1) + col;
+                    var elt = state.Solver.FindElement(new MatrixLocation(row + 1, col + 1));
+                    if (elt is null)
+                        elements[index] = ".";
+                    else if (elt.Value is IFormattable formattable)
+                        elements[index] = formattable.ToString("g6", CultureInfo.InvariantCulture);
+                    else
+                        elements[index] = elt.Value.ToString();
+                    columnWidths[col] = Math.Max(columnWidths[col], elements[index].Length + 1);
+                }
+
+                // RHS element
+                {
+                    var index = row * (n + 1) + n;
+                    var elt = state.Solver.FindElement(row + 1);
+                    if (elt is null)
+                        elements[index] = ".";
+                    else if (elt.Value is IFormattable formattable)
+                        elements[index] = formattable.ToString("g6", CultureInfo.InvariantCulture);
+                    else
+                        elements[index] = elt.Value.ToString();
+                    columnWidths[n] = Math.Max(columnWidths[n], elements[index].Length + 1);
+                }
+            }
+
+            // Write our column headers
+            writer.Write(new string(' ', leadWidth));
+            for (var i = 0; i < n; i++)
+                writer.Write($"{{0,{columnWidths[i]}}}".FormatString(variables[i]));
+            writer.WriteLine();
+
+            // Write every row
+            for (var row = 0; row < n; row++)
+            {
+                writer.Write($"{{0,{leadWidth}}}".FormatString(variables[row]));
+                for (var col = 0; col <= n; col++)
+                    writer.Write($"{{0,{columnWidths[col]}:g}}".FormatString(elements[row * (n + 1) + col]));
+                writer.WriteLine();
+            }
+
+            return writer.ToString();
+        }
+#endif
     }
 }
