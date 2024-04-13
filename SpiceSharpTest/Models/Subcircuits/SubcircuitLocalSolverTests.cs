@@ -198,7 +198,11 @@ namespace SpiceSharpTest.Models
             // Relatively straightforward example with only a single current source and a single resistor.
             // The special thing here is that the Y-matrix and RHS elements are nicely defined
 
-            var inst = Create("X1", [new CurrentSource("I1", "a", "b", 1.0), new Resistor("R1", "a", "b", 1e3)], ["a", "b"], ["0", "x"]);
+            var inst = Create("X1",
+                [
+                    new CurrentSource("I1", "a", "b", 1.0), 
+                    new Resistor("R1", "a", "b", 1e3)
+                ], ["a", "b"], ["0", "x"]);
             var ckt = new Circuit(
                 inst,
                 new Resistor("R1", "0", "x", 1e3));
@@ -208,6 +212,44 @@ namespace SpiceSharpTest.Models
             op.ExportSimulationData += (sender, args) =>
             {
                 Assert.AreEqual(0.5e3, args.GetVoltage("x"));
+            };
+            op.Run(ckt);
+        }
+
+        [Test]
+        public void When_VoltageSourceResistor_Expect_Reference()
+        {
+            var inst = Create("X1", [new VoltageSource("V1", "a", "c", 1.0), new Resistor("R1", "c", "b", 1e3)], ["a", "b"], ["0", "x"]);
+            var ckt = new Circuit(
+                inst,
+                new Resistor("R1", "0", "x", 1e3));
+
+            // Simulation
+            var op = new OP("op");
+            op.ExportSimulationData += (sender, args) =>
+            {
+                Assert.AreEqual(0.5, args.GetVoltage("x"));
+            };
+            op.Run(ckt);
+        }
+
+        [Test]
+        public void When_VoltageSourceResistor2_Expect_Reference()
+        {
+            var inst = Create("X1", [
+                new Resistor("R1a", "a", "c", 500),
+                new VoltageSource("V1", "c", "d", 1.0),
+                new Resistor("R1", "d", "b", 500)],
+                ["a", "b"], ["0", "x"]);
+            var ckt = new Circuit(
+                inst,
+                new Resistor("R1", "0", "x", 1e3));
+
+            // Simulation
+            var op = new OP("op");
+            op.ExportSimulationData += (sender, args) =>
+            {
+                Assert.AreEqual(0.5, args.GetVoltage("x"));
             };
             op.Run(ckt);
         }

@@ -155,8 +155,8 @@ namespace SpiceSharpTest.Models
                     parentEntities.Add(scCircuit);
                 }
 
-                parentEntities.Add(new VoltageSource("Vterm1", "CN_0", "parent_terminal_pos", 0));
-                parentEntities.Add(new VoltageSource("Vterm2", "CN_" + (childCircuits).ToString(), "parent_terminal_neg", 0));
+                parentEntities.Add(new Resistor("Vterm1", "CN_0", "parent_terminal_pos", 1e-3));
+                parentEntities.Add(new Resistor("Vterm2", "CN_" + (childCircuits).ToString(), "parent_terminal_neg", 1e-3));
 
                 var newSubCircuitParentDef = new SubcircuitDefinition(new EntityCollection(), new string[] { "parent_terminal_pos", "parent_terminal_neg" });
 
@@ -172,8 +172,8 @@ namespace SpiceSharpTest.Models
             }
 
             string lastNodeName = parentCircuits.ToString() + "_" + "0";
-            parallelComponents.Add(new VoltageSource("Vterm1", "0_0", "parallel_terminal_pos", 0));
-            parallelComponents.Add(new VoltageSource("Vterm2", lastNodeName, "parallel_terminal_neg", 0));
+            parallelComponents.Add(new Resistor("Vterm1", "0_0", "parallel_terminal_pos", 1e-3));
+            parallelComponents.Add(new Resistor("Vterm2", lastNodeName, "parallel_terminal_neg", 1e-3));
 
             var solveCirc = new Circuit();
             var newParallel = new Parallel("PL1", parallelComponents);
