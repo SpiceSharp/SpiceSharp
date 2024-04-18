@@ -157,7 +157,7 @@ namespace SpiceSharp.Algebra
         public override double ComputeDegenerateContribution(int index)
         {
             var result = 0.0;
-            for (var i = 1; i < index; i++)
+            for (var i = 1; i <= Degeneracy; i++)
                 result += Matrix[index, i] * _intermediate[i];
             return result;
         }

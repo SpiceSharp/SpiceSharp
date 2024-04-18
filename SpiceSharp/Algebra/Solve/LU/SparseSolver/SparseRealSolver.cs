@@ -74,8 +74,13 @@ namespace SpiceSharp.Algebra
         /// <inheritdoc />
         public override void BackwardSubstitute(IVector<double> solution)
         {
-            // Backward substitution
             var order = Size - Degeneracy;
+
+            // Copy the degenerate solution to the intermediate vector
+            for (var i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Row.Reverse(i)];
+
+            // Backward substitution
             for (var i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
@@ -136,8 +141,13 @@ namespace SpiceSharp.Algebra
         /// <inheritdoc/>
         public override void BackwardSubstituteTransposed(IVector<double> solution)
         {
-            // Backward substitution
             var order = Size - Degeneracy;
+
+            // Copy the degenerate solution to the intermediate vector
+            for (var i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Row.Reverse(i)];
+
+            // Backward substitution
             for (var i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
@@ -159,8 +169,9 @@ namespace SpiceSharp.Algebra
         public override double ComputeDegenerateContribution(int index)
         {
             var result = 0.0;
-            var elt = Matrix.FindDiagonalElement(index)?.Left;
-            while (elt != null)
+            var elt = Matrix.GetFirstInRow(Row[index]);
+            int order = Size - Degeneracy;
+            while (elt != null && elt.Column <= order)
             {
                 result += elt.Value * _intermediate[elt.Column];
                 elt = elt.Left;

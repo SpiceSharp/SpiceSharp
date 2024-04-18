@@ -381,10 +381,11 @@ namespace SpiceSharp
 
 #if DEBUG
         /// <summary>
-        /// Prints a solver to a string.
+        /// Prints a solver matrix and RHS vector to a string.
         /// </summary>
-        /// <param name="state">The solver simulation state base type.</param>
-        /// <returns>Returns the string that represents the solver matrix.</returns>
+        /// <typeparam name="T">The state base type.</typeparam>
+        /// <param name="state">The state.</param>
+        /// <returns>The string.</returns>
         public static string Print<T>(this ISolverSimulationState<T> state)
         {
             var writer = new StringWriter();
@@ -453,10 +454,41 @@ namespace SpiceSharp
             {
                 writer.Write($"{{0,{leadWidth}}}".FormatString(variables[row]));
                 for (var col = 0; col <= n; col++)
-                    writer.Write($"{{0,{columnWidths[col]}:g}}".FormatString(elements[row * (n + 1) + col]));
+                    writer.Write($"{{0,{columnWidths[col]}}}".FormatString(elements[row * (n + 1) + col]));
                 writer.WriteLine();
             }
 
+            return writer.ToString();
+        }
+
+        /// <summary>
+        /// Prints a solver solution to a string.
+        /// </summary>
+        /// <typeparam name="T">The state base type.</typeparam>
+        /// <param name="state">The state.</param>
+        /// <returns>The string.</returns>
+        public static string PrintSolution<T>(this ISolverSimulationState<T> state)
+        {
+            var writer = new StringWriter();
+            int n = state.Solver.Size;
+            var names = new string[n + 1];
+            var values = new string[n + 1];
+            int nameWidth = 6;
+            foreach (var p in state.Map)
+            {
+                names[p.Value] = p.Key.Name;
+                nameWidth = Math.Max(nameWidth, p.Key.Name.Length);
+                var value = state.Solution[p.Value];
+                if (value is null)
+                    values[p.Value] = ".";
+                else if (value is IFormattable formattable)
+                    values[p.Value] = formattable.ToString("g6", CultureInfo.InvariantCulture);
+                else
+                    values[p.Value] = value.ToString();
+            }
+
+            for (var i = 0; i <= n; i++)
+                writer.WriteLine($"{{0,{nameWidth}}} {{1}}".FormatString(names[i], values[i]));
             return writer.ToString();
         }
 
