@@ -77,22 +77,41 @@ namespace SpiceSharp.Algebra
         T this[int row] { get; set; }
 
         /// <summary>
-        /// Solves the equations using the factored matrix and right hand side vector.
+        /// Applies forward substitution on a factored matrix and right-hand side vector.
         /// </summary>
-        /// <param name="solution">The solution.</param>
+        /// <param name="solution">The solution vector.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="Size" /> elements.</exception>
-        void Solve(IVector<T> solution);
+        void ForwardSubstitute(IVector<T> solution);
 
         /// <summary>
-        /// Solves the equations using the transposed factored matrix and right hand side vector.
+        /// Applies backward substitution on a factored matrix and the intermediate vector.
         /// </summary>
-        /// <param name="solution">The solution.</param>
+        /// <param name="solution">The solution vector.</param>
+        void BackwardSubstitute(IVector<T> solution);
+
+        /// <summary>
+        /// Applies forward substitution on the adjoint matrix and right-hand side vector.
+        /// </summary>
+        /// <param name="solution">The solution vector.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
         /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="Size" /> elements.</exception>
-        void SolveTransposed(IVector<T> solution);
+        void ForwardSubstituteTransposed(IVector<T> solution);
+
+        /// <summary>
+        /// Applies backward substitution on the adjoint matrix and the intermediate vector.
+        /// </summary>
+        /// <param name="solution">The solution vector.</param>
+        void BackwardSubstituteTransposed(IVector<T> solution);
+
+        /// <summary>
+        /// Computes a contribution for degenerate solvers (<see cref="Degeneracy"/> is larger than 0).
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>Returns the contribution.</returns>
+        T ComputeDegenerateContribution(int index);
 
         /// <summary>
         /// Factor the equation matrix and right hand side vector.

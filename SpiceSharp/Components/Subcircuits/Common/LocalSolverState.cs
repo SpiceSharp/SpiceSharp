@@ -227,7 +227,8 @@ namespace SpiceSharp.Components.Subcircuits
             // Fill in the shared variables
             foreach (var pair in _indices)
                 Solution[pair.Local] = Parent.Solution[pair.Global];
-            Solver.Solve(Solution);
+            Solver.ForwardSubstitute(Solution);
+            Solver.BackwardSubstitute(Solution);
             Solution[0] = default;
             Updated = true;
         }

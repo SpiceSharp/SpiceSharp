@@ -189,7 +189,8 @@ namespace SpiceSharp.Simulations
             Statistics.ComplexSolveTime.Start();
             try
             {
-                solver.Solve(_state.Solution);
+                solver.ForwardSubstitute(_state.Solution);
+                solver.BackwardSubstitute(_state.Solution);
             }
             finally
             {

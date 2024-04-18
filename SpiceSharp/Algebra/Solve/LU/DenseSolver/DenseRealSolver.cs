@@ -28,28 +28,25 @@ namespace SpiceSharp.Algebra
         {
         }
 
-        /// <inheritdoc/>
-        public override void Solve(IVector<double> solution)
-            => Solve(solution, Size);
+        /// <inheritdoc />
+        public override void ForwardSubstitute(IVector<double> solution)
+            => ForwardSubstitute(solution, Size);
 
         /// <summary>
-        /// Solves the system of equations with a matrix that was factored for a number of steps.
+        /// Applies forward substitution, but limits to the given size.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="size">The size of the submatrix to be solved.</param>
+        /// <param name="size">The size.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
-        /// </exception>
-        public void Solve(IVector<double> solution, int size)
+        /// <exception cref="AlgebraException">Thrown if the matrix is not yet factored.</exception>
+        /// <exception cref="ArgumentException">Thrown if the solution vector is not of size <see cref="PivotingSolver{M, V, T}.Size"/>.</exception>
+        public void ForwardSubstitute(IVector<double> solution, int size)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
-
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             size = Math.Min(size, Size);
@@ -66,6 +63,22 @@ namespace SpiceSharp.Algebra
                 for (var j = 1; j < i; j++)
                     _intermediate[i] -= Matrix[i, j] * _intermediate[j];
             }
+        }
+
+        /// <inheritdoc />
+        public override void BackwardSubstitute(IVector<double> solution)
+            => BackwardSubstitute(solution, Size);
+
+        /// <summary>
+        /// Applies backward substitution.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="size">The maximum size.</param>
+        public void BackwardSubstitute(IVector<double> solution, int size)
+        {
+            solution.ThrowIfNull(nameof(solution));
+            size = Math.Min(size, Size);
+            var order = Math.Min(size, Size - Degeneracy);
 
             // Backward substitution
             for (var i = order; i >= 1; i--)
@@ -78,19 +91,19 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <inheritdoc/>
-        public override void SolveTransposed(IVector<double> solution)
-            => SolveTransposed(solution, Size);
+        /// <inheritdoc />
+        public override void ForwardSubstituteTransposed(IVector<double> solution)
+            => ForwardSubstituteTransposed(solution, Size);
 
         /// <summary>
-        /// Solves the transposed.
+        /// Applies forward substitution of the adjoint matrix, but limits to the given size.
         /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <param name="steps">The steps.</param>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
-        public void SolveTransposed(IVector<double> solution, int steps)
+        /// <param name="solution">The solution vector.</param>
+        /// <param name="steps">The steps to substitute.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="AlgebraException">Thrown if the matrix is not yet factored.</exception>
+        /// <exception cref="ArgumentException">Thrown if the solution vector is not of size <see cref="PivotingSolver{M, V, T}.Size"/>.</exception>
+        public void ForwardSubstituteTransposed(IVector<double> solution, int steps)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
@@ -115,7 +128,19 @@ namespace SpiceSharp.Algebra
                 for (var j = 1; j < i; j++)
                     _intermediate[i] -= Matrix[i, j] * Vector[j];
             }
+        }
 
+        /// <inheritdoc />
+        public override void BackwardSubstituteTransposed(IVector<double> solution)
+            => BackwardSubstituteTransposed(solution, Size);
+
+        /// <summary>
+        /// Applies backward substitution on the adjoint matrix, but limits to the given size.
+        /// </summary>
+        /// <param name="solution">The solution vector.</param>
+        /// <param name="steps">The steps to substitute.</param>
+        public void BackwardSubstituteTransposed(IVector<double> solution, int steps)
+        {
             // Backward substitution
             _intermediate[steps] *= Matrix[steps, steps];
             for (var i = steps - 1; i >= 1; i--)
@@ -126,6 +151,15 @@ namespace SpiceSharp.Algebra
             }
 
             Row.Unscramble(_intermediate, solution);
+        }
+
+        /// <inheritdoc />
+        public override double ComputeDegenerateContribution(int index)
+        {
+            var result = 0.0;
+            for (var i = 1; i < index; i++)
+                result += Matrix[index, i] * _intermediate[i];
+            return result;
         }
 
         /// <inheritdoc/>

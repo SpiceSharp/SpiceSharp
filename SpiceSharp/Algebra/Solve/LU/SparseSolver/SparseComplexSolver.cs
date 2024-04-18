@@ -23,8 +23,8 @@ namespace SpiceSharp.Algebra
         {
         }
 
-        /// <inheritdoc/>
-        public override void Solve(IVector<Complex> solution)
+        /// <inheritdoc />
+        public override void ForwardSubstitute(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
@@ -71,8 +71,13 @@ namespace SpiceSharp.Algebra
                     }
                 }
             }
+        }
 
+        /// <inheritdoc />
+        public override void BackwardSubstitute(IVector<Complex> solution)
+        {
             // Backward substitution
+            var order = Size - Degeneracy;
             for (var i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
@@ -90,8 +95,8 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <inheritdoc/>
-        public override void SolveTransposed(IVector<Complex> solution)
+        /// <inheritdoc />
+        public override void ForwardSubstituteTransposed(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
@@ -127,8 +132,13 @@ namespace SpiceSharp.Algebra
                     }
                 }
             }
+        }
 
+        /// <inheritdoc/>
+        public override void BackwardSubstituteTransposed(IVector<Complex> solution)
+        {
             // Backward substitution
+            var order = Size - Degeneracy;
             for (var i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
@@ -144,6 +154,19 @@ namespace SpiceSharp.Algebra
 
             // Unscramble
             Row.Unscramble(_intermediate, solution);
+        }
+
+        /// <inheritdoc />
+        public override Complex ComputeDegenerateContribution(int index)
+        {
+            Complex result = 0.0;
+            var elt = Matrix.FindDiagonalElement(index)?.Left;
+            while (elt != null)
+            {
+                result += elt.Value * _intermediate[elt.Column];
+                elt = elt.Left;
+            }
+            return result;
         }
 
         /// <inheritdoc/>

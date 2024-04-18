@@ -199,7 +199,8 @@ namespace SpiceSharp.Simulations
             solver.GetElement(posDrive).Add(1.0);
             solver.GetElement(negDrive).Subtract(1.0);
 
-            solver.SolveTransposed(cstate.Solution);
+            solver.ForwardSubstituteTransposed(cstate.Solution);
+            solver.BackwardSubstituteTransposed(cstate.Solution);
             cstate.Solution[0] = 0.0;
         }
     }

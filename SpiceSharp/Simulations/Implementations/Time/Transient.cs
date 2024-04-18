@@ -352,7 +352,8 @@ namespace SpiceSharp.Simulations
                     base.Statistics.SolveTime.Start();
                     try
                     {
-                        solver.Solve(state.Solution);
+                        solver.ForwardSubstitute(state.Solution);
+                        solver.BackwardSubstitute(state.Solution);
                     }
                     finally
                     {

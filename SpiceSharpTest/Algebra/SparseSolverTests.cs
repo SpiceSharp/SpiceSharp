@@ -36,7 +36,8 @@ namespace SpiceSharpTest.Algebra
             Assert.AreEqual(solver.Size, solver.OrderAndFactor());
 
             IVector<double> solution = new DenseVector<double>(solver.Size);
-            solver.Solve(solution);
+            solver.ForwardSubstitute(solution);
+            solver.BackwardSubstitute(solution);
         }
 
         [Test]
@@ -223,7 +224,8 @@ namespace SpiceSharpTest.Algebra
             // Solver
             Assert.AreEqual(solver.Size, solver.OrderAndFactor());
             var solution = new DenseVector<Complex>(solver.Size);
-            solver.Solve(solution);
+            solver.ForwardSubstitute(solution);
+            solver.BackwardSubstitute(solution);
 
             // Check!
             for (var r = 0; r < reference.Length; r++)
@@ -285,12 +287,14 @@ namespace SpiceSharpTest.Algebra
             var solution = new DenseVector<double>(4);
             solution[3] = 0;
             solution[4] = 0;
-            solver.Solve(solution);
+            solver.ForwardSubstitute(solution);
+            solver.BackwardSubstitute(solution);
             Assert.AreEqual(1.0, solution[1], 1e-12);
             Assert.AreEqual(1.0, solution[2], 1e-12);
             solution[3] = 1.0;
             solution[4] = 2.0;
-            solver.Solve(solution);
+            solver.ForwardSubstitute(solution);
+            solver.BackwardSubstitute(solution);
             Assert.AreEqual(-7.0, solution[1], 1e-12);
             Assert.AreEqual(-1.0, solution[2], 1e-12);
         }

@@ -108,7 +108,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     }
                 }
                 Solver.Factor(n);
-                Solver.Solve(Coefficients, n);
+                Solver.ForwardSubstitute(Coefficients, n);
+                Solver.BackwardSubstitute(Coefficients, n);
 
                 // Predictor calculations
                 for (var i = 2; i <= n; i++)
@@ -128,7 +129,8 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     }
                 }
                 Solver.Factor(n);
-                Solver.Solve(PredictionCoefficients, n);
+                Solver.ForwardSubstitute(PredictionCoefficients, n);
+                Solver.BackwardSubstitute(PredictionCoefficients, n);
 
                 // Store the derivative w.r.t. the current timestep
                 Slope = Coefficients[1];

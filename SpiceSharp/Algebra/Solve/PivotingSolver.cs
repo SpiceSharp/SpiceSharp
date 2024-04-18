@@ -179,12 +179,6 @@ namespace SpiceSharp.Algebra.Solve
         public override string ToString() => "Pivoting solver ({0}x{1})".FormatString(Size, Size + 1);
 
         /// <inheritdoc/>
-        public abstract void Solve(IVector<T> solution);
-
-        /// <inheritdoc/>
-        public abstract void SolveTransposed(IVector<T> solution);
-
-        /// <inheritdoc/>
         public abstract bool Factor();
 
         /// <inheritdoc/>
@@ -196,5 +190,20 @@ namespace SpiceSharp.Algebra.Solve
             base.SetParameter(name, value);
             return this;
         }
+
+        /// <inheritdoc />
+        public abstract void ForwardSubstitute(IVector<T> solution);
+
+        /// <inheritdoc />
+        public abstract void BackwardSubstitute(IVector<T> solution);
+
+        /// <inheritdoc />
+        public abstract void ForwardSubstituteTransposed(IVector<T> solution);
+
+        /// <inheritdoc />
+        public abstract void BackwardSubstituteTransposed(IVector<T> solution);
+
+        /// <inheritdoc />
+        public abstract T ComputeDegenerateContribution(int index);
     }
 }
