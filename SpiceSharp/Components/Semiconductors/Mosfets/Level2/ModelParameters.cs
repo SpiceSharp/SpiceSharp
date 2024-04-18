@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// </value>
         [ParameterName("ucrit"), ParameterInfo("Crit. field for mob. degradation")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _criticalField = new GivenParameter<double>(1e4, false);
+        private GivenParameter<double> _criticalField = new(1e4, false);
 
         /// <summary>
         /// Gets or sets the critical field exponent for mobility degradation.
@@ -58,7 +58,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// </value>
         [ParameterName("neff"), ParameterInfo("Total channel charge coeff.")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _channelCharge = new GivenParameter<double>(1, false);
+        private GivenParameter<double> _channelCharge = new(1, false);
 
         /// <summary>
         /// Gets the fast surface state density.

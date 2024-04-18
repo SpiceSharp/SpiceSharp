@@ -109,32 +109,32 @@ namespace SpiceSharp.Components.Bipolars
         /// <param name="vcs">The collector-substrate voltage.</param>
         protected void CalculateCapacitances(double vbe, double vbc, double vbx, double vcs)
         {
-            var cbe = CurrentBe;
-            var gbe = CondBe;
-            var cbc = CurrentBc;
-            var gbc = CondBc;
-            var qb = BaseCharge;
+            double cbe = CurrentBe;
+            double gbe = CondBe;
+            double cbc = CurrentBc;
+            double gbc = CondBc;
+            double qb = BaseCharge;
             double f1, f2, f3;
 
             // Charge storage elements
             double tf = ModelParameters.TransitTimeForward;
             double tr = ModelParameters.TransitTimeReverse;
-            var czbe = TempBeCap * Parameters.Area;
-            var pe = TempBePotential;
+            double czbe = TempBeCap * Parameters.Area;
+            double pe = TempBePotential;
             double xme = ModelParameters.JunctionExpBe;
             double cdis = ModelParameters.BaseFractionBcCap;
-            var ctot = TempBcCap * Parameters.Area;
-            var czbc = ctot * cdis;
-            var czbx = ctot - czbc;
-            var pc = TempBcPotential;
+            double ctot = TempBcCap * Parameters.Area;
+            double czbc = ctot * cdis;
+            double czbx = ctot - czbc;
+            double pc = TempBcPotential;
             double xmc = ModelParameters.JunctionExpBc;
-            var fcpe = TempDepletionCap;
-            var czcs = ModelParameters.CapCs * Parameters.Area;
+            double fcpe = TempDepletionCap;
+            double czcs = ModelParameters.CapCs * Parameters.Area;
             double ps = ModelParameters.PotentialSubstrate;
             double xms = ModelParameters.ExponentialSubstrate;
             double xtf = ModelParameters.TransitTimeBiasCoefficientForward;
-            var ovtf = ModelTemperature.TransitTimeVoltageBcFactor;
-            var xjtf = ModelParameters.TransitTimeHighCurrentForward * Parameters.Area;
+            double ovtf = ModelTemperature.TransitTimeVoltageBcFactor;
+            double xjtf = ModelParameters.TransitTimeHighCurrentForward * Parameters.Area;
             if (!tf.Equals(0) && vbe > 0) // Avoid computations
             {
                 double argtf = 0;
@@ -150,7 +150,7 @@ namespace SpiceSharp.Components.Bipolars
                     arg2 = argtf;
                     if (!xjtf.Equals(0)) // Avoid computations
                     {
-                        var tmp = cbe / (cbe + xjtf);
+                        double tmp = cbe / (cbe + xjtf);
                         argtf = argtf * tmp * tmp;
                         arg2 = argtf * (3 - tmp - tmp);
                     }
@@ -162,8 +162,8 @@ namespace SpiceSharp.Components.Bipolars
             }
             if (vbe < fcpe)
             {
-                var arg = 1 - vbe / pe;
-                var sarg = Math.Exp(-xme * Math.Log(arg));
+                double arg = 1 - vbe / pe;
+                double sarg = Math.Exp(-xme * Math.Log(arg));
                 ChargeBe = tf * cbe + pe * czbe * (1 - arg * sarg) / (1 - xme);
                 CapBe = tf * gbe + czbe * sarg;
             }
@@ -172,46 +172,46 @@ namespace SpiceSharp.Components.Bipolars
                 f1 = TempFactor1;
                 f2 = ModelTemperature.F2;
                 f3 = ModelTemperature.F3;
-                var czbef2 = czbe / f2;
+                double czbef2 = czbe / f2;
                 ChargeBe = tf * cbe + czbe * f1 + czbef2 * (f3 * (vbe - fcpe) + xme / (pe + pe) * (vbe * vbe -
                      fcpe * fcpe));
                 CapBe = tf * gbe + czbef2 * (f3 + xme * vbe / pe);
             }
-            var fcpc = TempFactor4;
+            double fcpc = TempFactor4;
             f1 = TempFactor5;
             f2 = ModelTemperature.F6;
             f3 = ModelTemperature.F7;
             if (vbc < fcpc)
             {
-                var arg = 1 - vbc / pc;
-                var sarg = Math.Exp(-xmc * Math.Log(arg));
+                double arg = 1 - vbc / pc;
+                double sarg = Math.Exp(-xmc * Math.Log(arg));
                 ChargeBc = tr * cbc + pc * czbc * (1 - arg * sarg) / (1 - xmc);
                 CapBc = tr * gbc + czbc * sarg;
             }
             else
             {
-                var czbcf2 = czbc / f2;
+                double czbcf2 = czbc / f2;
                 ChargeBc = tr * cbc + czbc * f1 + czbcf2 * (f3 * (vbc - fcpc) + xmc / (pc + pc) * (vbc * vbc -
                      fcpc * fcpc));
                 CapBc = tr * gbc + czbcf2 * (f3 + xmc * vbc / pc);
             }
             if (vbx < fcpc)
             {
-                var arg = 1 - vbx / pc;
-                var sarg = Math.Exp(-xmc * Math.Log(arg));
+                double arg = 1 - vbx / pc;
+                double sarg = Math.Exp(-xmc * Math.Log(arg));
                 ChargeBx = pc * czbx * (1 - arg * sarg) / (1 - xmc);
                 CapBx = czbx * sarg;
             }
             else
             {
-                var czbxf2 = czbx / f2;
+                double czbxf2 = czbx / f2;
                 ChargeBx = czbx * f1 + czbxf2 * (f3 * (vbx - fcpc) + xmc / (pc + pc) * (vbx * vbx - fcpc * fcpc));
                 CapBx = czbxf2 * (f3 + xmc * vbx / pc);
             }
             if (vcs < 0)
             {
-                var arg = 1 - vcs / ps;
-                var sarg = Math.Exp(-xms * Math.Log(arg));
+                double arg = 1 - vcs / ps;
+                double sarg = Math.Exp(-xms * Math.Log(arg));
                 ChargeCs = ps * czcs * (1 - arg * sarg) / (1 - xms);
                 CapCs = czcs * sarg;
             }

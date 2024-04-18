@@ -44,7 +44,7 @@ namespace SpiceSharp.Components
             /// <inheritdoc/>
             public void Probe()
             {
-                var time = _method?.Time ?? 0.0;
+                double time = _method?.Time ?? 0.0;
                 time -= _td;
 
                 // Calculate sine wave result (no offset)

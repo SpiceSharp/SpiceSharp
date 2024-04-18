@@ -95,7 +95,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <value>
         /// The strategies.
         /// </value>
-        public Collection<MarkowitzSearchStrategy<T>> Strategies { get; } = new Collection<MarkowitzSearchStrategy<T>>();
+        public Collection<MarkowitzSearchStrategy<T>> Strategies { get; } = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Markowitz{T}" /> class.
@@ -134,11 +134,11 @@ namespace SpiceSharp.Algebra.Solve
                 return false;
 
             // Get the magnitude of the current pivot
-            var magnitude = Magnitude(pivot.Value);
+            double magnitude = Magnitude(pivot.Value);
 
             // Search for the largest element below the pivot
             var element = pivot.Below;
-            var largest = 0.0;
+            double largest = 0.0;
             while (element != null && element.Row <= max)
             {
                 largest = Math.Max(largest, Magnitude(element.Value));
@@ -184,10 +184,10 @@ namespace SpiceSharp.Algebra.Solve
             var rhsElement = rhs.GetFirstInVector();
 
             // Generate Markowitz row count
-            for (var i = max; i >= step; i--)
+            for (int i = max; i >= step; i--)
             {
                 // Set count to -1 initially to remove count due to pivot element
-                var count = -1;
+                int count = -1;
                 element = matrix.GetFirstInRow(i);
                 while (element != null && element.Column < step)
                     element = element.Right;
@@ -207,10 +207,10 @@ namespace SpiceSharp.Algebra.Solve
             }
 
             // Generate Markowitz column count
-            for (var i = step; i <= max; i++)
+            for (int i = step; i <= max; i++)
             {
                 // Set count to -1 initially to remove count due to pivot element
-                var count = -1;
+                int count = -1;
                 element = matrix.GetFirstInColumn(i);
                 while (element != null && element.Row < step)
                     element = element.Below;
@@ -226,7 +226,7 @@ namespace SpiceSharp.Algebra.Solve
         private void Products(int step, int max)
         {
             Singletons = 0;
-            for (var i = step; i <= max; i++)
+            for (int i = step; i <= max; i++)
             {
                 // UpdateMarkowitzProduct(i);
                 _markowitzProduct[i] = _markowitzRow[i] * _markowitzColumn[i];
@@ -281,8 +281,8 @@ namespace SpiceSharp.Algebra.Solve
                 return;
             int oldProduct;
 
-            var row = pivot.Row;
-            var col = pivot.Column;
+            int row = pivot.Row;
+            int col = pivot.Column;
 
             // If the pivot is a singleton, then we just consumed it
             if (_markowitzProduct[row] == 0 || _markowitzProduct[col] == 0)
@@ -292,9 +292,7 @@ namespace SpiceSharp.Algebra.Solve
             if (row != eliminationStep)
             {
                 // Swap row Markowitz numbers
-                var tmp = _markowitzRow[row];
-                _markowitzRow[row] = _markowitzRow[eliminationStep];
-                _markowitzRow[eliminationStep] = tmp;
+                (_markowitzRow[eliminationStep], _markowitzRow[row]) = (_markowitzRow[row], _markowitzRow[eliminationStep]);
 
                 // Update the Markowitz product
                 oldProduct = _markowitzProduct[row];
@@ -315,9 +313,7 @@ namespace SpiceSharp.Algebra.Solve
             if (col != eliminationStep)
             {
                 // Swap column Markowitz numbers
-                var tmp = _markowitzColumn[col];
-                _markowitzColumn[col] = _markowitzColumn[eliminationStep];
-                _markowitzColumn[eliminationStep] = tmp;
+                (_markowitzColumn[eliminationStep], _markowitzColumn[col]) = (_markowitzColumn[col], _markowitzColumn[eliminationStep]);
 
                 // Update the Markowitz product
                 oldProduct = _markowitzProduct[col];
@@ -370,7 +366,7 @@ namespace SpiceSharp.Algebra.Solve
             // Go through all elements below the pivot. If they exist, then we can subtract 1 from the Markowitz row vector!
             for (var column = pivot.Below; column != null && column.Row <= limit; column = column.Below)
             {
-                var row = column.Row;
+                int row = column.Row;
 
                 // Update the Markowitz product
                 _markowitzProduct[row] -= _markowitzColumn[row];
@@ -384,7 +380,7 @@ namespace SpiceSharp.Algebra.Solve
             // go through all elements right of the pivot. For every element, we can subtract 1 from the Markowitz column vector!
             for (var row = pivot.Right; row != null && row.Column <= limit; row = row.Right)
             {
-                var column = row.Column;
+                int column = row.Column;
 
                 // Update the Markowitz product
                 _markowitzProduct[column] -= _markowitzRow[column];
@@ -470,14 +466,16 @@ namespace SpiceSharp.Algebra.Solve
         /// <inheritdoc/>
         public Markowitz<T> Clone()
         {
-            var clone = new Markowitz<T>();
-            clone.Magnitude = Magnitude;
-            clone._absolutePivotThreshold = _absolutePivotThreshold;
-            clone._relativePivotThreshold = _relativePivotThreshold;
-            clone.Singletons = Singletons;
-            clone._markowitzRow = (int[])_markowitzRow.Clone();
-            clone._markowitzColumn = (int[])_markowitzColumn.Clone();
-            clone._markowitzProduct = (int[])_markowitzProduct.Clone();
+            var clone = new Markowitz<T>
+            {
+                Magnitude = Magnitude,
+                _absolutePivotThreshold = _absolutePivotThreshold,
+                _relativePivotThreshold = _relativePivotThreshold,
+                Singletons = Singletons,
+                _markowitzRow = (int[])_markowitzRow.Clone(),
+                _markowitzColumn = (int[])_markowitzColumn.Clone(),
+                _markowitzProduct = (int[])_markowitzProduct.Clone()
+            };
             foreach (var strategy in Strategies)
                 clone.Strategies.Add(strategy);
             return clone;

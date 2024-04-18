@@ -11,12 +11,12 @@ namespace SpiceSharpTest.Algebra
         {
             // Test swapping of elements in all possible combinations
 
-            for (var i = 0; i < 32; i++)
+            for (int i = 0; i < 32; i++)
             {
                 // Setup
                 var vector = new SparseVector<double>(5);
-                var fill = i;
-                for (var k = 1; k <= 5; k++)
+                int fill = i;
+                for (int k = 1; k <= 5; k++)
                 {
                     if ((fill & 0x01) != 0)
                         vector[k] = k;
@@ -28,9 +28,9 @@ namespace SpiceSharpTest.Algebra
 
                 // Check
                 fill = i;
-                for (var k = 1; k <= 5; k++)
+                for (int k = 1; k <= 5; k++)
                 {
-                    var realk = k;
+                    int realk = k;
                     if (k == 2)
                         realk = 4;
                     else if (k == 4)
@@ -56,7 +56,7 @@ namespace SpiceSharpTest.Algebra
 
             vector.RemoveElement(index);
 
-            for (var i = 1; i <= 3; i++)
+            for (int i = 1; i <= 3; i++)
             {
                 if (i == index)
                     Assert.AreEqual(null, vector.FindElement(i));

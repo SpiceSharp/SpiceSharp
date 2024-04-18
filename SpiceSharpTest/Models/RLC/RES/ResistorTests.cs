@@ -61,7 +61,7 @@ namespace SpiceSharpTest.Models
 
             var op = new OP("op");
             var exports = new IExport<double>[] { new RealVoltageExport(op, "a") };
-            var references = new[] { 245.0 };
+            double[] references = [245.0];
 
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
@@ -96,7 +96,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             var exports = new IExport<double>[1];
             exports[0] = new RealCurrentExport(op, "V1");
-            double[] references = { -0.01 };
+            double[] references = [-0.01];
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
@@ -116,8 +116,8 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var ac = new AC("ac", new LinearSweep(1.0, 10001, 10));
-            IExport<Complex>[] exports = { new ComplexPropertyExport(ac, "R1", "i") };
-            Func<double, Complex>[] references = { f => 1e-3 };
+            IExport<Complex>[] exports = [new ComplexPropertyExport(ac, "R1", "i")];
+            Func<double, Complex>[] references = [f => 1e-3];
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -152,8 +152,8 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var op = new OP("op");
-            IExport<double>[] exports = { new RealPropertyExport(op, "R2", "v") };
-            double[] references = { 100.0 * 1.0 / (3.0 + 1.0) };
+            IExport<double>[] exports = [new RealPropertyExport(op, "R2", "v")];
+            double[] references = [100.0 * 1.0 / (3.0 + 1.0)];
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
@@ -186,14 +186,14 @@ namespace SpiceSharpTest.Models
              * 1) Current through resistors is 50 and 100A respectively
              */
             double dc = 100;
-            var r1 = 2.0;
-            var r2 = 1.0;
+            double r1 = 2.0;
+            double r2 = 1.0;
             var ckt = CreateParallelResistorsDcCircuit(dc, r1, r2);
 
             // Create simulation, exports and references
             var op = new OP("op");
-            IExport<double>[] exports = { new RealPropertyExport(op, "R1", "i"), new RealPropertyExport(op, "R2", "i") };
-            double[] references = { dc / r1, dc / r2 };
+            IExport<double>[] exports = [new RealPropertyExport(op, "R1", "i"), new RealPropertyExport(op, "R2", "i")];
+            double[] references = [dc / r1, dc / r2];
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
@@ -211,11 +211,11 @@ namespace SpiceSharpTest.Models
             // Create simulation exports and references
             var op = new OP("op");
             IExport<double>[] exports =
-            {
+            [
                 new RealPropertyExport(op, "R1", "resistance"),
                 new RealPropertyExport(op, "V1", "dc"),
-            };
-            double[] references = { 1.0e3, 1.0 };
+            ];
+            double[] references = [1.0e3, 1.0];
 
             // Run
             AnalyzeOp(op, ckt, exports, references);
@@ -284,7 +284,7 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new CurrentSource("I1", "in", "0", 1),
                 new Resistor("R1", "in", "0", 1e3).SetParameter("temp", 20.0));
-            var temp = 20 + Constants.CelsiusKelvin;
+            double temp = 20 + Constants.CelsiusKelvin;
 
             var noise = new Noise("noise", "I1", "in", new DecadeSweep(10, 10e9, 10));
             var onoise = new OutputNoiseDensityExport(noise);

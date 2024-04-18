@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.Mosfets.Level3
         /// </value>
         [ParameterName("kappa"), ParameterInfo("Kappa")]
         [Finite]
-        private GivenParameter<double> _kappa = new GivenParameter<double>(0.2, false);
+        private GivenParameter<double> _kappa = new(0.2, false);
 
         /// <summary>
         /// Gets or sets the gate-source voltage dependence on mobility.

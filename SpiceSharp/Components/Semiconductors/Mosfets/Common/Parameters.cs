@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The temperature in Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _temperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the instance temperature difference.
@@ -51,7 +51,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _width = new GivenParameter<double>(1e-4, false);
+        private GivenParameter<double> _width = new(1e-4, false);
 
         /// <summary>
         /// Gets or sets the mosfet length.
@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("l"), ParameterInfo("Length", Units = "m")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _length = new GivenParameter<double>(1e-4, false);
+        private GivenParameter<double> _length = new(1e-4, false);
 
         /// <summary>
         /// Gets or sets the source layout area.

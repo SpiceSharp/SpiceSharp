@@ -48,7 +48,7 @@ namespace SpiceSharp.Components
             if (nodes != null && nodes.Count > 0)
             {
                 myNodes = new string[nodes.Count];
-                for (var i = 0; i < nodes.Count; i++)
+                for (int i = 0; i < nodes.Count; i++)
                 {
                     if (nodes[i] == null)
                     {

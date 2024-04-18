@@ -109,18 +109,18 @@ namespace SpiceSharp.Components.JFETs
         /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
-            var vgs = Vgs;
-            var vgd = Vgd;
+            double vgs = Vgs;
+            double vgd = Vgd;
 
             // Calculate charge storage elements
-            var czgs = TempCapGs * Parameters.Area;
-            var czgd = TempCapGd * Parameters.Area;
-            var twop = TempGatePotential + TempGatePotential;
-            var czgsf2 = czgs / ModelTemperature.F2;
-            var czgdf2 = czgd / ModelTemperature.F2;
+            double czgs = TempCapGs * Parameters.Area;
+            double czgd = TempCapGd * Parameters.Area;
+            double twop = TempGatePotential + TempGatePotential;
+            double czgsf2 = czgs / ModelTemperature.F2;
+            double czgdf2 = czgd / ModelTemperature.F2;
             if (vgs < CorDepCap)
             {
-                var sarg = Math.Sqrt(1 - vgs / TempGatePotential);
+                double sarg = Math.Sqrt(1 - vgs / TempGatePotential);
                 CapGs = czgs / sarg;
             }
             else
@@ -128,7 +128,7 @@ namespace SpiceSharp.Components.JFETs
 
             if (vgd < CorDepCap)
             {
-                var sarg = Math.Sqrt(1 - vgd / TempGatePotential);
+                double sarg = Math.Sqrt(1 - vgd / TempGatePotential);
                 CapGd = czgd / sarg;
             }
             else
@@ -138,18 +138,18 @@ namespace SpiceSharp.Components.JFETs
         /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
-            var omega = ComplexState.Laplace.Imaginary;
+            double omega = ComplexState.Laplace.Imaginary;
 
-            var gdpr = ModelParameters.DrainConductance * Parameters.Area;
-            var gspr = ModelParameters.SourceConductance * Parameters.Area;
-            var gm = Gm;
-            var gds = Gds;
-            var ggs = Ggs;
-            var xgs = CapGs * omega;
-            var ggd = Ggd;
-            var xgd = CapGd * omega;
+            double gdpr = ModelParameters.DrainConductance * Parameters.Area;
+            double gspr = ModelParameters.SourceConductance * Parameters.Area;
+            double gm = Gm;
+            double gds = Gds;
+            double ggs = Ggs;
+            double xgs = CapGs * omega;
+            double ggd = Ggd;
+            double xgd = CapGd * omega;
 
-            var m = Parameters.ParallelMultiplier;
+            double m = Parameters.ParallelMultiplier;
             ComplexElements.Add(
                 gdpr * m,
                 new Complex(ggd + ggs, xgd + xgs) * m,

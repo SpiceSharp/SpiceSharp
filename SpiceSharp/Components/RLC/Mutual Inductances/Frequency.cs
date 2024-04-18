@@ -32,8 +32,8 @@ namespace SpiceSharp.Components.MutualInductances
             _branch1 = context.Inductor1Behaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
             _branch2 = context.Inductor2Behaviors.GetValue<IBranchedBehavior<Complex>>().Branch;
 
-            var br1 = _complex.Map[_branch1];
-            var br2 = _complex.Map[_branch2];
+            int br1 = _complex.Map[_branch1];
+            int br2 = _complex.Map[_branch2];
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(br1, br2),
                 new MatrixLocation(br2, br1));

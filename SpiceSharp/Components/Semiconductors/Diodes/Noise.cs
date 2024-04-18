@@ -83,8 +83,8 @@ namespace SpiceSharp.Components.Diodes
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {
-            var m = Parameters.ParallelMultiplier;
-            var n = Parameters.SeriesMultiplier;
+            double m = Parameters.ParallelMultiplier;
+            double n = Parameters.SeriesMultiplier;
 
             _rs.Compute(ModelTemperature.Conductance * m / n * Parameters.Area, Parameters.Temperature);
             _id.Compute(LocalCurrent * m / n);

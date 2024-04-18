@@ -11,8 +11,8 @@ namespace SpiceSharpGenerator
     /// <typeparam name="T">The value.</typeparam>
     public class DependencyGraph<T> where T : IEquatable<T>
     {
-        private readonly HashSet<T> _nodes = new HashSet<T>();
-        private readonly HashSet<Tuple<T, T>> _edges = new HashSet<Tuple<T, T>>();
+        private readonly HashSet<T> _nodes = [];
+        private readonly HashSet<Tuple<T, T>> _edges = [];
 
         /// <summary>
         /// Adds an item to the dependency graph.

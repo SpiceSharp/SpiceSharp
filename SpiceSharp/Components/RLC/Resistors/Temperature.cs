@@ -74,7 +74,7 @@ namespace SpiceSharp.Components.Resistors
                     }
                 }
 
-                var difference = Parameters.Temperature - _mbp.NominalTemperature;
+                double difference = Parameters.Temperature - _mbp.NominalTemperature;
 
                 if (_mbp.ExponentialCoefficient.Given)
                     factor = Math.Pow(1.01, _mbp.ExponentialCoefficient * difference);

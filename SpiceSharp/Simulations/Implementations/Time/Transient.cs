@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<ITimeBehavior> _transientBehaviors;
         private BehaviorList<IAcceptBehavior> _acceptBehaviors;
         private BehaviorList<ITruncatingBehavior> _truncatingBehaviors;
-        private readonly List<ConvergenceAid> _initialConditions = new List<ConvergenceAid>();
+        private readonly List<ConvergenceAid> _initialConditions = [];
         private bool _shouldReorder = true;
         private IIntegrationMethod _method;
         private readonly SimulationState _time;
@@ -171,7 +171,7 @@ namespace SpiceSharp.Simulations
                 var state = GetState<IBiasingSimulationState>();
                 foreach (var ic in _initialConditions)
                 {
-                    var index = state.Map[ic.Variable];
+                    int index = state.Map[ic.Variable];
                     state.Solution[index] = ic.Value;
                     state.OldSolution[index] = ic.Value; // Just to make sure...
                 }
@@ -198,7 +198,7 @@ namespace SpiceSharp.Simulations
 
             // Start our statistics
             var stats = ((BiasingSimulation)this).Statistics;
-            var startIters = stats.Iterations;
+            int startIters = stats.Iterations;
             var startselapsed = stats.SolveTime.Elapsed;
             Statistics.TransientTime.Start();
             try
@@ -236,7 +236,7 @@ namespace SpiceSharp.Simulations
                         Probe();
 
                         // Try to solve the new point
-                        var converged = TimeIterate(TimeParameters.TransientMaxIterations);
+                        bool converged = TimeIterate(TimeParameters.TransientMaxIterations);
                         Statistics.TimePoints++;
 
                         // Did we fail to converge to a solution?
@@ -248,7 +248,7 @@ namespace SpiceSharp.Simulations
                         else
                         {
                             // If our integration method approves of our solution, continue to the next timepoint
-                            var max = double.PositiveInfinity;
+                            double max = double.PositiveInfinity;
                             foreach (var behavior in _truncatingBehaviors)
                                 max = Math.Min(behavior.Evaluate(), max);
                             if (_method.Evaluate(max))
@@ -281,8 +281,8 @@ namespace SpiceSharp.Simulations
         {
             var state = GetState<IBiasingSimulationState>();
             var solver = state.Solver;
-            var iterno = 0;
-            var initTransient = _method.BaseTime.Equals(0.0);
+            int iterno = 0;
+            bool initTransient = _method.BaseTime.Equals(0.0);
 
             // Ignore operating condition point, just use the solution as-is
             if (_time.UseIc)
@@ -317,7 +317,7 @@ namespace SpiceSharp.Simulations
                         base.Statistics.ReorderTime.Start();
                         try
                         {
-                            var eliminated = solver.OrderAndFactor();
+                            int eliminated = solver.OrderAndFactor();
                             if (eliminated < solver.Size)
                                 throw new SingularException(eliminated + 1);
                             _shouldReorder = false;

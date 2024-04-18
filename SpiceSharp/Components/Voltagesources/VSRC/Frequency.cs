@@ -53,16 +53,16 @@ namespace SpiceSharp.Components.VoltageSources
             _variables = new OnePort<Complex>(_complex, context);
             Branch = _complex.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
 
-            var pos = _complex.Map[_variables.Positive];
-            var neg = _complex.Map[_variables.Negative];
-            var br = _complex.Map[Branch];
+            int pos = _complex.Map[_variables.Positive];
+            int neg = _complex.Map[_variables.Negative];
+            int br = _complex.Map[Branch];
 
-            _elements = new ElementSet<Complex>(_complex.Solver, new[] {
+            _elements = new ElementSet<Complex>(_complex.Solver, [
                         new MatrixLocation(pos, br),
                         new MatrixLocation(br, pos),
                         new MatrixLocation(neg, br),
                         new MatrixLocation(br, neg)
-                    }, new[] { br });
+                    ], [br]);
         }
 
         /// <inheritdoc/>

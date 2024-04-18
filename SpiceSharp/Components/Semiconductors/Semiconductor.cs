@@ -26,7 +26,7 @@ namespace SpiceSharp.Components.Semiconductors
             {
                 if (oldVoltage > 0)
                 {
-                    var arg = (newVoltage - oldVoltage) / thermalVoltage;
+                    double arg = (newVoltage - oldVoltage) / thermalVoltage;
                     if (arg > 0)
                         newVoltage = oldVoltage + thermalVoltage * (2 + Math.Log(arg - 2));
                     else

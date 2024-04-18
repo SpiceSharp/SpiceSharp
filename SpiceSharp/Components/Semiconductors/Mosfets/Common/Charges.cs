@@ -17,9 +17,9 @@ namespace SpiceSharp.Components.Mosfets
         public void Calculate(IMosfetBiasingBehavior behavior, ModelParameters mp)
         {
             var tp = behavior.Properties;
-            var vgs = behavior.Vgs;
-            var vds = behavior.Vds;
-            var vbs = behavior.Vbs;
+            double vgs = behavior.Vgs;
+            double vds = behavior.Vds;
+            double vbs = behavior.Vbs;
 
             /*
              * Now we do the hard part of the bulk-drain and bulk-source
@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.Mosfets
 
             // Bulk-drain depletion capacitances
             {
-                var vbd = vbs - vds;
+                double vbd = vbs - vds;
                 if (tp.Cbd != 0 || tp.CbdSidewall != 0)
                 {
                     if (vbd < tp.TempDepCap)

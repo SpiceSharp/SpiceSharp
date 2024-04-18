@@ -85,7 +85,7 @@ namespace SpiceSharp.Components.Distributed
         /// <param name="breakpoint">If <c>true</c>, interpolation will be linear. Else cubic interpolation will be used if possible.</param>
         public void Probe(double time, bool breakpoint)
         {
-            var refTime = time - Delay;
+            double refTime = time - Delay;
             InputDerivative = 0.0;
 
             // Store the probe value
@@ -104,16 +104,16 @@ namespace SpiceSharp.Components.Distributed
             {
                 if (_reference.Older == null)
                 {
-                    for (var i = 0; i < Size; i++)
+                    for (int i = 0; i < Size; i++)
                         _values[i] = _reference.Values[i];
                     if (_reference == _probed)
                         InputDerivative = 1.0;
                 }
                 else
                 {
-                    var f1 = (refTime - _reference.Time) / (_reference.Older.Time - _reference.Time);
-                    var f2 = (refTime - _reference.Older.Time) / (_reference.Time - _reference.Older.Time);
-                    for (var i = 0; i < Size; i++)
+                    double f1 = (refTime - _reference.Time) / (_reference.Older.Time - _reference.Time);
+                    double f2 = (refTime - _reference.Older.Time) / (_reference.Time - _reference.Older.Time);
+                    for (int i = 0; i < Size; i++)
                         _values[i] = f1 * _reference.Older.Values[i] + f2 * _reference.Values[i];
                     if (_reference == _probed)
                         InputDerivative = f2;
@@ -125,9 +125,9 @@ namespace SpiceSharp.Components.Distributed
                 if (breakpoint || _reference.Older == null)
                 {
                     // Linear interpolation
-                    var f1 = (refTime - _reference.Newer.Time) / (_reference.Time - _reference.Newer.Time);
-                    var f2 = (refTime - _reference.Time) / (_reference.Newer.Time - _reference.Time);
-                    for (var i = 0; i < Size; i++)
+                    double f1 = (refTime - _reference.Newer.Time) / (_reference.Time - _reference.Newer.Time);
+                    double f2 = (refTime - _reference.Time) / (_reference.Newer.Time - _reference.Time);
+                    for (int i = 0; i < Size; i++)
                         _values[i] = f1 * _reference.Values[i] + f2 * _reference.Newer.Values[i];
                     if (_reference.Newer == _probed)
                         InputDerivative = f2;
@@ -135,15 +135,15 @@ namespace SpiceSharp.Components.Distributed
                 else
                 {
                     // Cubic interpolation
-                    var f1 = (refTime - _reference.Time) * (refTime - _reference.Newer.Time) /
+                    double f1 = (refTime - _reference.Time) * (refTime - _reference.Newer.Time) /
                              (_reference.Older.Time - _reference.Time) /
                              (_reference.Older.Time - _reference.Newer.Time);
-                    var f2 = (refTime - _reference.Older.Time) * (refTime - _reference.Newer.Time) /
+                    double f2 = (refTime - _reference.Older.Time) * (refTime - _reference.Newer.Time) /
                              (_reference.Time - _reference.Older.Time) / (_reference.Time - _reference.Newer.Time);
-                    var f3 = (refTime - _reference.Older.Time) * (refTime - _reference.Time) /
+                    double f3 = (refTime - _reference.Older.Time) * (refTime - _reference.Time) /
                              (_reference.Newer.Time - _reference.Older.Time) /
                              (_reference.Newer.Time - _reference.Time);
-                    for (var i = 0; i < Size; i++)
+                    for (int i = 0; i < Size; i++)
                     {
                         _values[i] = f1 * _reference.Older.Values[i] +
                                     f2 * _reference.Values[i] +
@@ -162,7 +162,7 @@ namespace SpiceSharp.Components.Distributed
         public void SetProbedValues(params double[] values)
         {
             values.ThrowIfNotLength(nameof(values), Size);
-            for (var i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
                 _probed.Values[i] = values[i];
         }
 
@@ -171,7 +171,7 @@ namespace SpiceSharp.Components.Distributed
         /// </summary>
         public void AcceptProbedValues()
         {
-            var refTime = _probed.Time - Delay;
+            double refTime = _probed.Time - Delay;
 
             // We need at least 2 nodes before the accepted timepoint in case the timestep is truncated
             var tmp = _oldest;
@@ -197,13 +197,10 @@ namespace SpiceSharp.Components.Distributed
             }
 
             // We got rid of the nodes we don't need, advance the probed node
-            if (_probed.Newer == null)
-            {
-                _probed.Newer = new Node(Size)
+            _probed.Newer ??= new Node(Size)
                 {
                     Older = _probed
                 };
-            }
             _probed = _probed.Newer;
         }
 
@@ -221,7 +218,7 @@ namespace SpiceSharp.Components.Distributed
                 case 1: return _probed.Older.Values[index];
                 default:
                     var elt = _probed;
-                    for (var i = 0; i < back; i++)
+                    for (int i = 0; i < back; i++)
                         elt = elt?.Older;
                     return elt?.Values[index] ?? _oldest.Values[index];
             }
@@ -240,7 +237,7 @@ namespace SpiceSharp.Components.Distributed
                 case 1: return _probed.Older.Time;
                 default:
                     var elt = _probed;
-                    for (var i = 0; i < back; i++)
+                    for (int i = 0; i < back; i++)
                         elt = elt?.Older;
                     return elt?.Time ?? double.NegativeInfinity;
             }
@@ -253,8 +250,8 @@ namespace SpiceSharp.Components.Distributed
         private void MoveReferenceCloseTo(double time)
         {
             var r = _reference;
-            var distance = Math.Abs(r.Time - time);
-            var hasMoved = false;
+            double distance = Math.Abs(r.Time - time);
+            bool hasMoved = false;
 
             // Move forward until the middle point is closest
             while (r.Newer != null && Math.Abs(r.Newer.Time - time) < distance)
@@ -290,7 +287,7 @@ namespace SpiceSharp.Components.Distributed
             };
 
             // Clear values
-            for (var i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
                 _values[i] = 0.0;
         }
     }

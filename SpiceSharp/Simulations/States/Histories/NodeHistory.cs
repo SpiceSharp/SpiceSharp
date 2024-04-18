@@ -65,7 +65,7 @@ namespace SpiceSharp.Simulations.Histories
             // Create a cycle
             var first = new Node();
             var current = first;
-            for (var i = 1; i < length; i++)
+            for (int i = 1; i < length; i++)
             {
                 current.Next = new Node
                 {
@@ -90,7 +90,7 @@ namespace SpiceSharp.Simulations.Histories
             // Create a cycle
             var first = new Node();
             var current = first;
-            for (var i = 1; i < length; i++)
+            for (int i = 1; i < length; i++)
             {
                 current.Next = new Node
                 {
@@ -120,7 +120,7 @@ namespace SpiceSharp.Simulations.Histories
                 Value = generator(0)
             };
             var current = first;
-            for (var i = 1; i < length; i++)
+            for (int i = 1; i < length; i++)
             {
                 current.Next = new Node
                 {
@@ -157,7 +157,7 @@ namespace SpiceSharp.Simulations.Histories
 
             // Find the matching node
             var point = _currentPoint;
-            for (var i = 0; i < index; i++)
+            for (int i = 0; i < index; i++)
                 point = point.Previous;
             return point.Value;
         }
@@ -169,7 +169,7 @@ namespace SpiceSharp.Simulations.Histories
         public void Set(T value)
         {
             var current = _currentPoint;
-            for (var i = 0; i < Length; i++)
+            for (int i = 0; i < Length; i++)
             {
                 current.Value = value;
                 current = current.Previous;
@@ -184,7 +184,7 @@ namespace SpiceSharp.Simulations.Histories
         {
             method.ThrowIfNull(nameof(method));
             var current = _currentPoint;
-            for (var i = 0; i < Length; i++)
+            for (int i = 0; i < Length; i++)
             {
                 current.Value = method(i);
                 current = current.Previous;
@@ -200,7 +200,7 @@ namespace SpiceSharp.Simulations.Histories
         public IEnumerator<T> GetEnumerator()
         {
             var elt = _currentPoint;
-            for (var i = 0; i < Length; i++)
+            for (int i = 0; i < Length; i++)
             {
                 yield return elt.Value;
                 elt = elt.Previous;

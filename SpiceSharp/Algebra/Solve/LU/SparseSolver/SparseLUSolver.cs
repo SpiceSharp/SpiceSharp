@@ -61,8 +61,8 @@ namespace SpiceSharp.Algebra.Solve
         public override bool Factor()
         {
             IsFactored = false;
-            var order = Size - Degeneracy;
-            for (var step = 1; step <= order; step++)
+            int order = Size - Degeneracy;
+            for (int step = 1; step <= order; step++)
             {
                 var pivot = Matrix.FindDiagonalElement(step);
 
@@ -80,7 +80,7 @@ namespace SpiceSharp.Algebra.Solve
         {
             IsFactored = false;
             int step = 1;
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
             int max = Size - PivotSearchReduction;
 
             if (!NeedsReordering)

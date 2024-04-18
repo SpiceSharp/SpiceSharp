@@ -67,13 +67,13 @@ namespace SpiceSharp.Algebra
                 return Pivot<MatrixLocation>.Empty;
 
             // Find the largest element below and right of the pivot
-            var largest = Magnitude(matrix[eliminationStep, eliminationStep]);
+            double largest = Magnitude(matrix[eliminationStep, eliminationStep]);
             var loc = new MatrixLocation(eliminationStep, eliminationStep);
 
             // We just select the biggest off-diagonal element that we can find!
-            for (var i = eliminationStep + 1; i <= max; i++)
+            for (int i = eliminationStep + 1; i <= max; i++)
             {
-                var c = Magnitude(matrix[eliminationStep, i]);
+                double c = Magnitude(matrix[eliminationStep, i]);
                 if (c > largest)
                 {
                     largest = c;
@@ -105,13 +105,13 @@ namespace SpiceSharp.Algebra
             matrix.ThrowIfNull(nameof(matrix));
 
             // Get the magnitude of the current pivot
-            var magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);
+            double magnitude = Magnitude(matrix[eliminationStep, eliminationStep]);
             if (magnitude <= AbsolutePivotThreshold)
                 return false;
 
             // Search for the largest element below the pivot
-            var largest = 0.0;
-            for (var i = eliminationStep + 1; i <= max; i++)
+            double largest = 0.0;
+            for (int i = eliminationStep + 1; i <= max; i++)
             {
                 largest = Math.Max(largest, Magnitude(matrix[eliminationStep, i]));
                 largest = Math.Max(largest, Magnitude(matrix[i, eliminationStep]));

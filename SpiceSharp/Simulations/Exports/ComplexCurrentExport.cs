@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             source.ThrowIfNull(nameof(source));
-            SourcePath = new[] { source };
+            SourcePath = [source];
         }
 
         /// <summary>

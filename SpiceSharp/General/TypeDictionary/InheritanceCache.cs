@@ -10,7 +10,7 @@ namespace SpiceSharp.General
     /// </summary>
     public static class InheritanceCache
     {
-        private static readonly ConcurrentDictionary<Type, Type[]> _interfaces = new ConcurrentDictionary<Type, Type[]>();
+        private static readonly ConcurrentDictionary<Type, Type[]> _interfaces = new();
 
         /// <summary>
         /// Gets the specified type.

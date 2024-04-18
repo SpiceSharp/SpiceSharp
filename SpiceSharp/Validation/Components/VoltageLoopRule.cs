@@ -11,8 +11,8 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IAppliedVoltageRule" />
     public class VoltageLoopRule : IAppliedVoltageRule
     {
-        private readonly Dictionary<IVariable, Group> _groups = new Dictionary<IVariable, Group>();
-        private readonly List<VoltageLoopRuleViolation> _violations = new List<VoltageLoopRuleViolation>();
+        private readonly Dictionary<IVariable, Group> _groups = [];
+        private readonly List<VoltageLoopRuleViolation> _violations = [];
 
         /// <summary>
         /// Gets the number of violations of this rule.

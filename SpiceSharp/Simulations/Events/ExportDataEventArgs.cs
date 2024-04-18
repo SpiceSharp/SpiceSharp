@@ -89,7 +89,7 @@ namespace SpiceSharp.Simulations
             positive.ThrowIfNull(nameof(positive));
             if (_simulation is ISimulation<IVariable<double>> sim)
             {
-                var voltage = sim.Solved[positive].Value;
+                double voltage = sim.Solved[positive].Value;
                 if (negative != null)
                     voltage -= sim.Solved[negative].Value;
                 return voltage;

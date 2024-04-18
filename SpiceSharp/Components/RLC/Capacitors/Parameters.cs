@@ -18,7 +18,7 @@ namespace SpiceSharp.Components.Capacitors
         /// </value>
         [ParameterName("capacitance"), ParameterInfo("Device capacitance", Units = "F", IsPrincipal = true)]
         [GreaterThanOrEquals(0), Finite]
-        private GivenParameter<double> _capacitance = new GivenParameter<double>();
+        private GivenParameter<double> _capacitance = new();
 
         /// <summary>
         /// Gets the initial voltage parameter.
@@ -38,7 +38,7 @@ namespace SpiceSharp.Components.Capacitors
         /// </value>
         [ParameterName("w"), ParameterInfo("Device width", Units = "m", Interesting = false)]
         [GreaterThanOrEquals(0), Finite]
-        private GivenParameter<double> _width = new GivenParameter<double>();
+        private GivenParameter<double> _width = new();
 
         /// <summary>
         /// Gets the length of the capacitor.
@@ -48,7 +48,7 @@ namespace SpiceSharp.Components.Capacitors
         /// </value>
         [ParameterName("l"), ParameterInfo("Device length", Units = "m", Interesting = false)]
         [GreaterThanOrEquals(0), Finite]
-        private GivenParameter<double> _length = new GivenParameter<double>();
+        private GivenParameter<double> _length = new();
 
         /// <summary>
         /// Gets or sets the parallel multiplier.
@@ -81,6 +81,6 @@ namespace SpiceSharp.Components.Capacitors
         /// The temperature in Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _temperature = new(Constants.ReferenceTemperature, false);
     }
 }

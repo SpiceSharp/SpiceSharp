@@ -12,7 +12,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <summary>
         /// No pivot.
         /// </summary>
-        public static Pivot<P> Empty = new Pivot<P>(default, PivotInfo.None);
+        public static Pivot<P> Empty = new(default, PivotInfo.None);
 
         /// <summary>
         /// The pivot.
@@ -42,7 +42,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is Pivot<P> pivot)
                 return Equals(pivot);
@@ -56,7 +56,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// <c>true</c> if the pivots are the equal; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(Pivot<P> pivot)
+        public readonly bool Equals(Pivot<P> pivot)
         {
             if (!Element.Equals(pivot.Element))
                 return false;
@@ -71,7 +71,7 @@ namespace SpiceSharp.Algebra.Solve
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => (Element?.GetHashCode() ?? 0) ^ Info.GetHashCode();
+        public override readonly int GetHashCode() => (Element?.GetHashCode() ?? 0) ^ Info.GetHashCode();
 
         /// <summary>
         /// Implements the operator ==.

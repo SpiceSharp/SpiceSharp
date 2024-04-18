@@ -8,7 +8,7 @@
     public static class Array<T>
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations.", Justification = "Compatiblity for .NET Standard 1.5")]
-        private static readonly T[] _empty = new T[0];
+        private static readonly T[] _empty = [];
 
         /// <summary>
         /// Returns an empty array.

@@ -30,7 +30,7 @@ namespace SpiceSharp.Components.NoiseSources
         public void Compute(double gain)
         {
             var val = _variables.Positive.Value - _variables.Negative.Value;
-            var vgain = val.Real * val.Real + val.Imaginary * val.Imaginary;
+            double vgain = val.Real * val.Real + val.Imaginary * val.Imaginary;
             OutputNoiseDensity = vgain * gain;
         }
     }

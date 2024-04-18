@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.ParallelComponents
         /// The work distributors.
         /// </value>
         [ParameterName("workdistributors"), ParameterInfo("Workload distributors by the behavior type.")]
-        public Dictionary<Type, IWorkDistributor> WorkDistributors { get; } = new Dictionary<Type, IWorkDistributor>();
+        public Dictionary<Type, IWorkDistributor> WorkDistributors { get; } = [];
 
         /// <inheritdoc/>
         public Parameters Clone()

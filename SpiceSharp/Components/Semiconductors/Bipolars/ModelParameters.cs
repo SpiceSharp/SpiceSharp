@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The nominal temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _nominalTemperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the saturation current.
@@ -468,7 +468,7 @@ namespace SpiceSharp.Components.Bipolars
         /// </value>
         [ParameterName("fc"), ParameterInfo("Forward bias junction fit parameter")]
         [GreaterThanOrEquals(0), UpperLimit(0.9999)]
-        private GivenParameter<double> _depletionCapCoefficient = new GivenParameter<double>(0.5, false);
+        private GivenParameter<double> _depletionCapCoefficient = new(0.5, false);
 
         /// <summary>
         /// Gets or sets a parameter that is not accessible in Spice 3f5

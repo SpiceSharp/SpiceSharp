@@ -38,7 +38,7 @@ namespace SpiceSharp.Components
             if (pins != null)
             {
                 _pins = new string[pins.Length];
-                for (var i = 0; i < pins.Length; i++)
+                for (int i = 0; i < pins.Length; i++)
                     _pins[i] = pins[i].ThrowIfNull("node {0}".FormatString(i + 1));
             }
             else
@@ -47,6 +47,6 @@ namespace SpiceSharp.Components
 
         /// <inheritdoc/>
         public ISubcircuitDefinition Clone()
-            => new SubcircuitDefinition(Entities.Clone(), Pins.ToArray());
+            => new SubcircuitDefinition(Entities.Clone(), [.. Pins]);
     }
 }

@@ -36,7 +36,7 @@ namespace SpiceSharpTest.Simulations
             ac.ExportSimulationData -= BuildReference;
 
             // Rerun the simulation for building the reference values
-            var index = 0;
+            int index = 0;
             void CheckReference(object sender, ExportDataEventArgs args)
             {
                 Assert.AreEqual(r[index].Real, export.Value.Real, 1e-20);

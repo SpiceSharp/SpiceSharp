@@ -44,8 +44,8 @@ namespace SpiceSharp.Components.Mosfets
             ModelParameters mp,
             TemperatureProperties tp)
         {
-            var vbd = vbs - vds;
-            var vgd = vgs - vds;
+            double vbd = vbs - vds;
+            double vgd = vgs - vds;
             double arg, sarg, sargsw;
 
             /*

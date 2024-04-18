@@ -34,7 +34,7 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             entityName.ThrowIfNull(nameof(entityName));
-            EntityPath = new[] { entityName };
+            EntityPath = [entityName];
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 

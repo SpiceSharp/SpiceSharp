@@ -11,7 +11,7 @@ namespace SpiceSharp.Behaviors
     /// <seealso cref="IBehaviorContainerCollection"/>
     public class BehaviorContainerCollection : IBehaviorContainerCollection
     {
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.SupportsRecursion);
         private readonly Dictionary<string, IBehaviorContainer> _dictionary;
         private readonly List<IBehaviorContainer> _values;
 
@@ -29,7 +29,7 @@ namespace SpiceSharp.Behaviors
                 _lock.EnterReadLock();
                 try
                 {
-                    foreach (var key in _dictionary.Keys)
+                    foreach (string key in _dictionary.Keys)
                         yield return key;
                 }
                 finally
@@ -83,7 +83,7 @@ namespace SpiceSharp.Behaviors
         public BehaviorContainerCollection(IEqualityComparer<string> comparer)
         {
             _dictionary = new Dictionary<string, IBehaviorContainer>(comparer ?? Constants.DefaultComparer);
-            _values = new List<IBehaviorContainer>();
+            _values = [];
         }
 
         /// <inheritdoc/>

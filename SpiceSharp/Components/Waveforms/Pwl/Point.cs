@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a point for a <see cref="Pwl"/>.
     /// </summary>
-    public struct Point
+    public readonly struct Point
     {
         /// <summary>
         /// The point time.
@@ -32,7 +32,7 @@
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return (Time.GetHashCode() * 13) ^ Value.GetHashCode();
         }
@@ -44,7 +44,7 @@
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is Point pt)
             {
@@ -91,7 +91,7 @@
         /// <returns>
         /// A string that represents the current object.
         /// </returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return "({0}, {1})".FormatString(Time, Value);
         }

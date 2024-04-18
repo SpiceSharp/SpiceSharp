@@ -39,7 +39,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     _stateValues));
 
                 // Reset all integration coefficients
-                for (var i = 0; i < Coefficients.Length; i++)
+                for (int i = 0; i < Coefficients.Length; i++)
                     Coefficients[i] = 0.0;
 
                 base.Initialize();
@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <inheritdoc/>
             protected override void ComputeCoefficients()
             {
-                var delta = States.Value.Delta;
+                double delta = States.Value.Delta;
 
                 // Integration constants
                 switch (Order)
@@ -105,9 +105,9 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 {
                     case 1:
                         // Divided difference approach
-                        for (var i = 1; i <= Prediction.Length; i++)
+                        for (int i = 1; i <= Prediction.Length; i++)
                         {
-                            var dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
+                            double dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
                             Prediction[i] = current.Solution[i] + future.Delta * dd0;
                         }
                         break;
@@ -115,12 +115,12 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     case 2:
                         // Adams-Bashforth method (second order for variable timesteps)
                         var second = States.GetPreviousValue(3);
-                        var b = -future.Delta / (2.0 * current.Delta);
-                        var a = 1 - b;
-                        for (var i = 1; i <= Prediction.Length; i++)
+                        double b = -future.Delta / (2.0 * current.Delta);
+                        double a = 1 - b;
+                        for (int i = 1; i <= Prediction.Length; i++)
                         {
-                            var dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
-                            var dd1 = (previous.Solution[i] - second.Solution[i]) / previous.Delta;
+                            double dd0 = (current.Solution[i] - previous.Solution[i]) / current.Delta;
+                            double dd1 = (previous.Solution[i] - second.Solution[i]) / previous.Delta;
                             Prediction[i] = current.Solution[i] + (b * dd1 + a * dd0) * future.Delta;
                         }
                         break;

@@ -55,7 +55,7 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             posNode.ThrowIfNull(nameof(posNode));
-            PosNodePath = new[] { posNode };
+            PosNodePath = [posNode];
             NegNodePath = null;
         }
 
@@ -83,11 +83,11 @@ namespace SpiceSharp.Simulations
             : base(simulation)
         {
             posNode.ThrowIfNull(nameof(posNode));
-            PosNodePath = new[] { posNode };
+            PosNodePath = [posNode];
             if (negNode == null)
                 NegNodePath = null;
             else
-                NegNodePath = new[] { negNode };
+                NegNodePath = [negNode];
         }
 
         /// <summary>

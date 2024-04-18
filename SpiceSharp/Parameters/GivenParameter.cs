@@ -12,7 +12,7 @@ namespace SpiceSharp
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
     /// <seealso cref="IEquatable{T}"/>
-    public struct GivenParameter<T> : IEquatable<T>, IEquatable<GivenParameter<T>>
+    public readonly struct GivenParameter<T> : IEquatable<T>, IEquatable<GivenParameter<T>>
     {
         /// <summary>
         /// Gets or sets the value of the parameter.
@@ -45,7 +45,7 @@ namespace SpiceSharp
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             if (Given)
                 return "{0} (set)".FormatString(Value);
@@ -68,7 +68,7 @@ namespace SpiceSharp
         /// <returns>
         /// The result of the conversion.
         /// </returns>
-        public static implicit operator GivenParameter<T>(T value) => new GivenParameter<T>(value);
+        public static implicit operator GivenParameter<T>(T value) => new(value);
 
         /// <summary>
         /// Determines whether the specified <see cref="object" />, is equal to this instance.
@@ -77,7 +77,7 @@ namespace SpiceSharp
         /// <returns>
         ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is GivenParameter<T> gp)
             {
@@ -95,7 +95,7 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the specified value is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(T value) => Value.Equals(value);
+        public readonly bool Equals(T value) => Value.Equals(value);
 
         /// <summary>
         /// Determines whether the specified value is equal to this instance.
@@ -104,7 +104,7 @@ namespace SpiceSharp
         /// <returns>
         ///     <c>true</c> if the specified value is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(GivenParameter<T> value)
+        public readonly bool Equals(GivenParameter<T> value)
         {
             if (!Value.Equals(value.Value))
                 return false;
@@ -120,7 +120,7 @@ namespace SpiceSharp
         /// <remarks>
         /// The hash code is not based on whether or not the value is given.
         /// </remarks>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return Value.GetHashCode();
         }

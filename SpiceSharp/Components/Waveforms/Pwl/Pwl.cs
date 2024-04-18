@@ -34,10 +34,10 @@ namespace SpiceSharp.Components
         public void SetPoints(params double[] vector)
         {
             vector.ThrowIfNull(nameof(vector));
-            var n = Math.Max(vector.Length / 2, 2);
+            int n = Math.Max(vector.Length / 2, 2);
             vector.ThrowIfNotLength(nameof(vector), n * 2);
             Point[] arr = new Point[n];
-            for (var i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
                 arr[i] = new Point(vector[i * 2], vector[i * 2 + 1]);
             Points = arr;
         }

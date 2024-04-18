@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.Diodes
         /// The nominal temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _nominalTemperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the ohmic resistance.
@@ -141,7 +141,7 @@ namespace SpiceSharp.Components.Diodes
         /// </value>
         [ParameterName("bv"), ParameterInfo("Reverse breakdown voltage", Units = "V")]
         [Finite]
-        private GivenParameter<double> _breakdownVoltage = new GivenParameter<double>(-1.0, false);
+        private GivenParameter<double> _breakdownVoltage = new(-1.0, false);
 
         /// <summary>
         /// Gets the current at the reverse breakdown voltage.

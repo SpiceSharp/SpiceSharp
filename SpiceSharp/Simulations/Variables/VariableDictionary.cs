@@ -12,7 +12,7 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="IVariable"/>
     public class VariableDictionary<V> : IVariableDictionary<V> where V : IVariable
     {
-        private readonly Dictionary<string, V> _map = new Dictionary<string, V>();
+        private readonly Dictionary<string, V> _map = [];
 
         /// <inheritdoc/>
         public IEqualityComparer<string> Comparer => _map.Comparer;

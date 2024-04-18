@@ -40,7 +40,7 @@
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is Contribution<T> c)
             {
@@ -59,7 +59,7 @@
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => (13 * G.GetHashCode()) ^ C.GetHashCode();
+        public override readonly int GetHashCode() => (13 * G.GetHashCode()) ^ C.GetHashCode();
 
         /// <summary>
         /// Implements the operator ==.

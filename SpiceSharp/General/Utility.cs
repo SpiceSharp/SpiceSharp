@@ -121,12 +121,12 @@ namespace SpiceSharp
         {
             if (arguments == null && minimum > 0)
             {
-                var allowed = "{0}-{1}".FormatString(minimum, maximum);
+                string allowed = "{0}-{1}".FormatString(minimum, maximum);
                 throw new ArgumentException(Properties.Resources.Parameters_ArgumentCountMismatch.FormatString(name, 0, allowed));
             }
             if (arguments.Length < minimum || arguments.Length > maximum)
             {
-                var allowed = "{0}-{1}".FormatString(minimum, maximum);
+                string allowed = "{0}-{1}".FormatString(minimum, maximum);
                 throw new ArgumentException(Properties.Resources.Parameters_ArgumentCountMismatch.FormatString(name, allowed));
             }
             return arguments;
@@ -374,7 +374,7 @@ namespace SpiceSharp
                 throw new ArgumentNullException(nameof(nodes));
             if (nodes.Count != count)
                 throw new NodeMismatchException(count, nodes.Count);
-            foreach (var node in nodes)
+            foreach (string node in nodes)
                 node.ThrowIfNull(nameof(node));
             return nodes;
         }
@@ -392,13 +392,13 @@ namespace SpiceSharp
 
             // Make a list of all our variables and initialize the column widths
             int n = state.Solver.Size;
-            var variables = new string[n];
-            var elements = new string[n * (n + 1)];
-            var columnWidths = new int[n + 1];
-            var leadWidth = 0;
+            string[] variables = new string[n];
+            string[] elements = new string[n * (n + 1)];
+            int[] columnWidths = new int[n + 1];
+            int leadWidth = 0;
             foreach (var p in state.Map)
             {
-                var index = p.Value - 1;
+                int index = p.Value - 1;
                 if (index < 0)
                     continue; // Ground node
                 if (p.Key.Unit == Units.Volt)
@@ -413,12 +413,12 @@ namespace SpiceSharp
             columnWidths[n] = 6;
 
             // Determine the elements formatting and the widths
-            for (var row = 0; row < n; row++)
+            for (int row = 0; row < n; row++)
             {
                 // Matrix elements
-                for (var col = 0; col < n; col++)
+                for (int col = 0; col < n; col++)
                 {
-                    var index = row * (n + 1) + col;
+                    int index = row * (n + 1) + col;
                     var elt = state.Solver.FindElement(new MatrixLocation(row + 1, col + 1));
                     if (elt is null)
                         elements[index] = ".";
@@ -431,7 +431,7 @@ namespace SpiceSharp
 
                 // RHS element
                 {
-                    var index = row * (n + 1) + n;
+                    int index = row * (n + 1) + n;
                     var elt = state.Solver.FindElement(row + 1);
                     if (elt is null)
                         elements[index] = ".";
@@ -445,15 +445,15 @@ namespace SpiceSharp
 
             // Write our column headers
             writer.Write(new string(' ', leadWidth));
-            for (var i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
                 writer.Write($"{{0,{columnWidths[i]}}}".FormatString(variables[i]));
             writer.WriteLine();
 
             // Write every row
-            for (var row = 0; row < n; row++)
+            for (int row = 0; row < n; row++)
             {
                 writer.Write($"{{0,{leadWidth}}}".FormatString(variables[row]));
-                for (var col = 0; col <= n; col++)
+                for (int col = 0; col <= n; col++)
                     writer.Write($"{{0,{columnWidths[col]}}}".FormatString(elements[row * (n + 1) + col]));
                 writer.WriteLine();
             }
@@ -471,8 +471,8 @@ namespace SpiceSharp
         {
             var writer = new StringWriter();
             int n = state.Solver.Size;
-            var names = new string[n + 1];
-            var values = new string[n + 1];
+            string[] names = new string[n + 1];
+            string[] values = new string[n + 1];
             int nameWidth = 6;
             foreach (var p in state.Map)
             {
@@ -487,7 +487,7 @@ namespace SpiceSharp
                     values[p.Value] = value.ToString();
             }
 
-            for (var i = 0; i <= n; i++)
+            for (int i = 0; i <= n; i++)
                 writer.WriteLine($"{{0,{nameWidth}}} {{1}}".FormatString(names[i], values[i]));
             return writer.ToString();
         }
@@ -504,11 +504,11 @@ namespace SpiceSharp
 
             // Make a list of all our variables and initialize the column widths
             int n = state.Solver.Size;
-            var col_variables = new string[n];
-            var row_variables = new string[n];
-            var elements = new string[n * (n + 1)];
-            var columnWidths = new int[n + 1];
-            var leadWidth = 0;
+            string[] col_variables = new string[n];
+            string[] row_variables = new string[n];
+            string[] elements = new string[n * (n + 1)];
+            int[] columnWidths = new int[n + 1];
+            int leadWidth = 0;
             foreach (var p in state.Map)
             {
                 // Get the index to show here
@@ -537,12 +537,12 @@ namespace SpiceSharp
             columnWidths[n] = 6;
 
             // Determine the elements formatting and the widths
-            for (var row = 0; row < n; row++)
+            for (int row = 0; row < n; row++)
             {
                 // Matrix elements
-                for (var col = 0; col < n; col++)
+                for (int col = 0; col < n; col++)
                 {
-                    var index = row * (n + 1) + col;
+                    int index = row * (n + 1) + col;
                     var loc = new MatrixLocation(row + 1, col + 1);
                     loc = state.Solver.InternalToExternal(loc);
                     var elt = state.Solver.FindElement(loc);
@@ -557,7 +557,7 @@ namespace SpiceSharp
 
                 // RHS element
                 {
-                    var index = row * (n + 1) + n;
+                    int index = row * (n + 1) + n;
                     var loc = new MatrixLocation(row + 1, 0);
                     loc = state.Solver.InternalToExternal(loc);
                     var elt = state.Solver.FindElement(loc.Row);
@@ -573,15 +573,15 @@ namespace SpiceSharp
 
             // Write our column headers
             writer.Write(new string(' ', leadWidth));
-            for (var i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
                 writer.Write($"{{0,{columnWidths[i]}}}".FormatString(col_variables[i]));
             writer.WriteLine();
 
             // Write every row
-            for (var row = 0; row < n; row++)
+            for (int row = 0; row < n; row++)
             {
                 writer.Write($"{{0,{leadWidth}}}".FormatString(row_variables[row]));
-                for (var col = 0; col <= n; col++)
+                for (int col = 0; col <= n; col++)
                     writer.Write($"{{0,{columnWidths[col]}:g}}".FormatString(elements[row * (n + 1) + col]));
                 writer.WriteLine();
             }

@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations
     /// A system description at a data point in a <see cref="Noise"/> simulation.
     /// </summary>
     /// <seealso cref="IEquatable{T}" />
-    public struct NoisePoint : IEquatable<NoisePoint>
+    public readonly struct NoisePoint : IEquatable<NoisePoint>
     {
         /// <summary>
         /// Gets the frequency.
@@ -64,7 +64,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(NoisePoint other)
+        public readonly bool Equals(NoisePoint other)
         {
             if (!Frequency.Equals(other.Frequency))
                 return false;
@@ -93,7 +93,7 @@ namespace SpiceSharp.Simulations
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return (Frequency.GetHashCode() * 13) ^ InverseGainSquared.GetHashCode();
         }

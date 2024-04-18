@@ -34,7 +34,7 @@ namespace SpiceSharp.Algebra
             {
                 newElement.ThrowIfNull(nameof(newElement));
 
-                var row = newElement.Row;
+                int row = newElement.Row;
                 Element element = FirstInColumn, lastElement = null;
                 while (element != null)
                 {
@@ -186,12 +186,8 @@ namespace SpiceSharp.Algebra
                         second.Above.Below = first;
 
                         // Correct element links
-                        var element = first.Above;
-                        first.Above = second.Above;
-                        second.Above = element;
-                        element = first.Below;
-                        first.Below = second.Below;
-                        second.Below = element;
+                        (second.Above, first.Above) = (first.Above, second.Above);
+                        (second.Below, first.Below) = (first.Below, second.Below);
                         first.Row = rowSecond;
                         second.Row = rowFirst;
                     }

@@ -16,8 +16,8 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_SimpleDC_Expect_Reference()
         {
-            var gain = 0.85;
-            var resistance = 1e4;
+            double gain = 0.85;
+            double resistance = 1e4;
 
             // Build the circuit
             var ckt = new Circuit(
@@ -29,8 +29,8 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation, exports and references
             var dc = new DC("DC", "I1", -10.0, 10.0, 1e-3);
-            IExport<double>[] exports = { new RealVoltageExport(dc, "out"), new RealPropertyExport(dc, "R1", "i") };
-            Func<double, double>[] references = { sweep => sweep * gain * resistance, sweep => sweep * gain };
+            IExport<double>[] exports = [new RealVoltageExport(dc, "out"), new RealPropertyExport(dc, "R1", "i")];
+            Func<double, double>[] references = [sweep => sweep * gain * resistance, sweep => sweep * gain];
             AnalyzeDC(dc, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -38,9 +38,9 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_SimpleSmallSignal_Expect_Reference()
         {
-            var magnitude = 0.6;
-            var gain = 0.85;
-            var resistance = 1e4;
+            double magnitude = 0.6;
+            double gain = 0.85;
+            double resistance = 1e4;
 
             // Build the circuit
             var ckt = new Circuit(
@@ -53,8 +53,8 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1, 1e4, 3));
-            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i") };
-            Func<double, Complex>[] references = { freq => magnitude * gain * resistance, freq => magnitude * gain };
+            IExport<Complex>[] exports = [new ComplexVoltageExport(ac, "out"), new ComplexPropertyExport(ac, "R1", "i")];
+            Func<double, Complex>[] references = [freq => magnitude * gain * resistance, freq => magnitude * gain];
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }

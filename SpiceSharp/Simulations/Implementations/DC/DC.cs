@@ -83,7 +83,7 @@ namespace SpiceSharp.Simulations
             // Initialize
             var sweeps = DCParameters.Sweeps.ToArray();
             _sweepEnumerators = new IEnumerator<double>[DCParameters.Sweeps.Count];
-            for (var i = 0; i < sweeps.Length; i++)
+            for (int i = 0; i < sweeps.Length; i++)
             {
                 _sweepEnumerators[i] = sweeps[i].CreatePoints(this);
                 if (!_sweepEnumerators[i].MoveNext())
@@ -91,7 +91,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Execute the sweeps
-            var level = sweeps.Length - 1;
+            int level = sweeps.Length - 1;
             while (level >= 0)
             {
                 // Fill the values up again by resetting
@@ -131,8 +131,8 @@ namespace SpiceSharp.Simulations
         {
             if (_sweepEnumerators == null)
                 return null;
-            var result = new double[_sweepEnumerators.Length];
-            for (var i = 0; i < _sweepEnumerators.Length; i++)
+            double[] result = new double[_sweepEnumerators.Length];
+            for (int i = 0; i < _sweepEnumerators.Length; i++)
                 result[i] = _sweepEnumerators[i].Current;
             return result;
         }

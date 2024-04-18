@@ -55,10 +55,10 @@ namespace SpiceSharp.Simulations
         {
             state.ThrowIfNull(nameof(state));
 
-            var lnOutputNoiseDensity = Math.Log(Math.Max(OutputNoiseDensity, 1e-38));
-            var lnFrequency = state.Point.Value.LogFrequency;
-            var lnLastFrequency = state.Point.GetPreviousValue(1).LogFrequency;
-            var exponent = (lnOutputNoiseDensity - _lnLastOutputNoiseDensity) / (lnFrequency - lnLastFrequency);
+            double lnOutputNoiseDensity = Math.Log(Math.Max(OutputNoiseDensity, 1e-38));
+            double lnFrequency = state.Point.Value.LogFrequency;
+            double lnLastFrequency = state.Point.GetPreviousValue(1).LogFrequency;
+            double exponent = (lnOutputNoiseDensity - _lnLastOutputNoiseDensity) / (lnFrequency - lnLastFrequency);
             double delta;
 
             // Use simple box integration if the noise contribution doesn't change significantly over the frequency
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
                 delta = (Math.Exp(exponent * lnFrequency) - Math.Exp(exponent * lnLastFrequency)) / exponent;
 
             // Compute total output noise
-            var a = Math.Exp(lnOutputNoiseDensity - exponent * lnFrequency);
+            double a = Math.Exp(lnOutputNoiseDensity - exponent * lnFrequency);
             TotalOutputNoise += a * delta;
 
             // Compute total input noise

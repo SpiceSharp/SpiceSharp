@@ -13,9 +13,9 @@ namespace SpiceSharpGenerator
     {
         private readonly INamedTypeSymbol _entity, _context;
 #pragma warning disable RS1024 // Compare symbols correctly
-        private readonly Dictionary<INamedTypeSymbol, BehaviorData> _behaviors = new Dictionary<INamedTypeSymbol, BehaviorData>(SymbolEqualityComparer.Default);
+        private readonly Dictionary<INamedTypeSymbol, BehaviorData> _behaviors = new(SymbolEqualityComparer.Default);
 #pragma warning restore RS1024 // Compare symbols correctly
-        private readonly DependencyGraph<BehaviorData> _graph = new DependencyGraph<BehaviorData>();
+        private readonly DependencyGraph<BehaviorData> _graph = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BehaviorFactoryResolver"/> class.
@@ -75,7 +75,7 @@ namespace SpiceSharpGenerator
             yield return $"var context = new {_context}(this, simulation, behaviors);";
 
             var sb = new StringBuilder(32);
-            var needsBuilder = true;
+            bool needsBuilder = true;
 
             foreach (var behavior in _graph.OrderByIndependentFirst())
             {

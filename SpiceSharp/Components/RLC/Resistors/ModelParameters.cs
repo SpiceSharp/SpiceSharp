@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.Resistors
         /// The nominal temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0)]
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _nominalTemperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the first-order temperature coefficient parameter.

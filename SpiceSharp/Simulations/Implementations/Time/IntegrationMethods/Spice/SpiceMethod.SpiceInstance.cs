@@ -40,7 +40,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <value>
             /// The registered states.
             /// </value>
-            protected List<IIntegrationState> RegisteredStates { get; } = new List<IIntegrationState>();
+            protected List<IIntegrationState> RegisteredStates { get; } = [];
 
             /// <summary>
             /// Gets the truncatable states.
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <value>
             /// The truncatable states.
             /// </value>
-            protected List<ITruncatable> TruncatableStates { get; } = new List<ITruncatable>();
+            protected List<ITruncatable> TruncatableStates { get; } = [];
 
             /// <inheritdoc/>
             public Breakpoints Breakpoints { get; } = new Breakpoints();
@@ -149,7 +149,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <inheritdoc/>
             public virtual void Prepare()
             {
-                var delta = Math.Min(Delta, Parameters.MaxStep);
+                double delta = Math.Min(Delta, Parameters.MaxStep);
 
                 // Breakpoints
                 if (Time.Equals(Breakpoints.First) || Breakpoints.First - Time <= Parameters.MinStep)
@@ -158,7 +158,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     Order = 1;
 
                     // Limit the next timestep
-                    var mt = Math.Min(_saveDelta, Breakpoints.Delta);
+                    double mt = Math.Min(_saveDelta, Breakpoints.Delta);
                     delta = Math.Min(delta, 0.1 * mt);
 
                     // Spice will divide the first timestep by 10

@@ -47,11 +47,11 @@ namespace SpiceSharp.Components
 
                 // Make a list of node bridges
                 var pins = Parameters.Definition.Pins;
-                var outNodes = _connections;
+                string[] outNodes = _connections;
                 if ((outNodes == null && pins.Count > 0) || outNodes.Length != pins.Count)
                     throw new NodeMismatchException(pins.Count, outNodes?.Length ?? 0);
                 var nodes = new Bridge<string>[pins.Count];
-                for (var i = 0; i < pins.Count; i++)
+                for (int i = 0; i < pins.Count; i++)
                     nodes[i] = new Bridge<string>(pins[i], outNodes[i]);
                 return nodes;
             }
@@ -114,7 +114,7 @@ namespace SpiceSharp.Components
         {
             nodes.ThrowIfNull(nameof(nodes));
             _connections = new string[nodes.Length];
-            for (var i = 0; i < nodes.Length; i++)
+            for (int i = 0; i < nodes.Length; i++)
                 _connections[i] = nodes[i].ThrowIfNull($"node {0}".FormatString(i + 1));
             return this;
         }

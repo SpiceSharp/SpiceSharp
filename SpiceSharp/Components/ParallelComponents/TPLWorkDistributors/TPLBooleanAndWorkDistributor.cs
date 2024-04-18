@@ -21,7 +21,7 @@ namespace SpiceSharp.Components.ParallelComponents
             Task.WaitAll(tasks);
 
             // Combine the results synchronously
-            var result = true;
+            bool result = true;
             for (int i = 0; i < tasks.Length; i++)
                 result &= tasks[i].Result;
             return result;

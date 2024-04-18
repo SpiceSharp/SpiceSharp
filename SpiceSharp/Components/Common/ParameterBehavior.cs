@@ -12,8 +12,8 @@ namespace SpiceSharp.Components.Common
     /// <typeparam name="P">The parameter set type.</typeparam>
     /// <seealso cref="Behavior" />
     /// <seealso cref="IParameterized{P}" />
-    [BehaviorFor(typeof(ResistorModel), new[] { typeof(Resistors.ModelParameters) })]
-    [BehaviorFor(typeof(CapacitorModel), new[] { typeof(Capacitors.ModelParameters) })]
+    [BehaviorFor(typeof(ResistorModel), [typeof(Resistors.ModelParameters)])]
+    [BehaviorFor(typeof(CapacitorModel), [typeof(Capacitors.ModelParameters)])]
     public class ParameterBehavior<P> : Behavior,
         IParameterized<P> where P : IParameterSet, ICloneable<P>, new()
     {

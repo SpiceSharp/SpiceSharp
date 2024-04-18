@@ -17,17 +17,17 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <summary>
             /// The integration coefficients.
             /// </summary>
-            protected readonly DenseVector<double> Coefficients = new DenseVector<double>(_gearOrder + 1);
+            protected readonly DenseVector<double> Coefficients = new(_gearOrder + 1);
 
             /// <summary>
             /// The prediction coefficients.
             /// </summary>
-            protected readonly DenseVector<double> PredictionCoefficients = new DenseVector<double>(_gearOrder + 1);
+            protected readonly DenseVector<double> PredictionCoefficients = new(_gearOrder + 1);
 
             /// <summary>
             /// The solver used to calculate the coefficients.
             /// </summary>
-            protected readonly DenseRealSolver Solver = new DenseRealSolver(_gearOrder + 1);
+            protected readonly DenseRealSolver Solver = new(_gearOrder + 1);
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Instance" /> class.
@@ -48,7 +48,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                     _stateValues));
 
                 // Reset all integration coefficients
-                for (var i = 0; i <= _gearOrder; i++)
+                for (int i = 0; i <= _gearOrder; i++)
                 {
                     Coefficients[i] = 0.0;
                     PredictionCoefficients[i] = 0.0;
@@ -84,24 +84,24 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             /// <inheritdoc/>
             protected override void ComputeCoefficients()
             {
-                var delta = States.Value.Delta;
+                double delta = States.Value.Delta;
 
                 // Set up the matrix
                 int n = Order + 1;
-                for (var i = 1; i <= n; i++)
+                for (int i = 1; i <= n; i++)
                     Solver[i] = 0.0;
                 Solver[2] = -1 / delta;
-                for (var i = 1; i <= n; i++)
+                for (int i = 1; i <= n; i++)
                     Solver[1, i] = 1.0;
-                for (var i = 2; i <= n; i++)
+                for (int i = 2; i <= n; i++)
                     Solver[i, 1] = 0.0;
 
                 double arg = 0.0, arg1;
-                for (var i = 2; i <= n; i++)
+                for (int i = 2; i <= n; i++)
                 {
                     arg += States.GetPreviousValue(i - 2).Delta;
                     arg1 = 1.0;
-                    for (var j = 2; j <= n; j++)
+                    for (int j = 2; j <= n; j++)
                     {
                         arg1 *= arg / delta;
                         Solver[j, i] = arg1;
@@ -112,17 +112,17 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 Solver.BackwardSubstitute(Coefficients, n);
 
                 // Predictor calculations
-                for (var i = 2; i <= n; i++)
+                for (int i = 2; i <= n; i++)
                     Solver[i] = 0.0;
                 Solver[1] = 1.0;
-                for (var i = 1; i <= n; i++)
+                for (int i = 1; i <= n; i++)
                     Solver[1, i] = 1.0;
                 arg = 0.0;
-                for (var i = 1; i <= n; i++)
+                for (int i = 1; i <= n; i++)
                 {
                     arg += States.GetPreviousValue(i - 1).Delta;
                     arg1 = 1.0;
-                    for (var j = 2; j <= n; j++)
+                    for (int j = 2; j <= n; j++)
                     {
                         arg1 *= arg / delta;
                         Solver[j, i] = arg1;
@@ -140,10 +140,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             protected override void Predict()
             {
                 // Use the previous solutions to predict a new one
-                for (var i = 0; i <= Prediction.Length; i++)
+                for (int i = 0; i <= Prediction.Length; i++)
                 {
                     Prediction[i] = 0.0;
-                    for (var k = 0; k <= Order; k++)
+                    for (int k = 0; k <= Order; k++)
                     {
                         Prediction[i] += PredictionCoefficients[k + 1] * States.GetPreviousValue(k + 1).Solution[i];
                     }

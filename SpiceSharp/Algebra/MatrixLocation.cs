@@ -5,7 +5,7 @@ namespace SpiceSharp.Algebra
     /// <summary>
     /// A simple struct for describing a matrix row/column location.
     /// </summary>
-    public struct MatrixLocation : IEquatable<MatrixLocation>
+    public readonly struct MatrixLocation : IEquatable<MatrixLocation>
     {
         /// <summary>
         /// The row index.

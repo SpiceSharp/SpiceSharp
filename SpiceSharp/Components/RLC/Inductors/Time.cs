@@ -48,11 +48,11 @@ namespace SpiceSharp.Components.Inductors
             : base(context)
         {
             var state = context.GetState<IBiasingSimulationState>();
-            var br = state.Map[Branch];
+            int br = state.Map[Branch];
             _time = context.GetState<ITimeSimulationState>();
-            _elements = new ElementSet<double>(state.Solver, new[] {
+            _elements = new ElementSet<double>(state.Solver, [
                 new MatrixLocation(br, br)
-            }, new[] { br });
+            ], [br]);
 
             var method = context.GetState<IIntegrationMethod>();
             _flux = method.CreateDerivative();

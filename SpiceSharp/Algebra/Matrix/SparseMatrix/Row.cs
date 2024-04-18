@@ -217,13 +217,8 @@ namespace SpiceSharp.Algebra
                         second.Left.Right = first;
 
                         // Swap element links
-                        var element = first.Left;
-                        first.Left = second.Left;
-                        second.Left = element;
-
-                        element = first.Right;
-                        first.Right = second.Right;
-                        second.Right = element;
+                        (second.Left, first.Left) = (first.Left, second.Left);
+                        (second.Right, first.Right) = (first.Right, second.Right);
                         first.Column = columnSecond;
                         second.Column = columnFirst;
                     }

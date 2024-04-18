@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// <inheritdoc/>
         void IAcceptBehavior.Probe()
         {
-            var breakpoint = _wasBreak;
+            bool breakpoint = _wasBreak;
             if (_method is IBreakpointMethod method)
                 breakpoint |= method.Break;
             Signals.Probe(_method.Time, breakpoint);
@@ -59,7 +59,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
                     else
                     {
                         var signals = Signals;
-                        var delta = signals.GetTime(0) - signals.GetTime(1);
+                        double delta = signals.GetTime(0) - signals.GetTime(1);
                         slope1 = (signals.GetValue(0, 0) - signals.GetValue(1, 0)) / delta;
                         slope2 = (signals.GetValue(0, 1) - signals.GetValue(1, 1)) / delta;
                     }
@@ -67,9 +67,9 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
                     // If the previous point was a breakpoint, let's decide if we need another in the future
                     if (_wasBreak)
                     {
-                        var tol1 = Parameters.RelativeTolerance * Math.Max(Math.Abs(slope1), Math.Abs(_oldSlope1)) +
+                        double tol1 = Parameters.RelativeTolerance * Math.Max(Math.Abs(slope1), Math.Abs(_oldSlope1)) +
                                   Parameters.AbsoluteTolerance;
-                        var tol2 = Parameters.RelativeTolerance * Math.Max(Math.Abs(slope2), Math.Abs(_oldSlope2)) +
+                        double tol2 = Parameters.RelativeTolerance * Math.Max(Math.Abs(slope2), Math.Abs(_oldSlope2)) +
                                    Parameters.AbsoluteTolerance;
                         if (Math.Abs(slope1 - _oldSlope1) > tol1 || Math.Abs(slope2 - _oldSlope2) > tol2)
                             method.Breakpoints.SetBreakpoint(Signals.GetTime(1) + Parameters.Delay);

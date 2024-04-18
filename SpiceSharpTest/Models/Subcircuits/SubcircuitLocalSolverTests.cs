@@ -39,7 +39,7 @@ namespace SpiceSharpTest.Models
                 new RealVoltageExport(op, "out"),
                 new RealVoltageExport(op, new[] { "X1", "b" }),
             };
-            IEnumerable<double> references = new double[] { 0.5, 0.5 };
+            IEnumerable<double> references = [0.5, 0.5];
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -62,7 +62,7 @@ namespace SpiceSharpTest.Models
                 new ComplexVoltageExport(ac, "out"),
                 new ComplexVoltageExport(ac, new[] { "X1", "b" })
             };
-            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5, f => 0.5 };
+            IEnumerable<Func<double, Complex>> references = [f => 0.5, f => 0.5];
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -88,7 +88,7 @@ namespace SpiceSharpTest.Models
                 new RealVoltageExport(op, "X1".Combine("b")),
                 new RealVoltageExport(op, "X1".Combine("c"))
             };
-            IEnumerable<double> references = new double[] { 0.5, 0.5, 0.5 };
+            IEnumerable<double> references = [0.5, 0.5, 0.5];
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -109,7 +109,7 @@ namespace SpiceSharpTest.Models
 
             var ac = new AC("ac", new DecadeSweep(1, 100, 3));
             IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
-            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5 };
+            IEnumerable<Func<double, Complex>> references = [f => 0.5];
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -130,7 +130,7 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("transient", 1e-6, 1e-3);
             tran.TimeParameters.InitialConditions.Add("out", 0.0);
             IExport<double>[] exports = new[] { new RealVoltageExport(tran, "out") };
-            IEnumerable<Func<double, double>> references = new Func<double, double>[] { t => 1.0 - Math.Exp(-t * 1e3) };
+            IEnumerable<Func<double, double>> references = [t => 1.0 - Math.Exp(-t * 1e3)];
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }

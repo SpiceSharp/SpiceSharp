@@ -32,11 +32,11 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
-            var index = 0;
+            int index = 0;
             while (rhsElement != null && rhsElement.Index <= order)
             {
                 while (index < rhsElement.Index)
@@ -53,9 +53,9 @@ namespace SpiceSharp.Algebra
             }
 
             // Forward substitution
-            for (var i = 1; i <= order; i++)
+            for (int i = 1; i <= order; i++)
             {
-                var temp = _intermediate[i];
+                double temp = _intermediate[i];
                 if (!temp.Equals(0.0))
                 {
                     var pivot = Matrix.FindDiagonalElement(i);
@@ -74,16 +74,16 @@ namespace SpiceSharp.Algebra
         /// <inheritdoc />
         public override void BackwardSubstitute(IVector<double> solution)
         {
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
 
             // Copy the degenerate solution to the intermediate vector
-            for (var i = order + 1; i <= Size; i++)
+            for (int i = order + 1; i <= Size; i++)
                 _intermediate[i] = solution[Row.Reverse(i)];
 
             // Backward substitution
-            for (var i = order; i > 0; i--)
+            for (int i = order; i > 0; i--)
             {
-                var temp = _intermediate[i];
+                double temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Right;
                 while (element != null)
@@ -109,23 +109,23 @@ namespace SpiceSharp.Algebra
 
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
-            for (var i = 0; i <= order; i++)
+            for (int i = 0; i <= order; i++)
                 _intermediate[i] = 0.0;
             while (rhsElement != null && rhsElement.Index <= order)
             {
-                var newIndex = Column[Row.Reverse(rhsElement.Index)];
+                int newIndex = Column[Row.Reverse(rhsElement.Index)];
                 _intermediate[newIndex] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
 
             // Forward elimination
-            for (var i = 1; i <= order; i++)
+            for (int i = 1; i <= order; i++)
             {
-                var temp = _intermediate[i];
+                double temp = _intermediate[i];
                 if (!temp.Equals(0.0))
                 {
                     var element = Matrix.FindDiagonalElement(i).Right;
@@ -141,16 +141,16 @@ namespace SpiceSharp.Algebra
         /// <inheritdoc/>
         public override void BackwardSubstituteTransposed(IVector<double> solution)
         {
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
 
             // Copy the degenerate solution to the intermediate vector
-            for (var i = order + 1; i <= Size; i++)
+            for (int i = order + 1; i <= Size; i++)
                 _intermediate[i] = solution[Row.Reverse(i)];
 
             // Backward substitution
-            for (var i = order; i > 0; i--)
+            for (int i = order; i > 0; i--)
             {
-                var temp = _intermediate[i];
+                double temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Below;
                 while (element != null && element.Row <= order)
@@ -168,7 +168,7 @@ namespace SpiceSharp.Algebra
         /// <inheritdoc />
         public override double ComputeDegenerateContribution(int index)
         {
-            var result = 0.0;
+            double result = 0.0;
             var elt = Matrix.GetFirstInRow(Row[index]);
             int order = Size - Degeneracy;
             while (elt != null && elt.Column <= order)
@@ -198,7 +198,7 @@ namespace SpiceSharp.Algebra
                 var lower = pivot.Below;
                 while (lower != null)
                 {
-                    var row = lower.Row;
+                    int row = lower.Row;
 
                     // Find element in row that lines up with the current lower triangular element
                     while (sub != null && sub.Row < row)

@@ -10,7 +10,7 @@ namespace SpiceSharpGenerator
     public class BindingContextCollection
     {
 #pragma warning disable RS1024 // Compare symbols correctly
-        private readonly Dictionary<INamedTypeSymbol, INamedTypeSymbol> _map = new Dictionary<INamedTypeSymbol, INamedTypeSymbol>(SymbolEqualityComparer.Default);
+        private readonly Dictionary<INamedTypeSymbol, INamedTypeSymbol> _map = new(SymbolEqualityComparer.Default);
 #pragma warning restore RS1024 // Compare symbols correctly
 
         /// <summary>

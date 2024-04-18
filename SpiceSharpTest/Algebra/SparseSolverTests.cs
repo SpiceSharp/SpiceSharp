@@ -50,16 +50,16 @@ namespace SpiceSharpTest.Algebra
 
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
+            [
+                [0, 0, 1, 0],
+                [1, 1, 1, 1],
+                [0, 0, 0, 1],
+                [1, 0, 0, 0]
+            ];
+            double[] rhs = [0, 1, 0, 0];
+            for (int r = 0; r < matrix.Length; r++)
             {
-                new double[] { 0, 0, 1, 0 },
-                new double[] { 1, 1, 1, 1 },
-                new double[] { 0, 0, 0, 1 },
-                new double[] { 1, 0, 0, 0 }
-            };
-            double[] rhs = { 0, 1, 0, 0 };
-            for (var r = 0; r < matrix.Length; r++)
-            {
-                for (var c = 0; c < matrix[r].Length; c++)
+                for (int c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
@@ -83,16 +83,16 @@ namespace SpiceSharpTest.Algebra
 
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
+            [
+                [1,    0.5,   0,      0],
+                [-0.5,      5,   4,      0],
+                [0,      3,   2,    0.1],
+                [0,      0,  -0.01,   3]
+            ];
+            double[] rhs = [0, 0, 0, 0];
+            for (int r = 0; r < matrix.Length; r++)
             {
-                new[] {    1,    0.5,   0,      0 },
-                new[] { -0.5,      5,   4,      0 },
-                new[] {    0,      3,   2,    0.1 },
-                new[] {    0,      0,  -0.01,   3 }
-            };
-            double[] rhs = { 0, 0, 0, 0 };
-            for (var r = 0; r < matrix.Length; r++)
-            {
-                for (var c = 0; c < matrix[r].Length; c++)
+                for (int c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
@@ -116,16 +116,16 @@ namespace SpiceSharpTest.Algebra
 
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
+            [
+                [1,    0.5,   0,      0],
+                [0,      5,   4,      0],
+                [0,      3,   2,      0],
+                [0,      0,  -0.01,   3]
+            ];
+            double[] rhs = [1, 0, 0, 0];
+            for (int r = 0; r < matrix.Length; r++)
             {
-                new[] {    1,    0.5,   0,      0 },
-                new double[] {    0,      5,   4,      0 },
-                new double[] {    0,      3,   2,      0 },
-                new[] {    0,      0,  -0.01,   3 }
-            };
-            double[] rhs = { 1, 0, 0, 0 };
-            for (var r = 0; r < matrix.Length; r++)
-            {
-                for (var c = 0; c < matrix[r].Length; c++)
+                for (int c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
@@ -149,16 +149,16 @@ namespace SpiceSharpTest.Algebra
 
             // Build the matrix that should be solvable using only the singleton pivoting strategy
             double[][] matrix =
+            [
+                [1,    0.5,      0,  2],
+                [2,      5,      4,  3],
+                [0,      3,      2,  0],
+                [4,    1.8,  -0.01,  8]
+            ];
+            double[] rhs = [1, 2, 3, 4];
+            for (int r = 0; r < matrix.Length; r++)
             {
-                new[] {    1,    0.5,      0,  2 },
-                new double[] {    2,      5,      4,  3 },
-                new double[] {    0,      3,      2,  0 },
-                new[] {    4,    1.8,  -0.01,  8 }
-            };
-            double[] rhs = { 1, 2, 3, 4 };
-            for (var r = 0; r < matrix.Length; r++)
-            {
-                for (var c = 0; c < matrix[r].Length; c++)
+                for (int c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(0.0))
                         solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
@@ -176,34 +176,34 @@ namespace SpiceSharpTest.Algebra
         {
             // Build the example matrix
             Complex[][] matrix =
-            {
-                new Complex[] { 0, 0, 0, 0, 1, 0, 1, 0 },
-                new Complex[] { 0, 0, 0, 0, -1, 1, 0, 0 },
-                new[] { 0, 0, new Complex(0.0, 0.000628318530717959), 0, 0, 0, -1, 1 },
-                new Complex[] { 0, 0, 0, 0.001, 0, 0, 0, -1 },
-                new Complex[] { 1, -1, 0, 0, 0, 0, 0, 0 },
-                new Complex[] { 0, 1, 0, 0, 0, 0, 0, 0 },
-                new Complex[] { 1, 0, -1, 0, 0, 0, 0, 0 },
-                new[] { 0, 0, 1, -1, 0, 0, 0, new Complex(0.0, -1.5707963267949) }
-            };
-            Complex[] rhs = { 0, 0, 0, 0, 0, 24.0 };
+            [
+                [0, 0, 0, 0, 1, 0, 1, 0],
+                [0, 0, 0, 0, -1, 1, 0, 0],
+                [0, 0, new Complex(0.0, 0.000628318530717959), 0, 0, 0, -1, 1],
+                [0, 0, 0, 0.001, 0, 0, 0, -1],
+                [1, -1, 0, 0, 0, 0, 0, 0],
+                [0, 1, 0, 0, 0, 0, 0, 0],
+                [1, 0, -1, 0, 0, 0, 0, 0],
+                [0, 0, 1, -1, 0, 0, 0, new Complex(0.0, -1.5707963267949)]
+            ];
+            Complex[] rhs = [0, 0, 0, 0, 0, 24.0];
             Complex[] reference =
-            {
-                new Complex(24, 0),
-                new Complex(24, 0),
-                new Complex(24, 0),
-                new Complex(23.999940782519708, -0.037699018824477),
-                new Complex(-0.023999940782520, -0.015041945718407),
-                new Complex(-0.023999940782520, -0.015041945718407),
-                new Complex(0.023999940782520, 0.015041945718407),
-                new Complex(0.023999940782520, -0.000037699018824)
-            };
+            [
+                new(24, 0),
+                new(24, 0),
+                new(24, 0),
+                new(23.999940782519708, -0.037699018824477),
+                new(-0.023999940782520, -0.015041945718407),
+                new(-0.023999940782520, -0.015041945718407),
+                new(0.023999940782520, 0.015041945718407),
+                new(0.023999940782520, -0.000037699018824)
+            ];
 
             // build the matrix
             var solver = new SparseComplexSolver();
-            for (var r = 0; r < matrix.Length; r++)
+            for (int r = 0; r < matrix.Length; r++)
             {
-                for (var c = 0; c < matrix[r].Length; c++)
+                for (int c = 0; c < matrix[r].Length; c++)
                 {
                     if (!matrix[r][c].Equals(Complex.Zero))
                         solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrix[r][c];
@@ -215,7 +215,7 @@ namespace SpiceSharpTest.Algebra
             solver.GetElement(5);
 
             // Build the Rhs vector
-            for (var r = 0; r < rhs.Length; r++)
+            for (int r = 0; r < rhs.Length; r++)
             {
                 if (!rhs[r].Equals(Complex.Zero))
                     solver.GetElement(r + 1).Value = rhs[r];
@@ -228,7 +228,7 @@ namespace SpiceSharpTest.Algebra
             solver.BackwardSubstitute(solution);
 
             // Check!
-            for (var r = 0; r < reference.Length; r++)
+            for (int r = 0; r < reference.Length; r++)
             {
                 Assert.AreEqual(reference[r].Real, solution[r + 1].Real, 1e-12);
                 Assert.AreEqual(reference[r].Imaginary, solution[r + 1].Imaginary, 1e-12);

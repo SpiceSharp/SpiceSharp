@@ -39,8 +39,8 @@ namespace SpiceSharp.Components.MutualInductances
             load1.UpdateFlux += UpdateFlux1;
             load2.UpdateFlux += UpdateFlux2;
 
-            var br1 = state.Map[_branch1];
-            var br2 = state.Map[_branch2];
+            int br1 = state.Map[_branch1];
+            int br2 = state.Map[_branch2];
             _elements = new ElementSet<double>(state.Solver,
                 new MatrixLocation(br1, br2),
                 new MatrixLocation(br2, br1));

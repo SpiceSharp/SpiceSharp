@@ -51,9 +51,9 @@ namespace SpiceSharp.Components.Inductors
             _variables = new OnePort<double>(state, context);
             Branch = state.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
 
-            var pos = state.Map[_variables.Positive];
-            var neg = state.Map[_variables.Negative];
-            var br = state.Map[Branch];
+            int pos = state.Map[_variables.Positive];
+            int neg = state.Map[_variables.Negative];
+            int br = state.Map[Branch];
             _elements = new ElementSet<double>(state.Solver,
                 new MatrixLocation(pos, br),
                 new MatrixLocation(neg, br),

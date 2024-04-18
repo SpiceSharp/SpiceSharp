@@ -40,8 +40,8 @@ namespace SpiceSharp.General
         /// </summary>
         public InheritedTypeDictionary()
         {
-            _dictionary = new Dictionary<Type, TypeValues<V>>();
-            _values = new HashSet<V>();
+            _dictionary = [];
+            _values = [];
         }
 
         /// <inheritdoc/>

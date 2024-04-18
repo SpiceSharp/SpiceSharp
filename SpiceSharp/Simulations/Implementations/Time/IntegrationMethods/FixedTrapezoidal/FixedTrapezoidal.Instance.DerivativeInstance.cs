@@ -41,7 +41,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient, double currentValue)
                 {
-                    var g = _method.Slope * coefficient;
+                    double g = _method.Slope * coefficient;
                     return new JacobianInfo(
                         g,
                         Derivative - g * currentValue);
@@ -50,7 +50,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
                 /// <inheritdoc/>
                 public JacobianInfo GetContributions(double coefficient)
                 {
-                    var h = _method.Slope;
+                    double h = _method.Slope;
                     var s = _states.Value;
                     return new JacobianInfo(
                         h * coefficient,

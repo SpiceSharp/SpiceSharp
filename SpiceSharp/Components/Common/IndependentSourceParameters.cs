@@ -87,7 +87,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </summary>
         public void UpdatePhasor()
         {
-            var phase = AcPhase * Math.PI / 180.0;
+            double phase = AcPhase * Math.PI / 180.0;
             Phasor = new Complex(
                 AcMagnitude * Math.Cos(phase),
                 AcMagnitude * Math.Sin(phase));

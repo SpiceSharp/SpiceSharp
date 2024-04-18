@@ -32,7 +32,7 @@ namespace SpiceSharpGenerator
             Field = field;
 
             // Create the name of the property
-            var name = field.Name;
+            string name = field.Name;
             if (name[0] == '_')
                 name = char.ToUpper(name[1]) + name.Substring(2);
             else

@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
                     throw new ArgumentException(Properties.Resources.Waveforms_Pwl_Empty);
 
                 // Check monotonically increasing timepoints
-                for (var i = 1; i < _points.Length; i++)
+                for (int i = 1; i < _points.Length; i++)
                 {
                     if (_points[i - 1].Time >= _points[i].Time)
                         throw new ArgumentException(Properties.Resources.Waveforms_Pwl_NoIncreasingTimeValues);
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components
             /// <inheritdoc/>
             public void Probe()
             {
-                var time = _method?.Time ?? 0.0;
+                double time = _method?.Time ?? 0.0;
 
                 // Find the line segment
                 // The line segment is likely to be very close to the current segment.

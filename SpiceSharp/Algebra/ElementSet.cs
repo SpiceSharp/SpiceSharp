@@ -28,14 +28,14 @@ namespace SpiceSharp.Algebra
 
             if (matrixPins != null)
             {
-                for (var i = 0; i < matrixPins.Length; i++)
+                for (int i = 0; i < matrixPins.Length; i++)
                     _elements[i] = solver.GetElement(matrixPins[i]);
                 offset = matrixPins.Length;
             }
 
             if (rhsPins != null)
             {
-                for (var i = 0; i < rhsPins.Length; i++)
+                for (int i = 0; i < rhsPins.Length; i++)
                     _elements[i + offset] = solver.GetElement(rhsPins[i]);
             }
         }
@@ -71,7 +71,7 @@ namespace SpiceSharp.Algebra
         {
             if (values == null)
                 return;
-            for (var i = 0; i < values.Length; i++)
+            for (int i = 0; i < values.Length; i++)
                 _elements[i].Add(values[i]);
         }
 
@@ -84,7 +84,7 @@ namespace SpiceSharp.Algebra
         {
             if (values == null)
                 return;
-            for (var i = 0; i < values.Length; i++)
+            for (int i = 0; i < values.Length; i++)
                 _elements[i].Subtract(values[i]);
         }
 

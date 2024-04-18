@@ -58,7 +58,7 @@ namespace SpiceSharp.Simulations
         /// <value>
         /// The initial conditions.
         /// </value>
-        public Dictionary<string, double> InitialConditions { get; private set; } = new();
+        public Dictionary<string, double> InitialConditions { get; private set; } = [];
 
         /// <summary>
         /// Gets or sets a value indicating whether the simulation should be validated.

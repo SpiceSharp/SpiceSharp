@@ -63,7 +63,7 @@ namespace SpiceSharp.Simulations
         public virtual void Aid()
         {
             // Clear the row
-            var hasOtherTypes = false;
+            bool hasOtherTypes = false;
             foreach (var v in _state.Map)
             {
                 // If the variable is a current, then we can't just set it to 0... 

@@ -61,7 +61,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("kp"), ParameterInfo("Transconductance parameter", Units = "A/V^2")]
         [GreaterThanOrEquals(0), Finite]
-        private GivenParameter<double> _transconductance = new GivenParameter<double>(2e-5, false);
+        private GivenParameter<double> _transconductance = new(2e-5, false);
 
         /// <summary>
         /// Gets or sets the bulk threshold parameter.
@@ -81,7 +81,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("phi"), ParameterInfo("Surface potential", Units = "V")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _phi = new GivenParameter<double>(0.6, false);
+        private GivenParameter<double> _phi = new(0.6, false);
 
         /// <summary>
         /// Gets or sets the drain ohmic resistance.
@@ -231,7 +231,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("tox"), ParameterInfo("Oxide thickness", Units = "m")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _oxideThickness = new GivenParameter<double>(1e-7, false);
+        private GivenParameter<double> _oxideThickness = new(1e-7, false);
 
         /// <summary>
         /// Gets or sets the lateral diffusion.
@@ -261,7 +261,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("u0"), ParameterName("uo"), ParameterInfo("Surface mobility", Units = "V/cm")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _surfaceMobility = new GivenParameter<double>(600, false);
+        private GivenParameter<double> _surfaceMobility = new(600, false);
 
         /// <summary>
         /// Gets or sets the forward bias junction fitting parameter.
@@ -281,7 +281,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("tpg"), ParameterInfo("Gate type")]
         [Finite]
-        private GivenParameter<double> _gateType = new GivenParameter<double>(1, false);
+        private GivenParameter<double> _gateType = new(1, false);
 
         /// <summary>
         /// Gets or sets the substrate doping level.
@@ -291,7 +291,7 @@ namespace SpiceSharp.Components.Mosfets
         /// </value>
         [ParameterName("nsub"), ParameterInfo("Substrate doping")]
         [GreaterThan(1.45e10), Finite]
-        private GivenParameter<double> _substrateDoping = new GivenParameter<double>(2e10, false); // Value isn't used...
+        private GivenParameter<double> _substrateDoping = new(2e10, false); // Value isn't used...
 
         /// <summary>
         /// Gets or sets the surface state density.
@@ -310,7 +310,7 @@ namespace SpiceSharp.Components.Mosfets
         /// The nominal temperature in Kelvin.
         /// </value>
         [GreaterThanOrEquals(0), Finite]
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _nominalTemperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the mosfet type.

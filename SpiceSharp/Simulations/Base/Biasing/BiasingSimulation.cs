@@ -31,7 +31,7 @@ namespace SpiceSharp.Simulations
         private BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
         private BehaviorList<IBiasingUpdateBehavior> _updateBehaviors;
         private BehaviorList<ITemperatureBehavior> _temperatureBehaviors;
-        private readonly List<ConvergenceAid> _nodesets = new List<ConvergenceAid>();
+        private readonly List<ConvergenceAid> _nodesets = [];
         private bool _isPreordered, _shouldReorder;
         private SimulationState _state;
         private TemperatureSimulationState _temperature;
@@ -263,19 +263,19 @@ namespace SpiceSharp.Simulations
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartGminStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= _state.Solution.Length; i++)
+            for (int i = 0; i <= _state.Solution.Length; i++)
                 _state.Solution[i] = 0.0;
 
             // Let's make it a bit easier for our iterations to converge
-            var original = Iteration.Gmin;
+            double original = Iteration.Gmin;
             if (Iteration.Gmin <= 0)
                 Iteration.Gmin = 1e-12;
-            for (var i = 0; i < steps; i++)
+            for (int i = 0; i < steps; i++)
                 Iteration.Gmin *= 10.0;
 
             // Start GMIN stepping
             Iteration.Mode = IterationModes.Junction;
-            for (var i = 0; i <= steps; i++)
+            for (int i = 0; i <= steps; i++)
             {
                 Iteration.IsConvergent = false;
                 if (!Iterate(maxIterations))
@@ -309,22 +309,22 @@ namespace SpiceSharp.Simulations
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartDiagonalGminStepping);
 
             // We'll hack into the loading algorithm to apply our diagonal contributions
-            var diagonalGmin = Math.Min(Iteration.Gmin, 1e-12);
+            double diagonalGmin = Math.Min(Iteration.Gmin, 1e-12);
             void ApplyGminStep(object sender, LoadStateEventArgs args)
                 => _state.Solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.ApplyDiagonalGmin(matrix, diagonalGmin));
             AfterLoad += ApplyGminStep;
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= _state.Solution.Length; i++)
+            for (int i = 0; i <= _state.Solution.Length; i++)
                 _state.Solution[i] = 0.0;
 
             // Let's make it a bit easier for our iterations to converge
-            for (var i = 0; i < steps; i++)
+            for (int i = 0; i < steps; i++)
                 diagonalGmin *= 10.0;
 
             // Start GMIN stepping
             Iteration.Mode = IterationModes.Junction;
-            for (var i = 0; i <= steps; i++)
+            for (int i = 0; i <= steps; i++)
             {
                 Iteration.IsConvergent = false;
                 if (!Iterate(maxIterations))
@@ -357,13 +357,13 @@ namespace SpiceSharp.Simulations
             SpiceSharpWarning.Warning(this, Properties.Resources.Simulations_Biasing_StartSourceStepping);
 
             // We could've ended up with some crazy value, so let's reset it
-            for (var i = 0; i <= _state.Solution.Length; i++)
+            for (int i = 0; i <= _state.Solution.Length; i++)
                 _state.Solution[i] = 0.0;
 
             // Start SRC stepping
             bool success = true;
             Iteration.Mode = IterationModes.Junction;
-            for (var i = 0; i <= steps; i++)
+            for (int i = 0; i <= steps; i++)
             {
                 Iteration.SourceFactor = i / (double)steps;
                 if (!Iterate(maxIterations))
@@ -391,8 +391,8 @@ namespace SpiceSharp.Simulations
         protected virtual bool Iterate(int maxIterations)
         {
             var solver = _state.Solver;
-            var pass = false;
-            var iterno = 0;
+            bool pass = false;
+            int iterno = 0;
 
             try
             {
@@ -419,7 +419,7 @@ namespace SpiceSharp.Simulations
                         Statistics.ReorderTime.Start();
                         try
                         {
-                            var eliminated = solver.OrderAndFactor();
+                            int eliminated = solver.OrderAndFactor();
                             if (eliminated < solver.Size)
                             {
                                 // We should avoid throwing an exception here, because this may just be a starting
@@ -582,15 +582,15 @@ namespace SpiceSharp.Simulations
             foreach (var v in _state.Map)
             {
                 var node = v.Key;
-                var n = _state.Solution[v.Value];
-                var o = _state.OldSolution[v.Value];
+                double n = _state.Solution[v.Value];
+                double o = _state.OldSolution[v.Value];
 
                 if (double.IsNaN(n))
                     throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(v));
 
                 if (node.Unit == Units.Volt)
                 {
-                    var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.VoltageTolerance;
+                    double tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.VoltageTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;
@@ -599,7 +599,7 @@ namespace SpiceSharp.Simulations
                 }
                 else
                 {
-                    var tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
+                    double tol = BiasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + BiasingParameters.AbsoluteTolerance;
                     if (Math.Abs(n - o) > tol)
                     {
                         ProblemVariable = node;

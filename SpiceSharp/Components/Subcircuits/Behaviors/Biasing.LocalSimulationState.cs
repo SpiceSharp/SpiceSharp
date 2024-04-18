@@ -44,9 +44,7 @@ namespace SpiceSharp.Components.Subcircuits
                     return;
 
                 // We need to keep track of the old solution
-                var tmp = OldSolution;
-                OldSolution = LocalSolution;
-                LocalSolution = tmp;
+                (LocalSolution, OldSolution) = (OldSolution, LocalSolution);
 
                 // Update the current solution
                 base.Update();

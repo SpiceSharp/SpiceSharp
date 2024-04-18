@@ -98,8 +98,8 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.OutputRef)] : 0;
+            int posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.OutputRef)] : 0;
 
             // We only want to enable the source that is flagged as the input
             var source = EntityBehaviors[NoiseParameters.InputSource];
@@ -144,7 +144,7 @@ namespace SpiceSharp.Simulations
                     AcIterate();
 
                     var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                    var inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                    double inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
                     _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
 
                     // Solve the adjoint system

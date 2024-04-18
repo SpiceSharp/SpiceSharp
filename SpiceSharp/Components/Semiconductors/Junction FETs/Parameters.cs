@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.JFETs
         /// The temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _temperature = new GivenParameter<double>(300.15, false);
+        private GivenParameter<double> _temperature = new(300.15, false);
 
         /// <summary>
         /// Gets or sets the area.

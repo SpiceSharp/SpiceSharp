@@ -97,15 +97,15 @@ namespace SpiceSharp.Components.Subcircuits
             {
                 // Create diagonal elements if the matrix is too small
                 // This can happen if there are only contributions to the right-hand side.
-                for (var i = matrix.Size + 1; i <= vector.Length; i++)
+                for (int i = matrix.Size + 1; i <= vector.Length; i++)
                     matrix.GetElement(new(i, i));
 
-                for (var i = 0; i < _nodeIndices.Count; i++)
+                for (int i = 0; i < _nodeIndices.Count; i++)
                 {
                     // Let's move these variables to the back of the matrix
-                    var index = _nodeIndices[i].Local;
+                    int index = _nodeIndices[i].Local;
                     var location = Solver.ExternalToInternal(new MatrixLocation(index, index));
-                    var target = matrix.Size - i;
+                    int target = matrix.Size - i;
                     matrix.SwapColumns(location.Column, target);
                     matrix.SwapRows(location.Row, target);
                 }
@@ -251,7 +251,7 @@ namespace SpiceSharp.Components.Subcircuits
             // Get the local node!
             if (!TryGetValue(name, out var result))
             {
-                var index = _map.Count;
+                int index = _map.Count;
                 result = new SolverVariable<T>(this, name, index, Units.Volt);
                 Add(name, result);
                 _map.Add(result, index);
@@ -262,7 +262,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <inheritdoc/>
         public override IVariable<T> CreatePrivateVariable(string name, IUnit unit)
         {
-            var index = _map.Count;
+            int index = _map.Count;
             var result = new SolverVariable<T>(this, name, index, unit);
             _map.Add(result, index);
             return result;

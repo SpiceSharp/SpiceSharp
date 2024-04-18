@@ -28,7 +28,7 @@ namespace SpiceSharp.Components.Mosfets
             Factor1 = mp.NominalTemperature / Constants.ReferenceTemperature;
             Kt1 = Constants.Boltzmann * mp.NominalTemperature;
             EgFet1 = 1.16 - (7.02e-4 * mp.NominalTemperature * mp.NominalTemperature) / (mp.NominalTemperature + 1108);
-            var arg1 = -EgFet1 / (Kt1 + Kt1) + 1.1150877 / (Constants.Boltzmann * Constants.ReferenceTemperature * 2);
+            double arg1 = -EgFet1 / (Kt1 + Kt1) + 1.1150877 / (Constants.Boltzmann * Constants.ReferenceTemperature * 2);
             PbFactor1 = -2 * Vtnom * (1.5 * Math.Log(Factor1) + Constants.Charge * arg1);
         }
     }

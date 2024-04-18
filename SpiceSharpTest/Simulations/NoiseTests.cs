@@ -31,7 +31,7 @@ namespace SpiceSharpTest.Simulations
             noise.ExportSimulationData -= BuildReference;
 
             // Rerun the simulation for building the reference values
-            var index = 0;
+            int index = 0;
             void CheckReference(object sender, ExportDataEventArgs args)
             {
                 Assert.AreEqual(r[index++], export.Value, 1e-20);

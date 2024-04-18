@@ -47,9 +47,9 @@ namespace SpiceSharpTest.Simulations
             // Run simulation
             dc.ExportSimulationData += (sender, args) =>
             {
-                var resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
-                var voltage = dc.GetCurrentSweepValue()[1];
-                var expected = voltage * resistance / (resistance + 1.0e4);
+                double resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
+                double voltage = dc.GetCurrentSweepValue()[1];
+                double expected = voltage * resistance / (resistance + 1.0e4);
                 Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
             };
             dc.Run(ckt);
@@ -80,13 +80,13 @@ namespace SpiceSharpTest.Simulations
             var dcExportV12 = new RealPropertyExport(dc, "V1", "i");
             dc.ExportSimulationData += (sender, args) =>
             {
-                var v1 = dcExportV1.Value;
-                var v12 = dcExportV12.Value;
+                double v1 = dcExportV1.Value;
+                double v12 = dcExportV12.Value;
             };
             var opExportV1 = new RealPropertyExport(op, "V1", "i");
             op.ExportSimulationData += (sender, args) =>
             {
-                var v1 = opExportV1.Value;
+                double v1 = opExportV1.Value;
             };
 
             // Run DC and op
@@ -118,7 +118,7 @@ namespace SpiceSharpTest.Simulations
             dc.ExportSimulationData -= BuildReference;
 
             // Rerun: check with reference
-            var index = 0;
+            int index = 0;
             void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(dcExportV1.Value, r[index++], 1e-20);
             dc.ExportSimulationData += CheckReference;
             dc.Rerun();

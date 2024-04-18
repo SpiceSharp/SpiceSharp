@@ -63,10 +63,10 @@ namespace SpiceSharp.Components.CurrentControlledVoltageSources
             _control = context.ControlBehaviors.GetValue<IBranchedBehavior<double>>().Branch;
             Branch = _biasing.CreatePrivateVariable(Name.Combine("branch"), Units.Ampere);
 
-            var pos = _biasing.Map[_variables.Positive];
-            var neg = _biasing.Map[_variables.Negative];
-            var cbr = _biasing.Map[_control];
-            var br = _biasing.Map[Branch];
+            int pos = _biasing.Map[_variables.Positive];
+            int neg = _biasing.Map[_variables.Negative];
+            int cbr = _biasing.Map[_control];
+            int br = _biasing.Map[Branch];
 
             _elements = new ElementSet<double>(_biasing.Solver,
                 new MatrixLocation(pos, br),

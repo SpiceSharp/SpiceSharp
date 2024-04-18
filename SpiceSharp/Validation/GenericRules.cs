@@ -8,7 +8,7 @@ namespace SpiceSharp.Validation
     /// <seealso cref="IRules" />
     public class GenericRules : BaseRules
     {
-        private readonly HashSet<IRule> _rules = new HashSet<IRule>();
+        private readonly HashSet<IRule> _rules = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericRules"/> class.

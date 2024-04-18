@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.JFETs
         /// The measurement temperature in Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(300.15, false);
+        private GivenParameter<double> _nominalTemperature = new(300.15, false);
 
         /// <summary>
         /// Gets or sets the threshold voltage.

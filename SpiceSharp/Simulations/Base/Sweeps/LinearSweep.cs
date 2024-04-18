@@ -72,7 +72,7 @@ namespace SpiceSharp.Simulations
             Initial = initial;
 
             // Calculate the number of points to be used
-            var pts = (int)Math.Floor((final - Initial) / delta);
+            int pts = (int)Math.Floor((final - Initial) / delta);
             Final = Initial + pts * delta;
             Points = pts + 1;
         }
@@ -90,9 +90,9 @@ namespace SpiceSharp.Simulations
                 yield return Initial;
                 yield break;
             }
-            for (var i = 0; i < Points; i++)
+            for (int i = 0; i < Points; i++)
             {
-                var f = (double)i / (Points - 1);
+                double f = (double)i / (Points - 1);
                 yield return Initial * (1 - f) + Final * f;
             }
         }

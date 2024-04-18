@@ -157,7 +157,7 @@ namespace SpiceSharp.Simulations
                 Statistics.ComplexReorderTime.Start();
                 try
                 {
-                    var eliminated = solver.OrderAndFactor();
+                    int eliminated = solver.OrderAndFactor();
                     if (eliminated < solver.Size)
                         throw new SingularException(eliminated + 1);
                     _shouldReorderAc = false;
@@ -172,7 +172,7 @@ namespace SpiceSharp.Simulations
                 Statistics.ComplexDecompositionTime.Start();
                 try
                 {
-                    var factored = solver.Factor();
+                    bool factored = solver.Factor();
                     if (!factored)
                     {
                         _shouldReorderAc = true;

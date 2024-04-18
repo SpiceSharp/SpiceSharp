@@ -26,7 +26,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <summary>
         /// Private variables
         /// </summary>
-        private readonly List<double> _bps = new List<double> { 0.0, double.PositiveInfinity };
+        private readonly List<double> _bps = [0.0, double.PositiveInfinity];
 
         /// <summary>
         /// Adds a breakpoint to the list.
@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public void SetBreakpoint(double timePoint)
         {
             // Insert
-            for (var i = 0; i < _bps.Count; i++)
+            for (int i = 0; i < _bps.Count; i++)
             {
                 // Same breakpoint, return without setting it
                 if (Math.Abs(_bps[i] - timePoint) <= MinBreak)

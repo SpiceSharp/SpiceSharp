@@ -84,7 +84,7 @@ namespace SpiceSharp.Components.Subcircuits
         bool IConvergenceBehavior.IsConvergent()
         {
             _state?.Update();
-            var result = true;
+            bool result = true;
             foreach (var behavior in _convergenceBehaviors)
                 result &= behavior.IsConvergent();
             return result;

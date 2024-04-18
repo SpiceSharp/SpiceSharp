@@ -15,7 +15,7 @@ namespace SpiceSharpGenerator
             public bool HasImport { get; set; }
             public bool HasExport { get; set; }
         }
-        private readonly Dictionary<string, int> _nameMap = new();
+        private readonly Dictionary<string, int> _nameMap = [];
         private readonly INamedTypeSymbol _parameters;
 #pragma warning disable RS1024 // Compare symbols correctly
         private readonly Dictionary<ITypeSymbol, TypeParametersAndProperties> _members = new(SymbolEqualityComparer.Default);
@@ -92,7 +92,7 @@ namespace SpiceSharpGenerator
                         pp.HasExport |= getter != null;
                         pp.HasImport |= setter != null;
 
-                        foreach (var name in names)
+                        foreach (string name in names)
                         {
                             if (pp.TryGetValue(name, out var gs))
                             {
@@ -102,7 +102,7 @@ namespace SpiceSharpGenerator
                             }
                             else
                                 pp.Add(name, (setter, getter));
-                            if (!_nameMap.TryGetValue(name, out var mapped))
+                            if (!_nameMap.TryGetValue(name, out int mapped))
                                 _nameMap.Add(name, _nameMap.Count + 1);
                         }
                     }
@@ -134,10 +134,10 @@ namespace SpiceSharpGenerator
                                 };
                                 _members.Add(type, pp);
                             }
-                            foreach (var name in names)
+                            foreach (string name in names)
                             {
                                 pp.Add(name, ($"{extra.Variable} = value", extra.Variable));
-                                if (!_nameMap.TryGetValue(name, out var mapped))
+                                if (!_nameMap.TryGetValue(name, out int mapped))
                                     _nameMap.Add(name, _nameMap.Count + 1);
                             }
                         }
