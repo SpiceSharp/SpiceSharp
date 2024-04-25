@@ -144,8 +144,22 @@ namespace SpiceSharp.Algebra
             int order = Size - Degeneracy;
 
             // Copy the degenerate solution to the intermediate vector
-            for (int i = order + 1; i <= Size; i++)
-                _intermediate[i] = solution[Row.Reverse(i)];
+            if (order < Size)
+            {
+                // First copy to the intermediate vector
+                for (int i = order + 1; i <= Size; i++)
+                {
+                    _intermediate[i] = solution[Row.Reverse(i)];
+
+                    // Apply contributions from this intermediate vector
+                    var element = Matrix.GetFirstInColumn(i);
+                    while (element != null && element.Row <= order)
+                    {
+                        _intermediate[element.Row] -= _intermediate[i] * element.Value;
+                        element = element.Below;
+                    }
+                }
+            }
 
             // Backward substitution
             for (int i = order; i > 0; i--)
@@ -174,7 +188,7 @@ namespace SpiceSharp.Algebra
             while (elt != null && elt.Column <= order)
             {
                 result += elt.Value * _intermediate[elt.Column];
-                elt = elt.Left;
+                elt = elt.Right;
             }
             return result;
         }

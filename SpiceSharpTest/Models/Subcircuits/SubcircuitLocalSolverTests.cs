@@ -253,5 +253,109 @@ namespace SpiceSharpTest.Models
             };
             op.Run(ckt);
         }
+
+        [Test]
+        public void When_Diode_Expect_Reference()
+        {
+            var model = new DiodeModel("DM1");
+            model.SetParameter("is", 1e-12);
+            var inst = Create("X1", [model, new Diode("D1", "a", "b", "DM1")], ["a", "b"], ["a", "0"]);
+            var ckt = new Circuit(
+                inst,
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Resistor("R1", "in", "a", 1e3));
+
+            var op = new OP("op1");
+            op.ExportSimulationData += (sender, args) =>
+            {
+                Assert.Greater(args.GetVoltage("a"), 0.5);
+            };
+            op.Run(ckt);
+        }
+
+        [Test]
+        public void When_DiodeVoltageSources_Expect_Reference()
+        {
+            var model = new DiodeModel("DM1");
+            model.SetParameter("is", 1e-12);
+            var inst = Create("X1", [model, new VoltageSource("Vs1", "a", "a1", 0), new Diode("D1", "a1", "b1", "DM1"), new VoltageSource("Vs2", "b1", "b", 0)], ["a", "b"], ["a", "0"]);
+            var ckt = new Circuit(
+                inst,
+                new VoltageSource("V1", "in", "0", 1.0),
+                new Resistor("R1", "in", "a", 1e3));
+
+            var op = new OP("op1");
+            op.ExportSimulationData += (sender, args) =>
+            {
+                Assert.Greater(args.GetVoltage("a"), 0.5);
+            };
+            op.Run(ckt);
+        }
+
+        [Test]
+        public void When_DiodeResistorVoltageSources_Expect_Reference()
+        {
+            var model = new DiodeModel("DM1");
+            model.SetParameter("is", 1e-12);
+            var inst = Create("X1", [model, new VoltageSource("Vs1", "a", "a1", 0), new Resistor("R1", "a1", "a2", 1e3), new Diode("D1", "a2", "b1", "DM1"), new VoltageSource("Vs2", "b1", "b", 0)], ["a", "b"], ["a", "0"]);
+            var ckt = new Circuit(
+                inst,
+                new VoltageSource("V1", "a", "0", 1.0));
+
+            var op = new OP("op1");
+            var export = new RealVoltageExport(op, ["X1", "a2"]);
+            op.ExportSimulationData += (sender, args) =>
+            {
+                Assert.Greater(export.Value, 0.5);
+            };
+            op.Run(ckt);
+        }
+
+        [Test]
+        public void When_Hierarchical_Expect_Reference()
+        {
+            var inst = Create("X1", [new Resistor("R1", "a", "b", 1e3), new Resistor("R2", "b", "c", 1e3)], ["a", "c"], ["1", "2"]);
+            var inst2 = Create("X1", [inst, new Resistor("R1", "2", "3", 1e3)], ["1", "3"], ["0", "in"]);
+            var ckt = new Circuit(
+                inst2,
+                new VoltageSource("V1", "in", "0", 1.0));
+
+            var op = new OP("op1");
+            var export = new RealVoltageExport(op, ["X1", "X1", "b"]);
+            AnalyzeOp(op, ckt, [export], [1.0 / 3.0]);
+        }
+
+        [Test]
+        public void When_KnownMatrix1_Expect_Reference()
+        {
+            Circuit BuildCircuit(bool localSolver)
+            {
+                var def1 = new SubcircuitDefinition(new Circuit(
+                    new Resistor("R1", "posTerm", "1", 0.0025),
+                    new Resistor("Rdiode", "1", "negTerm", 1.0 / 0.707107),
+                    new CurrentSource("Idiode", "1", "negTerm", -0.371755)),
+                    ["posTerm", "negTerm"]);
+
+                var def2 = new SubcircuitDefinition(new Circuit(
+                    new Subcircuit("Child_0", def1, "CN_0", "CN_1"),
+                    new VoltageSource("Vterm1", "CN_0", "parent_terminal_pos", 0),
+                    new VoltageSource("Vterm2", "CN_1", "parent_terminal_neg", 0)),
+                    ["parent_terminal_pos", "parent_terminal_neg"]);
+
+                return new Circuit(
+                    new Subcircuit("ParentCircuit_0", def2, "0_1", "1_0").SetParameter("localsolver", localSolver),
+                    new Resistor("R1", "0_1", "0_0", 1),
+                    new Subcircuit("ParentCircuit_1", def2, "1_1", "2_0").SetParameter("localsolver", localSolver),
+                    new Resistor("R2", "1_0", "1_1", 1),
+                    new VoltageSource("Vterm1", "0_0", "parallel_terminal_pos", 0),
+                    new VoltageSource("Vterm2", "2_0", "parallel_terminal_neg", 0),
+                    new VoltageSource("vterm", "parallel_terminal_pos", "parallel_terminal_neg", 1),
+                    new Resistor("Rgnd", "parallel_terminal_neg", "0", 0));
+            }
+
+            var ckt = BuildCircuit(true);
+            var op = new OP("op");
+            op.Run(ckt);
+        }
     }
 }
