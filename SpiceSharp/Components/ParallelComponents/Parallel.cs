@@ -26,7 +26,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="ParallelComponents.Parameters"/>
+    /// <seealso cref="Parameters"/>
     public class Parallel : Entity<Parameters>,
         IComponent,
         IRuleSubject
@@ -108,6 +108,7 @@ namespace SpiceSharp.Components
 
                 // Let's create our behaviors
                 // Note: we do this first, such that any parallel simulation states can be added to the local simulation
+                behaviors.Add(new EntitiesBehavior(context));
                 behaviors.Build(simulation, context)
                     .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
                     .AddIfNo<IConvergenceBehavior>(context => new Convergence(context))

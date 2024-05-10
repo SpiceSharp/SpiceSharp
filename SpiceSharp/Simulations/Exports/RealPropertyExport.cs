@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Subcircuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Components.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,13 +52,13 @@ namespace SpiceSharp.Simulations
         /// Initializes the export.
         /// </summary>
         /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         protected override void Initialize(object sender, EventArgs e)
         {
             var behaviorContainer = Simulation.EntityBehaviors[EntityPath[0]];
             for (int i = 1; i < EntityPath.Count; i++)
             {
-                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                var behavior = behaviorContainer.GetValue<IEntitiesBehavior>();
                 behaviorContainer = behavior.LocalBehaviors[EntityPath[i]];
             }
             Extractor = behaviorContainer.CreatePropertyGetter<double>(PropertyName);

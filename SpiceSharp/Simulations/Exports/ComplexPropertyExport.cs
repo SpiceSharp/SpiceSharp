@@ -1,6 +1,4 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Subcircuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Components.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +60,7 @@ namespace SpiceSharp.Simulations
             var behaviorContainer = Simulation.EntityBehaviors[EntityPath[0]];
             for (int i = 1; i < EntityPath.Count; i++)
             {
-                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
+                var behavior = behaviorContainer.GetValue<IEntitiesBehavior>();
                 behaviorContainer = behavior.LocalBehaviors[EntityPath[i]];
             }
             Extractor = behaviorContainer.CreatePropertyGetter<Complex>(PropertyName);

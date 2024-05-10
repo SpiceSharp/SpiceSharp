@@ -1,4 +1,4 @@
-﻿using SpiceSharp.Components.Subcircuits;
+﻿using SpiceSharp.Components.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +78,6 @@ namespace SpiceSharp.Simulations
                 NegNodePath = null;
         }
 
-
         /// <summary>
         /// Initializes the export.
         /// </summary>
@@ -103,9 +102,9 @@ namespace SpiceSharp.Simulations
             IBiasingSimulationState state;
             if (path.Count > 1)
             {
-                var entitiesBehavior = Simulation.EntityBehaviors[path[0]].GetValue<EntitiesBehavior>();
+                var entitiesBehavior = Simulation.EntityBehaviors[path[0]].GetValue<IEntitiesBehavior>();
                 for (int i = 1; i < last; i++)
-                    entitiesBehavior = entitiesBehavior.LocalBehaviors[path[i]].GetValue<EntitiesBehavior>();;
+                    entitiesBehavior = entitiesBehavior.LocalBehaviors[path[i]].GetValue<IEntitiesBehavior>();;
                 state = entitiesBehavior.GetState<IBiasingSimulationState>();
             }
             else
