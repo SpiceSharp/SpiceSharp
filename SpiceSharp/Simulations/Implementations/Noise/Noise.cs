@@ -195,6 +195,10 @@ namespace SpiceSharp.Simulations
                 rhs.Reset();
             });
 
+            // Prepare all noise sources for the coming
+            foreach (var noise in _noiseBehaviors)
+                noise.Load();
+
             // Apply unit current excitation
             solver.GetElement(posDrive).Add(1.0);
             solver.GetElement(negDrive).Subtract(1.0);

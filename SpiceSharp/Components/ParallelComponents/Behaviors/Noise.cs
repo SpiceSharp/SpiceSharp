@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System.Linq;
 using System;
@@ -15,7 +14,7 @@ namespace SpiceSharp.Components.ParallelComponents
         IParallelBehavior,
         INoiseBehavior
     {
-        private readonly Workload _noiseInitializeWorkload, _noiseComputeWorkload;
+        private readonly Workload _noiseInitializeWorkload, _noiseLoadWorkload, _noiseComputeWorkload;
         private BehaviorList<INoiseBehavior> _noiseBehaviors;
 
         /// <inheritdoc/>
@@ -39,6 +38,7 @@ namespace SpiceSharp.Components.ParallelComponents
             if (parameters.WorkDistributors.TryGetValue(typeof(INoiseBehavior), out var dist) && dist != null)
             {
                 _noiseInitializeWorkload = new Workload(dist, parameters.Entities.Count);
+                _noiseLoadWorkload = new Workload(dist, parameters.Entities.Count);
                 _noiseComputeWorkload = new Workload(dist, parameters.Entities.Count);
                 if (context.TryGetState(out INoiseSimulationState parent))
                     context.AddLocalState<INoiseSimulationState>(new NoiseSimulationState(parent));
@@ -53,6 +53,11 @@ namespace SpiceSharp.Components.ParallelComponents
             {
                 foreach (var behavior in _noiseBehaviors)
                     _noiseInitializeWorkload.Actions.Add(behavior.Initialize);
+            }
+            if (_noiseLoadWorkload != null)
+            {
+                foreach (var behavior in _noiseBehaviors)
+                    _noiseLoadWorkload.Actions.Add(behavior.Load);
             }
             if (_noiseComputeWorkload != null)
             {
@@ -70,6 +75,18 @@ namespace SpiceSharp.Components.ParallelComponents
             {
                 foreach (var behavior in _noiseBehaviors)
                     behavior.Initialize();
+            }
+        }
+
+        /// <inheritdoc />
+        void INoiseBehavior.Load()
+        {
+            if (_noiseLoadWorkload != null)
+                _noiseLoadWorkload.Execute();
+            else
+            {
+                foreach (var behavior in _noiseBehaviors)
+                    behavior.Load();
             }
         }
 

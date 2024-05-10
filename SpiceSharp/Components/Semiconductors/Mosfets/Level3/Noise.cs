@@ -80,6 +80,9 @@ namespace SpiceSharp.Components.Mosfets.Level3
             _flicker.Initialize();
         }
 
+        /// <inheritdoc />
+        void INoiseBehavior.Load() { }
+
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {

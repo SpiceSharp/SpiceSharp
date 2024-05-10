@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 
@@ -49,11 +48,15 @@ namespace SpiceSharp.Components.Resistors
                 state.GetSharedVariable(context.Nodes[1]));
         }
 
+
         /// <inheritdoc/>
         void INoiseSource.Initialize()
         {
             _thermal.Initialize();
         }
+
+        /// <inheritdoc />
+        void INoiseBehavior.Load() { }
 
         /// <inheritdoc/>
         void INoiseBehavior.Compute()

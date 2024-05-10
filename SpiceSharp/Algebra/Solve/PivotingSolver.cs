@@ -198,12 +198,15 @@ namespace SpiceSharp.Algebra.Solve
         public abstract void BackwardSubstitute(IVector<T> solution);
 
         /// <inheritdoc />
+        public abstract T ComputeDegenerateContribution(int index);
+
+        /// <inheritdoc />
         public abstract void ForwardSubstituteTransposed(IVector<T> solution);
 
         /// <inheritdoc />
         public abstract void BackwardSubstituteTransposed(IVector<T> solution);
 
         /// <inheritdoc />
-        public abstract T ComputeDegenerateContribution(int index);
+        public abstract T ComputeDegenerateContributionTransposed(int index);
     }
 }

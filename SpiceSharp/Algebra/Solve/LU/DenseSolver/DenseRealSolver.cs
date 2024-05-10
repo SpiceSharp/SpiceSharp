@@ -92,6 +92,15 @@ namespace SpiceSharp.Algebra
         }
 
         /// <inheritdoc />
+        public override double ComputeDegenerateContribution(int index)
+        {
+            double result = 0.0;
+            for (int i = 1; i <= Degeneracy; i++)
+                result += Matrix[index, i] * _intermediate[i];
+            return result;
+        }
+
+        /// <inheritdoc />
         public override void ForwardSubstituteTransposed(IVector<double> solution)
             => ForwardSubstituteTransposed(solution, Size);
 
@@ -154,11 +163,11 @@ namespace SpiceSharp.Algebra
         }
 
         /// <inheritdoc />
-        public override double ComputeDegenerateContribution(int index)
+        public override double ComputeDegenerateContributionTransposed(int index)
         {
             double result = 0.0;
             for (int i = 1; i <= Degeneracy; i++)
-                result += Matrix[index, i] * _intermediate[i];
+                result += Matrix[i, index] * _intermediate[i];
             return result;
         }
 

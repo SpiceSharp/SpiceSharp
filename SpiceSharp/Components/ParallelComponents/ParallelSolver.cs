@@ -184,6 +184,9 @@ namespace SpiceSharp.Components.ParallelComponents
         void ISolver<T>.BackwardSubstitute(IVector<T> solution)
             => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.BackwardSubstitute)));
 
+        /// <inheritdoc />
+        T ISolver<T>.ComputeDegenerateContribution(int index)
+            => _parent.ComputeDegenerateContribution(index);
         /// <inheritdoc/>
         void ISolver<T>.ForwardSubstituteTransposed(IVector<T> solution)
             => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.ForwardSubstituteTransposed)));
@@ -193,8 +196,8 @@ namespace SpiceSharp.Components.ParallelComponents
             => throw new SpiceSharpException(Properties.Resources.Parallel_AccessNotSupported.FormatString(nameof(ISolver<T>.BackwardSubstituteTransposed)));
 
         /// <inheritdoc />
-        T ISolver<T>.ComputeDegenerateContribution(int index)
-            => _parent.ComputeDegenerateContribution(index);
+        T ISolver<T>.ComputeDegenerateContributionTransposed(int index)
+            => _parent.ComputeDegenerateContributionTransposed(index);
 
         /// <inheritdoc/>
         MatrixLocation IPivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>.InternalToExternal(MatrixLocation location)

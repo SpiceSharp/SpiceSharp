@@ -229,6 +229,22 @@ namespace SpiceSharp.Components.Subcircuits
         }
 
         /// <summary>
+        /// Applies forward substitution for the transposed/adjoint matrix.
+        /// </summary>
+        public virtual void ApplyTransposed()
+        {
+            // Apply contributions
+            Solver.ForwardSubstitute(Solution);
+            foreach (var pair in _rhsElements)
+            {
+                // Add the RHS element directly
+                pair.Value.Global.Add(pair.Value.Local.Value);
+                pair.Value.Global.Subtract(Solver.ComputeDegenerateContributionTransposed(pair.Key));
+            }
+            Updated = false;
+        }
+
+        /// <summary>
         /// Updates the state with the new solution.
         /// </summary>
         public virtual void Update()
@@ -241,6 +257,23 @@ namespace SpiceSharp.Components.Subcircuits
             foreach (var pair in _nodeIndices)
                 Solution[pair.Local] = Parent.Solution[pair.Global];
             Solver.BackwardSubstitute(Solution);
+            Solution[0] = default;
+            Updated = true;
+        }
+
+        /// <summary>
+        /// Updates the state with the new solution for the transposed version.
+        /// </summary>
+        public virtual void UpdateTransposed()
+        {
+            // No need to update again
+            if (Updated)
+                return;
+
+            // Fill in the sahred variables
+            foreach (var pair in _nodeIndices)
+                Solution[pair.Local] = Parent.Solver[pair.Global];
+            Solver.BackwardSubstituteTransposed(Solution);
             Solution[0] = default;
             Updated = true;
         }

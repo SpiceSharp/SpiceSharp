@@ -92,6 +92,14 @@ namespace SpiceSharp.Algebra
         void BackwardSubstitute(IVector<T> solution);
 
         /// <summary>
+        /// Computes a contribution for degenerate solvers (<see cref="Degeneracy"/> is larger than 0).
+        /// Used when solving submatrices separately.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>Returns the contribution.</returns>
+        T ComputeDegenerateContribution(int index);
+
+        /// <summary>
         /// Applies forward substitution on the adjoint matrix and right-hand side vector.
         /// </summary>
         /// <param name="solution">The solution vector.</param>
@@ -107,11 +115,12 @@ namespace SpiceSharp.Algebra
         void BackwardSubstituteTransposed(IVector<T> solution);
 
         /// <summary>
-        /// Computes a contribution for degenerate solvers (<see cref="Degeneracy"/> is larger than 0).
+        /// Computes a contribution of the transposed solving for degenerate solvers (<see cref="Degeneracy"/> is larger than 0).
+        /// Used when solving submatrices separately.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>Returns the contribution.</returns>
-        T ComputeDegenerateContribution(int index);
+        T ComputeDegenerateContributionTransposed(int index);
 
         /// <summary>
         /// Factor the equation matrix and right hand side vector.

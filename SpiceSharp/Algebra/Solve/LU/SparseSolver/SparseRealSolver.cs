@@ -99,6 +99,20 @@ namespace SpiceSharp.Algebra
         }
 
         /// <inheritdoc />
+        public override double ComputeDegenerateContribution(int index)
+        {
+            double result = 0.0;
+            var elt = Matrix.GetFirstInRow(Row[index]);
+            int order = Size - Degeneracy;
+            while (elt != null && elt.Column <= order)
+            {
+                result += elt.Value * _intermediate[elt.Column];
+                elt = elt.Right;
+            }
+            return result;
+        }
+
+        /// <inheritdoc />
         public override void ForwardSubstituteTransposed(IVector<double> solution)
         {
             solution.ThrowIfNull(nameof(solution));
@@ -106,15 +120,16 @@ namespace SpiceSharp.Algebra
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored);
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
-
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             int order = Size - Degeneracy;
 
             // Scramble
-            var rhsElement = Vector.GetFirstInVector();
             for (int i = 0; i <= order; i++)
                 _intermediate[i] = 0.0;
+            for (int i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Column.Reverse(i)];
+            var rhsElement = Vector.GetFirstInVector();
             while (rhsElement != null && rhsElement.Index <= order)
             {
                 int newIndex = Column[Row.Reverse(rhsElement.Index)];
@@ -122,10 +137,10 @@ namespace SpiceSharp.Algebra
                 rhsElement = rhsElement.Below;
             }
 
-            // Forward elimination
+            // Forward substitution
             for (int i = 1; i <= order; i++)
             {
-                double temp = _intermediate[i];
+                var temp = _intermediate[i];
                 if (!temp.Equals(0.0))
                 {
                     var element = Matrix.FindDiagonalElement(i).Right;
@@ -144,30 +159,16 @@ namespace SpiceSharp.Algebra
             int order = Size - Degeneracy;
 
             // Copy the degenerate solution to the intermediate vector
-            if (order < Size)
-            {
-                // First copy to the intermediate vector
-                for (int i = order + 1; i <= Size; i++)
-                {
-                    _intermediate[i] = solution[Row.Reverse(i)];
-
-                    // Apply contributions from this intermediate vector
-                    var element = Matrix.GetFirstInColumn(i);
-                    while (element != null && element.Row <= order)
-                    {
-                        _intermediate[element.Row] -= _intermediate[i] * element.Value;
-                        element = element.Below;
-                    }
-                }
-            }
+            for (int i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Row.Reverse(i)];
 
             // Backward substitution
             for (int i = order; i > 0; i--)
             {
-                double temp = _intermediate[i];
+                var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Below;
-                while (element != null && element.Row <= order)
+                while (element != null)
                 {
                     temp -= _intermediate[element.Row] * element.Value;
                     element = element.Below;
@@ -180,15 +181,15 @@ namespace SpiceSharp.Algebra
         }
 
         /// <inheritdoc />
-        public override double ComputeDegenerateContribution(int index)
+        public override double ComputeDegenerateContributionTransposed(int index)
         {
             double result = 0.0;
-            var elt = Matrix.GetFirstInRow(Row[index]);
+            var elt = Matrix.GetFirstInColumn(Column[index]);
             int order = Size - Degeneracy;
-            while (elt != null && elt.Column <= order)
+            while (elt != null && elt.Row <= order)
             {
-                result += elt.Value * _intermediate[elt.Column];
-                elt = elt.Right;
+                result += elt.Value * _intermediate[elt.Row];
+                elt = elt.Below;
             }
             return result;
         }

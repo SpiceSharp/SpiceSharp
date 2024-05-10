@@ -80,6 +80,9 @@ namespace SpiceSharp.Components.Diodes
             _flicker.Initialize();
         }
 
+        /// <inheritdoc />
+        void INoiseBehavior.Load() { }
+
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {
