@@ -5,29 +5,29 @@ using System.Security.Permissions;
 namespace SpiceSharp
 {
     /// <summary>
-    /// An exception that is thrown when a problem occurs find behaviors.
+    /// An exception that is thrown when a problem occurs find State.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
     [Serializable]
-    public class BehaviorsNotFoundException : SpiceSharpException
+    public class StateNotFoundException : SpiceSharpException
     {
         /// <summary>
-        /// Gets the name of the behaviors.
+        /// Gets the name of the State.
         /// </summary>
         /// <value>
         /// The name.
         /// </value>
-        public string Name { get; }
+        public string State { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
         /// </summary>
         /// <param name="info">The serialization info.</param>
         /// <param name="context">The streaming context.</param>
-        protected BehaviorsNotFoundException(SerializationInfo info, StreamingContext context)
+        protected StateNotFoundException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Name = info.GetString(nameof(Name));
+            State = info.GetString(nameof(State));
         }
 
         /// <summary>
@@ -39,58 +39,58 @@ namespace SpiceSharp
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.ThrowIfNull(nameof(info));
-            info.AddValue(nameof(Name), Name);
+            info.AddValue(nameof(State), State);
             base.GetObjectData(info, context);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="StateNotFoundException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public BehaviorsNotFoundException(string message)
+        public StateNotFoundException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="StateNotFoundException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public BehaviorsNotFoundException(string message, Exception innerException)
+        public StateNotFoundException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="StateNotFoundException"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior container.</param>
+        /// <param name="state">The name of the state type.</param>
         /// <param name="message">The message.</param>
-        public BehaviorsNotFoundException(string name, string message)
+        public StateNotFoundException(string state, string message)
             : base(message)
         {
-            Name = name;
+            State = state;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="StateNotFoundException"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior container.</param>
+        /// <param name="state">The name of the state type.</param>
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
-        public BehaviorsNotFoundException(string name, string message, Exception innerException)
+        public StateNotFoundException(string state, string message, Exception innerException)
             : base(message, innerException)
         {
-            Name = name;
+            State = state;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="StateNotFoundException"/> class.
         /// </summary>
-        public BehaviorsNotFoundException()
+        public StateNotFoundException()
         {
-            Name = null;
+            State = null;
         }
     }
 }

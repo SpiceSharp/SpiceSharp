@@ -304,7 +304,7 @@ namespace SpiceSharpTest.Models
                     new VoltageSource("V1", "a", "0", 1.0));
             }, simulation =>
             [
-                new RealVoltageExport(simulation, ["X1", "a2"])
+                new RealVoltageExport(simulation, new[] { "X1", "a2" })
             ]);
         }
 
@@ -318,7 +318,7 @@ namespace SpiceSharpTest.Models
                 new VoltageSource("V1", "in", "0", 1.0));
 
             var op = new OP("op1");
-            var export = new RealVoltageExport(op, ["X1", "X1", "b"]);
+            var export = new RealVoltageExport(op, new[] { "X1", "X1", "b" });
             AnalyzeOp(op, ckt, [export], [1.0 / 3.0]);
         }
 
@@ -356,12 +356,12 @@ namespace SpiceSharpTest.Models
                     new RealVoltageExport(simulation, "0_1"),
                     new RealVoltageExport(simulation, "1_0"),
                     new RealVoltageExport(simulation, "1_1"),
-                    new RealVoltageExport(simulation, ["ParentCircuit_0", "Child_0", "1"]),
-                    new RealVoltageExport(simulation, ["ParentCircuit_1", "Child_0", "1"]),
-                    new RealCurrentExport(simulation, ["ParentCircuit_0", "Vterm1"]),
-                    new RealCurrentExport(simulation, ["ParentCircuit_0", "Vterm2"]),
-                    new RealCurrentExport(simulation, ["ParentCircuit_1", "Vterm1"]),
-                    new RealCurrentExport(simulation, ["ParentCircuit_1", "Vterm2"]),
+                    new RealVoltageExport(simulation, new[] { "ParentCircuit_0", "Child_0", "1" }),
+                    new RealVoltageExport(simulation, new[] { "ParentCircuit_1", "Child_0", "1" }),
+                    new RealCurrentExport(simulation, new[] { "ParentCircuit_0", "Vterm1" }),
+                    new RealCurrentExport(simulation, new[] { "ParentCircuit_0", "Vterm2" }),
+                    new RealCurrentExport(simulation, new[] { "ParentCircuit_1", "Vterm1" }),
+                    new RealCurrentExport(simulation, new[] { "ParentCircuit_1", "Vterm2" }),
                 ];
             });
         }
@@ -400,12 +400,12 @@ namespace SpiceSharpTest.Models
                     new ComplexVoltageExport(simulation, "0_1"),
                     new ComplexVoltageExport(simulation, "1_0"),
                     new ComplexVoltageExport(simulation, "1_1"),
-                    new ComplexVoltageExport(simulation, ["ParentCircuit_0", "Child_0", "1"]),
-                    new ComplexVoltageExport(simulation, ["ParentCircuit_1", "Child_0", "1"]),
-                    new ComplexCurrentExport(simulation, ["ParentCircuit_0", "Vterm1"]),
-                    new ComplexCurrentExport(simulation, ["ParentCircuit_0", "Vterm2"]),
-                    new ComplexCurrentExport(simulation, ["ParentCircuit_1", "Vterm1"]),
-                    new ComplexCurrentExport(simulation, ["ParentCircuit_1", "Vterm2"]),
+                    new ComplexVoltageExport(simulation, new[] { "ParentCircuit_0", "Child_0", "1" }),
+                    new ComplexVoltageExport(simulation, new[] { "ParentCircuit_1", "Child_0", "1" }),
+                    new ComplexCurrentExport(simulation, new[] { "ParentCircuit_0", "Vterm1" }),
+                    new ComplexCurrentExport(simulation, new[] { "ParentCircuit_0", "Vterm2" }),
+                    new ComplexCurrentExport(simulation, new[] { "ParentCircuit_1", "Vterm1" }),
+                    new ComplexCurrentExport(simulation, new[] { "ParentCircuit_1", "Vterm2" }),
                 ];
             });
         }
@@ -534,9 +534,9 @@ namespace SpiceSharpTest.Models
                 new RealVoltageExport(simulation, "0_1"),
                 new RealVoltageExport(simulation, "1_0"),
                 new RealVoltageExport(simulation, "1_1"),
-                new RealVoltageExport(simulation, ["PL1", "ParentCircuit_0", "Child_0", "1"]),
-                new RealCurrentExport(simulation, ["PL1", "ParentCircuit_0", "Vterm1"]),
-                new RealCurrentExport(simulation, ["PL1", "ParentCircuit_0", "Vterm2"]),
+                new RealVoltageExport(simulation, new[] { "PL1", "ParentCircuit_0", "Child_0", "1" }),
+                new RealCurrentExport(simulation, new[] { "PL1", "ParentCircuit_0", "Vterm1" }),
+                new RealCurrentExport(simulation, new[] { "PL1", "ParentCircuit_0", "Vterm2" }),
                 new RealCurrentExport(simulation, "vterm"),
             ]);
         }

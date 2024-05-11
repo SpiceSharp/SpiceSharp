@@ -1,33 +1,33 @@
 ﻿using System;
+using SpiceSharp.Simulations.Base;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace SpiceSharp
+namespace SpiceSharp.Diagnostics
 {
     /// <summary>
-    /// An exception that is thrown when a problem occurs find behaviors.
+    /// An exception that is thrown when a problem occurs trying to find a variable.
     /// </summary>
-    /// <seealso cref="SpiceSharpException" />
     [Serializable]
-    public class BehaviorsNotFoundException : SpiceSharpException
+    public class VariableNotFoundException : SpiceSharpException
     {
         /// <summary>
-        /// Gets the name of the behaviors.
+        /// Gets the path that could not be found.
         /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string Name { get; }
+        public Reference Path { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="VariableNotFoundException"/>.
         /// </summary>
         /// <param name="info">The serialization info.</param>
         /// <param name="context">The streaming context.</param>
-        protected BehaviorsNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        protected VariableNotFoundException(SerializationInfo info, StreamingContext context)
         {
-            Name = info.GetString(nameof(Name));
+            int length = info.GetInt32("path_length");
+            string[] path = new string[length];
+            for (int i = 0; i < length; i++)
+                info.GetString($"path_{i}");
+            Path = new(path);
         }
 
         /// <summary>
@@ -39,58 +39,60 @@ namespace SpiceSharp
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.ThrowIfNull(nameof(info));
-            info.AddValue(nameof(Name), Name);
+            info.AddValue("path_length", Path.Length);
+            for (int i = 0; i < Path.Length; i++)
+                info.AddValue($"path_{i}", Path[i]);
             base.GetObjectData(info, context);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="VariableNotFoundException"/> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
-        public BehaviorsNotFoundException(string message)
+        public VariableNotFoundException(string message)
             : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="VariableNotFoundException"/> class.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
-        public BehaviorsNotFoundException(string message, Exception innerException)
+        public VariableNotFoundException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="VariableNotFoundException"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior container.</param>
+        /// <param name="path">The hierarchical reference.</param>
         /// <param name="message">The message.</param>
-        public BehaviorsNotFoundException(string name, string message)
+        public VariableNotFoundException(Reference path, string message)
             : base(message)
         {
-            Name = name;
+            Path = path;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="VariableNotFoundException"/> class.
         /// </summary>
-        /// <param name="name">The name of the behavior container.</param>
+        /// <param name="path">The hierarchical reference.</param>
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
-        public BehaviorsNotFoundException(string name, string message, Exception innerException)
+        public VariableNotFoundException(Reference path, string message, Exception innerException)
             : base(message, innerException)
         {
-            Name = name;
+            Path = path;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BehaviorsNotFoundException"/> class.
+        /// Initializes a new instance of the <see cref="VariableNotFoundException"/> class.
         /// </summary>
-        public BehaviorsNotFoundException()
+        public VariableNotFoundException()
         {
-            Name = null;
+            Path = default;
         }
     }
 }

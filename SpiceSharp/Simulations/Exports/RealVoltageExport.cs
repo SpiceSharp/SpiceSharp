@@ -1,7 +1,5 @@
-﻿using SpiceSharp.Components.Common;
+﻿using SpiceSharp.Simulations.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -12,108 +10,66 @@ namespace SpiceSharp.Simulations
     public class RealVoltageExport : Export<IBiasingSimulation, double>
     {
         /// <summary>
-        /// Gets the path to the positive node.
+        /// Gets the positive node.
         /// </summary>
-        public IReadOnlyList<string> PosNodePath { get; }
+        public Reference Positive { get; }
 
         /// <summary>
-        /// Gets the path to the negative node.
+        /// Gets the reference node.
         /// </summary>
-        public IReadOnlyList<string> NegNodePath { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="posNode">The node name.</param>
-        public RealVoltageExport(IBiasingSimulation simulation, string posNode)
-            : base(simulation)
-        {
-            posNode.ThrowIfNull(nameof(posNode));
-            PosNodePath = [posNode];
-            NegNodePath = null;
-        }
+        public Reference Reference { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="posNodePath">The node path.</param>
-        public RealVoltageExport(IBiasingSimulation simulation, IEnumerable<string> posNodePath)
+        /// <param name="posNode">The positive node (can be a string or a string array for a path).</param>
+        /// <param name="refNode">The reference/negative node (can be a string or a string array for a path).</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="posNode"/> and <paramref name="refNode"/> are both empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>.</exception>
+        public RealVoltageExport(IBiasingSimulation simulation, Reference posNode, Reference refNode = default)
             : base(simulation)
         {
-            PosNodePath = posNodePath.ThrowIfEmpty(nameof(posNodePath)).ToArray();
-            NegNodePath = null;
+            if (posNode.Length == 0 && refNode.Length == 0)
+                throw new ArgumentException(Properties.Resources.References_IsEmptyReference);
+            Positive = posNode;
+            Reference = refNode;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="posNode">The positive node name.</param>
-        /// <param name="negNode">The negative node name.</param>
-        public RealVoltageExport(IBiasingSimulation simulation, string posNode, string negNode)
-            : base(simulation)
-        {
-            posNode.ThrowIfNull(nameof(posNode));
-            PosNodePath = [posNode];
-            if (posNode == null)
-                NegNodePath = null;
-            else
-                NegNodePath = [negNode];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealVoltageExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="posNodePath">The positive node name.</param>
-        /// <param name="negNodePath">The negative node name.</param>
-        public RealVoltageExport(IBiasingSimulation simulation, IEnumerable<string> posNodePath, IEnumerable<string> negNodePath)
-            : base(simulation)
-        {
-            PosNodePath = posNodePath.ThrowIfEmpty(nameof(posNodePath)).ToArray();
-            NegNodePath = negNodePath?.ToArray();
-            if (NegNodePath != null && NegNodePath.Count == 0)
-                NegNodePath = null;
-        }
-
-        /// <summary>
-        /// Initializes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void Initialize(object sender, EventArgs e)
         {
             // Find the positive node variable
-            var pos = GetVariable(PosNodePath);
-            if (NegNodePath == null)
-                Extractor = () => pos.Value;
+            if (Positive.Length > 0 && Reference.Length > 0)
+            {
+                var posVariable = Positive.GetVariable<double, IBiasingSimulationState>(Simulation);
+                var refVariable = Reference.GetVariable<double, IBiasingSimulationState>(Simulation);
+                Extractor = () => posVariable.Value - refVariable.Value;
+            }
+            else if (Positive.Length > 0)
+            {
+                var posVariable = Positive.GetVariable<double, IBiasingSimulationState>(Simulation);
+                Extractor = () => posVariable.Value;
+            }
             else
             {
-                var neg = GetVariable(NegNodePath);
-                Extractor = () => pos.Value - neg.Value;
+                var refVariable = Reference.GetVariable<double, IBiasingSimulationState>(Simulation);
+                Extractor = () => -refVariable.Value;
             }
         }
 
-        private IVariable<double> GetVariable(IReadOnlyList<string> path)
+        /// <summary>
+        /// Converts the export to a string.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString()
         {
-            int last = path.Count - 1;
-            IBiasingSimulationState state;
-            if (path.Count > 1)
-            {
-                var entitiesBehavior = Simulation.EntityBehaviors[path[0]].GetValue<IEntitiesBehavior>();
-                for (int i = 1; i < last; i++)
-                    entitiesBehavior = entitiesBehavior.LocalBehaviors[path[i]].GetValue<IEntitiesBehavior>();;
-                state = entitiesBehavior.GetState<IBiasingSimulationState>();
-            }
+            if (Positive.Length > 0 && Reference.Length > 0)
+                return "V({0},{1})".FormatString(Positive, Reference);
+            else if (Positive.Length > 0)
+                return "V({0})".FormatString(Positive);
             else
-                state = Simulation.GetState<IBiasingSimulationState>();
-
-            // Get the node
-            if (!state.TryGetValue(path[last], out var result))
-                throw new Diagnostics.ParameterNotFoundException(path[last]);
-            return result;
+                return "V(0,{0})".FormatString(Reference);
         }
     }
 }

@@ -1,26 +1,24 @@
-﻿using SpiceSharp.Components.Common;
+﻿using SpiceSharp.Simulations.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This class can export complex voltages.
+    /// A class that exports complex voltages.
     /// </summary>
     /// <seealso cref="Export{S, T}" />
     public class ComplexVoltageExport : Export<IFrequencySimulation, Complex>
     {
         /// <summary>
-        /// Gets the path to the positive node.
+        /// Gets the positive node.
         /// </summary>
-        public IReadOnlyList<string> PosNodePath { get; }
+        public Reference Positive { get; }
 
         /// <summary>
-        /// Gets the path to the negative node.
+        /// Gets the reference node.
         /// </summary>
-        public IReadOnlyList<string> NegNodePath { get; }
+        public Reference Reference { get; }
 
         /// <summary>
         /// Gets the amplitude in decibels (dB).
@@ -50,97 +48,53 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="posNode">The node name.</param>
-        public ComplexVoltageExport(IFrequencySimulation simulation, string posNode)
+        /// <param name="posNode">The positive node (can be a string or a string array for a path).</param>
+        /// <param name="refNode">The reference/negative node (can be a string or a string array for a path).</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="posNode"/> and <paramref name="refNode"/> are both empty.</exception>
+        public ComplexVoltageExport(IFrequencySimulation simulation, Reference posNode, Reference refNode = default)
             : base(simulation)
         {
-            posNode.ThrowIfNull(nameof(posNode));
-            PosNodePath = [posNode];
-            NegNodePath = null;
+            if (posNode.Length == 0 && refNode.Length == 0)
+                throw new ArgumentException(Properties.Resources.References_IsEmptyReference);
+            Positive = posNode;
+            Reference = refNode;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="posNodePath">The node path.</param>
-        public ComplexVoltageExport(IFrequencySimulation simulation, IEnumerable<string> posNodePath)
-            : base(simulation)
-        {
-            PosNodePath = posNodePath.ThrowIfEmpty(nameof(posNodePath)).ToArray();
-            if (PosNodePath.Count == 0)
-                throw new ArgumentNullException(nameof(posNodePath), "posNodePath cannot be null or empty.");
-            NegNodePath = null;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="posNode">The positive node name.</param>
-        /// <param name="negNode">The negative node name.</param>
-        public ComplexVoltageExport(IFrequencySimulation simulation, string posNode, string negNode)
-            : base(simulation)
-        {
-            posNode.ThrowIfNull(nameof(posNode));
-            PosNodePath = [posNode];
-            if (negNode == null)
-                NegNodePath = null;
-            else
-                NegNodePath = [negNode];
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComplexVoltageExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="posNodePath">The positive node path.</param>
-        /// <param name="negNodePath">The negative node path.</param>
-        public ComplexVoltageExport(IFrequencySimulation simulation, IEnumerable<string> posNodePath, IEnumerable<string> negNodePath)
-            : base(simulation)
-        {
-            PosNodePath = posNodePath.ThrowIfEmpty(nameof(posNodePath)).ToArray();
-            NegNodePath = negNodePath?.ToArray();
-            if (NegNodePath != null && NegNodePath.Count == 0)
-                NegNodePath = null;
-        }
-
-        /// <summary>
-        /// Initializes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void Initialize(object sender, EventArgs e)
         {
             // Find the positive node variable
-            var pos = GetVariable(PosNodePath);
-            if (NegNodePath == null)
-                Extractor = () => pos.Value;
+            if (Positive.Length > 0 && Reference.Length > 0)
+            {
+                var posVariable = Positive.GetVariable<Complex, IComplexSimulationState>(Simulation);
+                var refVariable = Reference.GetVariable<Complex, IComplexSimulationState>(Simulation);
+                Extractor = () => posVariable.Value - refVariable.Value;
+            }
+            else if (Positive.Length > 0)
+            {
+                var posVariable = Positive.GetVariable<Complex, IComplexSimulationState>(Simulation);
+                Extractor = () => posVariable.Value;
+            }
             else
             {
-                var neg = GetVariable(NegNodePath);
-                Extractor = () => pos.Value - neg.Value;
+                var refVariable = Reference.GetVariable<Complex, IComplexSimulationState>(Simulation);
+                Extractor = () => -refVariable.Value;
             }
         }
 
-        private IVariable<Complex> GetVariable(IReadOnlyList<string> path)
+        /// <summary>
+        /// Converts the export to a string.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString()
         {
-            int last = path.Count - 1;
-            IComplexSimulationState state;
-            if (path.Count > 1)
-            {
-                var entitiesBehavior = Simulation.EntityBehaviors[path[0]].GetValue<IEntitiesBehavior>();
-                for (int i = 1; i < last; i++)
-                    entitiesBehavior = entitiesBehavior.LocalBehaviors[path[i]].GetValue<IEntitiesBehavior>();
-                state = entitiesBehavior.GetState<IComplexSimulationState>();
-            }
+            if (Positive.Length > 0 && Reference.Length > 0)
+                return "V({0},{1})".FormatString(Positive, Reference);
+            else if (Positive.Length > 0)
+                return "V({0})".FormatString(Positive);
             else
-                state = Simulation.GetState<IComplexSimulationState>();
-
-            // Get the node
-            if (!state.TryGetValue(path[last], out var result))
-                throw new Diagnostics.ParameterNotFoundException(path[last]);
-            return result;
+                return "V(0,{0})".FormatString(Reference);
         }
     }
 }
