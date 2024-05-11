@@ -1,4 +1,5 @@
-﻿using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Algebra;
+using SpiceSharp.Behaviors;
 using SpiceSharp.Components.Common;
 using SpiceSharp.Diagnostics;
 using System;
@@ -98,7 +99,7 @@ namespace SpiceSharp.Simulations.Base
         /// <exception cref="BehaviorsNotFoundException">Thrown if a behavior collection could not be found.</exception>
         public IBehaviorContainer GetContainer(ISimulation simulation)
         {
-            if (Path.Count == 0)
+            if (Length == 0)
                 return null;
             if (!simulation.EntityBehaviors.TryGetBehaviors(Path[0], out var container))
                 throw new BehaviorsNotFoundException(Path[0], Properties.Resources.Behaviors_NoBehaviorFor.FormatString(Path[0]));
@@ -120,7 +121,7 @@ namespace SpiceSharp.Simulations.Base
         public bool TryGetContainer(ISimulation simulation, out IBehaviorContainer container)
         {
             container = null;
-            if (Path.Count == 0)
+            if (Length == 0)
                 return false;
 
             if (!simulation.EntityBehaviors.TryGetBehaviors(Path[0], out container))
@@ -149,7 +150,7 @@ namespace SpiceSharp.Simulations.Base
         /// <exception cref="BehaviorsNotFoundException">Thrown if a behavior collection could not be found.</exception>
         public IVariable<T> GetVariable<T, S>(ISimulation simulation) where S : ISolverSimulationState<T>
         {
-            if (Path.Count == 0)
+            if (Length == 0)
                 return null;
 
             S state;
@@ -193,12 +194,12 @@ namespace SpiceSharp.Simulations.Base
         public bool TryGetVariable<T, S>(ISimulation simulation, out IVariable<T> variable) where S : ISolverSimulationState<T>
         {
             variable = default;
-            if (Path.Count == 0)
+            if (Length == 0)
                 return false;
 
             S state;
-            int last = Path.Count - 1;
-            if (Path.Count == 1)
+            int last = Length - 1;
+            if (Length == 1)
             {
                 if (!simulation.TryGetState(out state))
                     return false;
@@ -221,6 +222,96 @@ namespace SpiceSharp.Simulations.Base
             if (state is null)
                 return false;
             return state.TryGetValue(Path[last], out variable);
+        }
+
+        /// <summary>
+        /// Gets the right-hand side vector element that relates to the node the hierarchical reference points to.
+        /// </summary>
+        /// <typeparam name="T">The variable return type.</typeparam>
+        /// <typeparam name="S">The simulation state that needs to be used to find the variable.</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <returns>Returns the variable.</returns>
+        /// <exception cref="VariableNotFoundException">Thrown if the variable could not be found.</exception>
+        /// <exception cref="StateNotFoundException">Thrown if the simulation or entities behavior does not define the state.</exception>
+        /// <exception cref="BehaviorsNotFoundException">Thrown if a behavior collection could not be found.</exception>
+        public Element<T> GetVectorElement<T, S>(ISimulation simulation) where S : ISolverSimulationState<T>
+        {
+            if (Length == 0)
+                return null;
+
+            S state;
+            int last = Path.Count - 1;
+            if (Path.Count == 1)
+            {
+                // Search for the variable inside the simulation itself
+                if (!simulation.TryGetState(out state))
+                    throw new StateNotFoundException(typeof(S).Name, Properties.Resources.States_StateNotFoundFor.FormatString(typeof(S).Name));
+            }
+            else
+            {
+                if (!simulation.EntityBehaviors.TryGetBehaviors(Path[0], out var container))
+                    throw new BehaviorsNotFoundException(Path[0], Properties.Resources.Behaviors_NoBehaviorFor.FormatString(Path[0]));
+                for (int i = 1; i < last; i++)
+                {
+                    if (!container.TryGetValue<IEntitiesBehavior>(out var entitiesBehavior) ||
+                        !entitiesBehavior.LocalBehaviors.TryGetBehaviors(Path[i], out container))
+                        throw new BehaviorsNotFoundException(Path[i], Properties.Resources.Behaviors_NoBehaviorFor.FormatString(Path[i]));
+                }
+                if (!container.TryGetValue<IEntitiesBehavior>(out var eb))
+                    throw new VariableNotFoundException(this, Properties.Resources.Variables_NoVariableFor.FormatString(ToString()));
+                if (!eb.TryGetState(out state))
+                    throw new StateNotFoundException(typeof(S).Name, Properties.Resources.States_StateNotFoundFor.FormatString(typeof(S).Name));
+            }
+
+            // Get the variable
+            if (!state.ContainsKey(Path[last]))
+                throw new VariableNotFoundException(this, Properties.Resources.Variables_NoVariableFor.FormatString(ToString()));
+            return state.Solver.GetElement(state.Map[state.GetSharedVariable(Path[last])]);
+        }
+
+        /// <summary>
+        /// Tries to find a right-hand side vector element that relates to the node the hierarchical reference points to.
+        /// </summary>
+        /// <typeparam name="T">The variable return type.</typeparam>
+        /// <typeparam name="S">The simulation state used to find the variable.</typeparam>
+        /// <param name="simulation">The simulation.</param>
+        /// <param name="variable">The variable.</param>
+        /// <returns>Returns <c>true</c> if the variable was found; otherwise, <c>false</c>.</returns>
+        public bool TryGetVectorElement<T, S>(ISimulation simulation, out Element<T> variable) where S : ISolverSimulationState<T>
+        {
+            variable = default;
+            if (Length == 0)
+                return false;
+
+            S state;
+            int last = Length - 1;
+            if (Length == 1)
+            {
+                if (!simulation.TryGetState(out state))
+                    return false;
+            }
+            else
+            {
+                if (!simulation.EntityBehaviors.TryGetBehaviors(Path[0], out var container) ||
+                    !container.TryGetValue<IEntitiesBehavior>(out var entitiesBehavior))
+                    return false;
+                for (int i = 1; i < last; i++)
+                {
+                    if (!entitiesBehavior.LocalBehaviors.TryGetBehaviors(Path[i], out container) ||
+                        !container.TryGetValue(out entitiesBehavior))
+                        return false;
+                }
+                if (!entitiesBehavior.TryGetState(out state))
+                    return false;
+            }
+
+            // Get the variable
+            if (state is null)
+                return false;
+            if (!state.ContainsKey(Path[last]))
+                return false;
+            variable = state.Solver.GetElement(state.Map[state.GetSharedVariable(Path[last])]);
+            return true;
         }
 
         /// <summary>
