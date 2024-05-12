@@ -20,6 +20,7 @@ namespace SpiceSharp.Components.Subcircuits
     {
         private BehaviorList<IConvergenceBehavior> _convergenceBehaviors;
         private readonly LocalSimulationState _state;
+        private readonly BiasingParameters _biasingParameters;
 
         /// <summary>
         /// Gets the update behaviors.
@@ -44,6 +45,7 @@ namespace SpiceSharp.Components.Subcircuits
             }
             else
                 context.AddLocalState<IBiasingSimulationState>(new FlatSimulationState(Name, parent, context.Bridges));
+            _biasingParameters = context.GetSimulationParameterSet<BiasingParameters>();
         }
 
         /// <inheritdoc/>
@@ -84,6 +86,35 @@ namespace SpiceSharp.Components.Subcircuits
         bool IConvergenceBehavior.IsConvergent()
         {
             _state?.Update();
+
+            // Check convergence for each node
+            if (_state is not null)
+            {
+                foreach (var v in _state.Map)
+                {
+                    var node = v.Key;
+                    double n = _state.Solution[v.Value];
+                    double o = _state.OldSolution[v.Value];
+
+                    if (double.IsNaN(n))
+                        throw new SpiceSharpException(Properties.Resources.Simulation_VariableNotANumber.FormatString(v));
+
+                    if (node.Unit == Units.Volt)
+                    {
+                        double tol = _biasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + _biasingParameters.VoltageTolerance;
+                        if (Math.Abs(n - o) > tol)
+                            return false;
+                    }
+                    else
+                    {
+                        double tol = _biasingParameters.RelativeTolerance * Math.Max(Math.Abs(n), Math.Abs(o)) + _biasingParameters.AbsoluteTolerance;
+                        if (Math.Abs(n - o) > tol)
+                            return false;
+                    }
+                }
+            }
+
+            // Run the convergence behaviors
             bool result = true;
             foreach (var behavior in _convergenceBehaviors)
                 result &= behavior.IsConvergent();

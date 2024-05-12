@@ -449,6 +449,7 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_ExampleCircuitOP02_Expect_NonLocal()
         {
+            int seed = new Random(DateTime.Now.Second).Next(); // Random seed, but needs to be the same when comparing
             CompareOP(localSolver =>
             {
                 // Raised by sudsy - GitHub discussion #225
@@ -462,7 +463,7 @@ namespace SpiceSharpTest.Models
                 double Rs = 0.0025;
                 int Rsh = 150;
 
-                var r = new Random(); // Should be declared at the topmost level
+                var r = new Random(seed);
                 var parallelComponents = new List<IEntity>();
 
                 for (int parentCircuitIndex = 0; parentCircuitIndex < parentCircuits; parentCircuitIndex++)
@@ -570,12 +571,13 @@ namespace SpiceSharpTest.Models
 
             // Compare to the actual values
             bool didCheck = false;
+            var parameters = opExpected.BiasingParameters;
             opActual.ExportSimulationData += (sender, args) =>
             {
                 for (int i = 0; i < expected.Length; i++)
                 {
                     double actual = exportsActual[i].Value;
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected[i])) * 1e-6 + 1e-12;
+                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected[i])) * parameters.RelativeTolerance + parameters.AbsoluteTolerance;
                     Assert.AreEqual(expected[i], actual, tol);
                 }
                 didCheck = true;
