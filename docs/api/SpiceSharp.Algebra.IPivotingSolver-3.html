@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface IPivotingSolver&lt;M, V, T&gt;
- </title>
+    <title>Interface IPivotingSolver&lt;M, V, T&gt; </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface IPivotingSolver&lt;M, V, T&gt;
- ">
+    <meta name="title" content="Interface IPivotingSolver&lt;M, V, T&gt; ">
     <meta name="generator" content="docfx ">
   
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -73,8 +71,7 @@
 
 
 
-  <h1 id="SpiceSharp_Algebra_IPivotingSolver_3" data-uid="SpiceSharp.Algebra.IPivotingSolver`3" class="text-break">Interface IPivotingSolver&lt;M, V, T&gt;
-</h1>
+  <h1 id="SpiceSharp_Algebra_IPivotingSolver_3" data-uid="SpiceSharp.Algebra.IPivotingSolver`3" class="text-break">Interface IPivotingSolver&lt;M, V, T&gt;</h1>
   <div class="markdown level0 summary"><p>An <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a> that implements mechanisms for pivoting. This means
 that the solver may reorder the internal matrix and right hand side vector.</p>
 </div>
@@ -100,10 +97,22 @@ that the solver may reorder the internal matrix and right hand side vector.</p>
       <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Item_System_Int32_">ISolver&lt;T&gt;.this[int]</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Solve_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.Solve(IVector&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstitute_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.ForwardSubstitute(IVector&lt;T&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_SolveTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.SolveTransposed(IVector&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstitute_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.BackwardSubstitute(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContribution_System_Int32_">ISolver&lt;T&gt;.ComputeDegenerateContribution(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.ForwardSubstituteTransposed(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.BackwardSubstituteTransposed(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContributionTransposed_System_Int32_">ISolver&lt;T&gt;.ComputeDegenerateContributionTransposed(int)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Factor">ISolver&lt;T&gt;.Factor()</a>
@@ -413,7 +422,7 @@ This method will reorder the matrix as it sees fit.</p>
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

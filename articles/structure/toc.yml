@@ -8,3 +8,5 @@
   href: frequency.md
 - name: Transient analysis
   href: transient.md
+- name: Parallelization
+  href: parallel.md

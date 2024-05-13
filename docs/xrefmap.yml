@@ -268,6 +268,88 @@ references:
   fullName.vb: SpiceSharp.Algebra.DenseRealSolver.New
   nameWithType: DenseRealSolver.DenseRealSolver
   nameWithType.vb: DenseRealSolver.New
+- uid: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name: BackwardSubstitute(IVector<double>)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_BackwardSubstitute_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: BackwardSubstitute(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: DenseRealSolver.BackwardSubstitute(IVector<double>)
+  nameWithType.vb: DenseRealSolver.BackwardSubstitute(IVector(Of Double))
+- uid: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name: BackwardSubstitute(IVector<double>, int)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_BackwardSubstitute_SpiceSharp_Algebra_IVector_System_Double__System_Int32_
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name.vb: BackwardSubstitute(IVector(Of Double), Integer)
+  fullName: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector<double>, int)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector(Of Double), Integer)
+  nameWithType: DenseRealSolver.BackwardSubstitute(IVector<double>, int)
+  nameWithType.vb: DenseRealSolver.BackwardSubstitute(IVector(Of Double), Integer)
+- uid: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute*
+  name: BackwardSubstitute
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_BackwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstitute
+  nameWithType: DenseRealSolver.BackwardSubstitute
+- uid: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name: BackwardSubstituteTransposed(IVector<double>)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: BackwardSubstituteTransposed(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: DenseRealSolver.BackwardSubstituteTransposed(IVector<double>)
+  nameWithType.vb: DenseRealSolver.BackwardSubstituteTransposed(IVector(Of Double))
+- uid: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name: BackwardSubstituteTransposed(IVector<double>, int)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Double__System_Int32_
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name.vb: BackwardSubstituteTransposed(IVector(Of Double), Integer)
+  fullName: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector<double>, int)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of Double), Integer)
+  nameWithType: DenseRealSolver.BackwardSubstituteTransposed(IVector<double>, int)
+  nameWithType.vb: DenseRealSolver.BackwardSubstituteTransposed(IVector(Of Double), Integer)
+- uid: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed*
+  name: BackwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_BackwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.DenseRealSolver.BackwardSubstituteTransposed
+  nameWithType: DenseRealSolver.BackwardSubstituteTransposed
+- uid: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution(System.Int32)
+  name: ComputeDegenerateContribution(int)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ComputeDegenerateContribution_System_Int32_
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution(System.Int32)
+  name.vb: ComputeDegenerateContribution(Integer)
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution(int)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution(Integer)
+  nameWithType: DenseRealSolver.ComputeDegenerateContribution(int)
+  nameWithType.vb: DenseRealSolver.ComputeDegenerateContribution(Integer)
+- uid: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution*
+  name: ComputeDegenerateContribution
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ComputeDegenerateContribution_
+  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContribution
+  nameWithType: DenseRealSolver.ComputeDegenerateContribution
+- uid: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed(System.Int32)
+  name: ComputeDegenerateContributionTransposed(int)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ComputeDegenerateContributionTransposed_System_Int32_
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed(System.Int32)
+  name.vb: ComputeDegenerateContributionTransposed(Integer)
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed(int)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed(Integer)
+  nameWithType: DenseRealSolver.ComputeDegenerateContributionTransposed(int)
+  nameWithType.vb: DenseRealSolver.ComputeDegenerateContributionTransposed(Integer)
+- uid: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed*
+  name: ComputeDegenerateContributionTransposed
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ComputeDegenerateContributionTransposed_
+  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ComputeDegenerateContributionTransposed
+  nameWithType: DenseRealSolver.ComputeDegenerateContributionTransposed
 - uid: SpiceSharp.Algebra.DenseRealSolver.Eliminate(System.Int32,System.Int32)
   name: Eliminate(int, int)
   href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_Eliminate_System_Int32_System_Int32_
@@ -284,56 +366,56 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Algebra.DenseRealSolver.Eliminate
   nameWithType: DenseRealSolver.Eliminate
-- uid: SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double})
-  name: Solve(IVector<double>)
-  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_Solve_SpiceSharp_Algebra_IVector_System_Double__
-  commentId: M:SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double})
-  name.vb: Solve(IVector(Of Double))
-  fullName: SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector<double>)
-  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector(Of Double))
-  nameWithType: DenseRealSolver.Solve(IVector<double>)
-  nameWithType.vb: DenseRealSolver.Solve(IVector(Of Double))
-- uid: SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
-  name: Solve(IVector<double>, int)
-  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_Solve_SpiceSharp_Algebra_IVector_System_Double__System_Int32_
-  commentId: M:SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
-  name.vb: Solve(IVector(Of Double), Integer)
-  fullName: SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector<double>, int)
-  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.Solve(SpiceSharp.Algebra.IVector(Of Double), Integer)
-  nameWithType: DenseRealSolver.Solve(IVector<double>, int)
-  nameWithType.vb: DenseRealSolver.Solve(IVector(Of Double), Integer)
-- uid: SpiceSharp.Algebra.DenseRealSolver.Solve*
-  name: Solve
-  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_Solve_
-  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.Solve
+- uid: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name: ForwardSubstitute(IVector<double>)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ForwardSubstitute_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: ForwardSubstitute(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: DenseRealSolver.ForwardSubstitute(IVector<double>)
+  nameWithType.vb: DenseRealSolver.ForwardSubstitute(IVector(Of Double))
+- uid: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name: ForwardSubstitute(IVector<double>, int)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ForwardSubstitute_SpiceSharp_Algebra_IVector_System_Double__System_Int32_
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name.vb: ForwardSubstitute(IVector(Of Double), Integer)
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector<double>, int)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector(Of Double), Integer)
+  nameWithType: DenseRealSolver.ForwardSubstitute(IVector<double>, int)
+  nameWithType.vb: DenseRealSolver.ForwardSubstitute(IVector(Of Double), Integer)
+- uid: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute*
+  name: ForwardSubstitute
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ForwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute
   isSpec: "True"
-  fullName: SpiceSharp.Algebra.DenseRealSolver.Solve
-  nameWithType: DenseRealSolver.Solve
-- uid: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double})
-  name: SolveTransposed(IVector<double>)
-  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_SpiceSharp_Algebra_IVector_System_Double__
-  commentId: M:SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double})
-  name.vb: SolveTransposed(IVector(Of Double))
-  fullName: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector<double>)
-  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector(Of Double))
-  nameWithType: DenseRealSolver.SolveTransposed(IVector<double>)
-  nameWithType.vb: DenseRealSolver.SolveTransposed(IVector(Of Double))
-- uid: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
-  name: SolveTransposed(IVector<double>, int)
-  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_SpiceSharp_Algebra_IVector_System_Double__System_Int32_
-  commentId: M:SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
-  name.vb: SolveTransposed(IVector(Of Double), Integer)
-  fullName: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector<double>, int)
-  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector(Of Double), Integer)
-  nameWithType: DenseRealSolver.SolveTransposed(IVector<double>, int)
-  nameWithType.vb: DenseRealSolver.SolveTransposed(IVector(Of Double), Integer)
-- uid: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed*
-  name: SolveTransposed
-  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_SolveTransposed_
-  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.SolveTransposed
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstitute
+  nameWithType: DenseRealSolver.ForwardSubstitute
+- uid: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name: ForwardSubstituteTransposed(IVector<double>)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: ForwardSubstituteTransposed(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: DenseRealSolver.ForwardSubstituteTransposed(IVector<double>)
+  nameWithType.vb: DenseRealSolver.ForwardSubstituteTransposed(IVector(Of Double))
+- uid: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name: ForwardSubstituteTransposed(IVector<double>, int)
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Double__System_Int32_
+  commentId: M:SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double},System.Int32)
+  name.vb: ForwardSubstituteTransposed(IVector(Of Double), Integer)
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector<double>, int)
+  fullName.vb: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of Double), Integer)
+  nameWithType: DenseRealSolver.ForwardSubstituteTransposed(IVector<double>, int)
+  nameWithType.vb: DenseRealSolver.ForwardSubstituteTransposed(IVector(Of Double), Integer)
+- uid: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed*
+  name: ForwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.DenseRealSolver.html#SpiceSharp_Algebra_DenseRealSolver_ForwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed
   isSpec: "True"
-  fullName: SpiceSharp.Algebra.DenseRealSolver.SolveTransposed
-  nameWithType: DenseRealSolver.SolveTransposed
+  fullName: SpiceSharp.Algebra.DenseRealSolver.ForwardSubstituteTransposed
+  nameWithType: DenseRealSolver.ForwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.DenseVector`1
   name: DenseVector<T>
   href: api/SpiceSharp.Algebra.DenseVector-1.html
@@ -985,6 +1067,42 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISolver(Of T)
   nameWithType: ISolver<T>
   nameWithType.vb: ISolver(Of T)
+- uid: SpiceSharp.Algebra.ISolver`1.BackwardSubstitute(SpiceSharp.Algebra.IVector{`0})
+  name: BackwardSubstitute(IVector<T>)
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstitute_SpiceSharp_Algebra_IVector__0__
+  commentId: M:SpiceSharp.Algebra.ISolver`1.BackwardSubstitute(SpiceSharp.Algebra.IVector{`0})
+  name.vb: BackwardSubstitute(IVector(Of T))
+  fullName: SpiceSharp.Algebra.ISolver<T>.BackwardSubstitute(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).BackwardSubstitute(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: ISolver<T>.BackwardSubstitute(IVector<T>)
+  nameWithType.vb: ISolver(Of T).BackwardSubstitute(IVector(Of T))
+- uid: SpiceSharp.Algebra.ISolver`1.BackwardSubstitute*
+  name: BackwardSubstitute
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.ISolver`1.BackwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.ISolver<T>.BackwardSubstitute
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).BackwardSubstitute
+  nameWithType: ISolver<T>.BackwardSubstitute
+  nameWithType.vb: ISolver(Of T).BackwardSubstitute
+- uid: SpiceSharp.Algebra.ISolver`1.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`0})
+  name: BackwardSubstituteTransposed(IVector<T>)
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__
+  commentId: M:SpiceSharp.Algebra.ISolver`1.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`0})
+  name.vb: BackwardSubstituteTransposed(IVector(Of T))
+  fullName: SpiceSharp.Algebra.ISolver<T>.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: ISolver<T>.BackwardSubstituteTransposed(IVector<T>)
+  nameWithType.vb: ISolver(Of T).BackwardSubstituteTransposed(IVector(Of T))
+- uid: SpiceSharp.Algebra.ISolver`1.BackwardSubstituteTransposed*
+  name: BackwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.ISolver`1.BackwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.ISolver<T>.BackwardSubstituteTransposed
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).BackwardSubstituteTransposed
+  nameWithType: ISolver<T>.BackwardSubstituteTransposed
+  nameWithType.vb: ISolver(Of T).BackwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.ISolver`1.Clear
   name: Clear()
   href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Clear
@@ -1002,6 +1120,42 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISolver(Of T).Clear
   nameWithType: ISolver<T>.Clear
   nameWithType.vb: ISolver(Of T).Clear
+- uid: SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContribution(System.Int32)
+  name: ComputeDegenerateContribution(int)
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContribution_System_Int32_
+  commentId: M:SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContribution(System.Int32)
+  name.vb: ComputeDegenerateContribution(Integer)
+  fullName: SpiceSharp.Algebra.ISolver<T>.ComputeDegenerateContribution(int)
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ComputeDegenerateContribution(Integer)
+  nameWithType: ISolver<T>.ComputeDegenerateContribution(int)
+  nameWithType.vb: ISolver(Of T).ComputeDegenerateContribution(Integer)
+- uid: SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContribution*
+  name: ComputeDegenerateContribution
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContribution_
+  commentId: Overload:SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContribution
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.ISolver<T>.ComputeDegenerateContribution
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ComputeDegenerateContribution
+  nameWithType: ISolver<T>.ComputeDegenerateContribution
+  nameWithType.vb: ISolver(Of T).ComputeDegenerateContribution
+- uid: SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContributionTransposed(System.Int32)
+  name: ComputeDegenerateContributionTransposed(int)
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContributionTransposed_System_Int32_
+  commentId: M:SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContributionTransposed(System.Int32)
+  name.vb: ComputeDegenerateContributionTransposed(Integer)
+  fullName: SpiceSharp.Algebra.ISolver<T>.ComputeDegenerateContributionTransposed(int)
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ComputeDegenerateContributionTransposed(Integer)
+  nameWithType: ISolver<T>.ComputeDegenerateContributionTransposed(int)
+  nameWithType.vb: ISolver(Of T).ComputeDegenerateContributionTransposed(Integer)
+- uid: SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContributionTransposed*
+  name: ComputeDegenerateContributionTransposed
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContributionTransposed_
+  commentId: Overload:SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContributionTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.ISolver<T>.ComputeDegenerateContributionTransposed
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ComputeDegenerateContributionTransposed
+  nameWithType: ISolver<T>.ComputeDegenerateContributionTransposed
+  nameWithType.vb: ISolver(Of T).ComputeDegenerateContributionTransposed
 - uid: SpiceSharp.Algebra.ISolver`1.Degeneracy
   name: Degeneracy
   href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Degeneracy
@@ -1036,6 +1190,42 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISolver(Of T).Factor
   nameWithType: ISolver<T>.Factor
   nameWithType.vb: ISolver(Of T).Factor
+- uid: SpiceSharp.Algebra.ISolver`1.ForwardSubstitute(SpiceSharp.Algebra.IVector{`0})
+  name: ForwardSubstitute(IVector<T>)
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstitute_SpiceSharp_Algebra_IVector__0__
+  commentId: M:SpiceSharp.Algebra.ISolver`1.ForwardSubstitute(SpiceSharp.Algebra.IVector{`0})
+  name.vb: ForwardSubstitute(IVector(Of T))
+  fullName: SpiceSharp.Algebra.ISolver<T>.ForwardSubstitute(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ForwardSubstitute(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: ISolver<T>.ForwardSubstitute(IVector<T>)
+  nameWithType.vb: ISolver(Of T).ForwardSubstitute(IVector(Of T))
+- uid: SpiceSharp.Algebra.ISolver`1.ForwardSubstitute*
+  name: ForwardSubstitute
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.ISolver`1.ForwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.ISolver<T>.ForwardSubstitute
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ForwardSubstitute
+  nameWithType: ISolver<T>.ForwardSubstitute
+  nameWithType.vb: ISolver(Of T).ForwardSubstitute
+- uid: SpiceSharp.Algebra.ISolver`1.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`0})
+  name: ForwardSubstituteTransposed(IVector<T>)
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__
+  commentId: M:SpiceSharp.Algebra.ISolver`1.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`0})
+  name.vb: ForwardSubstituteTransposed(IVector(Of T))
+  fullName: SpiceSharp.Algebra.ISolver<T>.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: ISolver<T>.ForwardSubstituteTransposed(IVector<T>)
+  nameWithType.vb: ISolver(Of T).ForwardSubstituteTransposed(IVector(Of T))
+- uid: SpiceSharp.Algebra.ISolver`1.ForwardSubstituteTransposed*
+  name: ForwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.ISolver`1.ForwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.ISolver<T>.ForwardSubstituteTransposed
+  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).ForwardSubstituteTransposed
+  nameWithType: ISolver<T>.ForwardSubstituteTransposed
+  nameWithType.vb: ISolver(Of T).ForwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.ISolver`1.IsFactored
   name: IsFactored
   href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_IsFactored
@@ -1124,42 +1314,6 @@ references:
   fullName.vb: SpiceSharp.Algebra.ISolver(Of T).Size
   nameWithType: ISolver<T>.Size
   nameWithType.vb: ISolver(Of T).Size
-- uid: SpiceSharp.Algebra.ISolver`1.Solve(SpiceSharp.Algebra.IVector{`0})
-  name: Solve(IVector<T>)
-  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Solve_SpiceSharp_Algebra_IVector__0__
-  commentId: M:SpiceSharp.Algebra.ISolver`1.Solve(SpiceSharp.Algebra.IVector{`0})
-  name.vb: Solve(IVector(Of T))
-  fullName: SpiceSharp.Algebra.ISolver<T>.Solve(SpiceSharp.Algebra.IVector<T>)
-  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).Solve(SpiceSharp.Algebra.IVector(Of T))
-  nameWithType: ISolver<T>.Solve(IVector<T>)
-  nameWithType.vb: ISolver(Of T).Solve(IVector(Of T))
-- uid: SpiceSharp.Algebra.ISolver`1.Solve*
-  name: Solve
-  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Solve_
-  commentId: Overload:SpiceSharp.Algebra.ISolver`1.Solve
-  isSpec: "True"
-  fullName: SpiceSharp.Algebra.ISolver<T>.Solve
-  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).Solve
-  nameWithType: ISolver<T>.Solve
-  nameWithType.vb: ISolver(Of T).Solve
-- uid: SpiceSharp.Algebra.ISolver`1.SolveTransposed(SpiceSharp.Algebra.IVector{`0})
-  name: SolveTransposed(IVector<T>)
-  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_SolveTransposed_SpiceSharp_Algebra_IVector__0__
-  commentId: M:SpiceSharp.Algebra.ISolver`1.SolveTransposed(SpiceSharp.Algebra.IVector{`0})
-  name.vb: SolveTransposed(IVector(Of T))
-  fullName: SpiceSharp.Algebra.ISolver<T>.SolveTransposed(SpiceSharp.Algebra.IVector<T>)
-  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).SolveTransposed(SpiceSharp.Algebra.IVector(Of T))
-  nameWithType: ISolver<T>.SolveTransposed(IVector<T>)
-  nameWithType.vb: ISolver(Of T).SolveTransposed(IVector(Of T))
-- uid: SpiceSharp.Algebra.ISolver`1.SolveTransposed*
-  name: SolveTransposed
-  href: api/SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_SolveTransposed_
-  commentId: Overload:SpiceSharp.Algebra.ISolver`1.SolveTransposed
-  isSpec: "True"
-  fullName: SpiceSharp.Algebra.ISolver<T>.SolveTransposed
-  fullName.vb: SpiceSharp.Algebra.ISolver(Of T).SolveTransposed
-  nameWithType: ISolver<T>.SolveTransposed
-  nameWithType.vb: ISolver(Of T).SolveTransposed
 - uid: SpiceSharp.Algebra.ISparseMatrixElement`1
   name: ISparseMatrixElement<T>
   href: api/SpiceSharp.Algebra.ISparseMatrixElement-1.html
@@ -3465,6 +3619,42 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).New
   nameWithType: PivotingSolver<M, V, T>.PivotingSolver
   nameWithType.vb: PivotingSolver(Of M, V, T).New
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstitute(SpiceSharp.Algebra.IVector{`2})
+  name: BackwardSubstitute(IVector<T>)
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_BackwardSubstitute_SpiceSharp_Algebra_IVector__2__
+  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstitute(SpiceSharp.Algebra.IVector{`2})
+  name.vb: BackwardSubstitute(IVector(Of T))
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.BackwardSubstitute(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).BackwardSubstitute(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: PivotingSolver<M, V, T>.BackwardSubstitute(IVector<T>)
+  nameWithType.vb: PivotingSolver(Of M, V, T).BackwardSubstitute(IVector(Of T))
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstitute*
+  name: BackwardSubstitute
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_BackwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.BackwardSubstitute
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).BackwardSubstitute
+  nameWithType: PivotingSolver<M, V, T>.BackwardSubstitute
+  nameWithType.vb: PivotingSolver(Of M, V, T).BackwardSubstitute
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`2})
+  name: BackwardSubstituteTransposed(IVector<T>)
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector__2__
+  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`2})
+  name.vb: BackwardSubstituteTransposed(IVector(Of T))
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: PivotingSolver<M, V, T>.BackwardSubstituteTransposed(IVector<T>)
+  nameWithType.vb: PivotingSolver(Of M, V, T).BackwardSubstituteTransposed(IVector(Of T))
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstituteTransposed*
+  name: BackwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_BackwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.BackwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.BackwardSubstituteTransposed
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).BackwardSubstituteTransposed
+  nameWithType: PivotingSolver<M, V, T>.BackwardSubstituteTransposed
+  nameWithType.vb: PivotingSolver(Of M, V, T).BackwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.Clear
   name: Clear()
   href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Clear
@@ -3499,6 +3689,42 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).Column
   nameWithType: PivotingSolver<M, V, T>.Column
   nameWithType.vb: PivotingSolver(Of M, V, T).Column
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContribution(System.Int32)
+  name: ComputeDegenerateContribution(int)
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ComputeDegenerateContribution_System_Int32_
+  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContribution(System.Int32)
+  name.vb: ComputeDegenerateContribution(Integer)
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ComputeDegenerateContribution(int)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ComputeDegenerateContribution(Integer)
+  nameWithType: PivotingSolver<M, V, T>.ComputeDegenerateContribution(int)
+  nameWithType.vb: PivotingSolver(Of M, V, T).ComputeDegenerateContribution(Integer)
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContribution*
+  name: ComputeDegenerateContribution
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ComputeDegenerateContribution_
+  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContribution
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ComputeDegenerateContribution
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ComputeDegenerateContribution
+  nameWithType: PivotingSolver<M, V, T>.ComputeDegenerateContribution
+  nameWithType.vb: PivotingSolver(Of M, V, T).ComputeDegenerateContribution
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContributionTransposed(System.Int32)
+  name: ComputeDegenerateContributionTransposed(int)
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ComputeDegenerateContributionTransposed_System_Int32_
+  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContributionTransposed(System.Int32)
+  name.vb: ComputeDegenerateContributionTransposed(Integer)
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ComputeDegenerateContributionTransposed(int)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ComputeDegenerateContributionTransposed(Integer)
+  nameWithType: PivotingSolver<M, V, T>.ComputeDegenerateContributionTransposed(int)
+  nameWithType.vb: PivotingSolver(Of M, V, T).ComputeDegenerateContributionTransposed(Integer)
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContributionTransposed*
+  name: ComputeDegenerateContributionTransposed
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ComputeDegenerateContributionTransposed_
+  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.ComputeDegenerateContributionTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ComputeDegenerateContributionTransposed
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ComputeDegenerateContributionTransposed
+  nameWithType: PivotingSolver<M, V, T>.ComputeDegenerateContributionTransposed
+  nameWithType.vb: PivotingSolver(Of M, V, T).ComputeDegenerateContributionTransposed
 - uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.Degeneracy
   name: Degeneracy
   href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Degeneracy
@@ -3550,6 +3776,42 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).Factor
   nameWithType: PivotingSolver<M, V, T>.Factor
   nameWithType.vb: PivotingSolver(Of M, V, T).Factor
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstitute(SpiceSharp.Algebra.IVector{`2})
+  name: ForwardSubstitute(IVector<T>)
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ForwardSubstitute_SpiceSharp_Algebra_IVector__2__
+  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstitute(SpiceSharp.Algebra.IVector{`2})
+  name.vb: ForwardSubstitute(IVector(Of T))
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ForwardSubstitute(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ForwardSubstitute(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: PivotingSolver<M, V, T>.ForwardSubstitute(IVector<T>)
+  nameWithType.vb: PivotingSolver(Of M, V, T).ForwardSubstitute(IVector(Of T))
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstitute*
+  name: ForwardSubstitute
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ForwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ForwardSubstitute
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ForwardSubstitute
+  nameWithType: PivotingSolver<M, V, T>.ForwardSubstitute
+  nameWithType.vb: PivotingSolver(Of M, V, T).ForwardSubstitute
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`2})
+  name: ForwardSubstituteTransposed(IVector<T>)
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector__2__
+  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`2})
+  name.vb: ForwardSubstituteTransposed(IVector(Of T))
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector<T>)
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of T))
+  nameWithType: PivotingSolver<M, V, T>.ForwardSubstituteTransposed(IVector<T>)
+  nameWithType.vb: PivotingSolver(Of M, V, T).ForwardSubstituteTransposed(IVector(Of T))
+- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstituteTransposed*
+  name: ForwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_ForwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.ForwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.ForwardSubstituteTransposed
+  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).ForwardSubstituteTransposed
+  nameWithType: PivotingSolver<M, V, T>.ForwardSubstituteTransposed
+  nameWithType.vb: PivotingSolver(Of M, V, T).ForwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.InternalToExternal(SpiceSharp.Algebra.MatrixLocation)
   name: InternalToExternal(MatrixLocation)
   href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_InternalToExternal_SpiceSharp_Algebra_MatrixLocation_
@@ -3776,42 +4038,6 @@ references:
   fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).Size
   nameWithType: PivotingSolver<M, V, T>.Size
   nameWithType.vb: PivotingSolver(Of M, V, T).Size
-- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.Solve(SpiceSharp.Algebra.IVector{`2})
-  name: Solve(IVector<T>)
-  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Solve_SpiceSharp_Algebra_IVector__2__
-  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.Solve(SpiceSharp.Algebra.IVector{`2})
-  name.vb: Solve(IVector(Of T))
-  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.Solve(SpiceSharp.Algebra.IVector<T>)
-  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).Solve(SpiceSharp.Algebra.IVector(Of T))
-  nameWithType: PivotingSolver<M, V, T>.Solve(IVector<T>)
-  nameWithType.vb: PivotingSolver(Of M, V, T).Solve(IVector(Of T))
-- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.Solve*
-  name: Solve
-  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_Solve_
-  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.Solve
-  isSpec: "True"
-  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.Solve
-  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).Solve
-  nameWithType: PivotingSolver<M, V, T>.Solve
-  nameWithType.vb: PivotingSolver(Of M, V, T).Solve
-- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.SolveTransposed(SpiceSharp.Algebra.IVector{`2})
-  name: SolveTransposed(IVector<T>)
-  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SolveTransposed_SpiceSharp_Algebra_IVector__2__
-  commentId: M:SpiceSharp.Algebra.Solve.PivotingSolver`3.SolveTransposed(SpiceSharp.Algebra.IVector{`2})
-  name.vb: SolveTransposed(IVector(Of T))
-  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.SolveTransposed(SpiceSharp.Algebra.IVector<T>)
-  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).SolveTransposed(SpiceSharp.Algebra.IVector(Of T))
-  nameWithType: PivotingSolver<M, V, T>.SolveTransposed(IVector<T>)
-  nameWithType.vb: PivotingSolver(Of M, V, T).SolveTransposed(IVector(Of T))
-- uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.SolveTransposed*
-  name: SolveTransposed
-  href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SolveTransposed_
-  commentId: Overload:SpiceSharp.Algebra.Solve.PivotingSolver`3.SolveTransposed
-  isSpec: "True"
-  fullName: SpiceSharp.Algebra.Solve.PivotingSolver<M, V, T>.SolveTransposed
-  fullName.vb: SpiceSharp.Algebra.Solve.PivotingSolver(Of M, V, T).SolveTransposed
-  nameWithType: PivotingSolver<M, V, T>.SolveTransposed
-  nameWithType.vb: PivotingSolver(Of M, V, T).SolveTransposed
 - uid: SpiceSharp.Algebra.Solve.PivotingSolver`3.SwapColumns(System.Int32,System.Int32)
   name: SwapColumns(int, int)
   href: api/SpiceSharp.Algebra.Solve.PivotingSolver-3.html#SpiceSharp_Algebra_Solve_PivotingSolver_3_SwapColumns_System_Int32_System_Int32_
@@ -4904,6 +5130,70 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.New
   nameWithType: SparseComplexSolver.SparseComplexSolver
   nameWithType.vb: SparseComplexSolver.New
+- uid: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name: BackwardSubstitute(IVector<Complex>)
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_BackwardSubstitute_SpiceSharp_Algebra_IVector_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name.vb: BackwardSubstitute(IVector(Of Complex))
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector(Of System.Numerics.Complex))
+  nameWithType: SparseComplexSolver.BackwardSubstitute(IVector<Complex>)
+  nameWithType.vb: SparseComplexSolver.BackwardSubstitute(IVector(Of Complex))
+- uid: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute*
+  name: BackwardSubstitute
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_BackwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstitute
+  nameWithType: SparseComplexSolver.BackwardSubstitute
+- uid: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name: BackwardSubstituteTransposed(IVector<Complex>)
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name.vb: BackwardSubstituteTransposed(IVector(Of Complex))
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of System.Numerics.Complex))
+  nameWithType: SparseComplexSolver.BackwardSubstituteTransposed(IVector<Complex>)
+  nameWithType.vb: SparseComplexSolver.BackwardSubstituteTransposed(IVector(Of Complex))
+- uid: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed*
+  name: BackwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_BackwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.BackwardSubstituteTransposed
+  nameWithType: SparseComplexSolver.BackwardSubstituteTransposed
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution(System.Int32)
+  name: ComputeDegenerateContribution(int)
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ComputeDegenerateContribution_System_Int32_
+  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution(System.Int32)
+  name.vb: ComputeDegenerateContribution(Integer)
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution(int)
+  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution(Integer)
+  nameWithType: SparseComplexSolver.ComputeDegenerateContribution(int)
+  nameWithType.vb: SparseComplexSolver.ComputeDegenerateContribution(Integer)
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution*
+  name: ComputeDegenerateContribution
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ComputeDegenerateContribution_
+  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContribution
+  nameWithType: SparseComplexSolver.ComputeDegenerateContribution
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed(System.Int32)
+  name: ComputeDegenerateContributionTransposed(int)
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ComputeDegenerateContributionTransposed_System_Int32_
+  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed(System.Int32)
+  name.vb: ComputeDegenerateContributionTransposed(Integer)
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed(int)
+  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed(Integer)
+  nameWithType: SparseComplexSolver.ComputeDegenerateContributionTransposed(int)
+  nameWithType.vb: SparseComplexSolver.ComputeDegenerateContributionTransposed(Integer)
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed*
+  name: ComputeDegenerateContributionTransposed
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ComputeDegenerateContributionTransposed_
+  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ComputeDegenerateContributionTransposed
+  nameWithType: SparseComplexSolver.ComputeDegenerateContributionTransposed
 - uid: SpiceSharp.Algebra.SparseComplexSolver.Eliminate(SpiceSharp.Algebra.ISparseMatrixElement{System.Numerics.Complex})
   name: Eliminate(ISparseMatrixElement<Complex>)
   href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_Eliminate_SpiceSharp_Algebra_ISparseMatrixElement_System_Numerics_Complex__
@@ -4920,38 +5210,38 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Algebra.SparseComplexSolver.Eliminate
   nameWithType: SparseComplexSolver.Eliminate
-- uid: SpiceSharp.Algebra.SparseComplexSolver.Solve(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
-  name: Solve(IVector<Complex>)
-  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_Solve_SpiceSharp_Algebra_IVector_System_Numerics_Complex__
-  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.Solve(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
-  name.vb: Solve(IVector(Of Complex))
-  fullName: SpiceSharp.Algebra.SparseComplexSolver.Solve(SpiceSharp.Algebra.IVector<System.Numerics.Complex>)
-  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.Solve(SpiceSharp.Algebra.IVector(Of System.Numerics.Complex))
-  nameWithType: SparseComplexSolver.Solve(IVector<Complex>)
-  nameWithType.vb: SparseComplexSolver.Solve(IVector(Of Complex))
-- uid: SpiceSharp.Algebra.SparseComplexSolver.Solve*
-  name: Solve
-  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_Solve_
-  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.Solve
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name: ForwardSubstitute(IVector<Complex>)
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ForwardSubstitute_SpiceSharp_Algebra_IVector_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name.vb: ForwardSubstitute(IVector(Of Complex))
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector(Of System.Numerics.Complex))
+  nameWithType: SparseComplexSolver.ForwardSubstitute(IVector<Complex>)
+  nameWithType.vb: SparseComplexSolver.ForwardSubstitute(IVector(Of Complex))
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute*
+  name: ForwardSubstitute
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ForwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute
   isSpec: "True"
-  fullName: SpiceSharp.Algebra.SparseComplexSolver.Solve
-  nameWithType: SparseComplexSolver.Solve
-- uid: SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
-  name: SolveTransposed(IVector<Complex>)
-  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_SolveTransposed_SpiceSharp_Algebra_IVector_System_Numerics_Complex__
-  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
-  name.vb: SolveTransposed(IVector(Of Complex))
-  fullName: SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed(SpiceSharp.Algebra.IVector<System.Numerics.Complex>)
-  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed(SpiceSharp.Algebra.IVector(Of System.Numerics.Complex))
-  nameWithType: SparseComplexSolver.SolveTransposed(IVector<Complex>)
-  nameWithType.vb: SparseComplexSolver.SolveTransposed(IVector(Of Complex))
-- uid: SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed*
-  name: SolveTransposed
-  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_SolveTransposed_
-  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstitute
+  nameWithType: SparseComplexSolver.ForwardSubstitute
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name: ForwardSubstituteTransposed(IVector<Complex>)
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Numerics.Complex})
+  name.vb: ForwardSubstituteTransposed(IVector(Of Complex))
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector<System.Numerics.Complex>)
+  fullName.vb: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of System.Numerics.Complex))
+  nameWithType: SparseComplexSolver.ForwardSubstituteTransposed(IVector<Complex>)
+  nameWithType.vb: SparseComplexSolver.ForwardSubstituteTransposed(IVector(Of Complex))
+- uid: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed*
+  name: ForwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.SparseComplexSolver.html#SpiceSharp_Algebra_SparseComplexSolver_ForwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed
   isSpec: "True"
-  fullName: SpiceSharp.Algebra.SparseComplexSolver.SolveTransposed
-  nameWithType: SparseComplexSolver.SolveTransposed
+  fullName: SpiceSharp.Algebra.SparseComplexSolver.ForwardSubstituteTransposed
+  nameWithType: SparseComplexSolver.ForwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.SparseMatrix`1
   name: SparseMatrix<T>
   href: api/SpiceSharp.Algebra.SparseMatrix-1.html
@@ -5686,6 +5976,70 @@ references:
   fullName.vb: SpiceSharp.Algebra.SparseRealSolver.New
   nameWithType: SparseRealSolver.SparseRealSolver
   nameWithType.vb: SparseRealSolver.New
+- uid: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name: BackwardSubstitute(IVector<double>)
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_BackwardSubstitute_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: BackwardSubstitute(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: SparseRealSolver.BackwardSubstitute(IVector<double>)
+  nameWithType.vb: SparseRealSolver.BackwardSubstitute(IVector(Of Double))
+- uid: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute*
+  name: BackwardSubstitute
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_BackwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstitute
+  nameWithType: SparseRealSolver.BackwardSubstitute
+- uid: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name: BackwardSubstituteTransposed(IVector<double>)
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: BackwardSubstituteTransposed(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: SparseRealSolver.BackwardSubstituteTransposed(IVector<double>)
+  nameWithType.vb: SparseRealSolver.BackwardSubstituteTransposed(IVector(Of Double))
+- uid: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed*
+  name: BackwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_BackwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseRealSolver.BackwardSubstituteTransposed
+  nameWithType: SparseRealSolver.BackwardSubstituteTransposed
+- uid: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution(System.Int32)
+  name: ComputeDegenerateContribution(int)
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ComputeDegenerateContribution_System_Int32_
+  commentId: M:SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution(System.Int32)
+  name.vb: ComputeDegenerateContribution(Integer)
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution(int)
+  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution(Integer)
+  nameWithType: SparseRealSolver.ComputeDegenerateContribution(int)
+  nameWithType.vb: SparseRealSolver.ComputeDegenerateContribution(Integer)
+- uid: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution*
+  name: ComputeDegenerateContribution
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ComputeDegenerateContribution_
+  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContribution
+  nameWithType: SparseRealSolver.ComputeDegenerateContribution
+- uid: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed(System.Int32)
+  name: ComputeDegenerateContributionTransposed(int)
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ComputeDegenerateContributionTransposed_System_Int32_
+  commentId: M:SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed(System.Int32)
+  name.vb: ComputeDegenerateContributionTransposed(Integer)
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed(int)
+  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed(Integer)
+  nameWithType: SparseRealSolver.ComputeDegenerateContributionTransposed(int)
+  nameWithType.vb: SparseRealSolver.ComputeDegenerateContributionTransposed(Integer)
+- uid: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed*
+  name: ComputeDegenerateContributionTransposed
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ComputeDegenerateContributionTransposed_
+  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ComputeDegenerateContributionTransposed
+  nameWithType: SparseRealSolver.ComputeDegenerateContributionTransposed
 - uid: SpiceSharp.Algebra.SparseRealSolver.Eliminate(SpiceSharp.Algebra.ISparseMatrixElement{System.Double})
   name: Eliminate(ISparseMatrixElement<double>)
   href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_Eliminate_SpiceSharp_Algebra_ISparseMatrixElement_System_Double__
@@ -5702,38 +6056,38 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Algebra.SparseRealSolver.Eliminate
   nameWithType: SparseRealSolver.Eliminate
-- uid: SpiceSharp.Algebra.SparseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double})
-  name: Solve(IVector<double>)
-  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_Solve_SpiceSharp_Algebra_IVector_System_Double__
-  commentId: M:SpiceSharp.Algebra.SparseRealSolver.Solve(SpiceSharp.Algebra.IVector{System.Double})
-  name.vb: Solve(IVector(Of Double))
-  fullName: SpiceSharp.Algebra.SparseRealSolver.Solve(SpiceSharp.Algebra.IVector<double>)
-  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.Solve(SpiceSharp.Algebra.IVector(Of Double))
-  nameWithType: SparseRealSolver.Solve(IVector<double>)
-  nameWithType.vb: SparseRealSolver.Solve(IVector(Of Double))
-- uid: SpiceSharp.Algebra.SparseRealSolver.Solve*
-  name: Solve
-  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_Solve_
-  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.Solve
+- uid: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name: ForwardSubstitute(IVector<double>)
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ForwardSubstitute_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: ForwardSubstitute(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: SparseRealSolver.ForwardSubstitute(IVector<double>)
+  nameWithType.vb: SparseRealSolver.ForwardSubstitute(IVector(Of Double))
+- uid: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute*
+  name: ForwardSubstitute
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ForwardSubstitute_
+  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute
   isSpec: "True"
-  fullName: SpiceSharp.Algebra.SparseRealSolver.Solve
-  nameWithType: SparseRealSolver.Solve
-- uid: SpiceSharp.Algebra.SparseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double})
-  name: SolveTransposed(IVector<double>)
-  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_SolveTransposed_SpiceSharp_Algebra_IVector_System_Double__
-  commentId: M:SpiceSharp.Algebra.SparseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector{System.Double})
-  name.vb: SolveTransposed(IVector(Of Double))
-  fullName: SpiceSharp.Algebra.SparseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector<double>)
-  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.SolveTransposed(SpiceSharp.Algebra.IVector(Of Double))
-  nameWithType: SparseRealSolver.SolveTransposed(IVector<double>)
-  nameWithType.vb: SparseRealSolver.SolveTransposed(IVector(Of Double))
-- uid: SpiceSharp.Algebra.SparseRealSolver.SolveTransposed*
-  name: SolveTransposed
-  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_SolveTransposed_
-  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.SolveTransposed
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstitute
+  nameWithType: SparseRealSolver.ForwardSubstitute
+- uid: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name: ForwardSubstituteTransposed(IVector<double>)
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector_System_Double__
+  commentId: M:SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{System.Double})
+  name.vb: ForwardSubstituteTransposed(IVector(Of Double))
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector<double>)
+  fullName.vb: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector(Of Double))
+  nameWithType: SparseRealSolver.ForwardSubstituteTransposed(IVector<double>)
+  nameWithType.vb: SparseRealSolver.ForwardSubstituteTransposed(IVector(Of Double))
+- uid: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed*
+  name: ForwardSubstituteTransposed
+  href: api/SpiceSharp.Algebra.SparseRealSolver.html#SpiceSharp_Algebra_SparseRealSolver_ForwardSubstituteTransposed_
+  commentId: Overload:SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed
   isSpec: "True"
-  fullName: SpiceSharp.Algebra.SparseRealSolver.SolveTransposed
-  nameWithType: SparseRealSolver.SolveTransposed
+  fullName: SpiceSharp.Algebra.SparseRealSolver.ForwardSubstituteTransposed
+  nameWithType: SparseRealSolver.ForwardSubstituteTransposed
 - uid: SpiceSharp.Algebra.SparseVector`1
   name: SparseVector<T>
   href: api/SpiceSharp.Algebra.SparseVector-1.html
@@ -7880,6 +8234,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Behaviors.INoiseBehavior.Compute
   nameWithType: INoiseBehavior.Compute
+- uid: SpiceSharp.Behaviors.INoiseBehavior.Load
+  name: Load()
+  href: api/SpiceSharp.Behaviors.INoiseBehavior.html#SpiceSharp_Behaviors_INoiseBehavior_Load
+  commentId: M:SpiceSharp.Behaviors.INoiseBehavior.Load
+  fullName: SpiceSharp.Behaviors.INoiseBehavior.Load()
+  nameWithType: INoiseBehavior.Load()
+- uid: SpiceSharp.Behaviors.INoiseBehavior.Load*
+  name: Load
+  href: api/SpiceSharp.Behaviors.INoiseBehavior.html#SpiceSharp_Behaviors_INoiseBehavior_Load_
+  commentId: Overload:SpiceSharp.Behaviors.INoiseBehavior.Load
+  isSpec: "True"
+  fullName: SpiceSharp.Behaviors.INoiseBehavior.Load
+  nameWithType: INoiseBehavior.Load
 - uid: SpiceSharp.Behaviors.ITemperatureBehavior
   name: ITemperatureBehavior
   href: api/SpiceSharp.Behaviors.ITemperatureBehavior.html
@@ -11506,6 +11873,57 @@ references:
   fullName.vb: SpiceSharp.Components.Common.Contribution(Of T).<>
   nameWithType: Contribution<T>.operator !=
   nameWithType.vb: Contribution(Of T).<>
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior
+  name: IEntitiesBehavior
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html
+  commentId: T:SpiceSharp.Components.Common.IEntitiesBehavior
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior
+  nameWithType: IEntitiesBehavior
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior.GetState*
+  name: GetState
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html#SpiceSharp_Components_Common_IEntitiesBehavior_GetState_
+  commentId: Overload:SpiceSharp.Components.Common.IEntitiesBehavior.GetState
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior.GetState
+  nameWithType: IEntitiesBehavior.GetState
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior.GetState``1
+  name: GetState<S>()
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html#SpiceSharp_Components_Common_IEntitiesBehavior_GetState__1
+  commentId: M:SpiceSharp.Components.Common.IEntitiesBehavior.GetState``1
+  name.vb: GetState(Of S)()
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior.GetState<S>()
+  fullName.vb: SpiceSharp.Components.Common.IEntitiesBehavior.GetState(Of S)()
+  nameWithType: IEntitiesBehavior.GetState<S>()
+  nameWithType.vb: IEntitiesBehavior.GetState(Of S)()
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior.LocalBehaviors
+  name: LocalBehaviors
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html#SpiceSharp_Components_Common_IEntitiesBehavior_LocalBehaviors
+  commentId: P:SpiceSharp.Components.Common.IEntitiesBehavior.LocalBehaviors
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior.LocalBehaviors
+  nameWithType: IEntitiesBehavior.LocalBehaviors
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior.LocalBehaviors*
+  name: LocalBehaviors
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html#SpiceSharp_Components_Common_IEntitiesBehavior_LocalBehaviors_
+  commentId: Overload:SpiceSharp.Components.Common.IEntitiesBehavior.LocalBehaviors
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior.LocalBehaviors
+  nameWithType: IEntitiesBehavior.LocalBehaviors
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState*
+  name: TryGetState
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html#SpiceSharp_Components_Common_IEntitiesBehavior_TryGetState_
+  commentId: Overload:SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState
+  nameWithType: IEntitiesBehavior.TryGetState
+- uid: SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState``1(``0@)
+  name: TryGetState<S>(out S)
+  href: api/SpiceSharp.Components.Common.IEntitiesBehavior.html#SpiceSharp_Components_Common_IEntitiesBehavior_TryGetState__1___0__
+  commentId: M:SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState``1(``0@)
+  name.vb: TryGetState(Of S)(S)
+  fullName: SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState<S>(out S)
+  fullName.vb: SpiceSharp.Components.Common.IEntitiesBehavior.TryGetState(Of S)(S)
+  nameWithType: IEntitiesBehavior.TryGetState<S>(out S)
+  nameWithType.vb: IEntitiesBehavior.TryGetState(Of S)(S)
 - uid: SpiceSharp.Components.Common.ParameterBehavior`1
   name: ParameterBehavior<P>
   href: api/SpiceSharp.Components.Common.ParameterBehavior-1.html
@@ -22527,22 +22945,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.Parallel.Apply
   nameWithType: Parallel.Apply
-- uid: SpiceSharp.Components.Parallel.Connect(System.String[])
-  name: Connect(params string[])
-  href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_Connect_System_String___
-  commentId: M:SpiceSharp.Components.Parallel.Connect(System.String[])
-  name.vb: Connect(ParamArray String())
-  fullName: SpiceSharp.Components.Parallel.Connect(params string[])
-  fullName.vb: SpiceSharp.Components.Parallel.Connect(ParamArray String())
-  nameWithType: Parallel.Connect(params string[])
-  nameWithType.vb: Parallel.Connect(ParamArray String())
-- uid: SpiceSharp.Components.Parallel.Connect*
-  name: Connect
-  href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_Connect_
-  commentId: Overload:SpiceSharp.Components.Parallel.Connect
-  isSpec: "True"
-  fullName: SpiceSharp.Components.Parallel.Connect
-  nameWithType: Parallel.Connect
 - uid: SpiceSharp.Components.Parallel.CreateBehaviors(SpiceSharp.Simulations.ISimulation)
   name: CreateBehaviors(ISimulation)
   href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_CreateBehaviors_SpiceSharp_Simulations_ISimulation_
@@ -22803,6 +23205,76 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.ParallelComponents.Convergence.FetchBehaviors
   nameWithType: Convergence.FetchBehaviors
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior
+  name: EntitiesBehavior
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html
+  commentId: T:SpiceSharp.Components.ParallelComponents.EntitiesBehavior
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior
+  nameWithType: EntitiesBehavior
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.#ctor(SpiceSharp.Components.ParallelComponents.ParallelBindingContext)
+  name: EntitiesBehavior(ParallelBindingContext)
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior__ctor_SpiceSharp_Components_ParallelComponents_ParallelBindingContext_
+  commentId: M:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.#ctor(SpiceSharp.Components.ParallelComponents.ParallelBindingContext)
+  name.vb: New(ParallelBindingContext)
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.EntitiesBehavior(SpiceSharp.Components.ParallelComponents.ParallelBindingContext)
+  fullName.vb: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.New(SpiceSharp.Components.ParallelComponents.ParallelBindingContext)
+  nameWithType: EntitiesBehavior.EntitiesBehavior(ParallelBindingContext)
+  nameWithType.vb: EntitiesBehavior.New(ParallelBindingContext)
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.#ctor*
+  name: EntitiesBehavior
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior__ctor_
+  commentId: Overload:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.EntitiesBehavior
+  fullName.vb: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.New
+  nameWithType: EntitiesBehavior.EntitiesBehavior
+  nameWithType.vb: EntitiesBehavior.New
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState*
+  name: GetState
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior_GetState_
+  commentId: Overload:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState
+  isSpec: "True"
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState
+  nameWithType: EntitiesBehavior.GetState
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState``1
+  name: GetState<S>()
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior_GetState__1
+  commentId: M:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState``1
+  name.vb: GetState(Of S)()
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState<S>()
+  fullName.vb: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.GetState(Of S)()
+  nameWithType: EntitiesBehavior.GetState<S>()
+  nameWithType.vb: EntitiesBehavior.GetState(Of S)()
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.LocalBehaviors
+  name: LocalBehaviors
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior_LocalBehaviors
+  commentId: P:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.LocalBehaviors
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.LocalBehaviors
+  nameWithType: EntitiesBehavior.LocalBehaviors
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.LocalBehaviors*
+  name: LocalBehaviors
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior_LocalBehaviors_
+  commentId: Overload:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.LocalBehaviors
+  isSpec: "True"
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.LocalBehaviors
+  nameWithType: EntitiesBehavior.LocalBehaviors
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState*
+  name: TryGetState
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior_TryGetState_
+  commentId: Overload:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState
+  isSpec: "True"
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState
+  nameWithType: EntitiesBehavior.TryGetState
+- uid: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState``1(``0@)
+  name: TryGetState<S>(out S)
+  href: api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html#SpiceSharp_Components_ParallelComponents_EntitiesBehavior_TryGetState__1___0__
+  commentId: M:SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState``1(``0@)
+  name.vb: TryGetState(Of S)(S)
+  fullName: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState<S>(out S)
+  fullName.vb: SpiceSharp.Components.ParallelComponents.EntitiesBehavior.TryGetState(Of S)(S)
+  nameWithType: EntitiesBehavior.TryGetState<S>(out S)
+  nameWithType.vb: EntitiesBehavior.TryGetState(Of S)(S)
 - uid: SpiceSharp.Components.ParallelComponents.Frequency
   name: Frequency
   href: api/SpiceSharp.Components.ParallelComponents.Frequency.html
@@ -23134,6 +23606,19 @@ references:
   fullName.vb: SpiceSharp.Components.ParallelComponents.ParallelBindingContext.GetBehaviors(Of B)()
   nameWithType: ParallelBindingContext.GetBehaviors<B>()
   nameWithType.vb: ParallelBindingContext.GetBehaviors(Of B)()
+- uid: SpiceSharp.Components.ParallelComponents.ParallelBindingContext.LocalBehaviors
+  name: LocalBehaviors
+  href: api/SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html#SpiceSharp_Components_ParallelComponents_ParallelBindingContext_LocalBehaviors
+  commentId: P:SpiceSharp.Components.ParallelComponents.ParallelBindingContext.LocalBehaviors
+  fullName: SpiceSharp.Components.ParallelComponents.ParallelBindingContext.LocalBehaviors
+  nameWithType: ParallelBindingContext.LocalBehaviors
+- uid: SpiceSharp.Components.ParallelComponents.ParallelBindingContext.LocalBehaviors*
+  name: LocalBehaviors
+  href: api/SpiceSharp.Components.ParallelComponents.ParallelBindingContext.html#SpiceSharp_Components_ParallelComponents_ParallelBindingContext_LocalBehaviors_
+  commentId: Overload:SpiceSharp.Components.ParallelComponents.ParallelBindingContext.LocalBehaviors
+  isSpec: "True"
+  fullName: SpiceSharp.Components.ParallelComponents.ParallelBindingContext.LocalBehaviors
+  nameWithType: ParallelBindingContext.LocalBehaviors
 - uid: SpiceSharp.Components.ParallelComponents.ParallelSimulation
   name: ParallelSimulation
   href: api/SpiceSharp.Components.ParallelComponents.ParallelSimulation.html
@@ -25699,6 +26184,19 @@ references:
   fullName.vb: SpiceSharp.Components.SamplerBehaviors.Truncating.New
   nameWithType: Truncating.Truncating
   nameWithType.vb: Truncating.New
+- uid: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
+  name: Parameters
+  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html#SpiceSharp_Components_SamplerBehaviors_Truncating_Parameters
+  commentId: P:SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
+  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
+  nameWithType: Truncating.Parameters
+- uid: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters*
+  name: Parameters
+  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html#SpiceSharp_Components_SamplerBehaviors_Truncating_Parameters_
+  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
+  isSpec: "True"
+  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
+  nameWithType: Truncating.Parameters
 - uid: SpiceSharp.Components.Semiconductors
   name: SpiceSharp.Components.Semiconductors
   href: api/SpiceSharp.Components.Semiconductors.html
@@ -26887,6 +27385,23 @@ references:
   fullName.vb: SpiceSharp.Components.Subcircuits.LocalSolverState(Of T, S).Apply
   nameWithType: LocalSolverState<T, S>.Apply
   nameWithType.vb: LocalSolverState(Of T, S).Apply
+- uid: SpiceSharp.Components.Subcircuits.LocalSolverState`2.ApplyTransposed
+  name: ApplyTransposed()
+  href: api/SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_ApplyTransposed
+  commentId: M:SpiceSharp.Components.Subcircuits.LocalSolverState`2.ApplyTransposed
+  fullName: SpiceSharp.Components.Subcircuits.LocalSolverState<T, S>.ApplyTransposed()
+  fullName.vb: SpiceSharp.Components.Subcircuits.LocalSolverState(Of T, S).ApplyTransposed()
+  nameWithType: LocalSolverState<T, S>.ApplyTransposed()
+  nameWithType.vb: LocalSolverState(Of T, S).ApplyTransposed()
+- uid: SpiceSharp.Components.Subcircuits.LocalSolverState`2.ApplyTransposed*
+  name: ApplyTransposed
+  href: api/SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_ApplyTransposed_
+  commentId: Overload:SpiceSharp.Components.Subcircuits.LocalSolverState`2.ApplyTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Subcircuits.LocalSolverState<T, S>.ApplyTransposed
+  fullName.vb: SpiceSharp.Components.Subcircuits.LocalSolverState(Of T, S).ApplyTransposed
+  nameWithType: LocalSolverState<T, S>.ApplyTransposed
+  nameWithType.vb: LocalSolverState(Of T, S).ApplyTransposed
 - uid: SpiceSharp.Components.Subcircuits.LocalSolverState`2.CreatePrivateVariable(System.String,SpiceSharp.Simulations.Variables.IUnit)
   name: CreatePrivateVariable(string, IUnit)
   href: api/SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_CreatePrivateVariable_System_String_SpiceSharp_Simulations_Variables_IUnit_
@@ -27017,6 +27532,23 @@ references:
   fullName.vb: SpiceSharp.Components.Subcircuits.LocalSolverState(Of T, S).Update
   nameWithType: LocalSolverState<T, S>.Update
   nameWithType.vb: LocalSolverState(Of T, S).Update
+- uid: SpiceSharp.Components.Subcircuits.LocalSolverState`2.UpdateTransposed
+  name: UpdateTransposed()
+  href: api/SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_UpdateTransposed
+  commentId: M:SpiceSharp.Components.Subcircuits.LocalSolverState`2.UpdateTransposed
+  fullName: SpiceSharp.Components.Subcircuits.LocalSolverState<T, S>.UpdateTransposed()
+  fullName.vb: SpiceSharp.Components.Subcircuits.LocalSolverState(Of T, S).UpdateTransposed()
+  nameWithType: LocalSolverState<T, S>.UpdateTransposed()
+  nameWithType.vb: LocalSolverState(Of T, S).UpdateTransposed()
+- uid: SpiceSharp.Components.Subcircuits.LocalSolverState`2.UpdateTransposed*
+  name: UpdateTransposed
+  href: api/SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_UpdateTransposed_
+  commentId: Overload:SpiceSharp.Components.Subcircuits.LocalSolverState`2.UpdateTransposed
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Subcircuits.LocalSolverState<T, S>.UpdateTransposed
+  fullName.vb: SpiceSharp.Components.Subcircuits.LocalSolverState(Of T, S).UpdateTransposed
+  nameWithType: LocalSolverState<T, S>.UpdateTransposed
+  nameWithType.vb: LocalSolverState(Of T, S).UpdateTransposed
 - uid: SpiceSharp.Components.Subcircuits.LocalSolverState`2.Updated
   name: Updated
   href: api/SpiceSharp.Components.Subcircuits.LocalSolverState-2.html#SpiceSharp_Components_Subcircuits_LocalSolverState_2_Updated
@@ -30012,6 +30544,102 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Diagnostics.ParameterNotFoundException.ParameterizedObject
   nameWithType: ParameterNotFoundException.ParameterizedObject
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException
+  name: VariableNotFoundException
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html
+  commentId: T:SpiceSharp.Diagnostics.VariableNotFoundException
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException
+  nameWithType: VariableNotFoundException
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor
+  name: VariableNotFoundException()
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor
+  name.vb: New()
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException()
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New()
+  nameWithType: VariableNotFoundException.VariableNotFoundException()
+  nameWithType.vb: VariableNotFoundException.New()
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(SpiceSharp.Simulations.Base.Reference,System.String)
+  name: VariableNotFoundException(Reference, string)
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: New(Reference, String)
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException(SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New(SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: VariableNotFoundException.VariableNotFoundException(Reference, string)
+  nameWithType.vb: VariableNotFoundException.New(Reference, String)
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(SpiceSharp.Simulations.Base.Reference,System.String,System.Exception)
+  name: VariableNotFoundException(Reference, string, Exception)
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor_SpiceSharp_Simulations_Base_Reference_System_String_System_Exception_
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(SpiceSharp.Simulations.Base.Reference,System.String,System.Exception)
+  name.vb: New(Reference, String, Exception)
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException(SpiceSharp.Simulations.Base.Reference, string, System.Exception)
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New(SpiceSharp.Simulations.Base.Reference, String, System.Exception)
+  nameWithType: VariableNotFoundException.VariableNotFoundException(Reference, string, Exception)
+  nameWithType.vb: VariableNotFoundException.New(Reference, String, Exception)
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name: VariableNotFoundException(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name.vb: New(SerializationInfo, StreamingContext)
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  nameWithType: VariableNotFoundException.VariableNotFoundException(SerializationInfo, StreamingContext)
+  nameWithType.vb: VariableNotFoundException.New(SerializationInfo, StreamingContext)
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(System.String)
+  name: VariableNotFoundException(string)
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor_System_String_
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(System.String)
+  name.vb: New(String)
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException(string)
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New(String)
+  nameWithType: VariableNotFoundException.VariableNotFoundException(string)
+  nameWithType.vb: VariableNotFoundException.New(String)
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(System.String,System.Exception)
+  name: VariableNotFoundException(string, Exception)
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor_System_String_System_Exception_
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor(System.String,System.Exception)
+  name.vb: New(String, Exception)
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException(string, System.Exception)
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New(String, System.Exception)
+  nameWithType: VariableNotFoundException.VariableNotFoundException(string, Exception)
+  nameWithType.vb: VariableNotFoundException.New(String, Exception)
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.#ctor*
+  name: VariableNotFoundException
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException__ctor_
+  commentId: Overload:SpiceSharp.Diagnostics.VariableNotFoundException.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.VariableNotFoundException
+  fullName.vb: SpiceSharp.Diagnostics.VariableNotFoundException.New
+  nameWithType: VariableNotFoundException.VariableNotFoundException
+  nameWithType.vb: VariableNotFoundException.New
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name: GetObjectData(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.Diagnostics.VariableNotFoundException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  nameWithType: VariableNotFoundException.GetObjectData(SerializationInfo, StreamingContext)
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.GetObjectData*
+  name: GetObjectData
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException_GetObjectData_
+  commentId: Overload:SpiceSharp.Diagnostics.VariableNotFoundException.GetObjectData
+  isSpec: "True"
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.GetObjectData
+  nameWithType: VariableNotFoundException.GetObjectData
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.Path
+  name: Path
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException_Path
+  commentId: P:SpiceSharp.Diagnostics.VariableNotFoundException.Path
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.Path
+  nameWithType: VariableNotFoundException.Path
+- uid: SpiceSharp.Diagnostics.VariableNotFoundException.Path*
+  name: Path
+  href: api/SpiceSharp.Diagnostics.VariableNotFoundException.html#SpiceSharp_Diagnostics_VariableNotFoundException_Path_
+  commentId: Overload:SpiceSharp.Diagnostics.VariableNotFoundException.Path
+  isSpec: "True"
+  fullName: SpiceSharp.Diagnostics.VariableNotFoundException.Path
+  nameWithType: VariableNotFoundException.Path
 - uid: SpiceSharp.Documentation
   name: SpiceSharp.Documentation
   href: api/SpiceSharp.Documentation.html
@@ -34514,6 +35142,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Parameters_UpperLimitReached
   nameWithType: Resources.Parameters_UpperLimitReached
+- uid: SpiceSharp.Properties.Resources.References_IsEmptyReference
+  name: References_IsEmptyReference
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_References_IsEmptyReference
+  commentId: P:SpiceSharp.Properties.Resources.References_IsEmptyReference
+  fullName: SpiceSharp.Properties.Resources.References_IsEmptyReference
+  nameWithType: Resources.References_IsEmptyReference
+- uid: SpiceSharp.Properties.Resources.References_IsEmptyReference*
+  name: References_IsEmptyReference
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_References_IsEmptyReference_
+  commentId: Overload:SpiceSharp.Properties.Resources.References_IsEmptyReference
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.References_IsEmptyReference
+  nameWithType: Resources.References_IsEmptyReference
 - uid: SpiceSharp.Properties.Resources.Reflection_NotMatchingType
   name: Reflection_NotMatchingType
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Reflection_NotMatchingType
@@ -34813,6 +35454,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Stateful_NotDefined
   nameWithType: Resources.Stateful_NotDefined
+- uid: SpiceSharp.Properties.Resources.States_StateNotFoundFor
+  name: States_StateNotFoundFor
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_States_StateNotFoundFor
+  commentId: P:SpiceSharp.Properties.Resources.States_StateNotFoundFor
+  fullName: SpiceSharp.Properties.Resources.States_StateNotFoundFor
+  nameWithType: Resources.States_StateNotFoundFor
+- uid: SpiceSharp.Properties.Resources.States_StateNotFoundFor*
+  name: States_StateNotFoundFor
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_States_StateNotFoundFor_
+  commentId: Overload:SpiceSharp.Properties.Resources.States_StateNotFoundFor
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.States_StateNotFoundFor
+  nameWithType: Resources.States_StateNotFoundFor
 - uid: SpiceSharp.Properties.Resources.Subcircuits_NoEquivalent
   name: Subcircuits_NoEquivalent
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Subcircuits_NoEquivalent
@@ -34956,6 +35610,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.VariableNotFound
   nameWithType: Resources.VariableNotFound
+- uid: SpiceSharp.Properties.Resources.Variables_NoVariableFor
+  name: Variables_NoVariableFor
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Variables_NoVariableFor
+  commentId: P:SpiceSharp.Properties.Resources.Variables_NoVariableFor
+  fullName: SpiceSharp.Properties.Resources.Variables_NoVariableFor
+  nameWithType: Resources.Variables_NoVariableFor
+- uid: SpiceSharp.Properties.Resources.Variables_NoVariableFor*
+  name: Variables_NoVariableFor
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Variables_NoVariableFor_
+  commentId: Overload:SpiceSharp.Properties.Resources.Variables_NoVariableFor
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.Variables_NoVariableFor
+  nameWithType: Resources.Variables_NoVariableFor
 - uid: SpiceSharp.Properties.Resources.Waveforms_Pwl_Empty
   name: Waveforms_Pwl_Empty
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Waveforms_Pwl_Empty
@@ -35067,6 +35734,269 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
   nameWithType: AfterExecuteEventArgs.Repeat
+- uid: SpiceSharp.Simulations.Base
+  name: SpiceSharp.Simulations.Base
+  href: api/SpiceSharp.Simulations.Base.html
+  commentId: N:SpiceSharp.Simulations.Base
+  fullName: SpiceSharp.Simulations.Base
+  nameWithType: SpiceSharp.Simulations.Base
+- uid: SpiceSharp.Simulations.Base.Reference
+  name: Reference
+  href: api/SpiceSharp.Simulations.Base.Reference.html
+  commentId: T:SpiceSharp.Simulations.Base.Reference
+  fullName: SpiceSharp.Simulations.Base.Reference
+  nameWithType: Reference
+- uid: SpiceSharp.Simulations.Base.Reference.#ctor(System.String)
+  name: Reference(string)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference__ctor_System_String_
+  commentId: M:SpiceSharp.Simulations.Base.Reference.#ctor(System.String)
+  name.vb: New(String)
+  fullName: SpiceSharp.Simulations.Base.Reference.Reference(string)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.New(String)
+  nameWithType: Reference.Reference(string)
+  nameWithType.vb: Reference.New(String)
+- uid: SpiceSharp.Simulations.Base.Reference.#ctor(System.String[])
+  name: Reference(params string[])
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference__ctor_System_String___
+  commentId: M:SpiceSharp.Simulations.Base.Reference.#ctor(System.String[])
+  name.vb: New(ParamArray String())
+  fullName: SpiceSharp.Simulations.Base.Reference.Reference(params string[])
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.New(ParamArray String())
+  nameWithType: Reference.Reference(params string[])
+  nameWithType.vb: Reference.New(ParamArray String())
+- uid: SpiceSharp.Simulations.Base.Reference.#ctor*
+  name: Reference
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference__ctor_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: SpiceSharp.Simulations.Base.Reference.Reference
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.New
+  nameWithType: Reference.Reference
+  nameWithType.vb: Reference.New
+- uid: SpiceSharp.Simulations.Base.Reference.Equals(SpiceSharp.Simulations.Base.Reference)
+  name: Equals(Reference)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Equals_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.Base.Reference.Equals(SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.Base.Reference.Equals(SpiceSharp.Simulations.Base.Reference)
+  nameWithType: Reference.Equals(Reference)
+- uid: SpiceSharp.Simulations.Base.Reference.Equals(System.Object)
+  name: Equals(object)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Equals_System_Object_
+  commentId: M:SpiceSharp.Simulations.Base.Reference.Equals(System.Object)
+  name.vb: Equals(Object)
+  fullName: SpiceSharp.Simulations.Base.Reference.Equals(object)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.Equals(Object)
+  nameWithType: Reference.Equals(object)
+  nameWithType.vb: Reference.Equals(Object)
+- uid: SpiceSharp.Simulations.Base.Reference.Equals*
+  name: Equals
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Equals_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.Equals
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.Equals
+  nameWithType: Reference.Equals
+- uid: SpiceSharp.Simulations.Base.Reference.GetContainer(SpiceSharp.Simulations.ISimulation)
+  name: GetContainer(ISimulation)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetContainer_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.Base.Reference.GetContainer(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.Base.Reference.GetContainer(SpiceSharp.Simulations.ISimulation)
+  nameWithType: Reference.GetContainer(ISimulation)
+- uid: SpiceSharp.Simulations.Base.Reference.GetContainer*
+  name: GetContainer
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetContainer_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.GetContainer
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.GetContainer
+  nameWithType: Reference.GetContainer
+- uid: SpiceSharp.Simulations.Base.Reference.GetHashCode
+  name: GetHashCode()
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetHashCode
+  commentId: M:SpiceSharp.Simulations.Base.Reference.GetHashCode
+  fullName: SpiceSharp.Simulations.Base.Reference.GetHashCode()
+  nameWithType: Reference.GetHashCode()
+- uid: SpiceSharp.Simulations.Base.Reference.GetHashCode*
+  name: GetHashCode
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetHashCode_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.GetHashCode
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.GetHashCode
+  nameWithType: Reference.GetHashCode
+- uid: SpiceSharp.Simulations.Base.Reference.GetVariable*
+  name: GetVariable
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetVariable_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.GetVariable
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.GetVariable
+  nameWithType: Reference.GetVariable
+- uid: SpiceSharp.Simulations.Base.Reference.GetVariable``2(SpiceSharp.Simulations.ISimulation)
+  name: GetVariable<T, S>(ISimulation)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetVariable__2_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.Base.Reference.GetVariable``2(SpiceSharp.Simulations.ISimulation)
+  name.vb: GetVariable(Of T, S)(ISimulation)
+  fullName: SpiceSharp.Simulations.Base.Reference.GetVariable<T, S>(SpiceSharp.Simulations.ISimulation)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.GetVariable(Of T, S)(SpiceSharp.Simulations.ISimulation)
+  nameWithType: Reference.GetVariable<T, S>(ISimulation)
+  nameWithType.vb: Reference.GetVariable(Of T, S)(ISimulation)
+- uid: SpiceSharp.Simulations.Base.Reference.GetVectorElement*
+  name: GetVectorElement
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetVectorElement_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.GetVectorElement
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.GetVectorElement
+  nameWithType: Reference.GetVectorElement
+- uid: SpiceSharp.Simulations.Base.Reference.GetVectorElement``2(SpiceSharp.Simulations.ISimulation)
+  name: GetVectorElement<T, S>(ISimulation)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_GetVectorElement__2_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.Base.Reference.GetVectorElement``2(SpiceSharp.Simulations.ISimulation)
+  name.vb: GetVectorElement(Of T, S)(ISimulation)
+  fullName: SpiceSharp.Simulations.Base.Reference.GetVectorElement<T, S>(SpiceSharp.Simulations.ISimulation)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.GetVectorElement(Of T, S)(SpiceSharp.Simulations.ISimulation)
+  nameWithType: Reference.GetVectorElement<T, S>(ISimulation)
+  nameWithType.vb: Reference.GetVectorElement(Of T, S)(ISimulation)
+- uid: SpiceSharp.Simulations.Base.Reference.Item(System.Int32)
+  name: this[int]
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Item_System_Int32_
+  commentId: P:SpiceSharp.Simulations.Base.Reference.Item(System.Int32)
+  name.vb: this[](Integer)
+  fullName: SpiceSharp.Simulations.Base.Reference.this[int]
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.this[](Integer)
+  nameWithType: Reference.this[int]
+  nameWithType.vb: Reference.this[](Integer)
+- uid: SpiceSharp.Simulations.Base.Reference.Item*
+  name: this
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Item_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.Item
+  isSpec: "True"
+  name.vb: this[]
+  fullName: SpiceSharp.Simulations.Base.Reference.this
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.this[]
+  nameWithType: Reference.this
+  nameWithType.vb: Reference.this[]
+- uid: SpiceSharp.Simulations.Base.Reference.Length
+  name: Length
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Length
+  commentId: P:SpiceSharp.Simulations.Base.Reference.Length
+  fullName: SpiceSharp.Simulations.Base.Reference.Length
+  nameWithType: Reference.Length
+- uid: SpiceSharp.Simulations.Base.Reference.Length*
+  name: Length
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Length_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.Length
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.Length
+  nameWithType: Reference.Length
+- uid: SpiceSharp.Simulations.Base.Reference.Path
+  name: Path
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Path
+  commentId: P:SpiceSharp.Simulations.Base.Reference.Path
+  fullName: SpiceSharp.Simulations.Base.Reference.Path
+  nameWithType: Reference.Path
+- uid: SpiceSharp.Simulations.Base.Reference.Path*
+  name: Path
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_Path_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.Path
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.Path
+  nameWithType: Reference.Path
+- uid: SpiceSharp.Simulations.Base.Reference.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_ToString
+  commentId: M:SpiceSharp.Simulations.Base.Reference.ToString
+  fullName: SpiceSharp.Simulations.Base.Reference.ToString()
+  nameWithType: Reference.ToString()
+- uid: SpiceSharp.Simulations.Base.Reference.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_ToString_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.ToString
+  nameWithType: Reference.ToString
+- uid: SpiceSharp.Simulations.Base.Reference.TryGetContainer(SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer@)
+  name: TryGetContainer(ISimulation, out IBehaviorContainer)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_TryGetContainer_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer__
+  commentId: M:SpiceSharp.Simulations.Base.Reference.TryGetContainer(SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer@)
+  name.vb: TryGetContainer(ISimulation, IBehaviorContainer)
+  fullName: SpiceSharp.Simulations.Base.Reference.TryGetContainer(SpiceSharp.Simulations.ISimulation, out SpiceSharp.Behaviors.IBehaviorContainer)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.TryGetContainer(SpiceSharp.Simulations.ISimulation, SpiceSharp.Behaviors.IBehaviorContainer)
+  nameWithType: Reference.TryGetContainer(ISimulation, out IBehaviorContainer)
+  nameWithType.vb: Reference.TryGetContainer(ISimulation, IBehaviorContainer)
+- uid: SpiceSharp.Simulations.Base.Reference.TryGetContainer*
+  name: TryGetContainer
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_TryGetContainer_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.TryGetContainer
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.TryGetContainer
+  nameWithType: Reference.TryGetContainer
+- uid: SpiceSharp.Simulations.Base.Reference.TryGetVariable*
+  name: TryGetVariable
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_TryGetVariable_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.TryGetVariable
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.TryGetVariable
+  nameWithType: Reference.TryGetVariable
+- uid: SpiceSharp.Simulations.Base.Reference.TryGetVariable``2(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.IVariable{``0}@)
+  name: TryGetVariable<T, S>(ISimulation, out IVariable<T>)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_TryGetVariable__2_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_IVariable___0___
+  commentId: M:SpiceSharp.Simulations.Base.Reference.TryGetVariable``2(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.IVariable{``0}@)
+  name.vb: TryGetVariable(Of T, S)(ISimulation, IVariable(Of T))
+  fullName: SpiceSharp.Simulations.Base.Reference.TryGetVariable<T, S>(SpiceSharp.Simulations.ISimulation, out SpiceSharp.Simulations.IVariable<T>)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.TryGetVariable(Of T, S)(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.IVariable(Of T))
+  nameWithType: Reference.TryGetVariable<T, S>(ISimulation, out IVariable<T>)
+  nameWithType.vb: Reference.TryGetVariable(Of T, S)(ISimulation, IVariable(Of T))
+- uid: SpiceSharp.Simulations.Base.Reference.TryGetVectorElement*
+  name: TryGetVectorElement
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_TryGetVectorElement_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.TryGetVectorElement
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Base.Reference.TryGetVectorElement
+  nameWithType: Reference.TryGetVectorElement
+- uid: SpiceSharp.Simulations.Base.Reference.TryGetVectorElement``2(SpiceSharp.Simulations.ISimulation,SpiceSharp.Algebra.Element{``0}@)
+  name: TryGetVectorElement<T, S>(ISimulation, out Element<T>)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_TryGetVectorElement__2_SpiceSharp_Simulations_ISimulation_SpiceSharp_Algebra_Element___0___
+  commentId: M:SpiceSharp.Simulations.Base.Reference.TryGetVectorElement``2(SpiceSharp.Simulations.ISimulation,SpiceSharp.Algebra.Element{``0}@)
+  name.vb: TryGetVectorElement(Of T, S)(ISimulation, Element(Of T))
+  fullName: SpiceSharp.Simulations.Base.Reference.TryGetVectorElement<T, S>(SpiceSharp.Simulations.ISimulation, out SpiceSharp.Algebra.Element<T>)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.TryGetVectorElement(Of T, S)(SpiceSharp.Simulations.ISimulation, SpiceSharp.Algebra.Element(Of T))
+  nameWithType: Reference.TryGetVectorElement<T, S>(ISimulation, out Element<T>)
+  nameWithType.vb: Reference.TryGetVectorElement(Of T, S)(ISimulation, Element(Of T))
+- uid: SpiceSharp.Simulations.Base.Reference.op_Implicit(System.Collections.Generic.List{System.String})~SpiceSharp.Simulations.Base.Reference
+  name: implicit operator Reference(List<string>)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_op_Implicit_System_Collections_Generic_List_System_String___SpiceSharp_Simulations_Base_Reference
+  commentId: M:SpiceSharp.Simulations.Base.Reference.op_Implicit(System.Collections.Generic.List{System.String})~SpiceSharp.Simulations.Base.Reference
+  name.vb: CType(List(Of String))
+  fullName: SpiceSharp.Simulations.Base.Reference.implicit operator SpiceSharp.Simulations.Base.Reference(System.Collections.Generic.List<string>)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.CType(System.Collections.Generic.List(Of String))
+  nameWithType: Reference.implicit operator Reference(List<string>)
+  nameWithType.vb: Reference.CType(List(Of String))
+- uid: SpiceSharp.Simulations.Base.Reference.op_Implicit(System.String)~SpiceSharp.Simulations.Base.Reference
+  name: implicit operator Reference(string)
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_op_Implicit_System_String__SpiceSharp_Simulations_Base_Reference
+  commentId: M:SpiceSharp.Simulations.Base.Reference.op_Implicit(System.String)~SpiceSharp.Simulations.Base.Reference
+  name.vb: CType(String)
+  fullName: SpiceSharp.Simulations.Base.Reference.implicit operator SpiceSharp.Simulations.Base.Reference(string)
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.CType(String)
+  nameWithType: Reference.implicit operator Reference(string)
+  nameWithType.vb: Reference.CType(String)
+- uid: SpiceSharp.Simulations.Base.Reference.op_Implicit(System.String[])~SpiceSharp.Simulations.Base.Reference
+  name: implicit operator Reference(string[])
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_op_Implicit_System_String____SpiceSharp_Simulations_Base_Reference
+  commentId: M:SpiceSharp.Simulations.Base.Reference.op_Implicit(System.String[])~SpiceSharp.Simulations.Base.Reference
+  name.vb: CType(String())
+  fullName: SpiceSharp.Simulations.Base.Reference.implicit operator SpiceSharp.Simulations.Base.Reference(string[])
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.CType(String())
+  nameWithType: Reference.implicit operator Reference(string[])
+  nameWithType.vb: Reference.CType(String())
+- uid: SpiceSharp.Simulations.Base.Reference.op_Implicit*
+  name: implicit operator
+  href: api/SpiceSharp.Simulations.Base.Reference.html#SpiceSharp_Simulations_Base_Reference_op_Implicit_
+  commentId: Overload:SpiceSharp.Simulations.Base.Reference.op_Implicit
+  isSpec: "True"
+  name.vb: CType
+  fullName: SpiceSharp.Simulations.Base.Reference.implicit operator
+  fullName.vb: SpiceSharp.Simulations.Base.Reference.CType
+  nameWithType: Reference.implicit operator
+  nameWithType.vb: Reference.CType
 - uid: SpiceSharp.Simulations.BeforeExecuteEventArgs
   name: BeforeExecuteEventArgs
   href: api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html
@@ -35980,24 +36910,15 @@ references:
   commentId: T:SpiceSharp.Simulations.ComplexCurrentExport
   fullName: SpiceSharp.Simulations.ComplexCurrentExport
   nameWithType: ComplexCurrentExport
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.Collections.Generic.IEnumerable{System.String})
-  name: ComplexCurrentExport(IFrequencySimulation, IEnumerable<string>)
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_Collections_Generic_IEnumerable_System_String__
-  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.Collections.Generic.IEnumerable{System.String})
-  name.vb: New(IFrequencySimulation, IEnumerable(Of String))
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ComplexCurrentExport(SpiceSharp.Simulations.IFrequencySimulation, System.Collections.Generic.IEnumerable<string>)
-  fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.New(SpiceSharp.Simulations.IFrequencySimulation, System.Collections.Generic.IEnumerable(Of String))
-  nameWithType: ComplexCurrentExport.ComplexCurrentExport(IFrequencySimulation, IEnumerable<string>)
-  nameWithType.vb: ComplexCurrentExport.New(IFrequencySimulation, IEnumerable(Of String))
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String)
-  name: ComplexCurrentExport(IFrequencySimulation, string)
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String)
-  name.vb: New(IFrequencySimulation, String)
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ComplexCurrentExport(SpiceSharp.Simulations.IFrequencySimulation, string)
-  fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.New(SpiceSharp.Simulations.IFrequencySimulation, String)
-  nameWithType: ComplexCurrentExport.ComplexCurrentExport(IFrequencySimulation, string)
-  nameWithType.vb: ComplexCurrentExport.New(IFrequencySimulation, String)
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,SpiceSharp.Simulations.Base.Reference)
+  name: ComplexCurrentExport(IFrequencySimulation, Reference)
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,SpiceSharp.Simulations.Base.Reference)
+  name.vb: New(IFrequencySimulation, Reference)
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ComplexCurrentExport(SpiceSharp.Simulations.IFrequencySimulation, SpiceSharp.Simulations.Base.Reference)
+  fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.New(SpiceSharp.Simulations.IFrequencySimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: ComplexCurrentExport.ComplexCurrentExport(IFrequencySimulation, Reference)
+  nameWithType.vb: ComplexCurrentExport.New(IFrequencySimulation, Reference)
 - uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor*
   name: ComplexCurrentExport
   href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_
@@ -36024,43 +36945,47 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexCurrentExport.Initialize
   nameWithType: ComplexCurrentExport.Initialize
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.SourcePath
-  name: SourcePath
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_SourcePath
-  commentId: P:SpiceSharp.Simulations.ComplexCurrentExport.SourcePath
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.SourcePath
-  nameWithType: ComplexCurrentExport.SourcePath
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.SourcePath*
-  name: SourcePath
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_SourcePath_
-  commentId: Overload:SpiceSharp.Simulations.ComplexCurrentExport.SourcePath
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.Source
+  name: Source
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_Source
+  commentId: P:SpiceSharp.Simulations.ComplexCurrentExport.Source
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.Source
+  nameWithType: ComplexCurrentExport.Source
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.Source*
+  name: Source
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_Source_
+  commentId: Overload:SpiceSharp.Simulations.ComplexCurrentExport.Source
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.SourcePath
-  nameWithType: ComplexCurrentExport.SourcePath
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.Source
+  nameWithType: ComplexCurrentExport.Source
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_ToString
+  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.ToString
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ToString()
+  nameWithType: ComplexCurrentExport.ToString()
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.ComplexCurrentExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ToString
+  nameWithType: ComplexCurrentExport.ToString
 - uid: SpiceSharp.Simulations.ComplexPropertyExport
   name: ComplexPropertyExport
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html
   commentId: T:SpiceSharp.Simulations.ComplexPropertyExport
   fullName: SpiceSharp.Simulations.ComplexPropertyExport
   nameWithType: ComplexPropertyExport
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.Collections.Generic.IEnumerable{System.String},System.String)
-  name: ComplexPropertyExport(IEventfulSimulation, IEnumerable<string>, string)
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_System_Collections_Generic_IEnumerable_System_String__System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.Collections.Generic.IEnumerable{System.String},System.String)
-  name.vb: New(IEventfulSimulation, IEnumerable(Of String), String)
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, System.Collections.Generic.IEnumerable<string>, string)
-  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, System.Collections.Generic.IEnumerable(Of String), String)
-  nameWithType: ComplexPropertyExport.ComplexPropertyExport(IEventfulSimulation, IEnumerable<string>, string)
-  nameWithType.vb: ComplexPropertyExport.New(IEventfulSimulation, IEnumerable(Of String), String)
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.String,System.String)
-  name: ComplexPropertyExport(IEventfulSimulation, string, string)
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.String,System.String)
-  name.vb: New(IEventfulSimulation, String, String)
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, string, string)
-  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, String, String)
-  nameWithType: ComplexPropertyExport.ComplexPropertyExport(IEventfulSimulation, string, string)
-  nameWithType.vb: ComplexPropertyExport.New(IEventfulSimulation, String, String)
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name: ComplexPropertyExport(IEventfulSimulation, Reference, string)
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: New(IEventfulSimulation, Reference, String)
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: ComplexPropertyExport.ComplexPropertyExport(IEventfulSimulation, Reference, string)
+  nameWithType.vb: ComplexPropertyExport.New(IEventfulSimulation, Reference, String)
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor*
   name: ComplexPropertyExport
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_
@@ -36071,19 +36996,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New
   nameWithType: ComplexPropertyExport.ComplexPropertyExport
   nameWithType.vb: ComplexPropertyExport.New
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.EntityPath
-  name: EntityPath
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_EntityPath
-  commentId: P:SpiceSharp.Simulations.ComplexPropertyExport.EntityPath
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.EntityPath
-  nameWithType: ComplexPropertyExport.EntityPath
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.EntityPath*
-  name: EntityPath
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_EntityPath_
-  commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.EntityPath
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.Entity
+  name: Entity
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Entity
+  commentId: P:SpiceSharp.Simulations.ComplexPropertyExport.Entity
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Entity
+  nameWithType: ComplexPropertyExport.Entity
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.Entity*
+  name: Entity
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Entity_
+  commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.Entity
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.EntityPath
-  nameWithType: ComplexPropertyExport.EntityPath
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Entity
+  nameWithType: ComplexPropertyExport.Entity
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(object, EventArgs)
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Initialize_System_Object_System_EventArgs_
@@ -36113,48 +37038,34 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexPropertyExport.PropertyName
   nameWithType: ComplexPropertyExport.PropertyName
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_ToString
+  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.ToString
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ToString()
+  nameWithType: ComplexPropertyExport.ToString()
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ToString
+  nameWithType: ComplexPropertyExport.ToString
 - uid: SpiceSharp.Simulations.ComplexVoltageExport
   name: ComplexVoltageExport
   href: api/SpiceSharp.Simulations.ComplexVoltageExport.html
   commentId: T:SpiceSharp.Simulations.ComplexVoltageExport
   fullName: SpiceSharp.Simulations.ComplexVoltageExport
   nameWithType: ComplexVoltageExport
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.Collections.Generic.IEnumerable{System.String})
-  name: ComplexVoltageExport(IFrequencySimulation, IEnumerable<string>)
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_Collections_Generic_IEnumerable_System_String__
-  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.Collections.Generic.IEnumerable{System.String})
-  name.vb: New(IFrequencySimulation, IEnumerable(Of String))
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ComplexVoltageExport(SpiceSharp.Simulations.IFrequencySimulation, System.Collections.Generic.IEnumerable<string>)
-  fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.New(SpiceSharp.Simulations.IFrequencySimulation, System.Collections.Generic.IEnumerable(Of String))
-  nameWithType: ComplexVoltageExport.ComplexVoltageExport(IFrequencySimulation, IEnumerable<string>)
-  nameWithType.vb: ComplexVoltageExport.New(IFrequencySimulation, IEnumerable(Of String))
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})
-  name: ComplexVoltageExport(IFrequencySimulation, IEnumerable<string>, IEnumerable<string>)
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_Collections_Generic_IEnumerable_System_String__System_Collections_Generic_IEnumerable_System_String__
-  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})
-  name.vb: New(IFrequencySimulation, IEnumerable(Of String), IEnumerable(Of String))
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ComplexVoltageExport(SpiceSharp.Simulations.IFrequencySimulation, System.Collections.Generic.IEnumerable<string>, System.Collections.Generic.IEnumerable<string>)
-  fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.New(SpiceSharp.Simulations.IFrequencySimulation, System.Collections.Generic.IEnumerable(Of String), System.Collections.Generic.IEnumerable(Of String))
-  nameWithType: ComplexVoltageExport.ComplexVoltageExport(IFrequencySimulation, IEnumerable<string>, IEnumerable<string>)
-  nameWithType.vb: ComplexVoltageExport.New(IFrequencySimulation, IEnumerable(Of String), IEnumerable(Of String))
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String)
-  name: ComplexVoltageExport(IFrequencySimulation, string)
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String)
-  name.vb: New(IFrequencySimulation, String)
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ComplexVoltageExport(SpiceSharp.Simulations.IFrequencySimulation, string)
-  fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.New(SpiceSharp.Simulations.IFrequencySimulation, String)
-  nameWithType: ComplexVoltageExport.ComplexVoltageExport(IFrequencySimulation, string)
-  nameWithType.vb: ComplexVoltageExport.New(IFrequencySimulation, String)
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String,System.String)
-  name: ComplexVoltageExport(IFrequencySimulation, string, string)
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,System.String,System.String)
-  name.vb: New(IFrequencySimulation, String, String)
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ComplexVoltageExport(SpiceSharp.Simulations.IFrequencySimulation, string, string)
-  fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.New(SpiceSharp.Simulations.IFrequencySimulation, String, String)
-  nameWithType: ComplexVoltageExport.ComplexVoltageExport(IFrequencySimulation, string, string)
-  nameWithType.vb: ComplexVoltageExport.New(IFrequencySimulation, String, String)
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  name: ComplexVoltageExport(IFrequencySimulation, Reference, Reference)
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  name.vb: New(IFrequencySimulation, Reference, Reference)
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ComplexVoltageExport(SpiceSharp.Simulations.IFrequencySimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference)
+  fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.New(SpiceSharp.Simulations.IFrequencySimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: ComplexVoltageExport.ComplexVoltageExport(IFrequencySimulation, Reference, Reference)
+  nameWithType.vb: ComplexVoltageExport.New(IFrequencySimulation, Reference, Reference)
 - uid: SpiceSharp.Simulations.ComplexVoltageExport.#ctor*
   name: ComplexVoltageExport
   href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport__ctor_
@@ -36194,19 +37105,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexVoltageExport.Initialize
   nameWithType: ComplexVoltageExport.Initialize
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.NegNodePath
-  name: NegNodePath
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_NegNodePath
-  commentId: P:SpiceSharp.Simulations.ComplexVoltageExport.NegNodePath
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.NegNodePath
-  nameWithType: ComplexVoltageExport.NegNodePath
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.NegNodePath*
-  name: NegNodePath
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_NegNodePath_
-  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.NegNodePath
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.NegNodePath
-  nameWithType: ComplexVoltageExport.NegNodePath
 - uid: SpiceSharp.Simulations.ComplexVoltageExport.Phase
   name: Phase
   href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Phase
@@ -36220,19 +37118,45 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexVoltageExport.Phase
   nameWithType: ComplexVoltageExport.Phase
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.PosNodePath
-  name: PosNodePath
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_PosNodePath
-  commentId: P:SpiceSharp.Simulations.ComplexVoltageExport.PosNodePath
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.PosNodePath
-  nameWithType: ComplexVoltageExport.PosNodePath
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.PosNodePath*
-  name: PosNodePath
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_PosNodePath_
-  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.PosNodePath
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.Positive
+  name: Positive
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Positive
+  commentId: P:SpiceSharp.Simulations.ComplexVoltageExport.Positive
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Positive
+  nameWithType: ComplexVoltageExport.Positive
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.Positive*
+  name: Positive
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Positive_
+  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.Positive
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.PosNodePath
-  nameWithType: ComplexVoltageExport.PosNodePath
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Positive
+  nameWithType: ComplexVoltageExport.Positive
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.Reference
+  name: Reference
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Reference
+  commentId: P:SpiceSharp.Simulations.ComplexVoltageExport.Reference
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Reference
+  nameWithType: ComplexVoltageExport.Reference
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.Reference*
+  name: Reference
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Reference_
+  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.Reference
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Reference
+  nameWithType: ComplexVoltageExport.Reference
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_ToString
+  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.ToString
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ToString()
+  nameWithType: ComplexVoltageExport.ToString()
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.ToString
+  nameWithType: ComplexVoltageExport.ToString
 - uid: SpiceSharp.Simulations.ConvergenceAid
   name: ConvergenceAid
   href: api/SpiceSharp.Simulations.ConvergenceAid.html
@@ -43524,24 +44448,15 @@ references:
   commentId: T:SpiceSharp.Simulations.RealCurrentExport
   fullName: SpiceSharp.Simulations.RealCurrentExport
   nameWithType: RealCurrentExport
-- uid: SpiceSharp.Simulations.RealCurrentExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.Collections.Generic.IEnumerable{System.String})
-  name: RealCurrentExport(IBiasingSimulation, IEnumerable<string>)
-  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_System_Collections_Generic_IEnumerable_System_String__
-  commentId: M:SpiceSharp.Simulations.RealCurrentExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.Collections.Generic.IEnumerable{System.String})
-  name.vb: New(IBiasingSimulation, IEnumerable(Of String))
-  fullName: SpiceSharp.Simulations.RealCurrentExport.RealCurrentExport(SpiceSharp.Simulations.IBiasingSimulation, System.Collections.Generic.IEnumerable<string>)
-  fullName.vb: SpiceSharp.Simulations.RealCurrentExport.New(SpiceSharp.Simulations.IBiasingSimulation, System.Collections.Generic.IEnumerable(Of String))
-  nameWithType: RealCurrentExport.RealCurrentExport(IBiasingSimulation, IEnumerable<string>)
-  nameWithType.vb: RealCurrentExport.New(IBiasingSimulation, IEnumerable(Of String))
-- uid: SpiceSharp.Simulations.RealCurrentExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.String)
-  name: RealCurrentExport(IBiasingSimulation, string)
-  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_System_String_
-  commentId: M:SpiceSharp.Simulations.RealCurrentExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.String)
-  name.vb: New(IBiasingSimulation, String)
-  fullName: SpiceSharp.Simulations.RealCurrentExport.RealCurrentExport(SpiceSharp.Simulations.IBiasingSimulation, string)
-  fullName.vb: SpiceSharp.Simulations.RealCurrentExport.New(SpiceSharp.Simulations.IBiasingSimulation, String)
-  nameWithType: RealCurrentExport.RealCurrentExport(IBiasingSimulation, string)
-  nameWithType.vb: RealCurrentExport.New(IBiasingSimulation, String)
+- uid: SpiceSharp.Simulations.RealCurrentExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,SpiceSharp.Simulations.Base.Reference)
+  name: RealCurrentExport(IBiasingSimulation, Reference)
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.RealCurrentExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,SpiceSharp.Simulations.Base.Reference)
+  name.vb: New(IBiasingSimulation, Reference)
+  fullName: SpiceSharp.Simulations.RealCurrentExport.RealCurrentExport(SpiceSharp.Simulations.IBiasingSimulation, SpiceSharp.Simulations.Base.Reference)
+  fullName.vb: SpiceSharp.Simulations.RealCurrentExport.New(SpiceSharp.Simulations.IBiasingSimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: RealCurrentExport.RealCurrentExport(IBiasingSimulation, Reference)
+  nameWithType.vb: RealCurrentExport.New(IBiasingSimulation, Reference)
 - uid: SpiceSharp.Simulations.RealCurrentExport.#ctor*
   name: RealCurrentExport
   href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport__ctor_
@@ -43568,43 +44483,47 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.RealCurrentExport.Initialize
   nameWithType: RealCurrentExport.Initialize
-- uid: SpiceSharp.Simulations.RealCurrentExport.SourcePath
-  name: SourcePath
-  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_SourcePath
-  commentId: P:SpiceSharp.Simulations.RealCurrentExport.SourcePath
-  fullName: SpiceSharp.Simulations.RealCurrentExport.SourcePath
-  nameWithType: RealCurrentExport.SourcePath
-- uid: SpiceSharp.Simulations.RealCurrentExport.SourcePath*
-  name: SourcePath
-  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_SourcePath_
-  commentId: Overload:SpiceSharp.Simulations.RealCurrentExport.SourcePath
+- uid: SpiceSharp.Simulations.RealCurrentExport.Source
+  name: Source
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_Source
+  commentId: P:SpiceSharp.Simulations.RealCurrentExport.Source
+  fullName: SpiceSharp.Simulations.RealCurrentExport.Source
+  nameWithType: RealCurrentExport.Source
+- uid: SpiceSharp.Simulations.RealCurrentExport.Source*
+  name: Source
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_Source_
+  commentId: Overload:SpiceSharp.Simulations.RealCurrentExport.Source
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealCurrentExport.SourcePath
-  nameWithType: RealCurrentExport.SourcePath
+  fullName: SpiceSharp.Simulations.RealCurrentExport.Source
+  nameWithType: RealCurrentExport.Source
+- uid: SpiceSharp.Simulations.RealCurrentExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_ToString
+  commentId: M:SpiceSharp.Simulations.RealCurrentExport.ToString
+  fullName: SpiceSharp.Simulations.RealCurrentExport.ToString()
+  nameWithType: RealCurrentExport.ToString()
+- uid: SpiceSharp.Simulations.RealCurrentExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.RealCurrentExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.RealCurrentExport.ToString
+  nameWithType: RealCurrentExport.ToString
 - uid: SpiceSharp.Simulations.RealPropertyExport
   name: RealPropertyExport
   href: api/SpiceSharp.Simulations.RealPropertyExport.html
   commentId: T:SpiceSharp.Simulations.RealPropertyExport
   fullName: SpiceSharp.Simulations.RealPropertyExport
   nameWithType: RealPropertyExport
-- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.Collections.Generic.IEnumerable{System.String},System.String)
-  name: RealPropertyExport(IEventfulSimulation, IEnumerable<string>, string)
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_System_Collections_Generic_IEnumerable_System_String__System_String_
-  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.Collections.Generic.IEnumerable{System.String},System.String)
-  name.vb: New(IEventfulSimulation, IEnumerable(Of String), String)
-  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, System.Collections.Generic.IEnumerable<string>, string)
-  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, System.Collections.Generic.IEnumerable(Of String), String)
-  nameWithType: RealPropertyExport.RealPropertyExport(IEventfulSimulation, IEnumerable<string>, string)
-  nameWithType.vb: RealPropertyExport.New(IEventfulSimulation, IEnumerable(Of String), String)
-- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.String,System.String)
-  name: RealPropertyExport(IEventfulSimulation, string, string)
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.String,System.String)
-  name.vb: New(IEventfulSimulation, String, String)
-  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, string, string)
-  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, String, String)
-  nameWithType: RealPropertyExport.RealPropertyExport(IEventfulSimulation, string, string)
-  nameWithType.vb: RealPropertyExport.New(IEventfulSimulation, String, String)
+- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name: RealPropertyExport(IEventfulSimulation, Reference, string)
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: New(IEventfulSimulation, Reference, String)
+  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: RealPropertyExport.RealPropertyExport(IEventfulSimulation, Reference, string)
+  nameWithType.vb: RealPropertyExport.New(IEventfulSimulation, Reference, String)
 - uid: SpiceSharp.Simulations.RealPropertyExport.#ctor*
   name: RealPropertyExport
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_
@@ -43615,19 +44534,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New
   nameWithType: RealPropertyExport.RealPropertyExport
   nameWithType.vb: RealPropertyExport.New
-- uid: SpiceSharp.Simulations.RealPropertyExport.EntityPath
-  name: EntityPath
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_EntityPath
-  commentId: P:SpiceSharp.Simulations.RealPropertyExport.EntityPath
-  fullName: SpiceSharp.Simulations.RealPropertyExport.EntityPath
-  nameWithType: RealPropertyExport.EntityPath
-- uid: SpiceSharp.Simulations.RealPropertyExport.EntityPath*
-  name: EntityPath
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_EntityPath_
-  commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.EntityPath
+- uid: SpiceSharp.Simulations.RealPropertyExport.Entity
+  name: Entity
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Entity
+  commentId: P:SpiceSharp.Simulations.RealPropertyExport.Entity
+  fullName: SpiceSharp.Simulations.RealPropertyExport.Entity
+  nameWithType: RealPropertyExport.Entity
+- uid: SpiceSharp.Simulations.RealPropertyExport.Entity*
+  name: Entity
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Entity_
+  commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.Entity
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealPropertyExport.EntityPath
-  nameWithType: RealPropertyExport.EntityPath
+  fullName: SpiceSharp.Simulations.RealPropertyExport.Entity
+  nameWithType: RealPropertyExport.Entity
 - uid: SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,System.EventArgs)
   name: Initialize(object, EventArgs)
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Initialize_System_Object_System_EventArgs_
@@ -43657,48 +44576,34 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.RealPropertyExport.PropertyName
   nameWithType: RealPropertyExport.PropertyName
+- uid: SpiceSharp.Simulations.RealPropertyExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_ToString
+  commentId: M:SpiceSharp.Simulations.RealPropertyExport.ToString
+  fullName: SpiceSharp.Simulations.RealPropertyExport.ToString()
+  nameWithType: RealPropertyExport.ToString()
+- uid: SpiceSharp.Simulations.RealPropertyExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.RealPropertyExport.ToString
+  nameWithType: RealPropertyExport.ToString
 - uid: SpiceSharp.Simulations.RealVoltageExport
   name: RealVoltageExport
   href: api/SpiceSharp.Simulations.RealVoltageExport.html
   commentId: T:SpiceSharp.Simulations.RealVoltageExport
   fullName: SpiceSharp.Simulations.RealVoltageExport
   nameWithType: RealVoltageExport
-- uid: SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.Collections.Generic.IEnumerable{System.String})
-  name: RealVoltageExport(IBiasingSimulation, IEnumerable<string>)
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_System_Collections_Generic_IEnumerable_System_String__
-  commentId: M:SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.Collections.Generic.IEnumerable{System.String})
-  name.vb: New(IBiasingSimulation, IEnumerable(Of String))
-  fullName: SpiceSharp.Simulations.RealVoltageExport.RealVoltageExport(SpiceSharp.Simulations.IBiasingSimulation, System.Collections.Generic.IEnumerable<string>)
-  fullName.vb: SpiceSharp.Simulations.RealVoltageExport.New(SpiceSharp.Simulations.IBiasingSimulation, System.Collections.Generic.IEnumerable(Of String))
-  nameWithType: RealVoltageExport.RealVoltageExport(IBiasingSimulation, IEnumerable<string>)
-  nameWithType.vb: RealVoltageExport.New(IBiasingSimulation, IEnumerable(Of String))
-- uid: SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})
-  name: RealVoltageExport(IBiasingSimulation, IEnumerable<string>, IEnumerable<string>)
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_System_Collections_Generic_IEnumerable_System_String__System_Collections_Generic_IEnumerable_System_String__
-  commentId: M:SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.String})
-  name.vb: New(IBiasingSimulation, IEnumerable(Of String), IEnumerable(Of String))
-  fullName: SpiceSharp.Simulations.RealVoltageExport.RealVoltageExport(SpiceSharp.Simulations.IBiasingSimulation, System.Collections.Generic.IEnumerable<string>, System.Collections.Generic.IEnumerable<string>)
-  fullName.vb: SpiceSharp.Simulations.RealVoltageExport.New(SpiceSharp.Simulations.IBiasingSimulation, System.Collections.Generic.IEnumerable(Of String), System.Collections.Generic.IEnumerable(Of String))
-  nameWithType: RealVoltageExport.RealVoltageExport(IBiasingSimulation, IEnumerable<string>, IEnumerable<string>)
-  nameWithType.vb: RealVoltageExport.New(IBiasingSimulation, IEnumerable(Of String), IEnumerable(Of String))
-- uid: SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.String)
-  name: RealVoltageExport(IBiasingSimulation, string)
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_System_String_
-  commentId: M:SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.String)
-  name.vb: New(IBiasingSimulation, String)
-  fullName: SpiceSharp.Simulations.RealVoltageExport.RealVoltageExport(SpiceSharp.Simulations.IBiasingSimulation, string)
-  fullName.vb: SpiceSharp.Simulations.RealVoltageExport.New(SpiceSharp.Simulations.IBiasingSimulation, String)
-  nameWithType: RealVoltageExport.RealVoltageExport(IBiasingSimulation, string)
-  nameWithType.vb: RealVoltageExport.New(IBiasingSimulation, String)
-- uid: SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.String,System.String)
-  name: RealVoltageExport(IBiasingSimulation, string, string)
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,System.String,System.String)
-  name.vb: New(IBiasingSimulation, String, String)
-  fullName: SpiceSharp.Simulations.RealVoltageExport.RealVoltageExport(SpiceSharp.Simulations.IBiasingSimulation, string, string)
-  fullName.vb: SpiceSharp.Simulations.RealVoltageExport.New(SpiceSharp.Simulations.IBiasingSimulation, String, String)
-  nameWithType: RealVoltageExport.RealVoltageExport(IBiasingSimulation, string, string)
-  nameWithType.vb: RealVoltageExport.New(IBiasingSimulation, String, String)
+- uid: SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  name: RealVoltageExport(IBiasingSimulation, Reference, Reference)
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport__ctor_SpiceSharp_Simulations_IBiasingSimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.RealVoltageExport.#ctor(SpiceSharp.Simulations.IBiasingSimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  name.vb: New(IBiasingSimulation, Reference, Reference)
+  fullName: SpiceSharp.Simulations.RealVoltageExport.RealVoltageExport(SpiceSharp.Simulations.IBiasingSimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference)
+  fullName.vb: SpiceSharp.Simulations.RealVoltageExport.New(SpiceSharp.Simulations.IBiasingSimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: RealVoltageExport.RealVoltageExport(IBiasingSimulation, Reference, Reference)
+  nameWithType.vb: RealVoltageExport.New(IBiasingSimulation, Reference, Reference)
 - uid: SpiceSharp.Simulations.RealVoltageExport.#ctor*
   name: RealVoltageExport
   href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport__ctor_
@@ -43725,32 +44630,45 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.RealVoltageExport.Initialize
   nameWithType: RealVoltageExport.Initialize
-- uid: SpiceSharp.Simulations.RealVoltageExport.NegNodePath
-  name: NegNodePath
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_NegNodePath
-  commentId: P:SpiceSharp.Simulations.RealVoltageExport.NegNodePath
-  fullName: SpiceSharp.Simulations.RealVoltageExport.NegNodePath
-  nameWithType: RealVoltageExport.NegNodePath
-- uid: SpiceSharp.Simulations.RealVoltageExport.NegNodePath*
-  name: NegNodePath
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_NegNodePath_
-  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.NegNodePath
+- uid: SpiceSharp.Simulations.RealVoltageExport.Positive
+  name: Positive
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Positive
+  commentId: P:SpiceSharp.Simulations.RealVoltageExport.Positive
+  fullName: SpiceSharp.Simulations.RealVoltageExport.Positive
+  nameWithType: RealVoltageExport.Positive
+- uid: SpiceSharp.Simulations.RealVoltageExport.Positive*
+  name: Positive
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Positive_
+  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.Positive
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealVoltageExport.NegNodePath
-  nameWithType: RealVoltageExport.NegNodePath
-- uid: SpiceSharp.Simulations.RealVoltageExport.PosNodePath
-  name: PosNodePath
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_PosNodePath
-  commentId: P:SpiceSharp.Simulations.RealVoltageExport.PosNodePath
-  fullName: SpiceSharp.Simulations.RealVoltageExport.PosNodePath
-  nameWithType: RealVoltageExport.PosNodePath
-- uid: SpiceSharp.Simulations.RealVoltageExport.PosNodePath*
-  name: PosNodePath
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_PosNodePath_
-  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.PosNodePath
+  fullName: SpiceSharp.Simulations.RealVoltageExport.Positive
+  nameWithType: RealVoltageExport.Positive
+- uid: SpiceSharp.Simulations.RealVoltageExport.Reference
+  name: Reference
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Reference
+  commentId: P:SpiceSharp.Simulations.RealVoltageExport.Reference
+  fullName: SpiceSharp.Simulations.RealVoltageExport.Reference
+  nameWithType: RealVoltageExport.Reference
+- uid: SpiceSharp.Simulations.RealVoltageExport.Reference*
+  name: Reference
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Reference_
+  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.Reference
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealVoltageExport.PosNodePath
-  nameWithType: RealVoltageExport.PosNodePath
+  fullName: SpiceSharp.Simulations.RealVoltageExport.Reference
+  nameWithType: RealVoltageExport.Reference
+- uid: SpiceSharp.Simulations.RealVoltageExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_ToString
+  commentId: M:SpiceSharp.Simulations.RealVoltageExport.ToString
+  fullName: SpiceSharp.Simulations.RealVoltageExport.ToString()
+  nameWithType: RealVoltageExport.ToString()
+- uid: SpiceSharp.Simulations.RealVoltageExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.RealVoltageExport.ToString
+  nameWithType: RealVoltageExport.ToString
 - uid: SpiceSharp.Simulations.SIUnitDefinition
   name: SIUnitDefinition
   href: api/SpiceSharp.Simulations.SIUnitDefinition.html
@@ -46256,6 +47174,102 @@ references:
   commentId: E:SpiceSharp.SpiceSharpWarning.WarningGenerated
   fullName: SpiceSharp.SpiceSharpWarning.WarningGenerated
   nameWithType: SpiceSharpWarning.WarningGenerated
+- uid: SpiceSharp.StateNotFoundException
+  name: StateNotFoundException
+  href: api/SpiceSharp.StateNotFoundException.html
+  commentId: T:SpiceSharp.StateNotFoundException
+  fullName: SpiceSharp.StateNotFoundException
+  nameWithType: StateNotFoundException
+- uid: SpiceSharp.StateNotFoundException.#ctor
+  name: StateNotFoundException()
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor
+  commentId: M:SpiceSharp.StateNotFoundException.#ctor
+  name.vb: New()
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException()
+  fullName.vb: SpiceSharp.StateNotFoundException.New()
+  nameWithType: StateNotFoundException.StateNotFoundException()
+  nameWithType.vb: StateNotFoundException.New()
+- uid: SpiceSharp.StateNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name: StateNotFoundException(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.StateNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name.vb: New(SerializationInfo, StreamingContext)
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  fullName.vb: SpiceSharp.StateNotFoundException.New(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  nameWithType: StateNotFoundException.StateNotFoundException(SerializationInfo, StreamingContext)
+  nameWithType.vb: StateNotFoundException.New(SerializationInfo, StreamingContext)
+- uid: SpiceSharp.StateNotFoundException.#ctor(System.String)
+  name: StateNotFoundException(string)
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor_System_String_
+  commentId: M:SpiceSharp.StateNotFoundException.#ctor(System.String)
+  name.vb: New(String)
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException(string)
+  fullName.vb: SpiceSharp.StateNotFoundException.New(String)
+  nameWithType: StateNotFoundException.StateNotFoundException(string)
+  nameWithType.vb: StateNotFoundException.New(String)
+- uid: SpiceSharp.StateNotFoundException.#ctor(System.String,System.Exception)
+  name: StateNotFoundException(string, Exception)
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor_System_String_System_Exception_
+  commentId: M:SpiceSharp.StateNotFoundException.#ctor(System.String,System.Exception)
+  name.vb: New(String, Exception)
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException(string, System.Exception)
+  fullName.vb: SpiceSharp.StateNotFoundException.New(String, System.Exception)
+  nameWithType: StateNotFoundException.StateNotFoundException(string, Exception)
+  nameWithType.vb: StateNotFoundException.New(String, Exception)
+- uid: SpiceSharp.StateNotFoundException.#ctor(System.String,System.String)
+  name: StateNotFoundException(string, string)
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor_System_String_System_String_
+  commentId: M:SpiceSharp.StateNotFoundException.#ctor(System.String,System.String)
+  name.vb: New(String, String)
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException(string, string)
+  fullName.vb: SpiceSharp.StateNotFoundException.New(String, String)
+  nameWithType: StateNotFoundException.StateNotFoundException(string, string)
+  nameWithType.vb: StateNotFoundException.New(String, String)
+- uid: SpiceSharp.StateNotFoundException.#ctor(System.String,System.String,System.Exception)
+  name: StateNotFoundException(string, string, Exception)
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor_System_String_System_String_System_Exception_
+  commentId: M:SpiceSharp.StateNotFoundException.#ctor(System.String,System.String,System.Exception)
+  name.vb: New(String, String, Exception)
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException(string, string, System.Exception)
+  fullName.vb: SpiceSharp.StateNotFoundException.New(String, String, System.Exception)
+  nameWithType: StateNotFoundException.StateNotFoundException(string, string, Exception)
+  nameWithType.vb: StateNotFoundException.New(String, String, Exception)
+- uid: SpiceSharp.StateNotFoundException.#ctor*
+  name: StateNotFoundException
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException__ctor_
+  commentId: Overload:SpiceSharp.StateNotFoundException.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: SpiceSharp.StateNotFoundException.StateNotFoundException
+  fullName.vb: SpiceSharp.StateNotFoundException.New
+  nameWithType: StateNotFoundException.StateNotFoundException
+  nameWithType.vb: StateNotFoundException.New
+- uid: SpiceSharp.StateNotFoundException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  name: GetObjectData(SerializationInfo, StreamingContext)
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException_GetObjectData_System_Runtime_Serialization_SerializationInfo_System_Runtime_Serialization_StreamingContext_
+  commentId: M:SpiceSharp.StateNotFoundException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)
+  fullName: SpiceSharp.StateNotFoundException.GetObjectData(System.Runtime.Serialization.SerializationInfo, System.Runtime.Serialization.StreamingContext)
+  nameWithType: StateNotFoundException.GetObjectData(SerializationInfo, StreamingContext)
+- uid: SpiceSharp.StateNotFoundException.GetObjectData*
+  name: GetObjectData
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException_GetObjectData_
+  commentId: Overload:SpiceSharp.StateNotFoundException.GetObjectData
+  isSpec: "True"
+  fullName: SpiceSharp.StateNotFoundException.GetObjectData
+  nameWithType: StateNotFoundException.GetObjectData
+- uid: SpiceSharp.StateNotFoundException.State
+  name: State
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException_State
+  commentId: P:SpiceSharp.StateNotFoundException.State
+  fullName: SpiceSharp.StateNotFoundException.State
+  nameWithType: StateNotFoundException.State
+- uid: SpiceSharp.StateNotFoundException.State*
+  name: State
+  href: api/SpiceSharp.StateNotFoundException.html#SpiceSharp_StateNotFoundException_State_
+  commentId: Overload:SpiceSharp.StateNotFoundException.State
+  isSpec: "True"
+  fullName: SpiceSharp.StateNotFoundException.State
+  nameWithType: StateNotFoundException.State
 - uid: SpiceSharp.TimestepTooSmallException
   name: TimestepTooSmallException
   href: api/SpiceSharp.TimestepTooSmallException.html

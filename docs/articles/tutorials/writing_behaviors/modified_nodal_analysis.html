@@ -160,13 +160,14 @@ f_n(x_1, x_2, ..., x_n) &amp;= 0 \\
 <p>The <em>Jacobian</em> is from here on out called the <em>Y-matrix</em>. Everything on the right of the equation is called the <em>Right-Hand Side vector</em> (RHS vector). This formulation allows us to immediately calculate the <em>next</em> solution rather than the increment to find the next solution.</p>
 <h2 id="how-spice-does-it">How Spice# does it</h2>
 <p>Spice# will give each behavior the chance to add contributions to the allocated elements when computing a new iteration. This is called <em>loading</em> the Y-matrix and RHS-vector. After all components have loaded the matrix and vector, the simulator will solve the system of equations to find the solution for this iteration.</p>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

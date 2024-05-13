@@ -28,7 +28,7 @@ namespace SpiceSharp.Components
     /// <seealso cref="IParameterized{P}"/>
     /// <seealso cref="Parameters"/>
     public class Parallel : Entity<Parameters>,
-        IComponent,
+        IEntity,
         IRuleSubject
     {
         /// <inheritdoc/>
@@ -49,15 +49,8 @@ namespace SpiceSharp.Components
             }
         }
 
-        /// <inheritdoc/>
-        public IComponent Connect(params string[] nodes)
-        {
-            // We don't really have any connections of our own
-            return this;
-        }
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
@@ -67,7 +60,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <param name="entities">The components that can be executed in parallel.</param>
@@ -82,7 +75,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <param name="entities">The components that can be executed in parallel.</param>

@@ -121,22 +121,21 @@ namespace SpiceSharpTest.DiodeBehaviors
             _variableB = biasingState.GetSharedVariable(context.Nodes[1]);
 
             // Get the rows in the solver that represent the KCL equations
-            var rowA = biasingState.Map[_variableA];
-            var rowB = biasingState.Map[_variableB];
+            int rowA = biasingState.Map[_variableA];
+            int rowB = biasingState.Map[_variableB];
             _elements = new ElementSet&lt;double&gt;(biasingState.Solver,
-                new MatrixLocation[]
-                {
+                [
                     // The Y-matrix elements
-                    new MatrixLocation(rowA, rowA),
-                    new MatrixLocation(rowA, rowB),
-                    new MatrixLocation(rowB, rowA),
-                    new MatrixLocation(rowB, rowB)
-                },
-                new int[] {
+                    new(rowA, rowA),
+                    new(rowA, rowB),
+                    new(rowB, rowA),
+                    new(rowB, rowB)
+                ],
+                [
                     // The right-hand side vector elements
                     rowA,
                     rowB
-                });
+                ]);
 
         }
 
@@ -184,13 +183,14 @@ namespace SpiceSharpTest.DiodeBehaviors
 </ul>
 <p>These 6 contributions are potentially computed many times, given that the simulation will converge <em>iteratively</em> to a solution. So it is best that you try to keep the calculation time of these contributions to the Y-matrix and RHS-vector as fast as possible. Of course, this also depends on how accurate you want the model to be. The more modern transistor models for example, quickly need multiple pages of code to just model its behavior accurately.</p>
 <p>Also note that we are using the property <code>Vte</code>, which was calculated by the temperature behavior to avoid some computation time in this heavily used loading method.</p>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

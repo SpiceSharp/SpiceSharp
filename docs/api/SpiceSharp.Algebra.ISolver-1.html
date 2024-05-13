@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface ISolver&lt;T&gt;
- </title>
+    <title>Interface ISolver&lt;T&gt; </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface ISolver&lt;T&gt;
- ">
+    <meta name="title" content="Interface ISolver&lt;T&gt; ">
     <meta name="generator" content="docfx ">
   
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -73,8 +71,7 @@
 
 
 
-  <h1 id="SpiceSharp_Algebra_ISolver_1" data-uid="SpiceSharp.Algebra.ISolver`1" class="text-break">Interface ISolver&lt;T&gt;
-</h1>
+  <h1 id="SpiceSharp_Algebra_ISolver_1" data-uid="SpiceSharp.Algebra.ISolver`1" class="text-break">Interface ISolver&lt;T&gt;</h1>
   <div class="markdown level0 summary"><p>Describes a linear system of equations. It tracks permutations of
 the equations and the variables.</p>
 </div>
@@ -395,6 +392,60 @@ A solver needs to be factored becore it can solve for a solution.</p>
   </table>
   <h3 id="methods">Methods
 </h3>
+  <a id="SpiceSharp_Algebra_ISolver_1_BackwardSubstitute_" data-uid="SpiceSharp.Algebra.ISolver`1.BackwardSubstitute*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_BackwardSubstitute_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.BackwardSubstitute(SpiceSharp.Algebra.IVector{`0})">BackwardSubstitute(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Applies backward substitution on a factored matrix and the intermediate vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void BackwardSubstitute(IVector&lt;T&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_BackwardSubstituteTransposed_" data-uid="SpiceSharp.Algebra.ISolver`1.BackwardSubstituteTransposed*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.BackwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`0})">BackwardSubstituteTransposed(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Applies backward substitution on the adjoint matrix and the intermediate vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void BackwardSubstituteTransposed(IVector&lt;T&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_ISolver_1_Clear_" data-uid="SpiceSharp.Algebra.ISolver`1.Clear*"></a>
   <h4 id="SpiceSharp_Algebra_ISolver_1_Clear" data-uid="SpiceSharp.Algebra.ISolver`1.Clear">Clear()</h4>
   <div class="markdown level1 summary"><p>Clears the solver of any elements. The size of the solver becomes 0.</p>
@@ -408,6 +459,94 @@ A solver needs to be factored becore it can solve for a solution.</p>
   <div class="markdown level1 remarks"><p>The method is only redefined here to avoid ambiguity issues between
 <a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&lt;T&gt;</a> and <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a>.</p>
 </div>
+  <a id="SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContribution_" data-uid="SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContribution*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContribution_System_Int32_" data-uid="SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContribution(System.Int32)">ComputeDegenerateContribution(int)</h4>
+  <div class="markdown level1 summary"><p>Computes a contribution for degenerate solvers (<a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Degeneracy">Degeneracy</a> is larger than 0).
+Used when solving submatrices separately.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T ComputeDegenerateContribution(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>Returns the contribution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContributionTransposed_" data-uid="SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContributionTransposed*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContributionTransposed_System_Int32_" data-uid="SpiceSharp.Algebra.ISolver`1.ComputeDegenerateContributionTransposed(System.Int32)">ComputeDegenerateContributionTransposed(int)</h4>
+  <div class="markdown level1 summary"><p>Computes a contribution of the transposed solving for degenerate solvers (<a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Degeneracy">Degeneracy</a> is larger than 0).
+Used when solving submatrices separately.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">T ComputeDegenerateContributionTransposed(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>The index.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><p>Returns the contribution.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_ISolver_1_Factor_" data-uid="SpiceSharp.Algebra.ISolver`1.Factor*"></a>
   <h4 id="SpiceSharp_Algebra_ISolver_1_Factor" data-uid="SpiceSharp.Algebra.ISolver`1.Factor">Factor()</h4>
   <div class="markdown level1 summary"><p>Factor the equation matrix and right hand side vector.
@@ -434,6 +573,112 @@ This method can save time when factoring similar matrices in succession.</p>
       </tr>
     </tbody>
   </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_ForwardSubstitute_" data-uid="SpiceSharp.Algebra.ISolver`1.ForwardSubstitute*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_ForwardSubstitute_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.ForwardSubstitute(SpiceSharp.Algebra.IVector{`0})">ForwardSubstitute(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Applies forward substitution on a factored matrix and right-hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ForwardSubstitute(IVector&lt;T&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>Thrown if <code class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if <code class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Algebra_ISolver_1_ForwardSubstituteTransposed_" data-uid="SpiceSharp.Algebra.ISolver`1.ForwardSubstituteTransposed*"></a>
+  <h4 id="SpiceSharp_Algebra_ISolver_1_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.ForwardSubstituteTransposed(SpiceSharp.Algebra.IVector{`0})">ForwardSubstituteTransposed(IVector&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Applies forward substitution on the adjoint matrix and right-hand side vector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ForwardSubstituteTransposed(IVector&lt;T&gt; solution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
+        <td><span class="parametername">solution</span></td>
+        <td><p>The solution vector.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>Thrown if <code class="paramref">solution</code> is <code>null</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
+        <td><p>Thrown if the solver is not factored yet.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if <code class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Algebra_ISolver_1_Reset_" data-uid="SpiceSharp.Algebra.ISolver`1.Reset*"></a>
   <h4 id="SpiceSharp_Algebra_ISolver_1_Reset" data-uid="SpiceSharp.Algebra.ISolver`1.Reset">Reset()</h4>
   <div class="markdown level1 summary"><p>Clears all matrix and vector elements.</p>
@@ -447,112 +692,6 @@ This method can save time when factoring similar matrices in succession.</p>
   <div class="markdown level1 remarks"><p>This method is only redefined here to avoid ambiguity
 issues between <a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&lt;T&gt;</a> and <a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector&lt;T&gt;</a>.</p>
 </div>
-  <a id="SpiceSharp_Algebra_ISolver_1_Solve_" data-uid="SpiceSharp.Algebra.ISolver`1.Solve*"></a>
-  <h4 id="SpiceSharp_Algebra_ISolver_1_Solve_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.Solve(SpiceSharp.Algebra.IVector{`0})">Solve(IVector&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Solves the equations using the factored matrix and right hand side vector.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Solve(IVector&lt;T&gt; solution)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
-        <td><span class="parametername">solution</span></td>
-        <td><p>The solution.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><p>Thrown if <code class="paramref">solution</code> is <code>null</code>.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
-        <td><p>Thrown if the solver is not factored yet.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><p>Thrown if <code class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Algebra_ISolver_1_SolveTransposed_" data-uid="SpiceSharp.Algebra.ISolver`1.SolveTransposed*"></a>
-  <h4 id="SpiceSharp_Algebra_ISolver_1_SolveTransposed_SpiceSharp_Algebra_IVector__0__" data-uid="SpiceSharp.Algebra.ISolver`1.SolveTransposed(SpiceSharp.Algebra.IVector{`0})">SolveTransposed(IVector&lt;T&gt;)</h4>
-  <div class="markdown level1 summary"><p>Solves the equations using the transposed factored matrix and right hand side vector.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void SolveTransposed(IVector&lt;T&gt; solution)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.IVector-1.html">IVector</a>&lt;T&gt;</td>
-        <td><span class="parametername">solution</span></td>
-        <td><p>The solution.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
-        <td><p>Thrown if <code class="paramref">solution</code> is <code>null</code>.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Algebra.AlgebraException.html">AlgebraException</a></td>
-        <td><p>Thrown if the solver is not factored yet.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
-        <td><p>Thrown if <code class="paramref">solution</code> does not have <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Size">Size</a> elements.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
@@ -576,7 +715,7 @@ issues between <a class="xref" href="SpiceSharp.Algebra.IMatrix-1.html">IMatrix&
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

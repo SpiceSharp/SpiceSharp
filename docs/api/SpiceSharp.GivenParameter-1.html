@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Struct GivenParameter&lt;T&gt;
- </title>
+    <title>Struct GivenParameter&lt;T&gt; </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Struct GivenParameter&lt;T&gt;
- ">
+    <meta name="title" content="Struct GivenParameter&lt;T&gt; ">
     <meta name="generator" content="docfx ">
   
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -73,8 +71,7 @@
 
 
 
-  <h1 id="SpiceSharp_GivenParameter_1" data-uid="SpiceSharp.GivenParameter`1" class="text-break">Struct GivenParameter&lt;T&gt;
-</h1>
+  <h1 id="SpiceSharp_GivenParameter_1" data-uid="SpiceSharp.GivenParameter`1" class="text-break">Struct GivenParameter&lt;T&gt;</h1>
   <div class="markdown level0 summary"><p>This class describes a parameter that is optional. Whether or not it was specified can be
 found using the Given variable. It also has a default value when not specified.</p>
 </div>
@@ -100,7 +97,7 @@ found using the Given variable. It also has a default value when not specified.<
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_GivenParameter_1_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public struct GivenParameter&lt;T&gt; : IEquatable&lt;T&gt;, IEquatable&lt;GivenParameter&lt;T&gt;&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public readonly struct GivenParameter&lt;T&gt; : IEquatable&lt;T&gt;, IEquatable&lt;GivenParameter&lt;T&gt;&gt;</code></pre>
   </div>
   <h5 class="typeParameters">Type Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -155,10 +152,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1__ctor__0_System_Boolean__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <h3 id="properties">Properties
 </h3>
   <a id="SpiceSharp_GivenParameter_1_Given_" data-uid="SpiceSharp.GivenParameter`1.Given*"></a>
@@ -168,7 +161,7 @@ want these parameters to return a default value.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly bool Given { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public bool Given { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -186,10 +179,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_Given_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_Value_" data-uid="SpiceSharp.GivenParameter`1.Value*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_Value" data-uid="SpiceSharp.GivenParameter`1.Value">Value</h4>
   <div class="markdown level1 summary"><p>Gets or sets the value of the parameter.</p>
@@ -197,7 +186,7 @@ want these parameters to return a default value.</p>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly T Value { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public T Value { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -215,10 +204,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_Value_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <h3 id="methods">Methods
 </h3>
   <a id="SpiceSharp_GivenParameter_1_Equals_" data-uid="SpiceSharp.GivenParameter`1.Equals*"></a>
@@ -264,10 +249,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_Equals_SpiceSharp_GivenParameter__0___seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_Equals_" data-uid="SpiceSharp.GivenParameter`1.Equals*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_Equals_System_Object_" data-uid="SpiceSharp.GivenParameter`1.Equals(System.Object)">Equals(object)</h4>
   <div class="markdown level1 summary"><p>Determines whether the specified <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a>, is equal to this instance.</p>
@@ -313,10 +294,6 @@ want these parameters to return a default value.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.equals">ValueType.Equals(object)</a></div>
-  <h5 id="SpiceSharp_GivenParameter_1_Equals_System_Object__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_Equals_" data-uid="SpiceSharp.GivenParameter`1.Equals*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_Equals__0_" data-uid="SpiceSharp.GivenParameter`1.Equals(`0)">Equals(T)</h4>
   <div class="markdown level1 summary"><p>Determines whether the specified value is equal to this instance.</p>
@@ -360,10 +337,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_Equals__0__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_GetHashCode_" data-uid="SpiceSharp.GivenParameter`1.GetHashCode*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_GetHashCode" data-uid="SpiceSharp.GivenParameter`1.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary"><p>Returns a hash code for this instance.</p>
@@ -394,10 +367,6 @@ want these parameters to return a default value.</p>
   <h5 id="SpiceSharp_GivenParameter_1_GetHashCode_remarks">Remarks</h5>
   <div class="markdown level1 remarks"><p>The hash code is not based on whether or not the value is given.</p>
 </div>
-  <h5 id="SpiceSharp_GivenParameter_1_GetHashCode_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_ToString_" data-uid="SpiceSharp.GivenParameter`1.ToString*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_ToString" data-uid="SpiceSharp.GivenParameter`1.ToString">ToString()</h4>
   <div class="markdown level1 summary"><p>Returns a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a> that represents this instance.</p>
@@ -425,10 +394,6 @@ want these parameters to return a default value.</p>
   </table>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.valuetype.tostring">ValueType.ToString()</a></div>
-  <h5 id="SpiceSharp_GivenParameter_1_ToString_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <h3 id="operators">Operators
 </h3>
   <a id="SpiceSharp_GivenParameter_1_op_Equality_" data-uid="SpiceSharp.GivenParameter`1.op_Equality*"></a>
@@ -480,10 +445,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_op_Equality_SpiceSharp_GivenParameter__0__SpiceSharp_GivenParameter__0___seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_op_Implicit_" data-uid="SpiceSharp.GivenParameter`1.op_Implicit*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_op_Implicit_SpiceSharp_GivenParameter__0____0" data-uid="SpiceSharp.GivenParameter`1.op_Implicit(SpiceSharp.GivenParameter{`0})~`0">implicit operator T(GivenParameter&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Performs an implicit conversion from <a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter&lt;T&gt;</a> to the base value type.</p>
@@ -527,10 +488,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_op_Implicit_SpiceSharp_GivenParameter__0____0_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_op_Implicit_" data-uid="SpiceSharp.GivenParameter`1.op_Implicit*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_op_Implicit__0__SpiceSharp_GivenParameter__0_" data-uid="SpiceSharp.GivenParameter`1.op_Implicit(`0)~SpiceSharp.GivenParameter{`0}">implicit operator GivenParameter&lt;T&gt;(T)</h4>
   <div class="markdown level1 summary"><p>Performs an implicit conversion from the base value type to <a class="xref" href="SpiceSharp.GivenParameter-1.html">GivenParameter&lt;T&gt;</a>.</p>
@@ -574,10 +531,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_op_Implicit__0__SpiceSharp_GivenParameter__0__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_GivenParameter_1_op_Inequality_" data-uid="SpiceSharp.GivenParameter`1.op_Inequality*"></a>
   <h4 id="SpiceSharp_GivenParameter_1_op_Inequality_SpiceSharp_GivenParameter__0__SpiceSharp_GivenParameter__0__" data-uid="SpiceSharp.GivenParameter`1.op_Inequality(SpiceSharp.GivenParameter{`0},SpiceSharp.GivenParameter{`0})">operator !=(GivenParameter&lt;T&gt;, GivenParameter&lt;T&gt;)</h4>
   <div class="markdown level1 summary"><p>Implements the operator !=.</p>
@@ -627,10 +580,6 @@ want these parameters to return a default value.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_GivenParameter_1_op_Inequality_SpiceSharp_GivenParameter__0__SpiceSharp_GivenParameter__0___seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;T&gt;</div>
-  </div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable&lt;T&gt;</a>
@@ -653,7 +602,7 @@ want these parameters to return a default value.</p>
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

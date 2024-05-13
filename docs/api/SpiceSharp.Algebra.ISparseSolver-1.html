@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface ISparseSolver&lt;T&gt;
- </title>
+    <title>Interface ISparseSolver&lt;T&gt; </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface ISparseSolver&lt;T&gt;
- ">
+    <meta name="title" content="Interface ISparseSolver&lt;T&gt; ">
     <meta name="generator" content="docfx ">
   
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -73,8 +71,7 @@
 
 
 
-  <h1 id="SpiceSharp_Algebra_ISparseSolver_1" data-uid="SpiceSharp.Algebra.ISparseSolver`1" class="text-break">Interface ISparseSolver&lt;T&gt;
-</h1>
+  <h1 id="SpiceSharp_Algebra_ISparseSolver_1" data-uid="SpiceSharp.Algebra.ISparseSolver`1" class="text-break">Interface ISparseSolver&lt;T&gt;</h1>
   <div class="markdown level0 summary"><p>An <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver&lt;T&gt;</a> that uses sparse elements internally.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -99,10 +96,22 @@
       <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Item_System_Int32_">ISolver&lt;T&gt;.this[int]</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Solve_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.Solve(IVector&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstitute_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.ForwardSubstitute(IVector&lt;T&gt;)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_SolveTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.SolveTransposed(IVector&lt;T&gt;)</a>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstitute_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.BackwardSubstitute(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContribution_System_Int32_">ISolver&lt;T&gt;.ComputeDegenerateContribution(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ForwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.ForwardSubstituteTransposed(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_BackwardSubstituteTransposed_SpiceSharp_Algebra_IVector__0__">ISolver&lt;T&gt;.BackwardSubstituteTransposed(IVector&lt;T&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_ComputeDegenerateContributionTransposed_System_Int32_">ISolver&lt;T&gt;.ComputeDegenerateContributionTransposed(int)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Algebra.ISolver-1.html#SpiceSharp_Algebra_ISolver_1_Factor">ISolver&lt;T&gt;.Factor()</a>
@@ -208,10 +217,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Algebra_ISparseSolver_1_FindElement_SpiceSharp_Algebra_MatrixLocation__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_Algebra_ISparseSolver_1_FindElement_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.FindElement*"></a>
   <h4 id="SpiceSharp_Algebra_ISparseSolver_1_FindElement_System_Int32_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.FindElement(System.Int32)">FindElement(int)</h4>
   <div class="markdown level1 summary"><p>Finds the element at the specified position in the right-hand side vector.</p>
@@ -271,10 +276,6 @@
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Algebra_ISparseSolver_1_FindElement_System_Int32__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_Algebra_ISparseSolver_1_GetElement_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.GetElement*"></a>
   <h4 id="SpiceSharp_Algebra_ISparseSolver_1_GetElement_SpiceSharp_Algebra_MatrixLocation_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.GetElement(SpiceSharp.Algebra.MatrixLocation)">GetElement(MatrixLocation)</h4>
   <div class="markdown level1 summary"><p>Gets the element at the specified location in the matrix. A new element is
@@ -319,10 +320,6 @@ created if it doesn't exist yet.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Algebra_ISparseSolver_1_GetElement_SpiceSharp_Algebra_MatrixLocation__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_Algebra_ISparseSolver_1_GetElement_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.GetElement*"></a>
   <h4 id="SpiceSharp_Algebra_ISparseSolver_1_GetElement_System_Int32_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.GetElement(System.Int32)">GetElement(int)</h4>
   <div class="markdown level1 summary"><p>Gets the element at the specified position in the right-hand side vector.
@@ -383,10 +380,6 @@ A new element is created if it doesn't exist yet.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Algebra_ISparseSolver_1_GetElement_System_Int32__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.RemoveElement*"></a>
   <h4 id="SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.RemoveElement(SpiceSharp.Algebra.MatrixLocation)">RemoveElement(MatrixLocation)</h4>
   <div class="markdown level1 summary"><p>Removes a matrix element at the specified location.</p>
@@ -430,10 +423,6 @@ A new element is created if it doesn't exist yet.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_SpiceSharp_Algebra_MatrixLocation__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;T&gt;</div>
-  </div>
   <a id="SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.RemoveElement*"></a>
   <h4 id="SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_System_Int32_" data-uid="SpiceSharp.Algebra.ISparseSolver`1.RemoveElement(System.Int32)">RemoveElement(int)</h4>
   <div class="markdown level1 summary"><p>Removes a right-hand side vector element.</p>
@@ -477,10 +466,6 @@ A new element is created if it doesn't exist yet.</p>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Algebra_ISparseSolver_1_RemoveElement_System_Int32__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Algebra.ISolver-1.html">ISolver</a>&lt;T&gt;</div>
-  </div>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
@@ -508,7 +493,7 @@ A new element is created if it doesn't exist yet.</p>
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

@@ -1,5 +1,4 @@
 {
-  "homepages": [],
   "source_base_path": "C:/Users/svenb/Documents/CSharp/Projects/SpiceSharp",
   "xrefmap": "xrefmap.yml",
   "files": [
@@ -1169,6 +1168,16 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.Common.Contribution-1.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.Common.IEntitiesBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.Common.IEntitiesBehavior.html"
         }
       },
       "version": ""
@@ -2565,6 +2574,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.ParallelComponents.EntitiesBehavior.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.ParallelComponents.Frequency.ComplexSimulationState.yml",
       "output": {
         ".html": {
@@ -3665,6 +3684,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Diagnostics.VariableNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Diagnostics.VariableNotFoundException.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Diagnostics.yml",
       "output": {
         ".html": {
@@ -4099,6 +4128,26 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.AfterExecuteEventArgs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.Base.Reference.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Base.Reference.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.Base.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.Base.html"
         }
       },
       "version": ""
@@ -5425,6 +5474,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.StateNotFoundException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.StateNotFoundException.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.TimestepTooSmallException.yml",
       "output": {
         ".html": {
@@ -5689,6 +5748,9 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
         }
       },
       "version": ""
@@ -5785,16 +5847,6 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/structure/images/flowdiagram_template.svg",
-      "output": {
-        "resource": {
-          "relative_path": "articles/structure/images/flowdiagram_template.svg"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
       "source_relative_path": "articles/structure/images/frequency.svg",
       "output": {
         "resource": {
@@ -5865,6 +5917,29 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "articles/structure/parallel.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/structure/parallel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/structure/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/structure/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/structure/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "articles/structure/transient.md",
       "output": {
         ".html": {
@@ -5879,6 +5954,9 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/toc.json"
         }
       },
       "version": ""
@@ -5929,6 +6007,19 @@
       "output": {
         "resource": {
           "relative_path": "articles/tutorials/changing_parameters/images/example_lpf_resdiv_graph.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/tutorials/changing_parameters/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tutorials/changing_parameters/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/tutorials/changing_parameters/toc.json"
         }
       },
       "version": ""
@@ -6029,6 +6120,19 @@
       "output": {
         "resource": {
           "relative_path": "articles/tutorials/images/example_TransientGraph.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/tutorials/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tutorials/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/tutorials/toc.json"
         }
       },
       "version": ""
@@ -6184,6 +6288,19 @@
       "version": ""
     },
     {
+      "type": "Toc",
+      "source_relative_path": "articles/tutorials/writing_behaviors/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/tutorials/writing_behaviors/toc.html"
+        },
+        ".json": {
+          "relative_path": "articles/tutorials/writing_behaviors/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "index.md",
       "output": {
@@ -6199,12 +6316,14 @@
       "output": {
         ".html": {
           "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
         }
       },
       "version": ""
     }
   ],
-  "version_info": {},
   "groups": [
     {
       "xrefmap": "xrefmap.yml"
