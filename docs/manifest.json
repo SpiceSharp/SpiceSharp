@@ -1,5 +1,5 @@
 {
-  "source_base_path": "C:/Users/svenb/Documents/CSharp/Projects/SpiceSharp",
+  "source_base_path": "C:/Users/Sven/Documents/CSharp/Projects/SpiceSharp",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -5867,6 +5867,16 @@
     },
     {
       "type": "Resource",
+      "source_relative_path": "articles/structure/images/noise.svg",
+      "output": {
+        "resource": {
+          "relative_path": "articles/structure/images/noise.svg"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
       "source_relative_path": "articles/structure/images/operatingpoint.svg",
       "output": {
         "resource": {
@@ -5901,6 +5911,16 @@
       "output": {
         ".html": {
           "relative_path": "articles/structure/iterate.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/structure/noise.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/structure/noise.html"
         }
       },
       "version": ""

@@ -22958,32 +22958,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.Parallel.CreateBehaviors
   nameWithType: Parallel.CreateBehaviors
-- uid: SpiceSharp.Components.Parallel.Model
-  name: Model
-  href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_Model
-  commentId: P:SpiceSharp.Components.Parallel.Model
-  fullName: SpiceSharp.Components.Parallel.Model
-  nameWithType: Parallel.Model
-- uid: SpiceSharp.Components.Parallel.Model*
-  name: Model
-  href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_Model_
-  commentId: Overload:SpiceSharp.Components.Parallel.Model
-  isSpec: "True"
-  fullName: SpiceSharp.Components.Parallel.Model
-  nameWithType: Parallel.Model
-- uid: SpiceSharp.Components.Parallel.Nodes
-  name: Nodes
-  href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_Nodes
-  commentId: P:SpiceSharp.Components.Parallel.Nodes
-  fullName: SpiceSharp.Components.Parallel.Nodes
-  nameWithType: Parallel.Nodes
-- uid: SpiceSharp.Components.Parallel.Nodes*
-  name: Nodes
-  href: api/SpiceSharp.Components.Parallel.html#SpiceSharp_Components_Parallel_Nodes_
-  commentId: Overload:SpiceSharp.Components.Parallel.Nodes
-  isSpec: "True"
-  fullName: SpiceSharp.Components.Parallel.Nodes
-  nameWithType: Parallel.Nodes
 - uid: SpiceSharp.Components.ParallelComponents
   name: SpiceSharp.Components.ParallelComponents
   href: api/SpiceSharp.Components.ParallelComponents.html

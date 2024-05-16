@@ -31,24 +31,6 @@ namespace SpiceSharp.Components
         IEntity,
         IRuleSubject
     {
-        /// <inheritdoc/>
-        public string Model { get; set; }
-
-        /// <inheritdoc/>
-        public IReadOnlyList<string> Nodes
-        {
-            get
-            {
-                var list = new List<string>();
-                foreach (var entity in Parameters.Entities)
-                {
-                    if (entity is IComponent component)
-                        list.AddRange(component.Nodes);
-                }
-                return list.AsReadOnly();
-            }
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>

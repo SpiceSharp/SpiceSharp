@@ -72,18 +72,18 @@
 
 <p>The main structure of Spice# revolves around <strong>entities</strong>, <strong>behaviors</strong>, <strong>simulations</strong> and their <strong>simulation states</strong>.</p>
 <p align="center"><img src="images/simulation_flow.svg"></p>
-<p>When running a simulation, that simulation will ask for each entity to create behaviors for the simulation (the entity can add its behaviors to the simulation's <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IEntityBehaviorCollection</a></strong>). These behaviors are then called on by the simulation when they are needed.</p>
-<p>These behaviors implement specific parts of the algorithm and is specific to the <strong>entity</strong>. For example, a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Transient.html">Transient</a></strong> simulation requires several types of behaviors that a component might want to implement. The behaviors would then implement one or more of these interfaces:</p>
+<p>When running a simulation, that simulation will create the necessary simulation states, and ask for each entity in the entity collection to create behaviors for the simulation (the entity can add its behaviors to the simulation's <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IEntityBehaviorCollection</a></strong>). These behaviors define methods that can be called by the simulation when needed.</p>
+<p>Behaviors implement specific parts of the simulation algorithm and are also specific to the <strong>entity</strong> being modeled. For example, a <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Transient.html">Transient</a></strong> simulation requires several types of behaviors that a component might need to implement. The behaviors would then implement one or more of these interfaces:</p>
 <ul>
 <li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></strong> that describes a method that tells the behavior that the temperature might have changed. The entity should recalculate anything that might have changed.</li>
 <li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a></strong> that contains methods that are called each iteration in order to build up the Y-matrix and right-hand side vector.</li>
 <li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.IConvergenceBehavior.html">IConvergenceBehavior</a></strong> that allows some influence over deciding whether or not a new iteration should be computed.</li>
 <li>An <strong><a class="xref" href="../../api/SpiceSharp.Behaviors.ITimeBehavior.html">ITimeBehavior</a></strong> that gets called when it's okay to make time-dependent states that can be integrated.</li>
 </ul>
-<p>Once all <strong>behaviors</strong> have been created by all <strong>entities</strong>, the simulation no longer has a need for any entities, and will continue to work with just behaviors.</p>
+<p>Once all <strong>behaviors</strong> have been created by all <strong>entities</strong>, the simulation no longer has a need for entities, and will continue to work with just the created behaviors.</p>
 <h1 id="entities">Entities</h1>
 <p>An entity implements the <strong><a class="xref" href="../../api/SpiceSharp.Entities.IEntity.html">IEntity</a></strong> interface. The main job of the entity is to create behaviors for simulations, at which point they are allowed to search for other entities that they are linked to (like a mutual inductance that searches for its inductors, or a component/instance that searches for its model). Each entity also has a <strong>name</strong> and can contain <strong>parameters</strong>.</p>
-<p>In all Spice-based simulators the distinction is made between <em>instances</em> and <em>models</em>. Both are considered <strong>entities</strong> in Spice#, however the instance entity will ask the simulation for the model behaviors by using the model's name, allowing the model behaviors to be created first by the model entity. The instance entity can then use these model behaviors to create the instance behaviors. An instance entity in Spice# has been implemented through the <strong><a class="xref" href="../../api/SpiceSharp.Components.IComponent.html">IComponent</a></strong> interface.</p>
+<p>In all Spice-based simulators the distinction is made between <em>instances</em> and <em>models</em>. Both are considered <strong>entities</strong> in Spice#, however the <em>instance</em> entity will ask the simulation for the behaviors created by the <em>model</em> entity, by using the model entity's name. This prompts the simulation to first ask the <em>model</em> entity for behaviors. An <em>instance</em> entity in Spice# has been implemented through the <strong><a class="xref" href="../../api/SpiceSharp.Components.IComponent.html">IComponent</a></strong> interface.</p>
 <h2 id="parameters-and-properties">Parameters and properties</h2>
 <p>Entities can contain one or more <strong><a class="xref" href="../../api/SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></strong>'s that can be used by behaviors. They are usually simple classes with properties that contain information that needs to be passed down to the behaviors, like the resistance of a resistor or DC voltage of a voltage source, but they can just as well be used to describe anything. These parameters can be set directly by accessing the entity's members or, when implemented, they can also be set using their Spice &quot;name&quot;. The name of a parameter is nothing more than a shorthand notation used by most Spice simulators to identify the parameter.</p>
 <p>For example, the parameters of a resistor are defined in <a class="xref" href="../../api/SpiceSharp.Components.Resistors.Parameters.html">Parameters</a>.</p>
@@ -98,38 +98,38 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Resistance</td>
-<td style="text-align: left;">&quot;resistance&quot; or &quot;r&quot;</td>
+<td style="text-align: left;"><code>Resistance</code></td>
+<td style="text-align: left;"><code>resistance</code> or <code>r</code></td>
 <td style="text-align: left;">Resistance (ohms)</td>
 <td style="text-align: left;">If not specified, the model is used to determine the resistance.</td>
 </tr>
 <tr>
-<td style="text-align: left;">TemperatureCelsius</td>
-<td style="text-align: left;">&quot;temp&quot;</td>
+<td style="text-align: left;"><code>TemperatureCelsius</code></td>
+<td style="text-align: left;"><code>temp</code></td>
 <td style="text-align: left;">Instance operating temperature (degrees Celsius)</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr>
-<td style="text-align: left;">Width</td>
-<td style="text-align: left;">&quot;w&quot;</td>
+<td style="text-align: left;"><code>Width</code></td>
+<td style="text-align: left;"><code>w</code></td>
 <td style="text-align: left;">Width (m)</td>
 <td style="text-align: left;">Optional parameter that is only used if a model is specified.</td>
 </tr>
 <tr>
-<td style="text-align: left;">Length</td>
-<td style="text-align: left;">&quot;l&quot;</td>
+<td style="text-align: left;"><code>Length</code></td>
+<td style="text-align: left;"><code>l</code></td>
 <td style="text-align: left;">Length (m)</td>
 <td style="text-align: left;">Optional parameter that is only used if a model is specified.</td>
 </tr>
 <tr>
-<td style="text-align: left;">ParallelMultiplier</td>
-<td style="text-align: left;">&quot;m&quot;</td>
+<td style="text-align: left;"><code>ParallelMultiplier</code></td>
+<td style="text-align: left;"><code>m</code></td>
 <td style="text-align: left;">Number of resistors in parallel</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr>
-<td style="text-align: left;">SeriesMultiplier</td>
-<td style="text-align: left;">&quot;n&quot;</td>
+<td style="text-align: left;"><code>SeriesMultiplier</code></td>
+<td style="text-align: left;"><code>n</code></td>
 <td style="text-align: left;">Number of resistors in series</td>
 <td style="text-align: left;"></td>
 </tr>
@@ -142,7 +142,7 @@ var resistor = new Resistor(&quot;R1&quot;, &quot;a&quot;, &quot;b&quot;, 1e3);
 // Set resistance using the property directly to 2kOhm
 resistor.Parameters.Resistance = 2.0e3;
 
-// Set resistance using the name of the parameter using reflection to 3kOhm
+// Set resistance using the name of the parameter using its Spice name
 // Note: if you use 3e3 instead of 3.0e3, then this method will try to find
 // a parameter of type &quot;int&quot; so make sure to specify a double!
 resistor.Parameters.SetParameter(&quot;r&quot;, 3.0e3);

@@ -4,22 +4,22 @@ The main structure of Spice# revolves around **entities**, **behaviors**, **simu
 
 <p align="center"><img src="images/simulation_flow.svg" /></p>
 
-When running a simulation, that simulation will ask for each entity to create behaviors for the simulation (the entity can add its behaviors to the simulation's **[IEntityBehaviorCollection](xref:SpiceSharp.Behaviors.IBehaviorContainerCollection)**). These behaviors are then called on by the simulation when they are needed.
+When running a simulation, that simulation will create the necessary simulation states, and ask for each entity in the entity collection to create behaviors for the simulation (the entity can add its behaviors to the simulation's **[IEntityBehaviorCollection](xref:SpiceSharp.Behaviors.IBehaviorContainerCollection)**). These behaviors define methods that can be called by the simulation when needed.
 
-These behaviors implement specific parts of the algorithm and is specific to the **entity**. For example, a **[Transient](xref:SpiceSharp.Simulations.Transient)** simulation requires several types of behaviors that a component might want to implement. The behaviors would then implement one or more of these interfaces:
+Behaviors implement specific parts of the simulation algorithm and are also specific to the **entity** being modeled. For example, a **[Transient](xref:SpiceSharp.Simulations.Transient)** simulation requires several types of behaviors that a component might need to implement. The behaviors would then implement one or more of these interfaces:
 
 - An **[ITemperatureBehavior](xref:SpiceSharp.Behaviors.ITemperatureBehavior)** that describes a method that tells the behavior that the temperature might have changed. The entity should recalculate anything that might have changed.
 - An **[IBiasingBehavior](xref:SpiceSharp.Behaviors.IBiasingBehavior)** that contains methods that are called each iteration in order to build up the Y-matrix and right-hand side vector.
 - An **[IConvergenceBehavior](xref:SpiceSharp.Behaviors.IConvergenceBehavior)** that allows some influence over deciding whether or not a new iteration should be computed.
 - An **[ITimeBehavior](xref:SpiceSharp.Behaviors.ITimeBehavior)** that gets called when it's okay to make time-dependent states that can be integrated.
 
-Once all **behaviors** have been created by all **entities**, the simulation no longer has a need for any entities, and will continue to work with just behaviors.
+Once all **behaviors** have been created by all **entities**, the simulation no longer has a need for entities, and will continue to work with just the created behaviors.
 
 # Entities
 
 An entity implements the **[IEntity](xref:SpiceSharp.Entities.IEntity)** interface. The main job of the entity is to create behaviors for simulations, at which point they are allowed to search for other entities that they are linked to (like a mutual inductance that searches for its inductors, or a component/instance that searches for its model). Each entity also has a **name** and can contain **parameters**.
 
-In all Spice-based simulators the distinction is made between *instances* and *models*. Both are considered **entities** in Spice#, however the instance entity will ask the simulation for the model behaviors by using the model's name, allowing the model behaviors to be created first by the model entity. The instance entity can then use these model behaviors to create the instance behaviors. An instance entity in Spice# has been implemented through the **[IComponent](xref:SpiceSharp.Components.IComponent)** interface.
+In all Spice-based simulators the distinction is made between *instances* and *models*. Both are considered **entities** in Spice#, however the *instance* entity will ask the simulation for the behaviors created by the *model* entity, by using the model entity's name. This prompts the simulation to first ask the *model* entity for behaviors. An *instance* entity in Spice# has been implemented through the **[IComponent](xref:SpiceSharp.Components.IComponent)** interface.
 
 ## Parameters and properties
 
@@ -27,14 +27,14 @@ Entities can contain one or more **[IParameterSet](xref:SpiceSharp.ParameterSets
 
 For example, the parameters of a resistor are defined in @SpiceSharp.Components.Resistors.Parameters.
 
-| Property name | Names | Description | Remarks |
-|:--------------|:------|:------------|:--------|
-| Resistance | "resistance" or "r" | Resistance (ohms) | If not specified, the model is used to determine the resistance. |
-| TemperatureCelsius | "temp" | Instance operating temperature (degrees Celsius) | |
-| Width | "w" | Width (m) | Optional parameter that is only used if a model is specified. |
-| Length | "l" | Length (m) | Optional parameter that is only used if a model is specified.
-| ParallelMultiplier | "m" | Number of resistors in parallel | |
-| SeriesMultiplier | "n" | Number of resistors in series | |
+| Property name      | Names               | Description                                      | Remarks                                                          |
+| :----------------- | :------------------ | :----------------------------------------------- | :--------------------------------------------------------------- |
+| `Resistance`         | `resistance` or `r` | Resistance (ohms)                                | If not specified, the model is used to determine the resistance. |
+| `TemperatureCelsius` | `temp`              | Instance operating temperature (degrees Celsius) |                                                                  |
+| `Width`              | `w`                 | Width (m)                                        | Optional parameter that is only used if a model is specified.    |
+| `Length`             | `l`                 | Length (m)                                       | Optional parameter that is only used if a model is specified.    |
+| `ParallelMultiplier` | `m`                 | Number of resistors in parallel                  |                                                                  |
+| `SeriesMultiplier`   | `n`                 | Number of resistors in series                    |                                                                  |
 
 It is possible to set the resistance of the resistor simply by using any of the following methods:
 
@@ -45,7 +45,7 @@ var resistor = new Resistor("R1", "a", "b", 1e3);
 // Set resistance using the property directly to 2kOhm
 resistor.Parameters.Resistance = 2.0e3;
 
-// Set resistance using the name of the parameter using reflection to 3kOhm
+// Set resistance using the name of the parameter using its Spice name
 // Note: if you use 3e3 instead of 3.0e3, then this method will try to find
 // a parameter of type "int" so make sure to specify a double!
 resistor.Parameters.SetParameter("r", 3.0e3);
