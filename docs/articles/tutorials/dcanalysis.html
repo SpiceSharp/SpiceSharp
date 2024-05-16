@@ -101,9 +101,9 @@ var currentExport = new RealPropertyExport(dc, &quot;M1&quot;, &quot;id&quot;);
 // Run the simulation
 dc.ExportSimulationData += (sender, args) =&gt;
 {
-    var vgsVoltage = dc.GetCurrentSweepValue()[0];
-    var vdsVoltage = dc.GetCurrentSweepValue()[1];
-    var current = currentExport.Value;
+    double vgsVoltage = dc.GetCurrentSweepValue()[0];
+    double vdsVoltage = dc.GetCurrentSweepValue()[1];
+    double current = currentExport.Value;
 };
 dc.Run(ckt);
 </code></pre>
@@ -127,13 +127,14 @@ Vds d 0 0
 .END
 </code></pre>
 <p>This netlist would be parsed, executed, and the results are then written to a file which can then be processed. Spice# is a <em>library</em>, which means that you have access to the data during execution, giving you more flexibility on how you want the simulation to be run as the simulation data is coming in.</p>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

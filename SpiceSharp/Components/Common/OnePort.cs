@@ -12,7 +12,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// is equal to the current out of the other.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct OnePort<T>
+    public readonly struct OnePort<T>
     {
         /// <summary>
         /// The positive node.
@@ -56,17 +56,17 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </summary>
         /// <param name="map">The map.</param>
         /// <returns>An array of matrix locations.</returns>
-        public MatrixLocation[] GetMatrixLocations(IVariableMap map)
+        public readonly MatrixLocation[] GetMatrixLocations(IVariableMap map)
         {
             int pos = map[Positive];
             int neg = map[Negative];
-            return new[]
-            {
+            return
+            [
                 new MatrixLocation(pos, pos),
                 new MatrixLocation(pos, neg),
                 new MatrixLocation(neg, pos),
                 new MatrixLocation(neg, neg)
-            };
+            ];
         }
 
         /// <summary>
@@ -74,11 +74,11 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// </summary>
         /// <param name="map">The map.</param>
         /// <returns>An array with indices.</returns>
-        public int[] GetRhsIndices(IVariableMap map)
+        public readonly int[] GetRhsIndices(IVariableMap map)
         {
             int pos = map[Positive];
             int neg = map[Negative];
-            return new[] { pos, neg };
+            return [pos, neg];
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is OnePort<T> op)
             {
@@ -107,7 +107,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => (Positive.GetHashCode() * 13) ^ Negative.GetHashCode();
+        public override readonly int GetHashCode() => (Positive.GetHashCode() * 13) ^ Negative.GetHashCode();
 
         /// <summary>
         /// Implements the operator ==.

@@ -35,7 +35,7 @@ namespace SpiceSharp.Components.Resistors
         {
             get
             {
-                var v = Voltage;
+                double v = Voltage;
                 return v * v * Conductance;
             }
         }

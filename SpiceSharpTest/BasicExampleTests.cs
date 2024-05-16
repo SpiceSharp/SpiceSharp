@@ -60,7 +60,7 @@ namespace SpiceSharpTest
             // <example_parameters_mos1_creategetter>
             // Create a getter for the nominal temperature of the mosfet1 model
             var tnomGetter = parameters.CreatePropertyGetter<double>("tnom");
-            var temperature = tnomGetter(); // In degrees Celsius
+            double temperature = tnomGetter(); // In degrees Celsius
             // </example_parameters_mos1_creategetter>
 
             // <example_parameters_mos1_createsetter>
@@ -71,7 +71,7 @@ namespace SpiceSharpTest
 
             // <example_parameters_mos1_getparameter>
             // Get the parameter that describes the oxide thickness of the mosfet1 model
-            var toxParameter = parameters.GetProperty<double>("tox");
+            double toxParameter = parameters.GetProperty<double>("tox");
             // </example_parameters_mos1_getparameter>
 
             // <example_parameters_mos1_setparameter>
@@ -98,8 +98,8 @@ namespace SpiceSharpTest
             // Catch exported data
             dc.ExportSimulationData += (sender, args) =>
             {
-                var input = args.GetVoltage("in");
-                var output = args.GetVoltage("out");
+                double input = args.GetVoltage("in");
+                double output = args.GetVoltage("out");
             };
             dc.Run(ckt);
             // </example01_simulate>
@@ -127,9 +127,9 @@ namespace SpiceSharpTest
             // Catch exported data
             dc.ExportSimulationData += (sender, args) =>
             {
-                var input = inputExport.Value;
-                var output = outputExport.Value;
-                var current = currentExport.Value;
+                double input = inputExport.Value;
+                double output = outputExport.Value;
+                double current = currentExport.Value;
             };
             dc.Run(ckt);
             // </example01_simulate2>
@@ -165,9 +165,9 @@ namespace SpiceSharpTest
             // Run the simulation
             dc.ExportSimulationData += (sender, args) =>
             {
-                var vgsVoltage = dc.GetCurrentSweepValue()[0];
-                var vdsVoltage = dc.GetCurrentSweepValue()[1];
-                var current = currentExport.Value;
+                double vgsVoltage = dc.GetCurrentSweepValue()[0];
+                double vdsVoltage = dc.GetCurrentSweepValue()[1];
+                double current = currentExport.Value;
             };
             dc.Run(ckt);
             // </example_DC>
@@ -195,7 +195,7 @@ namespace SpiceSharpTest
             ac.ExportSimulationData += (sender, args) =>
             {
                 var output = exportVoltage.Value;
-                var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
+                double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
             };
             ac.Run(ckt);
             // </example_AC>
@@ -222,8 +222,8 @@ namespace SpiceSharpTest
             // Simulate
             tran.ExportSimulationData += (sender, args) =>
             {
-                var input = inputExport.Value;
-                var output = outputExport.Value;
+                double input = inputExport.Value;
+                double output = outputExport.Value;
             };
             tran.Run(ckt);
             // </example_Transient>
@@ -243,11 +243,11 @@ namespace SpiceSharpTest
 
             // Attach events to apply stochastic variation
             var rndGenerator = new Random();
-            var counter = 0;
+            int counter = 0;
             op.BeforeExecute += (sender, args) =>
             {
                 // Apply a random value of 1kOhm with 5% tolerance
-                var value = 950 + 100 * rndGenerator.NextDouble();
+                double value = 950 + 100 * rndGenerator.NextDouble();
                 var sim = (Simulation)sender;
                 sim.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.Resistors.Parameters>().Resistance = value;
             };
@@ -265,7 +265,7 @@ namespace SpiceSharpTest
             op.ExportSimulationData += (sender, args) =>
             {
                 // This will run 1o times
-                var result = current.Value;
+                double result = current.Value;
             };
             op.Run(ckt);
             // </example_Stochastic>

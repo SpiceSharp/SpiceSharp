@@ -23,22 +23,21 @@ namespace SpiceSharp.Algebra
         {
         }
 
-        /// <inheritdoc/>
-        public override void Solve(IVector<Complex> solution)
+        /// <inheritdoc />
+        public override void ForwardSubstitute(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
-
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
 
             // Scramble
             var rhsElement = Vector.GetFirstInVector();
-            var index = 0;
+            int index = 0;
             while (rhsElement != null && rhsElement.Index <= order)
             {
                 while (index < rhsElement.Index)
@@ -55,7 +54,7 @@ namespace SpiceSharp.Algebra
             }
 
             // Forward substitution
-            for (var i = 1; i <= order; i++)
+            for (int i = 1; i <= order; i++)
             {
                 var temp = _intermediate[i];
                 if (!temp.Equals(0.0))
@@ -71,9 +70,19 @@ namespace SpiceSharp.Algebra
                     }
                 }
             }
+        }
+
+        /// <inheritdoc />
+        public override void BackwardSubstitute(IVector<Complex> solution)
+        {
+            int order = Size - Degeneracy;
+
+            // Copy the degenerate solution to the intermediate vector
+            for (int i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Row.Reverse(i)];
 
             // Backward substitution
-            for (var i = order; i > 0; i--)
+            for (int i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
@@ -86,12 +95,26 @@ namespace SpiceSharp.Algebra
                 _intermediate[i] = temp;
             }
 
-            // Unscrable
+            // Unscramble
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <inheritdoc/>
-        public override void SolveTransposed(IVector<Complex> solution)
+        /// <inheritdoc />
+        public override Complex ComputeDegenerateContribution(int index)
+        {
+            Complex result = 0.0;
+            var elt = Matrix.GetFirstInRow(Row[index]);
+            int order = Size - Degeneracy;
+            while (elt != null && elt.Column <= order)
+            {
+                result += elt.Value * _intermediate[elt.Column];
+                elt = elt.Right;
+            }
+            return result;
+        }
+
+        /// <inheritdoc />
+        public override void ForwardSubstituteTransposed(IVector<Complex> solution)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
@@ -100,21 +123,23 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new Complex[Size + 1];
-            var order = Size - Degeneracy;
+            int order = Size - Degeneracy;
 
             // Scramble
-            for (var i = 0; i <= Size; i++)
+            for (int i = 0; i <= order; i++)
                 _intermediate[i] = 0.0;
+            for (int i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Column.Reverse(i)];
             var rhsElement = Vector.GetFirstInVector();
-            while (rhsElement != null)
+            while (rhsElement != null && rhsElement.Index <= order)
             {
-                var newIndex = Column[Row.Reverse(rhsElement.Index)];
+                int newIndex = Column[Row.Reverse(rhsElement.Index)];
                 _intermediate[newIndex] = rhsElement.Value;
                 rhsElement = rhsElement.Below;
             }
 
-            // Forward elimination
-            for (var i = 1; i <= order; i++)
+            // Forward substitution
+            for (int i = 1; i <= order; i++)
             {
                 var temp = _intermediate[i];
                 if (!temp.Equals(0.0))
@@ -127,14 +152,24 @@ namespace SpiceSharp.Algebra
                     }
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public override void BackwardSubstituteTransposed(IVector<Complex> solution)
+        {
+            int order = Size - Degeneracy;
+
+            // Copy the degenerate solution to the intermediate vector
+            for (int i = order + 1; i <= Size; i++)
+                _intermediate[i] = solution[Row.Reverse(i)];
 
             // Backward substitution
-            for (var i = order; i > 0; i--)
+            for (int i = order; i > 0; i--)
             {
                 var temp = _intermediate[i];
                 var pivot = Matrix.FindDiagonalElement(i);
                 var element = pivot.Below;
-                while (element != null && element.Row <= order)
+                while (element != null)
                 {
                     temp -= _intermediate[element.Row] * element.Value;
                     element = element.Below;
@@ -144,6 +179,20 @@ namespace SpiceSharp.Algebra
 
             // Unscramble
             Row.Unscramble(_intermediate, solution);
+        }
+
+        /// <inheritdoc />
+        public override Complex ComputeDegenerateContributionTransposed(int index)
+        {
+            Complex result = 0.0;
+            var elt = Matrix.GetFirstInColumn(Column[index]);
+            int order = Size - Degeneracy;
+            while (elt != null && elt.Row <= order)
+            {
+                result += elt.Value * _intermediate[elt.Row];
+                elt = elt.Below;
+            }
+            return result;
         }
 
         /// <inheritdoc/>
@@ -164,7 +213,7 @@ namespace SpiceSharp.Algebra
                 var lower = pivot.Below;
                 while (lower != null)
                 {
-                    var row = lower.Row;
+                    int row = lower.Row;
 
                     // Find element in row that lines up with the current lower triangular element
                     while (sub != null && sub.Row < row)

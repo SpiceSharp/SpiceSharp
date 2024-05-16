@@ -103,8 +103,7 @@ namespace SpiceSharpTest.Simulations
                 // If the time > 5.0 then start exporting our stuff
                 if (args.Time > 5.0)
                 {
-                    if (export == null)
-                        export = new RealPropertyExport((Simulation)sender, "R1", "i");
+                    export ??= new RealPropertyExport((Simulation)sender, "R1", "i");
                     Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
                 }
             };
@@ -149,8 +148,8 @@ namespace SpiceSharpTest.Simulations
         public void When_FixedEulerDerivative_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
                  
             var tran = new Transient("tran", new FixedEuler { Step = 1e-7, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -165,8 +164,8 @@ namespace SpiceSharpTest.Simulations
         public void When_FixedTrapezoidalDerivative_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new FixedTrapezoidal { Step = 1e-7, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -181,8 +180,8 @@ namespace SpiceSharpTest.Simulations
         public void When_FixedEulerIntegral_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new FixedEuler { Step = 1e-7, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -197,8 +196,8 @@ namespace SpiceSharpTest.Simulations
         public void When_FixedTrapezoidalIntegral_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new FixedTrapezoidal { Step = 1e-7, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -213,8 +212,8 @@ namespace SpiceSharpTest.Simulations
         public void When_TrapezoidalDerivative_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new Trapezoidal { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -229,8 +228,8 @@ namespace SpiceSharpTest.Simulations
         public void When_TrapezoidalIntegral_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new Trapezoidal { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -245,8 +244,8 @@ namespace SpiceSharpTest.Simulations
         public void When_GearDerivative_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new Gear { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -261,8 +260,8 @@ namespace SpiceSharpTest.Simulations
         public void When_GearIntegral_Expect_Reference()
         {
             // Test a single derivative state
-            var f = 100.0;
-            var w = 2 * Math.PI * f;
+            double f = 100.0;
+            double w = 2 * Math.PI * f;
 
             var tran = new Transient("tran", new Gear { InitialStep = 1e-9, MaxStep = 1e-5, StopTime = 1 / f });
             var ckt = new Circuit(
@@ -444,14 +443,14 @@ namespace SpiceSharpTest.Simulations
             var pexport = new RealPropertyExport(sim1, "R1", "p");
             sim1.ExportSimulationData += (sender, e) =>
             {
-                var input = e.GetVoltage("in");
+                double input = e.GetVoltage("in");
                 Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
                 Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
                 Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
             };
             sim2.ExportSimulationData += (sender, e) =>
             {
-                var input = e.GetVoltage("in");
+                double input = e.GetVoltage("in");
                 Assert.AreEqual(Math.Sin(2 * Math.PI * 10 * e.Time) + 1.0, input, 1e-9);
                 Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
                 Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
@@ -486,7 +485,7 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("C2", "out", "0", 1e-6));
 
             var tran = new Transient("tran", 1e-9, 1e-6);
-            var a = true;
+            bool a = true;
             tran.ExportSimulationData += (sender, args) =>
             {
                 if (a)
@@ -523,7 +522,7 @@ namespace SpiceSharpTest.Simulations
             tran.ExportSimulationData -= BuildReference;
 
             // Rerun the simulation for building the reference values
-            var index = 0;
+            int index = 0;
             void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(r[index++], export.Value, 1e-20);
             tran.ExportSimulationData += CheckReference;
             tran.Rerun();

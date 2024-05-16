@@ -60,7 +60,7 @@ namespace SpiceSharp.Components
                 time -= _td;
                 if (time > _per)
                 {
-                    var basetime = _per * Math.Floor(time / _per);
+                    double basetime = _per * Math.Floor(time / _per);
                     time -= basetime;
                 }
 
@@ -77,7 +77,7 @@ namespace SpiceSharp.Components
             /// <inheritdoc/>
             public void Probe()
             {
-                var time = _method?.Time ?? 0.0;
+                double time = _method?.Time ?? 0.0;
                 At(time);
             }
 
@@ -98,15 +98,15 @@ namespace SpiceSharp.Components
                         return;
 
                     // Find the time relative to the first period
-                    var time = method.Time - _td;
-                    var basetime = 0.0;
+                    double time = method.Time - _td;
+                    double basetime = 0.0;
                     if (time >= _per)
                     {
                         basetime = _per * Math.Floor(time / _per);
                         time -= basetime;
                     }
 
-                    var tol = 1e-7 * _pw;
+                    double tol = 1e-7 * _pw;
 
                     // Are we at the start of a breakpoint?
                     if (time <= 0 || time >= _tr + _pw + _tf)

@@ -55,10 +55,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
             Parameters = context.GetParameterSet<Parameters>();
             _variables = new TwoPort<double>(_biasing, context);
 
-            var pos = _biasing.Map[_variables.Right.Positive];
-            var neg = _biasing.Map[_variables.Right.Negative];
-            var contPos = _biasing.Map[_variables.Left.Positive];
-            var contNeg = _biasing.Map[_variables.Left.Negative];
+            int pos = _biasing.Map[_variables.Right.Positive];
+            int neg = _biasing.Map[_variables.Right.Negative];
+            int contPos = _biasing.Map[_variables.Left.Positive];
+            int contNeg = _biasing.Map[_variables.Left.Negative];
             _elements = new ElementSet<double>(_biasing.Solver, new[] {
                         new MatrixLocation(pos, contPos),
                         new MatrixLocation(pos, contNeg),
@@ -70,7 +70,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
-            var value = Parameters.Transconductance * Parameters.ParallelMultiplier;
+            double value = Parameters.Transconductance * Parameters.ParallelMultiplier;
             _elements.Add(value, -value, -value, value);
         }
     }

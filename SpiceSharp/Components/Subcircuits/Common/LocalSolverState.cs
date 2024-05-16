@@ -3,6 +3,7 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Variables;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SpiceSharp.Components.Subcircuits
 {
@@ -16,8 +17,9 @@ namespace SpiceSharp.Components.Subcircuits
         where S : ISolverSimulationState<T>
     {
         private bool _shouldPreorder, _shouldReorder;
-        private readonly List<Bridge<Element<T>>> _elements = new List<Bridge<Element<T>>>();
-        private readonly List<Bridge<int>> _indices = new List<Bridge<int>>();
+        private readonly List<Bridge<Element<T>>> _matrixElements = new List<Bridge<Element<T>>>();
+        private readonly Dictionary<int, Bridge<Element<T>>> _rhsElements = new Dictionary<int, Bridge<Element<T>>>();
+        private readonly List<Bridge<int>> _nodeIndices = new List<Bridge<int>>();
         private readonly VariableMap _map;
 
         /// <summary>
@@ -83,38 +85,41 @@ namespace SpiceSharp.Components.Subcircuits
             nodes.ThrowIfNull(nameof(nodes));
 
             // Map each local node on the global node
-            _indices.Clear();
+            _nodeIndices.Clear();
             foreach (var bridge in nodes)
             {
                 var loc = GetSharedVariable(bridge.Local);
                 var glob = Parent.GetSharedVariable(bridge.Global);
-                _indices.Add(new Bridge<int>(_map[loc], Parent.Map[glob]));
+                _nodeIndices.Add(new Bridge<int>(_map[loc], Parent.Map[glob]));
             }
 
             Solver.Precondition((matrix, vector) =>
             {
-                for (var i = 0; i < _indices.Count; i++)
+                // Create diagonal elements if the matrix is too small
+                // This can happen if there are only contributions to the right-hand side.
+                for (int i = matrix.Size + 1; i <= vector.Length; i++)
+                    matrix.GetElement(new(i, i));
+
+                for (int i = 0; i < _nodeIndices.Count; i++)
                 {
                     // Let's move these variables to the back of the matrix
-                    int index = _indices[i].Local;
+                    int index = _nodeIndices[i].Local;
                     var location = Solver.ExternalToInternal(new MatrixLocation(index, index));
                     int target = matrix.Size - i;
                     matrix.SwapColumns(location.Column, target);
                     matrix.SwapRows(location.Row, target);
                 }
             });
-            Solver.Degeneracy = _indices.Count;
-            Solver.PivotSearchReduction = _indices.Count;
+            Solver.Degeneracy = _nodeIndices.Count;
+            Solver.PivotSearchReduction = _nodeIndices.Count;
 
             // Get the elements that need to be shared
-            Solver.Precondition((m, v) =>
+            Solver.Precondition((matrix, vector) =>
             {
-                var matrix = m;
-                var vector = v;
-                foreach (var row in _indices)
+                foreach (var row in _nodeIndices)
                 {
                     LinkElement(vector, row);
-                    foreach (var col in _indices)
+                    foreach (var col in _nodeIndices)
                         LinkElement(matrix, row, col);
                 }
             });
@@ -130,7 +135,7 @@ namespace SpiceSharp.Components.Subcircuits
             var loc = Solver.ExternalToInternal(new MatrixLocation(row.Local, row.Local));
 
             // Do we need to create an element?
-            var local_elt = vector.FindElement(loc.Row);
+            var local_elt = vector.GetElement(loc.Row); // Always allocate element
             if (local_elt == null)
             {
                 // Check if solving will result in an element
@@ -142,7 +147,7 @@ namespace SpiceSharp.Components.Subcircuits
             if (local_elt == null)
                 return;
             var parent_elt = Parent.Solver.GetElement(row.Global);
-            _elements.Add(new Bridge<Element<T>>(local_elt, parent_elt));
+            _rhsElements.Add(row.Local, new Bridge<Element<T>>(local_elt, parent_elt));
         }
 
         /// <summary>
@@ -174,7 +179,7 @@ namespace SpiceSharp.Components.Subcircuits
             if (local_elt == null)
                 return;
             var parent_elt = Parent.Solver.GetElement(new MatrixLocation(row.Global, column.Global));
-            _elements.Add(new Bridge<Element<T>>(local_elt, parent_elt));
+            _matrixElements.Add(new Bridge<Element<T>>(local_elt, parent_elt));
         }
 
         /// <summary>
@@ -207,11 +212,36 @@ namespace SpiceSharp.Components.Subcircuits
                 }
             }
 
-            // Copy the necessary elements
-            foreach (var bridge in _elements)
+            // Copy the necessary elements from the matrix
+            foreach (var bridge in _matrixElements)
                 bridge.Global.Add(bridge.Local.Value);
+
+            // Apply contributions
+            Solver.ForwardSubstitute(Solution);
+            foreach (var pair in _rhsElements)
+            {
+                // Add the RHS element directly
+                pair.Value.Global.Add(pair.Value.Local.Value);
+                pair.Value.Global.Subtract(Solver.ComputeDegenerateContribution(pair.Key));
+            }
             Updated = false;
             return true;
+        }
+
+        /// <summary>
+        /// Applies forward substitution for the transposed/adjoint matrix.
+        /// </summary>
+        public virtual void ApplyTransposed()
+        {
+            // Apply contributions
+            Solver.ForwardSubstitute(Solution);
+            foreach (var pair in _rhsElements)
+            {
+                // Add the RHS element directly
+                pair.Value.Global.Add(pair.Value.Local.Value);
+                pair.Value.Global.Subtract(Solver.ComputeDegenerateContributionTransposed(pair.Key));
+            }
+            Updated = false;
         }
 
         /// <summary>
@@ -224,9 +254,26 @@ namespace SpiceSharp.Components.Subcircuits
                 return;
 
             // Fill in the shared variables
-            foreach (var pair in _indices)
+            foreach (var pair in _nodeIndices)
                 Solution[pair.Local] = Parent.Solution[pair.Global];
-            Solver.Solve(Solution);
+            Solver.BackwardSubstitute(Solution);
+            Solution[0] = default;
+            Updated = true;
+        }
+
+        /// <summary>
+        /// Updates the state with the new solution for the transposed version.
+        /// </summary>
+        public virtual void UpdateTransposed()
+        {
+            // No need to update again
+            if (Updated)
+                return;
+
+            // Fill in the sahred variables
+            foreach (var pair in _nodeIndices)
+                Solution[pair.Local] = Parent.Solver[pair.Global];
+            Solver.BackwardSubstituteTransposed(Solution);
             Solution[0] = default;
             Updated = true;
         }
@@ -237,7 +284,7 @@ namespace SpiceSharp.Components.Subcircuits
             // Get the local node!
             if (!TryGetValue(name, out var result))
             {
-                var index = _map.Count;
+                int index = _map.Count;
                 result = new SolverVariable<T>(this, name, index, Units.Volt);
                 Add(name, result);
                 _map.Add(result, index);
@@ -248,7 +295,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <inheritdoc/>
         public override IVariable<T> CreatePrivateVariable(string name, IUnit unit)
         {
-            var index = _map.Count;
+            int index = _map.Count;
             var result = new SolverVariable<T>(this, name, index, unit);
             _map.Add(result, index);
             return result;

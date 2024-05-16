@@ -167,8 +167,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         {
             var laplace = _complex.Laplace;
             var factor = Complex.Exp(-laplace * Parameters.Delay.Value);
-            var y = Parameters.Admittance * Parameters.ParallelMultiplier;
-            var z = Parameters.Impedance / Parameters.ParallelMultiplier;
+            double y = Parameters.Admittance * Parameters.ParallelMultiplier;
+            double z = Parameters.Impedance / Parameters.ParallelMultiplier;
             _elements.Add(
                 y, -y, -1, y, -1,
                 -y, y, 1, y, 1, -1, -factor,

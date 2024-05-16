@@ -67,17 +67,15 @@ namespace SpiceSharp.Algebra
                 return;
 
             // Expand the matrix if necessary
-            var needed = Math.Max(row1, row2);
+            int needed = Math.Max(row1, row2);
             if (needed > Size)
                 Expand(needed);
 
-            var offset1 = (row1 - 1) * _allocatedSize;
-            var offset2 = (row2 - 1) * _allocatedSize;
-            for (var i = 0; i < Size; i++)
+            int offset1 = (row1 - 1) * _allocatedSize;
+            int offset2 = (row2 - 1) * _allocatedSize;
+            for (int i = 0; i < Size; i++)
             {
-                var tmp = _array[offset1 + i];
-                _array[offset1 + i] = _array[offset2 + i];
-                _array[offset2 + i] = tmp;
+                (_array[offset2 + i], _array[offset1 + i]) = (_array[offset1 + i], _array[offset2 + i]);
             }
         }
 
@@ -90,24 +88,22 @@ namespace SpiceSharp.Algebra
                 return;
 
             // Expand the matrix if necessary
-            var needed = Math.Max(column1, column2);
+            int needed = Math.Max(column1, column2);
             if (needed > Size)
                 Expand(needed);
 
             column1--;
             column2--;
-            for (var i = 0; i < _allocatedSize * _allocatedSize; i += _allocatedSize)
+            for (int i = 0; i < _allocatedSize * _allocatedSize; i += _allocatedSize)
             {
-                var tmp = _array[column1 + i];
-                _array[column1 + i] = _array[column2 + i];
-                _array[column2 + i] = tmp;
+                (_array[column2 + i], _array[column1 + i]) = (_array[column1 + i], _array[column2 + i]);
             }
         }
 
         /// <inheritdoc/>
         public void Reset()
         {
-            for (var i = 0; i < _array.Length; i++)
+            for (int i = 0; i < _array.Length; i++)
                 _array[i] = default;
         }
 
@@ -149,7 +145,7 @@ namespace SpiceSharp.Algebra
         }
         private void Expand(int newSize)
         {
-            var oldSize = Size;
+            int oldSize = Size;
             Size = newSize;
             if (newSize <= _allocatedSize)
                 return;
@@ -157,8 +153,8 @@ namespace SpiceSharp.Algebra
 
             // Create a new array and copy its contents
             var nArray = new T[newSize * newSize];
-            for (var r = 0; r < oldSize; r++)
-                for (var c = 0; c < oldSize; c++)
+            for (int r = 0; r < oldSize; r++)
+                for (int c = 0; c < oldSize; c++)
                     nArray[r * newSize + c] = _array[r * _allocatedSize + c];
             _array = nArray;
             _allocatedSize = newSize;

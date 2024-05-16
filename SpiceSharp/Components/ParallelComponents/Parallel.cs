@@ -26,38 +26,13 @@ namespace SpiceSharp.Components
     /// <seealso cref="Entity" />
     /// <seealso cref="IComponent" />
     /// <seealso cref="IParameterized{P}"/>
-    /// <seealso cref="ParallelComponents.Parameters"/>
+    /// <seealso cref="Parameters"/>
     public class Parallel : Entity<Parameters>,
-        IComponent,
+        IEntity,
         IRuleSubject
     {
-        /// <inheritdoc/>
-        public string Model { get; set; }
-
-        /// <inheritdoc/>
-        public IReadOnlyList<string> Nodes
-        {
-            get
-            {
-                var list = new List<string>();
-                foreach (var entity in Parameters.Entities)
-                {
-                    if (entity is IComponent component)
-                        list.AddRange(component.Nodes);
-                }
-                return list.AsReadOnly();
-            }
-        }
-
-        /// <inheritdoc/>
-        public IComponent Connect(params string[] nodes)
-        {
-            // We don't really have any connections of our own
-            return this;
-        }
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> is <c>null</c>.</exception>
@@ -67,7 +42,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <param name="entities">The components that can be executed in parallel.</param>
@@ -82,7 +57,7 @@ namespace SpiceSharp.Components
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParallelComponents"/> class.
+        /// Initializes a new instance of the <see cref="Parallel"/> class.
         /// </summary>
         /// <param name="name">The name of the component.</param>
         /// <param name="entities">The components that can be executed in parallel.</param>
@@ -108,6 +83,7 @@ namespace SpiceSharp.Components
 
                 // Let's create our behaviors
                 // Note: we do this first, such that any parallel simulation states can be added to the local simulation
+                behaviors.Add(new EntitiesBehavior(context));
                 behaviors.Build(simulation, context)
                     .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
                     .AddIfNo<IConvergenceBehavior>(context => new Convergence(context))

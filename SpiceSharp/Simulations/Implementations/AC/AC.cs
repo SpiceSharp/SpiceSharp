@@ -55,7 +55,7 @@ namespace SpiceSharp.Simulations
                     OnExport(exportargs);
 
                 // Sweep the frequency
-                foreach (var freq in FrequencyParameters.Frequencies)
+                foreach (double freq in FrequencyParameters.Frequencies)
                 {
                     // Calculate the current frequency
                     cstate.Laplace = new Complex(0.0, 2.0 * Math.PI * freq);

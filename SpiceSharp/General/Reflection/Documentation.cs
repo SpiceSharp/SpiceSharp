@@ -53,7 +53,7 @@ namespace SpiceSharp.Documentation
         {
             type.ThrowIfNull(nameof(type));
             var pinAttributes = type.GetCustomAttributes<PinAttribute>().ToArray();
-            var pins = new string[pinAttributes.Length];
+            string[] pins = new string[pinAttributes.Length];
             foreach (var attribute in pinAttributes)
                 pins[attribute.Index] = attribute.Name;
             return pins;

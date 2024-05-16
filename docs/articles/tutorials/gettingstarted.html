@@ -117,8 +117,8 @@ var dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
 // Catch exported data
 dc.ExportSimulationData += (sender, args) =&gt;
 {
-    var input = args.GetVoltage(&quot;in&quot;);
-    var output = args.GetVoltage(&quot;out&quot;);
+    double input = args.GetVoltage(&quot;in&quot;);
+    double output = args.GetVoltage(&quot;out&quot;);
 };
 dc.Run(ckt);
 </code></pre>
@@ -149,9 +149,9 @@ var currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
 // Catch exported data
 dc.ExportSimulationData += (sender, args) =&gt;
 {
-    var input = inputExport.Value;
-    var output = outputExport.Value;
-    var current = currentExport.Value;
+    double input = inputExport.Value;
+    double output = outputExport.Value;
+    double current = currentExport.Value;
 };
 dc.Run(ckt);
 </code></pre>
@@ -170,13 +170,14 @@ dc.Run(ckt);
 <li><code>input = 1</code> (V), <code>output = 0.667</code> (V), <code>current = -3.33e-05</code> (A)</li>
 </ol>
 <p>These export classes are setup automatically. These classes dynamically build a method that allows extracting data more efficiently during the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData">ExportSimulationData</a></strong> event compared to using the event's arguments.</p>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

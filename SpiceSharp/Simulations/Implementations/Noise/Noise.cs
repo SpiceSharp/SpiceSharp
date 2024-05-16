@@ -1,9 +1,11 @@
 ﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Components.Common;
 using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -98,30 +100,18 @@ namespace SpiceSharp.Simulations
             var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
-            var posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
-            var negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.OutputRef)] : 0;
+            int posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
+            int negOutNode = noiseconfig.OutputRef != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.OutputRef)] : 0;
 
             // We only want to enable the source that is flagged as the input
-            var source = EntityBehaviors[NoiseParameters.InputSource];
-            var originalParameters = new List<Tuple<IndependentSourceParameters, double, double>>();
-            foreach (var container in EntityBehaviors)
-            {
-                if (container.TryGetParameterSet(out IndependentSourceParameters parameters))
-                {
-                    originalParameters.Add(Tuple.Create(parameters, parameters.AcMagnitude, parameters.AcPhase));
-                    if (ReferenceEquals(container, source))
-                    {
-                        parameters.AcMagnitude = 1.0;
-                        parameters.AcPhase = 0.0;
-                    }
-                    else
-                    {
-                        parameters.AcMagnitude = 0.0;
-                        parameters.AcPhase = 0.0;
-                    }
-                }
-            }
+            var originalState = new List<Tuple<IndependentSourceParameters, double, double>>();
+            CollectSourceStates(EntityBehaviors, originalState);
 
+            // Drive the input
+            var source = EntityBehaviors[NoiseParameters.InputSource].GetParameterSet<IndependentSourceParameters>();
+            source.AcMagnitude = 1.0;
+            source.AcPhase = 0.0;
+            
             try
             {
                 // Initialize
@@ -144,7 +134,7 @@ namespace SpiceSharp.Simulations
                     AcIterate();
 
                     var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
-                    var inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
+                    double inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
                     _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
 
                     // Solve the adjoint system
@@ -165,11 +155,31 @@ namespace SpiceSharp.Simulations
             }
             finally
             {
-                foreach (var parameters in originalParameters)
+                RestoreSourceStates(originalState);
+            }
+        }
+
+        private void CollectSourceStates(IBehaviorContainerCollection behaviorContainers, List<Tuple<IndependentSourceParameters, double, double>> state)
+        {
+            foreach (var behaviors in behaviorContainers)
+            {
+                if (behaviors.TryGetParameterSet(out IndependentSourceParameters parameters))
                 {
-                    parameters.Item1.AcMagnitude = parameters.Item2;
-                    parameters.Item1.AcPhase = parameters.Item3;
+                    state.Add(Tuple.Create(parameters, parameters.AcMagnitude, parameters.AcPhase));
+                    parameters.AcMagnitude = 0.0;
+                    parameters.AcPhase = 0.0;
                 }
+                if (behaviors.TryGetValue<IEntitiesBehavior>(out var entitiesBehavior))
+                    CollectSourceStates(entitiesBehavior.LocalBehaviors, state);
+            }
+        }
+
+        private void RestoreSourceStates(List<Tuple<IndependentSourceParameters, double, double>> state)
+        {
+            foreach (var parameters in state)
+            {
+                parameters.Item1.AcMagnitude = parameters.Item2;
+                parameters.Item1.AcPhase = parameters.Item3;
             }
         }
 
@@ -195,11 +205,16 @@ namespace SpiceSharp.Simulations
                 rhs.Reset();
             });
 
+            // Prepare all noise sources for the coming
+            foreach (var noise in _noiseBehaviors)
+                noise.Load();
+
             // Apply unit current excitation
             solver.GetElement(posDrive).Add(1.0);
             solver.GetElement(negDrive).Subtract(1.0);
 
-            solver.SolveTransposed(cstate.Solution);
+            solver.ForwardSubstituteTransposed(cstate.Solution);
+            solver.BackwardSubstituteTransposed(cstate.Solution);
             cstate.Solution[0] = 0.0;
         }
     }

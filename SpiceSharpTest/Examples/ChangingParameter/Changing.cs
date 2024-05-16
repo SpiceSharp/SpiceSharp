@@ -26,8 +26,8 @@ namespace SpiceSharpTest.Examples
             var outputExport = new RealVoltageExport(tran, "out");
             tran.ExportSimulationData += (sender, args) =>
             {
-                var time = args.Time;
-                var output = outputExport.Value;
+                double time = args.Time;
+                double output = outputExport.Value;
             };
             // </example_change_parameter_transient>
             // <example_change_parameter_setup>
@@ -47,10 +47,10 @@ namespace SpiceSharpTest.Examples
             tran.BeforeLoad += (sender, args) =>
             {
                 // First we need to figure out the timepoint that will be loaded
-                var time = tran.GetState<IIntegrationMethod>().Time;
+                double time = tran.GetState<IIntegrationMethod>().Time;
 
                 // Then we need to calculate the resistance for "R2"
-                var resistance = 1.0e3 * (1 + time * 1.0e5);
+                double resistance = 1.0e3 * (1 + time * 1.0e5);
 
                 // Now let's update the parameter
                 bp.Resistance = resistance;

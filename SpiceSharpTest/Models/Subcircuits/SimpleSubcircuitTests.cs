@@ -29,7 +29,7 @@ namespace SpiceSharpTest.Models
             // Simulate the circuit
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
-            IEnumerable<double> references = new double[] { 2.5 };
+            IEnumerable<double> references = [2.5];
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Models
             // Simulate the circuit
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealPropertyExport(op, new[] { "X1", "R1" }, "i") };
-            IEnumerable<double> references = new double[] { 5.0 / 2e3 };
+            IEnumerable<double> references = [5.0 / 2e3];
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -79,7 +79,7 @@ namespace SpiceSharpTest.Models
                 new RealPropertyExport(op, new[] { "X1", "Vdiv", "R1" }, "i"),
                 new RealCurrentExport(op, new[] { "X1", "Vdiv", "V1" })
             };
-            IEnumerable<double> references = new double[] { 5.0 / 2e3, 5.0 / 2e3 };
+            IEnumerable<double> references = [5.0 / 2e3, 5.0 / 2e3];
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -111,7 +111,7 @@ namespace SpiceSharpTest.Models
                 new RealPropertyExport(op, new[] { "X1", "Vdiv", "R2" }, "v"),
                 new RealVoltageExport(op, new[] { "X1", "Vdiv", "b" }),
             };
-            IEnumerable<double> references = new double[] { 5.0 / 2e3, 5.0, 2.5, 2.5 };
+            IEnumerable<double> references = [5.0 / 2e3, 5.0, 2.5, 2.5];
             AnalyzeOp(op, ckt, exports, references);
         }
 
@@ -140,23 +140,23 @@ namespace SpiceSharpTest.Models
             var dc = new DC("DC 1", "V1", 1.0,2.0,1.0);
 
             // Create exports
-            string[] subcircuitOutput = { "X1", "Vdiv", "R2" };
+            string[] subcircuitOutput = ["X1", "Vdiv", "R2"];
 
             // Create exports
-            IExport<double>[] exports = {
+            IExport<double>[] exports = [
                 new RealPropertyExport(dc, "V1", "v"),
                 new RealPropertyExport(dc, subcircuitOutput, "v"),
                 new RealPropertyExport(dc, subcircuitOutput, "i"),
                 new RealPropertyExport(dc, subcircuitOutput, "resistance")
-            };
+            ];
 
             double[][] references =
-            {
-                new[] { 1.0, 2.0 },
-                new[] { 0.5, 1.0 },
-                new[] { 1/2e3, 2/2e3},
-                new[] { 1e3, 1e3},
-            };
+            [
+                [1.0, 2.0],
+                [0.5, 1.0],
+                [1/2e3, 2/2e3],
+                [1e3, 1e3],
+            ];
 
             // Run test
             AnalyzeDC(dc, ckt, exports, references);
@@ -187,24 +187,24 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("transient", 1e-9, 2e-11);
 
             // Create exports
-            string[] subcircuitOutput = { "X1", "Vdiv", "R2" };
+            string[] subcircuitOutput = ["X1", "Vdiv", "R2"];
 
             // Create exports
-            IExport<double>[] exports = { new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
+            IExport<double>[] exports = [ new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time),
                                         new RealPropertyExport(tran, "V1", "v"),
                                         new RealPropertyExport(tran, subcircuitOutput, "v"),
                                         new RealPropertyExport(tran, subcircuitOutput, "i"),
                                         new RealPropertyExport(tran, subcircuitOutput, "resistance")
-                                        };
+                                        ];
 
             // Create references
-            IEnumerable<Func<double, double>> references = new Func<double, double>[] {
+            IEnumerable<Func<double, double>> references = [
                 t => t,
                 t => 5.0,
                 t => 2.5,
                 t => 5/2e3,
                 t => 1e3,
-            };
+            ];
 
             // Run test
             AnalyzeTransient(tran, ckt, exports, references);
@@ -237,18 +237,18 @@ namespace SpiceSharpTest.Models
             var ac = new AC("AC 1", new DecadeSweep(0.1, 1e6, 2));
 
             // Create exports
-            IExport<Complex>[] exports = {
+            IExport<Complex>[] exports = [
                 new ComplexPropertyExport(ac, new[] { "X1", "Vdiv", "R2" }, "i"),
                 new ComplexCurrentExport(ac, new[] { "X1", "Vdiv", "V1" }),
                 new ComplexVoltageExport(ac, new[] { "X1", "Vdiv", "b" }),
-                };
+                ];
 
             Complex[][] references =
-            {
-                new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
-                new Complex[] { 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3 },
-                new Complex[] { 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 },
-            };
+            [
+                [0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3],
+                [0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3, 0.5e-3],
+                [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+            ];
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);
@@ -278,140 +278,9 @@ namespace SpiceSharpTest.Models
             // Simulate the circuit
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
-            IEnumerable<double> references = new double[] { 1.0 };
+            IEnumerable<double> references = [1.0];
             AnalyzeOp(op, ckt, exports, references);
             DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_LocalSolverSubcircuitOp_Expect_Reference()
-        {
-            // No internal nodes
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Resistor("R1", "a", "b", 1e3),
-                new Resistor("R2", "b", "0", 1e3)),
-                "a", "b");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0),
-                new Subcircuit("X1", subckt, "in", "out")
-                    .SetParameter("localsolver", true));
-
-            var op = new OP("op");
-            IExport<double>[] exports = new[] {
-                new RealVoltageExport(op, "out"),
-                new RealVoltageExport(op, new[] { "X1", "b" }),
-            };
-            IEnumerable<double> references = new double[] { 0.5, 0.5 };
-            AnalyzeOp(op, ckt, exports, references);
-            DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_LocalSolverSubcircuitAc_Expect_Reference()
-        {
-            // No internal nodes
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Resistor("R1", "a", "b", 1e3),
-                new Resistor("R2", "b", "0", 1e3)),
-                "a", "b");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
-                new Subcircuit("X1", subckt, "in", "out")
-                    .SetParameter("localsolver", true));
-
-            var ac = new AC("ac", new DecadeSweep(1, 100, 3));
-            IExport<Complex>[] exports = new[] {
-                new ComplexVoltageExport(ac, "out"),
-                new ComplexVoltageExport(ac, new[] { "X1", "b" })
-            };
-            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5, f => 0.5 };
-            AnalyzeAC(ac, ckt, exports, references);
-            DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_LocalSolverSubcircuitOp2_Expect_Reference()
-        {
-            // One internal node
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Resistor("R1", "a", "b", 1e3),
-                new Resistor("R2", "b", "c", 1e3),
-                new Resistor("R3", "b", "0", 1e3)),
-                "a", "c");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0),
-                new Subcircuit("X1", subckt, "in", "out")
-                    .SetParameter("localsolver", true));
-
-            var op = new OP("op");
-            IExport<double>[] exports = new[]
-            {
-                new RealVoltageExport(op, "out"),
-                new RealVoltageExport(op, "X1".Combine("b")),
-                new RealVoltageExport(op, "X1".Combine("c"))
-            };
-            IEnumerable<double> references = new double[] { 0.5, 0.5, 0.5 };
-            AnalyzeOp(op, ckt, exports, references);
-            DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_LocalSolverSubcircuitAC2_Expect_Reference()
-        {
-            // One internal node
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Resistor("R1", "a", "b", 1e3),
-                new Resistor("R2", "b", "c", 1e3),
-                new Resistor("R3", "b", "0", 1e3)),
-                "a", "c");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0).SetParameter("acmag", 1.0),
-                new Subcircuit("X1", subckt, "in", "out")
-                    .SetParameter("localsolver", true));
-
-            var ac = new AC("ac", new DecadeSweep(1, 100, 3));
-            IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
-            IEnumerable<Func<double, Complex>> references = new Func<double, Complex>[] { f => 0.5 };
-            AnalyzeAC(ac, ckt, exports, references);
-            DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_LocalSolverSubcircuitTransient_Expect_Reference()
-        {
-            // With internal states
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new Resistor("R1", "a", "b", 1e3),
-                new Capacitor("C1", "b", "0", 1e-6)),
-                "a", "b");
-            var ckt = new Circuit(
-                new VoltageSource("V1", "in", "0", 1.0),
-                new Subcircuit("X1", subckt, "in", "out")
-                    .SetParameter("localsolver", true));
-
-            var tran = new Transient("transient", 1e-6, 1e-3);
-            tran.TimeParameters.InitialConditions.Add("out", 0.0);
-            IExport<double>[] exports = new[] { new RealVoltageExport(tran, "out") };
-            IEnumerable<Func<double, double>> references = new Func<double, double>[] { t => 1.0 - Math.Exp(-t * 1e3) };
-            AnalyzeTransient(tran, ckt, exports, references);
-            DestroyExports(exports);
-        }
-
-        [Test]
-        public void When_LocalSolverSubcircuitOp3_Expect_Reference()
-        {
-            // Variable that makes an equivalent circuit impossible
-            var subckt = new SubcircuitDefinition(new Circuit(
-                new VoltageSource("V1", "a", "0", 1.0)), "a");
-            var ckt = new Circuit(
-                new Resistor("R1", "in", "out", 1e3),
-                new Resistor("R2", "out", "0", 1e3),
-                new Subcircuit("X1", subckt, "in")
-                    .SetParameter("localsolver", true));
-
-            var op = new OP("op");
-            IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
-            Assert.Throws<NoEquivalentSubcircuitException>(() => op.Run(ckt));
         }
 
         [Test]

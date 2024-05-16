@@ -13,7 +13,7 @@ namespace SpiceSharp.Simulations
     /// </remarks>
     public class VariableMap : IVariableMap
     {
-        private readonly Dictionary<IVariable, int> _map = new Dictionary<IVariable, int>();
+        private readonly Dictionary<IVariable, int> _map = [];
 
         /// <inheritdoc/>
         public int Count => _map.Count;

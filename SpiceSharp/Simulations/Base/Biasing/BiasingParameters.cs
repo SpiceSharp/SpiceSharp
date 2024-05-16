@@ -112,7 +112,7 @@ namespace SpiceSharp.Simulations
         /// iteration (or it will at least try to approach it). If you know an approximate solution
         /// to any voltage node, you can improve convergence by specifying it on this dictionary.
         /// </remarks>
-        public Dictionary<string, double> Nodesets { get; private set; } = new Dictionary<string, double>();
+        public Dictionary<string, double> Nodesets { get; private set; } = [];
 
         /// <summary>
         /// Gets or sets the relative threshold for choosing a pivot.
@@ -156,7 +156,7 @@ namespace SpiceSharp.Simulations
         public BiasingParameters Clone()
         {
             var clone = (BiasingParameters)MemberwiseClone();
-            clone.Nodesets = new Dictionary<string, double>();
+            clone.Nodesets = [];
             foreach (var pair in Nodesets)
                 clone.Nodesets.Add(pair.Key, pair.Value);
             return clone;

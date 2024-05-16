@@ -68,7 +68,7 @@ namespace SpiceSharp.General
         public void CopyTo(V[] array, int arrayIndex)
         {
             var arr = _dictionary.Values.ToArray();
-            for (var i = 0; i < arr.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
                 array[i + arrayIndex] = arr[i];
         }
 

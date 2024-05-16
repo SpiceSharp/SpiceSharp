@@ -120,6 +120,9 @@ namespace SpiceSharp.Components.Bipolars
             _flicker.Initialize();
         }
 
+        /// <inheritdoc />
+        void INoiseBehavior.Load() { }
+
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {

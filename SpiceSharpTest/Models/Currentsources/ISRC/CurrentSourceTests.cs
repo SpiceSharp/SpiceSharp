@@ -38,10 +38,10 @@ namespace SpiceSharpTest.Models
             exports[0] = new RealPropertyExport(op, "I1", "v");
             exports[1] = new RealPropertyExport(op, "R1", "i");
             double[] references =
-            {
+            [
                 -10.0e3,
                 10
-            };
+            ];
 
             // Run test
             AnalyzeOp(op, ckt, exports, references);
@@ -63,7 +63,7 @@ namespace SpiceSharpTest.Models
                 new Resistor("R1", "IN", "B1", resistance),
                 new Resistor($"R{count}", $"B{count - 1}", "0", resistance)
                 );
-            for (var i = 2; i <= count - 1; i++)
+            for (int i = 2; i <= count - 1; i++)
             {
                 ckt.Add(new Resistor($"R{i}", $"B{i - 1}", $"B{i}", resistance));
             }
@@ -79,21 +79,21 @@ namespace SpiceSharpTest.Models
              * 1) a current through each resistor is 100A
              * 2) a voltage across the current source is 500000V (currentInAmp * resistanceInOhms * resistorCount)
              */
-            var currentInAmp = 100;
-            var resistanceInOhms = 10;
-            var resistorCount = 500;
+            int currentInAmp = 100;
+            int resistanceInOhms = 10;
+            int resistorCount = 500;
             var ckt = CreateResistorsInSeriesCircuit(resistorCount, currentInAmp, resistanceInOhms);
             var op = new OP("op");
 
             // Create exports
             var exports = new List<IExport<double>>();
-            for (var i = 1; i <= resistorCount; i++)
+            for (int i = 1; i <= resistorCount; i++)
                 exports.Add(new RealPropertyExport(op, $"R{i}", "i"));
             exports.Add(new RealPropertyExport(op, "I1", "v"));
 
             // Add references
             var references = new List<double>();
-            for (var i = 1; i <= resistorCount; i++)
+            for (int i = 1; i <= resistorCount; i++)
                 references.Add(-100);
             references.Add(-currentInAmp * resistanceInOhms * resistorCount);
 

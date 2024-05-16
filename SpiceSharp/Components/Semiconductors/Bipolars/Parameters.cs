@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.Bipolars
         /// The temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _temperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the area of the transistor.

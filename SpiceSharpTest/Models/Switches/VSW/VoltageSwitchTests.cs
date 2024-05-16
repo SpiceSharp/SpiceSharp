@@ -42,11 +42,10 @@ namespace SpiceSharpTest.Models
 
             // Create the simulation, exports and references
             var dc = new DC("DC", "V1", -3, 3, 10e-3);
-            IExport<double>[] exports = { new RealVoltageExport(dc, "out") };
+            IExport<double>[] exports = [new RealVoltageExport(dc, "out")];
             double[][] references =
-            {
-                new[]
-                {
+            [
+                [
                     2.500000000000000e+00, 2.500000000000000e+00, 2.500000000000000e+00, 2.500000000000000e+00,
                     2.500000000000000e+00, 2.500000000000000e+00, 2.500000000000000e+00, 2.500000000000000e+00,
                     2.500000000000000e+00, 2.500000000000000e+00, 2.500000000000000e+00, 2.500000000000000e+00,
@@ -198,8 +197,8 @@ namespace SpiceSharpTest.Models
                     4.995004995004996e-03, 4.995004995004996e-03, 4.995004995004996e-03, 4.995004995004996e-03,
                     4.995004995004996e-03, 4.995004995004996e-03, 4.995004995004996e-03, 4.995004995004996e-03,
                     4.995004995004996e-03
-                }
-            };
+                ]
+            ];
             AnalyzeDC(dc, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -236,11 +235,10 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var tran = new Transient("Tran 1", 0.1e-3, 3e-3);
-            IExport<double>[] exports = { new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time), new RealVoltageExport(tran, "OUT") };
+            IExport<double>[] exports = [new GenericExport<double>(tran, () => tran.GetState<IIntegrationMethod>().Time), new RealVoltageExport(tran, "OUT")];
             double[][] references =
-            {
-                new[]
-                {
+            [
+                [
                     0.000000000000000e+00, 6.000000000000000e-07, 1.200000000000000e-06, 2.400000000000000e-06,
                     4.800000000000000e-06, 9.600000000000000e-06, 1.920000000000000e-05, 3.840000000000000e-05,
                     7.680000000000000e-05, 1.368000000000000e-04, 1.968000000000000e-04, 2.568000000000000e-04,
@@ -265,9 +263,8 @@ namespace SpiceSharpTest.Models
                     2.650000000000000e-03, 2.710000000000000e-03, 2.770000000000000e-03, 2.830000000000000e-03,
                     2.890000000000001e-03, 2.900000000000000e-03, 2.906000000000000e-03, 2.918000000000000e-03,
                     2.942000000000000e-03, 2.990000000000000e-03, 3.000000000000000e-03
-                },
-                new[]
-                {
+                ],
+                [
                     3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00,
                     3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00,
                     3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00,
@@ -292,8 +289,8 @@ namespace SpiceSharpTest.Models
                     3.296703296703298e-03, 3.296703296703298e-03, 3.296703296703298e-03, 3.296703296703298e-03,
                     3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00,
                     3.296703296703297e+00, 3.296703296703297e+00, 3.296703296703297e+00
-                }
-            };
+                ]
+            ];
             AnalyzeTransient(tran, ckt, exports, references);
             DestroyExports(exports);
         }

@@ -136,7 +136,7 @@ namespace SpiceSharpGenerator
                 // Get the set of behaviors for this entity
                 var bindingContext = bindingContexts.GetBindingContext(symbol);
                 var factory = new BehaviorFactoryResolver(symbol, behaviorMap[symbol], bindingContext);
-                var code = factory.Create();
+                string code = factory.Create();
                 context.AddSource(symbol.ToString() + ".Behaviors.cs", code);
             }
         }
@@ -149,7 +149,7 @@ namespace SpiceSharpGenerator
                 var symbol = model.GetDeclaredSymbol(parameterset, context.CancellationToken) as INamedTypeSymbol;
 
                 var factory = new ParameterImportExportResolver(symbol, generatedProperties);
-                var code = factory.Create();
+                string code = factory.Create();
                 context.AddSource($"{symbol}.Named.cs", code);
             }
         }
@@ -168,7 +168,7 @@ namespace SpiceSharpGenerator
                     var @class = symbol.ContainingType;
                     if (!map.TryGetValue(@class, out var list))
                 {
-                        list = new List<(IFieldSymbol, SyntaxTriviaList)>();
+                        list = [];
                         map.Add(@class, list);
                     }
                     list.Add((symbol, field.GetLeadingTrivia()));
@@ -177,7 +177,7 @@ namespace SpiceSharpGenerator
             foreach (var pair in map)
             {
                 var factory = new PropertyResolver(pair.Key, pair.Value);
-                var code = factory.Create();
+                string code = factory.Create();
                 context.AddSource($"{pair.Key.ContainingNamespace}.{pair.Key.Name}.AutoProperties.cs", code);
                 generated.Add(pair.Key, factory.Generated);
             }

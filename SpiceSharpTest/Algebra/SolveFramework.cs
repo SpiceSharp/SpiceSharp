@@ -21,9 +21,9 @@ namespace SpiceSharpTest.Algebra
             sr.ReadLine();
 
             // The second line tells us the dimensions
-            var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+            string line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
             var match = Regex.Match(line, @"^(?<rows>\d+)\s+(?<columns>\d+)\s+(\d+)");
-            var size = int.Parse(match.Groups["rows"].Value);
+            int size = int.Parse(match.Groups["rows"].Value);
             if (int.Parse(match.Groups["columns"].Value) != size)
                 throw new Exception("Matrix is not square");
 
@@ -38,9 +38,9 @@ namespace SpiceSharpTest.Algebra
                 match = Regex.Match(line, @"^(?<row>\d+)\s+(?<column>\d+)\s+(?<value>.*)\s*$");
                 if (!match.Success)
                     throw new Exception("Could not recognize file");
-                var row = int.Parse(match.Groups["row"].Value);
-                var column = int.Parse(match.Groups["column"].Value);
-                var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
+                int row = int.Parse(match.Groups["row"].Value);
+                int column = int.Parse(match.Groups["column"].Value);
+                double value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
 
                 // Set the value in the matrix
                 solver.GetElement(new MatrixLocation(row, column)).Value = value;
@@ -60,9 +60,9 @@ namespace SpiceSharpTest.Algebra
             sr.ReadLine();
 
             // The second line tells us the dimensions
-            var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+            string line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
             var match = Regex.Match(line, @"^(?<rows>\d+)\s+(\d+)");
-            var size = int.Parse(match.Groups["rows"].Value);
+            int size = int.Parse(match.Groups["rows"].Value);
 
             // All subsequent lines are of the format [row] [column] [value]
             while (!sr.EndOfStream)
@@ -75,8 +75,8 @@ namespace SpiceSharpTest.Algebra
                 match = Regex.Match(line, @"^(?<row>\d+)\s+(?<value>.*)\s*$");
                 if (!match.Success)
                     throw new Exception("Could not recognize file");
-                var row = int.Parse(match.Groups["row"].Value);
-                var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
+                int row = int.Parse(match.Groups["row"].Value);
+                double value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
 
                 // Set the value in the matrix
                 solver.GetElement(row).Value = value;
@@ -96,9 +96,9 @@ namespace SpiceSharpTest.Algebra
             sr.ReadLine();
 
             // The second line tells us the dimensions
-            var line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
+            string line = sr.ReadLine() ?? throw new Exception("Invalid Mtx file");
             var match = Regex.Match(line, @"^(?<rows>\d+)\s+(\d+)");
-            var size = int.Parse(match.Groups["rows"].Value);
+            int size = int.Parse(match.Groups["rows"].Value);
 
             // All subsequent lines are of the format [row] [column] [value]
             while (!sr.EndOfStream)
@@ -111,8 +111,8 @@ namespace SpiceSharpTest.Algebra
                 match = Regex.Match(line, @"^(?<row>\d+)\s+(?<value>.*)\s*$");
                 if (!match.Success)
                     throw new Exception("Could not recognize file");
-                var row = int.Parse(match.Groups["row"].Value);
-                var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
+                int row = int.Parse(match.Groups["row"].Value);
+                double value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
 
                 // Set the value in the matrix
                 vector[row] = value;
@@ -145,7 +145,7 @@ namespace SpiceSharpTest.Algebra
                     {
                         int row = int.Parse(match.Groups["row"].Value);
                         int col = int.Parse(match.Groups["col"].Value);
-                        var value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
+                        double value = double.Parse(match.Groups["value"].Value, CultureInfo.InvariantCulture);
                         solver.GetElement(new MatrixLocation(row, col)).Value = value;
                     }
                 }
@@ -154,10 +154,10 @@ namespace SpiceSharpTest.Algebra
             // Read the vector file
             using (var reader = new StreamReader(vecFilename))
             {
-                var index = 1;
+                int index = 1;
                 while (!reader.EndOfStream && (line = reader.ReadLine()) != null)
                 {
-                    var value = double.Parse(line, CultureInfo.InvariantCulture);
+                    double value = double.Parse(line, CultureInfo.InvariantCulture);
                     solver.GetElement(index).Value = value;
                     index++;
                 }

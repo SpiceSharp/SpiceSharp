@@ -124,10 +124,10 @@ namespace SpiceSharp.Components.Bipolars
         /// <inheritdoc/>
         void IFrequencyBehavior.InitializeParameters()
         {
-            var vbe = VoltageBe;
-            var vbc = VoltageBc;
-            var vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
-            var vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
+            double vbe = VoltageBe;
+            double vbc = VoltageBc;
+            double vbx = ModelParameters.BipolarType * (BiasingState.Solution[_baseNode] - BiasingState.Solution[_collectorPrimeNode]);
+            double vcs = ModelParameters.BipolarType * (BiasingState.Solution[_substrateNode] - BiasingState.Solution[_collectorPrimeNode]);
             CalculateCapacitances(vbe, vbc, vbx, vcs);
         }
 
@@ -135,13 +135,13 @@ namespace SpiceSharp.Components.Bipolars
         void IFrequencyBehavior.Load()
         {
             var cstate = _complex;
-            var gcpr = ModelTemperature.CollectorConduct * Parameters.Area;
-            var gepr = ModelTemperature.EmitterConduct * Parameters.Area;
-            var gpi = ConductancePi;
-            var gmu = ConductanceMu;
+            double gcpr = ModelTemperature.CollectorConduct * Parameters.Area;
+            double gepr = ModelTemperature.EmitterConduct * Parameters.Area;
+            double gpi = ConductancePi;
+            double gmu = ConductanceMu;
             Complex gm = Transconductance;
-            var go = OutputConductance;
-            var td = ModelTemperature.ExcessPhaseFactor;
+            double go = OutputConductance;
+            double td = ModelTemperature.ExcessPhaseFactor;
             if (!td.Equals(0)) // Avoid computations
             {
                 var arg = td * cstate.Laplace;
@@ -150,14 +150,14 @@ namespace SpiceSharp.Components.Bipolars
                 gm *= Complex.Exp(-arg);
                 gm -= go;
             }
-            var gx = ConductanceX;
+            double gx = ConductanceX;
             var xcpi = CapBe * cstate.Laplace;
             var xcmu = CapBc * cstate.Laplace;
             var xcbx = CapBx * cstate.Laplace;
             var xccs = CapCs * cstate.Laplace;
             var xcmcb = Geqcb * cstate.Laplace;
 
-            var m = Parameters.ParallelMultiplier;
+            double m = Parameters.ParallelMultiplier;
             _elements.Add(
                 gcpr * m,
                 (gx + xcbx) * m,

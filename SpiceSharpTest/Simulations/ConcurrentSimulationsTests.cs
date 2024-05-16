@@ -26,8 +26,8 @@ namespace SpiceSharpTest.Simulations
 
             // Do a DC sweep where one of the sweeps is a parameter
             var dcSimulations = new List<DC>();
-            var n = 4;
-            for (var i = 0; i < n; i++)
+            int n = 4;
+            for (int i = 0; i < n; i++)
             {
                 var dc = new DC("DC " + i);
                 dc.DCParameters.Sweeps.Add(new ParameterSweep("R2", "resistance", new LinearSweep(0.0, 1e4, 1e3), container =>
@@ -37,15 +37,15 @@ namespace SpiceSharpTest.Simulations
                 dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
                 dc.ExportSimulationData += (sender, args) =>
                 {
-                    var resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
-                    var voltage = dc.GetCurrentSweepValue()[1];
-                    var expected = voltage * resistance / (resistance + 1.0e4);
+                    double resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
+                    double voltage = dc.GetCurrentSweepValue()[1];
+                    double expected = voltage * resistance / (resistance + 1.0e4);
                     Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
                 };
 
                 dcSimulations.Add(dc);
             }
-            var maxConcurrentSimulations = 2;
+            int maxConcurrentSimulations = 2;
 
             System.Threading.Tasks.Parallel.ForEach(
                 dcSimulations,
@@ -63,9 +63,9 @@ namespace SpiceSharpTest.Simulations
             );
 
             var transientSimulations = new List<Transient>();
-            var n = 1000;
+            int n = 1000;
 
-            for (var i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 // Create the transient analysis
                 var tran = new Transient("Tran 1", 1e-6, 10.0);
@@ -77,7 +77,7 @@ namespace SpiceSharpTest.Simulations
                 transientSimulations.Add(tran);
             }
 
-            var maxConcurrentSimulations = 8;
+            int maxConcurrentSimulations = 8;
             System.Threading.Tasks.Parallel.ForEach(
                 transientSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },

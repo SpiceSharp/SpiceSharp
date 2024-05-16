@@ -15,7 +15,7 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_SimpleDC_Expect_Reference()
         {
-            var gain = 12.0;
+            double gain = 12.0;
 
             // Build circuit
             var ckt = new Circuit(
@@ -25,8 +25,8 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var dc = new DC("DC", "V1", -10, 10, 1e-3);
-            IExport<double>[] exports = { new RealVoltageExport(dc, "out") };
-            Func<double, double>[] references = { sweep => gain * sweep };
+            IExport<double>[] exports = [new RealVoltageExport(dc, "out")];
+            Func<double, double>[] references = [sweep => gain * sweep];
             AnalyzeDC(dc, ckt, exports, references);
             DestroyExports(exports);
         }
@@ -34,8 +34,8 @@ namespace SpiceSharpTest.Models
         [Test]
         public void When_SimpleSmallSignal_Expect_Reference()
         {
-            var magnitude = 0.9;
-            var gain = 12.0;
+            double magnitude = 0.9;
+            double gain = 12.0;
 
             // Build circuit
             var ckt = new Circuit(
@@ -46,8 +46,8 @@ namespace SpiceSharpTest.Models
 
             // Build simulation, exports and references
             var ac = new AC("AC", new DecadeSweep(1.0, 10e3, 4));
-            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
-            Func<double, Complex>[] references = { sweep => gain * magnitude };
+            IExport<Complex>[] exports = [new ComplexVoltageExport(ac, "out")];
+            Func<double, Complex>[] references = [sweep => gain * magnitude];
             AnalyzeAC(ac, ckt, exports, references);
             DestroyExports(exports);
         }

@@ -5,7 +5,7 @@ using System.Security.Permissions;
 namespace SpiceSharp
 {
     /// <summary>
-    /// An exception that is thrown when a problem occurs with the generic type of a method.
+    /// An exception that is thrown when a problem occurs find behaviors.
     /// </summary>
     /// <seealso cref="SpiceSharpException" />
     [Serializable]

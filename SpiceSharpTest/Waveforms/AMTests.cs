@@ -35,7 +35,7 @@ namespace SpiceSharpTest.Waveforms
             var tran = new Transient("tran", 1e-6, 1);
             tran.ExportSimulationData += (sender, args) =>
             {
-                var time = args.Time - td;
+                double time = args.Time - td;
                 if (time <= 0)
                     Assert.AreEqual(0.0, args.GetVoltage("a"), 1e-12);
                 else

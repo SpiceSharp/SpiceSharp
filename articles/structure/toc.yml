@@ -1,4 +1,4 @@
-- name: Spice# Flow
+- name: Spice# simulation Flow
   href: flow.md
 - name: Iterating to a solution
   href: iterate.md
@@ -8,3 +8,7 @@
   href: frequency.md
 - name: Transient analysis
   href: transient.md
+- name: Noise analysis
+  href: noise.md
+- name: Parallelization
+  href: parallel.md

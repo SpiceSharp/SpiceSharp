@@ -109,7 +109,7 @@ namespace SpiceSharp.Simulations
             }
 
             // Enumerate the points
-            foreach (var pt in Points)
+            foreach (double pt in Points)
             {
                 setter(pt);
                 Update?.Invoke(behaviors);

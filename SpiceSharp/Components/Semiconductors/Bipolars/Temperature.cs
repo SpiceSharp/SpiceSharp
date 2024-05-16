@@ -186,28 +186,28 @@ namespace SpiceSharp.Components.Bipolars
             if (!Parameters.Temperature.Given)
                 Parameters.Temperature = new GivenParameter<double>(_temperature.Temperature, false);
             Vt = Parameters.Temperature * Constants.KOverQ;
-            var fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
-            var egfet = 1.16 - 7.02e-4 * Parameters.Temperature * Parameters.Temperature / (Parameters.Temperature + 1108);
-            var arg = -egfet / (2 * Constants.Boltzmann * Parameters.Temperature) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature +
+            double fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
+            double egfet = 1.16 - 7.02e-4 * Parameters.Temperature * Parameters.Temperature / (Parameters.Temperature + 1108);
+            double arg = -egfet / (2 * Constants.Boltzmann * Parameters.Temperature) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature +
                                                                                                                 Constants.ReferenceTemperature));
-            var pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
+            double pbfact = -2 * Vt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
-            var ratlog = Math.Log(Parameters.Temperature / ModelParameters.NominalTemperature);
-            var ratio1 = Parameters.Temperature / ModelParameters.NominalTemperature - 1;
-            var factlog = ratio1 * ModelParameters.EnergyGap / Vt + ModelParameters.TempExpIs * ratlog;
-            var factor = Math.Exp(factlog);
+            double ratlog = Math.Log(Parameters.Temperature / ModelParameters.NominalTemperature);
+            double ratio1 = Parameters.Temperature / ModelParameters.NominalTemperature - 1;
+            double factlog = ratio1 * ModelParameters.EnergyGap / Vt + ModelParameters.TempExpIs * ratlog;
+            double factor = Math.Exp(factlog);
             TempSaturationCurrent = ModelParameters.SatCur * factor;
-            var bfactor = Math.Exp(ratlog * ModelParameters.BetaExponent);
+            double bfactor = Math.Exp(ratlog * ModelParameters.BetaExponent);
             TempBetaForward = ModelParameters.BetaF * bfactor;
             TempBetaReverse = ModelParameters.BetaR * bfactor;
             TempBeLeakageCurrent = ModelParameters.LeakBeCurrent * Math.Exp(factlog / ModelParameters.LeakBeEmissionCoefficient) / bfactor;
             TempBcLeakageCurrent = ModelParameters.LeakBcCurrent * Math.Exp(factlog / ModelParameters.LeakBcEmissionCoefficient) / bfactor;
 
-            var pbo = (ModelParameters.PotentialBe - pbfact) / ModelTemperature.Factor1;
-            var gmaold = (ModelParameters.PotentialBe - pbo) / pbo;
+            double pbo = (ModelParameters.PotentialBe - pbfact) / ModelTemperature.Factor1;
+            double gmaold = (ModelParameters.PotentialBe - pbo) / pbo;
             TempBeCap = ModelParameters.DepletionCapBe / (1 + ModelParameters.JunctionExpBe * (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             TempBePotential = fact2 * pbo + pbfact;
-            var gmanew = (TempBePotential - pbo) / pbo;
+            double gmanew = (TempBePotential - pbo) / pbo;
             TempBeCap *= 1 + ModelParameters.JunctionExpBe * (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew);
 
             pbo = (ModelParameters.PotentialBc - pbfact) / ModelTemperature.Factor1;

@@ -25,7 +25,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
         /// <summary>
         /// The common temperature-dependent properties.
         /// </summary>
-        protected readonly TemperatureProperties Properties = new TemperatureProperties();
+        protected readonly TemperatureProperties Properties = new();
 
         /// <summary>
         /// The model parameters.
@@ -89,13 +89,13 @@ namespace SpiceSharp.Components.Mosfets.Level2
             // here->MOS2von = 0;
 
             Properties.TempVt = Parameters.Temperature * Constants.KOverQ;
-            var ratio = Parameters.Temperature / ModelParameters.NominalTemperature;
-            var fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
-            var kt = Parameters.Temperature * Constants.Boltzmann;
-            var egfet = 1.16 - (7.02e-4 * Parameters.Temperature * Parameters.Temperature) /
+            double ratio = Parameters.Temperature / ModelParameters.NominalTemperature;
+            double fact2 = Parameters.Temperature / Constants.ReferenceTemperature;
+            double kt = Parameters.Temperature * Constants.Boltzmann;
+            double egfet = 1.16 - (7.02e-4 * Parameters.Temperature * Parameters.Temperature) /
                     (Parameters.Temperature + 1108);
-            var arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
-            var pbfact = -2 * Properties.TempVt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
+            double arg = -egfet / (kt + kt) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
+            double pbfact = -2 * Properties.TempVt * (1.5 * Math.Log(fact2) + Constants.Charge * arg);
 
             if (ModelParameters.DrainResistance.Given)
             {
@@ -134,10 +134,10 @@ namespace SpiceSharp.Components.Mosfets.Level2
             if (Parameters.Length - 2 * ModelParameters.LateralDiffusion <= 0)
                 throw new SpiceSharpException("{0}, {1}: Effective channel length is less than zero".FormatString(ModelTemperature.Name, Name));
 
-            var ratio4 = ratio * Math.Sqrt(ratio);
+            double ratio4 = ratio * Math.Sqrt(ratio);
             Properties.TempTransconductance = ModelParameters.Transconductance / ratio4;
             Properties.TempSurfaceMobility = ModelParameters.SurfaceMobility / ratio4;
-            var phio = (ModelParameters.Phi - ModelTemperature.Properties.PbFactor1) / ModelTemperature.Properties.Factor1;
+            double phio = (ModelParameters.Phi - ModelTemperature.Properties.PbFactor1) / ModelTemperature.Properties.Factor1;
             Properties.TempPhi = fact2 * phio + pbfact;
             Properties.TempVbi = ModelParameters.Vt0 - ModelParameters.MosfetType *
                         (ModelParameters.Gamma * Math.Sqrt(ModelParameters.Phi))
@@ -149,9 +149,9 @@ namespace SpiceSharp.Components.Mosfets.Level2
                     Math.Exp(-egfet / Properties.TempVt + ModelTemperature.Properties.EgFet1 / ModelTemperature.Properties.Vtnom);
             Properties.TempSatCurDensity = ModelParameters.JunctionSatCurDensity *
                     Math.Exp(-egfet / Properties.TempVt + ModelTemperature.Properties.EgFet1 / ModelTemperature.Properties.Vtnom);
-            var pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.Properties.PbFactor1) / ModelTemperature.Properties.Factor1;
-            var gmaold = (ModelParameters.BulkJunctionPotential - pbo) / pbo;
-            var capfact = 1 / (1 + ModelParameters.BulkJunctionBotGradingCoefficient *
+            double pbo = (ModelParameters.BulkJunctionPotential - ModelTemperature.Properties.PbFactor1) / ModelTemperature.Properties.Factor1;
+            double gmaold = (ModelParameters.BulkJunctionPotential - pbo) / pbo;
+            double capfact = 1 / (1 + ModelParameters.BulkJunctionBotGradingCoefficient *
                     (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             Properties.TempCbd = ModelParameters.CapBd * capfact;
             Properties.TempCbs = ModelParameters.CapBs * capfact;
@@ -160,7 +160,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
                     (4e-4 * (ModelParameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
             Properties.TempCjsw = ModelParameters.SidewallCapFactor * capfact;
             Properties.TempBulkPotential = fact2 * pbo + pbfact;
-            var gmanew = (Properties.TempBulkPotential - pbo) / pbo;
+            double gmanew = (Properties.TempBulkPotential - pbo) / pbo;
             capfact = (1 + ModelParameters.BulkJunctionBotGradingCoefficient *
                     (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew));
             Properties.Cbd *= capfact;
@@ -198,8 +198,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
             else
                 czbdsw = 0;
             arg = 1 - ModelParameters.ForwardCapDepletionCoefficient;
-            var sarg = Math.Exp((-ModelParameters.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
-            var sargsw = Math.Exp((-ModelParameters.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
+            double sarg = Math.Exp((-ModelParameters.BulkJunctionBotGradingCoefficient) * Math.Log(arg));
+            double sargsw = Math.Exp((-ModelParameters.BulkJunctionSideGradingCoefficient) * Math.Log(arg));
             Properties.Cbd = czbd;
             Properties.CbdSidewall = czbdsw;
             Properties.F2d = czbd * (1 - ModelParameters.ForwardCapDepletionCoefficient *

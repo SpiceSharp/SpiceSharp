@@ -12,6 +12,11 @@ namespace SpiceSharp.Components.ParallelComponents
     public class ParallelBindingContext : BindingContext
     {
         /// <summary>
+        /// Gets the current simulation entity behaviors.
+        /// </summary>
+        public IBehaviorContainerCollection LocalBehaviors => Simulation.EntityBehaviors;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ParallelBindingContext"/> class.
         /// </summary>
         /// <param name="entity">The entity.</param>

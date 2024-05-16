@@ -53,12 +53,12 @@ namespace SpiceSharp.Algebra
 
             // Allocate rows
             _rows = new Row[_initialSize + 1];
-            for (var i = 1; i <= _initialSize; i++)
+            for (int i = 1; i <= _initialSize; i++)
                 _rows[i] = new Row();
 
             // Allocate columns
             _columns = new Column[_initialSize + 1];
-            for (var i = 1; i <= _initialSize; i++)
+            for (int i = 1; i <= _initialSize; i++)
                 _columns[i] = new Column();
 
             // Other
@@ -79,12 +79,12 @@ namespace SpiceSharp.Algebra
 
             // Allocate rows
             _rows = new Row[_allocatedSize + 1];
-            for (var i = 1; i <= _allocatedSize; i++)
+            for (int i = 1; i <= _allocatedSize; i++)
                 _rows[i] = new Row();
 
             // Allocate columns
             _columns = new Column[_allocatedSize + 1];
-            for (var i = 1; i <= _allocatedSize; i++)
+            for (int i = 1; i <= _allocatedSize; i++)
                 _columns[i] = new Column();
 
             // Other
@@ -195,11 +195,7 @@ namespace SpiceSharp.Algebra
 
             // Simplify algorithm: first index is always the lowest one
             if (row2 < row1)
-            {
-                var tmp = row1;
-                row1 = row2;
-                row2 = tmp;
-            }
+                (row2, row1) = (row1, row2);
             if (row2 > Size)
                 Expand(row2);
 
@@ -208,9 +204,7 @@ namespace SpiceSharp.Algebra
             var row2Element = _rows[row2].FirstInRow;
 
             // Swap the two rows
-            var tmpRow = _rows[row1];
-            _rows[row1] = _rows[row2];
-            _rows[row2] = tmpRow;
+            (_rows[row2], _rows[row1]) = (_rows[row1], _rows[row2]);
 
             // Reset the diagonal elements
             _diagonal[row1] = null;
@@ -274,9 +268,7 @@ namespace SpiceSharp.Algebra
             // Simplify algorithm: column1 is always the lowest index
             if (column2 < column1)
             {
-                var tmp = column1;
-                column1 = column2;
-                column2 = tmp;
+                (column2, column1) = (column1, column2);
             }
             if (column2 > Size)
                 Expand(column2);
@@ -286,9 +278,7 @@ namespace SpiceSharp.Algebra
             var column2Element = _columns[column2].FirstInColumn;
 
             // Swap the two rows
-            var tmpColumn = _columns[column1];
-            _columns[column1] = _columns[column2];
-            _columns[column2] = tmpColumn;
+            (_columns[column2], _columns[column1]) = (_columns[column1], _columns[column2]);
 
             // Reset the diagonals
             _diagonal[column1] = null;
@@ -345,7 +335,7 @@ namespace SpiceSharp.Algebra
         public void Reset()
         {
             _trashCan.Value = default;
-            for (var r = 1; r <= Size; r++)
+            for (int r = 1; r <= Size; r++)
             {
                 var elt = GetFirstInRow(r);
                 while (elt != null)
@@ -360,11 +350,11 @@ namespace SpiceSharp.Algebra
         public void Clear()
         {
             _trashCan.Value = default;
-            for (var i = 1; i < _columns.Length; i++)
+            for (int i = 1; i < _columns.Length; i++)
                 _columns[i].Clear();
-            for (var i = 1; i < _rows.Length; i++)
+            for (int i = 1; i < _rows.Length; i++)
                 _rows[i].Clear();
-            for (var i = 0; i < _diagonal.Length; i++)
+            for (int i = 0; i < _diagonal.Length; i++)
                 _diagonal[i] = null;
             Array.Resize(ref _columns, _initialSize + 1);
             Array.Resize(ref _rows, _initialSize + 1);
@@ -417,19 +407,19 @@ namespace SpiceSharp.Algebra
             // No need to allocate new vectors
             if (newSize <= _allocatedSize)
                 return;
-            var oldAllocatedSize = _allocatedSize;
+            int oldAllocatedSize = _allocatedSize;
 
             // Allocate some extra space if necessary
             newSize = Math.Max(newSize, (int)(_allocatedSize * _expansionFactor));
 
             // Resize rows
             Array.Resize(ref _rows, newSize + 1);
-            for (var i = oldAllocatedSize + 1; i <= newSize; i++)
+            for (int i = oldAllocatedSize + 1; i <= newSize; i++)
                 _rows[i] = new Row();
 
             // Resize columns
             Array.Resize(ref _columns, newSize + 1);
-            for (var i = oldAllocatedSize + 1; i <= newSize; i++)
+            for (int i = oldAllocatedSize + 1; i <= newSize; i++)
                 _columns[i] = new Column();
 
             // Other

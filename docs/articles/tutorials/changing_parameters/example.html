@@ -86,8 +86,8 @@ var tran = new Transient(&quot;tran&quot;, 1e-6, 10e-5);
 var outputExport = new RealVoltageExport(tran, &quot;out&quot;);
 tran.ExportSimulationData += (sender, args) =&gt;
 {
-    var time = args.Time;
-    var output = outputExport.Value;
+    double time = args.Time;
+    double output = outputExport.Value;
 };
 </code></pre>
 <p>So far so good. Nothing has really changed from before. We will now subscribe to the necessary events to modify the value of <em>R2</em>. We want it to change linearly with time from (1k\Omega) to (11k\Omega).</p>
@@ -120,10 +120,10 @@ tran.AfterSetup += (sender, args) =&gt;
 tran.BeforeLoad += (sender, args) =&gt;
 {
     // First we need to figure out the timepoint that will be loaded
-    var time = tran.GetState&lt;IIntegrationMethod&gt;().Time;
+    double time = tran.GetState&lt;IIntegrationMethod&gt;().Time;
 
     // Then we need to calculate the resistance for &quot;R2&quot;
-    var resistance = 1.0e3 * (1 + time * 1.0e5);
+    double resistance = 1.0e3 * (1 + time * 1.0e5);
 
     // Now let's update the parameter
     bp.Resistance = resistance;
@@ -135,13 +135,14 @@ tran.Run(ckt);
 </code></pre>
 <p>Combining all these code snippets finally results in the following simulation output.</p>
 <p align="center"><img src="images/example_lpf_resdiv_graph.svg"></p>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

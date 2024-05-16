@@ -41,16 +41,16 @@ namespace SpiceSharp.Algebra.Solve
             if (eliminationStep < 1 || eliminationStep > max)
                 return Pivot<ISparseMatrixElement<T>>.Empty;
 
-            var minMarkowitzProduct = int.MaxValue;
+            int minMarkowitzProduct = int.MaxValue;
             ISparseMatrixElement<T> chosen = null;
-            var ratioOfAccepted = 0.0;
-            var ties = 0;
+            double ratioOfAccepted = 0.0;
+            int ties = 0;
 
             /* Used for debugging alongside Spice 3f5
             for (var index = matrix.Size + 1; index > eliminationStep; index--)
             {
                 var i = index > matrix.Size ? eliminationStep : index; */
-            for (var i = eliminationStep; i <= max; i++)
+            for (int i = eliminationStep; i <= max; i++)
             {
                 // Skip the diagonal if we already have a better one
                 if (markowitz.Product(i) > minMarkowitzProduct)
@@ -62,12 +62,12 @@ namespace SpiceSharp.Algebra.Solve
                     continue;
 
                 // Get the magnitude
-                var magnitude = markowitz.Magnitude(diagonal.Value);
+                double magnitude = markowitz.Magnitude(diagonal.Value);
                 if (magnitude <= markowitz.AbsolutePivotThreshold)
                     continue;
 
                 // Check that the pivot is eligible
-                var largest = 0.0;
+                double largest = 0.0;
                 var element = diagonal.Below;
                 while (element != null && element.Row <= max)
                 {
@@ -96,7 +96,7 @@ namespace SpiceSharp.Algebra.Solve
                 {
                     // If we have enough elements with the same (minimum) number of ties, stop searching
                     ties++;
-                    var ratio = largest / magnitude;
+                    double ratio = largest / magnitude;
                     if (ratio < ratioOfAccepted)
                     {
                         chosen = diagonal;

@@ -45,7 +45,7 @@ namespace SpiceSharp.Simulations
              * care of first.
              */
             ISparseMatrixElement<T> twin1 = null, twin2 = null;
-            var start = 1;
+            int start = 1;
             bool anotherPassNeeded;
 
             do
@@ -54,11 +54,11 @@ namespace SpiceSharp.Simulations
                 anotherPassNeeded = swapped = false;
 
                 // Search for zero diagonals with lone twins. 
-                for (var j = start; j <= size; j++)
+                for (int j = start; j <= size; j++)
                 {
                     if (matrix.FindDiagonalElement(j) == null)
                     {
-                        var twins = CountTwins(matrix, j, ref twin1, ref twin2, size);
+                        int twins = CountTwins(matrix, j, ref twin1, ref twin2, size);
                         if (twins == 1)
                         {
                             // Lone twins found, swap columns
@@ -76,7 +76,7 @@ namespace SpiceSharp.Simulations
                 // All lone twins are gone, look for zero diagonals with multiple twins. 
                 if (anotherPassNeeded)
                 {
-                    for (var j = start; !swapped && j <= size; j++)
+                    for (int j = start; !swapped && j <= size; j++)
                     {
                         if (matrix.FindDiagonalElement(j) == null)
                         {
@@ -106,7 +106,7 @@ namespace SpiceSharp.Simulations
             if (matrix is ISparseMatrix<double> m)
             {
                 // Add to the diagonal
-                for (var i = 1; i <= matrix.Size; i++)
+                for (int i = 1; i <= matrix.Size; i++)
                 {
                     var diagonal = m.FindDiagonalElement(i);
                     if (diagonal != null)
@@ -115,7 +115,7 @@ namespace SpiceSharp.Simulations
             }
             else
             {
-                for (var i = 1; i <= matrix.Size; i++)
+                for (int i = 1; i <= matrix.Size; i++)
                     matrix[i, i] += gmin;
             }
         }
@@ -136,7 +136,7 @@ namespace SpiceSharp.Simulations
         private static int CountTwins<M>(M matrix, int column, ref ISparseMatrixElement<T> twin1, ref ISparseMatrixElement<T> twin2, int size)
             where M : ISparseMatrix<T>
         {
-            var twins = 0;
+            int twins = 0;
 
             // Begin `CountTwins'.
             var cTwin1 = matrix.GetFirstInColumn(column);
@@ -145,7 +145,7 @@ namespace SpiceSharp.Simulations
                 // if (Math.Abs(pTwin1.Element.Magnitude) == 1.0)
                 if (Magnitude(cTwin1.Value).Equals(1.0))
                 {
-                    var row = cTwin1.Row;
+                    int row = cTwin1.Row;
                     var cTwin2 = matrix.GetFirstInColumn(row);
                     while (cTwin2 != null && cTwin2.Row != column)
                         cTwin2 = cTwin2.Below;

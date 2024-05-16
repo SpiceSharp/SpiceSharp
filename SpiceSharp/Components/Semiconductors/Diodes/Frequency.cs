@@ -69,13 +69,13 @@ namespace SpiceSharp.Components.Diodes
         {
             var state = _complex;
 
-            var gspr = ModelTemperature.Conductance * Parameters.Area;
-            var geq = LocalConductance;
-            var xceq = LocalCapacitance * state.Laplace.Imaginary;
+            double gspr = ModelTemperature.Conductance * Parameters.Area;
+            double geq = LocalConductance;
+            double xceq = LocalCapacitance * state.Laplace.Imaginary;
 
             // Load Y-matrix
-            var m = Parameters.ParallelMultiplier;
-            var n = Parameters.SeriesMultiplier;
+            double m = Parameters.ParallelMultiplier;
+            double n = Parameters.SeriesMultiplier;
             geq *= m / n;
             gspr *= m / n;
             xceq *= m / n;

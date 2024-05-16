@@ -41,7 +41,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <inheritdoc/>
         public IVariable GetSharedVariable(string name)
         {
-            if (!_nodeMap.TryGetValue(name, out var mapped))
+            if (!_nodeMap.TryGetValue(name, out string mapped))
                 mapped = _name.Combine(name);
             return _parent.GetSharedVariable(mapped);
         }

@@ -28,49 +28,62 @@ namespace SpiceSharp.Algebra
         {
         }
 
-        /// <inheritdoc/>
-        public override void Solve(IVector<double> solution)
-            => Solve(solution, Size);
+        /// <inheritdoc />
+        public override void ForwardSubstitute(IVector<double> solution)
+            => ForwardSubstitute(solution, Size);
 
         /// <summary>
-        /// Solves the system of equations with a matrix that was factored for a number of steps.
+        /// Applies forward substitution, but limits to the given size.
         /// </summary>
         /// <param name="solution">The solution.</param>
-        /// <param name="size">The size of the submatrix to be solved.</param>
+        /// <param name="size">The size.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">
-        /// Thrown if <paramref name="solution"/> does not have <see cref="ISolver{T}.Size"/> elements.
-        /// </exception>
-        public void Solve(IVector<double> solution, int size)
+        /// <exception cref="AlgebraException">Thrown if the matrix is not yet factored.</exception>
+        /// <exception cref="ArgumentException">Thrown if the solution vector is not of size <see cref="PivotingSolver{M, V, T}.Size"/>.</exception>
+        public void ForwardSubstitute(IVector<double> solution, int size)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
                 throw new AlgebraException(Properties.Resources.Algebra_SolverNotFactored.FormatString(nameof(Solve)));
             if (solution.Length != Size)
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(solution.Length, Size), nameof(solution));
-
             if (_intermediate == null || _intermediate.Length != Size + 1)
                 _intermediate = new double[Size + 1];
             size = Math.Min(size, Size);
-            var order = Math.Min(size, Size - Degeneracy);
+            int order = Math.Min(size, Size - Degeneracy);
 
             // Fill in the values from the solution for degenerate cases
-            for (var i = order + 1; i <= Size; i++)
+            for (int i = order + 1; i <= Size; i++)
                 _intermediate[i] = solution[Column.Reverse(i)];
 
             // Forward substitution
-            for (var i = 1; i <= order; i++)
+            for (int i = 1; i <= order; i++)
             {
                 _intermediate[i] = Vector[i];
-                for (var j = 1; j < i; j++)
+                for (int j = 1; j < i; j++)
                     _intermediate[i] -= Matrix[i, j] * _intermediate[j];
             }
+        }
+
+        /// <inheritdoc />
+        public override void BackwardSubstitute(IVector<double> solution)
+            => BackwardSubstitute(solution, Size);
+
+        /// <summary>
+        /// Applies backward substitution.
+        /// </summary>
+        /// <param name="solution">The solution.</param>
+        /// <param name="size">The maximum size.</param>
+        public void BackwardSubstitute(IVector<double> solution, int size)
+        {
+            solution.ThrowIfNull(nameof(solution));
+            size = Math.Min(size, Size);
+            int order = Math.Min(size, Size - Degeneracy);
 
             // Backward substitution
-            for (var i = order; i >= 1; i--)
+            for (int i = order; i >= 1; i--)
             {
-                for (var j = i + 1; j <= size; j++)
+                for (int j = i + 1; j <= size; j++)
                     _intermediate[i] -= Matrix[i, j] * _intermediate[j];
                 _intermediate[i] *= Matrix[i, i];
             }
@@ -78,19 +91,28 @@ namespace SpiceSharp.Algebra
             Column.Unscramble(_intermediate, solution);
         }
 
-        /// <inheritdoc/>
-        public override void SolveTransposed(IVector<double> solution)
-            => SolveTransposed(solution, Size);
+        /// <inheritdoc />
+        public override double ComputeDegenerateContribution(int index)
+        {
+            double result = 0.0;
+            for (int i = 1; i <= Degeneracy; i++)
+                result += Matrix[index, i] * _intermediate[i];
+            return result;
+        }
+
+        /// <inheritdoc />
+        public override void ForwardSubstituteTransposed(IVector<double> solution)
+            => ForwardSubstituteTransposed(solution, Size);
 
         /// <summary>
-        /// Solves the transposed.
+        /// Applies forward substitution of the adjoint matrix, but limits to the given size.
         /// </summary>
-        /// <param name="solution">The solution.</param>
-        /// <param name="steps">The steps.</param>
-        /// <exception cref="AlgebraException">Thrown if the solver is not factored yet.</exception>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="solution" /> does not have <see cref="ISolver{T}.Size" /> elements.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution" /> is <c>null</c>.</exception>
-        public void SolveTransposed(IVector<double> solution, int steps)
+        /// <param name="solution">The solution vector.</param>
+        /// <param name="steps">The steps to substitute.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="solution"/> is <c>null</c>.</exception>
+        /// <exception cref="AlgebraException">Thrown if the matrix is not yet factored.</exception>
+        /// <exception cref="ArgumentException">Thrown if the solution vector is not of size <see cref="PivotingSolver{M, V, T}.Size"/>.</exception>
+        public void ForwardSubstituteTransposed(IVector<double> solution, int steps)
         {
             solution.ThrowIfNull(nameof(solution));
             if (!IsFactored)
@@ -103,24 +125,36 @@ namespace SpiceSharp.Algebra
             steps = Math.Max(steps, Size);
 
             // Scramble
-            for (var i = 1; i <= steps; i++)
+            for (int i = 1; i <= steps; i++)
             {
-                var newIndex = Column[Row.Reverse(i)];
+                int newIndex = Column[Row.Reverse(i)];
                 _intermediate[newIndex] = Vector[i];
             }
 
             // Forward substitution
-            for (var i = 1; i <= steps; i++)
+            for (int i = 1; i <= steps; i++)
             {
-                for (var j = 1; j < i; j++)
+                for (int j = 1; j < i; j++)
                     _intermediate[i] -= Matrix[i, j] * Vector[j];
             }
+        }
 
+        /// <inheritdoc />
+        public override void BackwardSubstituteTransposed(IVector<double> solution)
+            => BackwardSubstituteTransposed(solution, Size);
+
+        /// <summary>
+        /// Applies backward substitution on the adjoint matrix, but limits to the given size.
+        /// </summary>
+        /// <param name="solution">The solution vector.</param>
+        /// <param name="steps">The steps to substitute.</param>
+        public void BackwardSubstituteTransposed(IVector<double> solution, int steps)
+        {
             // Backward substitution
             _intermediate[steps] *= Matrix[steps, steps];
-            for (var i = steps - 1; i >= 1; i--)
+            for (int i = steps - 1; i >= 1; i--)
             {
-                for (var j = i + 1; j <= steps; j++)
+                for (int j = i + 1; j <= steps; j++)
                     _intermediate[i] -= Matrix[i, j] * _intermediate[j];
                 _intermediate[i] *= Matrix[i, i];
             }
@@ -128,24 +162,33 @@ namespace SpiceSharp.Algebra
             Row.Unscramble(_intermediate, solution);
         }
 
+        /// <inheritdoc />
+        public override double ComputeDegenerateContributionTransposed(int index)
+        {
+            double result = 0.0;
+            for (int i = 1; i <= Degeneracy; i++)
+                result += Matrix[i, index] * _intermediate[i];
+            return result;
+        }
+
         /// <inheritdoc/>
         protected override void Eliminate(int step, int size)
         {
-            var diagonal = Matrix[step, step];
+            double diagonal = Matrix[step, step];
             if (diagonal.Equals(0.0))
                 throw new AlgebraException(Properties.Resources.Algebra_InvalidPivot.FormatString(step));
             diagonal = 1.0 / diagonal;
             Matrix[step, step] = diagonal;
 
-            for (var r = step + 1; r <= size; r++)
+            for (int r = step + 1; r <= size; r++)
             {
-                var lead = Matrix[r, step];
+                double lead = Matrix[r, step];
                 if (lead.Equals(0.0))
                     continue;
                 lead *= diagonal;
                 Matrix[r, step] = lead;
 
-                for (var c = step + 1; c <= size; c++)
+                for (int c = step + 1; c <= size; c++)
                     Matrix[r, c] -= lead * Matrix[step, c];
             }
         }

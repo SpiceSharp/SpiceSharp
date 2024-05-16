@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             private readonly FixedTrapezoidal _parameters;
             private int _stateValues = 0;
             private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(3);
-            private readonly List<IIntegrationState> _registeredStates = new List<IIntegrationState>();
+            private readonly List<IIntegrationState> _registeredStates = [];
             private readonly double _xmu;
             private double _ag0, _ag1;
 

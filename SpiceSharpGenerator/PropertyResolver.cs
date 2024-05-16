@@ -16,7 +16,7 @@ namespace SpiceSharpGenerator
         /// <summary>
         /// Gets the generated variables.
         /// </summary>
-        public GeneratedPropertyCollection Generated { get; } = new GeneratedPropertyCollection();
+        public GeneratedPropertyCollection Generated { get; } = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyResolver"/> class.
@@ -36,10 +36,10 @@ namespace SpiceSharpGenerator
             {
                 var g = new GeneratedProperty(field);
                 Generated.Add(g);
-                var name = g.Variable;
+                string name = g.Variable;
 
                 // We first want to copy the trivia
-                foreach (var line in trivia.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string line in trivia.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (!string.IsNullOrWhiteSpace(line))
                         yield return line.Trim();
@@ -49,7 +49,7 @@ namespace SpiceSharpGenerator
                 var sb = new StringBuilder(32);
                 var checks = new List<string>(4);
                 sb.Append("[");
-                var isFirst = true;
+                bool isFirst = true;
                 foreach (var attribute in field.GetAttributes())
                 {
                     if (attribute.IsAttribute("LessThanAttribute"))
@@ -81,7 +81,7 @@ namespace SpiceSharpGenerator
                 yield return $"\tget => {field.Name};";
                 yield return $"\tset";
                 yield return "\t{";
-                foreach (var check in checks)
+                foreach (string check in checks)
                     yield return "\t\t" + check;
                 yield return $"\t\t{field.Name} = value;";
                 yield return "\t}";

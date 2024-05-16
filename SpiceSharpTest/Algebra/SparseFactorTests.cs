@@ -13,30 +13,30 @@ namespace SpiceSharpTest.Algebra
         public void When_Factoring_Expect_Reference()
         {
             double[][] matrixElements =
-            {
-                new[] { 1.0, 1.0, 1.0 },
-                new[] { 2.0, 3.0, 5.0 },
-                new[] { 4.0, 6.0, 8.0 }
-            };
+            [
+                [1.0, 1.0, 1.0],
+                [2.0, 3.0, 5.0],
+                [4.0, 6.0, 8.0]
+            ];
             double[][] expected =
-            {
-                new[] { 1.0, 1.0, 1.0 },
-                new[] { 2.0, 1.0, 3.0 },
-                new[] { 4.0, 2.0, -0.5 }
-            };
+            [
+                [1.0, 1.0, 1.0],
+                [2.0, 1.0, 3.0],
+                [4.0, 2.0, -0.5]
+            ];
 
             // Create matrix
             var solver = new SparseRealSolver();
-            for (var r = 0; r < matrixElements.Length; r++)
-                for (var c = 0; c < matrixElements[r].Length; c++)
+            for (int r = 0; r < matrixElements.Length; r++)
+                for (int c = 0; c < matrixElements[r].Length; c++)
                     solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value = matrixElements[r][c];
 
             // Factor
             solver.Factor();
 
             // Compare
-            for (var r = 0; r < matrixElements.Length; r++)
-                for (var c = 0; c < matrixElements[r].Length; c++)
+            for (int r = 0; r < matrixElements.Length; r++)
+                for (int c = 0; c < matrixElements[r].Length; c++)
                     Assert.AreEqual(expected[r][c], solver.GetElement(new MatrixLocation(r + 1, c + 1)).Value, 1e-12);
         }
 

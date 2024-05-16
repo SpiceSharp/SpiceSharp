@@ -77,7 +77,7 @@ namespace SpiceSharp.Entities
         public ConcurrentEntityCollection()
         {
             _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-            _entities = new Dictionary<string, IEntity>();
+            _entities = [];
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace SpiceSharp.Entities
             _lock.EnterReadLock();
             try
             {
-                result = _entities.Values.ToArray();
+                result = [.. _entities.Values];
             }
             finally
             {

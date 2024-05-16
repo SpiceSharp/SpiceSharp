@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.ParallelComponents
         protected class IterationSimulationState : IIterationSimulationState
         {
             private readonly IIterationSimulationState _parent;
-            private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.NoRecursion);
 
             /// <inheritdoc/>
             IterationModes IIterationSimulationState.Mode => _parent.Mode;

@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations.Biasing
         IParameterized<ComponentRuleParameters>
     {
         private readonly FloatingNodeRule _floatingNode;
-        private readonly VoltageLoopRule _voltageLoop = new VoltageLoopRule();
+        private readonly VoltageLoopRule _voltageLoop = new();
         private readonly VariablePresenceRule _groundPresence;
 
         /// <inheritdoc/>

@@ -49,7 +49,7 @@ namespace SpiceSharp.Components.Diodes
         [DerivedProperty, GreaterThan(-Constants.CelsiusKelvin), Finite]
         public GivenParameter<double> TemperatureCelsius
         {
-            get => new GivenParameter<double>(Temperature - Constants.CelsiusKelvin, Temperature.Given);
+            get => new(Temperature - Constants.CelsiusKelvin, Temperature.Given);
             set => Temperature = new GivenParameter<double>(value + Constants.CelsiusKelvin, value.Given);
         }
 
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.Diodes
         /// The temperature in degrees Kelvin.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _temperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the number of diodes in parallel.

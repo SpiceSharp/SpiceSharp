@@ -13,7 +13,7 @@ namespace SpiceSharp.Components.ParallelComponents
         protected class NoiseSimulationState : INoiseSimulationState
         {
             private readonly INoiseSimulationState _parent;
-            private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+            private readonly ReaderWriterLockSlim _lock = new(LockRecursionPolicy.NoRecursion);
 
             /// <inheritdoc/>
             public double OutputNoiseDensity

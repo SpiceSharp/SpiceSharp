@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class EntitiesBehavior
- </title>
+    <title>Class EntitiesBehavior </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class EntitiesBehavior
- ">
+    <meta name="title" content="Class EntitiesBehavior ">
     <meta name="generator" content="docfx ">
   
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -73,8 +71,7 @@
 
 
 
-  <h1 id="SpiceSharp_Components_Subcircuits_EntitiesBehavior" data-uid="SpiceSharp.Components.Subcircuits.EntitiesBehavior" class="text-break">Class EntitiesBehavior
-</h1>
+  <h1 id="SpiceSharp_Components_Subcircuits_EntitiesBehavior" data-uid="SpiceSharp.Components.Subcircuits.EntitiesBehavior" class="text-break">Class EntitiesBehavior</h1>
   <div class="markdown level0 summary"><p>A behavior that allows access to the entity behaviors inside the subcircuit.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -88,6 +85,7 @@
   </div>
   <div class="implements">
     <h5>Implements</h5>
+    <div><a class="xref" href="SpiceSharp.Components.Common.IEntitiesBehavior.html">IEntitiesBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.IBehaviorContainerCollection.html">IBehaviorContainerCollection</a>&gt;</div>
@@ -151,7 +149,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Components_Subcircuits_EntitiesBehavior_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class EntitiesBehavior : Behavior, IBehavior, IParameterSetCollection, IExportPropertySet&lt;IBehaviorContainerCollection&gt;, IParameterSet</code></pre>
+    <pre><code class="lang-csharp hljs">public class EntitiesBehavior : Behavior, IEntitiesBehavior, IBehavior, IParameterSetCollection, IExportPropertySet&lt;IBehaviorContainerCollection&gt;, IParameterSet</code></pre>
   </div>
   <h3 id="constructors">Constructors
 </h3>
@@ -177,7 +175,8 @@
       <tr>
         <td><a class="xref" href="SpiceSharp.Components.Subcircuits.SubcircuitBindingContext.html">SubcircuitBindingContext</a></td>
         <td><span class="parametername">context</span></td>
-        <td></td>
+        <td><p>The context.</p>
+</td>
       </tr>
     </tbody>
   </table>
@@ -214,7 +213,7 @@ public IBehaviorContainerCollection LocalBehaviors { get; }</code></pre>
 </h3>
   <a id="SpiceSharp_Components_Subcircuits_EntitiesBehavior_GetState_" data-uid="SpiceSharp.Components.Subcircuits.EntitiesBehavior.GetState*"></a>
   <h4 id="SpiceSharp_Components_Subcircuits_EntitiesBehavior_GetState__1" data-uid="SpiceSharp.Components.Subcircuits.EntitiesBehavior.GetState``1">GetState&lt;S&gt;()</h4>
-  <div class="markdown level1 summary"><p>Gets a simulation state from the used simulation.</p>
+  <div class="markdown level1 summary"><p>Gets a simulation state from a potentially local simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
@@ -255,7 +254,7 @@ public IBehaviorContainerCollection LocalBehaviors { get; }</code></pre>
   </table>
   <a id="SpiceSharp_Components_Subcircuits_EntitiesBehavior_TryGetState_" data-uid="SpiceSharp.Components.Subcircuits.EntitiesBehavior.TryGetState*"></a>
   <h4 id="SpiceSharp_Components_Subcircuits_EntitiesBehavior_TryGetState__1___0__" data-uid="SpiceSharp.Components.Subcircuits.EntitiesBehavior.TryGetState``1(``0@)">TryGetState&lt;S&gt;(out S)</h4>
-  <div class="markdown level1 summary"><p>Tries to get a simulation state from the used simulation.</p>
+  <div class="markdown level1 summary"><p>Tries to get a simulation state from a potentially local simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
@@ -291,7 +290,7 @@ public IBehaviorContainerCollection LocalBehaviors { get; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
-        <td><p><code>true</code> if the state was found; otherwise, <code>false</code>.</p>
+        <td><p>Returns <code>true</code> if the state was found; otherwise, <code>false</code>.</p>
 </td>
       </tr>
     </tbody>
@@ -313,6 +312,9 @@ public IBehaviorContainerCollection LocalBehaviors { get; }</code></pre>
     </tbody>
   </table>
   <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="SpiceSharp.Components.Common.IEntitiesBehavior.html">IEntitiesBehavior</a>
+  </div>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a>
   </div>
@@ -348,7 +350,7 @@ public IBehaviorContainerCollection LocalBehaviors { get; }</code></pre>
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

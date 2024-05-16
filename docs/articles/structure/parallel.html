@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Parallelization </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Parallelization ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../../api/images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="parallelization">Parallelization</h1>
+
+<p>Spice# supports a few options for solving circuits in a parallel way, but they are always centered around the <strong><a class="xref" href="../../api/SpiceSharp.Components.Parallel.html">Parallel</a></strong> entity. The parameters of this component contain a dictionary, <em><a class="xref" href="../../api/SpiceSharp.Components.ParallelComponents.Parameters.html#SpiceSharp_Components_ParallelComponents_Parameters_WorkDistributors">WorkDistributors</a></em>, whose contents will decide which behaviors are run in parallel and which ones won't. In order to run behaviors in parallel, you should register a work distributor for the given behavior interface type.</p>
+<p>There is some overhead associated with parallelization. The entity will avoid two behaviors accessing the same matrix and vector elements of a solver at the same time. There is inevitably some overhead associated with this, as well as distributing the work to different threads.</p>
+<p>Using the entity works best in conjunction with entities that are heavily CPU limited. For most &quot;simple&quot; components (e.g. resistors, capacitors, etc.), most of the time would be spent dealing with simultaneously accessing shared memory. However, if there are many <em>complex</em> models (e.g. some bipolar or mosfet model computations) then it is worth a shot.</p>
+<p>If it is possible to group the circuit in rather large subcircuits, it may be useful to try <strong>local solvers</strong> instead, even if those subcircuits contain many &quot;simple&quot; components.</p>
+<h2 id="local-solvers">Local solvers</h2>
+<p>Subcircuits can be configured to use their own local solver with a Y-matrix and right-hand side vector. This causes the subcircuit to first compute a Norton equivalent circuit with respect to all of the ports of the subcircuit (provided that they can be computed). It then loads the global solver with the computed Norton equivalent contributions.</p>
+<p>In order to maximize the performance gain, you must make sure that there are many subcircuits that can be parallelized. Also, each of these subcircuits should contain many internal nodes, and preferably only a few ports in comparison. In worst case, if you use subcircuits with no internal nodes, then the global matrix will still be the same size, and all overhead needed for making local solvers work will only reduce the overall performance.</p>
+<h3 id="how-does-it-work">How does it work?</h3>
+<p>If you are interested in how the math works out, this is your turn. Let us look at the <em>global</em> Y-matrix and right-hand side vector as follows:</p>
+<div class="math">
+\[
+\left(
+\begin{matrix}
+A_{11} &amp; A_{12} &amp; 0 \\
+A_{21} &amp; A_{22} + B_{11} &amp; B_{12} \\
+0 &amp; B_{21} &amp; B_{22}
+\end{matrix}\right) \left(\begin{matrix}
+X_A \\
+X_S \\
+X_B
+\end{matrix}\right) = \left(\begin{matrix}
+Y_{A1} \\
+Y_{A2} + Y_{B1} \\
+Y_{B2}
+\end{matrix}\right)
+\]</div>
+<p>The submatrices labeled <span class="math">\(A_{ij}\)</span> and <span class="math">\(Y_{Ai}\)</span> all contain contributions from the subcircuit. All submatrices labeled as <span class="math">\(B_{ij}\)</span> and <span class="math">\(Y_{Bi}\)</span> contain contributions from the global circuit. What we want to do is to first (at least partially) solve <span class="math">\(A\)</span> locally, and then solve <span class="math">\(B\)</span> afterwards. <span class="math">\(X_A\)</span> is the solution for all <em>internal</em> nodes to the subcircuit, <span class="math">\(X_S\)</span> refers to all <em>shared</em> nodes between the subcircuit and the global circuit (the ports), and <span class="math">\(X_B\)</span> are only part of the global circuit.</p>
+<p>Lets say we have a local solver, which only contains the contributions from <span class="math">\(A\)</span>. After a few LU decomposing steps, we have the following equivalence:</p>
+<div class="math">
+\[
+\left(\begin{matrix}
+A_{11} &amp; A_{12} \\
+A_{21} &amp; A_{22}
+\end{matrix}\right) = \left(\begin{matrix}
+L_A &amp; 0 \\
+A_{21}' &amp; I
+\end{matrix}\right) \left(\begin{matrix}
+U_A &amp; A_{12}' \\
+0 &amp; A_{22}'
+\end{matrix}\right)
+\]</div>
+<p>We have the following system of equations, with <span class="math">\(X_A\)</span> and <span class="math">\(X_S'\)</span> unknown.</p>
+<div class="math">
+\[
+\left(\begin{matrix}
+L_A &amp; 0 \\
+A_{21}' &amp; I
+\end{matrix}\right) \left(\begin{matrix}
+U_A &amp; A_{12}' \\
+0 &amp; A_{22}'
+\end{matrix}\right) \left(\begin{matrix}
+X_A \\
+X_S'
+\end{matrix}\right) = \left(\begin{matrix}
+Y_{A1} \\
+Y_{A2}
+\end{matrix}\right)
+\]</div>
+<p>Writing out these as equations, we find</p>
+<div class="math">
+\[
+\left\{\begin{align*}
+L_A (U_A X_A + A_{12}' X_S) &amp;= Y_{A1} \\
+A_{21}' U_A + A_{22}' &amp;= Y_{A2}
+\end{align*}\right.
+\]</div>
+<p>If we take a look at the first equation, we see that we can actually solve the equation for <span class="math">\(X_A' = U_A X_A + A_{12}' X_S\)</span> by doing a forward substitution. Please remember this factor as it reappears later.</p>
+<p>Let's now take a look what would happen if were to only partially decompose the global matrix. This would result in:</p>
+<div class="math">
+\[
+\left(
+\begin{matrix}
+L_{A} &amp; 0 &amp; 0 \\
+A_{21}' &amp; I &amp; 0 \\
+0 &amp; 0 &amp; I
+\end{matrix}\right) \left(
+\begin{matrix}
+U_A &amp; A_{12}' &amp; 0 \\
+0 &amp; A_{22}' + B_{11}' &amp; B_{12} \\
+0 &amp; B_{21} &amp; B_{22}
+\end{matrix}\right) \left(\begin{matrix}
+X_A \\
+X_S \\
+X_B
+\end{matrix}\right) = \left(\begin{matrix}
+Y_{A1} \\
+Y_{A2} + Y_{B1} \\
+Y_{B2}
+\end{matrix}\right)
+\]</div>
+<p>Writing out these as equations, we have</p>
+<div class="math">
+\[
+\left\{\begin{align*}
+L_A (U_A X_A + A_{12}' X_S) &amp;= Y_{A1} \\
+A_{21}' U_A X_A + (A_{21}' A_{12}' + A_{22}' + B_{11}') X_S + B_{12} X_B &amp;= Y_{A2} + Y_{B1} \\
+B_{21} X_S + B_{22} X_B &amp;= Y_{B2}
+\end{align*}\right.
+\]</div>
+<p>The first equation is actually identical to that of the local solver. The second equation can be rewritten as:</p>
+<div class="math">
+\[
+A_{21}' (U_A X_A + A_{12}' X_S) + B_{12} X_B + (A_{22}' + B_{11}') X_S = Y_{A2} + Y_{B1}
+\]</div>
+<p>We see that the factor <span class="math">\(X_A' = U_A X_A + A_{12}' X_S\)</span> actually appears in both the local solution and the global equations, and this is what allows us to split the LU decomposition into smaller parts. We rewrite:</p>
+<div class="math">
+\[
+(A_{22}' + B_{11}) X_S + B_{12} X_B = Y_{B1} + (Y_{A2} - A_{21}' X_A')
+\]</div>
+<p>After solving the global matrix for <span class="math">\(X_S\)</span> and <span class="math">\(X_B\)</span>, the local matrix can continue with a backward substitution step as well.</p>
+<div class="math">
+\[
+\begin{align*}
+U_A X_A + A_{12}' X_S &amp;= Y_{A1} \\
+&amp;\Downarrow \\
+U_A X_A &amp;= Y_{A1} - A_{12}' X_S
+\end{align*}
+\]</div>
+<p>So in summary:</p>
+<ol>
+<li>We load the local solver (<em>local</em>).</li>
+<li>We perform partial LU decomposition on the local solver, making sure all connections to the outside are at the end of the local solver. This gives us <span class="math">\(A_{12}'\)</span>, <span class="math">\(A_{21}'\)</span>, <span class="math">\(A_{22}'\)</span> (<em>local</em>).</li>
+<li>We perform forward substitution to find <span class="math">\(X_A'\)</span> (<em>local</em>).</li>
+<li>We now load the global solver with <span class="math">\(A_{22}'\)</span> in the Y-matrix and <span class="math">\(Y_{A2} - A_{21}' X_A'\)</span> in the right-hand side vector (<em>global</em>).</li>
+<li>We perform full LU decomposition on the global solver. This gives us <span class="math">\(X_S\)</span> and <span class="math">\(X_B\)</span> (<em>global</em>).</li>
+<li>We finally copy the contributions by <span class="math">\(X_S\)</span> to the local solver, and complete the backward substitution steps to find <span class="math">\(X_A\)</span> (<em>local</em>).</li>
+</ol>
+<p>As can be seen, most steps can be performed locally. This potentially allows many subcircuits to perform not only loading of the solver in parallel, but also to perform part of the LU decomposition in parallel. There is some associated overhead, so it only works well if <span class="math">\(X_A\)</span> is large and <span class="math">\(X_S\)</span> is small. In other words, if the subcircuit has many local nodes and branch currents, and the number of ports of the subcircuit is limited, this method of parallelization can improve performance.</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

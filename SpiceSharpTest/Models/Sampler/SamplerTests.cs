@@ -14,7 +14,7 @@ namespace SpiceSharpTest.Models
             get
             {
                 double time = 0;
-                for (var i = 0; i < 100; i++)
+                for (int i = 0; i < 100; i++)
                 {
                     yield return time;
                     time += 1e-3;

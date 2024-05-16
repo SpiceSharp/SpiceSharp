@@ -95,6 +95,7 @@
     <Compile Include="Algebra\SparseVectorTests.cs" />
     <Compile Include="Algebra\SolveFramework.cs" />
     <Compile Include="Models\Semiconductors\Mosfet\Level3\MOS3Tests.cs" />
+    <Compile Include="Models\Subcircuits\SubcircuitLocalSolverTests.cs" />
     <Compile Include="Models\Subcircuits\SimpleSubcircuitTests.cs" />
     <Compile Include="Models\Switches\CSW\CurrentSwitchTests.cs" />
     <Compile Include="Models\Switches\VSW\VoltageSwitchTests.cs" />

@@ -73,7 +73,7 @@ namespace SpiceSharp.Algebra.Solve
         public bool Factor(int size)
         {
             int order = Math.Min(size, Size) - Degeneracy;
-            for (var step = 1; step <= order; step++)
+            for (int step = 1; step <= order; step++)
             {
                 var pivot = Matrix[step, step];
                 if (pivot.Equals(default))
@@ -87,9 +87,9 @@ namespace SpiceSharp.Algebra.Solve
         /// <inheritdoc/>
         public override int OrderAndFactor()
         {
-            var size = Size;
-            var step = 1;
-            var order = Size - Degeneracy;
+            int size = Size;
+            int step = 1;
+            int order = Size - Degeneracy;
             int max = Size - PivotSearchReduction;
 
             if (!NeedsReordering)

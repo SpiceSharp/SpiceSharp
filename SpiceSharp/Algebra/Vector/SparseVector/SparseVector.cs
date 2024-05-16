@@ -161,7 +161,7 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(target.Length, Length), nameof(target));
             if (target == this)
                 return;
-            for (var i = 1; i <= Length; i++)
+            for (int i = 1; i <= Length; i++)
                 target[i] = GetVectorValue(i);
         }
 
@@ -174,9 +174,7 @@ namespace SpiceSharp.Algebra
                 return;
             if (index2 < index1)
             {
-                var tmp = index1;
-                index1 = index2;
-                index2 = tmp;
+                (index2, index1) = (index1, index2);
             }
 
             // Get the two elements
@@ -354,14 +352,8 @@ namespace SpiceSharp.Algebra
                     second.PreviousInVector.NextInVector = first;
 
                     // Swap element links
-                    var element = first.PreviousInVector;
-                    first.PreviousInVector = second.PreviousInVector;
-                    second.PreviousInVector = element;
-
-                    element = first.NextInVector;
-                    first.NextInVector = second.NextInVector;
-                    second.NextInVector = element;
-
+                    (second.PreviousInVector, first.PreviousInVector) = (first.PreviousInVector, second.PreviousInVector);
+                    (second.NextInVector, first.NextInVector) = (first.NextInVector, second.NextInVector);
                     first.Index = index2;
                     second.Index = index1;
                 }

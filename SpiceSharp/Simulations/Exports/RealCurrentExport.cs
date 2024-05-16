@@ -1,9 +1,6 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components;
-using SpiceSharp.Components.Subcircuits;
+﻿using SpiceSharp.Components;
+using SpiceSharp.Simulations.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -16,49 +13,35 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the name of the voltage source.
         /// </summary>
-        public IReadOnlyList<string> SourcePath { get; }
+        public Reference Source { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
+        /// Initializes a new instance of the <see cref="ComplexCurrentExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="source">The source name.</param>
-        public RealCurrentExport(IBiasingSimulation simulation, string source)
+        public RealCurrentExport(IBiasingSimulation simulation, Reference source)
             : base(simulation)
         {
-            source.ThrowIfNull(nameof(source));
-            SourcePath = new[] { source };
+            if (source.Length == 0)
+                throw new ArgumentException(Properties.Resources.References_IsEmptyReference, nameof(source));
+            Source = source;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealCurrentExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="sourcePath">The path to the source that defines a current.</param>
-        public RealCurrentExport(IBiasingSimulation simulation, IEnumerable<string> sourcePath)
-            : base(simulation)
-        {
-            SourcePath = sourcePath.ThrowIfEmpty(nameof(sourcePath)).ToArray();
-        }
-
-        /// <summary>
-        /// Initializes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void Initialize(object sender, EventArgs e)
         {
-            var behaviorContainer = Simulation.EntityBehaviors[SourcePath[0]];
-            for (int i = 1; i < SourcePath.Count; i++)
-            {
-                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
-                behaviorContainer = behavior.LocalBehaviors[SourcePath[i]];
-            }
-
-            // Find a branched behavior for the current
-            var branchedBehavior = behaviorContainer.GetValue<IBranchedBehavior<double>>();
-            var branch = branchedBehavior.Branch;
+            var behaviors = Source.GetContainer(Simulation);
+            var behavior = behaviors.GetValue<IBranchedBehavior<double>>();
+            var branch = behavior.Branch;
             Extractor = () => branch.Value;
         }
+
+        /// <summary>
+        /// Converts the export to a string.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString()
+            => "I({0})".FormatString(Source);
     }
 }

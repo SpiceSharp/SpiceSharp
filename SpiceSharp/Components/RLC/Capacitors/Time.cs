@@ -71,14 +71,14 @@ namespace SpiceSharp.Components.Capacitors
             // Don't matter for DC analysis
             if (_time.UseDc)
                 return;
-            var vcap = _variables.Positive.Value - _variables.Negative.Value;
+            double vcap = _variables.Positive.Value - _variables.Negative.Value;
 
             // Integrate
             _qcap.Value = Capacitance * vcap;
             _qcap.Derive();
             var info = _qcap.GetContributions(Capacitance);
-            var geq = info.Jacobian;
-            var ceq = info.Rhs;
+            double geq = info.Jacobian;
+            double ceq = info.Rhs;
 
             // Load matrix and rhs vector
             _elements.Add(geq, -geq, -geq, geq, -ceq, ceq);

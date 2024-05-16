@@ -3,7 +3,7 @@
     /// <summary>
     /// Information for filling in the Jacobian matrix and right-hand-side vector.
     /// </summary>
-    public struct JacobianInfo
+    public readonly struct JacobianInfo
     {
         /// <summary>
         /// Gets the jacobian.
@@ -39,7 +39,7 @@
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is JacobianInfo ji)
             {
@@ -58,7 +58,7 @@
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => (Jacobian.GetHashCode() * 13) ^ (Rhs.GetHashCode());
+        public override readonly int GetHashCode() => (Jacobian.GetHashCode() * 13) ^ (Rhs.GetHashCode());
 
         /// <summary>
         /// Implements the operator ==.

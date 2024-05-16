@@ -59,7 +59,7 @@ namespace SpiceSharp.Simulations
             /// <inheritdoc/>
             public IVariable<Complex> CreatePrivateVariable(string name, IUnit unit)
             {
-                var index = _map.Count;
+                int index = _map.Count;
                 var result = new SolverVariable<Complex>(this, name, index, unit);
                 _map.Add(result, index);
                 return result;

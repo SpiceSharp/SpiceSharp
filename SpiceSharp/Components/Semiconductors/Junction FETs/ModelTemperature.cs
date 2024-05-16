@@ -99,15 +99,15 @@ namespace SpiceSharp.Components.JFETs
             if (Parameters.NominalTemperature.Given)
                 Parameters.NominalTemperature = new GivenParameter<double>(_temperature.NominalTemperature, false);
 
-            var vtnom = Constants.KOverQ * Parameters.NominalTemperature;
-            var fact1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
-            var kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
-            var egfet1 = 1.16 - (7.02e-4 * Parameters.NominalTemperature * Parameters.NominalTemperature) /
+            double vtnom = Constants.KOverQ * Parameters.NominalTemperature;
+            double fact1 = Parameters.NominalTemperature / Constants.ReferenceTemperature;
+            double kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
+            double egfet1 = 1.16 - (7.02e-4 * Parameters.NominalTemperature * Parameters.NominalTemperature) /
                          (Parameters.NominalTemperature + 1108);
-            var arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Constants.Boltzmann * 2 * Constants.ReferenceTemperature);
-            var pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Constants.Charge * arg1);
+            double arg1 = -egfet1 / (kt1 + kt1) + 1.1150877 / (Constants.Boltzmann * 2 * Constants.ReferenceTemperature);
+            double pbfact1 = -2 * vtnom * (1.5 * Math.Log(fact1) + Constants.Charge * arg1);
             Pbo = (Parameters.GatePotential - pbfact1) / fact1;
-            var gmaold = (Parameters.GatePotential - Pbo) / Pbo;
+            double gmaold = (Parameters.GatePotential - Pbo) / Pbo;
             Cjfact = 1 / (1 + .5 * (4e-4 * (Parameters.NominalTemperature - Constants.ReferenceTemperature) - gmaold));
 
             Xfc = Math.Log(1 - Parameters.DepletionCapCoefficient);

@@ -27,7 +27,7 @@ namespace SpiceSharp.Algebra.Solve
 
             // Find the first valid singleton we can use
             int singletons = 0, index;
-            for (var i = max + 1; i >= eliminationStep; i--)
+            for (int i = max + 1; i >= eliminationStep; i--)
             {
                 // First check the current pivot, else
                 // search from last to first as this tends to push the higher markowitz
@@ -62,7 +62,7 @@ namespace SpiceSharp.Algebra.Solve
                     if (chosen.Row <= max && chosen.Column <= max)
                     {
                         // Check if it is a valid pivot
-                        var magnitude = markowitz.Magnitude(chosen.Value);
+                        double magnitude = markowitz.Magnitude(chosen.Value);
                         if (magnitude > markowitz.AbsolutePivotThreshold)
                             return new Pivot<ISparseMatrixElement<T>>(chosen, PivotInfo.Good);
                     }
@@ -85,7 +85,7 @@ namespace SpiceSharp.Algebra.Solve
 
                     // First find the biggest magnitude in the column, not counting the pivot candidate
                     var element = chosen.Above;
-                    var largest = 0.0;
+                    double largest = 0.0;
                     while (element != null && element.Row >= eliminationStep)
                     {
                         largest = Math.Max(largest, markowitz.Magnitude(element.Value));
@@ -101,7 +101,7 @@ namespace SpiceSharp.Algebra.Solve
                     // Check if the pivot is valid
                     if (chosen.Row <= max && chosen.Column <= max)
                     {
-                        var magnitude = markowitz.Magnitude(chosen.Value);
+                        double magnitude = markowitz.Magnitude(chosen.Value);
                         if (magnitude > markowitz.AbsolutePivotThreshold &&
                             magnitude > markowitz.RelativePivotThreshold * largest)
                             return new Pivot<ISparseMatrixElement<T>>(chosen, PivotInfo.Good);

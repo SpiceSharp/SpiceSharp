@@ -67,6 +67,6 @@ namespace SpiceSharp.Components.Capacitors
         /// Gets the nominal temperature parameter in degrees Kelvin.
         /// </summary>
         [GreaterThan(0)]
-        private GivenParameter<double> _nominalTemperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _nominalTemperature = new(Constants.ReferenceTemperature, false);
     }
 }

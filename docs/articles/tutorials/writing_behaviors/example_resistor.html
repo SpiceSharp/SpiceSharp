@@ -89,10 +89,10 @@ Y_{B,B} &amp;= \frac{\partial f_B}{\partial v_B} = \frac{1}{R}
 <p>All other <em>Y-matrix</em> contributions are 0. Similarly, we calculate the contributions to the <em>RHS vector</em>:</p>
 <p>$$\begin{aligned}
 RHS_A &amp;= \pmb J_A\pmb x^{(k)} - f_A(...,v_A^{(k)},...,v_B^{(k)},...)\\
-&amp;=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right )\\
+&amp;=\frac{v_A}{R}-\frac{v_B}{R}-\left(\frac{v_A}{R}-\frac{v_B}{R}\right)\\
 &amp;=0\\
 RHS_B &amp;= \pmb J_B\pmb x^{(k)} - f_B(...,v_A^{(k)},...,v_B^{(k)},...)\\
-&amp;=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right )\\
+&amp;=\frac{v_B}{R}-\frac{v_A}{R}-\left(\frac{v_B}{R}-\frac{v_A}{R}\right)\\
 &amp;=0
 \end{aligned}$$</p>
 <p>The first and second terms for the RHS vector cancel each other out. This turns out to be a <em>general property of linear components</em>. Another consequence is that a step of the iterative method is identical to regular Nodal Analysis, and we only need <em>one</em> iteration to find the right solution <em>if we only have linear components</em>. Once a nonlinear component is introduced, a single iteration will not be sufficient anymore.</p>
@@ -110,13 +110,14 @@ Y_{B,B} &amp;+= \frac{1}{R}
 <ul>
 <li>The simulator will give all other components in the circuit a chance to load the matrix with their contributions.</li>
 </ul>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

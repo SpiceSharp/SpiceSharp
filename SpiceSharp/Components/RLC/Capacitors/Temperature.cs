@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.Capacitors
                 if (_mbp == null)
                     throw new SpiceSharpException(Properties.Resources.Components_NoModel.FormatString(Name));
 
-                var width = Parameters.Width.Given
+                double width = Parameters.Width.Given
                     ? Parameters.Width.Value
                     : _mbp.DefaultWidth;
                 capacitance = _mbp.JunctionCap *
@@ -78,11 +78,11 @@ namespace SpiceSharp.Components.Capacitors
             else
                 capacitance = Parameters.Capacitance;
 
-            var factor = 1.0;
+            double factor = 1.0;
 
             if (_mbp != null)
             {
-                var temperatureDiff = Parameters.Temperature - _mbp.NominalTemperature;
+                double temperatureDiff = Parameters.Temperature - _mbp.NominalTemperature;
                 factor = 1.0 + _mbp.TemperatureCoefficient1 * temperatureDiff + _mbp.TemperatureCoefficient2 * temperatureDiff * temperatureDiff;
             }
 

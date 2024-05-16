@@ -93,7 +93,7 @@ var exportVoltage = new ComplexVoltageExport(ac, &quot;out&quot;);
 ac.ExportSimulationData += (sender, args) =&gt;
 {
     var output = exportVoltage.Value;
-    var decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
+    double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
 };
 ac.Run(ckt);
 </code></pre>
@@ -114,13 +114,14 @@ C1 out 0 1u
 </code></pre>
 <p>Plotting the output amplitude in decibels gives the following low-pass filter characteristic, neatly showing the bandwidth to be a bit higher than 10Hz (the exact <span class="math">\(f_{-3dB} = 15.915Hz\)</span>).</p>
 <p align="center"><img src="images/example_ACgraph.svg"></p>
+
 </article>
           </div>
 
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

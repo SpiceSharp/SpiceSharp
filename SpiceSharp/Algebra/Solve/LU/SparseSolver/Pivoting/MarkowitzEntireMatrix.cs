@@ -42,13 +42,13 @@ namespace SpiceSharp.Algebra.Solve
                 return Pivot<ISparseMatrixElement<T>>.Empty;
 
             ISparseMatrixElement<T> chosen = null;
-            var minMarkowitzProduct = long.MaxValue;
+            long minMarkowitzProduct = long.MaxValue;
             double largestMagnitude = 0.0, acceptedRatio = 0.0;
             ISparseMatrixElement<T> largestElement = null;
-            var ties = 0;
+            int ties = 0;
 
             // Start search of matrix on column by column basis
-            for (var i = eliminationStep; i <= max; i++)
+            for (int i = eliminationStep; i <= max; i++)
             {
                 // Find an entry point to the interesting part of the column
                 var lowest = matrix.GetLastInColumn(i);
@@ -58,7 +58,7 @@ namespace SpiceSharp.Algebra.Solve
                     continue;
 
                 // Find the biggest magnitude in the column for checking valid pivots later
-                var largest = 0.0;
+                double largest = 0.0;
                 var element = lowest;
                 while (element != null && element.Row >= eliminationStep)
                 {
@@ -73,8 +73,8 @@ namespace SpiceSharp.Algebra.Solve
                 while (element != null && element.Row >= eliminationStep)
                 {
                     // Find the magnitude and Markowitz product
-                    var magnitude = markowitz.Magnitude(element.Value);
-                    var product = markowitz.RowCount(element.Row) * markowitz.ColumnCount(element.Column);
+                    double magnitude = markowitz.Magnitude(element.Value);
+                    int product = markowitz.RowCount(element.Row) * markowitz.ColumnCount(element.Column);
 
                     // In the case no valid pivot is available, at least return the largest element
                     if (magnitude > largestMagnitude)
@@ -103,7 +103,7 @@ namespace SpiceSharp.Algebra.Solve
                         {
                             // This case handles Markowitz ties
                             ties++;
-                            var ratio = largest / magnitude;
+                            double ratio = largest / magnitude;
                             if (ratio < acceptedRatio)
                             {
                                 chosen = element;

@@ -12,7 +12,7 @@ namespace SpiceSharp.Validation
     public partial class FloatingNodeRule : IConductiveRule
     {
         private readonly Group _representative;
-        private readonly Dictionary<IVariable, Group> _dcGroups = new Dictionary<IVariable, Group>(), _acGroups = new Dictionary<IVariable, Group>();
+        private readonly Dictionary<IVariable, Group> _dcGroups = [], _acGroups = [];
         private int _dcGroupCount, _acGroupCount;
 
         /// <summary>
@@ -119,9 +119,9 @@ namespace SpiceSharp.Validation
             }
             else
             {
-                for (var i = 0; i < variables.Length; i++)
+                for (int i = 0; i < variables.Length; i++)
                 {
-                    for (var j = i + 1; j < variables.Length; j++)
+                    for (int j = i + 1; j < variables.Length; j++)
                         AddPath(variables[i], variables[j], type);
                 }
             }
@@ -163,8 +163,8 @@ namespace SpiceSharp.Validation
         private void Connect(IVariable a, IVariable b, Dictionary<IVariable, Group> groups, ref int counter)
         {
             // Add to DC group
-            var hasA = groups.TryGetValue(a, out var groupA);
-            var hasB = groups.TryGetValue(b, out var groupB);
+            bool hasA = groups.TryGetValue(a, out var groupA);
+            bool hasB = groups.TryGetValue(b, out var groupB);
             if (hasA && hasB)
             {
                 // Join the groups

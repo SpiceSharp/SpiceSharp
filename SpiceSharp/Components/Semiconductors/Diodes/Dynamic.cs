@@ -55,18 +55,18 @@ namespace SpiceSharp.Components.Diodes
         protected void CalculateCapacitance(double vd)
         {
             // charge storage elements
-            var czero = TempJunctionCap * Parameters.Area;
+            double czero = TempJunctionCap * Parameters.Area;
             if (vd < TempDepletionCap)
             {
-                var arg = 1 - vd / ModelParameters.JunctionPotential;
-                var sarg = Math.Exp(-ModelParameters.GradingCoefficient * Math.Log(arg));
+                double arg = 1 - vd / ModelParameters.JunctionPotential;
+                double sarg = Math.Exp(-ModelParameters.GradingCoefficient * Math.Log(arg));
                 LocalCapCharge = ModelParameters.TransitTime * LocalCurrent + ModelParameters.JunctionPotential * czero *
                             (1 - arg * sarg) / (1 - ModelParameters.GradingCoefficient);
                 LocalCapacitance = ModelParameters.TransitTime * LocalConductance + czero * sarg;
             }
             else
             {
-                var czof2 = czero / ModelTemperature.F2;
+                double czof2 = czero / ModelTemperature.F2;
                 LocalCapCharge = ModelParameters.TransitTime * LocalCurrent + czero * TempFactor1 + czof2 *
                             (ModelTemperature.F3 * (vd - TempDepletionCap) + ModelParameters.GradingCoefficient /
                              (ModelParameters.JunctionPotential + ModelParameters.JunctionPotential) *

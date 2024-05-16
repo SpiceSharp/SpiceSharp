@@ -32,7 +32,7 @@ namespace SpiceSharp.Components.ParallelComponents
                 _convergenceWorkload = new Workload<bool>((IWorkDistributor<bool>)dist, parameters.Entities.Count);
                 if (context.TryGetState<IIterationSimulationState>(out var parent))
                 {
-                    if (!(parent is IterationSimulationState))
+                    if (parent is not IterationSimulationState)
                         context.AddLocalState<IIterationSimulationState>(new IterationSimulationState(parent));
                 }
             }
@@ -57,7 +57,7 @@ namespace SpiceSharp.Components.ParallelComponents
                 return _convergenceWorkload.Execute();
             else
             {
-                var convergence = true;
+                bool convergence = true;
                 foreach (var behavior in _convergenceBehaviors)
                     convergence &= behavior.IsConvergent();
                 return convergence;

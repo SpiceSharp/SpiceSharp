@@ -135,7 +135,7 @@ namespace SpiceSharp.Entities
             Entity = entity.ThrowIfNull(nameof(entity));
             Simulation = simulation.ThrowIfNull(nameof(simulation));
             Behaviors = behaviors;
-            _cloned = entity.LinkParameters ? null : new Dictionary<IParameterSet, IParameterSet>();
+            _cloned = entity.LinkParameters ? null : [];
         }
     }
 }

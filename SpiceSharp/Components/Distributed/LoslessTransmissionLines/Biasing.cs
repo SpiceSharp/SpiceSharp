@@ -185,8 +185,8 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// <inheritdoc/>
         void IBiasingBehavior.Load()
         {
-            var m = Parameters.ParallelMultiplier;
-            var y = Parameters.Admittance * m;
+            double m = Parameters.ParallelMultiplier;
+            double y = Parameters.Admittance * m;
             
             BiasingElements.Add(
                 y, -y, -y, y, 1, 0, -1, -1,

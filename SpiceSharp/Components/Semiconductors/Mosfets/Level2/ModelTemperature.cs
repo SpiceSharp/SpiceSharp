@@ -72,7 +72,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             Properties.Kt1 = Constants.Boltzmann * Parameters.NominalTemperature;
             Properties.EgFet1 = 1.16 - (7.02e-4 * Parameters.NominalTemperature * Parameters.NominalTemperature) /
                     (Parameters.NominalTemperature + 1108);
-            var arg1 = -Properties.EgFet1 / (Properties.Kt1 + Properties.Kt1) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
+            double arg1 = -Properties.EgFet1 / (Properties.Kt1 + Properties.Kt1) + 1.1150877 / (Constants.Boltzmann * (Constants.ReferenceTemperature + Constants.ReferenceTemperature));
             Properties.PbFactor1 = -2 * Properties.Vtnom * (1.5 * Math.Log(Properties.Factor1) + Constants.Charge * arg1);
 
             if (Parameters.Phi <= 0.0)
@@ -90,19 +90,19 @@ namespace SpiceSharp.Components.Mosfets.Level2
                         Parameters.Phi = 2 * Properties.Vtnom * Math.Log(Parameters.SubstrateDoping * 1e6 /*(cm**3/m**3)*// 1.45e16);
                         Parameters.Phi = new GivenParameter<double>(Math.Max(.1, Parameters.Phi));
                     }
-                    var fermis = Parameters.MosfetType * .5 * Parameters.Phi;
-                    var wkfng = 3.2;
+                    double fermis = Parameters.MosfetType * .5 * Parameters.Phi;
+                    double wkfng = 3.2;
                     if (Parameters.GateType != 0)
                     {
-                        var fermig = Parameters.MosfetType * Parameters.GateType * .5 * Properties.EgFet1;
+                        double fermig = Parameters.MosfetType * Parameters.GateType * .5 * Properties.EgFet1;
                         wkfng = 3.25 + .5 * Properties.EgFet1 - fermig;
                     }
-                    var wkfngs = wkfng - (3.25 + .5 * Properties.EgFet1 + fermis);
+                    double wkfngs = wkfng - (3.25 + .5 * Properties.EgFet1 + fermis);
                     if (!Parameters.Gamma.Given)
                         Parameters.Gamma = Math.Sqrt(2 * 11.70 * 8.854214871e-12 * Constants.Charge * Parameters.SubstrateDoping * 1e6 /*(cm**3/m**3)*/) / Properties.OxideCapFactor;
                     if (!Parameters.Vt0.Given)
                     {
-                        var vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 /*(cm**2/m**2)*/ * Constants.Charge / Properties.OxideCapFactor;
+                        double vfb = wkfngs - Parameters.SurfaceStateDensity * 1e4 /*(cm**2/m**2)*/ * Constants.Charge / Properties.OxideCapFactor;
                         Parameters.Vt0 = vfb + Parameters.MosfetType * (Parameters.Gamma * Math.Sqrt(Parameters.Phi) + Parameters.Phi);
                     }
                     Properties.Xd = Math.Sqrt((EpsilonSilicon + EpsilonSilicon) / (Constants.Charge * Parameters.SubstrateDoping * 1e6 /*(cm**3/m**3)*/));

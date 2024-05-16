@@ -41,8 +41,8 @@ namespace SpiceSharp.General
         /// </summary>
         public InterfaceTypeDictionary()
         {
-            _dictionary = new Dictionary<Type, V>();
-            _interfaces = new Dictionary<Type, TypeValues<V>>();
+            _dictionary = [];
+            _interfaces = [];
         }
 
         /// <summary>

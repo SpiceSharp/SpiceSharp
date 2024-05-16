@@ -237,6 +237,9 @@
   <data name="ParameterSets.NotDefined" xml:space="preserve">
     <value>The parameter set of type '{0}' is not defined.</value>
   </data>
+  <data name="References.IsEmptyReference" xml:space="preserve">
+    <value>The reference is empty.</value>
+  </data>
   <data name="Reflection.NotMatchingType" xml:space="preserve">
     <value>The destination type does not match the source.</value>
   </data>
@@ -303,6 +306,9 @@
   <data name="Stateful.NotDefined" xml:space="preserve">
     <value>A simulation state of type '{0}' is not defined.</value>
   </data>
+  <data name="States.StateNotFoundFor" xml:space="preserve">
+    <value>Could not find a state of type '{0}'.</value>
+  </data>
   <data name="Subcircuits.NoEquivalent" xml:space="preserve">
     <value>Cannot compute an equivalent solution for subcircuit '{0}'.</value>
   </data>
@@ -335,6 +341,9 @@
   </data>
   <data name="VariableNotFound" xml:space="preserve">
     <value>A variable by the name of '{0}' could not be found.</value>
+  </data>
+  <data name="Variables.NoVariableFor" xml:space="preserve">
+    <value>Could not find a variable for '{0}'.</value>
   </data>
   <data name="Waveforms.Pwl.Empty" xml:space="preserve">
     <value>No points are specified.</value>

@@ -28,22 +28,21 @@ namespace SpiceSharpTest.DiodeBehaviors
             _variableB = biasingState.GetSharedVariable(context.Nodes[1]);
 
             // Get the rows in the solver that represent the KCL equations
-            var rowA = biasingState.Map[_variableA];
-            var rowB = biasingState.Map[_variableB];
+            int rowA = biasingState.Map[_variableA];
+            int rowB = biasingState.Map[_variableB];
             _elements = new ElementSet<double>(biasingState.Solver,
-                new MatrixLocation[]
-                {
+                [
                     // The Y-matrix elements
-                    new MatrixLocation(rowA, rowA),
-                    new MatrixLocation(rowA, rowB),
-                    new MatrixLocation(rowB, rowA),
-                    new MatrixLocation(rowB, rowB)
-                },
-                new int[] {
+                    new(rowA, rowA),
+                    new(rowA, rowB),
+                    new(rowB, rowA),
+                    new(rowB, rowB)
+                ],
+                [
                     // The right-hand side vector elements
                     rowA,
                     rowB
-                });
+                ]);
 
         }
 

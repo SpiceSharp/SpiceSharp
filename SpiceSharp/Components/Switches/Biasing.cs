@@ -82,7 +82,7 @@ namespace SpiceSharp.Components.Switches
         {
             get
             {
-                var v = Voltage;
+                double v = Voltage;
                 return v * v * Conductance;
             }
         }
@@ -131,7 +131,7 @@ namespace SpiceSharp.Components.Switches
             else
             {
                 // Get the previous state
-                var ctrl = _controller();
+                double ctrl = _controller();
                 if (UseOldState)
                 {
                     // Calculate the current state
@@ -176,7 +176,7 @@ namespace SpiceSharp.Components.Switches
             }
 
             // Get the current conduction
-            var gNow = currentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
+            double gNow = currentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
             gNow *= Parameters.ParallelMultiplier;
             Conductance = gNow;
 

@@ -8,7 +8,7 @@ namespace SpiceSharpGenerator
     /// </summary>
     public class GeneratedPropertyCollection : IEnumerable<GeneratedProperty>
     {
-        private readonly List<GeneratedProperty> _properties = new List<GeneratedProperty>(4);
+        private readonly List<GeneratedProperty> _properties = new(4);
 
         /// <summary>
         /// Adds the generated property.

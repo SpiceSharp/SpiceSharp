@@ -15,7 +15,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             private readonly FixedEuler _parameters;
             private int _stateValues = 0;
             private readonly IHistory<IVector<double>> _states = new ArrayHistory<IVector<double>>(2);
-            private readonly List<IIntegrationState> _registeredStates = new List<IIntegrationState>();
+            private readonly List<IIntegrationState> _registeredStates = [];
 
             /// <inheritdoc/>
             public int MaxOrder => 1;

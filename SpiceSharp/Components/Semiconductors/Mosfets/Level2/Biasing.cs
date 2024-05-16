@@ -26,10 +26,10 @@ namespace SpiceSharp.Components.Mosfets.Level2
         private readonly ElementSet<double> _elements;
         private readonly MosfetVariables<double> _variables;
         private readonly BiasingParameters _config;
-        private readonly Contributions<double> _contributions = new Contributions<double>();
+        private readonly Contributions<double> _contributions = new();
         private readonly MosfetContributionEventArgs _args;
-        private static readonly double[] _sig1 = { 1.0, -1.0, 1.0, -1.0 };
-        private static readonly double[] _sig2 = { 1.0, 1.0, -1.0, -1.0 };
+        private static readonly double[] _sig1 = [1.0, -1.0, 1.0, -1.0];
+        private static readonly double[] _sig2 = [1.0, 1.0, -1.0, -1.0];
 
         /// <summary>
         /// The permittivity of silicon.
@@ -137,7 +137,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             var con = _contributions;
             con.Reset();
 
-            var vt = Constants.KOverQ * Parameters.Temperature;
+            double vt = Constants.KOverQ * Parameters.Temperature;
             double DrainSatCur, SourceSatCur;
             if ((Properties.TempSatCurDensity == 0) || (Parameters.DrainArea == 0) || (Parameters.SourceArea == 0))
             {
@@ -149,12 +149,12 @@ namespace SpiceSharp.Components.Mosfets.Level2
                 DrainSatCur = Parameters.ParallelMultiplier * Properties.TempSatCurDensity * Parameters.DrainArea;
                 SourceSatCur = Parameters.ParallelMultiplier * Properties.TempSatCurDensity * Parameters.SourceArea;
             }
-            var Beta = Properties.TempTransconductance * Parameters.Width * Parameters.ParallelMultiplier / Properties.EffectiveLength;
+            double Beta = Properties.TempTransconductance * Parameters.Width * Parameters.ParallelMultiplier / Properties.EffectiveLength;
 
             // Get the current voltages
-            Initialize(out var vgs, out var vds, out var vbs, out var check);
-            var vbd = vbs - vds;
-            var vgd = vgs - vds;
+            Initialize(out double vgs, out double vds, out double vbs, out bool check);
+            double vbd = vbs - vds;
+            double vgd = vgs - vds;
 
             if (vbs <= -3 * vt)
             {
@@ -163,7 +163,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             }
             else
             {
-                var evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / vt));
+                double evbs = Math.Exp(Math.Min(MaximumExponentArgument, vbs / vt));
                 con.Bs.G = SourceSatCur * evbs / vt + _config.Gmin;
                 con.Bs.C = SourceSatCur * (evbs - 1) + _config.Gmin * vbs;
             }
@@ -174,7 +174,7 @@ namespace SpiceSharp.Components.Mosfets.Level2
             }
             else
             {
-                var evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / vt));
+                double evbd = Math.Exp(Math.Min(MaximumExponentArgument, vbd / vt));
                 con.Bd.G = DrainSatCur * evbd / vt + _config.Gmin;
                 con.Bd.C = DrainSatCur * (evbd - 1) + _config.Gmin * vbd;
             }
@@ -428,9 +428,9 @@ namespace SpiceSharp.Components.Mosfets.Level2
                     dgdvds = 0.0;
                     dgddb2 = 0.0;
                 }
-                var von = vbin + gamasd * sarg;
+                double von = vbin + gamasd * sarg;
                 vth = von;
-                var vdsat = 0.0;
+                double vdsat = 0.0;
                 if (ModelParameters.FastSurfaceStateDensity != 0.0 && Properties.OxideCap != 0.0)
                 {
                     // XXX constant per model
@@ -906,16 +906,16 @@ namespace SpiceSharp.Components.Mosfets.Level2
                 _iteration.Mode == IterationModes.Fix && !Parameters.Off)
             {
                 // General iteration
-                var s = _variables.SourcePrime.Value;
+                double s = _variables.SourcePrime.Value;
                 vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - s);
                 vgs = ModelParameters.MosfetType * (_variables.Gate.Value - s);
                 vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - s);
 
                 // now some common crunching for some more useful quantities
-                var vbd = vbs - vds;
-                var vgd = vgs - vds;
-                var vgdo = Vgs - Vds;
-                var von = ModelParameters.MosfetType * Von;
+                double vbd = vbs - vds;
+                double vgd = vgs - vds;
+                double vgdo = Vgs - Vds;
+                double von = ModelParameters.MosfetType * Von;
 
                 /*
 				 * limiting
@@ -979,18 +979,18 @@ namespace SpiceSharp.Components.Mosfets.Level2
         {
             double cdhat;
 
-            var s = _variables.SourcePrime.Value;
-            var vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - s);
-            var vgs = ModelParameters.MosfetType * (_variables.Gate.Value - s);
-            var vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - s);
-            var vbd = vbs - vds;
-            var vgd = vgs - vds;
-            var vgdo = Vgs - Vds;
-            var delvbs = vbs - Vbs;
-            var delvbd = vbd - Vbd;
-            var delvgs = vgs - Vgs;
-            var delvds = vds - Vds;
-            var delvgd = vgd - vgdo;
+            double s = _variables.SourcePrime.Value;
+            double vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - s);
+            double vgs = ModelParameters.MosfetType * (_variables.Gate.Value - s);
+            double vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - s);
+            double vbd = vbs - vds;
+            double vgd = vgs - vds;
+            double vgdo = Vgs - Vds;
+            double delvbs = vbs - Vbs;
+            double delvbd = vbd - Vbd;
+            double delvgs = vgs - Vgs;
+            double delvds = vds - Vds;
+            double delvgd = vgd - vgdo;
 
             // these are needed for convergence testing
             // NOTE: Cd does not include contributions for transient simulations... Should check for a way to include them!
@@ -1004,12 +1004,12 @@ namespace SpiceSharp.Components.Mosfets.Level2
                 cdhat = Id - (Gbd - Gmbs) * delvbd -
                     Gm * delvgd + Gds * delvds;
             }
-            var cbhat = Ibs + Ibd + Gbd * delvbd + Gbs * delvbs;
+            double cbhat = Ibs + Ibd + Gbd * delvbd + Gbs * delvbs;
 
             /*
              *  check convergence
              */
-            var tol = _config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Id)) + _config.AbsoluteTolerance;
+            double tol = _config.RelativeTolerance * Math.Max(Math.Abs(cdhat), Math.Abs(Id)) + _config.AbsoluteTolerance;
             if (Math.Abs(cdhat - Id) >= tol)
             {
                 _iteration.IsConvergent = false;

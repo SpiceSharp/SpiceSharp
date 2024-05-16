@@ -39,8 +39,7 @@ namespace SpiceSharp.Algebra
         /// <param name="value">The value.</param>
         public void Add(T value)
         {
-            if (Addition == null)
-                Addition = CompileDefaultAddition();
+            Addition ??= CompileDefaultAddition();
             Value = Addition(Value, value);
         }
 
@@ -50,8 +49,7 @@ namespace SpiceSharp.Algebra
         /// <param name="value">The value.</param>
         public void Subtract(T value)
         {
-            if (Subtraction == null)
-                Subtraction = CompileDefaultSubtraction();
+            Subtraction ??= CompileDefaultSubtraction();
             Value = Subtraction(Value, value);
         }
 

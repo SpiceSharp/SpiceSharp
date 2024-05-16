@@ -7,7 +7,7 @@ namespace SpiceSharp.Components.Subcircuits
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <seealso cref="IEquatable{T}" />
-    public struct Bridge<T> : IEquatable<Bridge<T>>
+    public readonly struct Bridge<T> : IEquatable<Bridge<T>>
     {
         /// <summary>
         /// The local/internal instance.
@@ -50,7 +50,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => (Local.GetHashCode() * 13) ^ Global.GetHashCode();
+        public override readonly int GetHashCode() => (Local.GetHashCode() * 13) ^ Global.GetHashCode();
 
         /// <summary>
         /// Implements the operator ==.
@@ -79,7 +79,7 @@ namespace SpiceSharp.Components.Subcircuits
         /// <returns>
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(Bridge<T> other)
+        public readonly bool Equals(Bridge<T> other)
         {
             if (!Local.Equals(other.Local))
                 return false;

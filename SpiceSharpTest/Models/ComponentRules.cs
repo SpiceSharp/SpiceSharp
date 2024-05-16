@@ -9,7 +9,7 @@ namespace SpiceSharpTest.Models
 {
     public class ComponentRules : ParameterSetCollection, IRules, IParameterized<ComponentRuleParameters>
     {
-        private readonly HashSet<IRule> _rules = new HashSet<IRule>();
+        private readonly HashSet<IRule> _rules = [];
 
         /// <summary>
         /// Gets the parameter set.

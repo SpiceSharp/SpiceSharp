@@ -10,7 +10,7 @@ namespace SpiceSharp.Components.CommonBehaviors
     /// of the nodes is equal to the current out of the other one of the same port.
     /// </remarks>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct TwoPort<T>
+    public readonly struct TwoPort<T>
     {
         /// <summary>
         /// The left port.
@@ -45,7 +45,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is TwoPort<T> op)
             {
@@ -64,7 +64,7 @@ namespace SpiceSharp.Components.CommonBehaviors
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => (Left.GetHashCode() * 13 * 13) ^ Right.GetHashCode();
+        public override readonly int GetHashCode() => (Left.GetHashCode() * 13 * 13) ^ Right.GetHashCode();
 
         /// <summary>
         /// Implements the operator ==.

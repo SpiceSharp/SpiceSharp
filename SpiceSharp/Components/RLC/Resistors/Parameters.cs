@@ -22,7 +22,7 @@ namespace SpiceSharp.Components.Resistors
         /// The temperature of the resistor.
         /// </value>
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _temperature = new GivenParameter<double>(Constants.ReferenceTemperature, false);
+        private GivenParameter<double> _temperature = new(Constants.ReferenceTemperature, false);
 
         /// <summary>
         /// Gets or sets the resistance of the resistor.
@@ -60,7 +60,7 @@ namespace SpiceSharp.Components.Resistors
         /// </value>
         [ParameterName("w"), ParameterInfo("Width", Units = "m")]
         [GreaterThan(0), Finite]
-        private GivenParameter<double> _width = new GivenParameter<double>(1.0, false);
+        private GivenParameter<double> _width = new(1.0, false);
 
         /// <summary>
         /// Gets or sets the length of the resistor.

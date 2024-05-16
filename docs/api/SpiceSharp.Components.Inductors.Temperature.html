@@ -5,11 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Temperature
- </title>
+    <title>Class Temperature </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Temperature
- ">
+    <meta name="title" content="Class Temperature ">
     <meta name="generator" content="docfx ">
   
     <link rel="shortcut icon" href="../api/images/favicon.ico">
@@ -73,8 +71,7 @@
 
 
 
-  <h1 id="SpiceSharp_Components_Inductors_Temperature" data-uid="SpiceSharp.Components.Inductors.Temperature" class="text-break">Class Temperature
-</h1>
+  <h1 id="SpiceSharp_Components_Inductors_Temperature" data-uid="SpiceSharp.Components.Inductors.Temperature" class="text-break">Class Temperature</h1>
   <div class="markdown level0 summary"><p>Temperature behavior for a <a class="xref" href="SpiceSharp.Components.Inductor.html">Inductor</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
@@ -92,6 +89,7 @@
     <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.Behaviors.IBehavior.html">IBehavior</a></div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a></div>
+    <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized</a>&lt;<a class="xref" href="SpiceSharp.Components.Inductors.Parameters.html">Parameters</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.ParameterSets.IParameterSet.html">IParameterSet</a></div>
   </div>
@@ -155,7 +153,7 @@
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[BehaviorFor(typeof(Inductor))]
 [AddBehaviorIfNo(typeof(ITemperatureBehavior))]
-public class Temperature : Behavior, ITemperatureBehavior, IBehavior, IParameterSetCollection, IExportPropertySet&lt;double&gt;, IParameterSet</code></pre>
+public class Temperature : Behavior, ITemperatureBehavior, IBehavior, IParameterSetCollection, IParameterized&lt;Parameters&gt;, IExportPropertySet&lt;double&gt;, IParameterSet</code></pre>
   </div>
   <h3 id="constructors">Constructors
 </h3>
@@ -202,11 +200,6 @@ public class Temperature : Behavior, ITemperatureBehavior, IBehavior, IParameter
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Components_Inductors_Temperature__ctor_SpiceSharp_Components_IComponentBindingContext__seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-      <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
-  </div>
   <h3 id="properties">Properties
 </h3>
   <a id="SpiceSharp_Components_Inductors_Temperature_Inductance_" data-uid="SpiceSharp.Components.Inductors.Temperature.Inductance*"></a>
@@ -237,14 +230,10 @@ public double Inductance { get; }</code></pre>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Components_Inductors_Temperature_Inductance_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-      <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
-  </div>
   <a id="SpiceSharp_Components_Inductors_Temperature_Parameters_" data-uid="SpiceSharp.Components.Inductors.Temperature.Parameters*"></a>
   <h4 id="SpiceSharp_Components_Inductors_Temperature_Parameters" data-uid="SpiceSharp.Components.Inductors.Temperature.Parameters">Parameters</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Gets the parameter set.</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
@@ -261,15 +250,11 @@ public double Inductance { get; }</code></pre>
     <tbody>
       <tr>
         <td><a class="xref" href="SpiceSharp.Components.Inductors.Parameters.html">Parameters</a></td>
-        <td></td>
+        <td><p>The parameter set.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <h5 id="SpiceSharp_Components_Inductors_Temperature_Parameters_seealso">See Also</h5>
-  <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Behaviors.Behavior.html">Behavior</a></div>
-      <div><a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a></div>
-  </div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>
@@ -279,6 +264,9 @@ public double Inductance { get; }</code></pre>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ParameterSets.IParameterSetCollection.html">IParameterSetCollection</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.ParameterSets.IParameterized-1.html">IParameterized&lt;P&gt;</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.ParameterSets.IExportPropertySet-1.html">IExportPropertySet&lt;P&gt;</a>
@@ -314,7 +302,7 @@ public double Inductance { get; }</code></pre>
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
+                <h5>In this article</h5>
                 <div></div>
               </nav>
             </div>

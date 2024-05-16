@@ -19,7 +19,7 @@ namespace SpiceSharpGenerator
         public static string GetQualifiedName(this ClassDeclarationSyntax @class)
         {
             // Find the namespace by going outward
-            var name = "";
+            string name = "";
             var parent = @class.Parent;
             while (parent != null)
             {
@@ -47,7 +47,7 @@ namespace SpiceSharpGenerator
         /// <returns>The fully qualified name.</returns>
         public static string GetQualifiedName(this INamedTypeSymbol type)
         {
-            var name = type.ContainingNamespace.ToString() + "." + type.Name;
+            string name = type.ContainingNamespace.ToString() + "." + type.Name;
             if (type.TypeParameters.Length > 0)
                 name += "<" + string.Join(".", type.TypeParameters.Select(p => p.Name)) + ">";
             return name;
@@ -135,7 +135,7 @@ namespace SpiceSharpGenerator
         /// </returns>
         public static bool Implements(this INamedTypeSymbol toCheck, INamedTypeSymbol implemented)
         {
-            var ns = implemented.ContainingNamespace.ToString();
+            string ns = implemented.ContainingNamespace.ToString();
             if (implemented.TypeKind == TypeKind.Class)
             {
                 // Check any base type
@@ -196,7 +196,7 @@ namespace SpiceSharpGenerator
             };
         }
 
-        private static readonly Regex _dashes = new Regex(@"[\-\.](?<word>\w+)");
+        private static readonly Regex _dashes = new(@"[\-\.](?<word>\w+)");
 
         /// <summary>
         /// Turn a string into a name that can be used as a variable.
@@ -209,7 +209,7 @@ namespace SpiceSharpGenerator
             name = name.Replace(' ', '_');
             name = _dashes.Replace(name, match =>
             {
-                var word = match.Groups["word"].Value;
+                string word = match.Groups["word"].Value;
                 return char.ToUpper(word[0]) + word.Substring(1);
             });
             name = char.ToUpper(name[0]) + name.Substring(1);

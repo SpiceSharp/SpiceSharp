@@ -72,7 +72,7 @@ namespace SpiceSharp.Components
             /// <inheritdoc/>
             public void Probe()
             {
-                var time = _method?.Time ?? 0.0;
+                double time = _method?.Time ?? 0.0;
                 At(time);
             }
 

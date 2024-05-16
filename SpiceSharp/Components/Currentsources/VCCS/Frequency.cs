@@ -46,10 +46,10 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
             _complex = context.GetState<IComplexSimulationState>();
             _variables = new TwoPort<Complex>(_complex, context);
 
-            var pos = _complex.Map[_variables.Right.Positive];
-            var neg = _complex.Map[_variables.Right.Negative];
-            var contPos = _complex.Map[_variables.Left.Positive];
-            var contNeg = _complex.Map[_variables.Left.Negative];
+            int pos = _complex.Map[_variables.Right.Positive];
+            int neg = _complex.Map[_variables.Right.Negative];
+            int contPos = _complex.Map[_variables.Left.Positive];
+            int contNeg = _complex.Map[_variables.Left.Negative];
             _elements = new ElementSet<Complex>(_complex.Solver,
                 new MatrixLocation(pos, contPos),
                 new MatrixLocation(pos, contNeg),
@@ -65,7 +65,7 @@ namespace SpiceSharp.Components.VoltageControlledCurrentSources
         /// <inheritdoc/>
         void IFrequencyBehavior.Load()
         {
-            var value = Parameters.Transconductance * Parameters.ParallelMultiplier;
+            double value = Parameters.Transconductance * Parameters.ParallelMultiplier;
             _elements.Add(value, -value, -value, value);
         }
     }

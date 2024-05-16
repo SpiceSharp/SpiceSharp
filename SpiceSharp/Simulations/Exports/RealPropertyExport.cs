@@ -1,9 +1,5 @@
-﻿using SpiceSharp.Behaviors;
-using SpiceSharp.Components.Subcircuits;
-using SpiceSharp.Diagnostics;
+﻿using SpiceSharp.Simulations.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Simulations
 {
@@ -14,12 +10,12 @@ namespace SpiceSharp.Simulations
     public class RealPropertyExport : Export<IEventfulSimulation, double>
     {
         /// <summary>
-        /// Gets the path to the name of the entity.
+        /// Gets the path to the entity.
         /// </summary>
-        public IReadOnlyList<string> EntityPath { get; }
+        public Reference Entity { get; }
 
         /// <summary>
-        /// Gets the name of the property.
+        /// Gets property name.
         /// </summary>
         public string PropertyName { get; }
 
@@ -27,43 +23,29 @@ namespace SpiceSharp.Simulations
         /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        /// <param name="entityName">The name of the entity.</param>
+        /// <param name="entity">The path to the entity (can be a string or string array).</param>
         /// <param name="propertyName">The name of the property.</param>
-        public RealPropertyExport(IEventfulSimulation simulation, string entityName, string propertyName)
+        public RealPropertyExport(IEventfulSimulation simulation, Reference entity, string propertyName)
             : base(simulation)
         {
-            entityName.ThrowIfNull(nameof(entityName));
-            EntityPath = new[] { entityName };
+            if (entity.Length == 0)
+                throw new ArgumentException(Properties.Resources.References_IsEmptyReference, nameof(entity));
+            Entity = entity;
             PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RealPropertyExport"/> class.
-        /// </summary>
-        /// <param name="simulation">The simulation.</param>
-        /// <param name="entityPath">The path to the entity.</param>
-        /// <param name="propertyName">The name of the property.</param>
-        public RealPropertyExport(IEventfulSimulation simulation, IEnumerable<string> entityPath, string propertyName)
-            : base(simulation)
-        {
-            EntityPath = entityPath.ThrowIfEmpty(nameof(entityPath)).ToArray();
-            PropertyName = propertyName.ThrowIfNull(nameof(propertyName));
-        }
-
-        /// <summary>
-        /// Initializes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
+        /// <inheritdoc />
         protected override void Initialize(object sender, EventArgs e)
         {
-            var behaviorContainer = Simulation.EntityBehaviors[EntityPath[0]];
-            for (int i = 1; i < EntityPath.Count; i++)
-            {
-                var behavior = behaviorContainer.GetValue<EntitiesBehavior>();
-                behaviorContainer = behavior.LocalBehaviors[EntityPath[i]];
-            }
-            Extractor = behaviorContainer.CreatePropertyGetter<double>(PropertyName);
+            var behaviors = Entity.GetContainer(Simulation);
+            Extractor = behaviors.CreatePropertyGetter<double>(PropertyName);
         }
+
+        /// <summary>
+        /// Converts the export to a string.
+        /// </summary>
+        /// <returns>Returns the export represented as a string.</returns>
+        public override string ToString()
+            => "@{0}[{1}]".FormatString(Entity, PropertyName);
     }
 }

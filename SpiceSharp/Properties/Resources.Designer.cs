@@ -19,7 +19,7 @@ namespace SpiceSharp.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -421,6 +421,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The reference is empty..
+        /// </summary>
+        public static string References_IsEmptyReference {
+            get {
+                return ResourceManager.GetString("References.IsEmptyReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The destination type does not match the source..
         /// </summary>
         public static string Reflection_NotMatchingType {
@@ -619,6 +628,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find a state of type &apos;{0}&apos;..
+        /// </summary>
+        public static string States_StateNotFoundFor {
+            get {
+                return ResourceManager.GetString("States.StateNotFoundFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot compute an equivalent solution for subcircuit &apos;{0}&apos;..
         /// </summary>
         public static string Subcircuits_NoEquivalent {
@@ -714,6 +732,15 @@ namespace SpiceSharp.Properties {
         public static string VariableNotFound {
             get {
                 return ResourceManager.GetString("VariableNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find a variable for &apos;{0}&apos;..
+        /// </summary>
+        public static string Variables_NoVariableFor {
+            get {
+                return ResourceManager.GetString("Variables.NoVariableFor", resourceCulture);
             }
         }
         

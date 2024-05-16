@@ -32,7 +32,7 @@ namespace SpiceSharpTest.Models
             exports[0] = new RealVoltageExport(op, "OUT");
 
             // Create references
-            double[] references = { 1.0 };
+            double[] references = [1.0];
 
             // Run test
             AnalyzeOp(op, ckt, exports, references);
@@ -47,9 +47,9 @@ namespace SpiceSharpTest.Models
              * The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
              */
             double dcVoltage = 10;
-            var resistorResistance = 10e3; // 10000;
-            var capacitance = 1e-6; // 0.000001;
-            var tau = resistorResistance * capacitance;
+            double resistorResistance = 10e3; // 10000;
+            double capacitance = 1e-6; // 0.000001;
+            double tau = resistorResistance * capacitance;
 
             // Build circuit
             var ckt = new Circuit(
@@ -61,8 +61,8 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
             tran.TimeParameters.InitialConditions["OUT"] = 0.0;
-            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
-            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+            IExport<double>[] exports = [new RealPropertyExport(tran, "C1", "v")];
+            Func<double, double>[] references = [t => dcVoltage * (1.0 - Math.Exp(-t / tau))];
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
@@ -75,9 +75,9 @@ namespace SpiceSharpTest.Models
             // A test for a lowpass RC circuit (DC voltage, resistor, capacitor)
             // The initial voltage on capacitor is 0V. The result should be an exponential converging to dcVoltage.
             double dcVoltage = 10;
-            var resistorResistance = 10e3; // 10000;
-            var capacitance = 1e-6; // 0.000001;
-            var tau = resistorResistance * capacitance;
+            double resistorResistance = 10e3; // 10000;
+            double capacitance = 1e-6; // 0.000001;
+            double tau = resistorResistance * capacitance;
 
             // Build circuit
             var ckt = new Circuit(
@@ -89,8 +89,8 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             var tran = new Transient("tran", new Gear { InitialStep = 1e-8, StopTime = 10e-6 });
             tran.TimeParameters.InitialConditions["OUT"] = 0.0;
-            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
-            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+            IExport<double>[] exports = [new RealPropertyExport(tran, "C1", "v")];
+            Func<double, double>[] references = [t => dcVoltage * (1.0 - Math.Exp(-t / tau))];
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
@@ -106,9 +106,9 @@ namespace SpiceSharpTest.Models
              * Temperature is 30 degrees.
              */
             double dcVoltage = 10;
-            var resistorResistance = 10e3; // 10000;
-            var capacitance = 1e-6; // 0.000001;
-            var tau = resistorResistance * capacitance;
+            double resistorResistance = 10e3; // 10000;
+            double capacitance = 1e-6; // 0.000001;
+            double tau = resistorResistance * capacitance;
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
             var model = new CapacitorModel("model C1");
@@ -133,8 +133,8 @@ namespace SpiceSharpTest.Models
                     ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
-            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
-            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+            IExport<double>[] exports = [new RealPropertyExport(tran, "C1", "v")];
+            Func<double, double>[] references = [t => dcVoltage * (1.0 - Math.Exp(-t / tau))];
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
@@ -151,12 +151,12 @@ namespace SpiceSharpTest.Models
              * Temperature is 30 degrees.
              */
             double dcVoltage = 10;
-            var resistorResistance = 10e3; // 10000;
+            double resistorResistance = 10e3; // 10000;
             double factor = (1.0 + 3.0 * 1.1 + 3.0 * 3.0 * 2.1);
-            var capacitance = 1e-6;
-            var capacitanceAfterTemperature = capacitance * factor;
+            double capacitance = 1e-6;
+            double capacitanceAfterTemperature = capacitance * factor;
 
-            var tau = resistorResistance * capacitanceAfterTemperature;
+            double tau = resistorResistance * capacitanceAfterTemperature;
 
             var capacitor = new Capacitor("C1", "OUT", "0", capacitance);
             var model = new CapacitorModel("model C1");
@@ -181,8 +181,8 @@ namespace SpiceSharpTest.Models
                     ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
                 };
 
-            IExport<double>[] exports = { new RealPropertyExport(tran, "C1", "v") };
-            Func<double, double>[] references = { t => dcVoltage * (1.0 - Math.Exp(-t / tau)) };
+            IExport<double>[] exports = [new RealPropertyExport(tran, "C1", "v")];
+            Func<double, double>[] references = [t => dcVoltage * (1.0 - Math.Exp(-t / tau))];
 
             // Run
             AnalyzeTransient(tran, ckt, exports, references);
@@ -196,8 +196,8 @@ namespace SpiceSharpTest.Models
              * Lowpass RC filter in the frequency domain should have a single pole at s=-2pi*R*C
              */
             // Create circuit
-            var resistance = 1e3;
-            var capacitance = 1e-6;
+            double resistance = 1e3;
+            double capacitance = 1e-6;
             var ckt = new Circuit(
                 new VoltageSource("V1", "IN", "0", 0.0)
                     .SetParameter("acmag", 1.0),
@@ -209,10 +209,10 @@ namespace SpiceSharpTest.Models
             var ac = new AC("ac", new DecadeSweep(0.1, 1.0e6, 10));
 
             // Create exports
-            IExport<Complex>[] exports = { new ComplexPropertyExport(ac, "C1", "v") };
+            IExport<Complex>[] exports = [new ComplexPropertyExport(ac, "C1", "v")];
 
             // Create references
-            Func<double, Complex>[] references = { f => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f) };
+            Func<double, Complex>[] references = [f => 1.0 / new Complex(1.0, resistance * capacitance * 2 * Math.PI * f)];
 
             // Run test
             AnalyzeAC(ac, ckt, exports, references);
@@ -238,7 +238,7 @@ namespace SpiceSharpTest.Models
             // Create simulation, exports and references
             var tran = new Transient("tran", 1e-8, 10e-6);
             tran.TimeParameters.InitialConditions["OUT"] = 0.0;
-            IExport<double>[] exports = { new RealVoltageExport(tran, "out") };
+            IExport<double>[] exports = [new RealVoltageExport(tran, "out")];
 
             // Run 
             Compare(tran, ckt_reference, ckt_actual, exports);
@@ -262,7 +262,7 @@ namespace SpiceSharpTest.Models
 
             // Create simulation, exports and references
             var ac = new AC("ac", new DecadeSweep(1, 1e6, 3));
-            IExport<Complex>[] exports = { new ComplexVoltageExport(ac, "out") };
+            IExport<Complex>[] exports = [new ComplexVoltageExport(ac, "out")];
 
             // Run 
             Compare(ac, ckt_reference, ckt_actual, exports);
@@ -273,7 +273,7 @@ namespace SpiceSharpTest.Models
         public void When_CapacitorIC_Expect_Reference()
         {
             double R = 1.0, C = 1e-3, v0 = 1.0;
-            var tau = R * C;
+            double tau = R * C;
 
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 0.0),

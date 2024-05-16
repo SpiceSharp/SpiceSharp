@@ -51,7 +51,7 @@ namespace SpiceSharp.Components
 
             if (nodes == null || nodes.Length != _connections.Length)
                 throw new NodeMismatchException(Name, _connections.Length, nodes?.Length ?? 0);
-            for (var i = 0; i < nodes.Length; i++)
+            for (int i = 0; i < nodes.Length; i++)
             {
                 nodes[i].ThrowIfNull("node{0}".FormatString(i + 1));
                 _connections[i] = nodes[i];
@@ -68,7 +68,7 @@ namespace SpiceSharp.Components
             if (_connections != null)
             {
                 var variables = new IVariable[_connections.Length];
-                for (var i = 0; i < _connections.Length; i++)
+                for (int i = 0; i < _connections.Length; i++)
                     variables[i] = p.Factory.GetSharedVariable(_connections[i]);
 
                 foreach (var rule in rules.GetRules<IConductiveRule>())

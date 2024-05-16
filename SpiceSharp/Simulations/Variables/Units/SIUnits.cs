@@ -93,7 +93,7 @@ namespace SpiceSharp.Simulations.Variables
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is SIUnits units)
                 return Equals(units);
@@ -107,7 +107,7 @@ namespace SpiceSharp.Simulations.Variables
         /// <returns>
         ///     <c>true</c> if the specified <see cref="SIUnits"/> is equal to this instance; otherwise <c>false</c>.
         /// </returns>
-        public bool Equals(SIUnits units) => _units == units._units;
+        public readonly bool Equals(SIUnits units) => _units == units._units;
 
         /// <summary>
         /// Returns a hash code for this instance.
@@ -115,7 +115,7 @@ namespace SpiceSharp.Simulations.Variables
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode() => _units.GetHashCode();
+        public override readonly int GetHashCode() => _units.GetHashCode();
 
         /// <summary>
         /// Converts to string.
@@ -123,7 +123,7 @@ namespace SpiceSharp.Simulations.Variables
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public override readonly string ToString()
         {
             var sb = new StringBuilder(16);
             if (_m != 0)
@@ -148,7 +148,7 @@ namespace SpiceSharp.Simulations.Variables
         /// </summary>
         /// <param name="exponent">The exponent.</param>
         /// <returns>The result.</returns>
-        public SIUnits Pow(Fraction exponent)
+        public readonly SIUnits Pow(Fraction exponent)
         {
             return new SIUnits(
                 _s * exponent,

@@ -111,9 +111,7 @@ namespace SpiceSharp.Algebra
                 Expand(Math.Max(index1, index2));
             if (index1 == index2)
                 return;
-            var tmp = _values[index1];
-            _values[index1] = _values[index2];
-            _values[index2] = tmp;
+            (_values[index2], _values[index1]) = (_values[index1], _values[index2]);
         }
 
         /// <summary>
@@ -121,7 +119,7 @@ namespace SpiceSharp.Algebra
         /// </summary>
         public void Reset()
         {
-            for (var i = 0; i < _values.Length; i++)
+            for (int i = 0; i < _values.Length; i++)
                 _values[i] = default;
         }
 
@@ -145,7 +143,7 @@ namespace SpiceSharp.Algebra
                 throw new ArgumentException(Properties.Resources.Algebra_VectorLengthMismatch.FormatString(target.Length, Length), nameof(target));
             if (target == this)
                 return;
-            for (var i = 1; i <= Length; i++)
+            for (int i = 1; i <= Length; i++)
                 target[i] = this[i];
         }
 

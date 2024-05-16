@@ -8,7 +8,7 @@ namespace SpiceSharp.Components.Mosfets
     /// Variables for a mosfet.
     /// </summary>
     /// <typeparam name="T">The base value type.</typeparam>
-    public struct MosfetVariables<T>
+    public readonly struct MosfetVariables<T>
     {
         /// <summary>
         /// The drain node.
@@ -71,17 +71,17 @@ namespace SpiceSharp.Components.Mosfets
         /// </summary>
         /// <param name="map">The map.</param>
         /// <returns>The matrix locations.</returns>
-        public MatrixLocation[] GetMatrixLocations(IVariableMap map)
+        public readonly MatrixLocation[] GetMatrixLocations(IVariableMap map)
         {
-            var d = map[Drain];
-            var dp = map[DrainPrime];
-            var s = map[Source];
-            var sp = map[SourcePrime];
-            var g = map[Gate];
-            var b = map[Bulk];
+            int d = map[Drain];
+            int dp = map[DrainPrime];
+            int s = map[Source];
+            int sp = map[SourcePrime];
+            int g = map[Gate];
+            int b = map[Bulk];
 
-            return new[]
-            {
+            return
+            [
                 new MatrixLocation(d, d),
                 new MatrixLocation(g, g),
                 new MatrixLocation(s, s),
@@ -110,7 +110,7 @@ namespace SpiceSharp.Components.Mosfets
                 new MatrixLocation(sp, s),
                 new MatrixLocation(sp, b),
                 new MatrixLocation(sp, dp)
-            };
+            ];
         }
 
         /// <summary>
@@ -118,15 +118,15 @@ namespace SpiceSharp.Components.Mosfets
         /// </summary>
         /// <param name="map">The map.</param>
         /// <returns>The right hand side vector indices.</returns>
-        public int[] GetRhsIndices(IVariableMap map)
+        public readonly int[] GetRhsIndices(IVariableMap map)
         {
-            return new[]
-            {
+            return
+            [
                 map[Gate],
                 map[Bulk],
                 map[DrainPrime],
                 map[SourcePrime]
-            };
+            ];
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace SpiceSharp.Components.Mosfets
         /// <returns>
         ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             if (obj is MosfetVariables<T> mv)
             {
@@ -162,9 +162,9 @@ namespace SpiceSharp.Components.Mosfets
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
-            var hash = Drain.GetHashCode();
+            int hash = Drain.GetHashCode();
             hash = (hash * 13) ^ DrainPrime.GetHashCode();
             hash = (hash * 13) ^ Source.GetHashCode();
             hash = (hash * 13) ^ SourcePrime.GetHashCode();

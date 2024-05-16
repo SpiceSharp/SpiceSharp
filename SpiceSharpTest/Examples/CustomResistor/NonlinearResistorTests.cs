@@ -25,7 +25,7 @@ namespace SpiceSharpTest.Examples
             var currentExport = new RealPropertyExport(dc, "V1", "i");
             dc.ExportSimulationData += (sender, args) =>
             {
-                var current = -currentExport.Value;
+                double current = -currentExport.Value;
                 System.Console.Write("{0}, ".FormatString(current));
             };
             dc.Run(ckt);

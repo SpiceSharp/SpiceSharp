@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><svg xmlns:sc="https://github.com/svenboulanger/SimpleCircuit" width="2040" height="1580" viewBox="-50.28 -16 408.41 316.84" xmlns="http://www.w3.org/2000/svg"><style>g {
+    stroke: black;
+    stroke-width: 0.5pt;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+text { fill: black; stroke: none; }
+.marker { fill: black; }
+.dashed { stroke-dasharray: 2 2; }
+.diagram { fill: white; }
+
+.process path { fill: #fff7c3; }
+.decision path { fill: #bfffcc; }
+.terminator path { fill: #2393e2; }
+.terminator text { fill: white; }
+.io path { fill: #ffb0ac; }
+#FTerror path { fill: #d72d00; }
+.endcss</style><metadata><sc:version>1.8.4.0</sc:version></metadata><metadata><sc:script><![CDATA[
+.css
+.process path { fill: #fff7c3; }
+.decision path { fill: #bfffcc; }
+.terminator path { fill: #2393e2; }
+.terminator text { fill: white; }
+.io path { fill: #ffb0ac; }
+#FTerror path { fill: #d72d00; }
+.endcss
+.property FP radius=3 width=100
+.property FD rx=2 ry=5 width=100 height=30
+.property FIO width=100 r=2
+.property FT width=50 height=15
+.property wire r=3
+.variant X -dot
+
+* Initialization
+FT("Noise") <d arrow> FPtemp
+FPtemp("Do temperature-dependent calculations") <d arrow> FPstore
+FPstore("Store original AC source parameters") <d arrow> FPinput
+FPinput("Apply input source AC parameters") <d arrow> FPop
+FPop("Solve operating point") <d arrow> FPinit
+FPinit("Initialize frequency and noise behaviors") <d arrow> FDmore
+FDmore("Is there a frequency point left?") <r> DIR("No") <r arrow> FP("Restore AC source parameters") <r arrow> FT("Finish")
+FDmore <d> DIR("Yes") <d arrow> FPaciter
+FPaciter("Perform regular AC iteration") <d arrow> FPupdate1
+FPupdate1("Update noise state\n(find input to output gain)") <d arrow> FPnziter
+FPnziter("Solve noise iteration\n(compute gain from each node to the output)" w=120) <d arrow> FPcompute
+FPcompute("Compute noise contributions") <d arrow> FPexport
+FPexport("Export data") <l +20 u r arrow> FDmore
+
+* IO
+FIO1("INoiseBehavior list") <r +30 dashed arrow> FPinit
+FIO1 <d dashed x r dashed jump arrow> FPnziter
+X <d dashed r jump arrow> FPcompute
+
+
+
+]]></sc:script></metadata><g class="wire" id="w-1"><path class="wire" d="M127.13,-0 v10" /><polygon class="marker arrow" points="128.13,7.5 127.13,10 126.13,7.5" /></g><g class="wire" id="w-2"><path class="wire" d="M127.13,25 v10" /><polygon class="marker arrow" points="128.13,32.5 127.13,35 126.13,32.5" /></g><g class="wire" id="w-3"><path class="wire" d="M127.13,50 v10" /><polygon class="marker arrow" points="128.13,57.5 127.13,60 126.13,57.5" /></g><g class="wire" id="w-4"><path class="wire" d="M127.13,75 v10" /><polygon class="marker arrow" points="128.13,82.5 127.13,85 126.13,82.5" /></g><g class="wire" id="w-5"><path class="wire" d="M127.13,100 v10" /><polygon class="marker arrow" points="128.13,107.49 127.13,109.99 126.13,107.49" /></g><g class="wire" id="w-6"><path class="wire" d="M127.13,124.99 v9.99" /><polygon class="marker arrow" points="128.13,132.48 127.13,134.98 126.13,132.48" /></g><g class="wire" id="w-7"><path class="wire" d="M177.13,149.98 h10" /></g><g class="wire" id="w-8"><path class="wire" d="M187.13,149.98 h10" /><polygon class="marker arrow" points="194.62,148.98 197.12,149.98 194.62,150.98" /></g><g class="wire" id="w-9"><path class="wire" d="M297.12,149.98 h10" /><polygon class="marker arrow" points="304.62,148.98 307.12,149.98 304.62,150.98" /></g><g class="wire" id="w-10"><path class="wire" d="M127.13,164.98 v9.97" /></g><g class="wire" id="w-11"><path class="wire" d="M127.13,174.95 v9.97" /><polygon class="marker arrow" points="128.13,182.43 127.13,184.93 126.13,182.43" /></g><g class="wire" id="w-12"><path class="wire" d="M127.13,199.93 v9.97" /><polygon class="marker arrow" points="128.13,207.4 127.13,209.9 126.13,207.4" /></g><g class="wire" id="w-13"><path class="wire" d="M127.13,224.9 v9.97" /><polygon class="marker arrow" points="128.13,232.37 127.13,234.87 126.13,232.37" /></g><g class="wire" id="w-14"><path class="wire" d="M127.13,249.87 v9.98" /><polygon class="marker arrow" points="128.13,257.36 127.13,259.86 126.13,257.36" /></g><g class="wire" id="w-15"><path class="wire" d="M127.13,274.86 v9.98" /><polygon class="marker arrow" points="128.13,282.34 127.13,284.84 126.13,282.34" /></g><g class="wire" id="w-16"><path class="wire" d="M77.13,292.34 h-17 C58.47,292.34 57.13,291 57.13,289.34 v-136.36 C57.13,151.32 58.47,149.98 60.13,149.98 h17" /><polygon class="marker arrow" points="74.63,148.98 77.13,149.98 74.63,150.98" /></g><g class="wire dashed" id="w-17"><path class="wire dashed" d="M47.14,117.49 h29.98" /><polygon class="marker arrow" points="74.63,116.49 77.13,117.49 74.63,118.49" /></g><g class="wire dashed" id="w-18"><path class="wire dashed" d="M-0,124.33 v118.04" /></g><g class="wire dashed jump" id="w-19"><path class="wire dashed" d="M-0,242.37 h55.63 C55.63,241.55 56.31,240.87 57.13,240.87 S58.63,241.55 58.63,242.37 h8.5" /><polygon class="marker arrow" points="64.63,241.37 67.13,242.37 64.63,243.37" /></g><g class="wire dashed jump" id="w-20"><path class="wire dashed" d="M-0,242.37 v21.98 C-0,265.15 0.32,265.91 0.88,266.48 1.44,267.04 2.2,267.36 3,267.36 h52.63 C55.63,266.53 56.31,265.86 57.13,265.86 S58.63,266.53 58.63,267.36 h18.5" /><polygon class="marker arrow" points="74.63,266.36 77.13,267.36 74.63,268.36" /></g><g class="terminator diagram" id="FT-1"><path d="M109.63,-15 h35 C148.77,-15 152.13,-11.64 152.13,-7.5 152.13,-3.36 148.77,-0 144.63,-0 h-35 C105.48,-0 102.13,-3.36 102.13,-7.5 102.13,-11.64 105.48,-15 109.63,-15 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="120.3" y="-5.5">Noise</tspan></text></g><g class="process diagram" id="FPtemp"><path d="M80.13,10 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="80.29" y="19">Do temperature-dependent calculations</tspan></text></g><g class="process diagram" id="FPstore"><path d="M80.13,35 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="83.86" y="44">Store original AC source parameters</tspan></text></g><g class="process diagram" id="FPinput"><path d="M80.13,60 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="86.37" y="69">Apply input source AC parameters</tspan></text></g><g class="process diagram" id="FPop"><path d="M80.13,85 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="101.83" y="94">Solve operating point</tspan></text></g><g class="process diagram" id="FPinit"><path d="M80.13,109.99 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="80.29" y="118.99">Initialize frequency and noise behaviors</tspan></text></g><g class="decision diagram" id="FDmore"><path d="M78.6,148.05 l47.21,-12.89 C126.67,134.92 127.58,134.92 128.44,135.16 l47.21,12.89 C176.52,148.29 177.13,149.08 177.13,149.98 177.13,150.88 176.52,151.67 175.65,151.91 l-47.21,12.89 C127.58,165.04 126.67,165.04 125.81,164.8 l-47.21,-12.89 C77.73,151.67 77.13,150.88 77.13,149.98 77.13,149.08 77.73,148.29 78.6,148.05" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="91.26" y="151.48">Is there a frequency point left?</tspan></text></g><g class="direction" id="DIR-2"><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="183.7" y="147.98">No</tspan></text></g><g class="process diagram" id="FP-3"><path d="M200.12,142.48 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="210.22" y="151.48">Restore AC source parameters</tspan></text></g><g class="terminator diagram" id="FT-4"><path d="M314.62,142.48 h35 C353.77,142.48 357.12,145.84 357.12,149.98 357.12,154.12 353.77,157.48 349.62,157.48 h-35 C310.48,157.48 307.12,154.12 307.12,149.98 307.12,145.84 310.48,142.48 314.62,142.48 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="325" y="151.98">Finish</tspan></text></g><g class="direction" id="DIR-5"><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="129.13" y="176.95">Yes</tspan></text></g><g class="process diagram" id="FPaciter"><path d="M80.13,184.93 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="93.93" y="193.93">Perform regular AC iteration</tspan></text></g><g class="process diagram" id="FPupdate1"><path d="M80.13,209.9 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="104.89" y="215.9">Update noise state</tspan><tspan style="font-family:Arial;font-size:4pt;" x="97.53" y="221.9">(find input to output gain)</tspan></text></g><g class="process diagram" id="FPnziter"><path d="M70.13,234.87 h114 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-114 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="103.11" y="240.87">Solve noise iteration</tspan><tspan style="font-family:Arial;font-size:4pt;" x="74.42" y="246.87">(compute gain from each node to the output)</tspan></text></g><g class="process diagram" id="FPcompute"><path d="M80.13,259.86 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="93.18" y="268.86">Compute noise contributions</tspan></text></g><g class="process diagram" id="FPexport"><path d="M80.13,284.84 h94 c1.66,0 3,1.34 3,3 v9 c0,1.66 -1.34,3 -3,3 h-94 c-1.66,0 -3,-1.34 -3,-3 v-9 c0,-1.66 1.34,-3 3,-3 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="113.48" y="293.84">Export data</tspan></text></g><g class="io diagram" id="FIO1"><path d="M-47.18,124.33 C-47.83,124.33 -48.44,124.02 -48.81,123.49 -49.19,122.96 -49.28,122.28 -49.07,121.67 l3.85,-11 C-44.94,109.87 -44.18,109.33 -43.33,109.33 h90.51 C47.83,109.33 48.44,109.65 48.81,110.18 49.19,110.7 49.28,111.38 49.07,111.99 l-3.85,11 C44.94,123.8 44.18,124.33 43.33,124.33 Z" /><text class="lbl"><tspan style="font-family:Arial;font-size:4pt;" x="-22.33" y="118.83">INoiseBehavior list</tspan></text></g></svg>
