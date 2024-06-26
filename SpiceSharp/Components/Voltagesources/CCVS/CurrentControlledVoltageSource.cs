@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components.CommonBehaviors;
 using SpiceSharp.Components.CurrentControlledVoltageSources;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Validation;

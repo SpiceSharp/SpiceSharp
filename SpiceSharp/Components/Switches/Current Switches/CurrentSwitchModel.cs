@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.Switches;
 using SpiceSharp.Entities;
-using SpiceSharp.ParameterSets;
 
 namespace SpiceSharp.Components
 {

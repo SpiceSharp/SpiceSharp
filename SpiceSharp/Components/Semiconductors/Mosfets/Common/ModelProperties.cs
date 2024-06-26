@@ -1,5 +1,4 @@
-﻿using SpiceSharp.ParameterSets;
-using System;
+﻿using System;
 
 namespace SpiceSharp.Components.Mosfets
 {

@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.Mosfets.Level3;
 using SpiceSharp.Entities;
-using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Components

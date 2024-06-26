@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Algebra;
 using SpiceSharp.Simulations;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Components.Mosfets
 {

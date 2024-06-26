@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Entities;
 using SpiceSharp.Simulations.Variables;
 using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Validation
 {

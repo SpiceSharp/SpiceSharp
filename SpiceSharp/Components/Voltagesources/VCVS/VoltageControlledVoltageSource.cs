@@ -1,8 +1,6 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
 using SpiceSharp.Components.VoltageControlledVoltageSources;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
 using System.Linq;

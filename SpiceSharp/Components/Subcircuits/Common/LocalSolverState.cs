@@ -3,7 +3,6 @@ using SpiceSharp.Simulations;
 using SpiceSharp.Simulations.Variables;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SpiceSharp.Components.Subcircuits
 {
