@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.CurrentControlledCurrentSources;
-using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Validation;
 using System;

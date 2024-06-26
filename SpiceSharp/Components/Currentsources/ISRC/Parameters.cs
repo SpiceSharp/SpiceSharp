@@ -1,8 +1,4 @@
 ﻿using SpiceSharp.Attributes;
-using SpiceSharp.Components.CommonBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpiceSharp.Components.CurrentSources
 {

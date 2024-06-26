@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.Switches;
-using SpiceSharp.ParameterSets;
 using SpiceSharp.Validation;
 using System.Linq;
 
