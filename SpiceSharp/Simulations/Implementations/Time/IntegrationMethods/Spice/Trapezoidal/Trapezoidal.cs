@@ -1,5 +1,4 @@
-﻿using SpiceSharp.ParameterSets;
-using SpiceSharp.Attributes;
+﻿using SpiceSharp.Attributes;
 
 namespace SpiceSharp.Simulations.IntegrationMethods
 {

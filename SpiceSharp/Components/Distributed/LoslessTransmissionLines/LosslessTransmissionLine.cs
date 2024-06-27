@@ -1,6 +1,5 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Components.LosslessTransmissionLines;
-using SpiceSharp.ParameterSets;
 using System;
 
 namespace SpiceSharp.Components

@@ -1,6 +1,4 @@
-using SpiceSharp.ParameterSets;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using SpiceSharp.Attributes;
 using SpiceSharp.Simulations.Sweeps;

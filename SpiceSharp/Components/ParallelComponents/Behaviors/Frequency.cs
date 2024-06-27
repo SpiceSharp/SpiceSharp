@@ -1,5 +1,4 @@
-﻿using SpiceSharp.Attributes;
-using SpiceSharp.Behaviors;
+﻿using SpiceSharp.Behaviors;
 using SpiceSharp.Simulations;
 using System;
 
