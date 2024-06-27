@@ -4,6 +4,7 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
 using System;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Waveforms
 {

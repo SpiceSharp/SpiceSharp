@@ -6,6 +6,7 @@ using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;
 using System;
 using System.Collections.Generic;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Simulations
 {

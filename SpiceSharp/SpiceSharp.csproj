@@ -1,48 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0</TargetFrameworks>
-		<Version>3.1.9</Version>
-		<Authors>Sven Boulanger</Authors>
-		<Title>Spice#</Title>
-		<Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
-		<PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
-		<PackageLicenseUrl></PackageLicenseUrl>
-		<RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
-		<PackageTags>circuit electronics netlist spice simulator simulation ode solver design</PackageTags>
-		<AssemblyVersion>3.1.9.0</AssemblyVersion>
-		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Company />
-		<NeutralLanguage>en</NeutralLanguage>
-		<FileVersion>3.1.8.0</FileVersion>
-		<DebugType>full</DebugType>
-		<DebugSymbols>true</DebugSymbols>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Copyright />
-		<LangVersion>latest</LangVersion>
-		<PackageIcon>logo_full.png</PackageIcon>
-		<RepositoryType>git</RepositoryType>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard1.5|AnyCPU'">
-		<DocumentationFile></DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.5|AnyCPU'">
-		<DocumentationFile></DocumentationFile>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Compile Remove="Simulations\Implementations\PoleZeros\**" />
-		<EmbeddedResource Remove="Simulations\Implementations\PoleZeros\**" />
-		<None Remove="Simulations\Implementations\PoleZeros\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="Algebra\Polynomials\RationalPolynomial.cs" />
-	</ItemGroup>
+  <PropertyGroup>
+    <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<Compile Update="Properties\Resources.Designer.cs">
@@ -64,16 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\docs\api\images\logo_full.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-		<None Include="..\README.md">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-		</None>
+		<ProjectReference Include="$(RepoRoot)SpiceSharpGenerator/SpiceSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="../SpiceSharpGenerator/SpiceSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-	</ItemGroup>
+
 </Project>

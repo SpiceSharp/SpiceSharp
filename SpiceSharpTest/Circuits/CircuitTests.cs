@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp;
 using SpiceSharp.Components;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Circuits
 {

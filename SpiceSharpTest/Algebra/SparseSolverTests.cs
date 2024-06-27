@@ -5,6 +5,7 @@ using SpiceSharp.Simulations;
 using System;
 using System.IO;
 using System.Numerics;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {

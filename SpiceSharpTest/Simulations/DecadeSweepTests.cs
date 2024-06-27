@@ -2,6 +2,7 @@
 using SpiceSharp.Simulations;
 using System;
 using System.Linq;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Simulations
 {

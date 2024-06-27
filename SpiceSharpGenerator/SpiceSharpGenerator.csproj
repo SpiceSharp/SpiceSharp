@@ -1,44 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<DevelopmentDependency>true</DevelopmentDependency>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-		<Authors>Sven Boulanger</Authors>
-		<Company>SpiceSharp</Company>
-		<Product>SpiceSharp.Generator</Product>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<Description>A source generator that is built to help extending the functionality of the SpiceSharp framework.</Description>
-		<PackageIcon>logo_full.png</PackageIcon>
-		<Copyright></Copyright>
-		<RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
-		<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
 		<Version>1.0.5</Version>
 		<AssemblyVersion>1.0.5.0</AssemblyVersion>
+    <NoWarn>$(NoWarn);RS1035</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="bin\Debug\netstandard2.0\SpiceSharpGenerator.dll" />
+		<None Include="$(OutputPath)$(AssemblyName).dll" Pack="true" Visible="false" PackagePath="analyzers\dotnet\cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="$(OutputPath)\$(AssemblyName).dll" Visible="false">
-			<Pack>True</Pack>
-			<PackagePath>analyzers\dotnet\cs</PackagePath>
-		</None>
-		<None Include="..\docs\api\images\logo_full.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.1.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
 	</ItemGroup>
 </Project>

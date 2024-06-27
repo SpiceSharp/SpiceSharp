@@ -5,6 +5,7 @@ using SpiceSharp.Documentation;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest
 {

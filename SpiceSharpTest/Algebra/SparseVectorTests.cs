@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {

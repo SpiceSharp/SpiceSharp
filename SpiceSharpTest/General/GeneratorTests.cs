@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Attributes;
 using System;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.General
 {

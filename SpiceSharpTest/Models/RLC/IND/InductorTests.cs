@@ -7,6 +7,7 @@ using SpiceSharp.Validation;
 using System;
 using System.Linq;
 using System.Numerics;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {

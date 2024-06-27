@@ -3,6 +3,7 @@
 using NUnit.Framework;
 using SpiceSharp.Algebra;
 using System;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {

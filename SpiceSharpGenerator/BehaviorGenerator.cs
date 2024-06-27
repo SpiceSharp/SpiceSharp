@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using SpiceSharpGenerator.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using ClassDeclarationSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;

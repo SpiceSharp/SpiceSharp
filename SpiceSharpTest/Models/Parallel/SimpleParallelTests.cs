@@ -8,6 +8,7 @@ using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {

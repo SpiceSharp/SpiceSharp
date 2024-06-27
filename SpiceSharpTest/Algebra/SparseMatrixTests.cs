@@ -2,6 +2,7 @@
 using SpiceSharp.Algebra;
 using System.Collections;
 using System.Collections.Generic;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {
