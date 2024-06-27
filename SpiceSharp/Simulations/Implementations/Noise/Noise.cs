@@ -5,7 +5,6 @@ using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations

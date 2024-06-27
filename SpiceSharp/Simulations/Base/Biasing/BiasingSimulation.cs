@@ -5,7 +5,6 @@ using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations.Biasing;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace SpiceSharp.Simulations
 {

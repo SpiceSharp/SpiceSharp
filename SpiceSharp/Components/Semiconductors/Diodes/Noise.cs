@@ -1,7 +1,6 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
 using SpiceSharp.Components.NoiseSources;
-using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
 
