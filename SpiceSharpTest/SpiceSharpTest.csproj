@@ -2,14 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <Product>SpiceSharpTest</Product>
   </PropertyGroup>
-
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
 
   <ItemGroup>
     <Content Include="Algebra\Matrices\spice3f5_matrix01.dat">
@@ -25,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="$(RepoRoot)SpiceSharp/SpiceSharp.csproj" />
-    <ProjectReference Include="$(RepoRoot)SpiceSharpGenerator/SpiceSharpGenerator.csproj" />
     <ProjectReference Include="$(RepoRoot)SpiceSharpGenerator/SpiceSharpGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
