@@ -4,7 +4,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {
@@ -306,11 +305,11 @@ namespace SpiceSharpTest.Models
 
             // Check on
             s.SetParameter("on", true);
-            Assert.AreEqual(true, p.ZeroState);
+            Assert.That(p.ZeroState, Is.EqualTo(true));
 
             // Check off
             s.SetParameter("off", true);
-            Assert.AreEqual(false, p.ZeroState);
+            Assert.That(p.ZeroState, Is.EqualTo(false));
         }
 
         [Test]

@@ -7,7 +7,6 @@ using SpiceSharpTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -41,7 +40,7 @@ namespace SpiceSharpTest.Simulations
                     double resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
                     double voltage = dc.GetCurrentSweepValue()[1];
                     double expected = voltage * resistance / (resistance + 1.0e4);
-                    Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
+                    Assert.That(args.GetVoltage("out"), Is.EqualTo(expected).Within(1e-12));
                 };
 
                 dcSimulations.Add(dc);
@@ -72,7 +71,7 @@ namespace SpiceSharpTest.Simulations
                 var tran = new Transient("Tran 1", 1e-6, 10.0);
                 tran.ExportSimulationData += (sender, args) =>
                 {
-                    Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
+                    Assert.That(args.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
                 };
 
                 transientSimulations.Add(tran);

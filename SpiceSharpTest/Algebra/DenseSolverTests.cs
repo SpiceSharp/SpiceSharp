@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
 using System;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -29,14 +28,14 @@ namespace SpiceSharpTest.Algebra
             solver[4] = 8;
 
             var solution = new DenseVector<double>(4);
-            Assert.AreEqual(4, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(4));
             solver.ForwardSubstitute(solution);
             solver.BackwardSubstitute(solution);
 
-            Assert.AreEqual(solution[1], -9.0 / 4.0, 1e-12);
-            Assert.AreEqual(solution[2], 2.0, 1e-12);
-            Assert.AreEqual(solution[3], 5.0 / 4.0, 1e-12);
-            Assert.AreEqual(solution[4], 1.0, 1e-12);
+            Assert.That(solution[1], Is.EqualTo(-9.0 / 4.0).Within(1e-12));
+            Assert.That(solution[2], Is.EqualTo(2.0).Within(1e-12));
+            Assert.That(solution[3], Is.EqualTo(5.0 / 4.0).Within(1e-12));
+            Assert.That(solution[4], Is.EqualTo(1.0).Within(1e-12));
         }
 
         [Test]
@@ -64,7 +63,7 @@ namespace SpiceSharpTest.Algebra
             for (int i = 0; i < sol.Length; i++)
             {
                 double tol = Math.Max(Math.Abs(sol[i + 1]), Math.Abs(reference[i])) * 1e-12;
-                Assert.AreEqual(reference[i], sol[i + 1], tol);
+                Assert.That(sol[i + 1], Is.EqualTo(reference[i]).Within(tol));
             }
         }
     }

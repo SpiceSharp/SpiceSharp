@@ -4,7 +4,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {
@@ -51,7 +50,7 @@ namespace SpiceSharpTest.Models
 
                 // Because the property is always one iteration behind on the current solution, we relax the error a little bit
                 double tol = Math.Max(Math.Abs(voltage), Math.Abs(voltage2)) * RelTol + 1e-9;
-                Assert.AreEqual(voltage2, voltage, tol);
+                Assert.That(voltage, Is.EqualTo(voltage2).Within(tol));
             };
             dc.Run(ckt);
         }
@@ -344,7 +343,7 @@ namespace SpiceSharpTest.Models
             tran.ExportSimulationData += (sender, args) =>
             {
                 double tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
-                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
+                Assert.That(v_act.Value, Is.EqualTo(v_ref.Value).Within(tol));
             };
             tran.Run(ckt);
             v_ref.Destroy();

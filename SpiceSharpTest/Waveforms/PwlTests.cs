@@ -4,7 +4,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharpTest.Models;
 using System;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Waveforms
 {
@@ -42,7 +41,7 @@ namespace SpiceSharpTest.Waveforms
             var tran = new Transient("Tran 1", 1e-6, 10.0);
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(2.0, args.GetVoltage("in"), 1e-12);
+                Assert.That(args.GetVoltage("in"), Is.EqualTo(2.0).Within(1e-12));
             };
             tran.Run(ckt);
         }
@@ -60,7 +59,7 @@ namespace SpiceSharpTest.Waveforms
             var tran = new Transient("Tran 1", 1e-6, 1.0);
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(args.Time < 1.0 ? 2.0 * args.Time : 2.0, args.GetVoltage("in"), 1e-12);
+                Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time < 1.0 ? 2.0 * args.Time : 2.0).Within(1e-12));
             };
             tran.Run(ckt);
         }
@@ -78,7 +77,7 @@ namespace SpiceSharpTest.Waveforms
             var tran = new Transient("Tran 1", 1e-6, 1.0);
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(args.Time < 1.0 ? 1.0 + args.Time : 2.0, args.GetVoltage("in"), 1e-12);
+                Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time < 1.0 ? 1.0 + args.Time : 2.0).Within(1e-12));
             };
             tran.Run(ckt);
         }
@@ -102,7 +101,7 @@ namespace SpiceSharpTest.Waveforms
             var tran = new Transient("Tran 1", 1e-2, n - 1);
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(args.Time, args.GetVoltage("in"), 1e-12);
+                Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time).Within(1e-12));
             };
             tran.Run(ckt);
         }
@@ -130,17 +129,17 @@ namespace SpiceSharpTest.Waveforms
 
                 if (args.Time == integer)
                 {
-                    Assert.AreEqual(integer % 2, args.GetVoltage("in"), 1e-12);
+                    Assert.That(args.GetVoltage("in"), Is.EqualTo(integer % 2).Within(1e-12));
                 }
                 else
                 {
                     if (integer % 2 == 0)
                     {
-                        Assert.AreEqual(args.Time - integer, args.GetVoltage("in"), 1e-12);
+                        Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time - integer).Within(1e-12));
                     }
                     else
                     {
-                        Assert.AreEqual(1 - (args.Time - integer), args.GetVoltage("in"), 1e-12);
+                        Assert.That(args.GetVoltage("in"), Is.EqualTo(1 - (args.Time - integer)).Within(1e-12));
                     }
                 }
             };
@@ -173,12 +172,12 @@ namespace SpiceSharpTest.Waveforms
                     wasHit2 = true;
                 }
 
-                Assert.AreEqual(2.0, args.GetVoltage("in"), 1e-12);
+                Assert.That(args.GetVoltage("in"), Is.EqualTo(2.0).Within(1e-12));
             };
             tran.Run(ckt);
 
-            Assert.True(wasHit1);
-            Assert.True(wasHit2);
+            Assert.That(wasHit1);
+            Assert.That(wasHit2);
         }
     }
 }

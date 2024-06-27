@@ -6,7 +6,6 @@ using SpiceSharp.Simulations.IntegrationMethods;
 using SpiceSharpTest.Models;
 using System;
 using System.Collections.Generic;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -27,7 +26,7 @@ namespace SpiceSharpTest.Simulations
             var tran = new Transient("tran 1", 1.0, 10.0);
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-12);
+                Assert.That(args.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
             };
             tran.Run(ckt);
 
@@ -55,7 +54,7 @@ namespace SpiceSharpTest.Simulations
             var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10);
+                Assert.That(args.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-10));
             };
             tran.Run(ckt);
 
@@ -83,7 +82,7 @@ namespace SpiceSharpTest.Simulations
             var tran = new Transient("Tran 1", 1e-6, 10.0);
             tran.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
+                Assert.That(args.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
             };
             tran.Run(ckt);
         }
@@ -105,7 +104,7 @@ namespace SpiceSharpTest.Simulations
                 if (args.Time > 5.0)
                 {
                     export ??= new RealPropertyExport((Simulation)sender, "R1", "i");
-                    Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
+                    Assert.That(export.Value, Is.EqualTo(10.0 / 1e3).Within(1e-12));
                 }
             };
             tran.Run(ckt);
@@ -445,17 +444,17 @@ namespace SpiceSharpTest.Simulations
             sim1.ExportSimulationData += (sender, e) =>
             {
                 double input = e.GetVoltage("in");
-                Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
-                Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
-                Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
+                Assert.That(vexport.Value, Is.EqualTo(input * 0.5).Within(1e-9));
+                Assert.That(iexport.Value, Is.EqualTo(-input / 2.0e3).Within(1e-9));
+                Assert.That(pexport.Value, Is.EqualTo(input * input / 4.0 / 1.0e3).Within(1e-9));
             };
             sim2.ExportSimulationData += (sender, e) =>
             {
                 double input = e.GetVoltage("in");
-                Assert.AreEqual(Math.Sin(2 * Math.PI * 10 * e.Time) + 1.0, input, 1e-9);
-                Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
-                Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
-                Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
+                Assert.That(input, Is.EqualTo(Math.Sin(2 * Math.PI * 10 * e.Time) + 1.0).Within(1e-9));
+                Assert.That(vexport.Value, Is.EqualTo(input * 0.5).Within(1e-9));
+                Assert.That(iexport.Value, Is.EqualTo(-input / 2.0e3).Within(1e-9));
+                Assert.That(pexport.Value, Is.EqualTo(input * input / 4.0 / 1.0e3).Within(1e-9));
             };
             sim1.Run(ckt);
 
@@ -490,9 +489,9 @@ namespace SpiceSharpTest.Simulations
             tran.ExportSimulationData += (sender, args) =>
             {
                 if (a)
-                    Assert.AreEqual(args.Time * 1e-3 / 1e-6, args.GetVoltage("in"), 1e-12);
+                    Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time * 1e-3 / 1e-6).Within(1e-12));
                 else
-                    Assert.AreEqual(args.Time * 1e-3 / 2e-6, args.GetVoltage("in"), 1e-12);
+                    Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time * 1e-3 / 2e-6).Within(1e-12));
             };
             a = false; // Doing second circuit
             tran.Run(cktB);
@@ -524,7 +523,7 @@ namespace SpiceSharpTest.Simulations
 
             // Rerun the simulation for building the reference values
             int index = 0;
-            void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(r[index++], export.Value, 1e-20);
+            void CheckReference(object sender, ExportDataEventArgs args) => Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
             tran.ExportSimulationData += CheckReference;
             tran.Rerun();
             tran.ExportSimulationData -= CheckReference;

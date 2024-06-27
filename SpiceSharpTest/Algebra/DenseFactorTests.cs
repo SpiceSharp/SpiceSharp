@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -34,7 +33,7 @@ namespace SpiceSharpTest.Algebra
             // Compare
             for (int r = 0; r < matrixElements.Length; r++)
                 for (int c = 0; c < matrixElements[r].Length; c++)
-                    Assert.AreEqual(expected[r][c], solver[r + 1, c + 1], 1e-12);
+                    Assert.That(solver[r + 1, c + 1], Is.EqualTo(expected[r][c]).Within(1e-12));
         }
 
         [Test]
@@ -50,18 +49,18 @@ namespace SpiceSharpTest.Algebra
             solver[5, 4] = 1;
 
             // Order and factor
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
 
             // Compare
-            Assert.AreEqual(solver[1, 1], 1.0);
-            Assert.AreEqual(solver[1, 4], -1.0);
-            Assert.AreEqual(solver[2, 1], -1.0);
-            Assert.AreEqual(solver[2, 3], 1.0);
-            Assert.AreEqual(solver[2, 4], -1.0);
-            Assert.AreEqual(solver[3, 2], 1.0);
-            Assert.AreEqual(solver[3, 2], 1.0);
-            Assert.AreEqual(solver[4, 5], 1.0);
-            Assert.AreEqual(solver[5, 4], 1.0);
+            Assert.That(solver[1, 1], Is.EqualTo(1.0));
+            Assert.That(solver[1, 4], Is.EqualTo(-1.0));
+            Assert.That(solver[2, 1], Is.EqualTo(-1.0));
+            Assert.That(solver[2, 3], Is.EqualTo(1.0));
+            Assert.That(solver[2, 4], Is.EqualTo(-1.0));
+            Assert.That(solver[3, 2], Is.EqualTo(1.0));
+            Assert.That(solver[3, 2], Is.EqualTo(1.0));
+            Assert.That(solver[4, 5], Is.EqualTo(1.0));
+            Assert.That(solver[5, 4], Is.EqualTo(1.0));
         }
     }
 }

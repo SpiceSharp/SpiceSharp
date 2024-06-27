@@ -5,7 +5,6 @@ using SpiceSharp.Documentation;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest
 {
@@ -290,7 +289,7 @@ namespace SpiceSharpTest
                 }
             }
             // </example_Validation>
-            Assert.AreEqual(1, rules.ViolationCount);
+            Assert.That(rules.ViolationCount, Is.EqualTo(1));
         }
 
         [Test]

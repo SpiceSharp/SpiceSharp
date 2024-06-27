@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -13,13 +12,13 @@ namespace SpiceSharpTest.Algebra
             var n = new DenseMatrix<double>();
             n[10, 10] = 3;
 
-            Assert.AreEqual(10, n.Size);
-            Assert.AreEqual(3.0, n[10, 10], 1e-12);
+            Assert.That(n.Size, Is.EqualTo(10));
+            Assert.That(n[10, 10], Is.EqualTo(3.0).Within(1e-12));
 
             n.Clear();
 
-            Assert.AreEqual(0, n.Size);
-            Assert.AreEqual(0.0, n[10, 10], 1e-12);
+            Assert.That(n.Size, Is.EqualTo(0));
+            Assert.That(n[10, 10], Is.EqualTo(0.0).Within(1e-12));
         }
 
         [Test]
@@ -36,7 +35,7 @@ namespace SpiceSharpTest.Algebra
             {
                 int row = r == 2 ? 5 : r == 5 ? 2 : r;
                 for (int c = 1; c < 10; c++)
-                    Assert.AreEqual((row - 1) * 10 + c, n[r, c], 1e-12);
+                    Assert.That(n[r, c], Is.EqualTo((row - 1) * 10 + c).Within(1e-12));
             }
 
             n.Clear();
@@ -57,7 +56,7 @@ namespace SpiceSharpTest.Algebra
                 for (int c = 1; c < 10; c++)
                 {
                     int col = c == 2 ? 5 : c == 5 ? 2 : c;
-                    Assert.AreEqual((r - 1) * 10 + col, n[r, c], 1e-12);
+                    Assert.That(n[r, c], Is.EqualTo((r - 1) * 10 + col).Within(1e-12));
                 }
             }
 

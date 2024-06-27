@@ -4,7 +4,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {
@@ -416,7 +415,7 @@ namespace SpiceSharpTest.Models
             tran.ExportSimulationData += (sender, args) =>
             {
                 double tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
-                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
+                Assert.That(v_act.Value, Is.EqualTo(v_ref.Value).Within(tol));
             };
             tran.Run(ckt);
         }

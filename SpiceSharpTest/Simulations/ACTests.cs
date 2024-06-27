@@ -4,7 +4,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System.Collections.Generic;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -36,8 +35,8 @@ namespace SpiceSharpTest.Simulations
             int index = 0;
             void CheckReference(object sender, ExportDataEventArgs args)
             {
-                Assert.AreEqual(r[index].Real, export.Value.Real, 1e-20);
-                Assert.AreEqual(r[index++].Imaginary, export.Value.Imaginary, 1e-20);
+                Assert.That(export.Value.Real, Is.EqualTo(r[index].Real).Within(1e-20));
+                Assert.That(export.Value.Imaginary, Is.EqualTo(r[index++].Imaginary).Within(1e-20));
             }
             ac.ExportSimulationData += CheckReference;
             ac.Rerun();

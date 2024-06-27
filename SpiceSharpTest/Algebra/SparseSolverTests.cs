@@ -5,7 +5,6 @@ using SpiceSharp.Simulations;
 using System;
 using System.IO;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -20,7 +19,7 @@ namespace SpiceSharpTest.Algebra
             ReadMatrix(solver, Path.Combine(TestContext.CurrentContext.TestDirectory, Path.Combine("Algebra", "Matrices", "fidapm05")));
 
             // Order and factor this larger matrix
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
         }
 
         [Test]
@@ -34,7 +33,7 @@ namespace SpiceSharpTest.Algebra
             // Order and factor
             ModifiedNodalAnalysisHelper<double>.Magnitude = Math.Abs;
             solver.Precondition((matrix, vector) => ModifiedNodalAnalysisHelper<double>.PreorderModifiedNodalAnalysis(matrix, matrix.Size));
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
 
             IVector<double> solution = new DenseVector<double>(solver.Size);
             solver.ForwardSubstitute(solution);
@@ -70,7 +69,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
         }
 
         [Test]
@@ -103,7 +102,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
         }
 
         [Test]
@@ -136,7 +135,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
         }
 
         [Test]
@@ -169,7 +168,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // This should run without throwing an exception
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
         }
 
         [Test]
@@ -223,7 +222,7 @@ namespace SpiceSharpTest.Algebra
             }
 
             // Solver
-            Assert.AreEqual(solver.Size, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(solver.Size));
             var solution = new DenseVector<Complex>(solver.Size);
             solver.ForwardSubstitute(solution);
             solver.BackwardSubstitute(solution);
@@ -231,8 +230,8 @@ namespace SpiceSharpTest.Algebra
             // Check!
             for (int r = 0; r < reference.Length; r++)
             {
-                Assert.AreEqual(reference[r].Real, solution[r + 1].Real, 1e-12);
-                Assert.AreEqual(reference[r].Imaginary, solution[r + 1].Imaginary, 1e-12);
+                Assert.That(solution[r + 1].Real, Is.EqualTo(reference[r].Real).Within(1e-12));
+                Assert.That(solution[r + 1].Imaginary, Is.EqualTo(reference[r].Imaginary).Within(1e-12));
             }
         }
 
@@ -253,16 +252,16 @@ namespace SpiceSharpTest.Algebra
             solver[3, 4] = 4;
             solver[4, 4] = 1;
 
-            Assert.AreEqual(2, solver.OrderAndFactor());
+            Assert.That(solver.OrderAndFactor(), Is.EqualTo(2));
 
             // We are testing two things here:
             // - First, the solver should not have chosen a pivot in the lower-right submatrix
             // - Second, the submatrix should be equal to A_cc - A_c1 * A^-1 * A_1c with A the top-left 
             //   matrix, A_cc the bottom-right submatrix, A_1c and A_c1 the off-diagonal matrices
-            Assert.AreEqual(2.0, solver[3, 3], 1e-12);
-            Assert.AreEqual(4.0, solver[3, 4], 1e-12);
-            Assert.AreEqual(-8.0, solver[4, 3], 1e-12);
-            Assert.AreEqual(1.0, solver[4, 4], 1e-12);
+            Assert.That(solver[3, 3], Is.EqualTo(2.0).Within(1e-12));
+            Assert.That(solver[3, 4], Is.EqualTo(4.0).Within(1e-12));
+            Assert.That(solver[4, 3], Is.EqualTo(-8.0).Within(1e-12));
+            Assert.That(solver[4, 4], Is.EqualTo(1.0).Within(1e-12));
         }
 
         [Test]
@@ -290,14 +289,14 @@ namespace SpiceSharpTest.Algebra
             solution[4] = 0;
             solver.ForwardSubstitute(solution);
             solver.BackwardSubstitute(solution);
-            Assert.AreEqual(1.0, solution[1], 1e-12);
-            Assert.AreEqual(1.0, solution[2], 1e-12);
+            Assert.That(solution[1], Is.EqualTo(1.0).Within(1e-12));
+            Assert.That(solution[2], Is.EqualTo(1.0).Within(1e-12));
             solution[3] = 1.0;
             solution[4] = 2.0;
             solver.ForwardSubstitute(solution);
             solver.BackwardSubstitute(solution);
-            Assert.AreEqual(-7.0, solution[1], 1e-12);
-            Assert.AreEqual(-1.0, solution[2], 1e-12);
+            Assert.That(solution[1], Is.EqualTo(-7.0).Within(1e-12));
+            Assert.That(solution[2], Is.EqualTo(-1.0).Within(1e-12));
         }
     }
 }

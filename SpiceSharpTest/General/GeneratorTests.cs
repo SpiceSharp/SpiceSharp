@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using SpiceSharp.Attributes;
 using System;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.General
 {
@@ -71,9 +71,9 @@ namespace SpiceSharpTest.General
         {
             var p = new TestParameters();
             p.LowerLimit1 = 1.5;
-            Assert.AreEqual(1.5, p.LowerLimit1, 1e-12);
+            Assert.That(p.LowerLimit1, Is.EqualTo(1.5).Within(1e-12));
             p.LowerLimit1 = 0.5;
-            Assert.AreEqual(1.0, p.LowerLimit1, 1e-12);
+            Assert.That(p.LowerLimit1, Is.EqualTo(1.0).Within(1e-12));
         }
 
         [Test]
@@ -81,9 +81,9 @@ namespace SpiceSharpTest.General
         {
             var p = new TestParameters();
             p.UpperLimit1 = 1.5;
-            Assert.AreEqual(1.0, p.UpperLimit1, 1e-12);
+            Assert.That(p.UpperLimit1, Is.EqualTo(1.0).Within(1e-12));
             p.UpperLimit1 = 0.5;
-            Assert.AreEqual(0.5, p.UpperLimit1, 1e-12);
+            Assert.That(p.UpperLimit1, Is.EqualTo(0.5).Within(1e-12));
         }
     }
 }

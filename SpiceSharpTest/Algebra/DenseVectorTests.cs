@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Algebra
 {
@@ -17,7 +16,7 @@ namespace SpiceSharpTest.Algebra
             vector.SwapElements(2, 4);
 
             for (int k = 1; k <= 5; k++)
-                Assert.AreEqual(k == 2 ? 4 : k == 4 ? 2 : k, vector[k], 1e-12);
+                Assert.That(vector[k], Is.EqualTo(k == 2 ? 4 : k == 4 ? 2 : k).Within(1e-12));
         }
     }
 }

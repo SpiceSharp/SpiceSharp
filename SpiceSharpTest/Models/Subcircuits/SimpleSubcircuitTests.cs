@@ -5,7 +5,6 @@ using SpiceSharp.Simulations;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {
@@ -297,10 +296,10 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.Run(ckt);
             var behaviors = op.EntityBehaviors["X2"].GetValue<SpiceSharp.Components.Subcircuits.EntitiesBehavior>();
-            Assert.AreEqual(10.0 / 4.0, behaviors.LocalBehaviors["R2"].GetProperty<double>("v"), 1e-12);
+            Assert.That(behaviors.LocalBehaviors["R2"].GetProperty<double>("v"), Is.EqualTo(10.0 / 4.0).Within(1e-12));
 
             var state = behaviors.GetState<IBiasingSimulationState>();
-            Assert.AreEqual(10.0 / 4.0, state.Solution[state.Map[state.GetSharedVariable("b")]], 1e-12);
+            Assert.That(state.Solution[state.Map[state.GetSharedVariable("b")]], Is.EqualTo(10.0 / 4.0).Within(1e-12));
         }
     }
 }

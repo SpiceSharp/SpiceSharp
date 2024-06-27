@@ -7,7 +7,6 @@ using SpiceSharp.Validation;
 using System;
 using System.Linq;
 using System.Numerics;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Models
 {
@@ -123,9 +122,9 @@ namespace SpiceSharpTest.Models
 
             var op = new OP("op");
             var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
-            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
-            Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+            Assert.That(violation, Is.InstanceOf<VoltageLoopRuleViolation>());
         }
 
         [Test]

@@ -2,7 +2,6 @@
 using SpiceSharp.Simulations;
 using System;
 using System.Linq;
-using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -22,8 +21,8 @@ namespace SpiceSharpTest.Simulations
             ];
             int index = 0;
             foreach (double c in sweep)
-                Assert.AreEqual(expected[index++], c, 1e-9);
-            Assert.AreEqual(index, expected.Length);
+                Assert.That(c, Is.EqualTo(expected[index++]).Within(1e-9));
+            Assert.That(expected.Length, Is.EqualTo(index));
         }
 
         [Test]
@@ -39,8 +38,8 @@ namespace SpiceSharpTest.Simulations
             ];
             int index = 0;
             foreach (double c in sweep)
-                Assert.AreEqual(expected[index++], c, 1e-9);
-            Assert.AreEqual(index, expected.Length);
+                Assert.That(c, Is.EqualTo(expected[index++]).Within(1e-9));
+            Assert.That(expected.Length, Is.EqualTo(index));
         }
 
         [Test]
@@ -56,8 +55,8 @@ namespace SpiceSharpTest.Simulations
             ];
             int index = 0;
             foreach (double c in sweep)
-                Assert.AreEqual(expected[index++], c, 1e-9);
-            Assert.AreEqual(index, expected.Length);
+                Assert.That(c, Is.EqualTo(expected[index++]).Within(1e-9));
+            Assert.That(expected.Length, Is.EqualTo(index));
         }
 
         [Test]
@@ -73,8 +72,8 @@ namespace SpiceSharpTest.Simulations
             ];
             int index = 0;
             foreach (double c in sweep)
-                Assert.AreEqual(expected[index++], c, 1e-9);
-            Assert.AreEqual(index, expected.Length);
+                Assert.That(c, Is.EqualTo(expected[index++]).Within(1e-9));
+            Assert.That(expected.Length, Is.EqualTo(index));
         }
 
         [Test]
