@@ -1,5 +1,50 @@
-<Project>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!-- Directories -->
   <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <UserDocsDir>$(RepoRoot)docs/</UserDocsDir>
+    <BuildDir>$(RepoRoot)build\</BuildDir>
+    <DocPath>$(BuildDir)doc\</DocPath>
   </PropertyGroup>
+  
+  <!-- Build info -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <NeutralLanguage>en</NeutralLanguage>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <LangVersion>latest</LangVersion>
+	<OutputPath>$(BuildDir)bin\$(MSBuildProjectName)\</OutputPath>
+    <BaseIntermediateOutputPath>$(BuildDir)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <DocumentationFile>$(DocPath)$(MSBuildProjectName).xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <!-- Assembly info -->
+  <PropertyGroup>
+    <Version>3.1.9</Version>
+	<AssemblyVersion>3.1.9.0</AssemblyVersion>
+    <Authors>Sven Boulanger</Authors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Title>Spice#</Title>
+    <Company>SpiceSharp</Company>
+  </PropertyGroup>
+  
+  <!-- NuGet package info -->
+  <PropertyGroup>
+    <PackageProjectUrl>https://github.com/SpiceSharp/SpiceSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SpiceSharp/SpiceSharp</RepositoryUrl>
+    <PackageTags>circuit electronics netlist spice simulator simulation ode solver design</PackageTags>
+	<PackageReleaseNotes>Refer to the GitHub release for release notes.</PackageReleaseNotes>
+    <PackageIcon>logo_full.png</PackageIcon> 
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>circuit electronics netlist parser spice simulator simulation ode solver design</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(UserDocsDir)api/images/logo_full.png" Pack="true" Visible="false" PackagePath="" />
+    <None Include="$(RepoRoot)README.md" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+  
 </Project>

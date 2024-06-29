@@ -20,9 +20,9 @@ namespace SpiceSharpTest.General
             d.Add(typeof(A), a);
             d.Add(typeof(B), b);
 
-            Assert.AreEqual(a, d[typeof(A)]);
-            Assert.AreEqual(b, d[typeof(B)]);
-            Assert.AreEqual(b, d[typeof(IB)]);
+            Assert.That(a, Is.EqualTo(d[typeof(A)]));
+            Assert.That(b, Is.EqualTo(d[typeof(B)]));
+            Assert.That(b, Is.EqualTo(d[typeof(IB)]));
             Assert.Throws<AmbiguousTypeException>(() => { object r = d[typeof(IA)]; });
         }
     }

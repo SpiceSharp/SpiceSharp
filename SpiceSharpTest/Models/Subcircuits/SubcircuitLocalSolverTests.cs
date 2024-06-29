@@ -169,7 +169,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(1.0e3, args.GetVoltage("x"));
+                Assert.That(args.GetVoltage("x"), Is.EqualTo(1.0e3));
             };
             op.Run(ckt);
         }
@@ -189,7 +189,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(1.0e3, args.GetVoltage("x"));
+                Assert.That(args.GetVoltage("x"), Is.EqualTo(1.0e3));
             };
             op.Run(ckt);
         }
@@ -213,7 +213,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(0.5e3, args.GetVoltage("x"));
+                Assert.That(args.GetVoltage("x"), Is.EqualTo(0.5e3));
             };
             op.Run(ckt);
         }
@@ -230,7 +230,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(0.5, args.GetVoltage("x"));
+                Assert.That(args.GetVoltage("x"), Is.EqualTo(0.5));
             };
             op.Run(ckt);
         }
@@ -251,7 +251,7 @@ namespace SpiceSharpTest.Models
             var op = new OP("op");
             op.ExportSimulationData += (sender, args) =>
             {
-                Assert.AreEqual(0.5, args.GetVoltage("x"));
+                Assert.That(args.GetVoltage("x"), Is.EqualTo(0.5));
             };
             op.Run(ckt);
         }
@@ -557,8 +557,8 @@ namespace SpiceSharpTest.Models
 
             var exportsExpected = buildExports(opExpected);
             var exportsActual = buildExports(opActual);
-            Assert.AreEqual(exportsExpected.Length, exportsActual.Length);
-            Assert.Greater(exportsExpected.Length, 0);
+            Assert.That(exportsActual.Length, Is.EqualTo(exportsExpected.Length));
+            Assert.That(exportsExpected.Length, Is.GreaterThan(0));
 
             // Simulate the expected values
             double[] expected = new double[exportsExpected.Length];
@@ -578,12 +578,12 @@ namespace SpiceSharpTest.Models
                 {
                     double actual = exportsActual[i].Value;
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected[i])) * parameters.RelativeTolerance + parameters.AbsoluteTolerance;
-                    Assert.AreEqual(expected[i], actual, tol);
+                    Assert.That(actual, Is.EqualTo(expected[i]).Within(tol));
                 }
                 didCheck = true;
             };
             opActual.Run(cktActual);
-            Assert.True(didCheck);
+            Assert.That(didCheck);
 
             DestroyExports(exportsExpected);
             DestroyExports(exportsActual);
@@ -607,8 +607,8 @@ namespace SpiceSharpTest.Models
 
             var exportsExpected = buildExports(opExpected);
             var exportsActual = buildExports(opActual);
-            Assert.AreEqual(exportsExpected.Length, exportsActual.Length);
-            Assert.Greater(exportsExpected.Length, 0);
+            Assert.That(exportsActual.Length, Is.EqualTo(exportsExpected.Length));
+            Assert.That(exportsExpected.Length, Is.GreaterThan(0));
 
             // Simulate the expected values
             var expected = new Complex[points][];
@@ -631,14 +631,14 @@ namespace SpiceSharpTest.Models
                 {
                     var actual = exportsActual[i].Value;
                     double tol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected[index][i].Real)) * 1e-6 + 1e-12;
-                    Assert.AreEqual(expected[index][i].Real, actual.Real, tol);
+                    Assert.That(actual.Real, Is.EqualTo(expected[index][i].Real).Within(tol));
                     tol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected[index][i].Imaginary)) * 1e-6 + 1e-12;
-                    Assert.AreEqual(expected[index][i].Imaginary, actual.Imaginary, tol);
+                    Assert.That(actual.Imaginary, Is.EqualTo(expected[index][i].Imaginary).Within(tol));
                 }
                 index++;
             };
             opActual.Run(cktActual);
-            Assert.AreEqual(points, index);
+            Assert.That(index, Is.EqualTo(points));
 
             DestroyExports(exportsExpected);
             DestroyExports(exportsActual);
@@ -664,8 +664,8 @@ namespace SpiceSharpTest.Models
 
             var exportsExpected = buildExports(opExpected);
             var exportsActual = buildExports(opActual);
-            Assert.AreEqual(exportsExpected.Length, exportsActual.Length);
-            Assert.Greater(exportsExpected.Length, 0);
+            Assert.That(exportsActual.Length, Is.EqualTo(exportsExpected.Length));
+            Assert.That(exportsExpected.Length, Is.GreaterThan(0));
 
             // Simulate the expected values
             double[][] expected = new double[points][];
@@ -688,12 +688,12 @@ namespace SpiceSharpTest.Models
                 {
                     double actual = exportsActual[i].Value;
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected[index][i])) * 1e-6;
-                    Assert.AreEqual(expected[index][i], actual, tol);
+                    Assert.That(actual, Is.EqualTo(expected[index][i]).Within(tol));
                 }
                 index++;
             };
             opActual.Run(cktActual);
-            Assert.AreEqual(points, index);
+            Assert.That(index, Is.EqualTo(points));
 
             DestroyExports(exportsExpected);
             DestroyExports(exportsActual);

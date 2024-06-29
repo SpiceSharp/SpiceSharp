@@ -57,7 +57,7 @@ namespace SpiceSharpTest.Models
         /// <returns></returns>
         static Circuit CreateResistorsInSeriesCircuit(int count, double current, double resistance)
         {
-            Assert.IsTrue(count > 1);
+            Assert.That(count > 1);
             var ckt = new Circuit(
                 new CurrentSource("I1", "IN", "0", current),
                 new Resistor("R1", "IN", "B1", resistance),
@@ -130,17 +130,17 @@ namespace SpiceSharpTest.Models
             isrc.GetProperty<IWaveformDescription>("waveform").SetParameter("v2", 2.0);
 
             // Check
-            Assert.AreEqual(isrc.Name, clone.Name);
+            Assert.That(clone.Name, Is.EqualTo(isrc.Name));
             var origNodes = isrc.Nodes;
             var cloneNodes = clone.Nodes;
-            Assert.AreEqual(origNodes[0], cloneNodes[0]);
-            Assert.AreEqual(origNodes[1], cloneNodes[1]);
+            Assert.That(cloneNodes[0], Is.EqualTo(origNodes[0]));
+            Assert.That(cloneNodes[1], Is.EqualTo(origNodes[1]));
             var waveform = (Pulse)clone.GetProperty<IWaveformDescription>("waveform");
-            Assert.AreEqual(0.0, waveform.InitialValue, 1e-12);
-            Assert.AreEqual(1.0, waveform.PulsedValue, 1e-12);
-            Assert.AreEqual(2.0, isrc.GetProperty<IWaveformDescription>("waveform").GetProperty<double>("v2"));
-            Assert.AreEqual(1.0, waveform.GetProperty<double>("v2"));
-            Assert.AreEqual(1e-5, waveform.GetProperty<double>("per"), 1e-12);
+            Assert.That(waveform.InitialValue, Is.EqualTo(0.0).Within(1e-12));
+            Assert.That(waveform.PulsedValue, Is.EqualTo(1.0).Within(1e-12));
+            Assert.That(isrc.GetProperty<IWaveformDescription>("waveform").GetProperty<double>("v2"), Is.EqualTo(2.0));
+            Assert.That(waveform.GetProperty<double>("v2"), Is.EqualTo(1.0));
+            Assert.That(waveform.GetProperty<double>("per"), Is.EqualTo(1e-5).Within(1e-12));
         }
 
         [Test]

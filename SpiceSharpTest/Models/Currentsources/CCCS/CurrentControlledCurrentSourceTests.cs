@@ -4,7 +4,6 @@ using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using SpiceSharp.Validation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
@@ -71,10 +70,10 @@ namespace SpiceSharpTest.Models
             // Make the simulation and run it
             var op = new OP("op");
             var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
-            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
-            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violation);
-            Assert.AreEqual("out", ((FloatingNodeRuleViolation)violation).FloatingVariable.Name);
+            Assert.That(violation, Is.InstanceOf<FloatingNodeRuleViolation>());
+            Assert.That(((FloatingNodeRuleViolation)violation).FloatingVariable.Name, Is.EqualTo("out"));
         }
 
         [Test]

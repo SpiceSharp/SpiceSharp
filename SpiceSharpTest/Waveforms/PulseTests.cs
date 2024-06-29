@@ -66,10 +66,10 @@ namespace SpiceSharpTest.Waveforms
             };
             tran.Run(ckt);
 
-            Assert.True(riseHit);
-            Assert.True(risenHit);
-            Assert.True(fallHit);
-            Assert.True(fallenHit);
+            Assert.That(riseHit);
+            Assert.That(risenHit);
+            Assert.That(fallHit);
+            Assert.That(fallenHit);
         }
     }
 }

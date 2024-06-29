@@ -146,7 +146,7 @@ namespace SpiceSharpTest.Models
                     double expected = results[index++];
                     double actual = export.Value;
                     double tol = Math.Max(Math.Abs(expected), Math.Abs(actual)) * CompareRelTol + CompareAbsTol;
-                    Assert.AreEqual(expected, actual, tol);
+                    Assert.That(actual, Is.EqualTo(expected).Within(tol));
                 }
             }
 
@@ -184,9 +184,9 @@ namespace SpiceSharpTest.Models
                     var expected = results[index++];
                     var actual = export.Value;
                     double tol = Math.Max(Math.Abs(expected.Real), Math.Abs(actual.Real)) * CompareRelTol + CompareAbsTol;
-                    Assert.AreEqual(expected.Real, actual.Real, tol);
+                    Assert.That(actual.Real, Is.EqualTo(expected.Real).Within(tol));
                     tol = Math.Max(Math.Abs(expected.Imaginary), Math.Abs(actual.Imaginary)) * CompareRelTol + CompareAbsTol;
-                    Assert.AreEqual(expected.Imaginary, actual.Imaginary, tol);
+                    Assert.That(actual.Imaginary, Is.EqualTo(expected.Imaginary).Within(tol));
                 }
             }
 
@@ -224,7 +224,7 @@ namespace SpiceSharpTest.Models
                     double actual = exportIt.Current?.Value ?? throw new ArgumentNullException();
                     double expected = referencesIt.Current;
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
-                    Assert.AreEqual(expected, actual, tol);
+                    Assert.That(actual, Is.EqualTo(expected).Within(tol));
                 }
             };
             sim.Run(ckt);
@@ -257,7 +257,7 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected, actual, tol);
+                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
                     }
                     catch (Exception ex)
                     {
@@ -297,7 +297,7 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected, actual, tol);
+                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
                     }
                     catch (Exception ex)
                     {
@@ -337,7 +337,7 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected, actual, tol);
+                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
                     }
                     catch (Exception ex)
                     {
@@ -378,8 +378,8 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected.Real, actual.Real, rtol);
-                        Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                        Assert.That(actual.Real, Is.EqualTo(expected.Real).Within(rtol));
+                        Assert.That(actual.Imaginary, Is.EqualTo(expected.Imaginary).Within(itol));
                     }
                     catch (Exception ex)
                     {
@@ -419,8 +419,8 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected.Real, actual.Real, rtol);
-                        Assert.AreEqual(expected.Imaginary, actual.Imaginary, itol);
+                        Assert.That(actual.Real, Is.EqualTo(expected.Real).Within(rtol));
+                        Assert.That(actual.Imaginary, Is.EqualTo(expected.Imaginary).Within(itol));
                     }
                     catch (Exception ex)
                     {
@@ -454,7 +454,7 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected, actual, tol);
+                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
                     }
                     catch (Exception ex)
                     {
@@ -490,7 +490,7 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected, actual, tol);
+                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
                     }
                     catch (Exception ex)
                     {
@@ -525,7 +525,7 @@ namespace SpiceSharpTest.Models
 
                     try
                     {
-                        Assert.AreEqual(expected, actual, tol);
+                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
                     }
                     catch (Exception ex)
                     {

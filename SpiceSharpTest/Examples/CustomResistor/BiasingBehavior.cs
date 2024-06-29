@@ -19,6 +19,7 @@ namespace SpiceSharp.Components.NonlinearResistorBehaviors
         /// Creates a new instance of the <see cref="BiasingBehavior"/> class.
         /// </summary>
         /// <param name="name">The name of the behavior.</param>
+        /// <param name="context">The component binding context.</param>
         public BiasingBehavior(string name, ComponentBindingContext context) : base(name)
         {
             if (context == null)

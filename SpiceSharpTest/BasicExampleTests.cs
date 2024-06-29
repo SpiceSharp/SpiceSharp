@@ -289,7 +289,7 @@ namespace SpiceSharpTest
                 }
             }
             // </example_Validation>
-            Assert.AreEqual(1, rules.ViolationCount);
+            Assert.That(rules.ViolationCount, Is.EqualTo(1));
         }
 
         [Test]

@@ -50,7 +50,7 @@ namespace SpiceSharpTest.Simulations
                 double resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
                 double voltage = dc.GetCurrentSweepValue()[1];
                 double expected = voltage * resistance / (resistance + 1.0e4);
-                Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
+                Assert.That(args.GetVoltage("out"), Is.EqualTo(expected).Within(1e-12));
             };
             dc.Run(ckt);
         }
@@ -119,7 +119,7 @@ namespace SpiceSharpTest.Simulations
 
             // Rerun: check with reference
             int index = 0;
-            void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(dcExportV1.Value, r[index++], 1e-20);
+            void CheckReference(object sender, ExportDataEventArgs args) => Assert.That(r[index++], Is.EqualTo(dcExportV1.Value).Within(1e-20));
             dc.ExportSimulationData += CheckReference;
             dc.Rerun();
             dc.ExportSimulationData -= CheckReference;
@@ -147,9 +147,9 @@ namespace SpiceSharpTest.Simulations
             dc.ExportSimulationData += (sender, args) =>
             {
                 if (a)
-                    Assert.AreEqual(args.GetVoltage("in") * 0.5, args.GetVoltage("out"), 1e-12);
+                    Assert.That(args.GetVoltage("out"), Is.EqualTo(args.GetVoltage("in") * 0.5).Within(1e-12));
                 else
-                    Assert.AreEqual(args.GetVoltage("in") * 2.0 / 3.0, args.GetVoltage("out"), 1e-12);
+                    Assert.That(args.GetVoltage("out"), Is.EqualTo(args.GetVoltage("in") * 2.0 / 3.0).Within(1e-12));
             };
             a = false; // Doing second circuit
             dc.Run(cktB);

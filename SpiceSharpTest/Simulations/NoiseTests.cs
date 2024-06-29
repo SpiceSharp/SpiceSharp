@@ -34,7 +34,7 @@ namespace SpiceSharpTest.Simulations
             int index = 0;
             void CheckReference(object sender, ExportDataEventArgs args)
             {
-                Assert.AreEqual(r[index++], export.Value, 1e-20);
+                Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
             }
             noise.ExportSimulationData += CheckReference;
             noise.Rerun();

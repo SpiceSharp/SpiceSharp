@@ -204,7 +204,7 @@ namespace SpiceSharpTest.Models
             var watch = System.Diagnostics.Stopwatch.StartNew();
             dc.Run(solveCirc);
             watch.Stop();
-            Assert.AreNotEqual(0.0, maxPower);
+            Assert.That(maxPower, Is.Not.EqualTo(0.0));
         }
 
         public static IEnumerable<TestCaseData> WorkDistributor

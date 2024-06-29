@@ -304,11 +304,11 @@ namespace SpiceSharpTest.Models
 
             // Check on
             s.SetParameter("on", true);
-            Assert.AreEqual(true, p.ZeroState);
+            Assert.That(p.ZeroState, Is.EqualTo(true));
 
             // Check off
             s.SetParameter("off", true);
-            Assert.AreEqual(false, p.ZeroState);
+            Assert.That(p.ZeroState, Is.EqualTo(false));
         }
 
         [Test]
@@ -321,10 +321,10 @@ namespace SpiceSharpTest.Models
             // Make the simulation and run it
             var op = new OP("op");
             var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
-            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
-            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violation);
-            Assert.AreEqual("in", ((FloatingNodeRuleViolation)violation).FloatingVariable.Name);
+            Assert.That(violation, Is.InstanceOf<FloatingNodeRuleViolation>());
+            Assert.That(((FloatingNodeRuleViolation)violation).FloatingVariable.Name, Is.EqualTo("in"));
         }
 
         [Test]

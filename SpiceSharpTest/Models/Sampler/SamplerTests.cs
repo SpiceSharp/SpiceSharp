@@ -32,12 +32,13 @@ namespace SpiceSharpTest.Models
                 {
                     if (!refPoints.MoveNext())
                         throw new SpiceSharpException("Reference points already ended");
-                    Assert.AreEqual(args.Time, refPoints.Current, 1e-9);
+                    Assert.That(refPoints.Current, Is.EqualTo(args.Time).Within(1e-9));
                 }));
             var tran = new Transient("tran", 1e-6, 1);
             tran.Run(ckt);
 
             // Make sure we went through all our reference points
-            Assert.IsFalse(refPoints.MoveNext());        }
+            Assert.That(refPoints.MoveNext(), Is.False);
+        }
     }
 }

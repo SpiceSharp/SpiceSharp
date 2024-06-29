@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using SpiceSharp.Algebra;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SpiceSharpTest.Algebra
@@ -35,7 +34,7 @@ namespace SpiceSharpTest.Algebra
                 for (int c = 0; c < size; c++)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    Assert.That(element.Value, Is.EqualTo(expected).Within(1e-12));
                     element = element.Right;
                 }
             }
@@ -47,7 +46,7 @@ namespace SpiceSharpTest.Algebra
                 for (int c = size - 1; c >= 0; c--)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    Assert.That(element.Value, Is.EqualTo(expected).Within(1e-12));
                     element = element.Left;
                 }
             }
@@ -59,7 +58,7 @@ namespace SpiceSharpTest.Algebra
                 for (int r = 0; r < size; r++)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    Assert.That(element.Value, Is.EqualTo(expected).Within(1e-12));
                     element = element.Below;
                 }
             }
@@ -71,7 +70,7 @@ namespace SpiceSharpTest.Algebra
                 for (int r = size - 1; r >= 0; r--)
                 {
                     int expected = r * size + c + 1;
-                    Assert.AreEqual(expected, element.Value, 1e-12);
+                    Assert.That(element.Value, Is.EqualTo(expected).Within(1e-12));
                     element = element.Above;
                 }
             }
@@ -121,10 +120,10 @@ namespace SpiceSharpTest.Algebra
                     if ((fill & 0x01) != 0)
                     {
                         int expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix[crow, i + 1], 1e-12);
+                        Assert.That(matrix[crow, i + 1], Is.EqualTo(expected).Within(1e-12));
                     }
                     else
-                        Assert.AreEqual(null, matrix.FindElement(new MatrixLocation(crow, i + 1)));
+                        Assert.That(matrix.FindElement(new MatrixLocation(crow, i + 1)), Is.EqualTo(null));
                     fill = (fill >> 1) & 0b011111;
                 }
             }
@@ -174,10 +173,10 @@ namespace SpiceSharpTest.Algebra
                     if ((fill & 0x01) != 0)
                     {
                         int expected = k * 32 + i + 1;
-                        Assert.AreEqual(expected, matrix[i + 1, ccolumn], 1e-12);
+                        Assert.That(matrix[i + 1, ccolumn], Is.EqualTo(expected).Within(1e-12));
                     }
                     else
-                        Assert.AreEqual(null, matrix.FindElement(new MatrixLocation(i + 1, ccolumn)));
+                        Assert.That(matrix.FindElement(new MatrixLocation(i + 1, ccolumn)), Is.EqualTo(null));
                     fill = (fill >> 1) & 0b011111;
                 }
             }
@@ -208,9 +207,9 @@ namespace SpiceSharpTest.Algebra
                 for (int c = 1; c <= 3; c++)
                 {
                     if (r == row && c == column)
-                        Assert.AreEqual(null, matrix.FindElement(new MatrixLocation(r, c)));
+                        Assert.That(matrix.FindElement(new MatrixLocation(r, c)), Is.EqualTo(null));
                     else
-                        Assert.AreEqual(index, matrix.FindElement(new MatrixLocation(r, c)).Value, 1e-9);
+                        Assert.That(matrix.FindElement(new MatrixLocation(r, c)).Value, Is.EqualTo(index).Within(1e-9));
                     index++;
                 }
             }
