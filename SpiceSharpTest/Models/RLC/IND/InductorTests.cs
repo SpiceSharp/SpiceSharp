@@ -121,7 +121,7 @@ namespace SpiceSharpTest.Models
                 new Inductor("L2", "in", "0", 1e-6));
 
             var op = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
+            var ex = Assert.Throws<ValidationFailedException>(() => op.RunToEnd(ckt));
             Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
             Assert.That(violation, Is.InstanceOf<VoltageLoopRuleViolation>());

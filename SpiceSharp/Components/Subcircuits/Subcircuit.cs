@@ -96,7 +96,8 @@ namespace SpiceSharp.Components
                     .AddIfNo<INoiseBehavior>(context => new Subcircuits.Noise(context));
 
                 // Run the simulation
-                localSim.Run(Parameters.Definition.Entities);
+                foreach (var _ in localSim.Run(Parameters.Definition.Entities))
+                { }
 
                 // Allow the behaviors to fetch the behaviors if they want
                 foreach (var behavior in behaviors)

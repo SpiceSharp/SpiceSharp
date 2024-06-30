@@ -24,11 +24,7 @@ namespace SpiceSharpTest.Examples
             // Create the transient analysis and exports
             var tran = new Transient("tran", 1e-6, 10e-5);
             var outputExport = new RealVoltageExport(tran, "out");
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                double time = args.Time;
-                double output = outputExport.Value;
-            };
+
             // </example_change_parameter_transient>
             // <example_change_parameter_setup>
             // Now we need to make sure we have a reference to both the base parameters and temperature behavior
@@ -58,7 +54,11 @@ namespace SpiceSharpTest.Examples
             };
 
             // Run the simulation
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt))
+            {
+                double time = tran.Time;
+                double output = outputExport.Value;
+            }
             // </example_change_parameter_load>
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -8,6 +9,11 @@ namespace SpiceSharp.Simulations
     /// <seealso cref="BiasingSimulation" />
     public class OP : BiasingSimulation
     {
+        /// <summary>
+        /// The constant returned when exporting the operating point.
+        /// </summary>
+        public const int ExportOperatingPoint = 0x01;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OP"/> class.
         /// </summary>
@@ -19,12 +25,15 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int exportMask = -1)
         {
-            base.Execute();
+            foreach (int exportType in base.Execute())
+                yield return exportType;
+
             Op(BiasingParameters.DcMaxIterations);
-            var exportargs = new ExportDataEventArgs(this);
-            OnExport(exportargs);
+
+            if ((exportMask & ExportOperatingPoint) != 0)
+                yield return ExportOperatingPoint;
         }
     }
 }

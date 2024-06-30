@@ -8,8 +8,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export complex currents.
     /// </summary>
-    /// <seealso cref="Export{S, T}" />
-    public class ComplexCurrentExport : Export<IFrequencySimulation, Complex>
+    /// <seealso cref="Export{T}" />
+    public class ComplexCurrentExport : Export<Complex>
     {
         /// <summary>
         /// Gets the name of the voltage source.
@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <param name="source">The source name.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="source"/> is empty.</exception>
-        public ComplexCurrentExport(IFrequencySimulation simulation, Reference source)
+        public ComplexCurrentExport(ISimulation simulation, Reference source)
             : base(simulation)
         {
             if (source.Length == 0)
@@ -32,12 +32,16 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc />
-        protected override void Initialize(object sender, EventArgs e)
+        protected override Func<Complex> BuildExtractor(ISimulation simulation)
         {
-            var branch = Source.GetContainer(Simulation)
-                .GetValue<IBranchedBehavior<Complex>>()
-                .Branch;
-            Extractor = () => branch.Value;
+            if (simulation is not null &&
+                Source.TryGetContainer(simulation, out var container) &&
+                container.TryGetValue<IBranchedBehavior<Complex>>(out var behavior))
+            {
+                var branch = behavior.Branch;
+                return () => branch.Value;
+            }
+            return null;
         }
 
         /// <summary>

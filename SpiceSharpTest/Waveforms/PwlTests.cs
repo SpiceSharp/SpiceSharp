@@ -39,11 +39,10 @@ namespace SpiceSharpTest.Waveforms
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 10.0);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                Assert.That(args.GetVoltage("in"), Is.EqualTo(2.0).Within(1e-12));
-            };
-            tran.Run(ckt);
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(2.0).Within(1e-12));
+            }
         }
 
         [Test]
@@ -57,11 +56,10 @@ namespace SpiceSharpTest.Waveforms
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 1.0);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time < 1.0 ? 2.0 * args.Time : 2.0).Within(1e-12));
-            };
-            tran.Run(ckt);
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(tran.Time < 1.0 ? 2.0 * tran.Time : 2.0).Within(1e-12));
+            }
         }
 
         [Test]
@@ -75,11 +73,10 @@ namespace SpiceSharpTest.Waveforms
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 1.0);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time < 1.0 ? 1.0 + args.Time : 2.0).Within(1e-12));
-            };
-            tran.Run(ckt);
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(tran.Time < 1.0 ? 1.0 + tran.Time : 2.0).Within(1e-12));
+            }
         }
 
         [Test]
@@ -99,11 +96,10 @@ namespace SpiceSharpTest.Waveforms
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-2, n - 1);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time).Within(1e-12));
-            };
-            tran.Run(ckt);
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(tran.Time).Within(1e-12));
+            }
         }
 
         [Test]
@@ -123,27 +119,26 @@ namespace SpiceSharpTest.Waveforms
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-2, n - 1);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                int integer = (int)args.Time;
+                int integer = (int)tran.Time;
 
-                if (args.Time == integer)
+                if (tran.Time == integer)
                 {
-                    Assert.That(args.GetVoltage("in"), Is.EqualTo(integer % 2).Within(1e-12));
+                    Assert.That(tran.GetVoltage("in"), Is.EqualTo(integer % 2).Within(1e-12));
                 }
                 else
                 {
                     if (integer % 2 == 0)
                     {
-                        Assert.That(args.GetVoltage("in"), Is.EqualTo(args.Time - integer).Within(1e-12));
+                        Assert.That(tran.GetVoltage("in"), Is.EqualTo(tran.Time - integer).Within(1e-12));
                     }
                     else
                     {
-                        Assert.That(args.GetVoltage("in"), Is.EqualTo(1 - (args.Time - integer)).Within(1e-12));
+                        Assert.That(tran.GetVoltage("in"), Is.EqualTo(1 - (tran.Time - integer)).Within(1e-12));
                     }
                 }
-            };
-            tran.Run(ckt);
+            }
         }
 
         [Test]
@@ -160,21 +155,20 @@ namespace SpiceSharpTest.Waveforms
             bool wasHit1 = false;
             bool wasHit2 = false;
 
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                if (args.Time == 1.111)
+                if (tran.Time == 1.111)
                 {
                     wasHit1 = true;
                 }
 
-                if (args.Time == 3.34)
+                if (tran.Time == 3.34)
                 {
                     wasHit2 = true;
                 }
 
-                Assert.That(args.GetVoltage("in"), Is.EqualTo(2.0).Within(1e-12));
-            };
-            tran.Run(ckt);
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(2.0).Within(1e-12));
+            }
 
             Assert.That(wasHit1);
             Assert.That(wasHit2);

@@ -23,14 +23,11 @@ namespace SpiceSharpTest.Examples
             // Setup the simulation and export our current
             var dc = new DC("DC", "V1", -2.0, 2.0, 1e-2);
             var currentExport = new RealPropertyExport(dc, "V1", "i");
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double current = -currentExport.Value;
                 System.Console.Write("{0}, ".FormatString(current));
-            };
-            dc.Run(ckt);
-
-            currentExport.Destroy();
+            }
             // </example_customcomponent_nonlinearresistor_test>
         }
     }

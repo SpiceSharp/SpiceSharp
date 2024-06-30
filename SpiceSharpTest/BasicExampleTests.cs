@@ -96,12 +96,11 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Catch exported data
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
-                double input = args.GetVoltage("in");
-                double output = args.GetVoltage("out");
-            };
-            dc.Run(ckt);
+                double input = dc.GetVoltage("in");
+                double output = dc.GetVoltage("out");
+            }
             // </example01_simulate>
         }
 
@@ -125,13 +124,12 @@ namespace SpiceSharpTest
             var currentExport = new RealPropertyExport(dc, "V1", "i");
 
             // Catch exported data
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double input = inputExport.Value;
                 double output = outputExport.Value;
                 double current = currentExport.Value;
-            };
-            dc.Run(ckt);
+            }
             // </example01_simulate2>
         }
 
@@ -163,7 +161,7 @@ namespace SpiceSharpTest
             var currentExport = new RealPropertyExport(dc, "M1", "id");
 
             // Run the simulation
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double vgsVoltage = dc.GetCurrentSweepValue()[0];
                 double vdsVoltage = dc.GetCurrentSweepValue()[1];
@@ -192,12 +190,11 @@ namespace SpiceSharpTest
             var exportVoltage = new ComplexVoltageExport(ac, "out");
 
             // Simulate
-            ac.ExportSimulationData += (sender, args) =>
+            foreach (int _ in ac.Run(ckt, AC.ExportSmallSignal))
             {
                 var output = exportVoltage.Value;
                 double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
-            };
-            ac.Run(ckt);
+            }
             // </example_AC>
         }
 
@@ -220,12 +217,11 @@ namespace SpiceSharpTest
             var outputExport = new RealVoltageExport(tran, "out");
 
             // Simulate
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
                 double input = inputExport.Value;
                 double output = outputExport.Value;
-            };
-            tran.Run(ckt);
+            }
             // </example_Transient>
         }
 
@@ -262,12 +258,11 @@ namespace SpiceSharpTest
             var current = new RealPropertyExport(op, "R1", "i");
 
             // Simulate
-            op.ExportSimulationData += (sender, args) =>
+            foreach (int _ in op.Run(ckt))
             {
                 // This will run 1o times
                 double result = current.Value;
-            };
-            op.Run(ckt);
+            }
             // </example_Stochastic>
         }
 
@@ -335,7 +330,7 @@ namespace SpiceSharpTest
                     Console.WriteLine($" : {parameter.Description} ({parameter.Member.Name}, {parameter.BaseType.Name})");
                 }
             };
-            op.Run(ckt);
+            foreach (int _ in op.Run(ckt)) ;
             // </example_BehaviorDocumentation>
         }
     }

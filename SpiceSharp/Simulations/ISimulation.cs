@@ -1,5 +1,7 @@
 ﻿using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -36,6 +38,11 @@ namespace SpiceSharp.Simulations
         string Name { get; }
 
         /// <summary>
+        /// Gets the index of the current simulation run.
+        /// </summary>
+        int CurrentRun { get; }
+
+        /// <summary>
         /// Gets the current status of the <see cref="ISimulation"/>.
         /// </summary>
         /// <value>
@@ -44,14 +51,20 @@ namespace SpiceSharp.Simulations
         SimulationStatus Status { get; }
 
         /// <summary>
-        /// Runs the <see cref="ISimulation"/> on the specified <see cref="IEntityCollection"/>.
+        /// Runs the <see cref="ISimulation"/> on the specified <see cref="IEntityCollection"/>. Only one
+        /// enumerable can run at any given time.
         /// </summary>
         /// <param name="entities">The entities.</param>
-        void Run(IEntityCollection entities);
+        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
+        /// <returns>An enumerable that yields a type identifier every time new simulation data is available.</returns>
+        IEnumerable<int> Run(IEntityCollection entities, int exportMask = -1);
 
         /// <summary>
-        /// Reruns the <see cref="ISimulation"/> with the previous behaviors.
+        /// Reruns the <see cref="ISimulation"/> with the previous behaviors. Only one
+        /// enumerable can run at any given time.
         /// </summary>
-        void Rerun();
+        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
+        /// <returns>An enumerable that yields a type identifier every time new simulation data is available.</returns>
+        IEnumerable<int> Rerun(int exportMask = -1);
     }
 }

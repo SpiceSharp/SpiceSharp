@@ -69,7 +69,7 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation and run it
             var op = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
+            var ex = Assert.Throws<ValidationFailedException>(() => op.RunToEnd(ckt));
             Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
             Assert.That(violation, Is.InstanceOf<FloatingNodeRuleViolation>());

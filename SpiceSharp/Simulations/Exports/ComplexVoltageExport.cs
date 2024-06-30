@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A class that exports complex voltages.
     /// </summary>
-    /// <seealso cref="Export{S, T}" />
-    public class ComplexVoltageExport : Export<IFrequencySimulation, Complex>
+    /// <seealso cref="Export{T}" />
+    public class ComplexVoltageExport : Export<Complex>
     {
         /// <summary>
         /// Gets the positive node.
@@ -23,7 +23,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the amplitude in decibels (dB).
         /// </summary>
-        public double Decibels
+        public Complex Decibels
         {
             get
             {
@@ -35,7 +35,7 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Gets the phase in radians.
         /// </summary>
-        public double Phase
+        public Complex Phase
         {
             get
             {
@@ -62,25 +62,29 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc />
-        protected override void Initialize(object sender, EventArgs e)
+        protected override Func<Complex> BuildExtractor(ISimulation simulation)
         {
+            if (simulation is null)
+                return null;
+
             // Find the positive node variable
             if (Positive.Length > 0 && Reference.Length > 0)
             {
-                var posVariable = Positive.GetVariable<Complex, IComplexSimulationState>(Simulation);
-                var refVariable = Reference.GetVariable<Complex, IComplexSimulationState>(Simulation);
-                Extractor = () => posVariable.Value - refVariable.Value;
+                if (Positive.TryGetVariable<Complex, IComplexSimulationState>(simulation, out var posVariable) &&
+                    Reference.TryGetVariable<Complex, IComplexSimulationState>(simulation, out var negVariable))
+                    return () => posVariable.Value - negVariable.Value;
             }
             else if (Positive.Length > 0)
             {
-                var posVariable = Positive.GetVariable<Complex, IComplexSimulationState>(Simulation);
-                Extractor = () => posVariable.Value;
+                if (Positive.TryGetVariable<Complex, IComplexSimulationState>(simulation, out var posVariable))
+                    return () => posVariable.Value;
             }
             else
             {
-                var refVariable = Reference.GetVariable<Complex, IComplexSimulationState>(Simulation);
-                Extractor = () => -refVariable.Value;
+                if (Reference.TryGetVariable<Complex, IComplexSimulationState>(simulation, out var negVariable))
+                    return () => negVariable.Value;
             }
+            return null;
         }
 
         /// <summary>

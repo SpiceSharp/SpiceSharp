@@ -188,9 +188,10 @@ namespace SpiceSharpTest.Models
 
             double maxPower = 0.0;
 
-            dc.ExportSimulationData += (sender, args) =>
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+            foreach (int _ in dc.Run(solveCirc))
             {
-                double input = args.GetVoltage("parallel_terminal_pos");
+                double input = dc.GetVoltage("parallel_terminal_pos");
                 double output = currentExport.Value;
 
                 double power = input * output;
@@ -198,11 +199,7 @@ namespace SpiceSharpTest.Models
                 {
                     maxPower = power;
                 }
-
-            };
-
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            dc.Run(solveCirc);
+            }
             watch.Stop();
             Assert.That(maxPower, Is.Not.EqualTo(0.0));
         }

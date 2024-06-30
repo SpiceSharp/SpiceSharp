@@ -18,6 +18,8 @@ namespace SpiceSharp.Simulations
     public abstract class Simulation : ParameterSetCollection,
         IEventfulSimulation
     {
+        private int _lastRun = -1;
+
         /// <inheritdoc/>
         public SimulationStatus Status { get; private set; }
 
@@ -52,9 +54,6 @@ namespace SpiceSharp.Simulations
 
         #region Events
         /// <inheritdoc/>
-        public event EventHandler<ExportDataEventArgs> ExportSimulationData;
-
-        /// <inheritdoc/>
         public event EventHandler<EventArgs> BeforeSetup;
 
         /// <inheritdoc/>
@@ -82,6 +81,9 @@ namespace SpiceSharp.Simulations
         /// <inheritdoc/>
         public string Name { get; }
 
+        /// <inheritdoc />
+        public int CurrentRun { get; private set; } = -1;
+
         /// <inheritdoc/>
         public IBehaviorContainerCollection EntityBehaviors { get; private set; }
 
@@ -105,8 +107,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        public virtual void Run(IEntityCollection entities)
+        public virtual IEnumerable<int> Run(IEntityCollection entities, int exportMask = -1)
         {
+            if (CurrentRun >= 0)
+                throw new ArgumentException(Properties.Resources.Simulations_CannotRunMultiple);
+            _lastRun++;
+            CurrentRun = _lastRun;
+
             entities.ThrowIfNull(nameof(entities));
 
             // Setup the simulation
@@ -150,7 +157,8 @@ namespace SpiceSharp.Simulations
                 Statistics.ExecutionTime.Start();
                 try
                 {
-                    Execute();
+                    foreach (int exportType in Execute(exportMask))
+                        yield return exportType;
                 }
                 finally
                 {
@@ -176,6 +184,7 @@ namespace SpiceSharp.Simulations
             }
             finally
             {
+                CurrentRun = -1;
                 Statistics.FinishTime.Stop();
             }
             OnAfterUnsetup(EventArgs.Empty);
@@ -184,8 +193,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        public virtual void Rerun()
+        public virtual IEnumerable<int> Rerun(int exportMask = -1)
         {
+            if (CurrentRun >= 0)
+                throw new ArgumentException(Properties.Resources.Simulations_CannotRunMultiple);
+            _lastRun++;
+            CurrentRun = _lastRun;
+
             // Execute the simulation
             Status = SimulationStatus.Running;
             var beforeArgs = new BeforeExecuteEventArgs(false);
@@ -199,7 +213,8 @@ namespace SpiceSharp.Simulations
                 Statistics.ExecutionTime.Start();
                 try
                 {
-                    Execute();
+                    foreach (int exportType in Execute(exportMask))
+                        yield return exportType;
                 }
                 finally
                 {
@@ -225,6 +240,7 @@ namespace SpiceSharp.Simulations
             }
             finally
             {
+                CurrentRun = -1;
                 Statistics.FinishTime.Stop();
             }
             OnAfterUnsetup(EventArgs.Empty);
@@ -339,8 +355,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Executes the simulation.
         /// </summary>
+        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
         /// <exception cref="SpiceSharpException">Thrown if the simulation can't continue.</exception>
-        protected abstract void Execute();
+        protected abstract IEnumerable<int> Execute(int exportMask);
 
         /// <summary>
         /// Finish the simulation.
@@ -383,12 +400,6 @@ namespace SpiceSharp.Simulations
             => this is IStateful<S>;
 
         #region Methods for raising events
-        /// <summary>
-        /// Raises the <see cref="ExportSimulationData" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="ExportDataEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnExport(ExportDataEventArgs args) => ExportSimulationData?.Invoke(this, args);
-
         /// <summary>
         /// Raises the <see cref="BeforeSetup" /> event.
         /// </summary>

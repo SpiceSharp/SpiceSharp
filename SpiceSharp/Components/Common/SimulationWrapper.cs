@@ -23,6 +23,9 @@ namespace SpiceSharp.Components.Common
         /// </value>
         protected ISimulation Parent { get; }
 
+        /// <inheritdoc />
+        public int CurrentRun => Parent.CurrentRun;
+
         /// <summary>
         /// Gets the local states. These states are returned first!
         /// </summary>
@@ -70,7 +73,7 @@ namespace SpiceSharp.Components.Common
         /// The behaviors are stored in the specified <see cref="EntityBehaviors"/> of the <see cref="SimulationWrapper"/>.
         /// This can be a local collection, allowing you to keep a part of the behaviors separate.
         /// </remarks>
-        public void Run(IEntityCollection entities)
+        public IEnumerable<int> Run(IEntityCollection entities, int exportMask = -1)
         {
             void BehaviorsNotFound(object sender, BehaviorsNotFoundEventArgs args)
             {
@@ -94,10 +97,12 @@ namespace SpiceSharp.Components.Common
             }
 
             EntityBehaviors.BehaviorsNotFound -= BehaviorsNotFound;
+
+            yield break;
         }
 
         /// <inheritdoc/>
-        public void Rerun()
+        public IEnumerable<int> Rerun(int exportMask = -1)
         {
             throw new NotImplementedException();
         }

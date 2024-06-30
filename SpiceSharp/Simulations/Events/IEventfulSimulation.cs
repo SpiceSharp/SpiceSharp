@@ -9,11 +9,6 @@ namespace SpiceSharp.Simulations
     public interface IEventfulSimulation : ISimulation
     {
         /// <summary>
-        /// Occurs when simulation data can be exported.
-        /// </summary>
-        event EventHandler<ExportDataEventArgs> ExportSimulationData;
-
-        /// <summary>
         /// Occurs before the simulation is set up.
         /// </summary>
         event EventHandler<EventArgs> BeforeSetup;

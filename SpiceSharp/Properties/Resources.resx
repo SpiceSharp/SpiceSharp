@@ -273,11 +273,20 @@
   <data name="Simulations.Biasing.StartSourceStepping" xml:space="preserve">
     <value>Starting source stepping.</value>
   </data>
+  <data name="Simulations.CannotRunMultiple" xml:space="preserve">
+    <value>Cannot run multiple instances of the same simulation.</value>
+  </data>
   <data name="Simulations.ConvergenceAidVariableNotFound" xml:space="preserve">
     <value>Could not set convergence aid: variable '{0}' could not be found.</value>
   </data>
+  <data name="Simulations.CurrentNotFound" xml:space="preserve">
+    <value>Could not find a branch current for the entity '{0}'.</value>
+  </data>
   <data name="Simulations.DC.NoSweepPoints" xml:space="preserve">
     <value>The sweep '{0}' does not contain any points to simulate.</value>
+  </data>
+  <data name="Simulations.DifferentialVoltageNotFound" xml:space="preserve">
+    <value>Could not find the voltage V({0}, {1}).</value>
   </data>
   <data name="Simulations.History.InvalidLength" xml:space="preserve">
     <value>Histories cannot track less than one point.</value>
@@ -287,6 +296,9 @@
   </data>
   <data name="Simulations.NoEntities" xml:space="preserve">
     <value>{0}: there are no entities.</value>
+  </data>
+  <data name="Simulations.PropertyNotfound" xml:space="preserve">
+    <value>Could not find a property with name '{1}' on an entity with name '{0}'.</value>
   </data>
   <data name="Simulations.Time.MaximumExpansionTooSmall" xml:space="preserve">
     <value>The expansion factor should be greater or equal than 1.</value>
@@ -302,6 +314,9 @@
   </data>
   <data name="Simulations.ValidationFailed" xml:space="preserve">
     <value>The simulation '{0}' has {1} rule violations.</value>
+  </data>
+  <data name="Simulations.VoltageNotFound" xml:space="preserve">
+    <value>Could not find the voltage V({0}).</value>
   </data>
   <data name="Stateful.NotDefined" xml:space="preserve">
     <value>A simulation state of type '{0}' is not defined.</value>

@@ -29,13 +29,12 @@ namespace SpiceSharpTest.Waveforms
             var ckt = new Circuit(
                 new VoltageSource("V1", "a", "0", new SFFM(vo, va, fc, mdi, fs, phasec, phases)));
             var tran = new Transient("tran", 1e-6, 1);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                double time = args.Time;
-                Assert.That(args.GetVoltage("a"), Is.EqualTo(vo + va * Math.Sin(2.0 * Math.PI * fc * time + phasec * Math.PI / 180.0 +
+                double time = tran.Time;
+                Assert.That(tran.GetVoltage("a"), Is.EqualTo(vo + va * Math.Sin(2.0 * Math.PI * fc * time + phasec * Math.PI / 180.0 +
                     mdi * Math.Sin(2.0 * Math.PI * fs * time + phases * Math.PI / 180.0))).Within(1e-12));
-            };
-            tran.Run(ckt);
+            }
         }
     }
 }

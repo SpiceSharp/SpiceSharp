@@ -179,7 +179,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int exportMask = -1)
         {
             // Perform temperature-dependent calculations
             Temperature();
@@ -187,6 +187,8 @@ namespace SpiceSharp.Simulations
             // Apply nodesets if they are specified
             if (_nodesets.Count > 0)
                 AfterLoad += LoadNodeSets;
+
+            yield break;
         }
 
         /// <summary>
