@@ -130,7 +130,7 @@ namespace SpiceSharp.Simulations
         private double ComplexMagnitude(Complex value) => Math.Abs(value.Real) + Math.Abs(value.Imaginary);
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int exportMask = -1)
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             foreach (int exportType in base.Execute())
                 yield return exportType;

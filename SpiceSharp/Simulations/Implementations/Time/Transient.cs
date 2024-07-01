@@ -172,9 +172,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int exportMask = -1)
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
-            foreach (int exportType in base.Execute(exportMask))
+            foreach (int exportType in base.Execute(mask))
                 yield return exportType;
 
             // Calculate the operating point of the circuit
@@ -212,7 +212,7 @@ namespace SpiceSharp.Simulations
             _time.UseDc = false;
 
             // Export the operating point
-            if ((exportMask & ExportOperatingPoint) != 0)
+            if ((mask & ExportOperatingPoint) != 0)
                 yield return ExportOperatingPoint;
 
             // Start our statistics
@@ -228,7 +228,7 @@ namespace SpiceSharp.Simulations
                     Accept();
 
                     // Export the current timepoint
-                    if (_method.Time >= TimeParameters.StartTime && (exportMask & ExportTransient) != 0)
+                    if (_method.Time >= TimeParameters.StartTime && (mask & ExportTransient) != 0)
                         yield return ExportTransient;
 
                     // Detect the end of the simulation

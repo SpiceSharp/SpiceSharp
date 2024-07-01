@@ -75,10 +75,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int exportMask = -1)
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             // Base
-            foreach (int exportType in base.Execute(exportMask))
+            foreach (int exportType in base.Execute(mask))
                 yield return exportType;
 
             // Setup the state
@@ -116,7 +116,7 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Export data
-                if ((exportMask & ExportSweep) != 0)
+                if ((mask & ExportSweep) != 0)
                     yield return ExportSweep;
 
                 // Remove all values that are greater or equal to the maximum value

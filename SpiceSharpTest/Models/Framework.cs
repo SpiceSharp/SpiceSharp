@@ -386,7 +386,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
-            foreach (int _ in sim.Run(ckt, Transient.ExportTransient))
+            foreach (int type in sim.Run(ckt, Transient.ExportTransient))
             {
                 using var exportsIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -418,27 +418,36 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references)
+        /// <param name="actions">The actions.</param>
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references,
+            Dictionary<int, Action> actions = null)
         {
-            foreach (int _ in sim.Run(ckt))
+            foreach (int type in sim.Run(ckt, Simulation.Actions | Transient.ExportTransient))
             {
-                using var exportsIt = exports.GetEnumerator();
-                using var referencesIt = references.GetEnumerator();
-                while (exportsIt.MoveNext() && referencesIt.MoveNext())
-                {
-                    double t = sim.Time;
-                    double actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
-                    double expected = referencesIt.Current?.Invoke(t) ?? throw new ArgumentNullException();
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+                if (actions is not null &&
+                    actions.TryGetValue(type, out var action))
+                    action();
 
-                    try
+                if ((type & Simulation.Exports) != 0)
+                {
+                    using var exportsIt = exports.GetEnumerator();
+                    using var referencesIt = references.GetEnumerator();
+                    while (exportsIt.MoveNext() && referencesIt.MoveNext())
                     {
-                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
-                    }
-                    catch (Exception ex)
-                    {
-                        string msg = $"{ex.Message} at t={sim.Time} s";
-                        throw new Exception(msg, ex);
+                        double t = sim.Time;
+                        double actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
+                        double expected = referencesIt.Current?.Invoke(t) ?? throw new ArgumentNullException();
+                        double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+
+                        try
+                        {
+                            Assert.That(actual, Is.EqualTo(expected).Within(tol));
+                        }
+                        catch (Exception ex)
+                        {
+                            string msg = $"{ex.Message} at t={sim.Time} s";
+                            throw new Exception(msg, ex);
+                        }
                     }
                 }
             }

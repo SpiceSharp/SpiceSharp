@@ -26,6 +26,13 @@ namespace SpiceSharp.Components.Common
         /// <inheritdoc />
         public int CurrentRun => Parent.CurrentRun;
 
+        /// <inheritdoc />
+        public bool Repeat
+        {
+            get => Parent.Repeat;
+            set => throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Gets the local states. These states are returned first!
         /// </summary>

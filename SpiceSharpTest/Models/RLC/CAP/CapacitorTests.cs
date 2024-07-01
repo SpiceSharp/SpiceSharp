@@ -127,17 +127,18 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-8, 10e-6);
             tran.TimeParameters.InitialConditions["OUT"] = 0.0;
 
-            tran.BeforeTemperature += (sender, args) =>
-                {
-                    var state = tran.GetState<ITemperatureSimulationState>();
-                    ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
-                };
-
             IExport<double>[] exports = [new RealPropertyExport(tran, "C1", "v")];
             Func<double, double>[] references = [t => dcVoltage * (1.0 - Math.Exp(-t / tau))];
 
             // Run
-            AnalyzeTransient(tran, ckt, exports, references);
+            AnalyzeTransient(tran, ckt, exports, references, new()
+            {
+                { Simulation.BeforeExecute, () =>
+                {
+                    var state = tran.GetState<ITemperatureSimulationState>();
+                    ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
+                } }
+            });
             DestroyExports(exports);
         }
 
@@ -175,17 +176,18 @@ namespace SpiceSharpTest.Models
             var tran = new Transient("tran", 1e-8, 10e-6);
             tran.TimeParameters.InitialConditions["OUT"] = 0.0;
 
-            tran.BeforeTemperature += (sender, args) =>
-                {
-                    var state = tran.GetState<ITemperatureSimulationState>();
-                    ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
-                };
-
             IExport<double>[] exports = [new RealPropertyExport(tran, "C1", "v")];
             Func<double, double>[] references = [t => dcVoltage * (1.0 - Math.Exp(-t / tau))];
 
             // Run
-            AnalyzeTransient(tran, ckt, exports, references);
+            AnalyzeTransient(tran, ckt, exports, references, new()
+            {
+                { Simulation.BeforeExecute, () =>
+                {
+                    var state = tran.GetState<ITemperatureSimulationState>();
+                    ((TemperatureSimulationState)state).Temperature = Constants.CelsiusKelvin + 30.0;
+                } }
+            });
             DestroyExports(exports);
         }
 

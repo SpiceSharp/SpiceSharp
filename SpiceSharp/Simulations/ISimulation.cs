@@ -43,6 +43,12 @@ namespace SpiceSharp.Simulations
         int CurrentRun { get; }
 
         /// <summary>
+        /// If set, the simulation is repeated. The property is automatically reset
+        /// at the start of an execution.
+        /// </summary>
+        bool Repeat { get; set; }
+
+        /// <summary>
         /// Gets the current status of the <see cref="ISimulation"/>.
         /// </summary>
         /// <value>
@@ -55,16 +61,16 @@ namespace SpiceSharp.Simulations
         /// enumerable can run at any given time.
         /// </summary>
         /// <param name="entities">The entities.</param>
-        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
+        /// <param name="mask">A bit mask for simulation export identifiers.</param>
         /// <returns>An enumerable that yields a type identifier every time new simulation data is available.</returns>
-        IEnumerable<int> Run(IEntityCollection entities, int exportMask = -1);
+        IEnumerable<int> Run(IEntityCollection entities, int mask = Simulation.Exports);
 
         /// <summary>
         /// Reruns the <see cref="ISimulation"/> with the previous behaviors. Only one
         /// enumerable can run at any given time.
         /// </summary>
-        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
+        /// <param name="mask">A bit mask for simulation export identifiers.</param>
         /// <returns>An enumerable that yields a type identifier every time new simulation data is available.</returns>
-        IEnumerable<int> Rerun(int exportMask = -1);
+        IEnumerable<int> Rerun(int mask = Simulation.Exports);
     }
 }

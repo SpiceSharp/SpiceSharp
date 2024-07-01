@@ -28,7 +28,7 @@ namespace SpiceSharp.Simulations
         /// <param name="propertyName">The name of the property.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="simulation"/> or <paramref name="propertyName"> is <c>null</c>.</paramref></exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name="entity"/> is empty.</exception>
-        public ComplexPropertyExport(IEventfulSimulation simulation, Reference entity, string propertyName)
+        public ComplexPropertyExport(ISimulation simulation, Reference entity, string propertyName)
             : base(simulation)
         {
             if (entity.Length == 0)

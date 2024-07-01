@@ -31,12 +31,6 @@ namespace SpiceSharpTest.Examples
             // of the resistor
             SpiceSharp.Components.Resistors.Parameters bp = null;
             SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
-            tran.AfterSetup += (sender, args) =>
-            {
-                var eb = tran.EntityBehaviors["R2"];
-                eb.TryGetValue(out tb);
-                eb.TryGetParameterSet(out bp);
-            };
             // </example_change_parameter_setup>
             // <example_change_parameter_load>
             // Before loading the resistor, let's change its value first!
@@ -54,10 +48,21 @@ namespace SpiceSharpTest.Examples
             };
 
             // Run the simulation
-            foreach (int _ in tran.Run(ckt))
+            foreach (int status in tran.Run(ckt, Simulation.AfterSetup | Simulation.Exports))
             {
-                double time = tran.Time;
-                double output = outputExport.Value;
+                switch (status)
+                {
+                    case Simulation.AfterSetup:
+                        var eb = tran.EntityBehaviors["R2"];
+                        eb.TryGetValue(out tb);
+                        eb.TryGetParameterSet(out bp);
+                        break;
+
+                    default:
+                        double time = tran.Time;
+                        double output = outputExport.Value;
+                        break;
+                }
             }
             // </example_change_parameter_load>
         }

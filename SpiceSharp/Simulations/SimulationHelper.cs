@@ -3,6 +3,7 @@ using SpiceSharp.Entities;
 using SpiceSharp.Simulations.Base;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharp.Simulations
@@ -337,12 +338,28 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="entities">The entities.</param>
-        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
-        public static void RunToEnd(this ISimulation simulation, IEntityCollection entities, int exportMask = -1)
+        /// <param name="actions">The actions for each type of export.</param>
+        public static void RunToEnd(this ISimulation simulation, IEntityCollection entities,
+            IDictionary<int, Action> actions = null)
         {
-            foreach (int _ in simulation.Run(entities, exportMask))
+            // Compute the key
+            int mask = 0;
+            if (actions is not null)
             {
-                // Do nothing...
+                foreach (var key in actions.Keys)
+                    mask |= key;
+
+                foreach (int type in simulation.Run(entities, mask))
+                {
+                    if (actions is not null &&
+                        actions.TryGetValue(type, out var action))
+                        action();
+                }
+            }
+            else
+            {
+                foreach (int _ in simulation.Run(entities, 0))
+                { }
             }
         }
     }

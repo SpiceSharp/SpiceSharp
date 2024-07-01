@@ -47,7 +47,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int exportMask = -1)
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             // Execute base behavior
             foreach (int exportType in base.Execute())
@@ -66,7 +66,7 @@ namespace SpiceSharp.Simulations
                 InitializeAcParameters();
 
                 // Export operating point if requested
-                if ((exportMask & ExportOperatingPoint) != 0)
+                if ((mask & ExportOperatingPoint) != 0)
                     yield return ExportOperatingPoint;
 
                 // Sweep the frequency
@@ -79,7 +79,7 @@ namespace SpiceSharp.Simulations
                     AcIterate();
 
                     // Export the timepoint
-                    if ((exportMask & ExportSmallSignal) != 0)
+                    if ((mask & ExportSmallSignal) != 0)
                         yield return ExportSmallSignal;
                 }
             }

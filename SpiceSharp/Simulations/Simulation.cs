@@ -14,11 +14,40 @@ namespace SpiceSharp.Simulations
     /// A template for any simulation.
     /// </summary>
     /// <seealso cref="ParameterSetCollection"/>
-    /// <seealso cref="IEventfulSimulation"/>
-    public abstract class Simulation : ParameterSetCollection,
-        IEventfulSimulation
+    /// <seealso cref="ISimulation"/>
+    public abstract class Simulation : ParameterSetCollection, ISimulation
     {
         private int _lastRun = -1;
+
+        /// <summary>
+        /// The bits that are reserved for exports.
+        /// </summary>
+        public const int Exports = 0x0000_ffff;
+
+        /// <summary>
+        /// The bits that are reserved for actions.
+        /// </summary>
+        public const int Actions = unchecked((int)0xffff_0000);
+
+        /// <summary>
+        /// Represents the action after setting up behaviors.
+        /// </summary>
+        public const int AfterSetup = 0x0001_0000;
+                
+        /// <summary>
+        /// Represents the action after validating.
+        /// </summary>
+        public const int AfterValidation = 0x0002_0000;
+        
+        /// <summary>
+        /// Represents the action before each execution.
+        /// </summary>
+        public const int BeforeExecute = 0x0004_0000;
+        
+        /// <summary>
+        /// Represents the action after each execution.
+        /// </summary>
+        public const int AfterExecute = 0x0008_0000;
 
         /// <inheritdoc/>
         public SimulationStatus Status { get; private set; }
@@ -52,37 +81,14 @@ namespace SpiceSharp.Simulations
             }
         }
 
-        #region Events
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> BeforeSetup;
-
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> AfterSetup;
-
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> BeforeValidation;
-
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> AfterValidation;
-
-        /// <inheritdoc/>
-        public event EventHandler<BeforeExecuteEventArgs> BeforeExecute;
-
-        /// <inheritdoc/>
-        public event EventHandler<AfterExecuteEventArgs> AfterExecute;
-
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> BeforeUnsetup;
-
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> AfterUnsetup;
-        #endregion
-
         /// <inheritdoc/>
         public string Name { get; }
 
         /// <inheritdoc />
         public int CurrentRun { get; private set; } = -1;
+
+        /// <inheritdoc />
+        public bool Repeat { get; set; }
 
         /// <inheritdoc/>
         public IBehaviorContainerCollection EntityBehaviors { get; private set; }
@@ -107,7 +113,7 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        public virtual IEnumerable<int> Run(IEntityCollection entities, int exportMask = -1)
+        public virtual IEnumerable<int> Run(IEntityCollection entities, int mask = Exports)
         {
             if (CurrentRun >= 0)
                 throw new ArgumentException(Properties.Resources.Simulations_CannotRunMultiple);
@@ -117,7 +123,6 @@ namespace SpiceSharp.Simulations
             entities.ThrowIfNull(nameof(entities));
 
             // Setup the simulation
-            OnBeforeSetup(EventArgs.Empty);
             Statistics.SetupTime.Start();
             try
             {
@@ -128,10 +133,12 @@ namespace SpiceSharp.Simulations
             {
                 Statistics.SetupTime.Stop();
             }
-            OnAfterSetup(EventArgs.Empty);
+
+            // Yield after setup
+            if ((mask & AfterSetup) != 0)
+                yield return AfterSetup;
 
             // Validate the input
-            OnBeforeValidation(EventArgs.Empty);
             Statistics.ValidationTime.Start();
             try
             {
@@ -142,22 +149,26 @@ namespace SpiceSharp.Simulations
             {
                 Statistics.ValidationTime.Stop();
             }
-            OnAfterValidation(EventArgs.Empty);
+
+            // Yield after validation
+            if ((mask & AfterValidation) != 0)
+                yield return AfterValidation;
 
             // Execute the simulation
             Status = SimulationStatus.Running;
-            var beforeArgs = new BeforeExecuteEventArgs(false);
-            var afterArgs = new AfterExecuteEventArgs();
             do
             {
+                Repeat = false;
+
                 // Before execution
-                OnBeforeExecute(beforeArgs);
+                if ((mask & BeforeExecute) != 0)
+                    yield return BeforeExecute;
 
                 // Execute simulation
                 Statistics.ExecutionTime.Start();
                 try
                 {
-                    foreach (int exportType in Execute(exportMask))
+                    foreach (int exportType in Execute(mask))
                         yield return exportType;
                 }
                 finally
@@ -165,17 +176,14 @@ namespace SpiceSharp.Simulations
                     Statistics.ExecutionTime.Stop();
                 }
 
-                // Reset
-                afterArgs.Repeat = false;
-                OnAfterExecute(afterArgs);
+                // Reset                
+                if ((mask & AfterExecute) != 0)
+                    yield return AfterExecute;
 
                 // We're going to repeat the simulation, change the event arguments
-                if (afterArgs.Repeat)
-                    beforeArgs = new BeforeExecuteEventArgs(true);
-            } while (afterArgs.Repeat);
+            } while (Repeat);
 
             // Clean up the circuit
-            OnBeforeUnsetup(EventArgs.Empty);
             Statistics.FinishTime.Start();
             try
             {
@@ -187,13 +195,11 @@ namespace SpiceSharp.Simulations
                 CurrentRun = -1;
                 Statistics.FinishTime.Stop();
             }
-            OnAfterUnsetup(EventArgs.Empty);
-
             Status = SimulationStatus.None;
         }
 
         /// <inheritdoc/>
-        public virtual IEnumerable<int> Rerun(int exportMask = -1)
+        public virtual IEnumerable<int> Rerun(int mask = Exports)
         {
             if (CurrentRun >= 0)
                 throw new ArgumentException(Properties.Resources.Simulations_CannotRunMultiple);
@@ -202,18 +208,19 @@ namespace SpiceSharp.Simulations
 
             // Execute the simulation
             Status = SimulationStatus.Running;
-            var beforeArgs = new BeforeExecuteEventArgs(false);
-            var afterArgs = new AfterExecuteEventArgs();
             do
             {
-                // Before execution
-                OnBeforeExecute(beforeArgs);
+                Repeat = false;
+
+                // Yield before execute
+                if ((mask & BeforeExecute) != 0)
+                    yield return BeforeExecute;
 
                 // Execute simulation
                 Statistics.ExecutionTime.Start();
                 try
                 {
-                    foreach (int exportType in Execute(exportMask))
+                    foreach (int exportType in Execute(mask))
                         yield return exportType;
                 }
                 finally
@@ -221,17 +228,12 @@ namespace SpiceSharp.Simulations
                     Statistics.ExecutionTime.Stop();
                 }
 
-                // Reset
-                afterArgs.Repeat = false;
-                OnAfterExecute(afterArgs);
-
-                // We're going to repeat the simulation, change the event arguments
-                if (afterArgs.Repeat)
-                    beforeArgs = new BeforeExecuteEventArgs(true);
-            } while (afterArgs.Repeat);
+                // Yield after execute
+                if ((mask & AfterExecute) != 0)
+                    yield return AfterExecute;
+            } while (Repeat);
 
             // Clean up the circuit
-            OnBeforeUnsetup(EventArgs.Empty);
             Statistics.FinishTime.Start();
             try
             {
@@ -243,8 +245,6 @@ namespace SpiceSharp.Simulations
                 CurrentRun = -1;
                 Statistics.FinishTime.Stop();
             }
-            OnAfterUnsetup(EventArgs.Empty);
-
             Status = SimulationStatus.None;
         }
 
@@ -355,9 +355,9 @@ namespace SpiceSharp.Simulations
         /// <summary>
         /// Executes the simulation.
         /// </summary>
-        /// <param name="exportMask">A bit mask for simulation export identifiers.</param>
+        /// <param name="mask">A bit mask for simulation export identifiers.</param>
         /// <exception cref="SpiceSharpException">Thrown if the simulation can't continue.</exception>
-        protected abstract IEnumerable<int> Execute(int exportMask);
+        protected abstract IEnumerable<int> Execute(int mask);
 
         /// <summary>
         /// Finish the simulation.
@@ -398,55 +398,5 @@ namespace SpiceSharp.Simulations
         /// <inheritdoc/>
         public virtual bool UsesState<S>() where S : ISimulationState
             => this is IStateful<S>;
-
-        #region Methods for raising events
-        /// <summary>
-        /// Raises the <see cref="BeforeSetup" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnBeforeSetup(EventArgs args) => BeforeSetup?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="BeforeExecute" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="BeforeExecuteEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnBeforeExecute(BeforeExecuteEventArgs args) => BeforeExecute?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="AfterSetup" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAfterSetup(EventArgs args) => AfterSetup?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="BeforeValidation" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnBeforeValidation(EventArgs args) => BeforeValidation?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="AfterValidation" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAfterValidation(EventArgs args) => AfterValidation?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="AfterSetup" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAfterExecute(AfterExecuteEventArgs args) => AfterExecute?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="BeforeUnsetup" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnBeforeUnsetup(EventArgs args) => BeforeUnsetup?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="AfterUnsetup" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAfterUnsetup(EventArgs args) => AfterUnsetup?.Invoke(this, args);
-        #endregion
     }
 }

@@ -111,9 +111,9 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int exportMask = -1)
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
-            foreach (int exportType in base.Execute(exportMask))
+            foreach (int exportType in base.Execute(mask))
                 yield return exportType;
 
             var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
@@ -147,7 +147,7 @@ namespace SpiceSharp.Simulations
                     behavior.Initialize();
 
                 // Export the operating point
-                if ((exportMask & ExportOperatingPoint) != 0)
+                if ((mask & ExportOperatingPoint) != 0)
                     yield return ExportOperatingPoint;
 
                 // Loop through noise figures
@@ -162,7 +162,7 @@ namespace SpiceSharp.Simulations
                     _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
 
                     // Export AC solution
-                    if ((exportMask & ExportSmallSignal) != 0)
+                    if ((mask & ExportSmallSignal) != 0)
                         yield return ExportSmallSignal;
 
                     // Solve the adjoint system
@@ -177,7 +177,7 @@ namespace SpiceSharp.Simulations
                     }
 
                     // Export the data
-                    if ((exportMask & ExportNoise) != 0)
+                    if ((mask & ExportNoise) != 0)
                         yield return ExportNoise;
                 }
                 while (freq.MoveNext());

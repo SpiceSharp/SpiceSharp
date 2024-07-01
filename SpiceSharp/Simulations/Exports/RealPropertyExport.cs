@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="entity">The path to the entity (can be a string or string array).</param>
         /// <param name="propertyName">The name of the property.</param>
-        public RealPropertyExport(IEventfulSimulation simulation, Reference entity, string propertyName)
+        public RealPropertyExport(ISimulation simulation, Reference entity, string propertyName)
             : base(simulation)
         {
             if (entity.Length == 0)

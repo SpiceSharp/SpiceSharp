@@ -25,14 +25,14 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int exportMask = -1)
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             foreach (int exportType in base.Execute())
                 yield return exportType;
 
             Op(BiasingParameters.DcMaxIterations);
 
-            if ((exportMask & ExportOperatingPoint) != 0)
+            if ((mask & ExportOperatingPoint) != 0)
                 yield return ExportOperatingPoint;
         }
     }
