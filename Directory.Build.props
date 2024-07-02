@@ -22,8 +22,6 @@
   
   <!-- Assembly info -->
   <PropertyGroup>
-    <Version>3.1.9</Version>
-	<AssemblyVersion>3.1.9.0</AssemblyVersion>
     <Authors>Sven Boulanger</Authors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Title>Spice#</Title>

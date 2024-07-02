@@ -6,9 +6,9 @@
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<Description>A source generator that is built to help extending the functionality of the SpiceSharp framework.</Description>
-		<Version>1.0.5</Version>
-		<AssemblyVersion>1.0.5.0</AssemblyVersion>
     <NoWarn>$(NoWarn);RS1035</NoWarn>
+    <UseGitInfo>true</UseGitInfo>
+    <GitTagRegex>generator-v*</GitTagRegex>
 	</PropertyGroup>
 
 	<ItemGroup>
