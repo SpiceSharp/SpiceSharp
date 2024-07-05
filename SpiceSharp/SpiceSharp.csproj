@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <Description>Spice# is a circuit simulator based on and improved from Spice 3f5 by Berkeley. The framework allows custom components and simulations to be added.</Description>
+    <UseGitInfo>true</UseGitInfo>
+		<GitTagRegex>v*</GitTagRegex>
   </PropertyGroup>
 
 	<ItemGroup>

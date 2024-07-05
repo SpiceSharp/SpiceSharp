@@ -21,10 +21,22 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
+
   <!-- Disable some rules for test projects -->
   <PropertyGroup Condition="'$(TestProjectType)' != ''">
     <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
-  
+
+  <!-- Automatic versioning using GitInfo if UseGitInfo is set to true -->
+  <PropertyGroup Condition="'$(UseGitInfo)' == 'true'">
+    <GitSkipCache>true</GitSkipCache>
+    <GitBaseVersionRegex>^(?:\w+-)?v?(?&lt;MAJOR&gt;\d+)\.(?&lt;MINOR&gt;\d+)\.(?&lt;PATCH&gt;\d+)$</GitBaseVersionRegex>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(UseGitInfo)' == 'true'">
+    <PackageReference Include="GitInfo" Version="3.3.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>
