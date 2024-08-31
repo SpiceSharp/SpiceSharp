@@ -28,6 +28,7 @@ namespace SpiceSharp.Simulations
             Source = source;
         }
 
+        /// <inheritdoc />
         protected override Func<double> BuildExtractor(ISimulation simulation)
         {
             if (simulation is not null &&

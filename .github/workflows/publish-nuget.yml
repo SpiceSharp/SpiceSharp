@@ -15,7 +15,7 @@ jobs:
     - name: Setup dotnet tooling
       uses: actions/setup-dotnet@master
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '8.0.x'
     
     - name: Restore dependencies
       run: dotnet restore
@@ -26,5 +26,5 @@ jobs:
     - name: Publish to NuGet
       env:
         APIKEY: ${{ secrets.NUGET_APIKEY }}
-      run: dotnet nuget push .\SpiceSharp\bin\Release\SpiceSharp.*.nupkg -k $env:APIKEY -s "https://api.nuget.org/v3/index.json"
+      run: dotnet nuget push .\SpiceSharp\build\bin\SpiceSharp\SpiceSharp.*.nupkg -k $env:APIKEY -s "https://api.nuget.org/v3/index.json"
       

@@ -17,6 +17,7 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="simulation">The simulation.</param>
         /// <param name="extractor">The function for extracting information.</param>
+        /// <param name="name">The name of the export.</param>
         public GenericExport(ISimulation simulation, Func<T> extractor, string name = null)
             : base(simulation)
         {
