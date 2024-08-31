@@ -34,7 +34,7 @@ We will sweep the input voltage source from -1V to 1V in steps of 200mV.
 
 [!code-csharp[Simulation](../../SpiceSharpTest/BasicExampleTests.cs#example01_simulate)]
 
-Access to simulation output data is usually achieved by registering to the **[ExportSimulationData](xref:SpiceSharp.Simulations.IEventfulSimulation#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData)** event. This event is automatically fired by the simulation when the data is ready to be exported. The event arguments contains some easy access to main parts of the circuits (like voltages and currents).
+Access to simulation output data is usually achieved by using extension methods. These extension methods contain some code to access the most common aspects of the simulation states (like voltages and currents).
 
 The output will show:
 
@@ -54,7 +54,7 @@ The output will show:
 
 ## Using exports
 
-Using exports allows for faster access to voltages, currents, circuit properties, etc. compared to using the event arguments of **[ExportSimulationData](xref:SpiceSharp.Simulations.IEventfulSimulation#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData)**. For example, we could be interested in the current through voltage source V1. In which case we can define some exports like this:
+Using exports allows for faster access to voltages, currents, circuit properties, etc. compared to using the extension methods. For example, we could be interested in the current through voltage source V1. In which case we can define some exports like this:
 
 [!code-csharp[Simulation](../../SpiceSharpTest/BasicExampleTests.cs#example01_simulate2)]
 
@@ -72,4 +72,3 @@ This will lead to the result:
 10. `input = 0.8` (V), `output = 0.533` (V), `current = -2.67e-05` (A)
 11. `input = 1` (V), `output = 0.667` (V), `current = -3.33e-05` (A)
 
-These export classes are setup automatically. These classes dynamically build a method that allows extracting data more efficiently during the **[ExportSimulationData](xref:SpiceSharp.Simulations.IEventfulSimulation#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData)** event compared to using the event's arguments.
