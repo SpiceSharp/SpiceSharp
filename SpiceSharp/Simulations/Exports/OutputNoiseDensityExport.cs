@@ -3,10 +3,10 @@
 namespace SpiceSharp.Simulations
 {
     /// <summary>
-    /// This class can export the output noise density.
+    /// This class can export the output-referred noise density.
     /// </summary>
-    /// <seealso cref="Export{S, T}" />
-    public class OutputNoiseDensityExport : Export<INoiseSimulation, double>
+    /// <seealso cref="Export{T}" />
+    public class OutputNoiseDensityExport : Export<double>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="OutputNoiseDensityExport"/> class.
@@ -17,15 +17,19 @@ namespace SpiceSharp.Simulations
         {
         }
 
-        /// <summary>
-        /// Initializes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        protected override void Initialize(object sender, EventArgs e)
+        /// <inheritdoc />
+        protected override Func<double> BuildExtractor(ISimulation simulation)
         {
-            var state = Simulation.GetState<INoiseSimulationState>();
-            Extractor = () => state.OutputNoiseDensity;
+            if (simulation is not null &&
+                simulation.TryGetState<INoiseSimulationState>(out var state))
+                return () => state.OutputNoiseDensity;
+            return null;
         }
+
+        /// <summary>
+        /// Converts the export to a string.
+        /// </summary>
+        /// <returns>The string.</returns>
+        public override string ToString() => "onoise()";
     }
 }

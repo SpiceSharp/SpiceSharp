@@ -21,6 +21,21 @@ namespace SpiceSharp.Simulations
         private BehaviorList<INoiseBehavior> _noiseBehaviors;
 
         /// <summary>
+        /// The constant returned when exporting the operating point.
+        /// </summary>
+        public const int ExportOperatingPoint = 0x01;
+
+        /// <summary>
+        /// The constant returned when exporting the small signal solution.
+        /// </summary>
+        public const int ExportSmallSignal = 0x02;
+
+        /// <summary>
+        /// The constant returned when exporting noise.
+        /// </summary>
+        public const int ExportNoise = 0x04;
+
+        /// <summary>
         /// Gets the noise parameters.
         /// </summary>
         /// <value>
@@ -33,6 +48,11 @@ namespace SpiceSharp.Simulations
 
         /// <inheritdoc/>
         INoiseSimulationState IStateful<INoiseSimulationState>.State => _state;
+
+        /// <summary>
+        /// Gets the current frequency point.
+        /// </summary>
+        public double Frequency => GetState<IComplexSimulationState>().Laplace.Imaginary / (2 * Math.PI);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Noise"/> class.
@@ -91,12 +111,13 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
-            base.Execute();
+            foreach (int exportType in base.Execute(mask))
+                yield return exportType;
+
             var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
             var noiseconfig = NoiseParameters;
-            var exportargs = new ExportDataEventArgs(this);
 
             // Find the output nodes
             int posOutNode = noiseconfig.Output != null ? cstate.Map[cstate.GetSharedVariable(noiseconfig.Output)] : 0;
@@ -116,7 +137,7 @@ namespace SpiceSharp.Simulations
                 // Initialize
                 var freq = FrequencyParameters.Frequencies.GetEnumerator();
                 if (!freq.MoveNext())
-                    return;
+                    yield break;
                 cstate.Laplace = 0;
                 Op(BiasingParameters.DcMaxIterations);
 
@@ -124,6 +145,10 @@ namespace SpiceSharp.Simulations
                 InitializeAcParameters();
                 foreach (var behavior in _noiseBehaviors)
                     behavior.Initialize();
+
+                // Export the operating point
+                if ((mask & ExportOperatingPoint) != 0)
+                    yield return ExportOperatingPoint;
 
                 // Loop through noise figures
                 do
@@ -135,6 +160,10 @@ namespace SpiceSharp.Simulations
                     var val = cstate.Solution[posOutNode] - cstate.Solution[negOutNode];
                     double inverseGainSquared = 1.0 / Math.Max(val.Real * val.Real + val.Imaginary * val.Imaginary, 1e-20);
                     _state.SetCurrentPoint(new NoisePoint(freq.Current, inverseGainSquared));
+
+                    // Export AC solution
+                    if ((mask & ExportSmallSignal) != 0)
+                        yield return ExportSmallSignal;
 
                     // Solve the adjoint system
                     NzIterate(posOutNode, negOutNode);
@@ -148,7 +177,8 @@ namespace SpiceSharp.Simulations
                     }
 
                     // Export the data
-                    OnExport(exportargs);
+                    if ((mask & ExportNoise) != 0)
+                        yield return ExportNoise;
                 }
                 while (freq.MoveNext());
             }

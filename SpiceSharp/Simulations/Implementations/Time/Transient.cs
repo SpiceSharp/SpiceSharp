@@ -32,6 +32,16 @@ namespace SpiceSharp.Simulations
         private readonly SimulationState _time;
 
         /// <summary>
+        /// The constant returned when exporting the operating point.
+        /// </summary>
+        public const int ExportOperatingPoint = 0x01;
+
+        /// <summary>
+        /// The constant returned when exporting a transient point.
+        /// </summary>
+        public const int ExportTransient = 0x02;
+
+        /// <summary>
         /// Gets the time parameters.
         /// </summary>
         /// <value>
@@ -55,6 +65,11 @@ namespace SpiceSharp.Simulations
 
         /// <inheritdoc/>
         IIntegrationMethod IStateful<IIntegrationMethod>.State => _method;
+
+        /// <summary>
+        /// Gets the current time point.
+        /// </summary>
+        public double Time => _method.Time;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Transient"/> class.
@@ -157,9 +172,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
-            base.Execute();
+            foreach (int exportType in base.Execute(mask))
+                yield return exportType;
 
             // Calculate the operating point of the circuit
             _time.UseIc = TimeParameters.UseIc;
@@ -194,7 +210,10 @@ namespace SpiceSharp.Simulations
             InitializeStates();
             _time.UseIc = false;
             _time.UseDc = false;
-            var exportargs = new ExportDataEventArgs(this);
+
+            // Export the operating point
+            if ((mask & ExportOperatingPoint) != 0)
+                yield return ExportOperatingPoint;
 
             // Start our statistics
             var stats = ((BiasingSimulation)this).Statistics;
@@ -209,8 +228,8 @@ namespace SpiceSharp.Simulations
                     Accept();
 
                     // Export the current timepoint
-                    if (_method.Time >= TimeParameters.StartTime)
-                        OnExport(exportargs);
+                    if (_method.Time >= TimeParameters.StartTime && (mask & ExportTransient) != 0)
+                        yield return ExportTransient;
 
                     // Detect the end of the simulation
                     if (_method.Time >= TimeParameters.StopTime)
@@ -221,7 +240,7 @@ namespace SpiceSharp.Simulations
                         Statistics.TransientSolveTime += stats.SolveTime.Elapsed - startselapsed;
 
                         // Finished!
-                        return;
+                        yield break;
                     }
 
                     // Continue integration
@@ -257,10 +276,6 @@ namespace SpiceSharp.Simulations
                         }
                     }
                 }
-            }
-            catch (SpiceSharpException ex)
-            {
-                throw new SpiceSharpException(Properties.Resources.Simulations_Time_Terminated.FormatString(Name), ex);
             }
             finally
             {

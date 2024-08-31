@@ -53,18 +53,17 @@ namespace SpiceSharpTest.Waveforms
             var tran = new Transient("tran", 0.1, 1.2);
             bool riseHit = false, risenHit = false, fallHit = false, fallenHit = false;
 
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt))
             {
-                if (Math.Abs(args.Time - 0.2) < 1e-12)
+                if (Math.Abs(tran.Time - 0.2) < 1e-12)
                     riseHit = true;
-                if (Math.Abs(args.Time - 0.3) < 1e-12)
+                if (Math.Abs(tran.Time - 0.3) < 1e-12)
                     risenHit = true;
-                if (Math.Abs(args.Time - 0.7) < 1e-12)
+                if (Math.Abs(tran.Time - 0.7) < 1e-12)
                     fallHit = true;
-                if (Math.Abs(args.Time - 0.8) < 1e-12)
+                if (Math.Abs(tran.Time - 0.8) < 1e-12)
                     fallenHit = true;
-            };
-            tran.Run(ckt);
+            }
 
             Assert.That(riseHit);
             Assert.That(risenHit);

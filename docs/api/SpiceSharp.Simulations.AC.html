@@ -95,7 +95,6 @@
     <div><a class="xref" href="SpiceSharp.Simulations.IBiasingSimulation.html">IBiasingSimulation</a></div>
     <div><a class="xref" href="SpiceSharp.Simulations.ISimulation-1.html">ISimulation</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IVariable-1.html">IVariable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>&gt;&gt;</div>
     <div><a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulation.html">ITemperatureSimulation</a></div>
-    <div><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></div>
     <div><a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful</a>&lt;<a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulationState.html">ITemperatureSimulationState</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.ITemperatureBehavior.html">ITemperatureBehavior</a>&gt;</div>
     <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral-1.html">IBehavioral</a>&lt;<a class="xref" href="SpiceSharp.Behaviors.IBiasingBehavior.html">IBiasingBehavior</a>&gt;</div>
@@ -154,6 +153,9 @@
       <a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html#SpiceSharp_Simulations_FrequencySimulation_LoadFrequencyBehaviors">FrequencySimulation.LoadFrequencyBehaviors()</a>
     </div>
     <div>
+      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_AfterTemperature">BiasingSimulation.AfterTemperature</a>
+    </div>
+    <div>
       <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_ProblemVariable">BiasingSimulation.ProblemVariable</a>
     </div>
     <div>
@@ -167,15 +169,6 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_AfterLoad">BiasingSimulation.AfterLoad</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BeforeTemperature">BiasingSimulation.BeforeTemperature</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_AfterTemperature">BiasingSimulation.AfterTemperature</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Temperature">BiasingSimulation.Temperature()</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Finish">BiasingSimulation.Finish()</a>
@@ -214,31 +207,13 @@
       <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnAfterLoad_SpiceSharp_Simulations_LoadStateEventArgs_">BiasingSimulation.OnAfterLoad(LoadStateEventArgs)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnBeforeTemperature_SpiceSharp_Simulations_TemperatureStateEventArgs_">BiasingSimulation.OnBeforeTemperature(TemperatureStateEventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Exports">Simulation.Exports</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnAfterTemperature_SpiceSharp_Simulations_TemperatureStateEventArgs_">BiasingSimulation.OnAfterTemperature(TemperatureStateEventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Status">Simulation.Status</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_States">Simulation.States</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Behaviors">Simulation.Behaviors</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData">Simulation.ExportSimulationData</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeSetup">Simulation.BeforeSetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Actions">Simulation.Actions</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">Simulation.AfterSetup</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeValidation">Simulation.BeforeValidation</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterValidation">Simulation.AfterValidation</a>
@@ -250,22 +225,31 @@
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterExecute">Simulation.AfterExecute</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeUnsetup">Simulation.BeforeUnsetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Status">Simulation.Status</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterUnsetup">Simulation.AfterUnsetup</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_States">Simulation.States</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Behaviors">Simulation.Behaviors</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Name">Simulation.Name</a>
     </div>
     <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_CurrentRun">Simulation.CurrentRun</a>
+    </div>
+    <div>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Repeat">Simulation.Repeat</a>
+    </div>
+    <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityBehaviors">Simulation.EntityBehaviors</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_">Simulation.Run(IEntityCollection)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_System_Int32_">Simulation.Run(IEntityCollection, int)</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Rerun">Simulation.Rerun()</a>
+      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Rerun_System_Int32_">Simulation.Rerun(int)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Validate_SpiceSharp_Validation_IRules_SpiceSharp_Entities_IEntityCollection_">Simulation.Validate(IRules, IEntityCollection)</a>
@@ -284,33 +268,6 @@
     </div>
     <div>
       <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_UsesState__1">Simulation.UsesState&lt;S&gt;()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnExport_SpiceSharp_Simulations_ExportDataEventArgs_">Simulation.OnExport(ExportDataEventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeSetup_System_EventArgs_">Simulation.OnBeforeSetup(EventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeExecute_SpiceSharp_Simulations_BeforeExecuteEventArgs_">Simulation.OnBeforeExecute(BeforeExecuteEventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_">Simulation.OnAfterSetup(EventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeValidation_System_EventArgs_">Simulation.OnBeforeValidation(EventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterValidation_System_EventArgs_">Simulation.OnAfterValidation(EventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_">Simulation.OnAfterExecute(AfterExecuteEventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_System_EventArgs_">Simulation.OnBeforeUnsetup(EventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterUnsetup_System_EventArgs_">Simulation.OnAfterUnsetup(EventArgs)</a>
     </div>
     <div>
       <a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html#SpiceSharp_ParameterSets_ParameterSetCollection_GetParameterSet__1">ParameterSetCollection.GetParameterSet&lt;P&gt;()</a>
@@ -365,7 +322,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_AC_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class AC : FrequencySimulation, IStateful&lt;TemperatureSimulationState&gt;, IStateful&lt;IIterationSimulationState&gt;, IBehavioral&lt;IBiasingUpdateBehavior&gt;, IParameterized&lt;BiasingParameters&gt;, IFrequencySimulation, IBiasingSimulation, ISimulation&lt;IVariable&lt;double&gt;&gt;, ITemperatureSimulation, IEventfulSimulation, IStateful&lt;ITemperatureSimulationState&gt;, IBehavioral&lt;ITemperatureBehavior&gt;, IBehavioral&lt;IBiasingBehavior&gt;, IBehavioral&lt;IConvergenceBehavior&gt;, IStateful&lt;IBiasingSimulationState&gt;, ISimulation&lt;IVariable&lt;Complex&gt;&gt;, ISimulation, IParameterSetCollection, IParameterSet, IBehavioral&lt;IFrequencyBehavior&gt;, IStateful&lt;IComplexSimulationState&gt;, IStateful, IBehavioral&lt;IFrequencyUpdateBehavior&gt;, IBehavioral, IParameterized&lt;FrequencyParameters&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class AC : FrequencySimulation, IStateful&lt;TemperatureSimulationState&gt;, IStateful&lt;IIterationSimulationState&gt;, IBehavioral&lt;IBiasingUpdateBehavior&gt;, IParameterized&lt;BiasingParameters&gt;, IFrequencySimulation, IBiasingSimulation, ISimulation&lt;IVariable&lt;double&gt;&gt;, ITemperatureSimulation, IStateful&lt;ITemperatureSimulationState&gt;, IBehavioral&lt;ITemperatureBehavior&gt;, IBehavioral&lt;IBiasingBehavior&gt;, IBehavioral&lt;IConvergenceBehavior&gt;, IStateful&lt;IBiasingSimulationState&gt;, ISimulation&lt;IVariable&lt;Complex&gt;&gt;, ISimulation, IParameterSetCollection, IParameterSet, IBehavioral&lt;IFrequencyBehavior&gt;, IStateful&lt;IComplexSimulationState&gt;, IStateful, IBehavioral&lt;IFrequencyUpdateBehavior&gt;, IBehavioral, IParameterized&lt;FrequencyParameters&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
 </h3>
@@ -461,19 +418,126 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="fields">Fields
+</h3>
+  <h4 id="SpiceSharp_Simulations_AC_ExportOperatingPoint" data-uid="SpiceSharp.Simulations.AC.ExportOperatingPoint">ExportOperatingPoint</h4>
+  <div class="markdown level1 summary"><p>The constant returned when exporting the operating point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ExportOperatingPoint = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_AC_ExportSmallSignal" data-uid="SpiceSharp.Simulations.AC.ExportSmallSignal">ExportSmallSignal</h4>
+  <div class="markdown level1 summary"><p>The constant returned when exporting the small signal point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ExportSmallSignal = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <a id="SpiceSharp_Simulations_AC_Frequency_" data-uid="SpiceSharp.Simulations.AC.Frequency*"></a>
+  <h4 id="SpiceSharp_Simulations_AC_Frequency" data-uid="SpiceSharp.Simulations.AC.Frequency">Frequency</h4>
+  <div class="markdown level1 summary"><p>Gets the current frequency point.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public double Frequency { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="methods">Methods
 </h3>
   <a id="SpiceSharp_Simulations_AC_Execute_" data-uid="SpiceSharp.Simulations.AC.Execute*"></a>
-  <h4 id="SpiceSharp_Simulations_AC_Execute" data-uid="SpiceSharp.Simulations.AC.Execute">Execute()</h4>
+  <h4 id="SpiceSharp_Simulations_AC_Execute_System_Int32_" data-uid="SpiceSharp.Simulations.AC.Execute(System.Int32)">Execute(int)</h4>
   <div class="markdown level1 summary"><p>Executes the simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Execute()</code></pre>
+    <pre><code class="lang-csharp hljs">protected override IEnumerable&lt;int&gt; Execute(int mask = 65535)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">mask</span></td>
+        <td><p>A bit mask for simulation export identifiers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html#SpiceSharp_Simulations_FrequencySimulation_Execute">FrequencySimulation.Execute()</a></div>
+  <div><a class="xref" href="SpiceSharp.Simulations.FrequencySimulation.html#SpiceSharp_Simulations_FrequencySimulation_Execute_System_Int32_">FrequencySimulation.Execute(int)</a></div>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-condensed">
     <thead>
@@ -514,9 +578,6 @@
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Simulations.ITemperatureSimulation.html">ITemperatureSimulation</a>
-  </div>
-  <div>
-      <a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a>
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Simulations.IStateful-1.html">IStateful&lt;S&gt;</a>
@@ -578,6 +639,57 @@
   </div>
   <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetComplexCurrent(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_">SimulationHelper.GetComplexProperty(ISimulation, Reference, string)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetComplexVoltage(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetComplexVoltage(ISimulation, Reference, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetCurrent(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_">SimulationHelper.GetProperty(ISimulation, Reference, string)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetVoltage(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetVoltage(ISimulation, Reference, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_RunToEnd_SpiceSharp_Simulations_ISimulation_SpiceSharp_Entities_IEntityCollection_System_Collections_Generic_IDictionary_System_Int32_System_Action__">SimulationHelper.RunToEnd(ISimulation, IEntityCollection, IDictionary&lt;int, Action&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__">SimulationHelper.TryGetComplexCurrent(ISimulation, Reference, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Numerics_Complex__">SimulationHelper.TryGetComplexProperty(ISimulation, Reference, string, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__">SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, Reference, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__">SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__">SimulationHelper.TryGetCurrent(ISimulation, Reference, out double)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Double__">SimulationHelper.TryGetProperty(ISimulation, Reference, string, out double)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Double__">SimulationHelper.TryGetVoltage(ISimulation, Reference, Reference, out double)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__">SimulationHelper.TryGetVoltage(ISimulation, Reference, out double)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">

@@ -68,9 +68,9 @@ namespace SpiceSharpTest.Models
 
             var op = new OP("op1");
             var current = new RealPropertyExport(op, "G1", "i");
-            op.ExportSimulationData += (sender, args) => Assert.That(current.Value, Is.EqualTo(300.0).Within(1e-12));
-            op.Run(ckt);
-            current.Destroy();
+
+            foreach (int _ in op.Run(ckt))
+                Assert.That(current.Value, Is.EqualTo(300.0).Within(1e-12));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation and run it
             var dc = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => dc.Run(ckt));
+            var ex = Assert.Throws<ValidationFailedException>(() => dc.RunToEnd(ckt));
             Assert.That(ex.Rules.ViolationCount, Is.EqualTo(2));
             var violations = ex.Rules.Violations.ToArray();
             Assert.That(violations[0], Is.InstanceOf<FloatingNodeRuleViolation>());

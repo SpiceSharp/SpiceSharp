@@ -130,16 +130,19 @@ namespace SpiceSharpTest.Models
         /// <param name="cktReference">The reference circuit.</param>
         /// <param name="cktActual">The actual circuit.</param>
         /// <param name="exports">The exports to be compared.</param>
-        public void Compare(IEventfulSimulation simulation, IEntityCollection cktReference, IEntityCollection cktActual, IExport<double>[] exports)
+        public void Compare(ISimulation simulation, IEntityCollection cktReference, IEntityCollection cktActual, IExport<double>[] exports)
         {
+            // Store results
             var results = new List<double>();
-            void StoreResults(object sender, ExportDataEventArgs args)
+            foreach (int _ in simulation.Run(cktReference))
             {
                 foreach (var export in exports)
                     results.Add(export.Value);
             }
+
+            // Compare results
             int index = 0;
-            void CompareResults(object sender, ExportDataEventArgs args)
+            foreach (int _ in simulation.Run(cktActual))
             {
                 foreach (var export in exports)
                 {
@@ -149,16 +152,6 @@ namespace SpiceSharpTest.Models
                     Assert.That(actual, Is.EqualTo(expected).Within(tol));
                 }
             }
-
-            // Store results
-            simulation.ExportSimulationData += StoreResults;
-            simulation.Run(cktReference);
-            simulation.ExportSimulationData -= StoreResults;
-
-            // Compare to second circuit
-            simulation.ExportSimulationData += CompareResults;
-            simulation.Run(cktActual);
-            simulation.ExportSimulationData -= CompareResults;
         }
 
         /// <summary>
@@ -168,16 +161,19 @@ namespace SpiceSharpTest.Models
         /// <param name="cktReference">The reference circuit.</param>
         /// <param name="cktActual">The actual circuit.</param>
         /// <param name="exports">The exports to be compared.</param>
-        public void Compare(IEventfulSimulation simulation, IEntityCollection cktReference, IEntityCollection cktActual, IExport<Complex>[] exports)
+        public void Compare(ISimulation simulation, IEntityCollection cktReference, IEntityCollection cktActual, IExport<Complex>[] exports)
         {
+            // Store the results
             var results = new List<Complex>();
-            void StoreResults(object sender, ExportDataEventArgs args)
+            foreach (int _ in simulation.Run(cktReference))
             {
                 foreach (var export in exports)
                     results.Add(export.Value);
             }
+
+            // Compare the results
             int index = 0;
-            void CompareResults(object sender, ExportDataEventArgs args)
+            foreach (int _ in simulation.Run(cktActual))
             {
                 foreach (var export in exports)
                 {
@@ -189,16 +185,6 @@ namespace SpiceSharpTest.Models
                     Assert.That(actual.Imaginary, Is.EqualTo(expected.Imaginary).Within(tol));
                 }
             }
-
-            // Store results
-            simulation.ExportSimulationData += StoreResults;
-            simulation.Run(cktReference);
-            simulation.ExportSimulationData -= StoreResults;
-
-            // Compare to second circuit
-            simulation.ExportSimulationData += CompareResults;
-            simulation.Run(cktActual);
-            simulation.ExportSimulationData -= CompareResults;
         }
 
         /// <summary>
@@ -215,7 +201,7 @@ namespace SpiceSharpTest.Models
             if (references == null)
                 throw new ArgumentNullException(nameof(references));
 
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int _ in sim.Run(ckt))
             {
                 using var exportIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -226,8 +212,7 @@ namespace SpiceSharpTest.Models
                     double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
                     Assert.That(actual, Is.EqualTo(expected).Within(tol));
                 }
-            };
-            sim.Run(ckt);
+            }
         }
 
         /// <summary>
@@ -245,7 +230,7 @@ namespace SpiceSharpTest.Models
                 throw new ArgumentNullException(nameof(references));
 
             int index = 0;
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int _ in sim.Run(ckt))
             {
                 using var exportIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -264,7 +249,7 @@ namespace SpiceSharpTest.Models
                         var sweeps = sim.DCParameters.Sweeps;
                         double[] values = sim.GetCurrentSweepValue();
                         string msg = ex.Message + " at ";
-                        int index = 0;
+                        index = 0;
                         foreach (var sweep in sweeps)
                             msg += "{0}={1}".FormatString(sweep.Name, values[index++]) + ", ";
                         throw new Exception(msg, ex);
@@ -272,8 +257,7 @@ namespace SpiceSharpTest.Models
                 }
 
                 index++;
-            };
-            sim.Run(ckt);
+            }
         }
 
         /// <summary>
@@ -285,7 +269,7 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyzeDC(DC sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references)
         {
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int _ in sim.Run(ckt))
             {
                 using var exportIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -310,45 +294,7 @@ namespace SpiceSharpTest.Models
                         throw new Exception(msg, ex);
                     }
                 }
-            };
-            sim.Run(ckt);
-        }
-
-        /// <summary>
-        /// Perform a test for AC analysis
-        /// </summary>
-        /// <param name="sim">Simulation</param>
-        /// <param name="ckt">Circuit</param>
-        /// <param name="exports">Exports</param>
-        /// <param name="references">References</param>
-        protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
-        {
-            int index = 0;
-            sim.ExportSimulationData += (sender, data) =>
-            {
-                using var exportsIt = exports.GetEnumerator();
-                using var referencesIt = references.GetEnumerator();
-                while (exportsIt.MoveNext() && referencesIt.MoveNext())
-                {
-                    // Test export
-                    double actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
-                    double expected = referencesIt.Current?[index] ?? throw new ArgumentNullException();
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
-
-                    try
-                    {
-                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
-                    }
-                    catch (Exception ex)
-                    {
-                        string msg = $"{ex.Message} at {data.Frequency} Hz";
-                        throw new Exception(msg, ex);
-                    }
-                }
-
-                index++;
-            };
-            sim.Run(ckt);
+            }
         }
 
         /// <summary>
@@ -361,7 +307,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<Complex>> exports, IEnumerable<Complex[]> references)
         {
             int index = 0;
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int _ in sim.Run(ckt, AC.ExportSmallSignal))
             {
                 using var exportsIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -383,14 +329,13 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        string msg = $"{ex.Message} at {sim.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }
 
                 index++;
-            };
-            sim.Run(ckt);
+            }
         }
 
         /// <summary>
@@ -402,7 +347,7 @@ namespace SpiceSharpTest.Models
         /// <param name="references">References</param>
         protected void AnalyzeAC(AC sim, Circuit ckt, IEnumerable<IExport<Complex>> exports, IEnumerable<Func<double, Complex>> references)
         {
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int _ in sim.Run(ckt, AC.ExportSmallSignal))
             {
                 using var exportsIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -410,12 +355,11 @@ namespace SpiceSharpTest.Models
                 {
                     // Test export
                     var actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
-                    var expected = referencesIt.Current?.Invoke(data.Frequency) ?? throw new ArgumentNullException();
+                    var expected = referencesIt.Current?.Invoke(sim.Frequency) ?? throw new ArgumentNullException();
 
                     // Test real part
                     double rtol = Math.Max(Math.Abs(actual.Real), Math.Abs(expected.Real)) * RelTol + AbsTol;
-                    double itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol +
-                                  AbsTol;
+                    double itol = Math.Max(Math.Abs(actual.Imaginary), Math.Abs(expected.Imaginary)) * RelTol + AbsTol;
 
                     try
                     {
@@ -424,7 +368,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        string msg = $"{ex.Message} at {sim.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -442,7 +386,7 @@ namespace SpiceSharpTest.Models
         protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int type in sim.Run(ckt, Transient.ExportTransient))
             {
                 using var exportsIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -458,14 +402,13 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at t={data.Time} s";
+                        string msg = $"{ex.Message} at t={sim.Time} s";
                         throw new Exception(msg, ex);
                     }
                 }
 
                 index++;
-            };
-            sim.Run(ckt);
+            }
         }
 
         /// <summary>
@@ -475,31 +418,39 @@ namespace SpiceSharpTest.Models
         /// <param name="ckt">Circuit</param>
         /// <param name="exports">Exports</param>
         /// <param name="references">References</param>
-        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references)
+        /// <param name="actions">The actions.</param>
+        protected void AnalyzeTransient(Transient sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<Func<double, double>> references,
+            Dictionary<int, Action> actions = null)
         {
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int type in sim.Run(ckt, Simulation.Actions | Transient.ExportTransient))
             {
-                using var exportsIt = exports.GetEnumerator();
-                using var referencesIt = references.GetEnumerator();
-                while (exportsIt.MoveNext() && referencesIt.MoveNext())
-                {
-                    double t = data.Time;
-                    double actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
-                    double expected = referencesIt.Current?.Invoke(t) ?? throw new ArgumentNullException();
-                    double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+                if (actions is not null &&
+                    actions.TryGetValue(type, out var action))
+                    action();
 
-                    try
+                if ((type & Simulation.Exports) != 0)
+                {
+                    using var exportsIt = exports.GetEnumerator();
+                    using var referencesIt = references.GetEnumerator();
+                    while (exportsIt.MoveNext() && referencesIt.MoveNext())
                     {
-                        Assert.That(actual, Is.EqualTo(expected).Within(tol));
-                    }
-                    catch (Exception ex)
-                    {
-                        string msg = $"{ex.Message} at t={data.Time} s";
-                        throw new Exception(msg, ex);
+                        double t = sim.Time;
+                        double actual = exportsIt.Current?.Value ?? throw new ArgumentNullException();
+                        double expected = referencesIt.Current?.Invoke(t) ?? throw new ArgumentNullException();
+                        double tol = Math.Max(Math.Abs(actual), Math.Abs(expected)) * RelTol + AbsTol;
+
+                        try
+                        {
+                            Assert.That(actual, Is.EqualTo(expected).Within(tol));
+                        }
+                        catch (Exception ex)
+                        {
+                            string msg = $"{ex.Message} at t={sim.Time} s";
+                            throw new Exception(msg, ex);
+                        }
                     }
                 }
-            };
-            sim.Run(ckt);
+            }
         }
 
         /// <summary>
@@ -512,7 +463,7 @@ namespace SpiceSharpTest.Models
         protected static void AnalyzeNoise(Noise sim, Circuit ckt, IEnumerable<IExport<double>> exports, IEnumerable<double[]> references)
         {
             int index = 0;
-            sim.ExportSimulationData += (sender, data) =>
+            foreach (int _ in sim.Run(ckt, Noise.ExportNoise))
             {
                 using var exportsIt = exports.GetEnumerator();
                 using var referencesIt = references.GetEnumerator();
@@ -529,7 +480,7 @@ namespace SpiceSharpTest.Models
                     }
                     catch (Exception ex)
                     {
-                        string msg = $"{ex.Message} at {data.Frequency} Hz";
+                        string msg = $"{ex.Message} at {sim.Frequency} Hz";
                         throw new Exception(msg, ex);
                     }
                 }
@@ -556,13 +507,11 @@ namespace SpiceSharpTest.Models
             for (int i = 0; i < arr.Length; i++)
                 output[i] = [];
 
-            sim.ExportSimulationData += (sender, args) =>
+            foreach (int _ in sim.Run(ckt))
             {
                 for (int i = 0; i < arr.Length; i++)
                     output[i].Add(arr[i].Value.ToString(CultureInfo.InvariantCulture));
-            };
-
-            sim.Run(ckt);
+            }
 
             for (int i = 0; i < arr.Length; i++)
                 Console.WriteLine($"v{i} = [{string.Join(", ", output[i])} ];");
@@ -575,8 +524,6 @@ namespace SpiceSharpTest.Models
         /// <param name="exports">The exports.</param>
         protected static void DestroyExports<T>(IEnumerable<IExport<T>> exports)
         {
-            foreach (var export in exports)
-                export.Destroy();
         }
 
         /// <summary>
@@ -633,27 +580,6 @@ namespace SpiceSharpTest.Models
                     Console.WriteLine($"Could not find variable for index {i}");
             }
             Console.WriteLine();
-
-            /*
-            // Dump the states used by the transient
-            #if DEBUG
-            Console.WriteLine("- States");
-            var intstate = state.GetPreviousStates(0);
-            string[] output = new string[intstate.Length];
-            for (var i = 0; i < intstate.Length; i++)
-                output[i] = $"{intstate[i]}";
-            for (var k = 1; k <= state.MaxOrder; k++)
-            {
-                intstate = state.GetPreviousStates(k);
-                for (var i = 0; i < intstate.Length; i++)
-                    output[i] += $", {intstate[i]}";
-            }
-            for (var i = 0; i < output.Length; i++)
-                Console.WriteLine(output[i]);
-            Console.WriteLine();
-            #endif
-            */
-
             Console.WriteLine("------------------------ End of information ------------------------");
         }
     }

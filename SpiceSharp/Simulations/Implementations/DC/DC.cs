@@ -15,6 +15,11 @@ namespace SpiceSharp.Simulations
         private IEnumerator<double>[] _sweepEnumerators;
 
         /// <summary>
+        /// The constant returned when exporting a sweep point.
+        /// </summary>
+        public const int ExportSweep = 0x01;
+
+        /// <summary>
         /// Gets the dc parameters.
         /// </summary>
         /// <value>
@@ -70,12 +75,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             // Base
-            base.Execute();
-
-            var exportargs = new ExportDataEventArgs(this);
+            foreach (int exportType in base.Execute(mask))
+                yield return exportType;
 
             // Setup the state
             Iteration.Mode = IterationModes.Junction;
@@ -112,7 +116,8 @@ namespace SpiceSharp.Simulations
                 }
 
                 // Export data
-                OnExport(exportargs);
+                if ((mask & ExportSweep) != 0)
+                    yield return ExportSweep;
 
                 // Remove all values that are greater or equal to the maximum value
                 while (level >= 0 && !_sweepEnumerators[level].MoveNext())

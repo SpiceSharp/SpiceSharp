@@ -96,7 +96,8 @@ namespace SpiceSharp.Components
                     .AddIfNo<IAcceptBehavior>(context => new Accept(context));
 
                 // Run the simulation
-                localSim.Run(Parameters.Entities);
+                foreach (var _ in localSim.Run(Parameters.Entities))
+                { }
 
                 // Allow the behaviors to fetch the behaviors if they want
                 foreach (var behavior in behaviors)

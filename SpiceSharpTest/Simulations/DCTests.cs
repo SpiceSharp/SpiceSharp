@@ -45,14 +45,13 @@ namespace SpiceSharpTest.Simulations
             dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(0, 5, 0.1))); // Sweep V1 from 0V to 5V per 100mV
 
             // Run simulation
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
                 double voltage = dc.GetCurrentSweepValue()[1];
                 double expected = voltage * resistance / (resistance + 1.0e4);
-                Assert.That(args.GetVoltage("out"), Is.EqualTo(expected).Within(1e-12));
-            };
-            dc.Run(ckt);
+                Assert.That(dc.GetVoltage("out"), Is.EqualTo(expected).Within(1e-12));
+            }
         }
 
         [Test]
@@ -78,20 +77,23 @@ namespace SpiceSharpTest.Simulations
             // Create exports
             var dcExportV1 = new RealPropertyExport(dc, "V1", "i");
             var dcExportV12 = new RealPropertyExport(dc, "V1", "i");
-            dc.ExportSimulationData += (sender, args) =>
+            var opExportV1 = new RealPropertyExport(op, "V1", "i");
+
+            // Run DC and op
+            foreach (int _ in dc.Run(ckt))
             {
                 double v1 = dcExportV1.Value;
                 double v12 = dcExportV12.Value;
-            };
-            var opExportV1 = new RealPropertyExport(op, "V1", "i");
-            op.ExportSimulationData += (sender, args) =>
+            }
+            foreach (int _ in dc.Run(ckt))
+            {
+                double v1 = dcExportV1.Value;
+                double v12 = dcExportV12.Value;
+            }
+            foreach (int _ in op.Run(ckt))
             {
                 double v1 = opExportV1.Value;
-            };
-
-            // Run DC and op
-            dc.Run(ckt);
-            dc.Run(ckt);
+            }
         }
 
         [Test]
@@ -112,17 +114,13 @@ namespace SpiceSharpTest.Simulations
 
             // First run: build the reference
             var r = new List<double>();
-            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(dcExportV1.Value);
-            dc.ExportSimulationData += BuildReference;
-            dc.Run(ckt);
-            dc.ExportSimulationData -= BuildReference;
+            foreach (int _ in dc.Run(ckt))
+                r.Add(dcExportV1.Value);
 
             // Rerun: check with reference
             int index = 0;
-            void CheckReference(object sender, ExportDataEventArgs args) => Assert.That(r[index++], Is.EqualTo(dcExportV1.Value).Within(1e-20));
-            dc.ExportSimulationData += CheckReference;
-            dc.Rerun();
-            dc.ExportSimulationData -= CheckReference;
+            foreach (int _ in dc.Rerun())
+                Assert.That(r[index++], Is.EqualTo(dcExportV1.Value).Within(1e-20));
         }
 
         [Test]
@@ -143,18 +141,10 @@ namespace SpiceSharpTest.Simulations
                 new Resistor("R3", "int", "0", 1e3));
 
             var dc = new DC("dc", "V1", -2, 2, 0.1);
-            bool a = true;
-            dc.ExportSimulationData += (sender, args) =>
-            {
-                if (a)
-                    Assert.That(args.GetVoltage("out"), Is.EqualTo(args.GetVoltage("in") * 0.5).Within(1e-12));
-                else
-                    Assert.That(args.GetVoltage("out"), Is.EqualTo(args.GetVoltage("in") * 2.0 / 3.0).Within(1e-12));
-            };
-            a = false; // Doing second circuit
-            dc.Run(cktB);
-            a = true; // Doing first circuit
-            dc.Run(cktA);
+            foreach (int _ in dc.Run(cktB))
+                Assert.That(dc.GetVoltage("out"), Is.EqualTo(dc.GetVoltage("in") * 2.0 / 3.0).Within(1e-12));
+            foreach (int _ in dc.Run(cktA))
+                Assert.That(dc.GetVoltage("out"), Is.EqualTo(dc.GetVoltage("in") * 0.5).Within(1e-12));
         }
     }
 }

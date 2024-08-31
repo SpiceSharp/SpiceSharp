@@ -43,7 +43,7 @@ namespace SpiceSharp.Components
         /// <param name="name">The name.</param>
         /// <param name="timepoints">The timepoint.</param>
         /// <param name="callback">The callback method.</param>
-        public Sampler(string name, IEnumerable<double> timepoints, EventHandler<ExportDataEventArgs> callback)
+        public Sampler(string name, IEnumerable<double> timepoints, EventHandler<EventArgs> callback)
             : this(name)
         {
             Parameters.Points = timepoints;

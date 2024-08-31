@@ -36,6 +36,11 @@ namespace SpiceSharp.Simulations
         private TemperatureSimulationState _temperature;
 
         /// <summary>
+        /// Represents the action after doing temperature-dependent calculations.
+        /// </summary>
+        public const int AfterTemperature = 0x0010_0000;
+
+        /// <summary>
         /// Gets the variable that causes issues.
         /// </summary>
         /// <remarks>
@@ -96,24 +101,6 @@ namespace SpiceSharp.Simulations
         /// generates a load behavior.
         /// </remarks>
         public event EventHandler<LoadStateEventArgs> AfterLoad;
-
-        /// <summary>
-        /// Occurs before performing temperature-dependent calculations.
-        /// </summary>
-        /// <remarks>
-        /// For better performance, you can also create an entity with a high priority that
-        /// creates a temperature behavior.
-        /// </remarks>
-        public event EventHandler<TemperatureStateEventArgs> BeforeTemperature;
-
-        /// <summary>
-        /// Occurs after performing temperature-dependent calculations.
-        /// </summary>
-        /// <remarks>
-        /// For better performance, you can also create an entity with a low priority that
-        /// creates a temperature behavior.
-        /// </remarks>
-        public event EventHandler<TemperatureStateEventArgs> AfterTemperature;
         #endregion
 
         /// <summary>
@@ -179,26 +166,18 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             // Perform temperature-dependent calculations
-            Temperature();
+            foreach (var behavior in _temperatureBehaviors)
+                behavior.Temperature();
+
+            if ((mask & AfterTemperature) != 0)
+                yield return AfterTemperature;
 
             // Apply nodesets if they are specified
             if (_nodesets.Count > 0)
                 AfterLoad += LoadNodeSets;
-        }
-
-        /// <summary>
-        /// Perform temperature-dependent calculations.
-        /// </summary>
-        protected void Temperature()
-        {
-            var args = new TemperatureStateEventArgs(_temperature);
-            OnBeforeTemperature(args);
-            foreach (var behavior in _temperatureBehaviors)
-                behavior.Temperature();
-            OnAfterTemperature(args);
         }
 
         /// <inheritdoc/>
@@ -654,19 +633,6 @@ namespace SpiceSharp.Simulations
         /// </summary>
         /// <param name="args">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         protected virtual void OnAfterLoad(LoadStateEventArgs args) => AfterLoad?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="BeforeTemperature" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="TemperatureStateEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnBeforeTemperature(TemperatureStateEventArgs args) => BeforeTemperature?.Invoke(this, args);
-
-        /// <summary>
-        /// Raises the <see cref="AfterTemperature" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="TemperatureStateEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnAfterTemperature(TemperatureStateEventArgs args) => AfterTemperature?.Invoke(this, args);
-
         #endregion
     }
 }

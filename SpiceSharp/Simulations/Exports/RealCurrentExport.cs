@@ -7,8 +7,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export real currents.
     /// </summary>
-    /// <seealso cref="Export{S, T}" />
-    public class RealCurrentExport : Export<IBiasingSimulation, double>
+    /// <seealso cref="Export{T}" />
+    public class RealCurrentExport : Export<double>
     {
         /// <summary>
         /// Gets the name of the voltage source.
@@ -28,13 +28,16 @@ namespace SpiceSharp.Simulations
             Source = source;
         }
 
-        /// <inheritdoc />
-        protected override void Initialize(object sender, EventArgs e)
+        protected override Func<double> BuildExtractor(ISimulation simulation)
         {
-            var behaviors = Source.GetContainer(Simulation);
-            var behavior = behaviors.GetValue<IBranchedBehavior<double>>();
-            var branch = behavior.Branch;
-            Extractor = () => branch.Value;
+            if (simulation is not null &&
+                Source.TryGetContainer(simulation, out var container) &&
+                container.TryGetValue<IBranchedBehavior<double>>(out var behavior))
+            {
+                var branch = behavior.Branch;
+                return () => branch.Value;
+            }
+            return null;
         }
 
         /// <summary>

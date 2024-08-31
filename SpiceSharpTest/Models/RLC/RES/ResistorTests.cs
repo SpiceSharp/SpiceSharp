@@ -289,7 +289,8 @@ namespace SpiceSharpTest.Models
             var noise = new Noise("noise", "I1", "in", new DecadeSweep(10, 10e9, 10));
             var onoise = new OutputNoiseDensityExport(noise);
             var inoise = new InputNoiseDensityExport(noise);
-            noise.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in noise.Run(ckt, Noise.ExportNoise))
             {
                 // We expect 4*k*T*R noise variance
                 Assert.That(onoise.Value, Is.EqualTo(4 * Constants.Boltzmann * temp * 1e3).Within(1e-20));

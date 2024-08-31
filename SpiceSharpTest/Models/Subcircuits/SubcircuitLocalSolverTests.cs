@@ -151,7 +151,7 @@ namespace SpiceSharpTest.Models
 
             var op = new OP("op");
             IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
-            Assert.Throws<NoEquivalentSubcircuitException>(() => op.Run(ckt));
+            Assert.Throws<NoEquivalentSubcircuitException>(() => op.RunToEnd(ckt));
         }
 
         [Test]
@@ -167,11 +167,10 @@ namespace SpiceSharpTest.Models
 
             // Simulation
             var op = new OP("op");
-            op.ExportSimulationData += (sender, args) =>
+            foreach (int _ in op.Run(ckt))
             {
-                Assert.That(args.GetVoltage("x"), Is.EqualTo(1.0e3));
-            };
-            op.Run(ckt);
+                Assert.That(op.GetVoltage("x"), Is.EqualTo(1.0e3));
+            }
         }
 
         [Test]
@@ -187,11 +186,10 @@ namespace SpiceSharpTest.Models
 
             // Simulation
             var op = new OP("op");
-            op.ExportSimulationData += (sender, args) =>
+            foreach (int _ in op.Run(ckt))
             {
-                Assert.That(args.GetVoltage("x"), Is.EqualTo(1.0e3));
-            };
-            op.Run(ckt);
+                Assert.That(op.GetVoltage("x"), Is.EqualTo(1.0e3));
+            }
         }
 
         [Test]
@@ -211,11 +209,10 @@ namespace SpiceSharpTest.Models
 
             // Simulation
             var op = new OP("op");
-            op.ExportSimulationData += (sender, args) =>
+            foreach (int _ in op.Run(ckt))
             {
-                Assert.That(args.GetVoltage("x"), Is.EqualTo(0.5e3));
-            };
-            op.Run(ckt);
+                Assert.That(op.GetVoltage("x"), Is.EqualTo(0.5e3));
+            }
         }
 
         [Test]
@@ -228,11 +225,10 @@ namespace SpiceSharpTest.Models
 
             // Simulation
             var op = new OP("op");
-            op.ExportSimulationData += (sender, args) =>
+            foreach (int _ in op.Run(ckt))
             {
-                Assert.That(args.GetVoltage("x"), Is.EqualTo(0.5));
-            };
-            op.Run(ckt);
+                Assert.That(op.GetVoltage("x"), Is.EqualTo(0.5));
+            }
         }
 
         [Test]
@@ -249,11 +245,10 @@ namespace SpiceSharpTest.Models
 
             // Simulation
             var op = new OP("op");
-            op.ExportSimulationData += (sender, args) =>
+            foreach (int _ in op.Run(ckt))
             {
-                Assert.That(args.GetVoltage("x"), Is.EqualTo(0.5));
-            };
-            op.Run(ckt);
+                Assert.That(op.GetVoltage("x"), Is.EqualTo(0.5));
+            }
         }
 
         [Test]
@@ -562,17 +557,16 @@ namespace SpiceSharpTest.Models
 
             // Simulate the expected values
             double[] expected = new double[exportsExpected.Length];
-            opExpected.ExportSimulationData += (sender, args) =>
+            foreach (int _ in opExpected.Run(cktExpected))
             {
                 for (int i = 0; i < expected.Length; i++)
                     expected[i] = exportsExpected[i].Value;
-            };
-            opExpected.Run(cktExpected);
+            }
 
             // Compare to the actual values
             bool didCheck = false;
             var parameters = opExpected.BiasingParameters;
-            opActual.ExportSimulationData += (sender, args) =>
+            foreach (int _ in opActual.Run(cktActual))
             {
                 for (int i = 0; i < expected.Length; i++)
                 {
@@ -581,8 +575,7 @@ namespace SpiceSharpTest.Models
                     Assert.That(actual, Is.EqualTo(expected[i]).Within(tol));
                 }
                 didCheck = true;
-            };
-            opActual.Run(cktActual);
+            }
             Assert.That(didCheck);
 
             DestroyExports(exportsExpected);
@@ -615,17 +608,16 @@ namespace SpiceSharpTest.Models
             for (int i = 0; i < expected.Length; i++)
                 expected[i] = new Complex[exportsExpected.Length];
             int index = 0;
-            opExpected.ExportSimulationData += (sender, args) =>
+            foreach (int _ in opExpected.Run(cktExpected, AC.ExportSmallSignal))
             {
                 for (int i = 0; i < exportsExpected.Length; i++)
                     expected[index][i] = exportsExpected[i].Value;
                 index++;
-            };
-            opExpected.Run(cktExpected);
+            }
 
             // Compare to the actual values
             index = 0;
-            opActual.ExportSimulationData += (sender, args) =>
+            foreach (int _ in opActual.Run(cktActual, AC.ExportSmallSignal))
             {
                 for (int i = 0; i < exportsActual.Length; i++)
                 {
@@ -636,8 +628,7 @@ namespace SpiceSharpTest.Models
                     Assert.That(actual.Imaginary, Is.EqualTo(expected[index][i].Imaginary).Within(tol));
                 }
                 index++;
-            };
-            opActual.Run(cktActual);
+            }
             Assert.That(index, Is.EqualTo(points));
 
             DestroyExports(exportsExpected);
@@ -672,17 +663,16 @@ namespace SpiceSharpTest.Models
             for (int i = 0; i < points; i++)
                 expected[i] = new double[exportsExpected.Length];
             int index = 0;
-            opExpected.ExportSimulationData += (sender, args) =>
+            foreach (int _ in opExpected.Run(cktExpected, Noise.ExportNoise))
             {
                 for (int i = 0; i < exportsExpected.Length; i++)
                     expected[index][i] = exportsExpected[i].Value;
                 index++;
-            };
-            opExpected.Run(cktExpected);
+            }
 
             // Compare to the actual values
             index = 0;
-            opActual.ExportSimulationData += (sender, args) =>
+            foreach (int _ in opActual.Run(cktActual, Noise.ExportNoise))
             {
                 for (int i = 0; i < exportsActual.Length; i++)
                 {
@@ -691,8 +681,7 @@ namespace SpiceSharpTest.Models
                     Assert.That(actual, Is.EqualTo(expected[index][i]).Within(tol));
                 }
                 index++;
-            };
-            opActual.Run(cktActual);
+            }
             Assert.That(index, Is.EqualTo(points));
 
             DestroyExports(exportsExpected);

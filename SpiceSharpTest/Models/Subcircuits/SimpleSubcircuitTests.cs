@@ -294,7 +294,7 @@ namespace SpiceSharpTest.Models
                 new Subcircuit("X2", subckt, "out", "0"));
 
             var op = new OP("op");
-            op.Run(ckt);
+            op.RunToEnd(ckt);
             var behaviors = op.EntityBehaviors["X2"].GetValue<SpiceSharp.Components.Subcircuits.EntitiesBehavior>();
             Assert.That(behaviors.LocalBehaviors["R2"].GetProperty<double>("v"), Is.EqualTo(10.0 / 4.0).Within(1e-12));
 

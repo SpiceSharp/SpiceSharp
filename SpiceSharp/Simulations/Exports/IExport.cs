@@ -7,16 +7,16 @@
     public interface IExport<T>
     {
         /// <summary>
+        /// Gets or sets the simulation that the export applies to.
+        /// </summary>
+        ISimulation Simulation { get; set; }
+
+        /// <summary>
         /// Gets the current value from the simulation.
         /// </summary>
         /// <remarks>
         /// This property will return a default if there is nothing to extract.
         /// </remarks>
         T Value { get; }
-
-        /// <summary>
-        /// Destroys the export.
-        /// </summary>
-        void Destroy();
     }
 }
