@@ -85,7 +85,6 @@
   </div>
   <div class="implements">
     <h5>Implements</h5>
-    <div><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></div>
     <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
     <div><a class="xref" href="SpiceSharp.Simulations.IStateful.html">IStateful</a></div>
     <div><a class="xref" href="SpiceSharp.Simulations.IBehavioral.html">IBehavioral</a></div>
@@ -147,7 +146,7 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_Simulation_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class Simulation : ParameterSetCollection, IEventfulSimulation, ISimulation, IStateful, IBehavioral, IParameterSetCollection, IParameterSet</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class Simulation : ParameterSetCollection, ISimulation, IStateful, IBehavioral, IParameterSetCollection, IParameterSet</code></pre>
   </div>
   <h3 id="constructors">Constructors
 </h3>
@@ -194,6 +193,146 @@
       </tr>
     </tbody>
   </table>
+  <h3 id="fields">Fields
+</h3>
+  <h4 id="SpiceSharp_Simulations_Simulation_Actions" data-uid="SpiceSharp.Simulations.Simulation.Actions">Actions</h4>
+  <div class="markdown level1 summary"><p>The bits that are reserved for actions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int Actions = -65536</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_AfterExecute" data-uid="SpiceSharp.Simulations.Simulation.AfterExecute">AfterExecute</h4>
+  <div class="markdown level1 summary"><p>Represents the action after each execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int AfterExecute = 524288</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_AfterSetup" data-uid="SpiceSharp.Simulations.Simulation.AfterSetup">AfterSetup</h4>
+  <div class="markdown level1 summary"><p>Represents the action after setting up behaviors.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int AfterSetup = 65536</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_AfterValidation" data-uid="SpiceSharp.Simulations.Simulation.AfterValidation">AfterValidation</h4>
+  <div class="markdown level1 summary"><p>Represents the action after validating.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int AfterValidation = 131072</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_BeforeExecute" data-uid="SpiceSharp.Simulations.Simulation.BeforeExecute">BeforeExecute</h4>
+  <div class="markdown level1 summary"><p>Represents the action before each execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int BeforeExecute = 262144</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h4 id="SpiceSharp_Simulations_Simulation_Exports" data-uid="SpiceSharp.Simulations.Simulation.Exports">Exports</h4>
+  <div class="markdown level1 summary"><p>The bits that are reserved for exports.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int Exports = 65535</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="properties">Properties
 </h3>
   <a id="SpiceSharp_Simulations_Simulation_Behaviors_" data-uid="SpiceSharp.Simulations.Simulation.Behaviors*"></a>
@@ -218,6 +357,30 @@
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.type">Type</a>&gt;</td>
         <td><p>The behaviors.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_CurrentRun_" data-uid="SpiceSharp.Simulations.Simulation.CurrentRun*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_CurrentRun" data-uid="SpiceSharp.Simulations.Simulation.CurrentRun">CurrentRun</h4>
+  <div class="markdown level1 summary"><p>Gets the index of the current simulation run.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int CurrentRun { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -268,6 +431,31 @@
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
         <td><p>The name.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_Simulation_Repeat_" data-uid="SpiceSharp.Simulations.Simulation.Repeat*"></a>
+  <h4 id="SpiceSharp_Simulations_Simulation_Repeat" data-uid="SpiceSharp.Simulations.Simulation.Repeat">Repeat</h4>
+  <div class="markdown level1 summary"><p>If set, the simulation is repeated. The property is automatically reset
+at the start of an execution.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Repeat { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -401,14 +589,47 @@
     <pre><code class="lang-csharp hljs">protected abstract void CreateStates()</code></pre>
   </div>
   <a id="SpiceSharp_Simulations_Simulation_Execute_" data-uid="SpiceSharp.Simulations.Simulation.Execute*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Execute" data-uid="SpiceSharp.Simulations.Simulation.Execute">Execute()</h4>
+  <h4 id="SpiceSharp_Simulations_Simulation_Execute_System_Int32_" data-uid="SpiceSharp.Simulations.Simulation.Execute(System.Int32)">Execute(int)</h4>
   <div class="markdown level1 summary"><p>Executes the simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract void Execute()</code></pre>
+    <pre><code class="lang-csharp hljs">protected abstract IEnumerable&lt;int&gt; Execute(int mask)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">mask</span></td>
+        <td><p>A bit mask for simulation export identifiers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
   <h5 class="exceptions">Exceptions</h5>
   <table class="table table-bordered table-condensed">
     <thead>
@@ -491,266 +712,59 @@
       </tr>
     </tbody>
   </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnAfterExecute_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterExecute*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)">OnAfterExecute(AfterExecuteEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">AfterSetup</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnAfterExecute(AfterExecuteEventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.AfterExecuteEventArgs.html">AfterExecuteEventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnAfterSetup_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterSetup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)">OnAfterSetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup">AfterSetup</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnAfterSetup(EventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnAfterUnsetup_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterUnsetup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnAfterUnsetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterUnsetup(System.EventArgs)">OnAfterUnsetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterUnsetup">AfterUnsetup</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnAfterUnsetup(EventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnAfterValidation_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterValidation*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnAfterValidation_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnAfterValidation(System.EventArgs)">OnAfterValidation(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterValidation">AfterValidation</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnAfterValidation(EventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnBeforeExecute_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeExecute*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeExecute_SpiceSharp_Simulations_BeforeExecuteEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)">OnBeforeExecute(BeforeExecuteEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeExecute">BeforeExecute</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnBeforeExecute(BeforeExecuteEventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnBeforeSetup_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeSetup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeSetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeSetup(System.EventArgs)">OnBeforeSetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeSetup">BeforeSetup</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnBeforeSetup(EventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeUnsetup*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeUnsetup(System.EventArgs)">OnBeforeUnsetup(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeUnsetup">BeforeUnsetup</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnBeforeUnsetup(EventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnBeforeValidation_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeValidation*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnBeforeValidation_System_EventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnBeforeValidation(System.EventArgs)">OnBeforeValidation(EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeValidation">BeforeValidation</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnBeforeValidation(EventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="SpiceSharp_Simulations_Simulation_OnExport_" data-uid="SpiceSharp.Simulations.Simulation.OnExport*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_OnExport_SpiceSharp_Simulations_ExportDataEventArgs_" data-uid="SpiceSharp.Simulations.Simulation.OnExport(SpiceSharp.Simulations.ExportDataEventArgs)">OnExport(ExportDataEventArgs)</h4>
-  <div class="markdown level1 summary"><p>Raises the <a class="xref" href="SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData">ExportSimulationData</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnExport(ExportDataEventArgs args)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.ExportDataEventArgs.html">ExportDataEventArgs</a></td>
-        <td><span class="parametername">args</span></td>
-        <td><p>The <a class="xref" href="SpiceSharp.Simulations.ExportDataEventArgs.html">ExportDataEventArgs</a> instance containing the event data.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <a id="SpiceSharp_Simulations_Simulation_Rerun_" data-uid="SpiceSharp.Simulations.Simulation.Rerun*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Rerun" data-uid="SpiceSharp.Simulations.Simulation.Rerun">Rerun()</h4>
-  <div class="markdown level1 summary"><p>Reruns the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> with the previous behaviors.</p>
+  <h4 id="SpiceSharp_Simulations_Simulation_Rerun_System_Int32_" data-uid="SpiceSharp.Simulations.Simulation.Rerun(System.Int32)">Rerun(int)</h4>
+  <div class="markdown level1 summary"><p>Reruns the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> with the previous behaviors. Only one
+enumerable can run at any given time.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Rerun()</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;int&gt; Rerun(int mask = 65535)</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">mask</span></td>
+        <td><p>A bit mask for simulation export identifiers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</td>
+        <td><p>An enumerable that yields a type identifier every time new simulation data is available.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="SpiceSharp_Simulations_Simulation_Run_" data-uid="SpiceSharp.Simulations.Simulation.Run*"></a>
-  <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection)">Run(IEntityCollection)</h4>
-  <div class="markdown level1 summary"><p>Runs the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> on the specified <a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a>.</p>
+  <h4 id="SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_System_Int32_" data-uid="SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)">Run(IEntityCollection, int)</h4>
+  <div class="markdown level1 summary"><p>Runs the <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> on the specified <a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a>. Only one
+enumerable can run at any given time.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual void Run(IEntityCollection entities)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual IEnumerable&lt;int&gt; Run(IEntityCollection entities, int mask = 65535)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -766,6 +780,28 @@
         <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
         <td><span class="parametername">entities</span></td>
         <td><p>The entities.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">mask</span></td>
+        <td><p>A bit mask for simulation export identifiers.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>&gt;</td>
+        <td><p>An enumerable that yields a type identifier every time new simulation data is available.</p>
 </td>
       </tr>
     </tbody>
@@ -1050,219 +1086,7 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="events">Events
-</h3>
-  <h4 id="SpiceSharp_Simulations_Simulation_AfterExecute" data-uid="SpiceSharp.Simulations.Simulation.AfterExecute">AfterExecute</h4>
-  <div class="markdown level1 summary"><p>Occurs after the simulation has executed.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;AfterExecuteEventArgs&gt; AfterExecute</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="SpiceSharp.Simulations.AfterExecuteEventArgs.html">AfterExecuteEventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_AfterSetup" data-uid="SpiceSharp.Simulations.Simulation.AfterSetup">AfterSetup</h4>
-  <div class="markdown level1 summary"><p>Occurs after the simulation is set up.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; AfterSetup</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_AfterUnsetup" data-uid="SpiceSharp.Simulations.Simulation.AfterUnsetup">AfterUnsetup</h4>
-  <div class="markdown level1 summary"><p>Occurs after the simulation is destroyed.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; AfterUnsetup</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_AfterValidation" data-uid="SpiceSharp.Simulations.Simulation.AfterValidation">AfterValidation</h4>
-  <div class="markdown level1 summary"><p>Occurs after the simulation has validated the input.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; AfterValidation</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_BeforeExecute" data-uid="SpiceSharp.Simulations.Simulation.BeforeExecute">BeforeExecute</h4>
-  <div class="markdown level1 summary"><p>Occurs before the simulation starts its execution.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;BeforeExecuteEventArgs&gt; BeforeExecute</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_BeforeSetup" data-uid="SpiceSharp.Simulations.Simulation.BeforeSetup">BeforeSetup</h4>
-  <div class="markdown level1 summary"><p>Occurs before the simulation is set up.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; BeforeSetup</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_BeforeUnsetup" data-uid="SpiceSharp.Simulations.Simulation.BeforeUnsetup">BeforeUnsetup</h4>
-  <div class="markdown level1 summary"><p>Occurs before the simulation is destroyed.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; BeforeUnsetup</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_BeforeValidation" data-uid="SpiceSharp.Simulations.Simulation.BeforeValidation">BeforeValidation</h4>
-  <div class="markdown level1 summary"><p>Occurs before the simulation starts validating the input.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;EventArgs&gt; BeforeValidation</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h4 id="SpiceSharp_Simulations_Simulation_ExportSimulationData" data-uid="SpiceSharp.Simulations.Simulation.ExportSimulationData">ExportSimulationData</h4>
-  <div class="markdown level1 summary"><p>Occurs when simulation data can be exported.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ExportDataEventArgs&gt; ExportSimulationData</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="SpiceSharp.Simulations.ExportDataEventArgs.html">ExportDataEventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a>
-  </div>
   <div>
       <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>
   </div>
@@ -1292,12 +1116,63 @@
       <a class="xref" href="SpiceSharp.Documentation.Documentation.html#SpiceSharp_Documentation_Documentation_Parameters_SpiceSharp_ParameterSets_IParameterSetCollection_">Documentation.Parameters(IParameterSetCollection)</a>
   </div>
   <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetComplexCurrent(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_">SimulationHelper.GetComplexProperty(ISimulation, Reference, string)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetComplexVoltage(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetComplexVoltage(ISimulation, Reference, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetCurrent(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_">SimulationHelper.GetProperty(ISimulation, Reference, string)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetVoltage(ISimulation, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_">SimulationHelper.GetVoltage(ISimulation, Reference, Reference)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_RunToEnd_SpiceSharp_Simulations_ISimulation_SpiceSharp_Entities_IEntityCollection_System_Collections_Generic_IDictionary_System_Int32_System_Action__">SimulationHelper.RunToEnd(ISimulation, IEntityCollection, IDictionary&lt;int, Action&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__">SimulationHelper.TryGetComplexCurrent(ISimulation, Reference, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Numerics_Complex__">SimulationHelper.TryGetComplexProperty(ISimulation, Reference, string, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__">SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, Reference, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__">SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, out Complex)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__">SimulationHelper.TryGetCurrent(ISimulation, Reference, out double)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Double__">SimulationHelper.TryGetProperty(ISimulation, Reference, string, out double)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Double__">SimulationHelper.TryGetVoltage(ISimulation, Reference, Reference, out double)</a>
+  </div>
+  <div>
+      <a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__">SimulationHelper.TryGetVoltage(ISimulation, Reference, out double)</a>
+  </div>
+  <div>
       <a class="xref" href="SpiceSharp.Utility.html#SpiceSharp_Utility_ThrowIfNull__1___0_System_String_">Utility.ThrowIfNull&lt;T&gt;(T, string)</a>
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
       <div><a class="xref" href="SpiceSharp.ParameterSets.ParameterSetCollection.html">ParameterSetCollection</a></div>
-      <div><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></div>
+      <div><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></div>
   </div>
 
 </article>

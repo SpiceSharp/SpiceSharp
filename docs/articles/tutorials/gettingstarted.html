@@ -115,14 +115,13 @@ var ckt = new Circuit(
 var dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
 
 // Catch exported data
-dc.ExportSimulationData += (sender, args) =&gt;
+foreach (int _ in dc.Run(ckt))
 {
-    double input = args.GetVoltage(&quot;in&quot;);
-    double output = args.GetVoltage(&quot;out&quot;);
-};
-dc.Run(ckt);
+    double input = dc.GetVoltage(&quot;in&quot;);
+    double output = dc.GetVoltage(&quot;out&quot;);
+}
 </code></pre>
-<p>Access to simulation output data is usually achieved by registering to the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData">ExportSimulationData</a></strong> event. This event is automatically fired by the simulation when the data is ready to be exported. The event arguments contains some easy access to main parts of the circuits (like voltages and currents).</p>
+<p>Access to simulation output data is usually achieved by using extension methods. These extension methods contain some code to access the most common aspects of the simulation states (like voltages and currents).</p>
 <p>The output will show:</p>
 <pre><code>-1 V : -0.667 V
 -0.8 V : -0.533 V
@@ -137,7 +136,7 @@ dc.Run(ckt);
 1 V : 0.667 V
 </code></pre>
 <h2 id="using-exports">Using exports</h2>
-<p>Using exports allows for faster access to voltages, currents, circuit properties, etc. compared to using the event arguments of <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData">ExportSimulationData</a></strong>. For example, we could be interested in the current through voltage source V1. In which case we can define some exports like this:</p>
+<p>Using exports allows for faster access to voltages, currents, circuit properties, etc. compared to using the extension methods. For example, we could be interested in the current through voltage source V1. In which case we can define some exports like this:</p>
 <pre><code class="lang-csharp" name="Simulation">// Create a DC simulation that sweeps V1 from -1V to 1V in steps of 100mV
 var dc = new DC(&quot;DC 1&quot;, &quot;V1&quot;, -1.0, 1.0, 0.2);
 
@@ -147,13 +146,12 @@ var outputExport = new RealVoltageExport(dc, &quot;out&quot;);
 var currentExport = new RealPropertyExport(dc, &quot;V1&quot;, &quot;i&quot;);
 
 // Catch exported data
-dc.ExportSimulationData += (sender, args) =&gt;
+foreach (int _ in dc.Run(ckt))
 {
     double input = inputExport.Value;
     double output = outputExport.Value;
     double current = currentExport.Value;
-};
-dc.Run(ckt);
+}
 </code></pre>
 <p>This will lead to the result:</p>
 <ol>
@@ -169,7 +167,6 @@ dc.Run(ckt);
 <li><code>input = 0.8</code> (V), <code>output = 0.533</code> (V), <code>current = -2.67e-05</code> (A)</li>
 <li><code>input = 1</code> (V), <code>output = 0.667</code> (V), <code>current = -3.33e-05</code> (A)</li>
 </ol>
-<p>These export classes are setup automatically. These classes dynamically build a method that allows extracting data more efficiently during the <strong><a class="xref" href="../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData">ExportSimulationData</a></strong> event compared to using the event's arguments.</p>
 
 </article>
           </div>

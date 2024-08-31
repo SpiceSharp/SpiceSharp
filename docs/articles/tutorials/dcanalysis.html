@@ -99,7 +99,7 @@ var dc = new DC(&quot;DC 1&quot;, new[]
 var currentExport = new RealPropertyExport(dc, &quot;M1&quot;, &quot;id&quot;);
 
 // Run the simulation
-dc.ExportSimulationData += (sender, args) =&gt;
+foreach (int _ in dc.Run(ckt))
 {
     double vgsVoltage = dc.GetCurrentSweepValue()[0];
     double vdsVoltage = dc.GetCurrentSweepValue()[1];

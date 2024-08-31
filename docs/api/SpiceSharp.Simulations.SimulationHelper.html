@@ -1,0 +1,1195 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SimulationHelper </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SimulationHelper ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../api/images/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    <script type="text/javascript" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  
+  
+  
+  </head>  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../api/images/favicon.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="SpiceSharp.Simulations.SimulationHelper">
+
+
+
+  <h1 id="SpiceSharp_Simulations_SimulationHelper" data-uid="SpiceSharp.Simulations.SimulationHelper" class="text-break">Class SimulationHelper</h1>
+  <div class="markdown level0 summary"><p>Helper methods for extracting data from an <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">SimulationHelper</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="SpiceSharp.html">SpiceSharp</a>.<a class="xref" href="SpiceSharp.Simulations.html">Simulations</a></h6>
+  <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
+  <h5 id="SpiceSharp_Simulations_SimulationHelper_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class SimulationHelper</code></pre>
+  </div>
+  <h3 id="methods">Methods
+</h3>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetComplexCurrent_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)">GetComplexCurrent(ISimulation, Reference)</h4>
+  <div class="markdown level1 summary"><p>Gets a complex current from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Complex GetComplexCurrent(this ISimulation simulation, Reference entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity reference.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><p>Returns the value of the current.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the branch current could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetComplexProperty_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexProperty*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)">GetComplexProperty(ISimulation, Reference, string)</h4>
+  <div class="markdown level1 summary"><p>Gets a real property value from an entity behavior in a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Complex GetComplexProperty(this ISimulation simulation, Reference entity, string propertyName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>The property name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><p>Returns the value of the property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the entity or property could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)">GetComplexVoltage(ISimulation, Reference)</h4>
+  <div class="markdown level1 summary"><p>Gets a complex voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Complex GetComplexVoltage(this ISimulation simulation, Reference name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The reference to the node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><p>Returns the value of the voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the voltage could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)">GetComplexVoltage(ISimulation, Reference, Reference)</h4>
+  <div class="markdown level1 summary"><p>Gets a complex voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Complex GetComplexVoltage(this ISimulation simulation, Reference positive, Reference negative)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">positive</span></td>
+        <td><p>The positive node reference.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">negative</span></td>
+        <td><p>The negative node reference.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><p>Returns the value of the voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the voltage could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetCurrent_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetCurrent*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)">GetCurrent(ISimulation, Reference)</h4>
+  <div class="markdown level1 summary"><p>Gets a real current from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double GetCurrent(this ISimulation simulation, Reference entity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The entity reference.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>Returns the value of the current.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the branch current could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetProperty_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetProperty*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)">GetProperty(ISimulation, Reference, string)</h4>
+  <div class="markdown level1 summary"><p>Gets a real property value from an entity behavior in a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double GetProperty(this ISimulation simulation, Reference entity, string propertyName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>The property name.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>Returns the value of the property.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the entity or property could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)">GetVoltage(ISimulation, Reference)</h4>
+  <div class="markdown level1 summary"><p>Gets a real voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double GetVoltage(this ISimulation simulation, Reference name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The reference to the node.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>Returns the value of the voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the voltage could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_GetVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_" data-uid="SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)">GetVoltage(ISimulation, Reference, Reference)</h4>
+  <div class="markdown level1 summary"><p>Gets a real voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double GetVoltage(this ISimulation simulation, Reference positive, Reference negative)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">positive</span></td>
+        <td><p>The positive node reference.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">negative</span></td>
+        <td><p>The negative node reference.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><p>Returns the value of the voltage.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentexception">ArgumentException</a></td>
+        <td><p>Thrown if the voltage could not be found.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_RunToEnd_" data-uid="SpiceSharp.Simulations.SimulationHelper.RunToEnd*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_RunToEnd_SpiceSharp_Simulations_ISimulation_SpiceSharp_Entities_IEntityCollection_System_Collections_Generic_IDictionary_System_Int32_System_Action__" data-uid="SpiceSharp.Simulations.SimulationHelper.RunToEnd(SpiceSharp.Simulations.ISimulation,SpiceSharp.Entities.IEntityCollection,System.Collections.Generic.IDictionary{System.Int32,System.Action})">RunToEnd(ISimulation, IEntityCollection, IDictionary&lt;int, Action&gt;)</h4>
+  <div class="markdown level1 summary"><p>Runs a simulation to the end.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void RunToEnd(this ISimulation simulation, IEntityCollection entities, IDictionary&lt;int, Action&gt; actions = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Entities.IEntityCollection.html">IEntityCollection</a></td>
+        <td><span class="parametername">entities</span></td>
+        <td><p>The entities.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.action">Action</a>&gt;</td>
+        <td><span class="parametername">actions</span></td>
+        <td><p>The actions for each type of export.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexCurrent_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)">TryGetComplexCurrent(ISimulation, Reference, out Complex)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a complex current from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetComplexCurrent(this ISimulation simulation, Reference entity, out Complex result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The name of the entity that defines the branch current.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns <code>true</code> if the voltage was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexProperty_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Numerics_Complex__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String,System.Numerics.Complex@)">TryGetComplexProperty(ISimulation, Reference, string, out Complex)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a real property value from an entity behavior in a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetComplexProperty(this ISimulation simulation, Reference entity, string propertyName, out Complex result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>The property name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns the property value if found; otherwise, <code>NaN</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)">TryGetComplexVoltage(ISimulation, Reference, Reference, out Complex)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a complex voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetComplexVoltage(this ISimulation simulation, Reference positive, Reference negative, out Complex result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">positive</span></td>
+        <td><p>The positive node reference.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">negative</span></td>
+        <td><p>The negative node reference.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns <code>true</code> if the voltage was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)">TryGetComplexVoltage(ISimulation, Reference, out Complex)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a complex voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetComplexVoltage(this ISimulation simulation, Reference name, out Complex result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The reference to the node.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns <code>true</code> if the voltage was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetCurrent_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetCurrent*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Double@)">TryGetCurrent(ISimulation, Reference, out double)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a real current from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetCurrent(this ISimulation simulation, Reference entity, out double result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The name of the entity that defines the branch current.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns <code>true</code> if the voltage was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetProperty_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetProperty*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Double__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String,System.Double@)">TryGetProperty(ISimulation, Reference, string, out double)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a real property value from an entity behavior in a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetProperty(this ISimulation simulation, Reference entity, string propertyName, out double result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">entity</span></td>
+        <td><p>The name of the entity.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">propertyName</span></td>
+        <td><p>The property name.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns the property value if found; otherwise, <code>NaN</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Double__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference,System.Double@)">TryGetVoltage(ISimulation, Reference, Reference, out double)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a real voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetVoltage(this ISimulation simulation, Reference positive, Reference negative, out double result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">positive</span></td>
+        <td><p>The positive node reference.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">negative</span></td>
+        <td><p>The negative node reference.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns <code>true</code> if the voltage was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetVoltage*"></a>
+  <h4 id="SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__" data-uid="SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Double@)">TryGetVoltage(ISimulation, Reference, out double)</h4>
+  <div class="markdown level1 summary"><p>Tries to get a real voltage from a simulation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool TryGetVoltage(this ISimulation simulation, Reference name, out double result)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="SpiceSharp.Simulations.Base.Reference.html">Reference</a></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The reference to the node.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">result</span></td>
+        <td><p>The result.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>Returns <code>true</code> if the voltage was found; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

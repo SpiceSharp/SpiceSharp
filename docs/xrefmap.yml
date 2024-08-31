@@ -12039,6 +12039,19 @@ references:
   fullName.vb: SpiceSharp.Components.Common.SimulationWrapper.CreatePropertyGetter(Of P)(String)
   nameWithType: SimulationWrapper.CreatePropertyGetter<P>(string)
   nameWithType.vb: SimulationWrapper.CreatePropertyGetter(Of P)(String)
+- uid: SpiceSharp.Components.Common.SimulationWrapper.CurrentRun
+  name: CurrentRun
+  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_CurrentRun
+  commentId: P:SpiceSharp.Components.Common.SimulationWrapper.CurrentRun
+  fullName: SpiceSharp.Components.Common.SimulationWrapper.CurrentRun
+  nameWithType: SimulationWrapper.CurrentRun
+- uid: SpiceSharp.Components.Common.SimulationWrapper.CurrentRun*
+  name: CurrentRun
+  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_CurrentRun_
+  commentId: Overload:SpiceSharp.Components.Common.SimulationWrapper.CurrentRun
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Common.SimulationWrapper.CurrentRun
+  nameWithType: SimulationWrapper.CurrentRun
 - uid: SpiceSharp.Components.Common.SimulationWrapper.EntityBehaviors
   name: EntityBehaviors
   href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_EntityBehaviors
@@ -12168,12 +12181,28 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.Common.SimulationWrapper.Parent
   nameWithType: SimulationWrapper.Parent
-- uid: SpiceSharp.Components.Common.SimulationWrapper.Rerun
-  name: Rerun()
-  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Rerun
-  commentId: M:SpiceSharp.Components.Common.SimulationWrapper.Rerun
-  fullName: SpiceSharp.Components.Common.SimulationWrapper.Rerun()
-  nameWithType: SimulationWrapper.Rerun()
+- uid: SpiceSharp.Components.Common.SimulationWrapper.Repeat
+  name: Repeat
+  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Repeat
+  commentId: P:SpiceSharp.Components.Common.SimulationWrapper.Repeat
+  fullName: SpiceSharp.Components.Common.SimulationWrapper.Repeat
+  nameWithType: SimulationWrapper.Repeat
+- uid: SpiceSharp.Components.Common.SimulationWrapper.Repeat*
+  name: Repeat
+  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Repeat_
+  commentId: Overload:SpiceSharp.Components.Common.SimulationWrapper.Repeat
+  isSpec: "True"
+  fullName: SpiceSharp.Components.Common.SimulationWrapper.Repeat
+  nameWithType: SimulationWrapper.Repeat
+- uid: SpiceSharp.Components.Common.SimulationWrapper.Rerun(System.Int32)
+  name: Rerun(int)
+  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Rerun_System_Int32_
+  commentId: M:SpiceSharp.Components.Common.SimulationWrapper.Rerun(System.Int32)
+  name.vb: Rerun(Integer)
+  fullName: SpiceSharp.Components.Common.SimulationWrapper.Rerun(int)
+  fullName.vb: SpiceSharp.Components.Common.SimulationWrapper.Rerun(Integer)
+  nameWithType: SimulationWrapper.Rerun(int)
+  nameWithType.vb: SimulationWrapper.Rerun(Integer)
 - uid: SpiceSharp.Components.Common.SimulationWrapper.Rerun*
   name: Rerun
   href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Rerun_
@@ -12181,12 +12210,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.Common.SimulationWrapper.Rerun
   nameWithType: SimulationWrapper.Rerun
-- uid: SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection)
-  name: Run(IEntityCollection)
-  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Run_SpiceSharp_Entities_IEntityCollection_
-  commentId: M:SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection)
-  fullName: SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection)
-  nameWithType: SimulationWrapper.Run(IEntityCollection)
+- uid: SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)
+  name: Run(IEntityCollection, int)
+  href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Run_SpiceSharp_Entities_IEntityCollection_System_Int32_
+  commentId: M:SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)
+  name.vb: Run(IEntityCollection, Integer)
+  fullName: SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection, int)
+  fullName.vb: SpiceSharp.Components.Common.SimulationWrapper.Run(SpiceSharp.Entities.IEntityCollection, Integer)
+  nameWithType: SimulationWrapper.Run(IEntityCollection, int)
+  nameWithType.vb: SimulationWrapper.Run(IEntityCollection, Integer)
 - uid: SpiceSharp.Components.Common.SimulationWrapper.Run*
   name: Run
   href: api/SpiceSharp.Components.Common.SimulationWrapper.html#SpiceSharp_Components_Common_SimulationWrapper_Run_
@@ -26000,15 +26032,15 @@ references:
   fullName.vb: SpiceSharp.Components.Sampler.New(String, System.Collections.Generic.IEnumerable(Of Double))
   nameWithType: Sampler.Sampler(string, IEnumerable<double>)
   nameWithType.vb: Sampler.New(String, IEnumerable(Of Double))
-- uid: SpiceSharp.Components.Sampler.#ctor(System.String,System.Collections.Generic.IEnumerable{System.Double},System.EventHandler{SpiceSharp.Simulations.ExportDataEventArgs})
-  name: Sampler(string, IEnumerable<double>, EventHandler<ExportDataEventArgs>)
-  href: api/SpiceSharp.Components.Sampler.html#SpiceSharp_Components_Sampler__ctor_System_String_System_Collections_Generic_IEnumerable_System_Double__System_EventHandler_SpiceSharp_Simulations_ExportDataEventArgs__
-  commentId: M:SpiceSharp.Components.Sampler.#ctor(System.String,System.Collections.Generic.IEnumerable{System.Double},System.EventHandler{SpiceSharp.Simulations.ExportDataEventArgs})
-  name.vb: New(String, IEnumerable(Of Double), EventHandler(Of ExportDataEventArgs))
-  fullName: SpiceSharp.Components.Sampler.Sampler(string, System.Collections.Generic.IEnumerable<double>, System.EventHandler<SpiceSharp.Simulations.ExportDataEventArgs>)
-  fullName.vb: SpiceSharp.Components.Sampler.New(String, System.Collections.Generic.IEnumerable(Of Double), System.EventHandler(Of SpiceSharp.Simulations.ExportDataEventArgs))
-  nameWithType: Sampler.Sampler(string, IEnumerable<double>, EventHandler<ExportDataEventArgs>)
-  nameWithType.vb: Sampler.New(String, IEnumerable(Of Double), EventHandler(Of ExportDataEventArgs))
+- uid: SpiceSharp.Components.Sampler.#ctor(System.String,System.Collections.Generic.IEnumerable{System.Double},System.EventHandler{System.EventArgs})
+  name: Sampler(string, IEnumerable<double>, EventHandler<EventArgs>)
+  href: api/SpiceSharp.Components.Sampler.html#SpiceSharp_Components_Sampler__ctor_System_String_System_Collections_Generic_IEnumerable_System_Double__System_EventHandler_System_EventArgs__
+  commentId: M:SpiceSharp.Components.Sampler.#ctor(System.String,System.Collections.Generic.IEnumerable{System.Double},System.EventHandler{System.EventArgs})
+  name.vb: New(String, IEnumerable(Of Double), EventHandler(Of EventArgs))
+  fullName: SpiceSharp.Components.Sampler.Sampler(string, System.Collections.Generic.IEnumerable<double>, System.EventHandler<System.EventArgs>)
+  fullName.vb: SpiceSharp.Components.Sampler.New(String, System.Collections.Generic.IEnumerable(Of Double), System.EventHandler(Of System.EventArgs))
+  nameWithType: Sampler.Sampler(string, IEnumerable<double>, EventHandler<EventArgs>)
+  nameWithType.vb: Sampler.New(String, IEnumerable(Of Double), EventHandler(Of EventArgs))
 - uid: SpiceSharp.Components.Sampler.#ctor*
   name: Sampler
   href: api/SpiceSharp.Components.Sampler.html#SpiceSharp_Components_Sampler__ctor_
@@ -26038,21 +26070,59 @@ references:
   commentId: N:SpiceSharp.Components.SamplerBehaviors
   fullName: SpiceSharp.Components.SamplerBehaviors
   nameWithType: SpiceSharp.Components.SamplerBehaviors
+- uid: SpiceSharp.Components.SamplerBehaviors.Accept
+  name: Accept
+  href: api/SpiceSharp.Components.SamplerBehaviors.Accept.html
+  commentId: T:SpiceSharp.Components.SamplerBehaviors.Accept
+  fullName: SpiceSharp.Components.SamplerBehaviors.Accept
+  nameWithType: Accept
+- uid: SpiceSharp.Components.SamplerBehaviors.Accept.#ctor(SpiceSharp.Entities.IBindingContext)
+  name: Accept(IBindingContext)
+  href: api/SpiceSharp.Components.SamplerBehaviors.Accept.html#SpiceSharp_Components_SamplerBehaviors_Accept__ctor_SpiceSharp_Entities_IBindingContext_
+  commentId: M:SpiceSharp.Components.SamplerBehaviors.Accept.#ctor(SpiceSharp.Entities.IBindingContext)
+  name.vb: New(IBindingContext)
+  fullName: SpiceSharp.Components.SamplerBehaviors.Accept.Accept(SpiceSharp.Entities.IBindingContext)
+  fullName.vb: SpiceSharp.Components.SamplerBehaviors.Accept.New(SpiceSharp.Entities.IBindingContext)
+  nameWithType: Accept.Accept(IBindingContext)
+  nameWithType.vb: Accept.New(IBindingContext)
+- uid: SpiceSharp.Components.SamplerBehaviors.Accept.#ctor*
+  name: Accept
+  href: api/SpiceSharp.Components.SamplerBehaviors.Accept.html#SpiceSharp_Components_SamplerBehaviors_Accept__ctor_
+  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.Accept.#ctor
+  isSpec: "True"
+  name.vb: New
+  fullName: SpiceSharp.Components.SamplerBehaviors.Accept.Accept
+  fullName.vb: SpiceSharp.Components.SamplerBehaviors.Accept.New
+  nameWithType: Accept.Accept
+  nameWithType.vb: Accept.New
+- uid: SpiceSharp.Components.SamplerBehaviors.Accept.Parameters
+  name: Parameters
+  href: api/SpiceSharp.Components.SamplerBehaviors.Accept.html#SpiceSharp_Components_SamplerBehaviors_Accept_Parameters
+  commentId: P:SpiceSharp.Components.SamplerBehaviors.Accept.Parameters
+  fullName: SpiceSharp.Components.SamplerBehaviors.Accept.Parameters
+  nameWithType: Accept.Parameters
+- uid: SpiceSharp.Components.SamplerBehaviors.Accept.Parameters*
+  name: Parameters
+  href: api/SpiceSharp.Components.SamplerBehaviors.Accept.html#SpiceSharp_Components_SamplerBehaviors_Accept_Parameters_
+  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.Accept.Parameters
+  isSpec: "True"
+  fullName: SpiceSharp.Components.SamplerBehaviors.Accept.Parameters
+  nameWithType: Accept.Parameters
 - uid: SpiceSharp.Components.SamplerBehaviors.Parameters
   name: Parameters
   href: api/SpiceSharp.Components.SamplerBehaviors.Parameters.html
   commentId: T:SpiceSharp.Components.SamplerBehaviors.Parameters
   fullName: SpiceSharp.Components.SamplerBehaviors.Parameters
   nameWithType: Parameters
-- uid: SpiceSharp.Components.SamplerBehaviors.Parameters.Export(System.Object,SpiceSharp.Simulations.ExportDataEventArgs)
-  name: Export(object, ExportDataEventArgs)
-  href: api/SpiceSharp.Components.SamplerBehaviors.Parameters.html#SpiceSharp_Components_SamplerBehaviors_Parameters_Export_System_Object_SpiceSharp_Simulations_ExportDataEventArgs_
-  commentId: M:SpiceSharp.Components.SamplerBehaviors.Parameters.Export(System.Object,SpiceSharp.Simulations.ExportDataEventArgs)
-  name.vb: Export(Object, ExportDataEventArgs)
-  fullName: SpiceSharp.Components.SamplerBehaviors.Parameters.Export(object, SpiceSharp.Simulations.ExportDataEventArgs)
-  fullName.vb: SpiceSharp.Components.SamplerBehaviors.Parameters.Export(Object, SpiceSharp.Simulations.ExportDataEventArgs)
-  nameWithType: Parameters.Export(object, ExportDataEventArgs)
-  nameWithType.vb: Parameters.Export(Object, ExportDataEventArgs)
+- uid: SpiceSharp.Components.SamplerBehaviors.Parameters.Export(System.Object,System.EventArgs)
+  name: Export(object, EventArgs)
+  href: api/SpiceSharp.Components.SamplerBehaviors.Parameters.html#SpiceSharp_Components_SamplerBehaviors_Parameters_Export_System_Object_System_EventArgs_
+  commentId: M:SpiceSharp.Components.SamplerBehaviors.Parameters.Export(System.Object,System.EventArgs)
+  name.vb: Export(Object, EventArgs)
+  fullName: SpiceSharp.Components.SamplerBehaviors.Parameters.Export(object, System.EventArgs)
+  fullName.vb: SpiceSharp.Components.SamplerBehaviors.Parameters.Export(Object, System.EventArgs)
+  nameWithType: Parameters.Export(object, EventArgs)
+  nameWithType.vb: Parameters.Export(Object, EventArgs)
 - uid: SpiceSharp.Components.SamplerBehaviors.Parameters.Export*
   name: Export
   href: api/SpiceSharp.Components.SamplerBehaviors.Parameters.html#SpiceSharp_Components_SamplerBehaviors_Parameters_Export_
@@ -26092,85 +26162,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Components.SamplerBehaviors.Parameters.Points
   nameWithType: Parameters.Points
-- uid: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext
-  name: SamplerBindingContext
-  href: api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.html
-  commentId: T:SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext
-  fullName: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext
-  nameWithType: SamplerBindingContext
-- uid: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.#ctor(SpiceSharp.Entities.IEntity,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer)
-  name: SamplerBindingContext(IEntity, ISimulation, IBehaviorContainer)
-  href: api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.html#SpiceSharp_Components_SamplerBehaviors_SamplerBindingContext__ctor_SpiceSharp_Entities_IEntity_SpiceSharp_Simulations_ISimulation_SpiceSharp_Behaviors_IBehaviorContainer_
-  commentId: M:SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.#ctor(SpiceSharp.Entities.IEntity,SpiceSharp.Simulations.ISimulation,SpiceSharp.Behaviors.IBehaviorContainer)
-  name.vb: New(IEntity, ISimulation, IBehaviorContainer)
-  fullName: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.SamplerBindingContext(SpiceSharp.Entities.IEntity, SpiceSharp.Simulations.ISimulation, SpiceSharp.Behaviors.IBehaviorContainer)
-  fullName.vb: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.New(SpiceSharp.Entities.IEntity, SpiceSharp.Simulations.ISimulation, SpiceSharp.Behaviors.IBehaviorContainer)
-  nameWithType: SamplerBindingContext.SamplerBindingContext(IEntity, ISimulation, IBehaviorContainer)
-  nameWithType.vb: SamplerBindingContext.New(IEntity, ISimulation, IBehaviorContainer)
-- uid: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.#ctor*
-  name: SamplerBindingContext
-  href: api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.html#SpiceSharp_Components_SamplerBehaviors_SamplerBindingContext__ctor_
-  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.SamplerBindingContext
-  fullName.vb: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.New
-  nameWithType: SamplerBindingContext.SamplerBindingContext
-  nameWithType.vb: SamplerBindingContext.New
-- uid: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent(System.EventHandler{SpiceSharp.Simulations.ExportDataEventArgs})
-  name: RegisterToExportEvent(EventHandler<ExportDataEventArgs>)
-  href: api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.html#SpiceSharp_Components_SamplerBehaviors_SamplerBindingContext_RegisterToExportEvent_System_EventHandler_SpiceSharp_Simulations_ExportDataEventArgs__
-  commentId: M:SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent(System.EventHandler{SpiceSharp.Simulations.ExportDataEventArgs})
-  name.vb: RegisterToExportEvent(EventHandler(Of ExportDataEventArgs))
-  fullName: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent(System.EventHandler<SpiceSharp.Simulations.ExportDataEventArgs>)
-  fullName.vb: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent(System.EventHandler(Of SpiceSharp.Simulations.ExportDataEventArgs))
-  nameWithType: SamplerBindingContext.RegisterToExportEvent(EventHandler<ExportDataEventArgs>)
-  nameWithType.vb: SamplerBindingContext.RegisterToExportEvent(EventHandler(Of ExportDataEventArgs))
-- uid: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent*
-  name: RegisterToExportEvent
-  href: api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.html#SpiceSharp_Components_SamplerBehaviors_SamplerBindingContext_RegisterToExportEvent_
-  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent
-  isSpec: "True"
-  fullName: SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.RegisterToExportEvent
-  nameWithType: SamplerBindingContext.RegisterToExportEvent
-- uid: SpiceSharp.Components.SamplerBehaviors.Truncating
-  name: Truncating
-  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html
-  commentId: T:SpiceSharp.Components.SamplerBehaviors.Truncating
-  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating
-  nameWithType: Truncating
-- uid: SpiceSharp.Components.SamplerBehaviors.Truncating.#ctor(SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext)
-  name: Truncating(SamplerBindingContext)
-  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html#SpiceSharp_Components_SamplerBehaviors_Truncating__ctor_SpiceSharp_Components_SamplerBehaviors_SamplerBindingContext_
-  commentId: M:SpiceSharp.Components.SamplerBehaviors.Truncating.#ctor(SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext)
-  name.vb: New(SamplerBindingContext)
-  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating.Truncating(SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext)
-  fullName.vb: SpiceSharp.Components.SamplerBehaviors.Truncating.New(SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext)
-  nameWithType: Truncating.Truncating(SamplerBindingContext)
-  nameWithType.vb: Truncating.New(SamplerBindingContext)
-- uid: SpiceSharp.Components.SamplerBehaviors.Truncating.#ctor*
-  name: Truncating
-  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html#SpiceSharp_Components_SamplerBehaviors_Truncating__ctor_
-  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.Truncating.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating.Truncating
-  fullName.vb: SpiceSharp.Components.SamplerBehaviors.Truncating.New
-  nameWithType: Truncating.Truncating
-  nameWithType.vb: Truncating.New
-- uid: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
-  name: Parameters
-  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html#SpiceSharp_Components_SamplerBehaviors_Truncating_Parameters
-  commentId: P:SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
-  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
-  nameWithType: Truncating.Parameters
-- uid: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters*
-  name: Parameters
-  href: api/SpiceSharp.Components.SamplerBehaviors.Truncating.html#SpiceSharp_Components_SamplerBehaviors_Truncating_Parameters_
-  commentId: Overload:SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
-  isSpec: "True"
-  fullName: SpiceSharp.Components.SamplerBehaviors.Truncating.Parameters
-  nameWithType: Truncating.Parameters
 - uid: SpiceSharp.Components.Semiconductors
   name: SpiceSharp.Components.Semiconductors
   href: api/SpiceSharp.Components.Semiconductors.html
@@ -35285,6 +35276,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Simulations_Biasing_StartSourceStepping
   nameWithType: Resources.Simulations_Biasing_StartSourceStepping
+- uid: SpiceSharp.Properties.Resources.Simulations_CannotRunMultiple
+  name: Simulations_CannotRunMultiple
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_CannotRunMultiple
+  commentId: P:SpiceSharp.Properties.Resources.Simulations_CannotRunMultiple
+  fullName: SpiceSharp.Properties.Resources.Simulations_CannotRunMultiple
+  nameWithType: Resources.Simulations_CannotRunMultiple
+- uid: SpiceSharp.Properties.Resources.Simulations_CannotRunMultiple*
+  name: Simulations_CannotRunMultiple
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_CannotRunMultiple_
+  commentId: Overload:SpiceSharp.Properties.Resources.Simulations_CannotRunMultiple
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.Simulations_CannotRunMultiple
+  nameWithType: Resources.Simulations_CannotRunMultiple
 - uid: SpiceSharp.Properties.Resources.Simulations_ConvergenceAidVariableNotFound
   name: Simulations_ConvergenceAidVariableNotFound
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_ConvergenceAidVariableNotFound
@@ -35298,6 +35302,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Simulations_ConvergenceAidVariableNotFound
   nameWithType: Resources.Simulations_ConvergenceAidVariableNotFound
+- uid: SpiceSharp.Properties.Resources.Simulations_CurrentNotFound
+  name: Simulations_CurrentNotFound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_CurrentNotFound
+  commentId: P:SpiceSharp.Properties.Resources.Simulations_CurrentNotFound
+  fullName: SpiceSharp.Properties.Resources.Simulations_CurrentNotFound
+  nameWithType: Resources.Simulations_CurrentNotFound
+- uid: SpiceSharp.Properties.Resources.Simulations_CurrentNotFound*
+  name: Simulations_CurrentNotFound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_CurrentNotFound_
+  commentId: Overload:SpiceSharp.Properties.Resources.Simulations_CurrentNotFound
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.Simulations_CurrentNotFound
+  nameWithType: Resources.Simulations_CurrentNotFound
 - uid: SpiceSharp.Properties.Resources.Simulations_DC_NoSweepPoints
   name: Simulations_DC_NoSweepPoints
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_DC_NoSweepPoints
@@ -35311,6 +35328,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Simulations_DC_NoSweepPoints
   nameWithType: Resources.Simulations_DC_NoSweepPoints
+- uid: SpiceSharp.Properties.Resources.Simulations_DifferentialVoltageNotFound
+  name: Simulations_DifferentialVoltageNotFound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_DifferentialVoltageNotFound
+  commentId: P:SpiceSharp.Properties.Resources.Simulations_DifferentialVoltageNotFound
+  fullName: SpiceSharp.Properties.Resources.Simulations_DifferentialVoltageNotFound
+  nameWithType: Resources.Simulations_DifferentialVoltageNotFound
+- uid: SpiceSharp.Properties.Resources.Simulations_DifferentialVoltageNotFound*
+  name: Simulations_DifferentialVoltageNotFound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_DifferentialVoltageNotFound_
+  commentId: Overload:SpiceSharp.Properties.Resources.Simulations_DifferentialVoltageNotFound
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.Simulations_DifferentialVoltageNotFound
+  nameWithType: Resources.Simulations_DifferentialVoltageNotFound
 - uid: SpiceSharp.Properties.Resources.Simulations_History_InvalidLength
   name: Simulations_History_InvalidLength
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_History_InvalidLength
@@ -35350,6 +35380,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Simulations_NoEntities
   nameWithType: Resources.Simulations_NoEntities
+- uid: SpiceSharp.Properties.Resources.Simulations_PropertyNotfound
+  name: Simulations_PropertyNotfound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_PropertyNotfound
+  commentId: P:SpiceSharp.Properties.Resources.Simulations_PropertyNotfound
+  fullName: SpiceSharp.Properties.Resources.Simulations_PropertyNotfound
+  nameWithType: Resources.Simulations_PropertyNotfound
+- uid: SpiceSharp.Properties.Resources.Simulations_PropertyNotfound*
+  name: Simulations_PropertyNotfound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_PropertyNotfound_
+  commentId: Overload:SpiceSharp.Properties.Resources.Simulations_PropertyNotfound
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.Simulations_PropertyNotfound
+  nameWithType: Resources.Simulations_PropertyNotfound
 - uid: SpiceSharp.Properties.Resources.Simulations_Time_MaximumExpansionTooSmall
   name: Simulations_Time_MaximumExpansionTooSmall
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_Time_MaximumExpansionTooSmall
@@ -35415,6 +35458,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Properties.Resources.Simulations_ValidationFailed
   nameWithType: Resources.Simulations_ValidationFailed
+- uid: SpiceSharp.Properties.Resources.Simulations_VoltageNotFound
+  name: Simulations_VoltageNotFound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_VoltageNotFound
+  commentId: P:SpiceSharp.Properties.Resources.Simulations_VoltageNotFound
+  fullName: SpiceSharp.Properties.Resources.Simulations_VoltageNotFound
+  nameWithType: Resources.Simulations_VoltageNotFound
+- uid: SpiceSharp.Properties.Resources.Simulations_VoltageNotFound*
+  name: Simulations_VoltageNotFound
+  href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Simulations_VoltageNotFound_
+  commentId: Overload:SpiceSharp.Properties.Resources.Simulations_VoltageNotFound
+  isSpec: "True"
+  fullName: SpiceSharp.Properties.Resources.Simulations_VoltageNotFound
+  nameWithType: Resources.Simulations_VoltageNotFound
 - uid: SpiceSharp.Properties.Resources.Stateful_NotDefined
   name: Stateful_NotDefined
   href: api/SpiceSharp.Properties.Resources.html#SpiceSharp_Properties_Resources_Stateful_NotDefined
@@ -35676,12 +35732,15 @@ references:
   fullName.vb: SpiceSharp.Simulations.AC.New
   nameWithType: AC.AC
   nameWithType.vb: AC.New
-- uid: SpiceSharp.Simulations.AC.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_Execute
-  commentId: M:SpiceSharp.Simulations.AC.Execute
-  fullName: SpiceSharp.Simulations.AC.Execute()
-  nameWithType: AC.Execute()
+- uid: SpiceSharp.Simulations.AC.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.AC.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.AC.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.AC.Execute(Integer)
+  nameWithType: AC.Execute(int)
+  nameWithType.vb: AC.Execute(Integer)
 - uid: SpiceSharp.Simulations.AC.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_Execute_
@@ -35689,25 +35748,31 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.AC.Execute
   nameWithType: AC.Execute
-- uid: SpiceSharp.Simulations.AfterExecuteEventArgs
-  name: AfterExecuteEventArgs
-  href: api/SpiceSharp.Simulations.AfterExecuteEventArgs.html
-  commentId: T:SpiceSharp.Simulations.AfterExecuteEventArgs
-  fullName: SpiceSharp.Simulations.AfterExecuteEventArgs
-  nameWithType: AfterExecuteEventArgs
-- uid: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
-  name: Repeat
-  href: api/SpiceSharp.Simulations.AfterExecuteEventArgs.html#SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat
-  commentId: P:SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
-  fullName: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
-  nameWithType: AfterExecuteEventArgs.Repeat
-- uid: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat*
-  name: Repeat
-  href: api/SpiceSharp.Simulations.AfterExecuteEventArgs.html#SpiceSharp_Simulations_AfterExecuteEventArgs_Repeat_
-  commentId: Overload:SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
+- uid: SpiceSharp.Simulations.AC.ExportOperatingPoint
+  name: ExportOperatingPoint
+  href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_ExportOperatingPoint
+  commentId: F:SpiceSharp.Simulations.AC.ExportOperatingPoint
+  fullName: SpiceSharp.Simulations.AC.ExportOperatingPoint
+  nameWithType: AC.ExportOperatingPoint
+- uid: SpiceSharp.Simulations.AC.ExportSmallSignal
+  name: ExportSmallSignal
+  href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_ExportSmallSignal
+  commentId: F:SpiceSharp.Simulations.AC.ExportSmallSignal
+  fullName: SpiceSharp.Simulations.AC.ExportSmallSignal
+  nameWithType: AC.ExportSmallSignal
+- uid: SpiceSharp.Simulations.AC.Frequency
+  name: Frequency
+  href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_Frequency
+  commentId: P:SpiceSharp.Simulations.AC.Frequency
+  fullName: SpiceSharp.Simulations.AC.Frequency
+  nameWithType: AC.Frequency
+- uid: SpiceSharp.Simulations.AC.Frequency*
+  name: Frequency
+  href: api/SpiceSharp.Simulations.AC.html#SpiceSharp_Simulations_AC_Frequency_
+  commentId: Overload:SpiceSharp.Simulations.AC.Frequency
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.AfterExecuteEventArgs.Repeat
-  nameWithType: AfterExecuteEventArgs.Repeat
+  fullName: SpiceSharp.Simulations.AC.Frequency
+  nameWithType: AC.Frequency
 - uid: SpiceSharp.Simulations.Base
   name: SpiceSharp.Simulations.Base
   href: api/SpiceSharp.Simulations.Base.html
@@ -35971,44 +36036,6 @@ references:
   fullName.vb: SpiceSharp.Simulations.Base.Reference.CType
   nameWithType: Reference.implicit operator
   nameWithType.vb: Reference.CType
-- uid: SpiceSharp.Simulations.BeforeExecuteEventArgs
-  name: BeforeExecuteEventArgs
-  href: api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html
-  commentId: T:SpiceSharp.Simulations.BeforeExecuteEventArgs
-  fullName: SpiceSharp.Simulations.BeforeExecuteEventArgs
-  nameWithType: BeforeExecuteEventArgs
-- uid: SpiceSharp.Simulations.BeforeExecuteEventArgs.#ctor(System.Boolean)
-  name: BeforeExecuteEventArgs(bool)
-  href: api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html#SpiceSharp_Simulations_BeforeExecuteEventArgs__ctor_System_Boolean_
-  commentId: M:SpiceSharp.Simulations.BeforeExecuteEventArgs.#ctor(System.Boolean)
-  name.vb: New(Boolean)
-  fullName: SpiceSharp.Simulations.BeforeExecuteEventArgs.BeforeExecuteEventArgs(bool)
-  fullName.vb: SpiceSharp.Simulations.BeforeExecuteEventArgs.New(Boolean)
-  nameWithType: BeforeExecuteEventArgs.BeforeExecuteEventArgs(bool)
-  nameWithType.vb: BeforeExecuteEventArgs.New(Boolean)
-- uid: SpiceSharp.Simulations.BeforeExecuteEventArgs.#ctor*
-  name: BeforeExecuteEventArgs
-  href: api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html#SpiceSharp_Simulations_BeforeExecuteEventArgs__ctor_
-  commentId: Overload:SpiceSharp.Simulations.BeforeExecuteEventArgs.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: SpiceSharp.Simulations.BeforeExecuteEventArgs.BeforeExecuteEventArgs
-  fullName.vb: SpiceSharp.Simulations.BeforeExecuteEventArgs.New
-  nameWithType: BeforeExecuteEventArgs.BeforeExecuteEventArgs
-  nameWithType.vb: BeforeExecuteEventArgs.New
-- uid: SpiceSharp.Simulations.BeforeExecuteEventArgs.Repeated
-  name: Repeated
-  href: api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html#SpiceSharp_Simulations_BeforeExecuteEventArgs_Repeated
-  commentId: P:SpiceSharp.Simulations.BeforeExecuteEventArgs.Repeated
-  fullName: SpiceSharp.Simulations.BeforeExecuteEventArgs.Repeated
-  nameWithType: BeforeExecuteEventArgs.Repeated
-- uid: SpiceSharp.Simulations.BeforeExecuteEventArgs.Repeated*
-  name: Repeated
-  href: api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html#SpiceSharp_Simulations_BeforeExecuteEventArgs_Repeated_
-  commentId: Overload:SpiceSharp.Simulations.BeforeExecuteEventArgs.Repeated
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.BeforeExecuteEventArgs.Repeated
-  nameWithType: BeforeExecuteEventArgs.Repeated
 - uid: SpiceSharp.Simulations.Biasing
   name: SpiceSharp.Simulations.Biasing
   href: api/SpiceSharp.Simulations.Biasing.html
@@ -36488,7 +36515,7 @@ references:
 - uid: SpiceSharp.Simulations.BiasingSimulation.AfterTemperature
   name: AfterTemperature
   href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_AfterTemperature
-  commentId: E:SpiceSharp.Simulations.BiasingSimulation.AfterTemperature
+  commentId: F:SpiceSharp.Simulations.BiasingSimulation.AfterTemperature
   fullName: SpiceSharp.Simulations.BiasingSimulation.AfterTemperature
   nameWithType: BiasingSimulation.AfterTemperature
 - uid: SpiceSharp.Simulations.BiasingSimulation.BeforeLoad
@@ -36497,12 +36524,6 @@ references:
   commentId: E:SpiceSharp.Simulations.BiasingSimulation.BeforeLoad
   fullName: SpiceSharp.Simulations.BiasingSimulation.BeforeLoad
   nameWithType: BiasingSimulation.BeforeLoad
-- uid: SpiceSharp.Simulations.BiasingSimulation.BeforeTemperature
-  name: BeforeTemperature
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BeforeTemperature
-  commentId: E:SpiceSharp.Simulations.BiasingSimulation.BeforeTemperature
-  fullName: SpiceSharp.Simulations.BiasingSimulation.BeforeTemperature
-  nameWithType: BiasingSimulation.BeforeTemperature
 - uid: SpiceSharp.Simulations.BiasingSimulation.BiasingParameters
   name: BiasingParameters
   href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BiasingParameters
@@ -36542,12 +36563,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.BiasingSimulation.CreateStates
   nameWithType: BiasingSimulation.CreateStates
-- uid: SpiceSharp.Simulations.BiasingSimulation.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Execute
-  commentId: M:SpiceSharp.Simulations.BiasingSimulation.Execute
-  fullName: SpiceSharp.Simulations.BiasingSimulation.Execute()
-  nameWithType: BiasingSimulation.Execute()
+- uid: SpiceSharp.Simulations.BiasingSimulation.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.BiasingSimulation.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.BiasingSimulation.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.BiasingSimulation.Execute(Integer)
+  nameWithType: BiasingSimulation.Execute(int)
+  nameWithType.vb: BiasingSimulation.Execute(Integer)
 - uid: SpiceSharp.Simulations.BiasingSimulation.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Execute_
@@ -36758,19 +36782,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.BiasingSimulation.OnAfterLoad
   nameWithType: BiasingSimulation.OnAfterLoad
-- uid: SpiceSharp.Simulations.BiasingSimulation.OnAfterTemperature(SpiceSharp.Simulations.TemperatureStateEventArgs)
-  name: OnAfterTemperature(TemperatureStateEventArgs)
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnAfterTemperature_SpiceSharp_Simulations_TemperatureStateEventArgs_
-  commentId: M:SpiceSharp.Simulations.BiasingSimulation.OnAfterTemperature(SpiceSharp.Simulations.TemperatureStateEventArgs)
-  fullName: SpiceSharp.Simulations.BiasingSimulation.OnAfterTemperature(SpiceSharp.Simulations.TemperatureStateEventArgs)
-  nameWithType: BiasingSimulation.OnAfterTemperature(TemperatureStateEventArgs)
-- uid: SpiceSharp.Simulations.BiasingSimulation.OnAfterTemperature*
-  name: OnAfterTemperature
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnAfterTemperature_
-  commentId: Overload:SpiceSharp.Simulations.BiasingSimulation.OnAfterTemperature
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.BiasingSimulation.OnAfterTemperature
-  nameWithType: BiasingSimulation.OnAfterTemperature
 - uid: SpiceSharp.Simulations.BiasingSimulation.OnBeforeLoad(SpiceSharp.Simulations.LoadStateEventArgs)
   name: OnBeforeLoad(LoadStateEventArgs)
   href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnBeforeLoad_SpiceSharp_Simulations_LoadStateEventArgs_
@@ -36784,19 +36795,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.BiasingSimulation.OnBeforeLoad
   nameWithType: BiasingSimulation.OnBeforeLoad
-- uid: SpiceSharp.Simulations.BiasingSimulation.OnBeforeTemperature(SpiceSharp.Simulations.TemperatureStateEventArgs)
-  name: OnBeforeTemperature(TemperatureStateEventArgs)
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnBeforeTemperature_SpiceSharp_Simulations_TemperatureStateEventArgs_
-  commentId: M:SpiceSharp.Simulations.BiasingSimulation.OnBeforeTemperature(SpiceSharp.Simulations.TemperatureStateEventArgs)
-  fullName: SpiceSharp.Simulations.BiasingSimulation.OnBeforeTemperature(SpiceSharp.Simulations.TemperatureStateEventArgs)
-  nameWithType: BiasingSimulation.OnBeforeTemperature(TemperatureStateEventArgs)
-- uid: SpiceSharp.Simulations.BiasingSimulation.OnBeforeTemperature*
-  name: OnBeforeTemperature
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_OnBeforeTemperature_
-  commentId: Overload:SpiceSharp.Simulations.BiasingSimulation.OnBeforeTemperature
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.BiasingSimulation.OnBeforeTemperature
-  nameWithType: BiasingSimulation.OnBeforeTemperature
 - uid: SpiceSharp.Simulations.BiasingSimulation.Op(System.Int32)
   name: Op(int)
   href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Op_System_Int32_
@@ -36852,19 +36850,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.BiasingSimulation.StoreSolution
   nameWithType: BiasingSimulation.StoreSolution
-- uid: SpiceSharp.Simulations.BiasingSimulation.Temperature
-  name: Temperature()
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Temperature
-  commentId: M:SpiceSharp.Simulations.BiasingSimulation.Temperature
-  fullName: SpiceSharp.Simulations.BiasingSimulation.Temperature()
-  nameWithType: BiasingSimulation.Temperature()
-- uid: SpiceSharp.Simulations.BiasingSimulation.Temperature*
-  name: Temperature
-  href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Temperature_
-  commentId: Overload:SpiceSharp.Simulations.BiasingSimulation.Temperature
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.BiasingSimulation.Temperature
-  nameWithType: BiasingSimulation.Temperature
 - uid: SpiceSharp.Simulations.BiasingSimulation.Validate(SpiceSharp.Entities.IEntityCollection)
   name: Validate(IEntityCollection)
   href: api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_Validate_SpiceSharp_Entities_IEntityCollection_
@@ -36884,15 +36869,15 @@ references:
   commentId: T:SpiceSharp.Simulations.ComplexCurrentExport
   fullName: SpiceSharp.Simulations.ComplexCurrentExport
   nameWithType: ComplexCurrentExport
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,SpiceSharp.Simulations.Base.Reference)
-  name: ComplexCurrentExport(IFrequencySimulation, Reference)
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_IFrequencySimulation_SpiceSharp_Simulations_Base_Reference_
-  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.IFrequencySimulation,SpiceSharp.Simulations.Base.Reference)
-  name.vb: New(IFrequencySimulation, Reference)
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ComplexCurrentExport(SpiceSharp.Simulations.IFrequencySimulation, SpiceSharp.Simulations.Base.Reference)
-  fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.New(SpiceSharp.Simulations.IFrequencySimulation, SpiceSharp.Simulations.Base.Reference)
-  nameWithType: ComplexCurrentExport.ComplexCurrentExport(IFrequencySimulation, Reference)
-  nameWithType.vb: ComplexCurrentExport.New(IFrequencySimulation, Reference)
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  name: ComplexCurrentExport(ISimulation, Reference)
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  name.vb: New(ISimulation, Reference)
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.ComplexCurrentExport(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference)
+  fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.New(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: ComplexCurrentExport.ComplexCurrentExport(ISimulation, Reference)
+  nameWithType.vb: ComplexCurrentExport.New(ISimulation, Reference)
 - uid: SpiceSharp.Simulations.ComplexCurrentExport.#ctor*
   name: ComplexCurrentExport
   href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport__ctor_
@@ -36903,22 +36888,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.New
   nameWithType: ComplexCurrentExport.ComplexCurrentExport
   nameWithType.vb: ComplexCurrentExport.New
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.ComplexCurrentExport.Initialize(Object, System.EventArgs)
-  nameWithType: ComplexCurrentExport.Initialize(object, EventArgs)
-  nameWithType.vb: ComplexCurrentExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.ComplexCurrentExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.ComplexCurrentExport.Initialize
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.ComplexCurrentExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: ComplexCurrentExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.ComplexCurrentExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.ComplexCurrentExport.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexCurrentExport.Initialize
-  nameWithType: ComplexCurrentExport.Initialize
+  fullName: SpiceSharp.Simulations.ComplexCurrentExport.BuildExtractor
+  nameWithType: ComplexCurrentExport.BuildExtractor
 - uid: SpiceSharp.Simulations.ComplexCurrentExport.Source
   name: Source
   href: api/SpiceSharp.Simulations.ComplexCurrentExport.html#SpiceSharp_Simulations_ComplexCurrentExport_Source
@@ -36951,15 +36933,15 @@ references:
   commentId: T:SpiceSharp.Simulations.ComplexPropertyExport
   fullName: SpiceSharp.Simulations.ComplexPropertyExport
   nameWithType: ComplexPropertyExport
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
-  name: ComplexPropertyExport(IEventfulSimulation, Reference, string)
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_SpiceSharp_Simulations_Base_Reference_System_String_
-  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
-  name.vb: New(IEventfulSimulation, Reference, String)
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, string)
-  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, String)
-  nameWithType: ComplexPropertyExport.ComplexPropertyExport(IEventfulSimulation, Reference, string)
-  nameWithType.vb: ComplexPropertyExport.New(IEventfulSimulation, Reference, String)
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name: ComplexPropertyExport(ISimulation, Reference, string)
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: New(ISimulation, Reference, String)
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.ComplexPropertyExport(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: ComplexPropertyExport.ComplexPropertyExport(ISimulation, Reference, string)
+  nameWithType.vb: ComplexPropertyExport.New(ISimulation, Reference, String)
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.#ctor*
   name: ComplexPropertyExport
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport__ctor_
@@ -36970,6 +36952,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.New
   nameWithType: ComplexPropertyExport.ComplexPropertyExport
   nameWithType.vb: ComplexPropertyExport.New
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: ComplexPropertyExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor
+  nameWithType: ComplexPropertyExport.BuildExtractor
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.Entity
   name: Entity
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Entity
@@ -36983,22 +36978,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexPropertyExport.Entity
   nameWithType: ComplexPropertyExport.Entity
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.ComplexPropertyExport.Initialize(Object, System.EventArgs)
-  nameWithType: ComplexPropertyExport.Initialize(object, EventArgs)
-  nameWithType.vb: ComplexPropertyExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.ComplexPropertyExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.ComplexPropertyExport.Initialize
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexPropertyExport.Initialize
-  nameWithType: ComplexPropertyExport.Initialize
 - uid: SpiceSharp.Simulations.ComplexPropertyExport.PropertyName
   name: PropertyName
   href: api/SpiceSharp.Simulations.ComplexPropertyExport.html#SpiceSharp_Simulations_ComplexPropertyExport_PropertyName
@@ -37050,6 +37029,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.New
   nameWithType: ComplexVoltageExport.ComplexVoltageExport
   nameWithType.vb: ComplexVoltageExport.New
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: ComplexVoltageExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.ComplexVoltageExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.BuildExtractor
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ComplexVoltageExport.BuildExtractor
+  nameWithType: ComplexVoltageExport.BuildExtractor
 - uid: SpiceSharp.Simulations.ComplexVoltageExport.Decibels
   name: Decibels
   href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Decibels
@@ -37063,22 +37055,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ComplexVoltageExport.Decibels
   nameWithType: ComplexVoltageExport.Decibels
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.ComplexVoltageExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.ComplexVoltageExport.Initialize(Object, System.EventArgs)
-  nameWithType: ComplexVoltageExport.Initialize(object, EventArgs)
-  nameWithType.vb: ComplexVoltageExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.ComplexVoltageExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.ComplexVoltageExport.Initialize
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ComplexVoltageExport.Initialize
-  nameWithType: ComplexVoltageExport.Initialize
 - uid: SpiceSharp.Simulations.ComplexVoltageExport.Phase
   name: Phase
   href: api/SpiceSharp.Simulations.ComplexVoltageExport.html#SpiceSharp_Simulations_ComplexVoltageExport_Phase
@@ -37251,12 +37227,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.DC.DCParameters
   nameWithType: DC.DCParameters
-- uid: SpiceSharp.Simulations.DC.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_Execute
-  commentId: M:SpiceSharp.Simulations.DC.Execute
-  fullName: SpiceSharp.Simulations.DC.Execute()
-  nameWithType: DC.Execute()
+- uid: SpiceSharp.Simulations.DC.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.DC.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.DC.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.DC.Execute(Integer)
+  nameWithType: DC.Execute(int)
+  nameWithType.vb: DC.Execute(Integer)
 - uid: SpiceSharp.Simulations.DC.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_Execute_
@@ -37264,6 +37243,12 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.DC.Execute
   nameWithType: DC.Execute
+- uid: SpiceSharp.Simulations.DC.ExportSweep
+  name: ExportSweep
+  href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_ExportSweep
+  commentId: F:SpiceSharp.Simulations.DC.ExportSweep
+  fullName: SpiceSharp.Simulations.DC.ExportSweep
+  nameWithType: DC.ExportSweep
 - uid: SpiceSharp.Simulations.DC.GetCurrentSweepValue
   name: GetCurrentSweepValue()
   href: api/SpiceSharp.Simulations.DC.html#SpiceSharp_Simulations_DC_GetCurrentSweepValue
@@ -37431,299 +37416,85 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.DecadeSweep.R
   nameWithType: DecadeSweep.R
-- uid: SpiceSharp.Simulations.ExportDataEventArgs
-  name: ExportDataEventArgs
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html
-  commentId: T:SpiceSharp.Simulations.ExportDataEventArgs
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs
-  nameWithType: ExportDataEventArgs
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.#ctor(SpiceSharp.Simulations.ISimulation)
-  name: ExportDataEventArgs(ISimulation)
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs__ctor_SpiceSharp_Simulations_ISimulation_
-  commentId: M:SpiceSharp.Simulations.ExportDataEventArgs.#ctor(SpiceSharp.Simulations.ISimulation)
+- uid: SpiceSharp.Simulations.Export`1
+  name: Export<T>
+  href: api/SpiceSharp.Simulations.Export-1.html
+  commentId: T:SpiceSharp.Simulations.Export`1
+  name.vb: Export(Of T)
+  fullName: SpiceSharp.Simulations.Export<T>
+  fullName.vb: SpiceSharp.Simulations.Export(Of T)
+  nameWithType: Export<T>
+  nameWithType.vb: Export(Of T)
+- uid: SpiceSharp.Simulations.Export`1.#ctor(SpiceSharp.Simulations.ISimulation)
+  name: Export(ISimulation)
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1__ctor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.Export`1.#ctor(SpiceSharp.Simulations.ISimulation)
   name.vb: New(ISimulation)
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.ExportDataEventArgs(SpiceSharp.Simulations.ISimulation)
-  fullName.vb: SpiceSharp.Simulations.ExportDataEventArgs.New(SpiceSharp.Simulations.ISimulation)
-  nameWithType: ExportDataEventArgs.ExportDataEventArgs(ISimulation)
-  nameWithType.vb: ExportDataEventArgs.New(ISimulation)
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.#ctor*
-  name: ExportDataEventArgs
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs__ctor_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.#ctor
-  isSpec: "True"
-  name.vb: New
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.ExportDataEventArgs
-  fullName.vb: SpiceSharp.Simulations.ExportDataEventArgs.New
-  nameWithType: ExportDataEventArgs.ExportDataEventArgs
-  nameWithType.vb: ExportDataEventArgs.New
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.Frequency
-  name: Frequency
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_Frequency
-  commentId: P:SpiceSharp.Simulations.ExportDataEventArgs.Frequency
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.Frequency
-  nameWithType: ExportDataEventArgs.Frequency
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.Frequency*
-  name: Frequency
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_Frequency_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.Frequency
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.Frequency
-  nameWithType: ExportDataEventArgs.Frequency
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(System.String)
-  name: GetComplexVoltage(string)
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetComplexVoltage_System_String_
-  commentId: M:SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(System.String)
-  name.vb: GetComplexVoltage(String)
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(string)
-  fullName.vb: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(String)
-  nameWithType: ExportDataEventArgs.GetComplexVoltage(string)
-  nameWithType.vb: ExportDataEventArgs.GetComplexVoltage(String)
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(System.String,System.String)
-  name: GetComplexVoltage(string, string)
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetComplexVoltage_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(System.String,System.String)
-  name.vb: GetComplexVoltage(String, String)
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(string, string)
-  fullName.vb: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage(String, String)
-  nameWithType: ExportDataEventArgs.GetComplexVoltage(string, string)
-  nameWithType.vb: ExportDataEventArgs.GetComplexVoltage(String, String)
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage*
-  name: GetComplexVoltage
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetComplexVoltage_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetComplexVoltage
-  nameWithType: ExportDataEventArgs.GetComplexVoltage
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues
-  name: GetSweepValues()
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetSweepValues
-  commentId: M:SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues()
-  nameWithType: ExportDataEventArgs.GetSweepValues()
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues*
-  name: GetSweepValues
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetSweepValues_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetSweepValues
-  nameWithType: ExportDataEventArgs.GetSweepValues
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(System.String)
-  name: GetVoltage(string)
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetVoltage_System_String_
-  commentId: M:SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(System.String)
-  name.vb: GetVoltage(String)
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(string)
-  fullName.vb: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(String)
-  nameWithType: ExportDataEventArgs.GetVoltage(string)
-  nameWithType.vb: ExportDataEventArgs.GetVoltage(String)
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(System.String,System.String)
-  name: GetVoltage(string, string)
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetVoltage_System_String_System_String_
-  commentId: M:SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(System.String,System.String)
-  name.vb: GetVoltage(String, String)
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(string, string)
-  fullName.vb: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage(String, String)
-  nameWithType: ExportDataEventArgs.GetVoltage(string, string)
-  nameWithType.vb: ExportDataEventArgs.GetVoltage(String, String)
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage*
-  name: GetVoltage
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_GetVoltage_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.GetVoltage
-  nameWithType: ExportDataEventArgs.GetVoltage
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.Laplace
-  name: Laplace
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_Laplace
-  commentId: P:SpiceSharp.Simulations.ExportDataEventArgs.Laplace
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.Laplace
-  nameWithType: ExportDataEventArgs.Laplace
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.Laplace*
-  name: Laplace
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_Laplace_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.Laplace
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.Laplace
-  nameWithType: ExportDataEventArgs.Laplace
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.Time
-  name: Time
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_Time
-  commentId: P:SpiceSharp.Simulations.ExportDataEventArgs.Time
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.Time
-  nameWithType: ExportDataEventArgs.Time
-- uid: SpiceSharp.Simulations.ExportDataEventArgs.Time*
-  name: Time
-  href: api/SpiceSharp.Simulations.ExportDataEventArgs.html#SpiceSharp_Simulations_ExportDataEventArgs_Time_
-  commentId: Overload:SpiceSharp.Simulations.ExportDataEventArgs.Time
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.ExportDataEventArgs.Time
-  nameWithType: ExportDataEventArgs.Time
-- uid: SpiceSharp.Simulations.Export`2
-  name: Export<S, T>
-  href: api/SpiceSharp.Simulations.Export-2.html
-  commentId: T:SpiceSharp.Simulations.Export`2
-  name.vb: Export(Of S, T)
-  fullName: SpiceSharp.Simulations.Export<S, T>
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T)
-  nameWithType: Export<S, T>
-  nameWithType.vb: Export(Of S, T)
-- uid: SpiceSharp.Simulations.Export`2.#ctor(`0)
-  name: Export(S)
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2__ctor__0_
-  commentId: M:SpiceSharp.Simulations.Export`2.#ctor(`0)
-  name.vb: New(S)
-  fullName: SpiceSharp.Simulations.Export<S, T>.Export(S)
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).New(S)
-  nameWithType: Export<S, T>.Export(S)
-  nameWithType.vb: Export(Of S, T).New(S)
-- uid: SpiceSharp.Simulations.Export`2.#ctor*
+  fullName: SpiceSharp.Simulations.Export<T>.Export(SpiceSharp.Simulations.ISimulation)
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).New(SpiceSharp.Simulations.ISimulation)
+  nameWithType: Export<T>.Export(ISimulation)
+  nameWithType.vb: Export(Of T).New(ISimulation)
+- uid: SpiceSharp.Simulations.Export`1.#ctor*
   name: Export
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2__ctor_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.#ctor
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1__ctor_
+  commentId: Overload:SpiceSharp.Simulations.Export`1.#ctor
   isSpec: "True"
   name.vb: New
-  fullName: SpiceSharp.Simulations.Export<S, T>.Export
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).New
-  nameWithType: Export<S, T>.Export
-  nameWithType.vb: Export(Of S, T).New
-- uid: SpiceSharp.Simulations.Export`2.Destroy
-  name: Destroy()
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Destroy
-  commentId: M:SpiceSharp.Simulations.Export`2.Destroy
-  fullName: SpiceSharp.Simulations.Export<S, T>.Destroy()
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Destroy()
-  nameWithType: Export<S, T>.Destroy()
-  nameWithType.vb: Export(Of S, T).Destroy()
-- uid: SpiceSharp.Simulations.Export`2.Destroy*
-  name: Destroy
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Destroy_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.Destroy
+  fullName: SpiceSharp.Simulations.Export<T>.Export
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).New
+  nameWithType: Export<T>.Export
+  nameWithType.vb: Export(Of T).New
+- uid: SpiceSharp.Simulations.Export`1.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.Export`1.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.Export<T>.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: Export<T>.BuildExtractor(ISimulation)
+  nameWithType.vb: Export(Of T).BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.Export`1.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.Export`1.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.Destroy
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Destroy
-  nameWithType: Export<S, T>.Destroy
-  nameWithType.vb: Export(Of S, T).Destroy
-- uid: SpiceSharp.Simulations.Export`2.Extractor
-  name: Extractor
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Extractor
-  commentId: P:SpiceSharp.Simulations.Export`2.Extractor
-  fullName: SpiceSharp.Simulations.Export<S, T>.Extractor
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Extractor
-  nameWithType: Export<S, T>.Extractor
-  nameWithType.vb: Export(Of S, T).Extractor
-- uid: SpiceSharp.Simulations.Export`2.Extractor*
-  name: Extractor
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Extractor_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.Extractor
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.Extractor
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Extractor
-  nameWithType: Export<S, T>.Extractor
-  nameWithType.vb: Export(Of S, T).Extractor
-- uid: SpiceSharp.Simulations.Export`2.Finalize(System.Object,System.EventArgs)
-  name: Finalize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Finalize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Export`2.Finalize(System.Object,System.EventArgs)
-  name.vb: Finalize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.Export<S, T>.Finalize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Finalize(Object, System.EventArgs)
-  nameWithType: Export<S, T>.Finalize(object, EventArgs)
-  nameWithType.vb: Export(Of S, T).Finalize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.Export`2.Finalize*
-  name: Finalize
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Finalize_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.Finalize
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.Finalize
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Finalize
-  nameWithType: Export<S, T>.Finalize
-  nameWithType.vb: Export(Of S, T).Finalize
-- uid: SpiceSharp.Simulations.Export`2.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Export`2.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.Export<S, T>.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Initialize(Object, System.EventArgs)
-  nameWithType: Export<S, T>.Initialize(object, EventArgs)
-  nameWithType.vb: Export(Of S, T).Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.Export`2.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.Initialize
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.Initialize
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Initialize
-  nameWithType: Export<S, T>.Initialize
-  nameWithType.vb: Export(Of S, T).Initialize
-- uid: SpiceSharp.Simulations.Export`2.IsValid
-  name: IsValid
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_IsValid
-  commentId: P:SpiceSharp.Simulations.Export`2.IsValid
-  fullName: SpiceSharp.Simulations.Export<S, T>.IsValid
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).IsValid
-  nameWithType: Export<S, T>.IsValid
-  nameWithType.vb: Export(Of S, T).IsValid
-- uid: SpiceSharp.Simulations.Export`2.IsValid*
-  name: IsValid
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_IsValid_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.IsValid
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.IsValid
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).IsValid
-  nameWithType: Export<S, T>.IsValid
-  nameWithType.vb: Export(Of S, T).IsValid
-- uid: SpiceSharp.Simulations.Export`2.LazyLoad
-  name: LazyLoad()
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_LazyLoad
-  commentId: M:SpiceSharp.Simulations.Export`2.LazyLoad
-  fullName: SpiceSharp.Simulations.Export<S, T>.LazyLoad()
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).LazyLoad()
-  nameWithType: Export<S, T>.LazyLoad()
-  nameWithType.vb: Export(Of S, T).LazyLoad()
-- uid: SpiceSharp.Simulations.Export`2.LazyLoad*
-  name: LazyLoad
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_LazyLoad_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.LazyLoad
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.LazyLoad
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).LazyLoad
-  nameWithType: Export<S, T>.LazyLoad
-  nameWithType.vb: Export(Of S, T).LazyLoad
-- uid: SpiceSharp.Simulations.Export`2.Simulation
+  fullName: SpiceSharp.Simulations.Export<T>.BuildExtractor
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).BuildExtractor
+  nameWithType: Export<T>.BuildExtractor
+  nameWithType.vb: Export(Of T).BuildExtractor
+- uid: SpiceSharp.Simulations.Export`1.Simulation
   name: Simulation
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Simulation
-  commentId: P:SpiceSharp.Simulations.Export`2.Simulation
-  fullName: SpiceSharp.Simulations.Export<S, T>.Simulation
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Simulation
-  nameWithType: Export<S, T>.Simulation
-  nameWithType.vb: Export(Of S, T).Simulation
-- uid: SpiceSharp.Simulations.Export`2.Simulation*
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Simulation
+  commentId: P:SpiceSharp.Simulations.Export`1.Simulation
+  fullName: SpiceSharp.Simulations.Export<T>.Simulation
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).Simulation
+  nameWithType: Export<T>.Simulation
+  nameWithType.vb: Export(Of T).Simulation
+- uid: SpiceSharp.Simulations.Export`1.Simulation*
   name: Simulation
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Simulation_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.Simulation
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Simulation_
+  commentId: Overload:SpiceSharp.Simulations.Export`1.Simulation
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.Simulation
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Simulation
-  nameWithType: Export<S, T>.Simulation
-  nameWithType.vb: Export(Of S, T).Simulation
-- uid: SpiceSharp.Simulations.Export`2.Value
+  fullName: SpiceSharp.Simulations.Export<T>.Simulation
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).Simulation
+  nameWithType: Export<T>.Simulation
+  nameWithType.vb: Export(Of T).Simulation
+- uid: SpiceSharp.Simulations.Export`1.Value
   name: Value
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Value
-  commentId: P:SpiceSharp.Simulations.Export`2.Value
-  fullName: SpiceSharp.Simulations.Export<S, T>.Value
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Value
-  nameWithType: Export<S, T>.Value
-  nameWithType.vb: Export(Of S, T).Value
-- uid: SpiceSharp.Simulations.Export`2.Value*
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Value
+  commentId: P:SpiceSharp.Simulations.Export`1.Value
+  fullName: SpiceSharp.Simulations.Export<T>.Value
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).Value
+  nameWithType: Export<T>.Value
+  nameWithType.vb: Export(Of T).Value
+- uid: SpiceSharp.Simulations.Export`1.Value*
   name: Value
-  href: api/SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Value_
-  commentId: Overload:SpiceSharp.Simulations.Export`2.Value
+  href: api/SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Value_
+  commentId: Overload:SpiceSharp.Simulations.Export`1.Value
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.Export<S, T>.Value
-  fullName.vb: SpiceSharp.Simulations.Export(Of S, T).Value
-  nameWithType: Export<S, T>.Value
-  nameWithType.vb: Export(Of S, T).Value
+  fullName: SpiceSharp.Simulations.Export<T>.Value
+  fullName.vb: SpiceSharp.Simulations.Export(Of T).Value
+  nameWithType: Export<T>.Value
+  nameWithType.vb: Export(Of T).Value
 - uid: SpiceSharp.Simulations.Frequency
   name: SpiceSharp.Simulations.Frequency
   href: api/SpiceSharp.Simulations.Frequency.html
@@ -38248,12 +38019,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.FrequencySimulation.CreateStates
   nameWithType: FrequencySimulation.CreateStates
-- uid: SpiceSharp.Simulations.FrequencySimulation.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.FrequencySimulation.html#SpiceSharp_Simulations_FrequencySimulation_Execute
-  commentId: M:SpiceSharp.Simulations.FrequencySimulation.Execute
-  fullName: SpiceSharp.Simulations.FrequencySimulation.Execute()
-  nameWithType: FrequencySimulation.Execute()
+- uid: SpiceSharp.Simulations.FrequencySimulation.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.FrequencySimulation.html#SpiceSharp_Simulations_FrequencySimulation_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.FrequencySimulation.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.FrequencySimulation.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.FrequencySimulation.Execute(Integer)
+  nameWithType: FrequencySimulation.Execute(int)
+  nameWithType.vb: FrequencySimulation.Execute(Integer)
 - uid: SpiceSharp.Simulations.FrequencySimulation.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.FrequencySimulation.html#SpiceSharp_Simulations_FrequencySimulation_Execute_
@@ -38374,15 +38148,15 @@ references:
   fullName.vb: SpiceSharp.Simulations.GenericExport(Of T)
   nameWithType: GenericExport<T>
   nameWithType.vb: GenericExport(Of T)
-- uid: SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.Func{`0})
-  name: GenericExport(IEventfulSimulation, Func<T>)
-  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1__ctor_SpiceSharp_Simulations_IEventfulSimulation_System_Func__0__
-  commentId: M:SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.IEventfulSimulation,System.Func{`0})
-  name.vb: New(IEventfulSimulation, Func(Of T))
-  fullName: SpiceSharp.Simulations.GenericExport<T>.GenericExport(SpiceSharp.Simulations.IEventfulSimulation, System.Func<T>)
-  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).New(SpiceSharp.Simulations.IEventfulSimulation, System.Func(Of T))
-  nameWithType: GenericExport<T>.GenericExport(IEventfulSimulation, Func<T>)
-  nameWithType.vb: GenericExport(Of T).New(IEventfulSimulation, Func(Of T))
+- uid: SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.ISimulation,System.Func{`0},System.String)
+  name: GenericExport(ISimulation, Func<T>, string)
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1__ctor_SpiceSharp_Simulations_ISimulation_System_Func__0__System_String_
+  commentId: M:SpiceSharp.Simulations.GenericExport`1.#ctor(SpiceSharp.Simulations.ISimulation,System.Func{`0},System.String)
+  name.vb: New(ISimulation, Func(Of T), String)
+  fullName: SpiceSharp.Simulations.GenericExport<T>.GenericExport(SpiceSharp.Simulations.ISimulation, System.Func<T>, string)
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).New(SpiceSharp.Simulations.ISimulation, System.Func(Of T), String)
+  nameWithType: GenericExport<T>.GenericExport(ISimulation, Func<T>, string)
+  nameWithType.vb: GenericExport(Of T).New(ISimulation, Func(Of T), String)
 - uid: SpiceSharp.Simulations.GenericExport`1.#ctor*
   name: GenericExport
   href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1__ctor_
@@ -38393,24 +38167,40 @@ references:
   fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).New
   nameWithType: GenericExport<T>.GenericExport
   nameWithType.vb: GenericExport(Of T).New
-- uid: SpiceSharp.Simulations.GenericExport`1.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.GenericExport`1.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.GenericExport<T>.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).Initialize(Object, System.EventArgs)
-  nameWithType: GenericExport<T>.Initialize(object, EventArgs)
-  nameWithType.vb: GenericExport(Of T).Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.GenericExport`1.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.GenericExport`1.Initialize
+- uid: SpiceSharp.Simulations.GenericExport`1.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.GenericExport`1.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.GenericExport<T>.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: GenericExport<T>.BuildExtractor(ISimulation)
+  nameWithType.vb: GenericExport(Of T).BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.GenericExport`1.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.GenericExport`1.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.GenericExport<T>.Initialize
-  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).Initialize
-  nameWithType: GenericExport<T>.Initialize
-  nameWithType.vb: GenericExport(Of T).Initialize
+  fullName: SpiceSharp.Simulations.GenericExport<T>.BuildExtractor
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).BuildExtractor
+  nameWithType: GenericExport<T>.BuildExtractor
+  nameWithType.vb: GenericExport(Of T).BuildExtractor
+- uid: SpiceSharp.Simulations.GenericExport`1.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_ToString
+  commentId: M:SpiceSharp.Simulations.GenericExport`1.ToString
+  fullName: SpiceSharp.Simulations.GenericExport<T>.ToString()
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).ToString()
+  nameWithType: GenericExport<T>.ToString()
+  nameWithType.vb: GenericExport(Of T).ToString()
+- uid: SpiceSharp.Simulations.GenericExport`1.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.GenericExport-1.html#SpiceSharp_Simulations_GenericExport_1_ToString_
+  commentId: Overload:SpiceSharp.Simulations.GenericExport`1.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.GenericExport<T>.ToString
+  fullName.vb: SpiceSharp.Simulations.GenericExport(Of T).ToString
+  nameWithType: GenericExport<T>.ToString
+  nameWithType.vb: GenericExport(Of T).ToString
 - uid: SpiceSharp.Simulations.Histories
   name: SpiceSharp.Simulations.Histories
   href: api/SpiceSharp.Simulations.Histories.html
@@ -39009,66 +38799,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.IDerivative.Value
   nameWithType: IDerivative.Value
-- uid: SpiceSharp.Simulations.IEventfulSimulation
-  name: IEventfulSimulation
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html
-  commentId: T:SpiceSharp.Simulations.IEventfulSimulation
-  fullName: SpiceSharp.Simulations.IEventfulSimulation
-  nameWithType: IEventfulSimulation
-- uid: SpiceSharp.Simulations.IEventfulSimulation.AfterExecute
-  name: AfterExecute
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_AfterExecute
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.AfterExecute
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.AfterExecute
-  nameWithType: IEventfulSimulation.AfterExecute
-- uid: SpiceSharp.Simulations.IEventfulSimulation.AfterSetup
-  name: AfterSetup
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_AfterSetup
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.AfterSetup
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.AfterSetup
-  nameWithType: IEventfulSimulation.AfterSetup
-- uid: SpiceSharp.Simulations.IEventfulSimulation.AfterUnsetup
-  name: AfterUnsetup
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_AfterUnsetup
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.AfterUnsetup
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.AfterUnsetup
-  nameWithType: IEventfulSimulation.AfterUnsetup
-- uid: SpiceSharp.Simulations.IEventfulSimulation.AfterValidation
-  name: AfterValidation
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_AfterValidation
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.AfterValidation
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.AfterValidation
-  nameWithType: IEventfulSimulation.AfterValidation
-- uid: SpiceSharp.Simulations.IEventfulSimulation.BeforeExecute
-  name: BeforeExecute
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_BeforeExecute
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.BeforeExecute
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.BeforeExecute
-  nameWithType: IEventfulSimulation.BeforeExecute
-- uid: SpiceSharp.Simulations.IEventfulSimulation.BeforeSetup
-  name: BeforeSetup
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_BeforeSetup
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.BeforeSetup
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.BeforeSetup
-  nameWithType: IEventfulSimulation.BeforeSetup
-- uid: SpiceSharp.Simulations.IEventfulSimulation.BeforeUnsetup
-  name: BeforeUnsetup
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_BeforeUnsetup
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.BeforeUnsetup
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.BeforeUnsetup
-  nameWithType: IEventfulSimulation.BeforeUnsetup
-- uid: SpiceSharp.Simulations.IEventfulSimulation.BeforeValidation
-  name: BeforeValidation
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_BeforeValidation
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.BeforeValidation
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.BeforeValidation
-  nameWithType: IEventfulSimulation.BeforeValidation
-- uid: SpiceSharp.Simulations.IEventfulSimulation.ExportSimulationData
-  name: ExportSimulationData
-  href: api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_ExportSimulationData
-  commentId: E:SpiceSharp.Simulations.IEventfulSimulation.ExportSimulationData
-  fullName: SpiceSharp.Simulations.IEventfulSimulation.ExportSimulationData
-  nameWithType: IEventfulSimulation.ExportSimulationData
 - uid: SpiceSharp.Simulations.IExport`1
   name: IExport<T>
   href: api/SpiceSharp.Simulations.IExport-1.html
@@ -39078,23 +38808,23 @@ references:
   fullName.vb: SpiceSharp.Simulations.IExport(Of T)
   nameWithType: IExport<T>
   nameWithType.vb: IExport(Of T)
-- uid: SpiceSharp.Simulations.IExport`1.Destroy
-  name: Destroy()
-  href: api/SpiceSharp.Simulations.IExport-1.html#SpiceSharp_Simulations_IExport_1_Destroy
-  commentId: M:SpiceSharp.Simulations.IExport`1.Destroy
-  fullName: SpiceSharp.Simulations.IExport<T>.Destroy()
-  fullName.vb: SpiceSharp.Simulations.IExport(Of T).Destroy()
-  nameWithType: IExport<T>.Destroy()
-  nameWithType.vb: IExport(Of T).Destroy()
-- uid: SpiceSharp.Simulations.IExport`1.Destroy*
-  name: Destroy
-  href: api/SpiceSharp.Simulations.IExport-1.html#SpiceSharp_Simulations_IExport_1_Destroy_
-  commentId: Overload:SpiceSharp.Simulations.IExport`1.Destroy
+- uid: SpiceSharp.Simulations.IExport`1.Simulation
+  name: Simulation
+  href: api/SpiceSharp.Simulations.IExport-1.html#SpiceSharp_Simulations_IExport_1_Simulation
+  commentId: P:SpiceSharp.Simulations.IExport`1.Simulation
+  fullName: SpiceSharp.Simulations.IExport<T>.Simulation
+  fullName.vb: SpiceSharp.Simulations.IExport(Of T).Simulation
+  nameWithType: IExport<T>.Simulation
+  nameWithType.vb: IExport(Of T).Simulation
+- uid: SpiceSharp.Simulations.IExport`1.Simulation*
+  name: Simulation
+  href: api/SpiceSharp.Simulations.IExport-1.html#SpiceSharp_Simulations_IExport_1_Simulation_
+  commentId: Overload:SpiceSharp.Simulations.IExport`1.Simulation
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.IExport<T>.Destroy
-  fullName.vb: SpiceSharp.Simulations.IExport(Of T).Destroy
-  nameWithType: IExport<T>.Destroy
-  nameWithType.vb: IExport(Of T).Destroy
+  fullName: SpiceSharp.Simulations.IExport<T>.Simulation
+  fullName.vb: SpiceSharp.Simulations.IExport(Of T).Simulation
+  nameWithType: IExport<T>.Simulation
+  nameWithType.vb: IExport(Of T).Simulation
 - uid: SpiceSharp.Simulations.IExport`1.Value
   name: Value
   href: api/SpiceSharp.Simulations.IExport-1.html#SpiceSharp_Simulations_IExport_1_Value
@@ -39787,6 +39517,19 @@ references:
   commentId: T:SpiceSharp.Simulations.ISimulation
   fullName: SpiceSharp.Simulations.ISimulation
   nameWithType: ISimulation
+- uid: SpiceSharp.Simulations.ISimulation.CurrentRun
+  name: CurrentRun
+  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_CurrentRun
+  commentId: P:SpiceSharp.Simulations.ISimulation.CurrentRun
+  fullName: SpiceSharp.Simulations.ISimulation.CurrentRun
+  nameWithType: ISimulation.CurrentRun
+- uid: SpiceSharp.Simulations.ISimulation.CurrentRun*
+  name: CurrentRun
+  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_CurrentRun_
+  commentId: Overload:SpiceSharp.Simulations.ISimulation.CurrentRun
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ISimulation.CurrentRun
+  nameWithType: ISimulation.CurrentRun
 - uid: SpiceSharp.Simulations.ISimulation.Name
   name: Name
   href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Name
@@ -39800,12 +39543,28 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ISimulation.Name
   nameWithType: ISimulation.Name
-- uid: SpiceSharp.Simulations.ISimulation.Rerun
-  name: Rerun()
-  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Rerun
-  commentId: M:SpiceSharp.Simulations.ISimulation.Rerun
-  fullName: SpiceSharp.Simulations.ISimulation.Rerun()
-  nameWithType: ISimulation.Rerun()
+- uid: SpiceSharp.Simulations.ISimulation.Repeat
+  name: Repeat
+  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Repeat
+  commentId: P:SpiceSharp.Simulations.ISimulation.Repeat
+  fullName: SpiceSharp.Simulations.ISimulation.Repeat
+  nameWithType: ISimulation.Repeat
+- uid: SpiceSharp.Simulations.ISimulation.Repeat*
+  name: Repeat
+  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Repeat_
+  commentId: Overload:SpiceSharp.Simulations.ISimulation.Repeat
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.ISimulation.Repeat
+  nameWithType: ISimulation.Repeat
+- uid: SpiceSharp.Simulations.ISimulation.Rerun(System.Int32)
+  name: Rerun(int)
+  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Rerun_System_Int32_
+  commentId: M:SpiceSharp.Simulations.ISimulation.Rerun(System.Int32)
+  name.vb: Rerun(Integer)
+  fullName: SpiceSharp.Simulations.ISimulation.Rerun(int)
+  fullName.vb: SpiceSharp.Simulations.ISimulation.Rerun(Integer)
+  nameWithType: ISimulation.Rerun(int)
+  nameWithType.vb: ISimulation.Rerun(Integer)
 - uid: SpiceSharp.Simulations.ISimulation.Rerun*
   name: Rerun
   href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Rerun_
@@ -39813,12 +39572,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.ISimulation.Rerun
   nameWithType: ISimulation.Rerun
-- uid: SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection)
-  name: Run(IEntityCollection)
-  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Run_SpiceSharp_Entities_IEntityCollection_
-  commentId: M:SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection)
-  fullName: SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection)
-  nameWithType: ISimulation.Run(IEntityCollection)
+- uid: SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)
+  name: Run(IEntityCollection, int)
+  href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Run_SpiceSharp_Entities_IEntityCollection_System_Int32_
+  commentId: M:SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)
+  name.vb: Run(IEntityCollection, Integer)
+  fullName: SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection, int)
+  fullName.vb: SpiceSharp.Simulations.ISimulation.Run(SpiceSharp.Entities.IEntityCollection, Integer)
+  nameWithType: ISimulation.Run(IEntityCollection, int)
+  nameWithType.vb: ISimulation.Run(IEntityCollection, Integer)
 - uid: SpiceSharp.Simulations.ISimulation.Run*
   name: Run
   href: api/SpiceSharp.Simulations.ISimulation.html#SpiceSharp_Simulations_ISimulation_Run_
@@ -40364,22 +40126,32 @@ references:
   fullName.vb: SpiceSharp.Simulations.InputNoiseDensityExport.New
   nameWithType: InputNoiseDensityExport.InputNoiseDensityExport
   nameWithType.vb: InputNoiseDensityExport.New
-- uid: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize(Object, System.EventArgs)
-  nameWithType: InputNoiseDensityExport.Initialize(object, EventArgs)
-  nameWithType.vb: InputNoiseDensityExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.InputNoiseDensityExport.Initialize
+- uid: SpiceSharp.Simulations.InputNoiseDensityExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.InputNoiseDensityExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: InputNoiseDensityExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.InputNoiseDensityExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.InputNoiseDensityExport.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.Initialize
-  nameWithType: InputNoiseDensityExport.Initialize
+  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.BuildExtractor
+  nameWithType: InputNoiseDensityExport.BuildExtractor
+- uid: SpiceSharp.Simulations.InputNoiseDensityExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_ToString
+  commentId: M:SpiceSharp.Simulations.InputNoiseDensityExport.ToString
+  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.ToString()
+  nameWithType: InputNoiseDensityExport.ToString()
+- uid: SpiceSharp.Simulations.InputNoiseDensityExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.InputNoiseDensityExport.html#SpiceSharp_Simulations_InputNoiseDensityExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.InputNoiseDensityExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.InputNoiseDensityExport.ToString
+  nameWithType: InputNoiseDensityExport.ToString
 - uid: SpiceSharp.Simulations.IntegrationMethods
   name: SpiceSharp.Simulations.IntegrationMethods
   href: api/SpiceSharp.Simulations.IntegrationMethods.html
@@ -43610,12 +43382,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Noise.CreateStates
   nameWithType: Noise.CreateStates
-- uid: SpiceSharp.Simulations.Noise.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_Execute
-  commentId: M:SpiceSharp.Simulations.Noise.Execute
-  fullName: SpiceSharp.Simulations.Noise.Execute()
-  nameWithType: Noise.Execute()
+- uid: SpiceSharp.Simulations.Noise.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.Noise.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.Noise.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.Noise.Execute(Integer)
+  nameWithType: Noise.Execute(int)
+  nameWithType.vb: Noise.Execute(Integer)
 - uid: SpiceSharp.Simulations.Noise.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_Execute_
@@ -43623,6 +43398,37 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Noise.Execute
   nameWithType: Noise.Execute
+- uid: SpiceSharp.Simulations.Noise.ExportNoise
+  name: ExportNoise
+  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_ExportNoise
+  commentId: F:SpiceSharp.Simulations.Noise.ExportNoise
+  fullName: SpiceSharp.Simulations.Noise.ExportNoise
+  nameWithType: Noise.ExportNoise
+- uid: SpiceSharp.Simulations.Noise.ExportOperatingPoint
+  name: ExportOperatingPoint
+  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_ExportOperatingPoint
+  commentId: F:SpiceSharp.Simulations.Noise.ExportOperatingPoint
+  fullName: SpiceSharp.Simulations.Noise.ExportOperatingPoint
+  nameWithType: Noise.ExportOperatingPoint
+- uid: SpiceSharp.Simulations.Noise.ExportSmallSignal
+  name: ExportSmallSignal
+  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_ExportSmallSignal
+  commentId: F:SpiceSharp.Simulations.Noise.ExportSmallSignal
+  fullName: SpiceSharp.Simulations.Noise.ExportSmallSignal
+  nameWithType: Noise.ExportSmallSignal
+- uid: SpiceSharp.Simulations.Noise.Frequency
+  name: Frequency
+  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_Frequency
+  commentId: P:SpiceSharp.Simulations.Noise.Frequency
+  fullName: SpiceSharp.Simulations.Noise.Frequency
+  nameWithType: Noise.Frequency
+- uid: SpiceSharp.Simulations.Noise.Frequency*
+  name: Frequency
+  href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_Frequency_
+  commentId: Overload:SpiceSharp.Simulations.Noise.Frequency
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Noise.Frequency
+  nameWithType: Noise.Frequency
 - uid: SpiceSharp.Simulations.Noise.NoiseParameters
   name: NoiseParameters
   href: api/SpiceSharp.Simulations.Noise.html#SpiceSharp_Simulations_Noise_NoiseParameters
@@ -44138,12 +43944,15 @@ references:
   fullName.vb: SpiceSharp.Simulations.OP.New
   nameWithType: OP.OP
   nameWithType.vb: OP.New
-- uid: SpiceSharp.Simulations.OP.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.OP.html#SpiceSharp_Simulations_OP_Execute
-  commentId: M:SpiceSharp.Simulations.OP.Execute
-  fullName: SpiceSharp.Simulations.OP.Execute()
-  nameWithType: OP.Execute()
+- uid: SpiceSharp.Simulations.OP.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.OP.html#SpiceSharp_Simulations_OP_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.OP.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.OP.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.OP.Execute(Integer)
+  nameWithType: OP.Execute(int)
+  nameWithType.vb: OP.Execute(Integer)
 - uid: SpiceSharp.Simulations.OP.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.OP.html#SpiceSharp_Simulations_OP_Execute_
@@ -44151,6 +43960,12 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.OP.Execute
   nameWithType: OP.Execute
+- uid: SpiceSharp.Simulations.OP.ExportOperatingPoint
+  name: ExportOperatingPoint
+  href: api/SpiceSharp.Simulations.OP.html#SpiceSharp_Simulations_OP_ExportOperatingPoint
+  commentId: F:SpiceSharp.Simulations.OP.ExportOperatingPoint
+  fullName: SpiceSharp.Simulations.OP.ExportOperatingPoint
+  nameWithType: OP.ExportOperatingPoint
 - uid: SpiceSharp.Simulations.OctaveSweep
   name: OctaveSweep
   href: api/SpiceSharp.Simulations.OctaveSweep.html
@@ -44279,22 +44094,32 @@ references:
   fullName.vb: SpiceSharp.Simulations.OutputNoiseDensityExport.New
   nameWithType: OutputNoiseDensityExport.OutputNoiseDensityExport
   nameWithType.vb: OutputNoiseDensityExport.New
-- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize(Object, System.EventArgs)
-  nameWithType: OutputNoiseDensityExport.Initialize(object, EventArgs)
-  nameWithType.vb: OutputNoiseDensityExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize
+- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.OutputNoiseDensityExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: OutputNoiseDensityExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.OutputNoiseDensityExport.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.Initialize
-  nameWithType: OutputNoiseDensityExport.Initialize
+  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.BuildExtractor
+  nameWithType: OutputNoiseDensityExport.BuildExtractor
+- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.ToString
+  name: ToString()
+  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_ToString
+  commentId: M:SpiceSharp.Simulations.OutputNoiseDensityExport.ToString
+  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.ToString()
+  nameWithType: OutputNoiseDensityExport.ToString()
+- uid: SpiceSharp.Simulations.OutputNoiseDensityExport.ToString*
+  name: ToString
+  href: api/SpiceSharp.Simulations.OutputNoiseDensityExport.html#SpiceSharp_Simulations_OutputNoiseDensityExport_ToString_
+  commentId: Overload:SpiceSharp.Simulations.OutputNoiseDensityExport.ToString
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.OutputNoiseDensityExport.ToString
+  nameWithType: OutputNoiseDensityExport.ToString
 - uid: SpiceSharp.Simulations.ParameterSweep
   name: ParameterSweep
   href: api/SpiceSharp.Simulations.ParameterSweep.html
@@ -44441,22 +44266,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.RealCurrentExport.New
   nameWithType: RealCurrentExport.RealCurrentExport
   nameWithType.vb: RealCurrentExport.New
-- uid: SpiceSharp.Simulations.RealCurrentExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.RealCurrentExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.RealCurrentExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.RealCurrentExport.Initialize(Object, System.EventArgs)
-  nameWithType: RealCurrentExport.Initialize(object, EventArgs)
-  nameWithType.vb: RealCurrentExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.RealCurrentExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.RealCurrentExport.Initialize
+- uid: SpiceSharp.Simulations.RealCurrentExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.RealCurrentExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.RealCurrentExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: RealCurrentExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.RealCurrentExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.RealCurrentExport.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealCurrentExport.Initialize
-  nameWithType: RealCurrentExport.Initialize
+  fullName: SpiceSharp.Simulations.RealCurrentExport.BuildExtractor
+  nameWithType: RealCurrentExport.BuildExtractor
 - uid: SpiceSharp.Simulations.RealCurrentExport.Source
   name: Source
   href: api/SpiceSharp.Simulations.RealCurrentExport.html#SpiceSharp_Simulations_RealCurrentExport_Source
@@ -44489,15 +44311,15 @@ references:
   commentId: T:SpiceSharp.Simulations.RealPropertyExport
   fullName: SpiceSharp.Simulations.RealPropertyExport
   nameWithType: RealPropertyExport
-- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
-  name: RealPropertyExport(IEventfulSimulation, Reference, string)
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_SpiceSharp_Simulations_Base_Reference_System_String_
-  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)
-  name.vb: New(IEventfulSimulation, Reference, String)
-  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, string)
-  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New(SpiceSharp.Simulations.IEventfulSimulation, SpiceSharp.Simulations.Base.Reference, String)
-  nameWithType: RealPropertyExport.RealPropertyExport(IEventfulSimulation, Reference, string)
-  nameWithType.vb: RealPropertyExport.New(IEventfulSimulation, Reference, String)
+- uid: SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name: RealPropertyExport(ISimulation, Reference, string)
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Simulations.RealPropertyExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: New(ISimulation, Reference, String)
+  fullName: SpiceSharp.Simulations.RealPropertyExport.RealPropertyExport(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: RealPropertyExport.RealPropertyExport(ISimulation, Reference, string)
+  nameWithType.vb: RealPropertyExport.New(ISimulation, Reference, String)
 - uid: SpiceSharp.Simulations.RealPropertyExport.#ctor*
   name: RealPropertyExport
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport__ctor_
@@ -44508,6 +44330,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.RealPropertyExport.New
   nameWithType: RealPropertyExport.RealPropertyExport
   nameWithType.vb: RealPropertyExport.New
+- uid: SpiceSharp.Simulations.RealPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.RealPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.RealPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: RealPropertyExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.RealPropertyExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.BuildExtractor
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.RealPropertyExport.BuildExtractor
+  nameWithType: RealPropertyExport.BuildExtractor
 - uid: SpiceSharp.Simulations.RealPropertyExport.Entity
   name: Entity
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Entity
@@ -44521,22 +44356,6 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.RealPropertyExport.Entity
   nameWithType: RealPropertyExport.Entity
-- uid: SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.RealPropertyExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.RealPropertyExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.RealPropertyExport.Initialize(Object, System.EventArgs)
-  nameWithType: RealPropertyExport.Initialize(object, EventArgs)
-  nameWithType.vb: RealPropertyExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.RealPropertyExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.RealPropertyExport.Initialize
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealPropertyExport.Initialize
-  nameWithType: RealPropertyExport.Initialize
 - uid: SpiceSharp.Simulations.RealPropertyExport.PropertyName
   name: PropertyName
   href: api/SpiceSharp.Simulations.RealPropertyExport.html#SpiceSharp_Simulations_RealPropertyExport_PropertyName
@@ -44588,22 +44407,19 @@ references:
   fullName.vb: SpiceSharp.Simulations.RealVoltageExport.New
   nameWithType: RealVoltageExport.RealVoltageExport
   nameWithType.vb: RealVoltageExport.New
-- uid: SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object,System.EventArgs)
-  name: Initialize(object, EventArgs)
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Initialize_System_Object_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.RealVoltageExport.Initialize(System.Object,System.EventArgs)
-  name.vb: Initialize(Object, EventArgs)
-  fullName: SpiceSharp.Simulations.RealVoltageExport.Initialize(object, System.EventArgs)
-  fullName.vb: SpiceSharp.Simulations.RealVoltageExport.Initialize(Object, System.EventArgs)
-  nameWithType: RealVoltageExport.Initialize(object, EventArgs)
-  nameWithType.vb: RealVoltageExport.Initialize(Object, EventArgs)
-- uid: SpiceSharp.Simulations.RealVoltageExport.Initialize*
-  name: Initialize
-  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Initialize_
-  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.Initialize
+- uid: SpiceSharp.Simulations.RealVoltageExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  name: BuildExtractor(ISimulation)
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_
+  commentId: M:SpiceSharp.Simulations.RealVoltageExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  fullName: SpiceSharp.Simulations.RealVoltageExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)
+  nameWithType: RealVoltageExport.BuildExtractor(ISimulation)
+- uid: SpiceSharp.Simulations.RealVoltageExport.BuildExtractor*
+  name: BuildExtractor
+  href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_BuildExtractor_
+  commentId: Overload:SpiceSharp.Simulations.RealVoltageExport.BuildExtractor
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.RealVoltageExport.Initialize
-  nameWithType: RealVoltageExport.Initialize
+  fullName: SpiceSharp.Simulations.RealVoltageExport.BuildExtractor
+  nameWithType: RealVoltageExport.BuildExtractor
 - uid: SpiceSharp.Simulations.RealVoltageExport.Positive
   name: Positive
   href: api/SpiceSharp.Simulations.RealVoltageExport.html#SpiceSharp_Simulations_RealVoltageExport_Positive
@@ -44783,54 +44599,36 @@ references:
   fullName.vb: SpiceSharp.Simulations.Simulation.New
   nameWithType: Simulation.Simulation
   nameWithType.vb: Simulation.New
+- uid: SpiceSharp.Simulations.Simulation.Actions
+  name: Actions
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Actions
+  commentId: F:SpiceSharp.Simulations.Simulation.Actions
+  fullName: SpiceSharp.Simulations.Simulation.Actions
+  nameWithType: Simulation.Actions
 - uid: SpiceSharp.Simulations.Simulation.AfterExecute
   name: AfterExecute
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterExecute
-  commentId: E:SpiceSharp.Simulations.Simulation.AfterExecute
+  commentId: F:SpiceSharp.Simulations.Simulation.AfterExecute
   fullName: SpiceSharp.Simulations.Simulation.AfterExecute
   nameWithType: Simulation.AfterExecute
 - uid: SpiceSharp.Simulations.Simulation.AfterSetup
   name: AfterSetup
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterSetup
-  commentId: E:SpiceSharp.Simulations.Simulation.AfterSetup
+  commentId: F:SpiceSharp.Simulations.Simulation.AfterSetup
   fullName: SpiceSharp.Simulations.Simulation.AfterSetup
   nameWithType: Simulation.AfterSetup
-- uid: SpiceSharp.Simulations.Simulation.AfterUnsetup
-  name: AfterUnsetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterUnsetup
-  commentId: E:SpiceSharp.Simulations.Simulation.AfterUnsetup
-  fullName: SpiceSharp.Simulations.Simulation.AfterUnsetup
-  nameWithType: Simulation.AfterUnsetup
 - uid: SpiceSharp.Simulations.Simulation.AfterValidation
   name: AfterValidation
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_AfterValidation
-  commentId: E:SpiceSharp.Simulations.Simulation.AfterValidation
+  commentId: F:SpiceSharp.Simulations.Simulation.AfterValidation
   fullName: SpiceSharp.Simulations.Simulation.AfterValidation
   nameWithType: Simulation.AfterValidation
 - uid: SpiceSharp.Simulations.Simulation.BeforeExecute
   name: BeforeExecute
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeExecute
-  commentId: E:SpiceSharp.Simulations.Simulation.BeforeExecute
+  commentId: F:SpiceSharp.Simulations.Simulation.BeforeExecute
   fullName: SpiceSharp.Simulations.Simulation.BeforeExecute
   nameWithType: Simulation.BeforeExecute
-- uid: SpiceSharp.Simulations.Simulation.BeforeSetup
-  name: BeforeSetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeSetup
-  commentId: E:SpiceSharp.Simulations.Simulation.BeforeSetup
-  fullName: SpiceSharp.Simulations.Simulation.BeforeSetup
-  nameWithType: Simulation.BeforeSetup
-- uid: SpiceSharp.Simulations.Simulation.BeforeUnsetup
-  name: BeforeUnsetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeUnsetup
-  commentId: E:SpiceSharp.Simulations.Simulation.BeforeUnsetup
-  fullName: SpiceSharp.Simulations.Simulation.BeforeUnsetup
-  nameWithType: Simulation.BeforeUnsetup
-- uid: SpiceSharp.Simulations.Simulation.BeforeValidation
-  name: BeforeValidation
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_BeforeValidation
-  commentId: E:SpiceSharp.Simulations.Simulation.BeforeValidation
-  fullName: SpiceSharp.Simulations.Simulation.BeforeValidation
-  nameWithType: Simulation.BeforeValidation
 - uid: SpiceSharp.Simulations.Simulation.Behaviors
   name: Behaviors
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Behaviors
@@ -44870,6 +44668,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.CreateStates
   nameWithType: Simulation.CreateStates
+- uid: SpiceSharp.Simulations.Simulation.CurrentRun
+  name: CurrentRun
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_CurrentRun
+  commentId: P:SpiceSharp.Simulations.Simulation.CurrentRun
+  fullName: SpiceSharp.Simulations.Simulation.CurrentRun
+  nameWithType: Simulation.CurrentRun
+- uid: SpiceSharp.Simulations.Simulation.CurrentRun*
+  name: CurrentRun
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_CurrentRun_
+  commentId: Overload:SpiceSharp.Simulations.Simulation.CurrentRun
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Simulation.CurrentRun
+  nameWithType: Simulation.CurrentRun
 - uid: SpiceSharp.Simulations.Simulation.EntityBehaviors
   name: EntityBehaviors
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_EntityBehaviors
@@ -44883,12 +44694,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.EntityBehaviors
   nameWithType: Simulation.EntityBehaviors
-- uid: SpiceSharp.Simulations.Simulation.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Execute
-  commentId: M:SpiceSharp.Simulations.Simulation.Execute
-  fullName: SpiceSharp.Simulations.Simulation.Execute()
-  nameWithType: Simulation.Execute()
+- uid: SpiceSharp.Simulations.Simulation.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.Simulation.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.Simulation.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.Simulation.Execute(Integer)
+  nameWithType: Simulation.Execute(int)
+  nameWithType.vb: Simulation.Execute(Integer)
 - uid: SpiceSharp.Simulations.Simulation.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Execute_
@@ -44896,12 +44710,12 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.Execute
   nameWithType: Simulation.Execute
-- uid: SpiceSharp.Simulations.Simulation.ExportSimulationData
-  name: ExportSimulationData
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_ExportSimulationData
-  commentId: E:SpiceSharp.Simulations.Simulation.ExportSimulationData
-  fullName: SpiceSharp.Simulations.Simulation.ExportSimulationData
-  nameWithType: Simulation.ExportSimulationData
+- uid: SpiceSharp.Simulations.Simulation.Exports
+  name: Exports
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Exports
+  commentId: F:SpiceSharp.Simulations.Simulation.Exports
+  fullName: SpiceSharp.Simulations.Simulation.Exports
+  nameWithType: Simulation.Exports
 - uid: SpiceSharp.Simulations.Simulation.Finish
   name: Finish()
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Finish
@@ -44944,129 +44758,28 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.Name
   nameWithType: Simulation.Name
-- uid: SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)
-  name: OnAfterExecute(AfterExecuteEventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterExecute_SpiceSharp_Simulations_AfterExecuteEventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterExecute(SpiceSharp.Simulations.AfterExecuteEventArgs)
-  nameWithType: Simulation.OnAfterExecute(AfterExecuteEventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnAfterExecute*
-  name: OnAfterExecute
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterExecute_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnAfterExecute
+- uid: SpiceSharp.Simulations.Simulation.Repeat
+  name: Repeat
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Repeat
+  commentId: P:SpiceSharp.Simulations.Simulation.Repeat
+  fullName: SpiceSharp.Simulations.Simulation.Repeat
+  nameWithType: Simulation.Repeat
+- uid: SpiceSharp.Simulations.Simulation.Repeat*
+  name: Repeat
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Repeat_
+  commentId: Overload:SpiceSharp.Simulations.Simulation.Repeat
   isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterExecute
-  nameWithType: Simulation.OnAfterExecute
-- uid: SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)
-  name: OnAfterSetup(EventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterSetup_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterSetup(System.EventArgs)
-  nameWithType: Simulation.OnAfterSetup(EventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnAfterSetup*
-  name: OnAfterSetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterSetup_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnAfterSetup
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterSetup
-  nameWithType: Simulation.OnAfterSetup
-- uid: SpiceSharp.Simulations.Simulation.OnAfterUnsetup(System.EventArgs)
-  name: OnAfterUnsetup(EventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterUnsetup_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnAfterUnsetup(System.EventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterUnsetup(System.EventArgs)
-  nameWithType: Simulation.OnAfterUnsetup(EventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnAfterUnsetup*
-  name: OnAfterUnsetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterUnsetup_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnAfterUnsetup
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterUnsetup
-  nameWithType: Simulation.OnAfterUnsetup
-- uid: SpiceSharp.Simulations.Simulation.OnAfterValidation(System.EventArgs)
-  name: OnAfterValidation(EventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterValidation_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnAfterValidation(System.EventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterValidation(System.EventArgs)
-  nameWithType: Simulation.OnAfterValidation(EventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnAfterValidation*
-  name: OnAfterValidation
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnAfterValidation_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnAfterValidation
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnAfterValidation
-  nameWithType: Simulation.OnAfterValidation
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)
-  name: OnBeforeExecute(BeforeExecuteEventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeExecute_SpiceSharp_Simulations_BeforeExecuteEventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeExecute(SpiceSharp.Simulations.BeforeExecuteEventArgs)
-  nameWithType: Simulation.OnBeforeExecute(BeforeExecuteEventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeExecute*
-  name: OnBeforeExecute
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeExecute_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnBeforeExecute
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeExecute
-  nameWithType: Simulation.OnBeforeExecute
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeSetup(System.EventArgs)
-  name: OnBeforeSetup(EventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeSetup_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnBeforeSetup(System.EventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeSetup(System.EventArgs)
-  nameWithType: Simulation.OnBeforeSetup(EventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeSetup*
-  name: OnBeforeSetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeSetup_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnBeforeSetup
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeSetup
-  nameWithType: Simulation.OnBeforeSetup
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeUnsetup(System.EventArgs)
-  name: OnBeforeUnsetup(EventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnBeforeUnsetup(System.EventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeUnsetup(System.EventArgs)
-  nameWithType: Simulation.OnBeforeUnsetup(EventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeUnsetup*
-  name: OnBeforeUnsetup
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeUnsetup_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnBeforeUnsetup
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeUnsetup
-  nameWithType: Simulation.OnBeforeUnsetup
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeValidation(System.EventArgs)
-  name: OnBeforeValidation(EventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeValidation_System_EventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnBeforeValidation(System.EventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeValidation(System.EventArgs)
-  nameWithType: Simulation.OnBeforeValidation(EventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnBeforeValidation*
-  name: OnBeforeValidation
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnBeforeValidation_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnBeforeValidation
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnBeforeValidation
-  nameWithType: Simulation.OnBeforeValidation
-- uid: SpiceSharp.Simulations.Simulation.OnExport(SpiceSharp.Simulations.ExportDataEventArgs)
-  name: OnExport(ExportDataEventArgs)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnExport_SpiceSharp_Simulations_ExportDataEventArgs_
-  commentId: M:SpiceSharp.Simulations.Simulation.OnExport(SpiceSharp.Simulations.ExportDataEventArgs)
-  fullName: SpiceSharp.Simulations.Simulation.OnExport(SpiceSharp.Simulations.ExportDataEventArgs)
-  nameWithType: Simulation.OnExport(ExportDataEventArgs)
-- uid: SpiceSharp.Simulations.Simulation.OnExport*
-  name: OnExport
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_OnExport_
-  commentId: Overload:SpiceSharp.Simulations.Simulation.OnExport
-  isSpec: "True"
-  fullName: SpiceSharp.Simulations.Simulation.OnExport
-  nameWithType: Simulation.OnExport
-- uid: SpiceSharp.Simulations.Simulation.Rerun
-  name: Rerun()
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Rerun
-  commentId: M:SpiceSharp.Simulations.Simulation.Rerun
-  fullName: SpiceSharp.Simulations.Simulation.Rerun()
-  nameWithType: Simulation.Rerun()
+  fullName: SpiceSharp.Simulations.Simulation.Repeat
+  nameWithType: Simulation.Repeat
+- uid: SpiceSharp.Simulations.Simulation.Rerun(System.Int32)
+  name: Rerun(int)
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Rerun_System_Int32_
+  commentId: M:SpiceSharp.Simulations.Simulation.Rerun(System.Int32)
+  name.vb: Rerun(Integer)
+  fullName: SpiceSharp.Simulations.Simulation.Rerun(int)
+  fullName.vb: SpiceSharp.Simulations.Simulation.Rerun(Integer)
+  nameWithType: Simulation.Rerun(int)
+  nameWithType.vb: Simulation.Rerun(Integer)
 - uid: SpiceSharp.Simulations.Simulation.Rerun*
   name: Rerun
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Rerun_
@@ -45074,12 +44787,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.Rerun
   nameWithType: Simulation.Rerun
-- uid: SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection)
-  name: Run(IEntityCollection)
-  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_
-  commentId: M:SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection)
-  fullName: SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection)
-  nameWithType: Simulation.Run(IEntityCollection)
+- uid: SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)
+  name: Run(IEntityCollection, int)
+  href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_SpiceSharp_Entities_IEntityCollection_System_Int32_
+  commentId: M:SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection,System.Int32)
+  name.vb: Run(IEntityCollection, Integer)
+  fullName: SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection, int)
+  fullName.vb: SpiceSharp.Simulations.Simulation.Run(SpiceSharp.Entities.IEntityCollection, Integer)
+  nameWithType: Simulation.Run(IEntityCollection, int)
+  nameWithType.vb: Simulation.Run(IEntityCollection, Integer)
 - uid: SpiceSharp.Simulations.Simulation.Run*
   name: Run
   href: api/SpiceSharp.Simulations.Simulation.html#SpiceSharp_Simulations_Simulation_Run_
@@ -45206,6 +44922,238 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Simulation.Validate
   nameWithType: Simulation.Validate
+- uid: SpiceSharp.Simulations.SimulationHelper
+  name: SimulationHelper
+  href: api/SpiceSharp.Simulations.SimulationHelper.html
+  commentId: T:SpiceSharp.Simulations.SimulationHelper
+  fullName: SpiceSharp.Simulations.SimulationHelper
+  nameWithType: SimulationHelper
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  name: GetComplexCurrent(ISimulation, Reference)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: SimulationHelper.GetComplexCurrent(ISimulation, Reference)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent*
+  name: GetComplexCurrent
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexCurrent_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexCurrent
+  nameWithType: SimulationHelper.GetComplexCurrent
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name: GetComplexProperty(ISimulation, Reference, string)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetComplexProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: GetComplexProperty(ISimulation, Reference, String)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.GetComplexProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: SimulationHelper.GetComplexProperty(ISimulation, Reference, string)
+  nameWithType.vb: SimulationHelper.GetComplexProperty(ISimulation, Reference, String)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexProperty*
+  name: GetComplexProperty
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexProperty_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.GetComplexProperty
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexProperty
+  nameWithType: SimulationHelper.GetComplexProperty
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  name: GetComplexVoltage(ISimulation, Reference)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: SimulationHelper.GetComplexVoltage(ISimulation, Reference)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  name: GetComplexVoltage(ISimulation, Reference, Reference)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: SimulationHelper.GetComplexVoltage(ISimulation, Reference, Reference)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage*
+  name: GetComplexVoltage
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetComplexVoltage_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetComplexVoltage
+  nameWithType: SimulationHelper.GetComplexVoltage
+- uid: SpiceSharp.Simulations.SimulationHelper.GetCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  name: GetCurrent(ISimulation, Reference)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetCurrent(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: SimulationHelper.GetCurrent(ISimulation, Reference)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetCurrent*
+  name: GetCurrent
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetCurrent_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.GetCurrent
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetCurrent
+  nameWithType: SimulationHelper.GetCurrent
+- uid: SpiceSharp.Simulations.SimulationHelper.GetProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name: GetProperty(ISimulation, Reference, string)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)
+  name.vb: GetProperty(ISimulation, Reference, String)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, string)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.GetProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, String)
+  nameWithType: SimulationHelper.GetProperty(ISimulation, Reference, string)
+  nameWithType.vb: SimulationHelper.GetProperty(ISimulation, Reference, String)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetProperty*
+  name: GetProperty
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetProperty_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.GetProperty
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetProperty
+  nameWithType: SimulationHelper.GetProperty
+- uid: SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  name: GetVoltage(ISimulation, Reference)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: SimulationHelper.GetVoltage(ISimulation, Reference)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  name: GetVoltage(ISimulation, Reference, Reference)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference)
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference)
+  nameWithType: SimulationHelper.GetVoltage(ISimulation, Reference, Reference)
+- uid: SpiceSharp.Simulations.SimulationHelper.GetVoltage*
+  name: GetVoltage
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_GetVoltage_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.GetVoltage
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.GetVoltage
+  nameWithType: SimulationHelper.GetVoltage
+- uid: SpiceSharp.Simulations.SimulationHelper.RunToEnd(SpiceSharp.Simulations.ISimulation,SpiceSharp.Entities.IEntityCollection,System.Collections.Generic.IDictionary{System.Int32,System.Action})
+  name: RunToEnd(ISimulation, IEntityCollection, IDictionary<int, Action>)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_RunToEnd_SpiceSharp_Simulations_ISimulation_SpiceSharp_Entities_IEntityCollection_System_Collections_Generic_IDictionary_System_Int32_System_Action__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.RunToEnd(SpiceSharp.Simulations.ISimulation,SpiceSharp.Entities.IEntityCollection,System.Collections.Generic.IDictionary{System.Int32,System.Action})
+  name.vb: RunToEnd(ISimulation, IEntityCollection, IDictionary(Of Integer, Action))
+  fullName: SpiceSharp.Simulations.SimulationHelper.RunToEnd(SpiceSharp.Simulations.ISimulation, SpiceSharp.Entities.IEntityCollection, System.Collections.Generic.IDictionary<int, System.Action>)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.RunToEnd(SpiceSharp.Simulations.ISimulation, SpiceSharp.Entities.IEntityCollection, System.Collections.Generic.IDictionary(Of Integer, System.Action))
+  nameWithType: SimulationHelper.RunToEnd(ISimulation, IEntityCollection, IDictionary<int, Action>)
+  nameWithType.vb: SimulationHelper.RunToEnd(ISimulation, IEntityCollection, IDictionary(Of Integer, Action))
+- uid: SpiceSharp.Simulations.SimulationHelper.RunToEnd*
+  name: RunToEnd
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_RunToEnd_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.RunToEnd
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.RunToEnd
+  nameWithType: SimulationHelper.RunToEnd
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)
+  name: TryGetComplexCurrent(ISimulation, Reference, out Complex)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)
+  name.vb: TryGetComplexCurrent(ISimulation, Reference, Complex)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, out System.Numerics.Complex)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, System.Numerics.Complex)
+  nameWithType: SimulationHelper.TryGetComplexCurrent(ISimulation, Reference, out Complex)
+  nameWithType.vb: SimulationHelper.TryGetComplexCurrent(ISimulation, Reference, Complex)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent*
+  name: TryGetComplexCurrent
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexCurrent_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexCurrent
+  nameWithType: SimulationHelper.TryGetComplexCurrent
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String,System.Numerics.Complex@)
+  name: TryGetComplexProperty(ISimulation, Reference, string, out Complex)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String,System.Numerics.Complex@)
+  name.vb: TryGetComplexProperty(ISimulation, Reference, String, Complex)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, string, out System.Numerics.Complex)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, String, System.Numerics.Complex)
+  nameWithType: SimulationHelper.TryGetComplexProperty(ISimulation, Reference, string, out Complex)
+  nameWithType.vb: SimulationHelper.TryGetComplexProperty(ISimulation, Reference, String, Complex)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty*
+  name: TryGetComplexProperty
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexProperty_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexProperty
+  nameWithType: SimulationHelper.TryGetComplexProperty
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)
+  name: TryGetComplexVoltage(ISimulation, Reference, Reference, out Complex)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)
+  name.vb: TryGetComplexVoltage(ISimulation, Reference, Reference, Complex)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference, out System.Numerics.Complex)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference, System.Numerics.Complex)
+  nameWithType: SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, Reference, out Complex)
+  nameWithType.vb: SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, Reference, Complex)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)
+  name: TryGetComplexVoltage(ISimulation, Reference, out Complex)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Numerics_Complex__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Numerics.Complex@)
+  name.vb: TryGetComplexVoltage(ISimulation, Reference, Complex)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, out System.Numerics.Complex)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, System.Numerics.Complex)
+  nameWithType: SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, out Complex)
+  nameWithType.vb: SimulationHelper.TryGetComplexVoltage(ISimulation, Reference, Complex)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage*
+  name: TryGetComplexVoltage
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetComplexVoltage_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetComplexVoltage
+  nameWithType: SimulationHelper.TryGetComplexVoltage
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Double@)
+  name: TryGetCurrent(ISimulation, Reference, out double)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetCurrent_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetCurrent(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Double@)
+  name.vb: TryGetCurrent(ISimulation, Reference, Double)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetCurrent(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, out double)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetCurrent(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, Double)
+  nameWithType: SimulationHelper.TryGetCurrent(ISimulation, Reference, out double)
+  nameWithType.vb: SimulationHelper.TryGetCurrent(ISimulation, Reference, Double)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetCurrent*
+  name: TryGetCurrent
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetCurrent_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.TryGetCurrent
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetCurrent
+  nameWithType: SimulationHelper.TryGetCurrent
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String,System.Double@)
+  name: TryGetProperty(ISimulation, Reference, string, out double)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetProperty_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_System_Double__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetProperty(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String,System.Double@)
+  name.vb: TryGetProperty(ISimulation, Reference, String, Double)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, string, out double)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetProperty(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, String, Double)
+  nameWithType: SimulationHelper.TryGetProperty(ISimulation, Reference, string, out double)
+  nameWithType.vb: SimulationHelper.TryGetProperty(ISimulation, Reference, String, Double)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetProperty*
+  name: TryGetProperty
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetProperty_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.TryGetProperty
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetProperty
+  nameWithType: SimulationHelper.TryGetProperty
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference,System.Double@)
+  name: TryGetVoltage(ISimulation, Reference, Reference, out double)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_SpiceSharp_Simulations_Base_Reference_System_Double__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,SpiceSharp.Simulations.Base.Reference,System.Double@)
+  name.vb: TryGetVoltage(ISimulation, Reference, Reference, Double)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference, out double)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, SpiceSharp.Simulations.Base.Reference, Double)
+  nameWithType: SimulationHelper.TryGetVoltage(ISimulation, Reference, Reference, out double)
+  nameWithType.vb: SimulationHelper.TryGetVoltage(ISimulation, Reference, Reference, Double)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Double@)
+  name: TryGetVoltage(ISimulation, Reference, out double)
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_Double__
+  commentId: M:SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.Double@)
+  name.vb: TryGetVoltage(ISimulation, Reference, Double)
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, out double)
+  fullName.vb: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage(SpiceSharp.Simulations.ISimulation, SpiceSharp.Simulations.Base.Reference, Double)
+  nameWithType: SimulationHelper.TryGetVoltage(ISimulation, Reference, out double)
+  nameWithType.vb: SimulationHelper.TryGetVoltage(ISimulation, Reference, Double)
+- uid: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage*
+  name: TryGetVoltage
+  href: api/SpiceSharp.Simulations.SimulationHelper.html#SpiceSharp_Simulations_SimulationHelper_TryGetVoltage_
+  commentId: Overload:SpiceSharp.Simulations.SimulationHelper.TryGetVoltage
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.SimulationHelper.TryGetVoltage
+  nameWithType: SimulationHelper.TryGetVoltage
 - uid: SpiceSharp.Simulations.SimulationStatistics
   name: SimulationStatistics
   href: api/SpiceSharp.Simulations.SimulationStatistics.html
@@ -45856,12 +45804,15 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Transient.CreateStates
   nameWithType: Transient.CreateStates
-- uid: SpiceSharp.Simulations.Transient.Execute
-  name: Execute()
-  href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_Execute
-  commentId: M:SpiceSharp.Simulations.Transient.Execute
-  fullName: SpiceSharp.Simulations.Transient.Execute()
-  nameWithType: Transient.Execute()
+- uid: SpiceSharp.Simulations.Transient.Execute(System.Int32)
+  name: Execute(int)
+  href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_Execute_System_Int32_
+  commentId: M:SpiceSharp.Simulations.Transient.Execute(System.Int32)
+  name.vb: Execute(Integer)
+  fullName: SpiceSharp.Simulations.Transient.Execute(int)
+  fullName.vb: SpiceSharp.Simulations.Transient.Execute(Integer)
+  nameWithType: Transient.Execute(int)
+  nameWithType.vb: Transient.Execute(Integer)
 - uid: SpiceSharp.Simulations.Transient.Execute*
   name: Execute
   href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_Execute_
@@ -45869,6 +45820,18 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Transient.Execute
   nameWithType: Transient.Execute
+- uid: SpiceSharp.Simulations.Transient.ExportOperatingPoint
+  name: ExportOperatingPoint
+  href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_ExportOperatingPoint
+  commentId: F:SpiceSharp.Simulations.Transient.ExportOperatingPoint
+  fullName: SpiceSharp.Simulations.Transient.ExportOperatingPoint
+  nameWithType: Transient.ExportOperatingPoint
+- uid: SpiceSharp.Simulations.Transient.ExportTransient
+  name: ExportTransient
+  href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_ExportTransient
+  commentId: F:SpiceSharp.Simulations.Transient.ExportTransient
+  fullName: SpiceSharp.Simulations.Transient.ExportTransient
+  nameWithType: Transient.ExportTransient
 - uid: SpiceSharp.Simulations.Transient.InitializeStates
   name: InitializeStates()
   href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_InitializeStates
@@ -45924,6 +45887,19 @@ references:
   isSpec: "True"
   fullName: SpiceSharp.Simulations.Transient.Statistics
   nameWithType: Transient.Statistics
+- uid: SpiceSharp.Simulations.Transient.Time
+  name: Time
+  href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_Time
+  commentId: P:SpiceSharp.Simulations.Transient.Time
+  fullName: SpiceSharp.Simulations.Transient.Time
+  nameWithType: Transient.Time
+- uid: SpiceSharp.Simulations.Transient.Time*
+  name: Time
+  href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_Time_
+  commentId: Overload:SpiceSharp.Simulations.Transient.Time
+  isSpec: "True"
+  fullName: SpiceSharp.Simulations.Transient.Time
+  nameWithType: Transient.Time
 - uid: SpiceSharp.Simulations.Transient.TimeIterate(System.Int32)
   name: TimeIterate(int)
   href: api/SpiceSharp.Simulations.Transient.html#SpiceSharp_Simulations_Transient_TimeIterate_System_Int32_

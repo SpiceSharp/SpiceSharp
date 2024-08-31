@@ -1,5 +1,5 @@
 {
-  "source_base_path": "C:/Users/Sven/Documents/CSharp/Projects/SpiceSharp",
+  "source_base_path": "C:/Users/svenb/Documents/CSharp/Projects/SpiceSharp",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -2954,30 +2954,20 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.SamplerBehaviors.Accept.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Components.SamplerBehaviors.Accept.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.SamplerBehaviors.Parameters.yml",
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Components.SamplerBehaviors.Parameters.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Components.SamplerBehaviors.SamplerBindingContext.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Components.SamplerBehaviors.Truncating.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Components.SamplerBehaviors.Truncating.html"
         }
       },
       "version": ""
@@ -4124,16 +4114,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.AfterExecuteEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.AfterExecuteEventArgs.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.Base.Reference.yml",
       "output": {
         ".html": {
@@ -4148,16 +4128,6 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Base.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.BeforeExecuteEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.BeforeExecuteEventArgs.html"
         }
       },
       "version": ""
@@ -4304,20 +4274,10 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.Export-2.yml",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.Export-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.Export-2.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.ExportDataEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.ExportDataEventArgs.html"
+          "relative_path": "api/SpiceSharp.Simulations.Export-1.html"
         }
       },
       "version": ""
@@ -4498,16 +4458,6 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.IDerivative.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.IEventfulSimulation.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/SpiceSharp.Simulations.IEventfulSimulation.html"
         }
       },
       "version": ""
@@ -5238,6 +5188,16 @@
       "output": {
         ".html": {
           "relative_path": "api/SpiceSharp.Simulations.Simulation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "SpiceSharp/bin/api/SpiceSharp.Simulations.SimulationHelper.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/SpiceSharp.Simulations.SimulationHelper.html"
         }
       },
       "version": ""

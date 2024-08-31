@@ -95,13 +95,12 @@ namespace SpiceSimulation
 
             // Create a DC sweep and register to the event for exporting simulation data
             var dc = new DC(&quot;dc&quot;, &quot;V1&quot;, 0.0, 5.0, 0.001);
-            dc.ExportSimulationData += (sender, exportDataEventArgs) =&gt;
-            {
-                Console.WriteLine(exportDataEventArgs.GetVoltage(&quot;out&quot;));
-            };
 
             // Run the simulation
-            dc.Run(ckt);
+            foreach (int exportType in dc.Run(ckt))
+            {
+                Console.WriteLine(dc.GetVoltage(&quot;out&quot;))
+            }
         }
     }
 }

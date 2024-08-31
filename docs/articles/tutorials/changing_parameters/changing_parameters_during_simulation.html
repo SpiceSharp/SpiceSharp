@@ -70,14 +70,14 @@
             <article class="content wrap" id="_content" data-uid="">
 <h1 id="changing-parameters-during-simulation">Changing parameters during simulation</h1>
 
-<p>Spice# makes it possible to change parameters during simulations by registering to events. This allows you to customize behaviors with much more freedom.</p>
+<p>Spice# makes it possible to change parameters during simulations when the simulation is exporting data. This allows you to customize behaviors with much more freedom.</p>
 <p>In order to use this feature, it is first important to realize its limitations:</p>
 <ul>
 <li>When changing something during simulation, there is a chance that convergence becomes more difficult or even impossible. Depending on the situation, you should avoid making changes that are too drastic.</li>
 <li>You will need a good understanding of the flows of the <a href="../../structure/flow.html">structure</a> of Spice#, as well as details about the parameters that you want to change. For example:
 <ul>
-<li>It is not uncommon that parameters are used to compute derived properties in some properties. You may have to call those behaviors manually if the simulator doesn't do this automatically.</li>
-<li>You will also need to know <em>how</em> and <em>where</em> you can tap into the simulation to change parameters. Understanding the simulation flow can help with this.</li>
+<li>It is not uncommon that parameters are used to compute (multiple) derived properties in some other behaviors. You may have to call those behaviors manually if the simulation flow doesn't do this for you automatically.</li>
+<li>You will also need to know <em>how</em> and <em>where</em> you can tap into the simulation to change parameters.</li>
 </ul>
 </li>
 </ul>

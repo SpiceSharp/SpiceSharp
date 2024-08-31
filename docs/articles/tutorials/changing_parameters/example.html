@@ -84,16 +84,12 @@ var ckt = new Circuit(
 <pre><code class="lang-csharp" name="Circuit">// Create the transient analysis and exports
 var tran = new Transient(&quot;tran&quot;, 1e-6, 10e-5);
 var outputExport = new RealVoltageExport(tran, &quot;out&quot;);
-tran.ExportSimulationData += (sender, args) =&gt;
-{
-    double time = args.Time;
-    double output = outputExport.Value;
-};
+
 </code></pre>
 <p>So far so good. Nothing has really changed from before. We will now subscribe to the necessary events to modify the value of <em>R2</em>. We want it to change linearly with time from (1k\Omega) to (11k\Omega).</p>
 <h2 id="the-biasing-behavior-of-a-resistor">The biasing behavior of a resistor</h2>
 <p>The resistance of a resistor can be changed using the <strong><a class="xref" href="../../../api/SpiceSharp.Components.Resistors.Parameters.html">Parameters</a></strong> of that resistor. But we cannot change the parameters directly from the entity! In other words, the following will fail to change the resistance for the simulation.</p>
-<pre><code class="lang-csharp">ckt.Object[&quot;R1&quot;].SetParameter(newResistance);
+<pre><code class="lang-csharp">ckt[&quot;R1&quot;].SetParameter(newResistance);
 </code></pre>
 <p>This is because the entity is only in charge of creating behaviors for the simulation. After these behaviors are created, the entity has no say anymore in what happens.</p>
 <p>The reason why it won't work, is that the resistor's <strong><a class="xref" href="../../../api/SpiceSharp.Components.Resistors.Temperature.html">Temperature</a></strong> behavior will derive a conductance property that is used by the biasing behavior. So to have any effect, we:</p>
@@ -103,19 +99,17 @@ tran.ExportSimulationData += (sender, args) =&gt;
 </ol>
 <p>If you need to do something similar to other components, it is recommended to take a look at the source code to find out where the parameter is being used.</p>
 <h3 id="requesting-the-necessary-parameters-and-behaviors">Requesting the necessary parameters and behaviors</h3>
-<p>Parameters can potentially be cloned to make them independent of behaviors running in other simulations, so we prefer to ask our simulation for the parameters instead of the original entity. All behaviors will be created during setup, so we can use the <strong><a class="xref" href="../../../api/SpiceSharp.Simulations.IEventfulSimulation.html#SpiceSharp_Simulations_IEventfulSimulation_AfterSetup">AfterSetup</a></strong> event to retrieve our parameters.</p>
+<p>Parameters can potentially be cloned to make them independent of behaviors running in other simulations, so we prefer to ask our simulation for the parameters instead of the original entity. All behaviors will be created during setup, so we can use the <code>AfterSetup</code> code to retrieve our parameters.</p>
 <pre><code class="lang-csharp" name="Extract parameters and behaviors">// Now we need to make sure we have a reference to both the base parameters and temperature behavior
 // of the resistor
 SpiceSharp.Components.Resistors.Parameters bp = null;
 SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
-tran.AfterSetup += (sender, args) =&gt;
-{
-    var eb = tran.EntityBehaviors[&quot;R2&quot;];
-    eb.TryGetValue(out tb);
-    eb.TryGetParameterSet(out bp);
-};
 </code></pre><h3 id="updating-the-parameters">Updating the parameters</h3>
 <p>We need to update the resistance every time the simulation is getting ready to load the Y-matrix and RHS-vector. In other words, by registering to the <strong><a class="xref" href="../../../api/SpiceSharp.Simulations.BiasingSimulation.html#SpiceSharp_Simulations_BiasingSimulation_BeforeLoad">BeforeLoad</a></strong> event, we can be sure that the resistance is always updated with the latest value.</p>
+<blockquote>
+<p><strong>Note</strong></p>
+<p>The <code>BeforeLoad</code> and <code>AfterLoad</code> events are used instead of yielding a code to the <code>foreach</code> loop because of performance reasons. These events are called in very tight loops.</p>
+</blockquote>
 <pre><code class="lang-csharp" name="Change parameter">// Before loading the resistor, let's change its value first!
 tran.BeforeLoad += (sender, args) =&gt;
 {
@@ -131,7 +125,22 @@ tran.BeforeLoad += (sender, args) =&gt;
 };
 
 // Run the simulation
-tran.Run(ckt);
+foreach (int status in tran.Run(ckt, Simulation.AfterSetup | Simulation.Exports))
+{
+    switch (status)
+    {
+        case Simulation.AfterSetup:
+            var eb = tran.EntityBehaviors[&quot;R2&quot;];
+            eb.TryGetValue(out tb);
+            eb.TryGetParameterSet(out bp);
+            break;
+
+        default:
+            double time = tran.Time;
+            double output = outputExport.Value;
+            break;
+    }
+}
 </code></pre>
 <p>Combining all these code snippets finally results in the following simulation output.</p>
 <p align="center"><img src="images/example_lpf_resdiv_graph.svg"></p>

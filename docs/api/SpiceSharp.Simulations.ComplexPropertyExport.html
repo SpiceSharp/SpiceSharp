@@ -78,7 +78,7 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Export-2.html">Export</a>&lt;<a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a>, <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a>&gt;</div>
+    <div class="level1"><a class="xref" href="SpiceSharp.Simulations.Export-1.html">Export</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a>&gt;</div>
     <div class="level2"><span class="xref">ComplexPropertyExport</span></div>
   </div>
   <div class="implements">
@@ -88,28 +88,10 @@
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_IsValid">Export&lt;IEventfulSimulation, Complex&gt;.IsValid</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Simulation">Export&lt;Complex&gt;.Simulation</a>
     </div>
     <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Extractor">Export&lt;IEventfulSimulation, Complex&gt;.Extractor</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Simulation">Export&lt;IEventfulSimulation, Complex&gt;.Simulation</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Value">Export&lt;IEventfulSimulation, Complex&gt;.Value</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Destroy">Export&lt;IEventfulSimulation, Complex&gt;.Destroy()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_LazyLoad">Export&lt;IEventfulSimulation, Complex&gt;.LazyLoad()</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Initialize_System_Object_System_EventArgs_">Export&lt;IEventfulSimulation, Complex&gt;.Initialize(object, EventArgs)</a>
-    </div>
-    <div>
-      <a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Finalize_System_Object_System_EventArgs_">Export&lt;IEventfulSimulation, Complex&gt;.Finalize(object, EventArgs)</a>
+      <a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_Value">Export&lt;Complex&gt;.Value</a>
     </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
@@ -134,18 +116,18 @@
   <h6><strong>Assembly</strong>: SpiceSharp.dll</h6>
   <h5 id="SpiceSharp_Simulations_ComplexPropertyExport_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ComplexPropertyExport : Export&lt;IEventfulSimulation, Complex&gt;, IExport&lt;Complex&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public class ComplexPropertyExport : Export&lt;Complex&gt;, IExport&lt;Complex&gt;</code></pre>
   </div>
   <h3 id="constructors">Constructors
 </h3>
   <a id="SpiceSharp_Simulations_ComplexPropertyExport__ctor_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.#ctor*"></a>
-  <h4 id="SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_IEventfulSimulation_SpiceSharp_Simulations_Base_Reference_System_String_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.IEventfulSimulation,SpiceSharp.Simulations.Base.Reference,System.String)">ComplexPropertyExport(IEventfulSimulation, Reference, string)</h4>
+  <h4 id="SpiceSharp_Simulations_ComplexPropertyExport__ctor_SpiceSharp_Simulations_ISimulation_SpiceSharp_Simulations_Base_Reference_System_String_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.#ctor(SpiceSharp.Simulations.ISimulation,SpiceSharp.Simulations.Base.Reference,System.String)">ComplexPropertyExport(ISimulation, Reference, string)</h4>
   <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="SpiceSharp.Simulations.ComplexPropertyExport.html">ComplexPropertyExport</a> class.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ComplexPropertyExport(IEventfulSimulation simulation, Reference entity, string propertyName)</code></pre>
+    <pre><code class="lang-csharp hljs">public ComplexPropertyExport(ISimulation simulation, Reference entity, string propertyName)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -158,7 +140,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></td>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
         <td><span class="parametername">simulation</span></td>
         <td><p>The simulation.</p>
 </td>
@@ -250,14 +232,14 @@
   </table>
   <h3 id="methods">Methods
 </h3>
-  <a id="SpiceSharp_Simulations_ComplexPropertyExport_Initialize_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.Initialize*"></a>
-  <h4 id="SpiceSharp_Simulations_ComplexPropertyExport_Initialize_System_Object_System_EventArgs_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.Initialize(System.Object,System.EventArgs)">Initialize(object, EventArgs)</h4>
-  <div class="markdown level1 summary"><p>Initializes the export.</p>
+  <a id="SpiceSharp_Simulations_ComplexPropertyExport_BuildExtractor_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor*"></a>
+  <h4 id="SpiceSharp_Simulations_ComplexPropertyExport_BuildExtractor_SpiceSharp_Simulations_ISimulation_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.BuildExtractor(SpiceSharp.Simulations.ISimulation)">BuildExtractor(ISimulation)</h4>
+  <div class="markdown level1 summary"><p>Builds the extractor for the given simulation.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void Initialize(object sender, EventArgs e)</code></pre>
+    <pre><code class="lang-csharp hljs">protected override Func&lt;Complex&gt; BuildExtractor(ISimulation simulation)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -270,21 +252,31 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></td>
-        <td><span class="parametername">sender</span></td>
-        <td><p>The object (simulation) sending the event.</p>
+        <td><a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a></td>
+        <td><span class="parametername">simulation</span></td>
+        <td><p>The simulation.</p>
 </td>
       </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a></td>
-        <td><span class="parametername">e</span></td>
-        <td><p>The <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventargs">EventArgs</a> instance containing the event data.</p>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.func-1">Func</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.numerics.complex">Complex</a>&gt;</td>
+        <td><p>The extractor.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="SpiceSharp.Simulations.Export-2.html#SpiceSharp_Simulations_Export_2_Initialize_System_Object_System_EventArgs_">Export&lt;IEventfulSimulation, Complex&gt;.Initialize(object, EventArgs)</a></div>
+  <div><a class="xref" href="SpiceSharp.Simulations.Export-1.html#SpiceSharp_Simulations_Export_1_BuildExtractor_SpiceSharp_Simulations_ISimulation_">Export&lt;Complex&gt;.BuildExtractor(ISimulation)</a></div>
   <a id="SpiceSharp_Simulations_ComplexPropertyExport_ToString_" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.ToString*"></a>
   <h4 id="SpiceSharp_Simulations_ComplexPropertyExport_ToString" data-uid="SpiceSharp.Simulations.ComplexPropertyExport.ToString">ToString()</h4>
   <div class="markdown level1 summary"><p>Converts the export to a string.</p>
@@ -322,7 +314,7 @@
   </div>
   <h3 id="seealso">See Also</h3>
   <div class="seealso">
-      <div><a class="xref" href="SpiceSharp.Simulations.Export-2.html">Export</a>&lt;S, T&gt;</div>
+      <div><a class="xref" href="SpiceSharp.Simulations.Export-1.html">Export</a>&lt;T&gt;</div>
   </div>
 
 </article>
