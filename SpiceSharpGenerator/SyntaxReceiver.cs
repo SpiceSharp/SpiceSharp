@@ -32,7 +32,7 @@ namespace SpiceSharpGenerator
                 return StringComparer.Ordinal.GetHashCode(obj);
             }
         }
-        private Dictionary<string, Action<AttributeSyntax>> _categories = new(new AttributeComparer());
+        private readonly Dictionary<string, Action<AttributeSyntax>> _categories = new(new AttributeComparer());
 
         /// <summary>
         /// Gets the list of eligible entities that may need to be extended using code generation.

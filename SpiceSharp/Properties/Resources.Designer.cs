@@ -529,6 +529,15 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot run multiple instances of the same simulation..
+        /// </summary>
+        public static string Simulations_CannotRunMultiple {
+            get {
+                return ResourceManager.GetString("Simulations.CannotRunMultiple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not set convergence aid: variable &apos;{0}&apos; could not be found..
         /// </summary>
         public static string Simulations_ConvergenceAidVariableNotFound {
@@ -538,11 +547,29 @@ namespace SpiceSharp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find a branch current for the entity &apos;{0}&apos;..
+        /// </summary>
+        public static string Simulations_CurrentNotFound {
+            get {
+                return ResourceManager.GetString("Simulations.CurrentNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The sweep &apos;{0}&apos; does not contain any points to simulate..
         /// </summary>
         public static string Simulations_DC_NoSweepPoints {
             get {
                 return ResourceManager.GetString("Simulations.DC.NoSweepPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the voltage V({0}, {1})..
+        /// </summary>
+        public static string Simulations_DifferentialVoltageNotFound {
+            get {
+                return ResourceManager.GetString("Simulations.DifferentialVoltageNotFound", resourceCulture);
             }
         }
         
@@ -570,6 +597,15 @@ namespace SpiceSharp.Properties {
         public static string Simulations_NoEntities {
             get {
                 return ResourceManager.GetString("Simulations.NoEntities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find a property with name &apos;{1}&apos; on an entity with name &apos;{0}&apos;..
+        /// </summary>
+        public static string Simulations_PropertyNotfound {
+            get {
+                return ResourceManager.GetString("Simulations.PropertyNotfound", resourceCulture);
             }
         }
         
@@ -615,6 +651,15 @@ namespace SpiceSharp.Properties {
         public static string Simulations_ValidationFailed {
             get {
                 return ResourceManager.GetString("Simulations.ValidationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the voltage V({0})..
+        /// </summary>
+        public static string Simulations_VoltageNotFound {
+            get {
+                return ResourceManager.GetString("Simulations.VoltageNotFound", resourceCulture);
             }
         }
         

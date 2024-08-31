@@ -1,7 +1,9 @@
 ﻿using SpiceSharp.Attributes;
 using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
+using System;
 using System.Collections.Generic;
 
 namespace SpiceSharp.Components.SamplerBehaviors
@@ -17,10 +19,11 @@ namespace SpiceSharp.Components.SamplerBehaviors
     /// <seealso cref="ITimeBehavior"/>
     /// <seealso cref="ITruncatingBehavior"/>
     /// <seealso cref="IParameterized{P}"/>
-    [BehaviorFor(typeof(Sampler)), AddBehaviorIfNo(typeof(ITruncatingBehavior))]
-    public class Truncating : Behavior,
+    [BehaviorFor(typeof(Sampler)), AddBehaviorIfNo(typeof(IAcceptBehavior))]
+    public class Accept : Behavior,
         ITimeBehavior,
         ITruncatingBehavior,
+        IAcceptBehavior,
         IParameterized<Parameters>
     {
         private readonly IIntegrationMethod _method;
@@ -31,19 +34,16 @@ namespace SpiceSharp.Components.SamplerBehaviors
         public Parameters Parameters { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Truncating"/> class.
+        /// Initializes a new instance of the <see cref="Accept"/> class.
         /// </summary>
         /// <param name="context">The sampler binding context.</param>
-        public Truncating(SamplerBindingContext context)
+        public Accept(IBindingContext context)
             : base(context)
         {
             Parameters = context.GetParameterSet<Parameters>();
             _method = context.GetState<IIntegrationMethod>();
             _points = Parameters.Points.GetEnumerator();
             _continue = _points.MoveNext();
-
-            // Register to the export event
-            context.RegisterToExportEvent(OnExportSimulationData);
 
             // Find the first timepoint that is eligible for targeting
             while (_continue && _points.Current < -Parameters.MinDelta)
@@ -55,12 +55,9 @@ namespace SpiceSharp.Components.SamplerBehaviors
         {
         }
 
-        /// <summary>
-        /// The method that is called whenever the simulation is ready to export data.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The arguments.</param>
-        private void OnExportSimulationData(object sender, ExportDataEventArgs args)
+
+        /// <inheritdoc />
+        void IAcceptBehavior.Accept()
         {
             // Nothing left...
             if (!_continue)
@@ -70,7 +67,7 @@ namespace SpiceSharp.Components.SamplerBehaviors
             if (_method.Time > _points.Current - Parameters.MinDelta)
             {
                 // Pass it through
-                Parameters.Export(sender, args);
+                Parameters.Export(this, EventArgs.Empty);
 
                 // Find the next point that is eligible for targetting
                 while (_continue && _points.Current < _method.Time + Parameters.MinDelta)
@@ -89,5 +86,10 @@ namespace SpiceSharp.Components.SamplerBehaviors
         /// Here is where we have a soft-limit to our next timepoint.
         /// </remarks>
         double ITruncatingBehavior.Prepare() => _continue ? _points.Current - _method.Time : double.PositiveInfinity;
+
+        /// <inheritdoc />
+        void IAcceptBehavior.Probe()
+        {
+        }
     }
 }

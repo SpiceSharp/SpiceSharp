@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export real properties.
     /// </summary>
-    /// <seealso cref="Export{S, T}" />
-    public class RealPropertyExport : Export<IEventfulSimulation, double>
+    /// <seealso cref="Export{T}" />
+    public class RealPropertyExport : Export<double>
     {
         /// <summary>
         /// Gets the path to the entity.
@@ -25,7 +25,7 @@ namespace SpiceSharp.Simulations
         /// <param name="simulation">The simulation.</param>
         /// <param name="entity">The path to the entity (can be a string or string array).</param>
         /// <param name="propertyName">The name of the property.</param>
-        public RealPropertyExport(IEventfulSimulation simulation, Reference entity, string propertyName)
+        public RealPropertyExport(ISimulation simulation, Reference entity, string propertyName)
             : base(simulation)
         {
             if (entity.Length == 0)
@@ -35,10 +35,12 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc />
-        protected override void Initialize(object sender, EventArgs e)
+        protected override Func<double> BuildExtractor(ISimulation simulation)
         {
-            var behaviors = Entity.GetContainer(Simulation);
-            Extractor = behaviors.CreatePropertyGetter<double>(PropertyName);
+            if (simulation is not null &&
+                Entity.TryGetContainer(simulation, out var container))
+                return container.CreatePropertyGetter<double>(PropertyName);
+            return null;
         }
 
         /// <summary>

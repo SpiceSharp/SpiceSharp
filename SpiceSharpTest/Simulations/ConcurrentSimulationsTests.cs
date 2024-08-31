@@ -35,14 +35,6 @@ namespace SpiceSharpTest.Simulations
                     container.GetValue<ITemperatureBehavior>().Temperature();
                 })); // Sweep R2 from 0 to 10k per 1k
                 dc.DCParameters.Sweeps.Add(new ParameterSweep("V1", new LinearSweep(1, 5, 0.1))); // Sweep V1 from 1V to 5V per 100mV
-                dc.ExportSimulationData += (sender, args) =>
-                {
-                    double resistance = Math.Max(dc.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
-                    double voltage = dc.GetCurrentSweepValue()[1];
-                    double expected = voltage * resistance / (resistance + 1.0e4);
-                    Assert.AreEqual(expected, args.GetVoltage("out"), 1e-12);
-                };
-
                 dcSimulations.Add(dc);
             }
             int maxConcurrentSimulations = 2;
@@ -50,7 +42,15 @@ namespace SpiceSharpTest.Simulations
             System.Threading.Tasks.Parallel.ForEach(
                 dcSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
-                (simulation) => simulation.Run(ckt));
+                (simulation) => {
+                    foreach (int _ in simulation.Run(ckt))
+                    {
+                        double resistance = Math.Max(simulation.GetCurrentSweepValue()[0], SpiceSharp.Components.Resistors.Parameters.MinimumResistance);
+                        double voltage = simulation.GetCurrentSweepValue()[1];
+                        double expected = voltage * resistance / (resistance + 1.0e4);
+                        Assert.That(simulation.GetVoltage("out"), Is.EqualTo(expected).Within(1e-12));
+                    }
+                    });
         }
 
         [Test]
@@ -69,11 +69,6 @@ namespace SpiceSharpTest.Simulations
             {
                 // Create the transient analysis
                 var tran = new Transient("Tran 1", 1e-6, 10.0);
-                tran.ExportSimulationData += (sender, args) =>
-                {
-                    Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
-                };
-
                 transientSimulations.Add(tran);
             }
 
@@ -81,7 +76,10 @@ namespace SpiceSharpTest.Simulations
             System.Threading.Tasks.Parallel.ForEach(
                 transientSimulations,
                 new ParallelOptions() { MaxDegreeOfParallelism = maxConcurrentSimulations },
-                (simulation) => simulation.Run(ckt));
+                (simulation) => {
+                foreach (int _ in simulation.Run(ckt))
+                    Assert.That(simulation.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
+                    });
         }
     }
 }

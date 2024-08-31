@@ -11,6 +11,21 @@ namespace SpiceSharp.Simulations
     public class AC : FrequencySimulation
     {
         /// <summary>
+        /// The constant returned when exporting the operating point.
+        /// </summary>
+        public const int ExportOperatingPoint = 0x01;
+
+        /// <summary>
+        /// The constant returned when exporting the small signal point.
+        /// </summary>
+        public const int ExportSmallSignal = 0x02;
+
+        /// <summary>
+        /// Gets the current frequency point.
+        /// </summary>
+        public double Frequency => GetState<IComplexSimulationState>().Laplace.Imaginary / (2 * Math.PI);
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AC"/> class.
         /// </summary>
         /// <param name="name">The name of the simulation.</param>
@@ -32,10 +47,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override void Execute()
+        protected override IEnumerable<int> Execute(int mask = Exports)
         {
             // Execute base behavior
-            base.Execute();
+            foreach (int exportType in base.Execute())
+                yield return exportType;
 
             var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();
 
@@ -50,9 +66,8 @@ namespace SpiceSharp.Simulations
                 InitializeAcParameters();
 
                 // Export operating point if requested
-                var exportargs = new ExportDataEventArgs(this);
-                if (FrequencyParameters.KeepOpInfo)
-                    OnExport(exportargs);
+                if ((mask & ExportOperatingPoint) != 0)
+                    yield return ExportOperatingPoint;
 
                 // Sweep the frequency
                 foreach (double freq in FrequencyParameters.Frequencies)
@@ -64,7 +79,8 @@ namespace SpiceSharp.Simulations
                     AcIterate();
 
                     // Export the timepoint
-                    OnExport(exportargs);
+                    if ((mask & ExportSmallSignal) != 0)
+                        yield return ExportSmallSignal;
                 }
             }
             finally

@@ -90,12 +90,11 @@ var ac = new AC(&quot;AC 1&quot;, new DecadeSweep(1e-2, 1.0e3, 5));
 var exportVoltage = new ComplexVoltageExport(ac, &quot;out&quot;);
 
 // Simulate
-ac.ExportSimulationData += (sender, args) =&gt;
+foreach (int _ in ac.Run(ckt, AC.ExportSmallSignal))
 {
     var output = exportVoltage.Value;
     double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
-};
-ac.Run(ckt);
+}
 </code></pre>
 <p>The independent voltage source <code>V1</code> will be the one applying the small sinusoidal perturbation, and it will give that perturbation a weight/amplitude of 1. The amplitude and phase of the excitation can be set by using the <em>acmag</em> and <em>acphase</em> parameters of the <strong><a class="xref" href="../../api/SpiceSharp.Components.VoltageSource.html">VoltageSource</a></strong> instance. Current sources can also be set to perturb the system using the same kind of parameters.</p>
 <p>The frequency points that are simulated in our example range from 10mHz to 1kHz, simulating 5 points per decade, logarithmically spaced.</p>

@@ -58,9 +58,9 @@ namespace SpiceSharpTest.Models
             var ckt = new Circuit(
                 new VoltageControlledVoltageSource("E1", "out", "0", "in", "0", 1.0));
             var op = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
-            Assert.AreEqual(1, ex.Rules.ViolationCount);
-            Assert.IsInstanceOf<FloatingNodeRuleViolation>(ex.Rules.Violations.First());
+            var ex = Assert.Throws<ValidationFailedException>(() => op.RunToEnd(ckt));
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
+            Assert.That(ex.Rules.Violations.First(), Is.InstanceOf<FloatingNodeRuleViolation>());
         }
 
         [Test]
@@ -71,10 +71,10 @@ namespace SpiceSharpTest.Models
                 new VoltageControlledVoltageSource("E1", "out", "0", "in", "0", 1.0),
                 new VoltageControlledVoltageSource("E2", "0", "out", "in", "0", 2.0));
             var op = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
-            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var ex = Assert.Throws<ValidationFailedException>(() => op.RunToEnd(ckt));
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
-            Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+            Assert.That(violation, Is.InstanceOf<VoltageLoopRuleViolation>());
         }
 
         [Test]
@@ -86,10 +86,10 @@ namespace SpiceSharpTest.Models
                 new VoltageControlledVoltageSource("E2", "out2", "out", "in", "0", 2.0),
                 new VoltageControlledVoltageSource("E3", "out2", "0", "in", "0", 3.0));
             var op = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => op.Run(ckt));
-            Assert.AreEqual(1, ex.Rules.ViolationCount);
+            var ex = Assert.Throws<ValidationFailedException>(() => op.RunToEnd(ckt));
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(1));
             var violation = ex.Rules.Violations.First();
-            Assert.IsInstanceOf<VoltageLoopRuleViolation>(violation);
+            Assert.That(violation, Is.InstanceOf<VoltageLoopRuleViolation>());
         }
 
         /*

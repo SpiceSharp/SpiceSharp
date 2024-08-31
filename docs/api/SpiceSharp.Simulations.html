@@ -79,12 +79,6 @@ Classes
       <h4><a class="xref" href="SpiceSharp.Simulations.AC.html">AC</a></h4>
       <section><p>Class that implements a frequency-domain analysis (AC analysis).</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.AfterExecuteEventArgs.html">AfterExecuteEventArgs</a></h4>
-      <section><p>Event arguments that are used after simulation execution.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.BeforeExecuteEventArgs.html">BeforeExecuteEventArgs</a></h4>
-      <section><p>Event arguments that are used before simulation execution.</p>
-</section>
       <h4><a class="xref" href="SpiceSharp.Simulations.BiasingParameters.html">BiasingParameters</a></h4>
       <section><p>A configuration for a <a class="xref" href="SpiceSharp.Simulations.BiasingSimulation.html">BiasingSimulation</a>.</p>
 </section>
@@ -115,11 +109,7 @@ Classes
       <h4><a class="xref" href="SpiceSharp.Simulations.DecadeSweep.html">DecadeSweep</a></h4>
       <section><p>This class implements a sweep with a number of points per decade.</p>
 </section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.ExportDataEventArgs.html">ExportDataEventArgs</a></h4>
-      <section><p>A class that describes exported simulation data. Can be used by simulations to pass exported simulation data as an event argument.
-This class contains some helper methods for extracting data from the simulation.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.Export-2.html">Export&lt;S, T&gt;</a></h4>
+      <h4><a class="xref" href="SpiceSharp.Simulations.Export-1.html">Export&lt;T&gt;</a></h4>
       <section><p>A template for exporting data for a simulation.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.FrequencyParameters.html">FrequencyParameters</a></h4>
@@ -135,7 +125,7 @@ This class contains some helper methods for extracting data from the simulation.
       <section><p>This class allows any function to be specified.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.InputNoiseDensityExport.html">InputNoiseDensityExport</a></h4>
-      <section><p>This class can export the input-referred noise density.</p>
+      <section><p>This class can export the total input-referred noise density.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.LinearSweep.html">LinearSweep</a></h4>
       <section><p>A class that implements a linear sweep.</p>
@@ -165,7 +155,7 @@ This class contains some helper methods for extracting data from the simulation.
       <section><p>This class implements a sweep with a number of points per decade.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.OutputNoiseDensityExport.html">OutputNoiseDensityExport</a></h4>
-      <section><p>This class can export the output noise density.</p>
+      <section><p>This class can export the output-referred noise density.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.ParameterSweep.html">ParameterSweep</a></h4>
       <section><p>A sweep of a property of an entity.</p>
@@ -185,6 +175,9 @@ derived from SI units.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a></h4>
       <section><p>A template for any simulation.</p>
+</section>
+      <h4><a class="xref" href="SpiceSharp.Simulations.SimulationHelper.html">SimulationHelper</a></h4>
+      <section><p>Helper methods for extracting data from an <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a>.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.SimulationStatistics.html">SimulationStatistics</a></h4>
       <section><p>Statistics for a <a class="xref" href="SpiceSharp.Simulations.Simulation.html">Simulation</a>.</p>
@@ -246,9 +239,6 @@ Interfaces
       <h4><a class="xref" href="SpiceSharp.Simulations.IDerivative.html">IDerivative</a></h4>
       <section><p>Describes a state with a value that can also calculate the
 derivative with respect to time.</p>
-</section>
-      <h4><a class="xref" href="SpiceSharp.Simulations.IEventfulSimulation.html">IEventfulSimulation</a></h4>
-      <section><p>An <a class="xref" href="SpiceSharp.Simulations.ISimulation.html">ISimulation</a> that raises events.</p>
 </section>
       <h4><a class="xref" href="SpiceSharp.Simulations.IExport-1.html">IExport&lt;T&gt;</a></h4>
       <section><p>An interface that describes an exporter for simulation data.</p>

@@ -24,23 +24,13 @@ namespace SpiceSharpTest.Examples
             // Create the transient analysis and exports
             var tran = new Transient("tran", 1e-6, 10e-5);
             var outputExport = new RealVoltageExport(tran, "out");
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                double time = args.Time;
-                double output = outputExport.Value;
-            };
+
             // </example_change_parameter_transient>
             // <example_change_parameter_setup>
             // Now we need to make sure we have a reference to both the base parameters and temperature behavior
             // of the resistor
             SpiceSharp.Components.Resistors.Parameters bp = null;
             SpiceSharp.Behaviors.ITemperatureBehavior tb = null;
-            tran.AfterSetup += (sender, args) =>
-            {
-                var eb = tran.EntityBehaviors["R2"];
-                eb.TryGetValue(out tb);
-                eb.TryGetParameterSet(out bp);
-            };
             // </example_change_parameter_setup>
             // <example_change_parameter_load>
             // Before loading the resistor, let's change its value first!
@@ -58,7 +48,22 @@ namespace SpiceSharpTest.Examples
             };
 
             // Run the simulation
-            tran.Run(ckt);
+            foreach (int status in tran.Run(ckt, Simulation.AfterSetup | Simulation.Exports))
+            {
+                switch (status)
+                {
+                    case Simulation.AfterSetup:
+                        var eb = tran.EntityBehaviors["R2"];
+                        eb.TryGetValue(out tb);
+                        eb.TryGetParameterSet(out bp);
+                        break;
+
+                    default:
+                        double time = tran.Time;
+                        double output = outputExport.Value;
+                        break;
+                }
+            }
             // </example_change_parameter_load>
         }
     }

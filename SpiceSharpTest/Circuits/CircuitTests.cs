@@ -23,8 +23,8 @@ namespace SpiceSharpTest.Circuits
             ckt.Merge(subckt);
 
             // Test
-            Assert.AreEqual(ckt["Ra"], subckt["Ra"]);
-            Assert.AreEqual(ckt["Rb"], subckt["Rb"]);
+            Assert.That(subckt["Ra"], Is.EqualTo(ckt["Ra"]));
+            Assert.That(subckt["Rb"], Is.EqualTo(ckt["Rb"]));
         }
     }
 }

@@ -6,51 +6,24 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// A template for exporting data for a simulation.
     /// </summary>
-    /// <typeparam name="S">The simulation for which the export works.</typeparam>
     /// <typeparam name="T">The base value type.</typeparam>
-    public abstract class Export<S, T> : IExport<T> where S : IEventfulSimulation
+    public abstract class Export<T> : IExport<T>
     {
-        /// <summary>
-        /// Returns true if the exporter is currently valid.
-        /// </summary>
-        public bool IsValid
-        {
-            get
-            {
-                if (Extractor == null)
-                    LazyLoad();
-                return Extractor != null;
-            }
-        }
+        private int _currentRun;
+        private Func<T> _extractor;
+        private ISimulation _simulation;
 
-        /// <summary>
-        /// Gets or sets the extractor function.
-        /// </summary>
-        protected Func<T> Extractor { get; set; }
-
-        /// <summary>
-        /// Gets the simulation from which the data needs to be extracted.
-        /// </summary>
-        public S Simulation
+        /// <inheritdoc />
+        public ISimulation Simulation
         {
             get => _simulation;
             set
             {
-                if (_simulation != null)
-                {
-                    _simulation.AfterSetup -= Initialize;
-                    _simulation.BeforeUnsetup -= Initialize;
-                    Extractor = null;
-                }
                 _simulation = value;
-                if (_simulation != null)
-                {
-                    _simulation.AfterSetup += Initialize;
-                    _simulation.BeforeUnsetup += Finalize;
-                }
+                _extractor = null;
+                _currentRun = -1;
             }
         }
-        private S _simulation;
 
         /// <summary>
         /// Gets the current value from the simulation.
@@ -62,63 +35,41 @@ namespace SpiceSharp.Simulations
         {
             get
             {
-                if (Extractor == null)
+                if (_simulation.CurrentRun < 0)
                 {
-                    // Try initializing (lazy loading)
-                    LazyLoad();
-                    if (Extractor == null)
-                        return default;
+                    _extractor = null;
+                    return default(T); // The simulation hasn't started
                 }
 
-                return Extractor();
+                if (_simulation.CurrentRun != _currentRun)
+                {
+                    _extractor = BuildExtractor(Simulation);
+                    _currentRun = _simulation.CurrentRun;
+                }
+
+                // The simulation has started, and we have already 
+                if (_extractor is null)
+                    return default(T);
+                return _extractor();
             }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Export{S, T}"/> class.
+        /// Creates a new <see cref="Export{T}"/>.
         /// </summary>
         /// <param name="simulation">The simulation.</param>
-        protected Export(S simulation)
+        protected Export(ISimulation simulation)
         {
-            Simulation = simulation;
+            _simulation = simulation;
+            _extractor = null;
+            _currentRun = -1;
         }
 
         /// <summary>
-        /// Destroys the export.
+        /// Builds the extractor for the given simulation.
         /// </summary>
-        public virtual void Destroy()
-        {
-            Simulation = default;
-        }
-
-        /// <summary>
-        /// Load the export extractor if the simulation has already started.
-        /// </summary>
-        protected void LazyLoad()
-        {
-            if (EqualityComparer<S>.Default.Equals(_simulation, default))
-                return;
-
-            // If we're already too far, emulate a call from the simulation
-            if (Simulation.Status == SimulationStatus.Setup || Simulation.Status == SimulationStatus.Running)
-                Initialize(Simulation, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Initializes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected abstract void Initialize(object sender, EventArgs e);
-
-        /// <summary>
-        /// Finalizes the export.
-        /// </summary>
-        /// <param name="sender">The object (simulation) sending the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected virtual void Finalize(object sender, EventArgs e)
-        {
-            Extractor = null;
-        }
+        /// <param name="simulation">The simulation.</param>
+        /// <returns>The extractor.</returns>
+        protected abstract Func<T> BuildExtractor(ISimulation simulation);
     }
 }

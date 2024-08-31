@@ -381,13 +381,11 @@ namespace SpiceSharpTest.Models
             // Create the simulation
             var op = new OP("op");
             var export = new RealPropertyExport(op, "my-nmos", "is");
-            op.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in op.Run(ckt))
             {
                 double current = export.Value;
-            };
-
-            op.Run(ckt);
-            export.Destroy();
+            }
         }
 
         [Test]
@@ -418,14 +416,11 @@ namespace SpiceSharpTest.Models
 
             // Calculate the operating point
             var op = new OP("op");
-            op.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in op.Run(ckt))
             {
                 var v = op.GetState<IBiasingSimulationState>().Solution;
-            };
-
-            // Disable source stepping and see if it converges
-            // op.BiasingParameters.SourceSteps = 0;
-            op.Run(ckt);
+            }
         }
 
         [Test]
@@ -483,12 +478,12 @@ namespace SpiceSharpTest.Models
             tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var v_ref = new RealVoltageExport(tran, "outr");
             var v_act = new RealVoltageExport(tran, "outa");
-            tran.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
                 double tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
-                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
-            };
-            tran.Run(ckt);
+                Assert.That(v_act.Value, Is.EqualTo(v_ref.Value).Within(tol));
+            }
         }
 
         [Test]

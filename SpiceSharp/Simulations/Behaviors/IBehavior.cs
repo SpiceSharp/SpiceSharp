@@ -1,5 +1,4 @@
 ﻿using SpiceSharp.ParameterSets;
-using System;
 
 namespace SpiceSharp.Behaviors
 {

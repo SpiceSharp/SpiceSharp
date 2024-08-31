@@ -6,8 +6,8 @@ namespace SpiceSharp.Simulations
     /// <summary>
     /// This class can export real voltages.
     /// </summary>
-    /// <seealso cref="Export{S, T}" />
-    public class RealVoltageExport : Export<IBiasingSimulation, double>
+    /// <seealso cref="Export{T}" />
+    public class RealVoltageExport : Export<double>
     {
         /// <summary>
         /// Gets the positive node.
@@ -37,25 +37,29 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc />
-        protected override void Initialize(object sender, EventArgs e)
+        protected override Func<double> BuildExtractor(ISimulation simulation)
         {
+            if (simulation is null)
+                return null;
+
             // Find the positive node variable
             if (Positive.Length > 0 && Reference.Length > 0)
             {
-                var posVariable = Positive.GetVariable<double, IBiasingSimulationState>(Simulation);
-                var refVariable = Reference.GetVariable<double, IBiasingSimulationState>(Simulation);
-                Extractor = () => posVariable.Value - refVariable.Value;
+                if (Positive.TryGetVariable<double, IBiasingSimulationState>(simulation, out var posVariable) &&
+                    Reference.TryGetVariable<double, IBiasingSimulationState>(simulation, out var negVariable))
+                    return () => posVariable.Value - negVariable.Value;
             }
             else if (Positive.Length > 0)
             {
-                var posVariable = Positive.GetVariable<double, IBiasingSimulationState>(Simulation);
-                Extractor = () => posVariable.Value;
+                if (Positive.TryGetVariable<double, IBiasingSimulationState>(simulation, out var posVariable))
+                    return () => posVariable.Value;
             }
             else
             {
-                var refVariable = Reference.GetVariable<double, IBiasingSimulationState>(Simulation);
-                Extractor = () => -refVariable.Value;
+                if (Reference.TryGetVariable<double, IBiasingSimulationState>(simulation, out var negVariable))
+                    return () => negVariable.Value;
             }
+            return null;
         }
 
         /// <summary>

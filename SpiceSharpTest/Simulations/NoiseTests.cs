@@ -25,20 +25,13 @@ namespace SpiceSharpTest.Simulations
 
             // Run the simulation a first time for building the reference values
             var r = new List<double>();
-            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(export.Value);
-            noise.ExportSimulationData += BuildReference;
-            noise.Run(ckt);
-            noise.ExportSimulationData -= BuildReference;
+            foreach (int _ in noise.Run(ckt, Noise.ExportNoise))
+                r.Add(export.Value);
 
             // Rerun the simulation for building the reference values
             int index = 0;
-            void CheckReference(object sender, ExportDataEventArgs args)
-            {
-                Assert.AreEqual(r[index++], export.Value, 1e-20);
-            }
-            noise.ExportSimulationData += CheckReference;
-            noise.Rerun();
-            noise.ExportSimulationData -= CheckReference;
+            foreach (int _ in noise.Rerun(Noise.ExportNoise))
+                Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
         }
     }
 }

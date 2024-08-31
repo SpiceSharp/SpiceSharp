@@ -88,12 +88,11 @@ var inputExport = new RealVoltageExport(tran, &quot;in&quot;);
 var outputExport = new RealVoltageExport(tran, &quot;out&quot;);
 
 // Simulate
-tran.ExportSimulationData += (sender, args) =&gt;
+foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
 {
     double input = inputExport.Value;
     double output = outputExport.Value;
-};
-tran.Run(ckt);
+}
 </code></pre>
 <p>The voltage source now is passed a <strong><a class="xref" href="../../api/SpiceSharp.Components.Pulse.html">Pulse</a></strong> object that will calculate the voltage in time for us.</p>
 <p>The <strong><a class="xref" href="../../api/SpiceSharp.Simulations.Transient.html">Transient</a></strong> simulation expects a <em>timestep</em> that will be used to calculate the initial timestep for the simulation, and a <em>final time</em> that tells the analysis the last time point to simulate.</p>

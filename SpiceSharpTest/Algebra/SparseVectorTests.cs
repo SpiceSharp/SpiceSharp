@@ -37,9 +37,9 @@ namespace SpiceSharpTest.Algebra
                         realk = 2;
 
                     if ((fill & 0x01) != 0)
-                        Assert.AreEqual(k, vector[realk], 1e-12);
+                        Assert.That(vector[realk], Is.EqualTo(k).Within(1e-12));
                     else
-                        Assert.AreEqual(vector.FindElement(realk), null);
+                        Assert.That(vector.FindElement(realk), Is.Null);
                     fill = (fill >> 1) & 0b011111;
                 }
             }
@@ -59,9 +59,9 @@ namespace SpiceSharpTest.Algebra
             for (int i = 1; i <= 3; i++)
             {
                 if (i == index)
-                    Assert.AreEqual(null, vector.FindElement(i));
+                    Assert.That(vector.FindElement(i), Is.EqualTo(null));
                 else
-                    Assert.AreEqual(i, vector.FindElement(i).Value);
+                    Assert.That(vector.FindElement(i).Value, Is.EqualTo(i));
             }
         }
     }

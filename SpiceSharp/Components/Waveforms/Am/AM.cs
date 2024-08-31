@@ -3,8 +3,6 @@ using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
 using SpiceSharp.Simulations;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SpiceSharp.Components
 {

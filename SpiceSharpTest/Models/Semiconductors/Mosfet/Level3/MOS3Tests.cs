@@ -373,14 +373,12 @@ namespace SpiceSharpTest.Models
             tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var v_ref = new RealVoltageExport(tran, "outr");
             var v_act = new RealVoltageExport(tran, "outa");
-            tran.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in tran.Run(ckt))
             {
                 double tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
-                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
-            };
-            tran.Run(ckt);
-            v_ref.Destroy();
-            v_act.Destroy();
+                Assert.That(v_act.Value, Is.EqualTo(v_ref.Value).Within(tol));
+            }
         }
 
         [Test]

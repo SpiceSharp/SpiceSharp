@@ -96,12 +96,11 @@ namespace SpiceSharpTest
             var dc = new DC("DC 1", "V1", -1.0, 1.0, 0.2);
 
             // Catch exported data
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
-                double input = args.GetVoltage("in");
-                double output = args.GetVoltage("out");
-            };
-            dc.Run(ckt);
+                double input = dc.GetVoltage("in");
+                double output = dc.GetVoltage("out");
+            }
             // </example01_simulate>
         }
 
@@ -125,13 +124,12 @@ namespace SpiceSharpTest
             var currentExport = new RealPropertyExport(dc, "V1", "i");
 
             // Catch exported data
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double input = inputExport.Value;
                 double output = outputExport.Value;
                 double current = currentExport.Value;
-            };
-            dc.Run(ckt);
+            }
             // </example01_simulate2>
         }
 
@@ -163,7 +161,7 @@ namespace SpiceSharpTest
             var currentExport = new RealPropertyExport(dc, "M1", "id");
 
             // Run the simulation
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double vgsVoltage = dc.GetCurrentSweepValue()[0];
                 double vdsVoltage = dc.GetCurrentSweepValue()[1];
@@ -192,12 +190,11 @@ namespace SpiceSharpTest
             var exportVoltage = new ComplexVoltageExport(ac, "out");
 
             // Simulate
-            ac.ExportSimulationData += (sender, args) =>
+            foreach (int _ in ac.Run(ckt, AC.ExportSmallSignal))
             {
                 var output = exportVoltage.Value;
                 double decibels = 10.0 * Math.Log10(output.Real * output.Real + output.Imaginary * output.Imaginary);
-            };
-            ac.Run(ckt);
+            }
             // </example_AC>
         }
 
@@ -220,12 +217,11 @@ namespace SpiceSharpTest
             var outputExport = new RealVoltageExport(tran, "out");
 
             // Simulate
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
                 double input = inputExport.Value;
                 double output = outputExport.Value;
-            };
-            tran.Run(ckt);
+            }
             // </example_Transient>
         }
 
@@ -241,33 +237,35 @@ namespace SpiceSharpTest
             // Create the simulation
             var op = new OP("Op 1");
 
-            // Attach events to apply stochastic variation
-            var rndGenerator = new Random();
-            int counter = 0;
-            op.BeforeExecute += (sender, args) =>
-            {
-                // Apply a random value of 1kOhm with 5% tolerance
-                double value = 950 + 100 * rndGenerator.NextDouble();
-                var sim = (Simulation)sender;
-                sim.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.Resistors.Parameters>().Resistance = value;
-            };
-            op.AfterExecute += (sender, args) =>
-            {
-                // Run 10 times
-                counter++;
-                args.Repeat = counter < 10;
-            };
-
             // Make the exports
             var current = new RealPropertyExport(op, "R1", "i");
 
             // Simulate
-            op.ExportSimulationData += (sender, args) =>
+            var rndGenerator = new Random();
+            int counter = 0;
+            foreach (int status in op.Run(ckt, Simulation.BeforeExecute | Simulation.AfterExecute | Simulation.Exports))
             {
-                // This will run 1o times
-                double result = current.Value;
-            };
-            op.Run(ckt);
+                switch (status)
+                {
+                    case Simulation.BeforeExecute:
+                        // Apply a random value of 1kOhm with 5% tolerance
+                        double value = 950 + 100 * rndGenerator.NextDouble();
+                        op.EntityBehaviors["R1"].GetParameterSet<SpiceSharp.Components.Resistors.Parameters>().Resistance = value;
+                        break;
+
+                    case Simulation.AfterExecute:
+                        // Run 10 times
+                        counter++;
+                        op.Repeat = counter < 10;
+                        break;
+
+                    default:
+
+                        // Export
+                        double result = current.Value;
+                        break;
+                }
+            }
             // </example_Stochastic>
         }
 
@@ -289,7 +287,7 @@ namespace SpiceSharpTest
                 }
             }
             // </example_Validation>
-            Assert.AreEqual(1, rules.ViolationCount);
+            Assert.That(rules.ViolationCount, Is.EqualTo(1));
         }
 
         [Test]
@@ -324,7 +322,8 @@ namespace SpiceSharpTest
             var ckt = new Circuit(
                 new VoltageSource("V1", "in", "0", 1),
                 new Resistor("R1", "in", "0", 1e3));
-            op.AfterSetup += (sender, args) =>
+
+            foreach (int status in op.Run(ckt, Simulation.AfterSetup))
             {
                 // Behaviors are created when executing a simulation,
                 // so we need to register for the event to have access to them.
@@ -334,8 +333,7 @@ namespace SpiceSharpTest
                     Console.Write(string.Join(", ", parameter.Names));
                     Console.WriteLine($" : {parameter.Description} ({parameter.Member.Name}, {parameter.BaseType.Name})");
                 }
-            };
-            op.Run(ckt);
+            }
             // </example_BehaviorDocumentation>
         }
     }

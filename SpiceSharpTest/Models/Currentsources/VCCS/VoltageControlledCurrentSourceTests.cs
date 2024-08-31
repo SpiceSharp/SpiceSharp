@@ -68,9 +68,9 @@ namespace SpiceSharpTest.Models
 
             var op = new OP("op1");
             var current = new RealPropertyExport(op, "G1", "i");
-            op.ExportSimulationData += (sender, args) => Assert.AreEqual(300.0, current.Value, 1e-12);
-            op.Run(ckt);
-            current.Destroy();
+
+            foreach (int _ in op.Run(ckt))
+                Assert.That(current.Value, Is.EqualTo(300.0).Within(1e-12));
         }
 
         [Test]
@@ -83,13 +83,13 @@ namespace SpiceSharpTest.Models
 
             // Make the simulation and run it
             var dc = new OP("op");
-            var ex = Assert.Throws<ValidationFailedException>(() => dc.Run(ckt));
-            Assert.AreEqual(2, ex.Rules.ViolationCount);
+            var ex = Assert.Throws<ValidationFailedException>(() => dc.RunToEnd(ckt));
+            Assert.That(ex.Rules.ViolationCount, Is.EqualTo(2));
             var violations = ex.Rules.Violations.ToArray();
-            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[0]);
-            Assert.AreEqual("out", ((FloatingNodeRuleViolation)violations[0]).FloatingVariable.Name);
-            Assert.IsInstanceOf<FloatingNodeRuleViolation>(violations[1]);
-            Assert.AreEqual("in", ((FloatingNodeRuleViolation)violations[1]).FloatingVariable.Name);
+            Assert.That(violations[0], Is.InstanceOf<FloatingNodeRuleViolation>());
+            Assert.That(((FloatingNodeRuleViolation)violations[0]).FloatingVariable.Name, Is.EqualTo("out"));
+            Assert.That(violations[1], Is.InstanceOf<FloatingNodeRuleViolation>());
+            Assert.That(((FloatingNodeRuleViolation)violations[1]).FloatingVariable.Name, Is.EqualTo("in"));
         }
 
         [Test]

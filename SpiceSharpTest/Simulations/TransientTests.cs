@@ -24,16 +24,14 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", 1.0, 10.0);
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-12);
-            };
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+                Assert.That(tran.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
 
             // Let's run the simulation twice to check if it is consistent
             try
             {
-                tran.Run(ckt);
+                foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+                    Assert.That(tran.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
             }
             catch (Exception)
             {
@@ -52,15 +50,14 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("tran 1", new Gear { InitialStep = 1, StopTime = 10 });
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                Assert.AreEqual(10.0, args.GetVoltage("out"), 1e-10);
-            };
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+                Assert.That(tran.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-10));
 
             // Let's run the simulation twice to check if it is consistent
             try
             {
+                foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+                    Assert.That(tran.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-10));
                 tran.Run(ckt);
             }
             catch (Exception)
@@ -80,11 +77,10 @@ namespace SpiceSharpTest.Simulations
 
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 10.0);
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
-                Assert.AreEqual(args.GetVoltage("out"), 10.0, 1e-12);
-            };
-            tran.Run(ckt);
+                Assert.That(tran.GetVoltage("out"), Is.EqualTo(10.0).Within(1e-12));
+            }
         }
 
         [Test]
@@ -98,16 +94,15 @@ namespace SpiceSharpTest.Simulations
             // Create the transient analysis
             var tran = new Transient("Tran 1", 1e-6, 10.0);
             IExport<double> export = null;
-            tran.ExportSimulationData += (sender, args) =>
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
                 // If the time > 5.0 then start exporting our stuff
-                if (args.Time > 5.0)
+                if (tran.Time > 5.0)
                 {
-                    export ??= new RealPropertyExport((Simulation)sender, "R1", "i");
-                    Assert.AreEqual(10.0 / 1e3, export.Value, 1e-12);
+                    export ??= new RealPropertyExport(tran, "R1", "i");
+                    Assert.That(export.Value, Is.EqualTo(10.0 / 1e3).Within(1e-12));
                 }
-            };
-            tran.Run(ckt);
+            }
         }
 
         [Test]
@@ -124,7 +119,7 @@ namespace SpiceSharpTest.Simulations
 
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", new FixedEuler { Step = 1e-7, StopTime = 10e-5 });
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -141,7 +136,7 @@ namespace SpiceSharpTest.Simulations
 
             // Create a transient analysis using Backward Euler with fixed timesteps
             var tran = new Transient("tran", new FixedTrapezoidal { Step = 1e-7, StopTime = 10e-5 });
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -157,7 +152,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Fixed Euler has the worst accuracy, relaxed errors.
                 new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-1));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -173,7 +168,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Fixed Euler has the worst accuracy, relaxed errors.
                 new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-4, 1e-6));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -189,7 +184,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Fixed Euler has the worst accuracy, relaxed errors.
                 new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-3, 1e-8));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -205,7 +200,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Fixed trapezoidal has worse accuracy, relaxed errors.
                 new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-4, 1e-6));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -221,7 +216,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Trapezoidal integration allows for more accurate derivatives
                 new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-3));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -237,7 +232,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
                 new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-6, 1e-6));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -253,7 +248,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Trapezoidal integration allows for more accurate derivatives
                 new DerivativeTester(time => w * Math.Cos(w * time), 0.0, 1e-3, 1e-3));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -269,7 +264,7 @@ namespace SpiceSharpTest.Simulations
 
                 // Fixed Euler has the worst accuracy, we only limit to an absolute error of 0.1.
                 new IntegralTester(time => (1 - Math.Cos(w * time)) / w, 0, 1e-6, 1e-6));
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -424,7 +419,7 @@ namespace SpiceSharpTest.Simulations
             var tran = new Transient("tran", 1e-9, 10e-6);
             // tran.BiasingParameters.Solver = new SparseRealSolver();
             // tran.BiasingParameters.Solver.SetParameter("pivrel", 0.999);
-            tran.Run(ckt);
+            foreach (int _ in tran.Run(ckt)) { }
         }
 
         [Test]
@@ -441,29 +436,27 @@ namespace SpiceSharpTest.Simulations
             var vexport = new RealVoltageExport(sim1, "out");
             var iexport = new RealCurrentExport(sim1, "V1");
             var pexport = new RealPropertyExport(sim1, "R1", "p");
-            sim1.ExportSimulationData += (sender, e) =>
+            foreach (int _ in sim1.Run(ckt, Transient.ExportTransient))
             {
-                double input = e.GetVoltage("in");
-                Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
-                Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
-                Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
-            };
-            sim2.ExportSimulationData += (sender, e) =>
-            {
-                double input = e.GetVoltage("in");
-                Assert.AreEqual(Math.Sin(2 * Math.PI * 10 * e.Time) + 1.0, input, 1e-9);
-                Assert.AreEqual(input * 0.5, vexport.Value, 1e-9);
-                Assert.AreEqual(-input / 2.0e3, iexport.Value, 1e-9);
-                Assert.AreEqual(input * input / 4.0 / 1.0e3, pexport.Value, 1e-9);
-            };
-            sim1.Run(ckt);
+                double input = sim1.GetVoltage("in");
+                Assert.That(vexport.Value, Is.EqualTo(input * 0.5).Within(1e-9));
+                Assert.That(iexport.Value, Is.EqualTo(-input / 2.0e3).Within(1e-9));
+                Assert.That(pexport.Value, Is.EqualTo(input * input / 4.0 / 1.0e3).Within(1e-9));
+            }
 
             // Switch exports
             vexport.Simulation = sim2;
             iexport.Simulation = sim2;
             pexport.Simulation = sim2;
 
-            sim2.Run(ckt);
+            foreach (int _ in sim2.Run(ckt, Transient.ExportTransient))
+            {
+                double input = sim2.GetVoltage("in");
+                Assert.That(input, Is.EqualTo(Math.Sin(2 * Math.PI * 10 * sim2.Time) + 1.0).Within(1e-9));
+                Assert.That(vexport.Value, Is.EqualTo(input * 0.5).Within(1e-9));
+                Assert.That(iexport.Value, Is.EqualTo(-input / 2.0e3).Within(1e-9));
+                Assert.That(pexport.Value, Is.EqualTo(input * input / 4.0 / 1.0e3).Within(1e-9));
+            }
         }
 
         [Test]
@@ -485,18 +478,11 @@ namespace SpiceSharpTest.Simulations
                 new Capacitor("C2", "out", "0", 1e-6));
 
             var tran = new Transient("tran", 1e-9, 1e-6);
-            bool a = true;
-            tran.ExportSimulationData += (sender, args) =>
-            {
-                if (a)
-                    Assert.AreEqual(args.Time * 1e-3 / 1e-6, args.GetVoltage("in"), 1e-12);
-                else
-                    Assert.AreEqual(args.Time * 1e-3 / 2e-6, args.GetVoltage("in"), 1e-12);
-            };
-            a = false; // Doing second circuit
-            tran.Run(cktB);
-            a = true; // Doing first circuit
-            tran.Run(cktA);
+
+            foreach (int _ in tran.Run(cktA, Transient.ExportTransient))
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(tran.Time * 1e-3 / 1e-6).Within(1e-12));
+            foreach (int _ in tran.Run(cktB, Transient.ExportTransient))
+                Assert.That(tran.GetVoltage("in"), Is.EqualTo(tran.Time * 1e-3 / 2e-6).Within(1e-12));
         }
 
         [Test]
@@ -516,23 +502,13 @@ namespace SpiceSharpTest.Simulations
 
             // Run the simulation a first time for building the reference values
             var r = new List<double>();
-            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(export.Value);
-            tran.ExportSimulationData += BuildReference;
-            tran.Run(ckt);
-            tran.ExportSimulationData -= BuildReference;
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+                r.Add(export.Value);
 
             // Rerun the simulation for building the reference values
             int index = 0;
-            void CheckReference(object sender, ExportDataEventArgs args) => Assert.AreEqual(r[index++], export.Value, 1e-20);
-            tran.ExportSimulationData += CheckReference;
-            tran.Rerun();
-            tran.ExportSimulationData -= CheckReference;
-        }
-
-        [Test]
-        public void When_TransientUIC_Expect_Reference()
-        {
-
+            foreach (int _ in tran.Rerun(Transient.ExportTransient))
+                Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
         }
     }
 }

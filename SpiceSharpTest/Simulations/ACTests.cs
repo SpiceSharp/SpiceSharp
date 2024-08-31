@@ -2,12 +2,8 @@
 using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpiceSharpTest.Simulations
 {
@@ -30,21 +26,16 @@ namespace SpiceSharpTest.Simulations
 
             // Run the simulation a first time for building the reference values
             var r = new List<Complex>();
-            void BuildReference(object sender, ExportDataEventArgs args) => r.Add(export.Value);
-            ac.ExportSimulationData += BuildReference;
-            ac.Run(ckt);
-            ac.ExportSimulationData -= BuildReference;
+            foreach (int _ in ac.Run(ckt, AC.ExportSmallSignal))
+                r.Add(export.Value);
 
             // Rerun the simulation for building the reference values
             int index = 0;
-            void CheckReference(object sender, ExportDataEventArgs args)
+            foreach (int _ in ac.Rerun(AC.ExportSmallSignal))
             {
-                Assert.AreEqual(r[index].Real, export.Value.Real, 1e-20);
-                Assert.AreEqual(r[index++].Imaginary, export.Value.Imaginary, 1e-20);
+                Assert.That(export.Value.Real, Is.EqualTo(r[index].Real).Within(1e-20));
+                Assert.That(export.Value.Imaginary, Is.EqualTo(r[index++].Imaginary).Within(1e-20));
             }
-            ac.ExportSimulationData += CheckReference;
-            ac.Rerun();
-            ac.ExportSimulationData -= CheckReference;
         }
     }
 }

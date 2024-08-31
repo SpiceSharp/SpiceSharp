@@ -21,7 +21,7 @@ namespace SpiceSharpTest.Models
             {
                 var solver = op.GetState<IBiasingSimulationState>().Solver;
                 var elt = solver.FindElement(new SpiceSharp.Algebra.MatrixLocation(1, 1));
-                Assert.AreEqual(1.0 / SpiceSharp.Components.Resistors.Parameters.MinimumResistance, elt.Value, 1e-20);
+                Assert.That(elt.Value, Is.EqualTo(1.0 / SpiceSharp.Components.Resistors.Parameters.MinimumResistance).Within(1e-20));
             };
             op.Run(ckt);
         }
@@ -289,11 +289,12 @@ namespace SpiceSharpTest.Models
             var noise = new Noise("noise", "I1", "in", new DecadeSweep(10, 10e9, 10));
             var onoise = new OutputNoiseDensityExport(noise);
             var inoise = new InputNoiseDensityExport(noise);
-            noise.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in noise.Run(ckt, Noise.ExportNoise))
             {
                 // We expect 4*k*T*R noise variance
-                Assert.AreEqual(4 * Constants.Boltzmann * temp * 1e3, onoise.Value, 1e-20);
-                Assert.AreEqual(4 * Constants.Boltzmann * temp / 1e3, inoise.Value, 1e-20);
+                Assert.That(onoise.Value, Is.EqualTo(4 * Constants.Boltzmann * temp * 1e3).Within(1e-20));
+                Assert.That(inoise.Value, Is.EqualTo(4 * Constants.Boltzmann * temp / 1e3).Within(1e-20));
             };
             noise.Run(ckt);
         }

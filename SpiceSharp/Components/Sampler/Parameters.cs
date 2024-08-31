@@ -16,7 +16,7 @@ namespace SpiceSharp.Components.SamplerBehaviors
         /// <summary>
         /// Occurs when data can be exported.
         /// </summary>
-        public event EventHandler<ExportDataEventArgs> ExportSimulationData;
+        public event EventHandler<EventArgs> ExportSimulationData;
 
         /// <summary>
         /// Gets or sets the time-points that need to be hit.
@@ -42,7 +42,7 @@ namespace SpiceSharp.Components.SamplerBehaviors
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The argument.</param>
-        public void Export(object sender, ExportDataEventArgs args)
+        public void Export(object sender, EventArgs args)
         {
             ExportSimulationData?.Invoke(sender, args);
         }

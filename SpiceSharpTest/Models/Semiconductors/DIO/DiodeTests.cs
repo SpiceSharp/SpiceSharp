@@ -43,16 +43,15 @@ namespace SpiceSharpTest.Models
 
             var voltageExport = new RealPropertyExport(dc, "LED", "v");
 
-            dc.ExportSimulationData += (sender, args) =>
+            foreach (int _ in dc.Run(ckt))
             {
                 double voltage = voltageExport.Value;
-                double voltage2 = args.GetVoltage("a") - args.GetVoltage("b");
+                double voltage2 = dc.GetVoltage("a", "b");
 
                 // Because the property is always one iteration behind on the current solution, we relax the error a little bit
                 double tol = Math.Max(Math.Abs(voltage), Math.Abs(voltage2)) * RelTol + 1e-9;
-                Assert.AreEqual(voltage2, voltage, tol);
-            };
-            dc.Run(ckt);
+                Assert.That(voltage, Is.EqualTo(voltage2).Within(tol));
+            }
         }
 
         [Test]
@@ -340,14 +339,12 @@ namespace SpiceSharpTest.Models
             tran.BiasingParameters.Gmin = 0.0; // May interfere with comparison
             var v_ref = new RealVoltageExport(tran, "outr");
             var v_act = new RealVoltageExport(tran, "outa");
-            tran.ExportSimulationData += (sender, args) =>
+
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
             {
                 double tol = Math.Max(Math.Abs(v_ref.Value), Math.Abs(v_act.Value)) * CompareRelTol + CompareAbsTol;
-                Assert.AreEqual(v_ref.Value, v_act.Value, tol);
-            };
-            tran.Run(ckt);
-            v_ref.Destroy();
-            v_act.Destroy();
+                Assert.That(v_act.Value, Is.EqualTo(v_ref.Value).Within(tol));
+            }
         }
 
         [Test]
