@@ -54,7 +54,7 @@ Most standard Spice-components are available, and building your own custom compo
 
 Spice# is available as a **NuGet Package**.
 
-[![NuGet Badge](https://buildstats.info/nuget/spicesharp)](https://www.nuget.org/packages/SpiceSharp/) SpiceSharp
+[![NuGet Downloads](https://img.shields.io/nuget/dt/SpiceSharp?label=Spice%23)](https://www.nuget.org/packages/SpiceSharp/)
 
 ## Current build status
 
