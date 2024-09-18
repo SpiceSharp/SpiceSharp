@@ -30,24 +30,44 @@ namespace SpiceSharp.Simulations
         public const int Actions = unchecked((int)0xffff_0000);
 
         /// <summary>
+        /// Represents the action before setting up behaviors.
+        /// </summary>
+        public const int BeforeSetup = 0x0001_0000;
+
+        /// <summary>
         /// Represents the action after setting up behaviors.
         /// </summary>
-        public const int AfterSetup = 0x0001_0000;
-                
+        public const int AfterSetup = 0x0002_0000;
+
+        /// <summary>
+        /// Represents the action before validation.
+        /// </summary>
+        public const int BeforeValidation = 0x0004_0000;
+
         /// <summary>
         /// Represents the action after validating.
         /// </summary>
-        public const int AfterValidation = 0x0002_0000;
+        public const int AfterValidation = 0x0008_0000;
         
         /// <summary>
         /// Represents the action before each execution.
         /// </summary>
-        public const int BeforeExecute = 0x0004_0000;
+        public const int BeforeExecute = 0x0010_0000;
         
         /// <summary>
         /// Represents the action after each execution.
         /// </summary>
-        public const int AfterExecute = 0x0008_0000;
+        public const int AfterExecute = 0x0020_0000;
+
+        /// <summary>
+        /// Represents the action before cleaning up.
+        /// </summary>
+        public const int BeforeUnsetup = 0x0040_0000;
+
+        /// <summary>
+        /// Represents the action after cleaning up.
+        /// </summary>
+        public const int AfterUnsetup = 0x0080_0000;
 
         /// <inheritdoc/>
         public SimulationStatus Status { get; private set; }
@@ -122,6 +142,10 @@ namespace SpiceSharp.Simulations
 
             entities.ThrowIfNull(nameof(entities));
 
+            // Yield before setup - this is here for easier migration from Spice# 3.1.x
+            if ((mask & BeforeSetup) != 0)
+                yield return BeforeSetup;
+
             // Setup the simulation
             Statistics.SetupTime.Start();
             try
@@ -137,6 +161,10 @@ namespace SpiceSharp.Simulations
             // Yield after setup
             if ((mask & AfterSetup) != 0)
                 yield return AfterSetup;
+
+            // Yield before validation - this is here for easier migration from Spice# 3.1.x
+            if ((mask & BeforeValidation) != 0)
+                yield return BeforeValidation;
 
             // Validate the input
             Statistics.ValidationTime.Start();
@@ -183,6 +211,10 @@ namespace SpiceSharp.Simulations
                 // We're going to repeat the simulation, change the event arguments
             } while (Repeat);
 
+            // Yield before cleanup
+            if ((mask & BeforeUnsetup) != 0)
+                yield return BeforeUnsetup;
+
             // Clean up the circuit
             Statistics.FinishTime.Start();
             try
@@ -196,6 +228,10 @@ namespace SpiceSharp.Simulations
                 Statistics.FinishTime.Stop();
             }
             Status = SimulationStatus.None;
+
+            // Yield after cleanup - this is here for easier migration from Spice# 3.1.x
+            if ((mask & AfterUnsetup) != 0)
+                yield return AfterUnsetup;
         }
 
         /// <inheritdoc/>
@@ -233,6 +269,10 @@ namespace SpiceSharp.Simulations
                     yield return AfterExecute;
             } while (Repeat);
 
+            // Yield before cleanup
+            if ((mask & BeforeUnsetup) != 0)
+                yield return BeforeUnsetup;
+
             // Clean up the circuit
             Statistics.FinishTime.Start();
             try
@@ -246,6 +286,10 @@ namespace SpiceSharp.Simulations
                 Statistics.FinishTime.Stop();
             }
             Status = SimulationStatus.None;
+
+            // Yield after cleanup - this is here for easier migration from Spice# 3.1.x
+            if ((mask & AfterUnsetup) != 0)
+                yield return AfterUnsetup;
         }
 
         /// <summary>
