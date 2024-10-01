@@ -47,10 +47,10 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int mask = Exports)
+        protected override IEnumerable<int> Execute(int mask)
         {
             // Execute base behavior
-            foreach (int exportType in base.Execute())
+            foreach (int exportType in base.Execute(mask))
                 yield return exportType;
 
             var cstate = (ComplexSimulationState)GetState<IComplexSimulationState>();

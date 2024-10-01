@@ -36,9 +36,14 @@ namespace SpiceSharp.Simulations
         private TemperatureSimulationState _temperature;
 
         /// <summary>
+        /// Represents the action before doing temperature-dependent calculations.
+        /// </summary>
+        public const int BeforeTemperature = 0x0100_0000;
+
+        /// <summary>
         /// Represents the action after doing temperature-dependent calculations.
         /// </summary>
-        public const int AfterTemperature = 0x0010_0000;
+        public const int AfterTemperature = 0x0200_0000;
 
         /// <summary>
         /// Gets the variable that causes issues.
@@ -166,8 +171,11 @@ namespace SpiceSharp.Simulations
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<int> Execute(int mask = Exports)
+        protected override IEnumerable<int> Execute(int mask)
         {
+            if ((mask & BeforeTemperature) != 0)
+                yield return BeforeTemperature;
+
             // Perform temperature-dependent calculations
             foreach (var behavior in _temperatureBehaviors)
                 behavior.Temperature();
