@@ -510,5 +510,37 @@ namespace SpiceSharpTest.Simulations
             foreach (int _ in tran.Rerun(Transient.ExportTransient))
                 Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
         }
+
+        [Test]
+        public void When_TransientRun_Expect_YieldFlags()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10.0),
+                new Resistor("R1", "in", "out", 10),
+                new Capacitor("C1", "out", "0", 20)
+            );
+
+            // Create the transient analysis
+            var tran = new Transient("tran 1", 1.0, 10.0);
+
+            int flags = 0;
+            foreach (int flag in tran.Run(ckt, mask: -1))
+                flags |= flag;
+
+            Assert.That(flags, Is.EqualTo(
+                Simulation.BeforeSetup |
+                Simulation.AfterSetup |
+                Simulation.BeforeValidation |
+                Simulation.AfterValidation |
+                Simulation.BeforeExecute |
+                Simulation.AfterExecute |
+                Simulation.BeforeUnsetup |
+                Simulation.AfterUnsetup |
+                BiasingSimulation.BeforeTemperature |
+                BiasingSimulation.AfterTemperature |
+                Transient.ExportOperatingPoint |
+                Transient.ExportTransient));
+        }
     }
 }

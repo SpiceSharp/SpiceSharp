@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
         /// <inheritdoc/>
         protected override IEnumerable<int> Execute(int mask = Exports)
         {
-            foreach (int exportType in base.Execute())
+            foreach (int exportType in base.Execute(mask))
                 yield return exportType;
 
             Op(BiasingParameters.DcMaxIterations);

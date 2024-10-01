@@ -146,5 +146,39 @@ namespace SpiceSharpTest.Simulations
             foreach (int _ in dc.Run(cktA))
                 Assert.That(dc.GetVoltage("out"), Is.EqualTo(dc.GetVoltage("in") * 0.5).Within(1e-12));
         }
+
+        [Test]
+        public void When_DCRun_Expect_YieldFlags()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 0),
+                new Resistor("R1", "in", "out", 1.0e4),
+                new Resistor("R2", "out", "0", 1.0e4)
+                );
+
+            // Create the simulation
+            var dc = new DC("DC 1", [new ParameterSweep("R2", "resistance", new LinearSweep(0.0, 1e4, 1e3), container =>
+            {
+                container.GetValue<ITemperatureBehavior>().Temperature();
+            })]);
+
+            int flags = 0;
+            foreach (int flag in dc.Run(ckt, mask: -1))
+                flags |= flag;
+
+            Assert.That(flags, Is.EqualTo(
+                Simulation.BeforeSetup |
+                Simulation.AfterSetup |
+                Simulation.BeforeValidation |
+                Simulation.AfterValidation |
+                Simulation.BeforeExecute |
+                Simulation.AfterExecute |
+                Simulation.BeforeUnsetup |
+                Simulation.AfterUnsetup |
+                BiasingSimulation.BeforeTemperature |
+                BiasingSimulation.AfterTemperature |
+                DC.ExportSweep));
+        }
     }
 }

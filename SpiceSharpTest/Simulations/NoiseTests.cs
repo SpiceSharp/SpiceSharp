@@ -33,5 +33,38 @@ namespace SpiceSharpTest.Simulations
             foreach (int _ in noise.Rerun(Noise.ExportNoise))
                 Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
         }
+
+        [Test]
+        public void When_NoiseRun_Expect_YieldFlags()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10.0),
+                new Resistor("R1", "in", "out", 10),
+                new Capacitor("C1", "out", "0", 20)
+            );
+
+            // Create the transient analysis
+            var noise = new Noise("noise 1", "V1", "out", new DecadeSweep(1, 1e9, 10));
+
+            int flags = 0;
+            foreach (int flag in noise.Run(ckt, mask: -1))
+                flags |= flag;
+
+            Assert.That(flags, Is.EqualTo(
+                Simulation.BeforeSetup |
+                Simulation.AfterSetup |
+                Simulation.BeforeValidation |
+                Simulation.AfterValidation |
+                Simulation.BeforeExecute |
+                Simulation.AfterExecute |
+                Simulation.BeforeUnsetup |
+                Simulation.AfterUnsetup |
+                BiasingSimulation.BeforeTemperature |
+                BiasingSimulation.AfterTemperature |
+                Noise.ExportOperatingPoint |
+                Noise.ExportSmallSignal |
+                Noise.ExportNoise));
+        }
     }
 }
