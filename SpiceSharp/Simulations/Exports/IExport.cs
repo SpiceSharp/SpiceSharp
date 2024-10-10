@@ -18,5 +18,10 @@
         /// This property will return a default if there is nothing to extract.
         /// </remarks>
         T Value { get; }
+
+        /// <summary>
+        /// Returns true if the export is currently valid.
+        /// </summary>
+        bool IsValid { get; }
     }
 }

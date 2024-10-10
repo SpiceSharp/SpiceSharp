@@ -105,6 +105,51 @@ namespace SpiceSharpTest.Simulations
             }
         }
 
+
+        [Test]
+        public void When_IsNotValidExport_Expect_Reference()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10),
+                new Resistor("R1", "in", "0", 1e3));
+
+            // Create the transient analysis
+            var tran = new Transient("Tran 1", 1e-6, 10.0);
+            IExport<double> export = null;
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+            {
+                // If the time > 5.0 then start exporting our stuff
+                if (tran.Time > 5.0)
+                {
+                    export ??= new RealPropertyExport(tran, "rx", "i");
+                    Assert.That(export.IsValid, Is.False);
+                }
+            }
+        }
+
+        [Test]
+        public void When_IsValidExport_Expect_Reference()
+        {
+            // Create the circuit
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 10),
+                new Resistor("R1", "in", "0", 1e3));
+
+            // Create the transient analysis
+            var tran = new Transient("Tran 1", 1e-6, 10.0);
+            IExport<double> export = null;
+            foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+            {
+                // If the time > 5.0 then start exporting our stuff
+                if (tran.Time > 5.0)
+                {
+                    export ??= new RealPropertyExport(tran, "R1", "i");
+                    Assert.That(export.IsValid, Is.True);
+                }
+            }
+        }
+
         [Test]
         public void When_FixedEuler_Expect_NoException()
         {
