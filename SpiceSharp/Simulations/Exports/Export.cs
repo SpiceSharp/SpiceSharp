@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace SpiceSharp.Simulations
 {
@@ -12,6 +11,25 @@ namespace SpiceSharp.Simulations
         private int _currentRun;
         private Func<T> _extractor;
         private ISimulation _simulation;
+
+        /// <summary>
+        /// Returns true if the export is currently valid.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                if (_extractor == null)
+                {
+                    if (_simulation.CurrentRun != _currentRun)
+                    {
+                        _extractor = BuildExtractor(Simulation);
+                        _currentRun = _simulation.CurrentRun;
+                    }
+                }
+                return _extractor != null;
+            }
+        }
 
         /// <inheritdoc />
         public ISimulation Simulation
