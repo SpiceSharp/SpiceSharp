@@ -166,13 +166,13 @@ namespace SpiceSharpGenerator
                     var symbol = model.GetDeclaredSymbol(variable, context.CancellationToken) as IFieldSymbol;
                     var @class = symbol.ContainingType;
                     if (!map.TryGetValue(@class, out var list))
-                {
+                    {
                         list = [];
                         map.Add(@class, list);
                     }
                     list.Add((symbol, field.GetLeadingTrivia()));
                 }
-                }
+            }
             foreach (var pair in map)
             {
                 var factory = new PropertyResolver(pair.Key, pair.Value);
