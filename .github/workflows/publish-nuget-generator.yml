@@ -4,7 +4,7 @@ on:
   release:
     branches: [ master ]
     types: [ published ]
-    tags: [ v* ]
+    tags: [ generator-v* ]
 
 jobs:
   build:
@@ -21,11 +21,11 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Compile Spice#
-      run: dotnet build SpiceSharp\SpiceSharp.csproj --configuration Release --no-restore
+    - name: Compile Spice# generator
+      run: dotnet build SpiceSharpGenerator\SpiceSharpGenerator.csproj --configuration Release --no-restore
 
     - name: Publish to NuGet
       env:
         APIKEY: ${{ secrets.NUGET_APIKEY }}
-      run: dotnet nuget push ".\build\bin\SpiceSharp\SpiceSharp.*.nupkg" -k $env:APIKEY -s "https://api.nuget.org/v3/index.json"
+      run: dotnet nuget push ".\build\bin\SpiceSharpGenerator\SpiceSharpGenerator.*.nupkg" -k $env:APIKEY -s "https://api.nuget.org/v3/index.json"
       
