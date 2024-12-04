@@ -54,7 +54,37 @@ namespace SpiceSharpGenerator
                     contexts.Add(target, symbol);
                 }
             }
+
+            // Also go through referenced assemblies to look for more binding contexts
+            foreach (var referencedSymbols in context.Compilation.SourceModule.ReferencedAssemblySymbols)
+            {
+                foreach (var symbol in GetNamedTypeSymbols(referencedSymbols.GlobalNamespace))
+                {
+                    foreach (var attribute in symbol.GetAttributes().Where(attribute => attribute.IsAttribute(Constants.BindingContextFor)))
+                    {
+                        var target = attribute.MakeGenericFromAttribute();
+                        contexts.Add(target, symbol);
+                    }
+                }
+            }
+
             return contexts;
+        }
+        private static IEnumerable<INamedTypeSymbol> GetNamedTypeSymbols(INamespaceSymbol @namespace)
+        {
+            var stack = new Stack<INamespaceSymbol>();
+            stack.Push(@namespace);
+            while (stack.Count > 0)
+            {
+                @namespace = stack.Pop();
+                foreach (var member in @namespace.GetMembers())
+                {
+                    if (member is INamespaceSymbol nss)
+                        stack.Push(nss);
+                    else if (member is INamedTypeSymbol nts)
+                        yield return nts;
+                }
+            }
         }
         private Dictionary<INamedTypeSymbol, List<BehaviorData>> GetBehaviorMap(GeneratorExecutionContext context, IEnumerable<ClassDeclarationSyntax> @classes)
         {

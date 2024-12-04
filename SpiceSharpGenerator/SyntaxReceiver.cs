@@ -136,19 +136,5 @@ namespace SpiceSharpGenerator
             if (_categories.TryGetValue(attribute.Name.GetText().ToString(), out var action))
                 action(attribute);
         }
-
-        private bool IsOneOf(string name, params string[] attributes)
-        {
-            if (attributes == null || attributes.Length == 0)
-                return false;
-            for (int i = 0; i < attributes.Length; i++)
-            {
-                if (string.CompareOrdinal(name, attributes[i]) == 0)
-                    return true;
-                if (string.CompareOrdinal(name, $"{attributes[i]}Attribute") == 0)
-                    return true;
-            }
-            return false;
-        }
     }
 }

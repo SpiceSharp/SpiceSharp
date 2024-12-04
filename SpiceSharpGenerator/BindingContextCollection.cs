@@ -18,7 +18,7 @@ namespace SpiceSharpGenerator
         /// <param name="target">The target entity type.</param>
         /// <param name="context">The target context type.</param>
         public void Add(INamedTypeSymbol target, INamedTypeSymbol context)
-            => _map.Add(target, context);
+            => _map[target] = context;
 
         /// <summary>
         /// Gets the binding context for an entity type.
