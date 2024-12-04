@@ -39,7 +39,7 @@ namespace SpiceSharpGenerator
                 string name = g.Variable;
 
                 // We first want to copy the trivia
-                foreach (string line in trivia.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+                foreach (string line in trivia.ToString().Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (!string.IsNullOrWhiteSpace(line))
                         yield return line.Trim();
@@ -53,19 +53,19 @@ namespace SpiceSharpGenerator
                 foreach (var attribute in field.GetAttributes())
                 {
                     if (attribute.IsAttribute("LessThanAttribute"))
-                        checks.Add($"Utility.LessThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                        checks.Add($"SpiceSharp.Utility.LessThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("GreaterThanAttribute"))
-                        checks.Add($"Utility.GreaterThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                        checks.Add($"SpiceSharp.Utility.GreaterThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("LessThanOrEqualsAttribute"))
-                        checks.Add($"Utility.LessThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                        checks.Add($"SpiceSharp.Utility.LessThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("GreaterThanOrEqualsAttribute"))
-                        checks.Add($"Utility.GreaterThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                        checks.Add($"SpiceSharp.Utility.GreaterThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("LowerLimitAttribute"))
-                        checks.Add($"value = Utility.LowerLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                        checks.Add($"value = SpiceSharp.Utility.LowerLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("UpperLimitAttribute"))
-                        checks.Add($"value = Utility.UpperLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                        checks.Add($"value = SpiceSharp.Utility.UpperLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
                     else if (attribute.IsAttribute("FiniteAttribute"))
-                        checks.Add($"Utility.Finite(value, nameof({name}));");
+                        checks.Add($"SpiceSharp.Utility.Finite(value, nameof({name}));");
                     if (isFirst)
                         isFirst = false;
                     else
