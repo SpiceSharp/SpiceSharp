@@ -4,7 +4,8 @@ on:
   release:
     branches: [ master ]
     types: [ published ]
-    tags: [ v* ]
+    tags:
+      - 'v*'
 
 jobs:
   build:

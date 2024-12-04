@@ -4,7 +4,8 @@ on:
   release:
     branches: [ master ]
     types: [ published ]
-    tags: [ generator-v* ]
+    tags:
+      - 'generator-v*'
 
 jobs:
   build:
