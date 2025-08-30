@@ -1,54 +1,53 @@
 ﻿using SpiceSharp.Behaviors;
 using System;
 
-namespace SpiceSharp.Components.ParallelComponents
+namespace SpiceSharp.Components.ParallelComponents;
+
+/// <summary>
+/// An <see cref="ITimeBehavior"/> for a <see cref="Parallel"/>.
+/// </summary>
+/// <seealso cref="Convergence" />
+/// <seealso cref="ITimeBehavior" />
+public class Time : Behavior,
+    IParallelBehavior,
+    ITimeBehavior
 {
+    private readonly Workload _initWorkload;
+    private BehaviorList<ITimeBehavior> _timeBehaviors;
+
     /// <summary>
-    /// An <see cref="ITimeBehavior"/> for a <see cref="Parallel"/>.
+    /// Initializes a new instance of the <see cref="Time" /> class.
     /// </summary>
-    /// <seealso cref="Convergence" />
-    /// <seealso cref="ITimeBehavior" />
-    public class Time : Behavior,
-        IParallelBehavior,
-        ITimeBehavior
+    /// <param name="context">The context.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+    public Time(ParallelBindingContext context)
+        : base(context)
     {
-        private readonly Workload _initWorkload;
-        private BehaviorList<ITimeBehavior> _timeBehaviors;
+        var parameters = context.GetParameterSet<Parameters>();
+        if (parameters.WorkDistributors.TryGetValue(typeof(ITimeBehavior), out var dist) && dist != null)
+            _initWorkload = new Workload(dist, parameters.Entities.Count);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Time" /> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
-        public Time(ParallelBindingContext context)
-            : base(context)
+    /// <inheritdoc />
+    public void FetchBehaviors(ParallelBindingContext context)
+    {
+        _timeBehaviors = context.GetBehaviors<ITimeBehavior>();
+        if (_initWorkload != null)
         {
-            var parameters = context.GetParameterSet<Parameters>();
-            if (parameters.WorkDistributors.TryGetValue(typeof(ITimeBehavior), out var dist) && dist != null)
-                _initWorkload = new Workload(dist, parameters.Entities.Count);
+            foreach (var behavior in _timeBehaviors)
+                _initWorkload.Actions.Add(behavior.InitializeStates);
         }
+    }
 
-        /// <inheritdoc />
-        public void FetchBehaviors(ParallelBindingContext context)
+    /// <inheritdoc/>
+    void ITimeBehavior.InitializeStates()
+    {
+        if (_initWorkload != null)
+            _initWorkload.Execute();
+        else
         {
-            _timeBehaviors = context.GetBehaviors<ITimeBehavior>();
-            if (_initWorkload != null)
-            {
-                foreach (var behavior in _timeBehaviors)
-                    _initWorkload.Actions.Add(behavior.InitializeStates);
-            }
-        }
-
-        /// <inheritdoc/>
-        void ITimeBehavior.InitializeStates()
-        {
-            if (_initWorkload != null)
-                _initWorkload.Execute();
-            else
-            {
-                foreach (var behavior in _timeBehaviors)
-                    behavior.InitializeStates();
-            }
+            foreach (var behavior in _timeBehaviors)
+                behavior.InitializeStates();
         }
     }
 }

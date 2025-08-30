@@ -2,15 +2,14 @@
 using SpiceSharp.Components;
 using System;
 
-namespace SpiceSharpTest.Waveforms
+namespace SpiceSharpTest.Waveforms;
+
+[TestFixture]
+public class SineTests
 {
-    [TestFixture]
-    public class SineTests
+    [Test]
+    public void When_NegativeFrequency_Expect_Exception()
     {
-        [Test]
-        public void When_NegativeFrequency_Expect_Exception()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Sine(0, 1, -1).Create(null));
-        }
+        Assert.Throws<ArgumentOutOfRangeException>(() => new Sine(0, 1, -1).Create(null));
     }
 }

@@ -3,47 +3,46 @@ using SpiceSharp.Behaviors;
 using SpiceSharp.ParameterSets;
 using System;
 
-namespace SpiceSharp.Components.Inductors
+namespace SpiceSharp.Components.Inductors;
+
+/// <summary>
+/// Temperature behavior for a <see cref="Inductor"/>.
+/// </summary>
+/// <seealso cref="Behavior"/>
+/// <seealso cref="ITemperatureBehavior"/>
+[BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
+[GeneratedParameters]
+public partial class Temperature : Behavior,
+    ITemperatureBehavior,
+    IParameterized<Parameters>
 {
     /// <summary>
-    /// Temperature behavior for a <see cref="Inductor"/>.
+    /// Gets the inductance of the inductor.
     /// </summary>
-    /// <seealso cref="Behavior"/>
-    /// <seealso cref="ITemperatureBehavior"/>
-    [BehaviorFor(typeof(Inductor)), AddBehaviorIfNo(typeof(ITemperatureBehavior))]
-    [GeneratedParameters]
-    public partial class Temperature : Behavior,
-        ITemperatureBehavior,
-        IParameterized<Parameters>
+    /// <value>
+    /// The inductance.
+    /// </value>
+    [ParameterName("l"), ParameterName("inductance"), ParameterInfo("The inductance")]
+    public double Inductance { get; private set; }
+
+    /// <inheritdoc/>
+    public Parameters Parameters { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Temperature"/> class.
+    /// </summary>
+    /// <param name="context">The context.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
+    public Temperature(IComponentBindingContext context)
+        : base(context)
     {
-        /// <summary>
-        /// Gets the inductance of the inductor.
-        /// </summary>
-        /// <value>
-        /// The inductance.
-        /// </value>
-        [ParameterName("l"), ParameterName("inductance"), ParameterInfo("The inductance")]
-        public double Inductance { get; private set; }
+        context.ThrowIfNull(nameof(context));
+        Parameters = context.GetParameterSet<Parameters>();
+    }
 
-        /// <inheritdoc/>
-        public Parameters Parameters { get; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Temperature"/> class.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="context"/> is <c>null</c>.</exception>
-        public Temperature(IComponentBindingContext context)
-            : base(context)
-        {
-            context.ThrowIfNull(nameof(context));
-            Parameters = context.GetParameterSet<Parameters>();
-        }
-
-        /// <inheritdoc/>
-        void ITemperatureBehavior.Temperature()
-        {
-            Inductance = Parameters.Inductance * Parameters.SeriesMultiplier / Parameters.ParallelMultiplier;
-        }
+    /// <inheritdoc/>
+    void ITemperatureBehavior.Temperature()
+    {
+        Inductance = Parameters.Inductance * Parameters.SeriesMultiplier / Parameters.ParallelMultiplier;
     }
 }

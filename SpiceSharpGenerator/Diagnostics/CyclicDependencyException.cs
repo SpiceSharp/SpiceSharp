@@ -1,18 +1,17 @@
 ﻿using System;
 
-namespace SpiceSharpGenerator.Diagnostics
+namespace SpiceSharpGenerator.Diagnostics;
+
+/// <summary>
+/// An exception that is thrown if behaviors are cyclically dependent.
+/// </summary>
+public class CyclicDependencyException : Exception
 {
     /// <summary>
-    /// An exception that is thrown if behaviors are cyclically dependent.
+    /// Initializes a new instance of the <see cref="CyclicDependencyException"/> class.
     /// </summary>
-    public class CyclicDependencyException : Exception
+    public CyclicDependencyException()
+        : base("Cyclic dependency")
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CyclicDependencyException"/> class.
-        /// </summary>
-        public CyclicDependencyException()
-            : base("Cyclic dependency")
-        {
-        }
     }
 }

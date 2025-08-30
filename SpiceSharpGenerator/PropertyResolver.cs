@@ -3,102 +3,102 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpiceSharpGenerator
+namespace SpiceSharpGenerator;
+
+/// <summary>
+/// A class that can resolve auto-generated properties.
+/// </summary>
+public class PropertyResolver
 {
+    private readonly INamedTypeSymbol _symbol;
+    private readonly IEnumerable<(IFieldSymbol Field, SyntaxTriviaList Trivia)> _fields;
+
     /// <summary>
-    /// A class that can resolve auto-generated properties.
+    /// Gets the generated variables.
     /// </summary>
-    public class PropertyResolver
+    public GeneratedPropertyCollection Generated { get; } = [];
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PropertyResolver"/> class.
+    /// </summary>
+    /// <param name="symbol">The class symbol.</param>
+    /// <param name="fields">The field symbols and their leading trivia (remarks).</param>
+    public PropertyResolver(INamedTypeSymbol symbol, IEnumerable<(IFieldSymbol, SyntaxTriviaList)> fields)
     {
-        private readonly INamedTypeSymbol _symbol;
-        private readonly IEnumerable<(IFieldSymbol Field, SyntaxTriviaList Trivia)> _fields;
+        _symbol = symbol;
+        _fields = fields;
+    }
 
-        /// <summary>
-        /// Gets the generated variables.
-        /// </summary>
-        public GeneratedPropertyCollection Generated { get; } = [];
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyResolver"/> class.
-        /// </summary>
-        /// <param name="symbol">The class symbol.</param>
-        /// <param name="fields">The field symbols and their leading trivia (remarks).</param>
-        public PropertyResolver(INamedTypeSymbol symbol, IEnumerable<(IFieldSymbol, SyntaxTriviaList)> fields)
+    private IEnumerable<string> GetCode()
+    {
+        Generated.Clear();
+        foreach (var (field, trivia) in _fields)
         {
-            _symbol = symbol;
-            _fields = fields;
-        }
+            var g = new GeneratedProperty(field);
+            Generated.Add(g);
+            string name = g.Variable;
 
-        private IEnumerable<string> GetCode()
-        {
-            Generated.Clear();
-            foreach (var (field, trivia) in _fields)
+            // We first want to copy the trivia
+            foreach (string line in trivia.ToString().Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries))
             {
-                var g = new GeneratedProperty(field);
-                Generated.Add(g);
-                string name = g.Variable;
-
-                // We first want to copy the trivia
-                foreach (string line in trivia.ToString().Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries))
-                {
-                    if (!string.IsNullOrWhiteSpace(line))
-                        yield return line.Trim();
-                }
-
-                // then we also show the attributes
-                var sb = new StringBuilder(32);
-                var checks = new List<string>(4);
-                sb.Append("[");
-                bool isFirst = true;
-                foreach (var attribute in field.GetAttributes())
-                {
-                    if (attribute.IsAttribute("LessThanAttribute"))
-                        checks.Add($"SpiceSharp.Utility.LessThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
-                    else if (attribute.IsAttribute("GreaterThanAttribute"))
-                        checks.Add($"SpiceSharp.Utility.GreaterThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
-                    else if (attribute.IsAttribute("LessThanOrEqualsAttribute"))
-                        checks.Add($"SpiceSharp.Utility.LessThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
-                    else if (attribute.IsAttribute("GreaterThanOrEqualsAttribute"))
-                        checks.Add($"SpiceSharp.Utility.GreaterThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
-                    else if (attribute.IsAttribute("LowerLimitAttribute"))
-                        checks.Add($"value = SpiceSharp.Utility.LowerLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
-                    else if (attribute.IsAttribute("UpperLimitAttribute"))
-                        checks.Add($"value = SpiceSharp.Utility.UpperLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
-                    else if (attribute.IsAttribute("FiniteAttribute"))
-                        checks.Add($"SpiceSharp.Utility.Finite(value, nameof({name}));");
-                    if (isFirst)
-                        isFirst = false;
-                    else
-                        sb.Append(", ");
-                    sb.Append(attribute.ToString());
-                }
-                sb.Append("]");
-                yield return sb.ToString();
-
-                // Now comes the actual definition
-                yield return $"public{(field.IsStatic ? " static" : "")} {field.Type} {name}";
-                yield return "{";
-                yield return $"\tget => {field.Name};";
-                yield return $"\tset";
-                yield return "\t{";
-                foreach (string check in checks)
-                    yield return "\t\t" + check;
-                yield return $"\t\t{field.Name} = value;";
-                yield return "\t}";
-                yield return "}";
+                if (!string.IsNullOrWhiteSpace(line))
+                    yield return line.Trim();
             }
-        }
 
-        /// <summary>
-        /// Create the class.
-        /// </summary>
-        /// <returns>
-        /// The code.
-        /// </returns>
-        public string Create()
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine($@"using System;
+            // then we also show the attributes
+            var sb = new StringBuilder(32);
+            var checks = new List<string>(4);
+            sb.Append("[");
+            bool isFirst = true;
+            foreach (var attribute in field.GetAttributes())
+            {
+                if (attribute.IsAttribute("LessThanAttribute"))
+                    checks.Add($"SpiceSharp.Utility.LessThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                else if (attribute.IsAttribute("GreaterThanAttribute"))
+                    checks.Add($"SpiceSharp.Utility.GreaterThan(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                else if (attribute.IsAttribute("LessThanOrEqualsAttribute"))
+                    checks.Add($"SpiceSharp.Utility.LessThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                else if (attribute.IsAttribute("GreaterThanOrEqualsAttribute"))
+                    checks.Add($"SpiceSharp.Utility.GreaterThanOrEquals(value, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                else if (attribute.IsAttribute("LowerLimitAttribute"))
+                    checks.Add($"value = SpiceSharp.Utility.LowerLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                else if (attribute.IsAttribute("UpperLimitAttribute"))
+                    checks.Add($"value = SpiceSharp.Utility.UpperLimit(value, this, nameof({name}), {attribute.ConstructorArguments[0].Value.Format()});");
+                else if (attribute.IsAttribute("FiniteAttribute"))
+                    checks.Add($"SpiceSharp.Utility.Finite(value, nameof({name}));");
+                if (isFirst)
+                    isFirst = false;
+                else
+                    sb.Append(", ");
+                sb.Append(attribute.ToString());
+            }
+            sb.Append("]");
+            yield return sb.ToString();
+
+            // Now comes the actual definition
+            yield return $"public{(field.IsStatic ? " static" : "")} {field.Type} {name}";
+            yield return "{";
+            yield return $"\tget => {field.Name};";
+            yield return $"\tset";
+            yield return "\t{";
+            foreach (string check in checks)
+                yield return "\t\t" + check;
+            yield return $"\t\t{field.Name} = value;";
+            yield return "\t}";
+            yield return "}";
+        }
+    }
+
+    /// <summary>
+    /// Create the class.
+    /// </summary>
+    /// <returns>
+    /// The code.
+    /// </returns>
+    public string Create()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($@"using System;
 using SpiceSharp;
 using System.Collections.Generic;
 using SpiceSharp.Diagnostics;
@@ -111,7 +111,6 @@ namespace {_symbol.ContainingNamespace}
         {string.Join(Environment.NewLine + "\t\t", GetCode())}
     }}
 }}");
-            return sb.ToString();
-        }
+        return sb.ToString();
     }
 }

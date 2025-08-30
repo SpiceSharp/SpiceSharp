@@ -1,15 +1,14 @@
-﻿namespace SpiceSharp
+﻿namespace SpiceSharp;
+
+/// <summary>
+/// Describes a cloneable item.
+/// </summary>
+/// <typeparam name="T">The base type.</typeparam>
+public interface ICloneable<T>
 {
     /// <summary>
-    /// Describes a cloneable item.
+    /// Clones the instance.
     /// </summary>
-    /// <typeparam name="T">The base type.</typeparam>
-    public interface ICloneable<T>
-    {
-        /// <summary>
-        /// Clones the instance.
-        /// </summary>
-        /// <returns>The cloned instance.</returns>
-        T Clone();
-    }
+    /// <returns>The cloned instance.</returns>
+    T Clone();
 }

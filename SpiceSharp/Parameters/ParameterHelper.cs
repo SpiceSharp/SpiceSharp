@@ -1,9 +1,8 @@
-﻿namespace SpiceSharp.ParameterSets
+﻿namespace SpiceSharp.ParameterSets;
+
+/// <summary>
+/// Helper methods for parameters.
+/// </summary>
+public static class ParameterHelper
 {
-    /// <summary>
-    /// Helper methods for parameters.
-    /// </summary>
-    public static class ParameterHelper
-    {
-    }
 }
