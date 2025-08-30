@@ -38,10 +38,10 @@ public class JFETTests : Framework
         );
 
         // Build the simulation
-        var dc = new DC("dc", new[] {
+        var dc = new DC("dc", [
             new ParameterSweep("V1", new LinearSweep(0, 0.8, 0.1)),
             new ParameterSweep("V2", new LinearSweep(0.0, 5.0, 0.1))
-        });
+        ]);
 
         // Create exports
         var exports = new IExport<double>[]

@@ -151,11 +151,11 @@ public class BasicExampleTests
             );
 
         // Sweep the base current and vce voltage
-        var dc = new DC("DC 1", new[]
-        {
+        var dc = new DC("DC 1",
+        [
             new ParameterSweep("Vgs", new LinearSweep(0, 3, 0.2)),
             new ParameterSweep("Vds", new LinearSweep(0, 5, 0.1)),
-        });
+        ]);
 
         // Export the collector current
         var currentExport = new RealPropertyExport(dc, "M1", "id");

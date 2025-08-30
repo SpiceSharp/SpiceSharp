@@ -52,10 +52,10 @@ public class BipolarJunctionTransistorTests : Framework
             );
 
         // Create simulation
-        var dc = new DC("dc", new[] {
+        var dc = new DC("dc", [
             new ParameterSweep("V1", new LinearSweep(0, 0.8, 0.1)),
             new ParameterSweep("V2", new LinearSweep(0, 5, 0.5))
-        });
+        ]);
 
         // Create exports
         IExport<double>[] exports = [new RealPropertyExport(dc, "V2", "i"), new RealPropertyExport(dc, "V1", "i")];

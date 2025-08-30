@@ -27,7 +27,7 @@ public class SimpleSubcircuitTests : Framework
 
         // Simulate the circuit
         var op = new OP("op");
-        IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
+        IExport<double>[] exports = [new RealVoltageExport(op, "out")];
         IEnumerable<double> references = [2.5];
         AnalyzeOp(op, ckt, exports, references);
     }
@@ -48,7 +48,7 @@ public class SimpleSubcircuitTests : Framework
 
         // Simulate the circuit
         var op = new OP("op");
-        IExport<double>[] exports = new[] { new RealPropertyExport(op, new[] { "X1", "R1" }, "i") };
+        IExport<double>[] exports = [new RealPropertyExport(op, new[] { "X1", "R1" }, "i")];
         IEnumerable<double> references = [5.0 / 2e3];
         AnalyzeOp(op, ckt, exports, references);
     }
@@ -276,7 +276,7 @@ public class SimpleSubcircuitTests : Framework
 
         // Simulate the circuit
         var op = new OP("op");
-        IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
+        IExport<double>[] exports = [new RealVoltageExport(op, "out")];
         IEnumerable<double> references = [1.0];
         AnalyzeOp(op, ckt, exports, references);
         DestroyExports(exports);

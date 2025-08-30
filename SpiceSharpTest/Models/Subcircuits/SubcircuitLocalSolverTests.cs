@@ -37,10 +37,10 @@ public class SubcircuitLocalSolverTests : Framework
                 .SetParameter("localsolver", true));
 
         var op = new OP("op");
-        IExport<double>[] exports = new[] {
+        IExport<double>[] exports = [
             new RealVoltageExport(op, "out"),
             new RealVoltageExport(op, new[] { "X1", "b" }),
-        };
+        ];
         IEnumerable<double> references = [0.5, 0.5];
         AnalyzeOp(op, ckt, exports, references);
         DestroyExports(exports);
@@ -60,10 +60,10 @@ public class SubcircuitLocalSolverTests : Framework
                 .SetParameter("localsolver", true));
 
         var ac = new AC("ac", new DecadeSweep(1, 100, 3));
-        IExport<Complex>[] exports = new[] {
+        IExport<Complex>[] exports = [
             new ComplexVoltageExport(ac, "out"),
             new ComplexVoltageExport(ac, new[] { "X1", "b" })
-        };
+        ];
         IEnumerable<Func<double, Complex>> references = [f => 0.5, f => 0.5];
         AnalyzeAC(ac, ckt, exports, references);
         DestroyExports(exports);
@@ -84,12 +84,12 @@ public class SubcircuitLocalSolverTests : Framework
                 .SetParameter("localsolver", true));
 
         var op = new OP("op");
-        IExport<double>[] exports = new[]
-        {
+        IExport<double>[] exports =
+        [
             new RealVoltageExport(op, "out"),
             new RealVoltageExport(op, "X1".Combine("b")),
             new RealVoltageExport(op, "X1".Combine("c"))
-        };
+        ];
         IEnumerable<double> references = [0.5, 0.5, 0.5];
         AnalyzeOp(op, ckt, exports, references);
         DestroyExports(exports);
@@ -110,7 +110,7 @@ public class SubcircuitLocalSolverTests : Framework
                 .SetParameter("localsolver", true));
 
         var ac = new AC("ac", new DecadeSweep(1, 100, 3));
-        IExport<Complex>[] exports = new[] { new ComplexVoltageExport(ac, "out") };
+        IExport<Complex>[] exports = [new ComplexVoltageExport(ac, "out")];
         IEnumerable<Func<double, Complex>> references = [f => 0.5];
         AnalyzeAC(ac, ckt, exports, references);
         DestroyExports(exports);
@@ -131,7 +131,7 @@ public class SubcircuitLocalSolverTests : Framework
 
         var tran = new Transient("transient", 1e-6, 1e-3);
         tran.TimeParameters.InitialConditions.Add("out", 0.0);
-        IExport<double>[] exports = new[] { new RealVoltageExport(tran, "out") };
+        IExport<double>[] exports = [new RealVoltageExport(tran, "out")];
         IEnumerable<Func<double, double>> references = [t => 1.0 - Math.Exp(-t * 1e3)];
         AnalyzeTransient(tran, ckt, exports, references);
         DestroyExports(exports);
@@ -150,7 +150,7 @@ public class SubcircuitLocalSolverTests : Framework
                 .SetParameter("localsolver", true));
 
         var op = new OP("op");
-        IExport<double>[] exports = new[] { new RealVoltageExport(op, "out") };
+        IExport<double>[] exports = [new RealVoltageExport(op, "out")];
         Assert.Throws<NoEquivalentSubcircuitException>(() => op.RunToEnd(ckt));
     }
 
@@ -476,7 +476,7 @@ public class SubcircuitLocalSolverTests : Framework
                     string Node1 = "CN_" + childIndex.ToString();
                     string Node2 = "CN_" + (childIndex + 1).ToString();
 
-                    var scDef = new SubcircuitDefinition(new EntityCollection(), new string[] { "posTerm", "negTerm" });
+                    var scDef = new SubcircuitDefinition(new EntityCollection(), ["posTerm", "negTerm"]);
 
                     var diodeModel = new DiodeModel("J1Diode");
                     diodeModel.Parameters.SaturationCurrent = I01;
@@ -489,21 +489,21 @@ public class SubcircuitLocalSolverTests : Framework
                     scDef.Entities.Add(new Resistor("RS", "1", "posTerm", Rs));
                     scDef.Entities.Add(new Resistor("RSH", "1", "negTerm", Rsh));
 
-                    var scCircuit = new Subcircuit(childCircuitID, scDef, new string[] { Node1, Node2 });
+                    var scCircuit = new Subcircuit(childCircuitID, scDef, [Node1, Node2]);
                     parentEntities.Add(scCircuit);
                 }
 
                 parentEntities.Add(new VoltageSource("Vterm1", "CN_0", "parent_terminal_pos", 0));
                 parentEntities.Add(new VoltageSource("Vterm2", "CN_" + (childCircuits).ToString(), "parent_terminal_neg", 0));
 
-                var newSubCircuitParentDef = new SubcircuitDefinition(new EntityCollection(), new string[] { "parent_terminal_pos", "parent_terminal_neg" });
+                var newSubCircuitParentDef = new SubcircuitDefinition(new EntityCollection(), ["parent_terminal_pos", "parent_terminal_neg"]);
 
                 foreach (var item in parentEntities)
                 {
                     newSubCircuitParentDef.Entities.Add(item);
                 }
 
-                var newSubCircuit = new Subcircuit(parentCircuitID, newSubCircuitParentDef, new string[] { parentN2, parentN3 });
+                var newSubCircuit = new Subcircuit(parentCircuitID, newSubCircuitParentDef, [parentN2, parentN3]);
                 newSubCircuit.Parameters.LocalSolver = localSolver;
                 parallelComponents.Add(newSubCircuit);
                 parallelComponents.Add(new Resistor("R" + parentCircuitIndex.ToString(), parentN1, parentN2, 1));

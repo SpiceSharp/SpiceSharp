@@ -83,7 +83,7 @@ public class Framework
     {
         // Get all assignments
         definition = Regex.Replace(definition, @"\s*\=\s*", "=");
-        string[] assignments = definition.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        string[] assignments = definition.Split([',', ';', ' '], StringSplitOptions.RemoveEmptyEntries);
         foreach (string assignment in assignments)
         {
             // Get the name and value

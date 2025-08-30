@@ -47,10 +47,10 @@ public class MOS2Tests : Framework
         );
 
         // Create simulation
-        var dc = new DC("dc", new[] {
+        var dc = new DC("dc", [
             new ParameterSweep("V2", new LinearSweep(0, 3.3, 0.3)),
             new ParameterSweep("V1", new LinearSweep(0, 3.3, 0.3))
-        });
+        ]);
 
         // Create exports
         IExport<double>[] exports = [new RealPropertyExport(dc, "V2", "i")];
