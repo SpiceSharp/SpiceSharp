@@ -1,4 +1,6 @@
-﻿using SpiceSharp.ParameterSets;
+﻿using SpiceSharp.Behaviors;
+using SpiceSharp.Entities;
+using SpiceSharp.ParameterSets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +11,14 @@ namespace SpiceSharp.Simulations;
 /// Class that implements a DC sweep analysis.
 /// </summary>
 /// <seealso cref="BiasingSimulation" />
-public class DC : BiasingSimulation,
-    IParameterized<DCParameters>
+public partial class DC : BiasingSimulation,
+    IParameterized<DCParameters>,
+    IStateful<IComplexSimulationState>,
+    IBehavioral<IFrequencyBehavior>
 {
     private IEnumerator<double>[] _sweepEnumerators;
+    private BehaviorList<IFrequencyBehavior> _frequencyBehaviors;
+    private ComplexSimulationState _complexSimulationState;
 
     /// <summary>
     /// The constant returned when exporting a sweep point.
@@ -29,6 +35,9 @@ public class DC : BiasingSimulation,
 
     /// <inheritdoc/>
     DCParameters IParameterized<DCParameters>.Parameters => DCParameters;
+
+    /// <inheritdoc />
+    IComplexSimulationState IStateful<IComplexSimulationState>.State => _complexSimulationState;
 
     /// <summary>
     /// Occurs when iterating to a solution has failed.
@@ -74,6 +83,35 @@ public class DC : BiasingSimulation,
             DCParameters.Sweeps.Add(sweep);
     }
 
+    /// <inheritdoc />
+    public override bool UsesBehaviors<B>()
+    {
+        // Only use the frequency behavior when asked for
+        if (typeof(B) == typeof(IFrequencyBehavior))
+            return DCParameters.FrequencyBehaviors;
+        return base.UsesBehaviors<B>();
+    }
+
+    /// <inheritdoc />
+    protected override void CreateStates()
+    {
+        base.CreateStates();
+        if (DCParameters.FrequencyBehaviors)
+            _complexSimulationState = new ComplexSimulationState();
+        else
+            _complexSimulationState = null;
+    }
+
+    /// <inheritdoc />
+    protected override void CreateBehaviors(IEntityCollection entities)
+    {
+        base.CreateBehaviors(entities);
+        if (DCParameters.FrequencyBehaviors)
+            _frequencyBehaviors = EntityBehaviors.GetBehaviorList<IFrequencyBehavior>();
+        else
+            _frequencyBehaviors = null;
+    }
+
     /// <inheritdoc/>
     protected override IEnumerable<int> Execute(int mask = Exports)
     {
@@ -113,6 +151,13 @@ public class DC : BiasingSimulation,
             {
                 IterationFailed?.Invoke(this, EventArgs.Empty);
                 Op(BiasingParameters.DcMaxIterations);
+            }
+
+            // If specified, also calculate the frequency behaviors
+            if (_frequencyBehaviors is not null)
+            {
+                foreach (var behavior in _frequencyBehaviors)
+                    behavior.InitializeParameters();
             }
 
             // Export data

@@ -180,4 +180,52 @@ public class DCTests : Framework
             BiasingSimulation.AfterTemperature |
             DC.ExportSweep));
     }
+
+    [Test]
+    public void When_DCFrequencyBehaviors_Expect_NoExceptions()
+    {
+        // I needed a model that has some simulatable parameters in the frequency behavior
+        // to check. To avoid also making the test being about simulating a model, I'll
+        // simply check whether the export is successful.
+        var m1 = new Mosfet1("M1", "d", "g", "0", "b", "MM");
+        var model = new Mosfet1Model("MM");
+        model
+            .SetParameter("IS", 1e-32)
+            .SetParameter("VTO", 3.03646)
+            .SetParameter("LAMBDA", 0.0)
+            .SetParameter("KP", 5.28747)
+            .SetParameter("TOX", 200e-9)
+            .SetParameter("CGSO", 6.5761e-6)
+            .SetParameter("CGDO", 1e-11);
+
+        // Create circuit
+        var ckt = new Circuit(
+            new VoltageSource("V1", "g", "0", 0.0),
+            new VoltageSource("V2", "d", "0", 0),
+            new VoltageSource("V3", "b", "0", -5.0),
+            m1, model);
+
+        // Create simulation
+        var dc = new DC("dc", [
+            new ParameterSweep("V2", new LinearSweep(-5, 5, 0.5)),
+            new ParameterSweep("V1", new LinearSweep(-5, 5, 0.5))
+        ]);
+
+        // --- REAL TEST ---
+        dc.DCParameters.FrequencyBehaviors = true;
+
+        // Create an export for a parameter that is not possible to get with normal execution
+        var export = new RealPropertyExport(dc, "M1", "cgs");
+        bool hasNoneZero = false;
+
+        // Run the simulation and check that we at least get some non-zero values
+        // The test implicitly also makes sure there are no exceptions
+        foreach (int flag in dc.Run(ckt, Simulation.Exports))
+        {
+            // Find the parameter on 
+            if (!export.Value.Equals(0.0))
+                hasNoneZero = true;
+        }
+        Assert.That(hasNoneZero, Is.True);
+    }
 }

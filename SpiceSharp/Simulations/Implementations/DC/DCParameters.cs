@@ -15,18 +15,26 @@ public partial class DCParameters : ParameterSet, ICloneable<DCParameters>
     /// Gets the list of sweeps that need to be executed.
     /// </summary>
     [ParameterName("sweeps"), ParameterInfo("List of sweeps")]
-    public ICollection<ISweep> Sweeps { get; } = new List<ISweep>();
+    public ICollection<ISweep> Sweeps { get; } = [];
 
     /// <summary>
     /// Gets the maximum number of iterations allowed for DC sweeps.
     /// </summary>
     public int SweepMaxIterations { get; set; } = 20;
 
+    /// <summary>
+    /// If <c>true</c>, frequency behaviors are loaded and called on to calculate small-signal parameters.
+    /// </summary>
+    [ParameterName("dccap"), ParameterInfo("If true, frequency behaviors loaded and called on to calculate small-signal parameters.")]
+    public bool FrequencyBehaviors { get; set; }
+
     /// <inheritdoc/>
     public DCParameters Clone()
     {
-        var clone = new DCParameters();
-        clone.SweepMaxIterations = SweepMaxIterations;
+        var clone = new DCParameters
+        {
+            SweepMaxIterations = SweepMaxIterations
+        };
         foreach (var sweep in Sweeps)
             clone.Sweeps.Add(sweep.Clone());
         return clone;
