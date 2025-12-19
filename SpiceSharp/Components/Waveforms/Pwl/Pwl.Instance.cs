@@ -2,7 +2,6 @@
 using SpiceSharp.Simulations.IntegrationMethods;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SpiceSharp.Components;
 
@@ -17,12 +16,12 @@ public partial class Pwl
         private readonly Point[] _points;
         private readonly IIntegrationMethod _method;
         private Line _line;
-        private int _index;
+        private int _index = 0;
 
         /// <summary>
         /// A description of a line segment.
         /// </summary>
-        protected class Line
+        protected readonly struct Line
         {
             private readonly double _m, _q;
 
@@ -63,7 +62,7 @@ public partial class Pwl
         public Instance(IEnumerable<Point> points, IIntegrationMethod method)
         {
             _method = method;
-            _points = points.ThrowIfNull(nameof(points)).ToArray();
+            _points = [.. points.ThrowIfNull(nameof(points))];
             if (_points.Length == 0)
                 throw new ArgumentException(Properties.Resources.Waveforms_Pwl_Empty);
 
@@ -73,8 +72,12 @@ public partial class Pwl
                 if (_points[i - 1].Time >= _points[i].Time)
                     throw new ArgumentException(Properties.Resources.Waveforms_Pwl_NoIncreasingTimeValues);
             }
-            _index = 0;
 
+            // Initialize the current line segment
+            _index = 0;
+            _line = new Line(
+                double.NegativeInfinity, _points[0].Value,
+                double.PositiveInfinity, _points[0].Value);
             Probe();
         }
 
@@ -85,37 +88,41 @@ public partial class Pwl
 
             // Find the line segment
             // The line segment is likely to be very close to the current segment.
+            int lastIndex = _index;
             while (_index > 1 && _points[_index - 1].Time > time)
-            {
-                _line = null;
                 _index--;
-            }
             while (_index < _points.Length && time >= _points[_index].Time)
-            {
-                _line = null;
                 _index++;
-            }
-            if (_line == null)
+            if (_index != lastIndex)
             {
                 if (_index == 0)
+                {
+                    double value = _points[0].Value;
                     _line = new Line(
-                        double.NegativeInfinity, _points[0].Value,
-                        _points[0].Time, _points[0].Value);
+                        double.NegativeInfinity, value,
+                        double.PositiveInfinity, value);
+                }
                 else if (_index >= _points.Length)
                 {
+                    double value = _points[_points.Length - 1].Value;
                     _line = new Line(
-                        double.NegativeInfinity, _points[_points.Length - 1].Value,
-                        double.PositiveInfinity, _points[_points.Length - 1].Value
+                        double.NegativeInfinity, value,
+                        double.PositiveInfinity, value
                         );
                 }
                 else if (time > _points[_index].Time)
+                {
+                    double value = _points[_index].Value;
                     _line = new Line(
-                        _points[_index].Time, _points[_index].Value,
-                        double.PositiveInfinity, _points[_index].Value);
+                        double.NegativeInfinity, value,
+                        double.PositiveInfinity, value);
+                }
                 else
+                {
                     _line = new Line(
                         _points[_index - 1].Time, _points[_index - 1].Value,
                         _points[_index].Time, _points[_index].Value);
+                }
             }
 
             Value = _line.At(time);
