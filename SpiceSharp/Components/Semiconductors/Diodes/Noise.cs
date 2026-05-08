@@ -85,6 +85,8 @@ namespace SpiceSharp.Components.Diodes
         /// <inheritdoc/>
         void INoiseBehavior.Compute()
         {
+            // The idealized LTspice branch reuses these generic current/conductance-derived
+            // noise exports; exact LTspice ideal-diode noise parity is intentionally not claimed.
             double m = Parameters.ParallelMultiplier;
             double n = Parameters.SeriesMultiplier;
 

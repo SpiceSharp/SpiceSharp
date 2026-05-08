@@ -53,6 +53,13 @@ namespace SpiceSharp.Components.Diodes
         /// <param name="vd">The diode voltage.</param>
         protected void CalculateCapacitance(double vd)
         {
+            if (ModelParameters.IsIdeal)
+            {
+                LocalCapCharge = 0.0;
+                LocalCapacitance = 0.0;
+                return;
+            }
+
             // charge storage elements
             double czero = TempJunctionCap * Parameters.Area;
             if (vd < TempDepletionCap)

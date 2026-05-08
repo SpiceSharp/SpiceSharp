@@ -100,6 +100,12 @@ namespace SpiceSharp.Components.Diodes
         /// <inheritdoc/>
         protected virtual void Load()
         {
+            if (ModelParameters.IsIdeal)
+            {
+                LoadIdeal();
+                return;
+            }
+
             double cd, gd;
 
             // Get the current voltage across (one diode).
@@ -161,6 +167,37 @@ namespace SpiceSharp.Components.Diodes
                 cdeq, -cdeq);
         }
 
+        private void LoadIdeal()
+        {
+            InitializeIdeal(out double vd);
+
+            IdealDiode.Evaluate(
+                ModelParameters,
+                BiasingParameters,
+                vd,
+                Parameters.Area,
+                out double cd,
+                out double gd);
+
+            LocalVoltage = vd;
+            LocalCurrent = cd;
+            LocalConductance = gd;
+
+            double m = Parameters.ParallelMultiplier;
+            double n = Parameters.SeriesMultiplier;
+            double gspr = ModelTemperature.Conductance * Parameters.Area;
+            double cdeq = cd - gd * vd;
+
+            gd *= m / n;
+            gspr *= m / n;
+            cdeq *= m;
+            Elements.Add(
+                // Y-matrix
+                gspr, gd, gd + gspr, -gd, -gd, -gspr, -gspr,
+                // RHS vector
+                cdeq, -cdeq);
+        }
+
         /// <inheritdoc/>
         void IBiasingBehavior.Load() => Load();
 
@@ -194,6 +231,24 @@ namespace SpiceSharp.Components.Diodes
                 {
                     vd = Semiconductor.LimitJunction(vd, LocalVoltage, Vte, TempVCritical, ref check);
                 }
+            }
+        }
+
+        private void InitializeIdeal(out double vd)
+        {
+            if (_iteration.Mode == IterationModes.Junction)
+            {
+                vd = Parameters.Off ? 0.0 : ModelParameters.IdealForwardVoltage.Value;
+            }
+            else if (_iteration.Mode == IterationModes.Fix && Parameters.Off)
+            {
+                vd = 0.0;
+            }
+            else
+            {
+                // The LTspice idealized branch is piecewise-linear/quadratic, so the
+                // exponential junction limiter used by Berkeley diodes is intentionally skipped.
+                vd = (Variables.PosPrime.Value - Variables.Negative.Value) / Parameters.SeriesMultiplier;
             }
         }
 

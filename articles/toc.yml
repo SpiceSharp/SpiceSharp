@@ -4,6 +4,9 @@
 - name: Spice# structure
   href: structure/toc.yml
   topicHref: structure/flow.md
+- name: Compatibility
+  href: compatibility/toc.yml
+  topicHref: compatibility/ltspice-ideal-diode.md
 - name: Custom components
   href: tutorials/writing_behaviors/toc.yml
   topicHref: tutorials/writing_behaviors/custom_models.md

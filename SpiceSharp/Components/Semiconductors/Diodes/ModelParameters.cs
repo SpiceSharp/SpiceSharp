@@ -172,5 +172,91 @@ namespace SpiceSharp.Components.Diodes
         [ParameterName("af"), ParameterInfo("flicker noise exponent")]
         [Finite]
         private double _flickerNoiseExponent = 1;
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode forward resistance.
+        /// </summary>
+        /// <remarks>
+        /// When any ideal-diode parameter is given, the diode uses a piecewise-linear
+        /// LTspice-compatible approximation instead of the Berkeley exponential model.
+        /// </remarks>
+        [ParameterName("ron"), ParameterInfo("Ideal diode forward resistance", Units = "Ohm")]
+        [GreaterThan(0), Finite]
+        private GivenParameter<double> _idealOnResistance = new(1.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode off resistance.
+        /// </summary>
+        /// <remarks>
+        /// If omitted for an ideal diode, the off conductance follows the simulation Gmin.
+        /// </remarks>
+        [ParameterName("roff"), ParameterInfo("Ideal diode off resistance", Units = "Ohm")]
+        [GreaterThan(0), Finite]
+        private GivenParameter<double> _idealOffResistance = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode forward voltage.
+        /// </summary>
+        [ParameterName("vfwd"), ParameterInfo("Ideal diode forward voltage", Units = "V")]
+        [Finite]
+        private GivenParameter<double> _idealForwardVoltage = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode reverse breakdown voltage magnitude.
+        /// </summary>
+        [ParameterName("vrev"), ParameterInfo("Ideal diode reverse breakdown voltage", Units = "V")]
+        [GreaterThanOrEquals(0), Finite]
+        private GivenParameter<double> _idealReverseVoltage = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode reverse breakdown resistance.
+        /// </summary>
+        /// <remarks>
+        /// If omitted, reverse breakdown uses <see cref="IdealOnResistance"/>.
+        /// </remarks>
+        [ParameterName("rrev"), ParameterInfo("Ideal diode reverse breakdown resistance", Units = "Ohm")]
+        [GreaterThan(0), Finite]
+        private GivenParameter<double> _idealReverseResistance = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode forward current limit.
+        /// </summary>
+        [ParameterName("ilimit"), ParameterInfo("Ideal diode forward current limit", Units = "A")]
+        [GreaterThan(0), Finite]
+        private GivenParameter<double> _idealForwardCurrentLimit = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode reverse current limit.
+        /// </summary>
+        [ParameterName("revilimit"), ParameterInfo("Ideal diode reverse current limit", Units = "A")]
+        [GreaterThan(0), Finite]
+        private GivenParameter<double> _idealReverseCurrentLimit = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode forward transition width.
+        /// </summary>
+        [ParameterName("epsilon"), ParameterInfo("Ideal diode forward smoothing voltage", Units = "V")]
+        [GreaterThanOrEquals(0), Finite]
+        private GivenParameter<double> _idealForwardEpsilon = new(0.0, false);
+
+        /// <summary>
+        /// Gets or sets the LTspice ideal diode reverse transition width.
+        /// </summary>
+        [ParameterName("revepsilon"), ParameterInfo("Ideal diode reverse smoothing voltage", Units = "V")]
+        [GreaterThanOrEquals(0), Finite]
+        private GivenParameter<double> _idealReverseEpsilon = new(0.0, false);
+
+        /// <summary>
+        /// Gets whether this model uses the LTspice idealized diode branch.
+        /// </summary>
+        public bool IsIdeal => _idealOnResistance.Given
+            || _idealOffResistance.Given
+            || _idealForwardVoltage.Given
+            || _idealReverseVoltage.Given
+            || _idealReverseResistance.Given
+            || _idealForwardCurrentLimit.Given
+            || _idealReverseCurrentLimit.Given
+            || _idealForwardEpsilon.Given
+            || _idealReverseEpsilon.Given;
     }
 }

@@ -406,5 +406,148 @@ namespace SpiceSharpTest.Models
             AnalyzeDC(dc, ckt, exports, references);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_IdealDiodeForwardDc_Expect_AnalyticCurrent()
+        {
+            double current = RunIdealDiodeOp(3.0, "Ron=2 Roff=1e9 Vfwd=1");
+
+            Assert.That(current, Is.EqualTo(1.0).Within(1e-9));
+        }
+
+        [Test]
+        public void When_IdealDiodeOffDc_Expect_OffResistanceCurrent()
+        {
+            double current = RunIdealDiodeOp(0.5, "Ron=2 Roff=1e9 Vfwd=1");
+
+            Assert.That(current, Is.EqualTo(0.5e-9).Within(1e-15));
+        }
+
+        [Test]
+        public void When_IdealDiodeReverseBreakdownDc_Expect_AnalyticCurrent()
+        {
+            double current = RunIdealDiodeOp(-6.0, "Ron=2 Roff=1e9 Vfwd=1 Vrev=2 Rrev=4");
+
+            Assert.That(current, Is.EqualTo(-1.0).Within(1e-9));
+        }
+
+        [Test]
+        public void When_IdealDiodeReverseBreakdownHasForwardSmoothing_Expect_ReverseRegionRemainsSelected()
+        {
+            double current = RunIdealDiodeOp(-6.0, "Ron=2 Roff=1e9 Vfwd=1 Vrev=2 Rrev=4 Epsilon=0.2");
+
+            Assert.That(current, Is.EqualTo(-1.0).Within(1e-9));
+        }
+
+        [Test]
+        public void When_IdealDiodeMultipliersDc_Expect_ParallelAndSeriesScaling()
+        {
+            var model = CreateDiodeModel("ideal", "Ron=2 Roff=1e9 Vfwd=1");
+            var diode = new Diode("D1", "in", "0", model.Name)
+                .SetParameter("m", 2.0)
+                .SetParameter("n", 2.0);
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 3.0),
+                diode,
+                model);
+
+            var op = new OP("op");
+            var export = new RealCurrentExport(op, "V1");
+
+            double current = 0.0;
+            foreach (int _ in op.Run(ckt))
+            {
+                current = -export.Value;
+            }
+
+            Assert.That(current, Is.EqualTo(0.5).Within(1e-9));
+        }
+
+        [Test]
+        public void When_IdealDiodeCurrentLimitDc_Expect_TanhLimitedCurrent()
+        {
+            double current = RunIdealDiodeOp(10.0, "Ron=1 Roff=1e9 Vfwd=0 Ilimit=1");
+
+            Assert.That(current, Is.EqualTo(Math.Tanh(10.0)).Within(1e-9));
+            Assert.That(current, Is.LessThan(1.0));
+        }
+
+        [Test]
+        public void When_IdealDiodeReverseCurrentLimitDc_Expect_TanhLimitedCurrent()
+        {
+            double current = RunIdealDiodeOp(-10.0, "Ron=1 Roff=1e9 Vfwd=0 Vrev=0 Rrev=1 RevIlimit=2");
+
+            Assert.That(current, Is.EqualTo(2.0 * Math.Tanh(-5.0)).Within(1e-9));
+            Assert.That(current, Is.GreaterThan(-2.0));
+        }
+
+        [Test]
+        public void When_IdealDiodeForwardSmoothingDc_Expect_ContinuousCornerConductance()
+        {
+            var model = CreateDiodeModel("ideal", "Ron=1 Roff=1e9 Vfwd=1 Epsilon=0.2");
+            const double delta = 1e-6;
+
+            double lowerCurrent = RunIdealDiodeOp(1.0 - delta, model);
+            double upperCurrent = RunIdealDiodeOp(1.0 + delta, model);
+            double conductance = (upperCurrent - lowerCurrent) / (2.0 * delta);
+
+            Assert.That(conductance, Is.EqualTo(0.5).Within(1e-4));
+        }
+
+        [Test]
+        public void When_IdealDiodeAc_Expect_SmallSignalConductance()
+        {
+            var model = CreateDiodeModel("ideal", "Ron=2 Roff=1e9 Vfwd=1");
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", 3.0)
+                    .SetParameter("acmag", 1.0),
+                new Resistor("R1", "in", "out", 1.0),
+                new Diode("D1", "out", "0", model.Name),
+                model);
+
+            var ac = new AC("ac", new DecadeSweep(1, 1e3, 1));
+            var export = new ComplexVoltageExport(ac, "out");
+
+            foreach (int _ in ac.Run(ckt, AC.ExportSmallSignal))
+            {
+                Assert.That(export.Value.Real, Is.EqualTo(2.0 / 3.0).Within(1e-9));
+                Assert.That(export.Value.Imaginary, Is.EqualTo(0.0).Within(1e-12));
+            }
+        }
+
+        private double RunIdealDiodeOp(double voltage, string modelParameters)
+        {
+            var model = CreateDiodeModel("ideal", modelParameters);
+            var ckt = new Circuit(
+                new VoltageSource("V1", "in", "0", voltage),
+                new Diode("D1", "in", "0", model.Name),
+                model);
+
+            var op = new OP("op");
+            var export = new RealCurrentExport(op, "V1");
+
+            double current = 0.0;
+            foreach (int _ in op.Run(ckt))
+            {
+                current = -export.Value;
+            }
+
+            return current;
+        }
+
+        private double RunIdealDiodeOp(double voltage, DiodeModel model)
+        {
+            var ckt = new Circuit(new VoltageSource("V1", "in", "0", voltage), new Diode("D1", "in", "0", model.Name), model);
+            var op = new OP("op");
+            var export = new RealCurrentExport(op, "V1");
+
+            double current = 0.0;
+            foreach (int _ in op.Run(ckt))
+            {
+                current = -export.Value;
+            }
+
+            return current;
+        }
     }
 }
