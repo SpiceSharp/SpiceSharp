@@ -107,6 +107,8 @@ namespace SpiceSharp.Simulations
                 if (setter != null)
                     break;
             }
+            if (setter == null)
+                throw new ArgumentException(Properties.Resources.Simulations_PropertyNotfound.FormatString(Name, Property));
 
             // Enumerate the points
             foreach (double pt in Points)

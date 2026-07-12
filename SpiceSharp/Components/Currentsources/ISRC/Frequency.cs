@@ -28,11 +28,11 @@ namespace SpiceSharp.Components.CurrentSources
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
-        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(Parameters.Phasor);
+        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => Parameters.Phasor;
+        public Complex ComplexCurrent => Parameters.Phasor * Parameters.ParallelMultiplier;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.

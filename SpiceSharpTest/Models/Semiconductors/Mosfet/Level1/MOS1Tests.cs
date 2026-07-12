@@ -558,5 +558,28 @@ namespace SpiceSharpTest.Models
             Compare(ac, ckt_ref, ckt_act, exports);
             DestroyExports(exports);
         }
+
+        [Test]
+        public void When_GateBulkOverlapCapacitanceChanges_Expect_CapacitorCurrent()
+        {
+            const double length = 1e-4;
+            const double gateBulkCapFactor = 1e-5;
+            var waveform = new Pulse(0.0, 1.0, 0.0, 1e-6, 1e-6, 1e-6, 4e-6);
+            var circuit = new Circuit(
+                new VoltageSource("Vmos", "gmos", "0", waveform),
+                CreateMOS1("M1", "0", "gmos", "0", "0", "MM").SetParameter("l", length),
+                CreateMOS1Model("MM", $"IS=0 VTO=10 KP=0 TOX=1 CGBO={gateBulkCapFactor}"),
+                new VoltageSource("Vcap", "gcap", "0", waveform.Clone()),
+                new Capacitor("C1", "gcap", "0", gateBulkCapFactor * length));
+            var transient = new Transient("tran", 1e-8, 0.9e-6);
+            var mosCurrent = new RealPropertyExport(transient, "Vmos", "i");
+            var capacitorCurrent = new RealPropertyExport(transient, "Vcap", "i");
+
+            foreach (var _ in transient.Run(circuit, Transient.ExportTransient))
+            {
+                if (transient.Time > 1e-8)
+                    Assert.That(mosCurrent.Value, Is.EqualTo(capacitorCurrent.Value).Within(1e-9));
+            }
+        }
     }
 }

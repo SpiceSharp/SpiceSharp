@@ -55,6 +55,20 @@ namespace SpiceSharpTest.Simulations
         }
 
         [Test]
+        public void When_DCSweepParameterIsMissing_Expect_Exception()
+        {
+            var circuit = new Circuit(new VoltageSource("V1", "in", "0", 0));
+            var dc = new DC("dc", [new ParameterSweep("V1", "missing", new LinearSweep(0, 1, 2))]);
+
+            Assert.Throws<ArgumentException>(() =>
+            {
+                foreach (var _ in dc.Run(circuit))
+                {
+                }
+            });
+        }
+
+        [Test]
         public void When_DiodeDCTwice_Expect_NoException()
         {
             /*

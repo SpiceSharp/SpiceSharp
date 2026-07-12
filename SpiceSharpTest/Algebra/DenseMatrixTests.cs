@@ -22,6 +22,16 @@ namespace SpiceSharpTest.Algebra
         }
 
         [Test]
+        public void When_DefaultIsAssignedOutsideMatrix_Expect_NoExpansion()
+        {
+            var matrix = new DenseMatrix<double>();
+
+            Assert.DoesNotThrow(() => matrix[10, 10] = 0.0);
+            Assert.That(matrix.Size, Is.Zero);
+            Assert.That(matrix[10, 10], Is.Zero);
+        }
+
+        [Test]
         public void When_SwappingRows_Expect_Reference()
         {
             var n = new DenseMatrix<double>();

@@ -96,7 +96,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The power on side 1.
         /// </value>
         [ParameterName("p1"), ParameterName("p1_r"), ParameterInfo("Power 1")]
-        public Complex ComplexPower1 => -Voltage1 * Current1;
+        public Complex ComplexPower1 => -ComplexVoltage1 * Complex.Conjugate(ComplexCurrent1);
 
         /// <summary>
         /// Gets the power on side 2.
@@ -105,7 +105,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The power on side 2.
         /// </value>
         [ParameterName("p2"), ParameterName("p2_r"), ParameterInfo("Power 2")]
-        public Complex ComplexPower2 => -Voltage1 * Current1;
+        public Complex ComplexPower2 => -ComplexVoltage2 * Complex.Conjugate(ComplexCurrent2);
 
 
         /// <summary>

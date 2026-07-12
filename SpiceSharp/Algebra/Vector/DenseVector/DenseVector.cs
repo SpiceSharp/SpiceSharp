@@ -59,7 +59,7 @@ namespace SpiceSharp.Algebra
         /// <param name="length">The length of the vector.</param>
         public DenseVector(int length)
         {
-            if (length < 0 && length > int.MaxValue - 1)
+            if (length < 0 || length > int.MaxValue - 1)
                 throw new ArgumentOutOfRangeException(nameof(length));
             Length = length;
             _values = new T[length + 1];

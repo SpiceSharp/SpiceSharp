@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.VoltageSources
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]
-        public Complex ComplexPower => -Voltage * Complex.Conjugate(Branch.Value);
+        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(Branch.Value);
 
         /// <inheritdoc/>
         public new IVariable<Complex> Branch { get; }

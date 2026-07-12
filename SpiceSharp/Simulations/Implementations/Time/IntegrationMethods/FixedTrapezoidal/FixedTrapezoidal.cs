@@ -22,12 +22,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public double Step
         {
             get => _step;
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimestepInvalid);
-                _step = value;
-            }
+            set => _step = value.Finite(nameof(Step)).GreaterThan(nameof(Step), 0.0);
         }
         private double _step;
 
@@ -38,7 +33,17 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// The xmu constant.
         /// </value>
         [ParameterName("xmu"), ParameterInfo("The xmu parameter.")]
-        public double Xmu { get; set; } = 0.5;
+        public double Xmu
+        {
+            get => _xmu;
+            set
+            {
+                if (double.IsNaN(value))
+                    throw new ArgumentOutOfRangeException(nameof(Xmu), value, Properties.Resources.Parameters_NotGreaterOrEqual.FormatString(0.0));
+                _xmu = value.GreaterThanOrEquals(nameof(Xmu), 0.0).LessThan(nameof(Xmu), 1.0);
+            }
+        }
+        private double _xmu = 0.5;
 
         /// <summary>
         /// Creates an instance of the integration method.
@@ -47,6 +52,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <returns>
         /// The integration method.
         /// </returns>
-        public override IIntegrationMethod Create(IBiasingSimulationState state) => new Instance(this);
+        public override IIntegrationMethod Create(IBiasingSimulationState state)
+        {
+            _step.Finite(nameof(Step)).GreaterThan(nameof(Step), 0.0);
+            return new Instance(this);
+        }
     }
 }

@@ -34,13 +34,13 @@ namespace SpiceSharp.Components.Switches
             get
             {
                 double gNow = CurrentState ? ModelTemperature.OnConductance : ModelTemperature.OffConductance;
-                return ComplexVoltage * gNow;
+                return ComplexVoltage * gNow * Parameters.ParallelMultiplier;
             }
         }
 
         /// <include file='../Common/docs.xml' path='docs/members[@name="Frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("The complex power")]
-        public Complex ComplexPower => ComplexPower * Complex.Conjugate(ComplexCurrent);
+        public Complex ComplexPower => ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Frequency"/> class.

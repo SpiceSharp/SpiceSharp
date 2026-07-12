@@ -163,8 +163,8 @@ namespace SpiceSharp.Components.Mosfets.Level2
             double gmanew = (Properties.TempBulkPotential - pbo) / pbo;
             capfact = (1 + ModelParameters.BulkJunctionBotGradingCoefficient *
                     (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew));
-            Properties.Cbd *= capfact;
-            Properties.Cbs *= capfact;
+                Properties.TempCbd *= capfact;
+                Properties.TempCbs *= capfact;
             Properties.TempCj *= capfact;
             capfact = (1 + ModelParameters.BulkJunctionSideGradingCoefficient *
                     (4e-4 * (Parameters.Temperature - Constants.ReferenceTemperature) - gmanew));

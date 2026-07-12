@@ -88,7 +88,14 @@ namespace SpiceSharp.General
                 if (!existing.Equals(value))
                     return false;
                 foreach (var type in InterfaceCache.Get(key))
-                    _interfaces[type].Remove(value);
+                {
+                    if (_interfaces.TryGetValue(type, out var interfaceValues))
+                    {
+                        interfaceValues.Remove(value);
+                        if (interfaceValues.IsEmpty)
+                            _interfaces.Remove(type);
+                    }
+                }
                 _dictionary.Remove(key);
                 return true;
             }

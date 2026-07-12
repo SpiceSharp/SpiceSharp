@@ -115,7 +115,7 @@ namespace SpiceSharp.Components.Mosfets
             double GateBulkOverlapCap = _mp.GateBulkOverlapCapFactor * _behavior.Parameters.ParallelMultiplier * _behavior.Properties.EffectiveLength;
 
             double capgs = 2 * _charges.Cgs + GateSourceOverlapCap;
-            double capgd = 2 * _charges.Cgs + GateDrainOverlapCap;
+            double capgd = 2 * _charges.Cgd + GateDrainOverlapCap;
             double capgb = 2 * _charges.Cgb + GateBulkOverlapCap;
 
             _qgs.Value = capgs * vgs;
@@ -172,7 +172,7 @@ namespace SpiceSharp.Components.Mosfets
             _vbs.Value = vbs;
             _qgs.Value = (vgs - vgs1) * capgs + _qgs.GetPreviousValue(1);
             _qgd.Value = (vgd - vgd1) * capgd + _qgd.GetPreviousValue(1);
-            _qgb.Value = (vgb1 - vgb1) * capgb + _qgb.GetPreviousValue(1);
+            _qgb.Value = (vgb - vgb1) * capgb + _qgb.GetPreviousValue(1);
 
             _qgs.Derive();
             var info = _qgs.GetContributions(capgs, vgs);

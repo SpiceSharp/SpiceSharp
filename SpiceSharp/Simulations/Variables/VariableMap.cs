@@ -27,7 +27,7 @@ namespace SpiceSharp.Simulations
             get
             {
                 var result = _map.FirstOrDefault(p => p.Value == index);
-                if (result.Equals(default(IVariable)))
+                if (result.Equals(default(KeyValuePair<IVariable, int>)))
                     throw new ArgumentException(Properties.Resources.VariableNotFound.FormatString(index));
                 return result.Key;
             }
@@ -56,6 +56,8 @@ namespace SpiceSharp.Simulations
         {
             variable.ThrowIfNull(nameof(variable));
             index.GreaterThan(nameof(index), 0);
+            if (_map.ContainsValue(index))
+                throw new ArgumentException(Properties.Resources.VariableMap_KeyExists.FormatString(index), nameof(index));
             try
             {
                 _map.Add(variable, index);

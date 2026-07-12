@@ -20,18 +20,19 @@ namespace SpiceSharp.Simulations.Base
         /// Gets the path of the node.
         /// </summary>
         public IReadOnlyList<string> Path { get; }
+        private IReadOnlyList<string> SafePath => Path ?? Array.Empty<string>();
 
         /// <summary>
         /// Gets the length of the path.
         /// </summary>
-        public int Length => Path?.Count ?? 0;
+        public int Length => SafePath.Count;
 
         /// <summary>
         /// Gets an element of the hierarchical reference at the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>Returns the path item at the specified index.</returns>
-        public string this[int index] => Path[index];
+        public string this[int index] => SafePath[index];
 
         /// <summary>
         /// Creates a new <see cref="Reference"/>.
@@ -58,8 +59,9 @@ namespace SpiceSharp.Simulations.Base
         public override readonly int GetHashCode()
         {
             int hash = 0;
-            for (int i = 0; i < Path.Count; i++)
-                hash = (hash * 1021) ^ (Path[i]?.GetHashCode() ?? 0);
+            var path = SafePath;
+            for (int i = 0; i < path.Count; i++)
+                hash = (hash * 1021) ^ (path[i]?.GetHashCode() ?? 0);
             return hash;
         }
 
@@ -77,15 +79,17 @@ namespace SpiceSharp.Simulations.Base
         /// <returns>Returns <c>true</c> if both are equal; otherwise, <c>false</c>.</returns>
         public bool Equals(Reference other)
         {
-            if (Path.Count != other.Path.Count)
+            var path = SafePath;
+            var otherPath = other.SafePath;
+            if (path.Count != otherPath.Count)
                 return false;
-            for (int i = 0; i < Path.Count; i++)
+            for (int i = 0; i < path.Count; i++)
             {
-                if (Path[i] is null && other.Path[i] is null)
+                if (path[i] is null && otherPath[i] is null)
                     continue;
-                if (Path[i] is null || other.Path[i] is null)
+                if (path[i] is null || otherPath[i] is null)
                     return false;
-                if (!Path[i].Equals(other.Path[i]))
+                if (!path[i].Equals(otherPath[i]))
                     return false;
             }
             return true;
@@ -319,19 +323,19 @@ namespace SpiceSharp.Simulations.Base
         /// </summary>
         /// <returns>The string.</returns>
         public override string ToString()
-            => string.Join(Utility.Separator, Path);
+            => string.Join(Utility.Separator, SafePath);
 
         /// <summary>
         /// Gets an enumerator for the node reference.
         /// </summary>
         /// <returns>The enumerator.</returns>
-        IEnumerator<string> IEnumerable<string>.GetEnumerator() => Path.GetEnumerator();
+        IEnumerator<string> IEnumerable<string>.GetEnumerator() => SafePath.GetEnumerator();
 
         /// <summary>
         /// Gets an enumerator for the node reference.
         /// </summary>
         /// <returns>The enumerator.</returns>
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Path).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)SafePath).GetEnumerator();
 
         /// <summary>
         /// Implicitly converts a string to a node reference.
@@ -345,13 +349,13 @@ namespace SpiceSharp.Simulations.Base
         /// </summary>
         /// <param name="path">The path.</param>
         public static implicit operator Reference(string[] path)
-            => new(path.ToArray());
+            => new(path);
 
         /// <summary>
         /// Implicitly converts a list of strings to a node reference.
         /// </summary>
         /// <param name="path">The path.</param>
         public static implicit operator Reference(List<string> path)
-            => new(path.ToArray());
+            => new(path?.ToArray());
     }
 }

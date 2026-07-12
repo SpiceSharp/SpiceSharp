@@ -31,7 +31,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_r"), ParameterInfo("Current")]
-        public double Current => _control.Value * Parameters.Coefficient;
+        public double Current => _control.Value * Parameters.Coefficient * Parameters.ParallelMultiplier;
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="biasing"]/Voltage/*'/>
         [ParameterName("v"), ParameterName("v_r"), ParameterInfo("Voltage")]

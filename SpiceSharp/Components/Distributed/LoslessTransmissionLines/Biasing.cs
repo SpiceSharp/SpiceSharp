@@ -125,7 +125,7 @@ namespace SpiceSharp.Components.LosslessTransmissionLines
         /// The power on side 2.
         /// </value>
         [ParameterName("p2"), ParameterName("p2_r"), ParameterInfo("Power 2")]
-        public double Power2 => -Voltage1 * Current1;
+        public double Power2 => -Voltage2 * Current2;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Biasing"/> class.
