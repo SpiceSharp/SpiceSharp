@@ -299,11 +299,20 @@ namespace SpiceSharp.Entities
             array.ThrowIfNull(nameof(array));
             if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-            if (array.Length < arrayIndex + Count)
-                throw new ArgumentException(Properties.Resources.NotEnoughElements);
 
-            foreach (var item in _entities.Values)
-                array[arrayIndex++] = item;
+            _lock.EnterReadLock();
+            try
+            {
+                if (arrayIndex > array.Length || array.Length - arrayIndex < _entities.Count)
+                    throw new ArgumentException(Properties.Resources.NotEnoughElements);
+
+                foreach (var item in _entities.Values)
+                    array[arrayIndex++] = item;
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -320,7 +329,17 @@ namespace SpiceSharp.Entities
         public IEntityCollection Clone()
         {
             var clone = new ConcurrentEntityCollection(_entities.Comparer);
-            foreach (var pair in _entities.Values)
+            IEntity[] entities;
+            _lock.EnterReadLock();
+            try
+            {
+                entities = [.. _entities.Values];
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+            foreach (var pair in entities)
                 clone.Add(pair.Clone());
             return clone;
         }

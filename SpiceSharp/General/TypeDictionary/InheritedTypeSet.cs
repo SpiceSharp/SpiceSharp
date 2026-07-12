@@ -75,24 +75,20 @@ namespace SpiceSharp.General
         /// <inheritdoc/>
         public TResult GetValue<TResult>() where TResult : V
         {
-            try
+            if (!_dictionary.TryGetValue(typeof(TResult), out V result))
             {
-                if (!_dictionary.TryGetValue(typeof(TResult), out V result))
+                var args = new TypeNotFoundEventArgs<V>(typeof(TResult));
+                TypeNotFound?.Invoke(this, args);
+                if (args.Value is TResult newResult)
                 {
-                    var args = new TypeNotFoundEventArgs<V>(typeof(TResult));
-                    TypeNotFound?.Invoke(this, args);
-                    if (args.Value is TResult newResult)
-                    {
-                        Add(newResult);
-                        return newResult;
-                    }
+                    Add(newResult);
+                    return newResult;
                 }
-                return (TResult)result;
+                throw new TypeNotFoundException(
+                    typeof(TResult),
+                    Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName));
             }
-            catch (KeyNotFoundException ex)
-            {
-                throw new TypeNotFoundException(Properties.Resources.TypeDictionary_TypeNotFound.FormatString(typeof(TResult).FullName), ex);
-            }
+            return (TResult)result;
         }
 
         /// <summary>
