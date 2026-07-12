@@ -67,6 +67,17 @@ namespace SpiceSharpTest.General
         }
 
         [Test]
+        public void When_RangeParametersAreNaN_Expect_Exception()
+        {
+            var parameters = new TestParameters();
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => parameters.GreaterThan1 = double.NaN);
+            Assert.Throws<ArgumentOutOfRangeException>(() => parameters.LessThan1 = double.NaN);
+            Assert.Throws<ArgumentOutOfRangeException>(() => parameters.GreaterThanOrEquals1 = double.NaN);
+            Assert.Throws<ArgumentOutOfRangeException>(() => parameters.LessThanOrEquals1 = double.NaN);
+        }
+
+        [Test]
         public void When_LowerLimit_Expect_Reference()
         {
             var p = new TestParameters();

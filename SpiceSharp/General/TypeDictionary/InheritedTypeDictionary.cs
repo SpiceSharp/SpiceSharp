@@ -84,7 +84,14 @@ namespace SpiceSharp.General
                     return false;
                 _values.Remove(value);
                 foreach (var type in InheritanceCache.Get(key).Union(InterfaceCache.Get(key)))
-                    _dictionary[type].Remove(value);
+                {
+                    if (_dictionary.TryGetValue(type, out var inheritedValues))
+                    {
+                        inheritedValues.Remove(value);
+                        if (inheritedValues.IsEmpty)
+                            _dictionary.Remove(type);
+                    }
+                }
                 _dictionary.Remove(key);
                 return true;
             }

@@ -28,5 +28,31 @@ namespace SpiceSharpTest.Simulations
 
             Assert.Throws<ArgumentOutOfRangeException>(() => method.Xmu = value);
         }
+
+        [TestCase(double.NaN)]
+        [TestCase(double.PositiveInfinity)]
+        public void When_FixedStepIsNotFinite_Expect_Exception(double value)
+        {
+            Assert.That(() => new FixedEuler { Step = value }, Throws.InstanceOf<ArgumentException>());
+            Assert.That(() => new FixedTrapezoidal { Step = value }, Throws.InstanceOf<ArgumentException>());
+        }
+
+        [Test]
+        public void When_FixedStepIsUnset_Expect_CreateException()
+        {
+            Assert.That(() => new FixedEuler().Create(null), Throws.InstanceOf<ArgumentException>());
+            Assert.That(() => new FixedTrapezoidal().Create(null), Throws.InstanceOf<ArgumentException>());
+        }
+
+        [TestCase(double.NaN)]
+        [TestCase(double.PositiveInfinity)]
+        public void When_VariableStepLimitsAreNotFinite_Expect_Exception(double value)
+        {
+            var method = new Trapezoidal();
+
+            Assert.That(() => method.MaxStep = value, Throws.InstanceOf<ArgumentException>());
+            Assert.That(() => method.MinStep = value, Throws.InstanceOf<ArgumentException>());
+            Assert.That(() => method.MaximumExpansion = value, Throws.InstanceOf<ArgumentException>());
+        }
     }
 }

@@ -135,28 +135,20 @@ namespace SpiceSharp.Entities
         public bool Remove(string name)
         {
             name.ThrowIfNull(nameof(name));
-            _lock.EnterUpgradeableReadLock();
+            IEntity entity = null;
+            bool success;
+            _lock.EnterWriteLock();
             try
             {
-                if (!_entities.TryGetValue(name, out var entity))
-                    return false;
-
-                _lock.EnterWriteLock();
-                try
-                {
-                    _entities.Remove(name);
-                    OnEntityRemoved(new EntityEventArgs(entity));
-                    return true;
-                }
-                finally
-                {
-                    _lock.ExitWriteLock();
-                }
+                success = _entities.TryGetValue(name, out entity) && _entities.Remove(name);
             }
             finally
             {
-                _lock.ExitUpgradeableReadLock();
+                _lock.ExitWriteLock();
             }
+            if (success)
+                OnEntityRemoved(new EntityEventArgs(entity));
+            return success;
         }
 
         /// <summary>

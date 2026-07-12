@@ -28,9 +28,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
             set
             {
-                if (value < 0.0)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimestepInvalid);
-                _maxStep = value;
+                _maxStep = value.Finite(nameof(MaxStep)).GreaterThanOrEquals(nameof(MaxStep), 0.0);
             }
         }
         private double _maxStep = 0.0;
@@ -54,9 +52,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             }
             set
             {
-                if (value < 0.0)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimestepInvalid);
-                _minStep = value;
+                _minStep = value.Finite(nameof(MinStep)).GreaterThanOrEquals(nameof(MinStep), 0.0);
             }
         }
         private double _minStep = 0.0;
@@ -74,9 +70,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
             get => _maxExpansion;
             set
             {
-                if (value < 1)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_MaximumExpansionTooSmall);
-                _maxExpansion = value;
+                _maxExpansion = value.Finite(nameof(MaximumExpansion)).GreaterThanOrEquals(nameof(MaximumExpansion), 1.0);
             }
         }
         private double _maxExpansion = 2.0;

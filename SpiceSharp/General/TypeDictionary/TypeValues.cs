@@ -37,7 +37,7 @@ namespace SpiceSharp.General
         /// <value>
         ///   <c>true</c> if this instance is ambiguous; otherwise, <c>false</c>.
         /// </value>
-        public bool IsAmbiguous => _first.IsIndirect && _first.Next != null;
+        public bool IsAmbiguous => _first != null && _first.IsIndirect && _first.Next != null;
 
         /// <summary>
         /// Gets a value indicating whether this instance is empty.
@@ -142,7 +142,9 @@ namespace SpiceSharp.General
         /// <param name="value">The value.</param>
         public bool Remove(T value)
         {
-            if (_first.Value.Equals(value))
+            if (_first == null)
+                return false;
+            if (EqualityComparer<T>.Default.Equals(_first.Value, value))
             {
                 _first = _first.Next;
                 Count--;
@@ -154,7 +156,7 @@ namespace SpiceSharp.General
                 var elt = _first.Next;
                 while (elt != null)
                 {
-                    if (elt.Value.Equals(value))
+                    if (EqualityComparer<T>.Default.Equals(elt.Value, value))
                     {
                         previous.Next = elt.Next;
                         Count--;

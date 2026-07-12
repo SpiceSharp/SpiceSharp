@@ -82,7 +82,7 @@ namespace SpiceSharp.Simulations
             else
             {
                 if (Reference.TryGetVariable<Complex, IComplexSimulationState>(simulation, out var negVariable))
-                    return () => negVariable.Value;
+                    return () => -negVariable.Value;
             }
             return null;
         }

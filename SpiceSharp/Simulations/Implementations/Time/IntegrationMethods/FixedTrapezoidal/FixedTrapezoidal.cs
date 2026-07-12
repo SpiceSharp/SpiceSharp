@@ -22,12 +22,7 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         public double Step
         {
             get => _step;
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException(Properties.Resources.Simulations_Time_TimestepInvalid);
-                _step = value;
-            }
+            set => _step = value.Finite(nameof(Step)).GreaterThan(nameof(Step), 0.0);
         }
         private double _step;
 
@@ -57,6 +52,10 @@ namespace SpiceSharp.Simulations.IntegrationMethods
         /// <returns>
         /// The integration method.
         /// </returns>
-        public override IIntegrationMethod Create(IBiasingSimulationState state) => new Instance(this);
+        public override IIntegrationMethod Create(IBiasingSimulationState state)
+        {
+            _step.Finite(nameof(Step)).GreaterThan(nameof(Step), 0.0);
+            return new Instance(this);
+        }
     }
 }

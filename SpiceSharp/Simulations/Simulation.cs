@@ -139,99 +139,123 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentException(Properties.Resources.Simulations_CannotRunMultiple);
             _lastRun++;
             CurrentRun = _lastRun;
+            bool setupStarted = false;
+            bool cleanupStarted = false;
 
-            entities.ThrowIfNull(nameof(entities));
-
-            // Yield before setup - this is here for easier migration from Spice# 3.1.x
-            if ((mask & BeforeSetup) != 0)
-                yield return BeforeSetup;
-
-            // Setup the simulation
-            Statistics.SetupTime.Start();
-            try
+            void Cleanup()
             {
-                Status = SimulationStatus.Setup;
-                Setup(entities);
-            }
-            finally
-            {
-                Statistics.SetupTime.Stop();
-            }
-
-            // Yield after setup
-            if ((mask & AfterSetup) != 0)
-                yield return AfterSetup;
-
-            // Yield before validation - this is here for easier migration from Spice# 3.1.x
-            if ((mask & BeforeValidation) != 0)
-                yield return BeforeValidation;
-
-            // Validate the input
-            Statistics.ValidationTime.Start();
-            try
-            {
-                Status = SimulationStatus.Validation;
-                Validate(entities);
-            }
-            finally
-            {
-                Statistics.ValidationTime.Stop();
-            }
-
-            // Yield after validation
-            if ((mask & AfterValidation) != 0)
-                yield return AfterValidation;
-
-            // Execute the simulation
-            Status = SimulationStatus.Running;
-            do
-            {
-                Repeat = false;
-
-                // Before execution
-                if ((mask & BeforeExecute) != 0)
-                    yield return BeforeExecute;
-
-                // Execute simulation
-                Statistics.ExecutionTime.Start();
+                if (cleanupStarted)
+                    return;
+                cleanupStarted = true;
                 try
                 {
-                    foreach (int exportType in Execute(mask))
-                        yield return exportType;
+                    if (setupStarted)
+                    {
+                        Statistics.FinishTime.Start();
+                        try
+                        {
+                            Status = SimulationStatus.Unsetup;
+                            Finish();
+                        }
+                        finally
+                        {
+                            Statistics.FinishTime.Stop();
+                        }
+                    }
                 }
                 finally
                 {
-                    Statistics.ExecutionTime.Stop();
+                    CurrentRun = -1;
+                    Status = SimulationStatus.None;
                 }
+            }
 
-                // Reset                
-                if ((mask & AfterExecute) != 0)
-                    yield return AfterExecute;
-
-                // We're going to repeat the simulation, change the event arguments
-            } while (Repeat);
-
-            // Yield before cleanup
-            if ((mask & BeforeUnsetup) != 0)
-                yield return BeforeUnsetup;
-
-            // Clean up the circuit
-            Statistics.FinishTime.Start();
             try
             {
-                Status = SimulationStatus.Unsetup;
-                Finish();
+                entities.ThrowIfNull(nameof(entities));
+
+                // Yield before setup - this is here for easier migration from Spice# 3.1.x
+                if ((mask & BeforeSetup) != 0)
+                    yield return BeforeSetup;
+
+                // Setup the simulation
+                Statistics.SetupTime.Start();
+                try
+                {
+                    setupStarted = true;
+                    Status = SimulationStatus.Setup;
+                    Setup(entities);
+                }
+                finally
+                {
+                    Statistics.SetupTime.Stop();
+                }
+
+                // Yield after setup
+                if ((mask & AfterSetup) != 0)
+                    yield return AfterSetup;
+
+                // Yield before validation - this is here for easier migration from Spice# 3.1.x
+                if ((mask & BeforeValidation) != 0)
+                    yield return BeforeValidation;
+
+                // Validate the input
+                Statistics.ValidationTime.Start();
+                try
+                {
+                    Status = SimulationStatus.Validation;
+                    Validate(entities);
+                }
+                finally
+                {
+                    Statistics.ValidationTime.Stop();
+                }
+
+                // Yield after validation
+                if ((mask & AfterValidation) != 0)
+                    yield return AfterValidation;
+
+                // Execute the simulation
+                Status = SimulationStatus.Running;
+                do
+                {
+                    Repeat = false;
+
+                    // Before execution
+                    if ((mask & BeforeExecute) != 0)
+                        yield return BeforeExecute;
+
+                    // Execute simulation
+                    Statistics.ExecutionTime.Start();
+                    try
+                    {
+                        foreach (int exportType in Execute(mask))
+                            yield return exportType;
+                    }
+                    finally
+                    {
+                        Statistics.ExecutionTime.Stop();
+                    }
+
+                    // Reset
+                    if ((mask & AfterExecute) != 0)
+                        yield return AfterExecute;
+                } while (Repeat);
+
+                // Yield before cleanup
+                if ((mask & BeforeUnsetup) != 0)
+                    yield return BeforeUnsetup;
+
+                Cleanup();
+
+                // Yield after cleanup - this is here for easier migration from Spice# 3.1.x
+                if ((mask & AfterUnsetup) != 0)
+                    yield return AfterUnsetup;
             }
             finally
             {
-                CurrentRun = -1;
-                Statistics.FinishTime.Stop();
+                Cleanup();
             }
-            Status = SimulationStatus.None;
-
-            // Yield after cleanup - this is here for easier migration from Spice# 3.1.x
-            if ((mask & AfterUnsetup) != 0)
-                yield return AfterUnsetup;
         }
 
         /// <inheritdoc/>
@@ -241,55 +265,70 @@ namespace SpiceSharp.Simulations
                 throw new ArgumentException(Properties.Resources.Simulations_CannotRunMultiple);
             _lastRun++;
             CurrentRun = _lastRun;
+            bool cleanupStarted = false;
 
-            // Execute the simulation
-            Status = SimulationStatus.Running;
-            do
+            void Cleanup()
             {
-                Repeat = false;
-
-                // Yield before execute
-                if ((mask & BeforeExecute) != 0)
-                    yield return BeforeExecute;
-
-                // Execute simulation
-                Statistics.ExecutionTime.Start();
+                if (cleanupStarted)
+                    return;
+                cleanupStarted = true;
+                Statistics.FinishTime.Start();
                 try
                 {
-                    foreach (int exportType in Execute(mask))
-                        yield return exportType;
+                    Status = SimulationStatus.Unsetup;
+                    Finish();
                 }
                 finally
                 {
-                    Statistics.ExecutionTime.Stop();
+                    CurrentRun = -1;
+                    Status = SimulationStatus.None;
+                    Statistics.FinishTime.Stop();
                 }
+            }
 
-                // Yield after execute
-                if ((mask & AfterExecute) != 0)
-                    yield return AfterExecute;
-            } while (Repeat);
-
-            // Yield before cleanup
-            if ((mask & BeforeUnsetup) != 0)
-                yield return BeforeUnsetup;
-
-            // Clean up the circuit
-            Statistics.FinishTime.Start();
             try
             {
-                Status = SimulationStatus.Unsetup;
-                Finish();
+                // Execute the simulation
+                Status = SimulationStatus.Running;
+                do
+                {
+                    Repeat = false;
+
+                    // Yield before execute
+                    if ((mask & BeforeExecute) != 0)
+                        yield return BeforeExecute;
+
+                    // Execute simulation
+                    Statistics.ExecutionTime.Start();
+                    try
+                    {
+                        foreach (int exportType in Execute(mask))
+                            yield return exportType;
+                    }
+                    finally
+                    {
+                        Statistics.ExecutionTime.Stop();
+                    }
+
+                    // Yield after execute
+                    if ((mask & AfterExecute) != 0)
+                        yield return AfterExecute;
+                } while (Repeat);
+
+                // Yield before cleanup
+                if ((mask & BeforeUnsetup) != 0)
+                    yield return BeforeUnsetup;
+
+                Cleanup();
+
+                // Yield after cleanup - this is here for easier migration from Spice# 3.1.x
+                if ((mask & AfterUnsetup) != 0)
+                    yield return AfterUnsetup;
             }
             finally
             {
-                CurrentRun = -1;
-                Statistics.FinishTime.Stop();
+                Cleanup();
             }
-            Status = SimulationStatus.None;
-
-            // Yield after cleanup - this is here for easier migration from Spice# 3.1.x
-            if ((mask & AfterUnsetup) != 0)
-                yield return AfterUnsetup;
         }
 
         /// <summary>

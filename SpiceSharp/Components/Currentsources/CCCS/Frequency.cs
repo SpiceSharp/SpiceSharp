@@ -29,7 +29,7 @@ namespace SpiceSharp.Components.CurrentControlledCurrentSources
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Current/*'/>
         [ParameterName("i"), ParameterName("c"), ParameterName("i_c"), ParameterInfo("Complex current")]
-        public Complex ComplexCurrent => _control.Value * Parameters.Coefficient;
+        public Complex ComplexCurrent => _control.Value * Parameters.Coefficient * Parameters.ParallelMultiplier;
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterName("p_c"), ParameterInfo("Complex power")]

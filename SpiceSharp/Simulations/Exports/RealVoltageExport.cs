@@ -57,7 +57,7 @@ namespace SpiceSharp.Simulations
             else
             {
                 if (Reference.TryGetVariable<double, IBiasingSimulationState>(simulation, out var negVariable))
-                    return () => negVariable.Value;
+                    return () => -negVariable.Value;
             }
             return null;
         }

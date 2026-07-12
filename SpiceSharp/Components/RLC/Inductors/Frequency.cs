@@ -34,7 +34,7 @@ namespace SpiceSharp.Components.Inductors
 
         /// <include file='./Components/Common/docs.xml' path='docs/members[@name="frequency"]/Power/*'/>
         [ParameterName("p"), ParameterInfo("The complex power")]
-        public Complex ComplexPower => -Branch.Value * (_variables.Positive.Value - _variables.Negative.Value);
+        public Complex ComplexPower => -ComplexVoltage * Complex.Conjugate(ComplexCurrent);
 
         /// <inheritdoc/>
         public new IVariable<Complex> Branch { get; }

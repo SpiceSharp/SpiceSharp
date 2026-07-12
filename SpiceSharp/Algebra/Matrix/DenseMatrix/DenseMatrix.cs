@@ -138,8 +138,12 @@ namespace SpiceSharp.Algebra
                 _trashCan = value;
             else
             {
-                if (!EqualityComparer<T>.Default.Equals(value, default) && (location.Row > Size || location.Column > Size))
+                if (location.Row > Size || location.Column > Size)
+                {
+                    if (EqualityComparer<T>.Default.Equals(value, default))
+                        return;
                     Expand(Math.Max(location.Row, location.Column));
+                }
                 _array[(location.Row - 1) * _allocatedSize + location.Column - 1] = value;
             }
         }
