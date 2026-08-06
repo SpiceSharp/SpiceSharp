@@ -129,6 +129,9 @@
   <data name="Algebra.SingularMatrixIndexed" xml:space="preserve">
     <value>The matrix was found to be singular when eliminating row {0}.</value>
   </data>
+  <data name="Algebra.KluPartialNotSupported" xml:space="preserve">
+    <value>The KLU solver factors the whole system, so a nonzero degeneracy or pivot search reduction is not supported.</value>
+  </data>
   <data name="Algebra.SolverNotFactored" xml:space="preserve">
     <value>The solver is not factored yet.</value>
   </data>

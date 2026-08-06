@@ -141,11 +141,28 @@ public partial class BiasingParameters : ParameterSet, ICloneable<BiasingParamet
     private double _absolutePivotThreshold = 1e-13;
 
     /// <summary>
+    /// Gets or sets the kind of solver used for the linear system.
+    /// </summary>
+    /// <value>
+    /// The solver type.
+    /// </value>
+    [ParameterName("solver"), ParameterInfo("The kind of solver used for the linear system")]
+    public SolverTypes Solver { get; set; } = SolverTypes.Sparse;
+
+    /// <summary>
     /// Creates solver used to solve equations.
     /// </summary>
     /// <returns>A solver that can be used to solve equations.</returns>
     public ISparsePivotingSolver<double> CreateSolver()
     {
+        if (Solver == SolverTypes.Klu)
+        {
+            var klu = new KluRealSolver();
+            klu.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+            klu.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+            return klu;
+        }
+
         var solver = new SparseRealSolver();
         solver.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
         solver.Parameters.RelativePivotThreshold = RelativePivotThreshold;

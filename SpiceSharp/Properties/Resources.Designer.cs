@@ -97,6 +97,15 @@ public class Resources {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to The KLU solver factors the whole system, so a nonzero degeneracy or pivot search reduction is not supported..
+    /// </summary>
+    public static string Algebra_KluPartialNotSupported {
+        get {
+            return ResourceManager.GetString("Algebra.KluPartialNotSupported", resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to The solver is not factored yet..
     /// </summary>
     public static string Algebra_SolverNotFactored {

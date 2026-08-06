@@ -57,11 +57,28 @@ public partial class FrequencyParameters : ParameterSet, ICloneable<FrequencyPar
     private double _absolutePivotThreshold = 1e-13;
 
     /// <summary>
+    /// Gets or sets the kind of solver used for the linear system.
+    /// </summary>
+    /// <value>
+    /// The solver type.
+    /// </value>
+    [ParameterName("frequency.solver"), ParameterInfo("The kind of solver used for the linear system")]
+    public SolverTypes Solver { get; set; } = SolverTypes.Sparse;
+
+    /// <summary>
     /// Creates solver used to solve equations.
     /// </summary>
     /// <returns>A solver that can be used to solve equations.</returns>
     public ISparsePivotingSolver<Complex> CreateSolver()
     {
+        if (Solver == SolverTypes.Klu)
+        {
+            var klu = new KluComplexSolver();
+            klu.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+            klu.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+            return klu;
+        }
+
         var solver = new SparseComplexSolver();
         solver.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
         solver.Parameters.RelativePivotThreshold = RelativePivotThreshold;

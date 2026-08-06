@@ -9,14 +9,13 @@ namespace SpiceSharp.Algebra.Solve;
 /// is optimized for sparse matrices through the <see cref="ISparseMatrix{T}"/> interface.
 /// </summary>
 /// <typeparam name="T">The base value type.</typeparam>
-/// <seealso cref="PivotingSolver{M, V, T}"/>
+/// <seealso cref="SparsePivotingSolver{T}"/>
 /// <seealso cref="ISparsePivotingSolver{T}"/>
 /// <seealso cref="ISparseMatrix{T}"/>
 /// <seealso cref="ISparseVector{T}"/>
 /// <seealso cref="IParameterized{P}"/>
 /// <seealso cref="Markowitz{T}"/>
-public abstract partial class SparseLUSolver<T> : PivotingSolver<ISparseMatrix<T>, ISparseVector<T>, T>,
-    ISparsePivotingSolver<T>,
+public abstract partial class SparseLUSolver<T> : SparsePivotingSolver<T>,
     IParameterized<Markowitz<T>>
 {
     /// <summary>
@@ -43,18 +42,9 @@ public abstract partial class SparseLUSolver<T> : PivotingSolver<ISparseMatrix<T
     /// <param name="magnitude">The magnitude function.</param>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="magnitude"/> is <c>null</c>.</exception>
     protected SparseLUSolver(Func<T, double> magnitude)
-        : base(new SparseMatrix<T>(), new SparseVector<T>())
     {
         Parameters = new Markowitz<T>(magnitude);
         Fillins = 0;
-    }
-
-    /// <inheritdoc/>
-    public override void Precondition(PreconditioningMethod<ISparseMatrix<T>, ISparseVector<T>, T> method)
-    {
-        var reorderedMatrix = new ReorderedMatrix(this);
-        var reorderedVector = new ReorderedVector(this);
-        method(reorderedMatrix, reorderedVector);
     }
 
     /// <inheritdoc/>
@@ -143,79 +133,6 @@ public abstract partial class SparseLUSolver<T> : PivotingSolver<ISparseMatrix<T
     /// </returns>
     /// <exception cref="AlgebraException">Thrown if the pivot is <c>null</c> or has a magnitude of zero.</exception>
     protected abstract void Eliminate(ISparseMatrixElement<T> pivot);
-
-    /// <summary>
-    /// Finds the diagonal element at the specified row/column.
-    /// </summary>
-    /// <param name="index">The row/column index.</param>
-    /// <returns>
-    /// The matrix element.
-    /// </returns>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="index"/> is negative.</exception>
-    public Element<T> FindDiagonalElement(int index)
-    {
-        index.GreaterThanOrEquals(nameof(index), 0);
-        if (index > Size)
-            return null;
-        int row = Row[index];
-        int column = Column[index];
-        return Matrix.FindElement(new MatrixLocation(row, column));
-    }
-
-    /// <inheritdoc/>
-    public Element<T> FindElement(MatrixLocation location) => Matrix.FindElement(ExternalToInternal(location));
-
-    /// <inheritdoc/>
-    public Element<T> FindElement(int row) => Vector.FindElement(Row[row]);
-
-    /// <inheritdoc/>
-    public Element<T> GetElement(MatrixLocation location)
-    {
-        location = ExternalToInternal(location);
-        var elt = Matrix.GetElement(location);
-
-        // If we created a new row or column, let's move to the front
-        // to keep the same equations that are linearly dependent
-        if (Degeneracy > 0 && Size - Degeneracy > 0)
-        {
-            if (location.Row == Size)
-                SwapRows(Size, Size - Degeneracy);
-            if (location.Column == Size)
-                SwapColumns(Size, Size - Degeneracy);
-        }
-        return elt;
-    }
-
-    /// <inheritdoc/>
-    public bool RemoveElement(MatrixLocation location)
-    {
-        location = ExternalToInternal(location);
-        return Matrix.RemoveElement(location);
-    }
-
-    /// <inheritdoc/>
-    public Element<T> GetElement(int row)
-    {
-        if (row < 0)
-            throw new ArgumentOutOfRangeException(nameof(row));
-        row = Row[row];
-        var elt = Vector.GetElement(row);
-
-        // If we created a new row, let's move it back to still have the same equations that are considered linearly dependent
-        if (Degeneracy > 0)
-        {
-            if (row == Size)
-                SwapRows(Size, Size - Degeneracy);
-        }
-        return elt;
-    }
-
-    /// <inheritdoc/>
-    public bool RemoveElement(int row)
-    {
-        row = Row[row];
-        return Vector.RemoveElement(row);
-    }
 
     /// <summary>
     /// Moves a chosen pivot to the diagonal.

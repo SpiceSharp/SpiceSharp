@@ -2,15 +2,15 @@
 
 namespace SpiceSharp.Algebra.Solve;
 
-public abstract partial class SparseLUSolver<T>
+public abstract partial class SparsePivotingSolver<T>
 {
     /// <summary>
     /// A sparse vector that keeps both the matrix and right hand side vector synchronized for our solver.
     /// </summary>
-    /// <seealso cref="SparseLUSolver{T}" />
+    /// <seealso cref="SparsePivotingSolver{T}" />
     protected class ReorderedVector : ISparseVector<T>
     {
-        private readonly SparseLUSolver<T> _parent;
+        private readonly SparsePivotingSolver<T> _parent;
 
         /// <inheritdoc/>
         public int ElementCount => _parent.Vector.ElementCount;
@@ -37,7 +37,7 @@ public abstract partial class SparseLUSolver<T>
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="parent"/> is <c>null</c>.</exception>
-        public ReorderedVector(SparseLUSolver<T> parent)
+        public ReorderedVector(SparsePivotingSolver<T> parent)
         {
             _parent = parent.ThrowIfNull(nameof(parent));
         }
@@ -49,10 +49,10 @@ public abstract partial class SparseLUSolver<T>
         public ISparseVectorElement<T> GetLastInVector() => _parent.Vector.GetLastInVector();
 
         /// <inheritdoc/>
-        public Element<T> GetElement(int index) => _parent.Vector.GetElement(index);
+        public Element<T> GetElement(int index) => _parent.GetInternalElement(index);
 
         /// <inheritdoc/>
-        public bool RemoveElement(int index) => _parent.Vector.RemoveElement(index);
+        public bool RemoveElement(int index) => _parent.RemoveInternalElement(index);
 
         /// <inheritdoc/>
         public Element<T> FindElement(int index) => _parent.Vector.FindElement(index);
