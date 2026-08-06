@@ -64,9 +64,11 @@ public partial class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T>
             int i = index > matrix.Size ? eliminationStep : index; */
         for (int i = eliminationStep; i <= max; i++)
         {
-            // Skip diagonal elements with a Markowitz product worse than already found
+            // Skip diagonal elements with a Markowitz product worse than already found. Ones
+            // that tie with it have to be kept: choosing between them on their numbers is the
+            // whole point of collecting them below.
             int product = markowitz.Product(i);
-            if (product >= minMarkowitzProduct)
+            if (product > minMarkowitzProduct)
                 continue;
 
             // Get the diagonal item
@@ -83,9 +85,13 @@ public partial class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T>
             // Note that a singleton can still appear depending on the allowed tolerances!
             if (product == 1)
             {
-                // Find the off-diagonal elements
-                var otherInRow = diagonal.Right ?? diagonal.Left;
-                var otherInColumn = diagonal.Below ?? diagonal.Above;
+                // Find the off-diagonal elements. They have to be the ones inside the
+                // submatrix that is still to be eliminated: an element in a column that is
+                // already done, or past the limit, says nothing about the growth this pivot
+                // would cause, and accepting on the strength of it skips the threshold check
+                // that the tied candidates below get put through.
+                var otherInRow = OtherInRow(diagonal, eliminationStep, max);
+                var otherInColumn = OtherInColumn(diagonal, eliminationStep, max);
 
                 // Accept diagonal as pivot if diagonal is larger than off-diagonals and
                 // the off-diagonals are placed symmetrically
@@ -145,6 +151,37 @@ public partial class MarkowitzQuickDiagonal<T> : MarkowitzSearchStrategy<T>
 
         // We don't actually know if the pivot is sub-optimal, but we take the worst case scenario.
         return chosen != null ? new Pivot<ISparseMatrixElement<T>>(chosen, PivotInfo.Suboptimal) : Pivot<ISparseMatrixElement<T>>.Empty;
+    }
+
+    /// <summary>
+    /// The nearest element next to the diagonal in the part of the row that still has to be
+    /// eliminated, or <c>null</c> if there is none. A Markowitz row count of one says there is
+    /// exactly one, so whichever side it is on, the nearest element on that side is it.
+    /// </summary>
+    private static ISparseMatrixElement<T> OtherInRow(ISparseMatrixElement<T> diagonal, int eliminationStep, int max)
+    {
+        var right = diagonal.Right;
+        if (right != null && right.Column <= max)
+            return right;
+        var left = diagonal.Left;
+        if (left != null && left.Column >= eliminationStep)
+            return left;
+        return null;
+    }
+
+    /// <summary>
+    /// The nearest element next to the diagonal in the part of the column that still has to be
+    /// eliminated, or <c>null</c> if there is none.
+    /// </summary>
+    private static ISparseMatrixElement<T> OtherInColumn(ISparseMatrixElement<T> diagonal, int eliminationStep, int max)
+    {
+        var below = diagonal.Below;
+        if (below != null && below.Row <= max)
+            return below;
+        var above = diagonal.Above;
+        if (above != null && above.Row >= eliminationStep)
+            return above;
+        return null;
     }
 
     private double LargestOtherElementInColumn(Markowitz<T> markowitz, ISparseMatrixElement<T> chosen, int eliminationStep, int max)

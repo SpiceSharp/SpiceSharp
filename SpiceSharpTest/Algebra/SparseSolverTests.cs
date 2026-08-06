@@ -160,6 +160,57 @@ public class SparseSolverTests : SolveFramework
     }
 
     [Test]
+    public void When_QuickDiagonalPivotingHasTiedCandidates_Expect_BestConditionedChosen()
+    {
+        // Choosing between diagonals that tie on their Markowitz product, by how far each one
+        // is from the largest element in its column, is what this strategy documents itself as
+        // doing. For a while it could not: the test that skips worse candidates read
+        // 'product >= minMarkowitzProduct', which also skipped the equal ones, so the branch
+        // that collects ties was unreachable and only ever one candidate reached the
+        // comparison at the end. It then took whichever diagonal happened to reach the lowest
+        // product first, as long as it scraped past the relative threshold.
+        //
+        // Both diagonals below have three entries in their row and three in their column, so
+        // both score a Markowitz product of four and neither is a singleton. The first one is
+        // a hundred times smaller than the entry under it; the second is the largest in its
+        // column. Scanning runs low index first, so the weak one is met first.
+        var matrix = new SparseMatrix<double>();
+        var rhs = new SparseVector<double>();
+
+        // Columns 1 and 2 hold the two tied diagonals, 3 to 5 pad the rows and columns out so
+        // that nothing scores lower than they do.
+        double[][] values =
+        [
+            [1e-2, 0.0,  1.0,  1.0,  0.0],
+            [0.0,  1.0,  1.0,  0.0,  1.0],
+            [1.0,  1.0,  1.0,  1.0,  1.0],
+            [1.0,  0.0,  1.0,  1.0,  1.0],
+            [0.0,  1.0,  1.0,  1.0,  1.0]
+        ];
+        for (int r = 0; r < 5; r++)
+        {
+            for (int c = 0; c < 5; c++)
+            {
+                if (values[r][c] != 0.0)
+                    matrix.GetElement(new MatrixLocation(r + 1, c + 1)).Value = values[r][c];
+            }
+        }
+
+        var markowitz = new Markowitz<double>(Math.Abs);
+        markowitz.Setup(matrix, rhs, 1, 5);
+        Assert.That(markowitz.Product(1), Is.EqualTo(markowitz.Product(2)),
+            "the two diagonals are supposed to tie");
+
+        var strategy = new MarkowitzQuickDiagonal<double>();
+        var pivot = strategy.FindPivot(markowitz, matrix, 1, 5);
+
+        Assert.That(pivot.Element, Is.Not.Null);
+        Assert.That(pivot.Element.Row, Is.EqualTo(2),
+            $"picked the diagonal at {pivot.Element.Row} with value {pivot.Element.Value}, "
+            + "which is not the best conditioned of the tied candidates");
+    }
+
+    [Test]
     public void When_DiagonalPivoting_Expect_NoException()
     {
         // Build the solver with only the quick diagonal pivoting
