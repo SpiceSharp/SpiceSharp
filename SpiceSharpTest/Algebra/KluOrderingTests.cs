@@ -269,6 +269,57 @@ public class KluOrderingTests
     }
 
     [Test]
+    public void When_AmdOnSeparateComponents_Expect_ComponentsNotInterleaved()
+    {
+        // Minimum degree has no reason to finish one part of the graph before starting the
+        // next. Put two grids side by side and it works on whichever one happens to hold the
+        // lowest degree, hopping over as soon as the one it is in fills in a little: the two
+        // come out thoroughly interleaved. Postordering the assembly tree is what separates
+        // them again, and a component is a whole subtree, so each has to come out as one
+        // uninterrupted run.
+        const int components = 2;
+        const int side = 12;
+        const int size = components * side * side;
+
+        // The nodes of a component are spread out over the matrix, so nothing about the
+        // numbering can hand the ordering the answer.
+        var entries = new List<(int, int)>();
+        for (int c = 0; c < components; c++)
+            for (int y = 0; y < side; y++)
+                for (int x = 0; x < side; x++)
+                {
+                    int local = (y * side) + x;
+                    int node = (local * components) + c;
+                    entries.Add((node, node));
+                    if (x > 0)
+                    {
+                        int left = ((local - 1) * components) + c;
+                        entries.Add((node, left));
+                        entries.Add((left, node));
+                    }
+                    if (y > 0)
+                    {
+                        int above = ((local - side) * components) + c;
+                        entries.Add((node, above));
+                        entries.Add((above, node));
+                    }
+                }
+        var (columns, rows) = Pattern(size, entries);
+
+        int[] permutation = new int[size];
+        ApproximateMinimumDegree.Order(size, columns, rows, permutation);
+        AssertIsPermutation(permutation, size);
+
+        int runs = 1;
+        for (int p = 1; p < size; p++)
+        {
+            if (permutation[p] % components != permutation[p - 1] % components)
+                runs++;
+        }
+        Assert.That(runs, Is.EqualTo(components), "components came out interleaved");
+    }
+
+    [Test]
     public void When_AmdOnArrowPattern_Expect_DenseRowLast()
     {
         // A matrix whose last row and column are full is the classic case where the natural

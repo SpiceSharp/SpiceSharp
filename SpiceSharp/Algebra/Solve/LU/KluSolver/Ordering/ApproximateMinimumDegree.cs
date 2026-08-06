@@ -26,9 +26,11 @@ namespace SpiceSharp.Algebra.Solve;
 /// contained in the new clique are absorbed into it.
 /// </para>
 /// <para>
-/// Nodes are returned in the order they were eliminated. The reference implementation
-/// additionally postorders the assembly tree, which improves memory locality during
-/// factoring but produces the same amount of fill.
+/// The order in which nodes are eliminated is not the order they are returned in. Which
+/// nodes come out together is fixed by the elimination, but the groups themselves are
+/// free to move as long as each stays ahead of the group that absorbed it, and they are
+/// rearranged into a postorder of the assembly tree before being returned. That produces
+/// the same fill while factoring over the values far more locally.
 /// </para>
 /// </remarks>
 public static class ApproximateMinimumDegree
@@ -513,14 +515,102 @@ public static class ApproximateMinimumDegree
         }
 
         /// <summary>
+        /// Orders the elimination steps so that every subtree of the assembly tree comes out
+        /// as one uninterrupted run of positions.
+        /// </summary>
+        /// <remarks>
+        /// Eliminating a pivot leaves a clique behind, and that clique is later absorbed into
+        /// the clique of another pivot. Those absorptions form a forest over the elimination
+        /// steps, and any numbering that keeps a step ahead of the one that absorbed it gives
+        /// exactly the same fill. Minimum degree walks the tree in one such numbering, but it
+        /// jumps between unrelated parts of the graph whenever that is where the smallest
+        /// degree happens to sit, so subtrees come out interleaved. A postorder keeps each
+        /// subtree together, which puts the columns that share most of their structure next
+        /// to each other.
+        /// </remarks>
+        /// <returns>The position each elimination step ends up at.</returns>
+        private int[] RankStepsInPostorder()
+        {
+            int steps = _steps;
+            int[] rank = new int[steps];
+            if (steps == 0)
+                return rank;
+
+            // A pivot is exactly a node that was given a step of its own, and the pivot that
+            // absorbed its clique is its parent. Nodes that came out along with a pivot, or
+            // that were merged into another node, have a parent recorded as well, but they
+            // never have a step, so they take no part in the tree.
+            int[] pivots = new int[steps];
+            for (int i = 0; i < _size; i++)
+            {
+                if (_step[i] >= 0)
+                    pivots[_step[i]] = i;
+            }
+
+            // Collect the children of every step into one array, grouped by parent.
+            int[] childStart = new int[steps + 1];
+            for (int s = 0; s < steps; s++)
+            {
+                int parent = _parent[pivots[s]];
+                if (parent >= 0)
+                    childStart[_step[parent] + 1]++;
+            }
+            for (int s = 1; s <= steps; s++)
+                childStart[s] += childStart[s - 1];
+
+            int[] children = new int[steps];
+            int[] cursor = new int[steps];
+            Array.Copy(childStart, cursor, steps);
+            for (int s = 0; s < steps; s++)
+            {
+                int parent = _parent[pivots[s]];
+                if (parent >= 0)
+                    children[cursor[_step[parent]]++] = s;
+            }
+
+            // A clique can only be absorbed by a later pivot, so following parents always
+            // walks forwards and the whole forest is reachable from the steps that were never
+            // absorbed. Take each step once all of its children are placed. The search drives
+            // its own stack, which never needs more room than one entry per step.
+            Array.Copy(childStart, cursor, steps);
+            int[] stack = new int[steps];
+            int position = 0;
+            for (int root = 0; root < steps; root++)
+            {
+                if (_parent[pivots[root]] >= 0)
+                    continue;
+
+                int top = 0;
+                stack[top++] = root;
+                while (top > 0)
+                {
+                    int s = stack[top - 1];
+                    if (cursor[s] < childStart[s + 1])
+                        stack[top++] = children[cursor[s]++];
+                    else
+                    {
+                        top--;
+                        rank[s] = position++;
+                    }
+                }
+            }
+            return rank;
+        }
+
+        /// <summary>
         /// Turns the record of what absorbed what into the final ordering. Every original
         /// node is charged to the elimination step of the pivot that took it out, and the
-        /// nodes are then grouped by that step.
+        /// nodes are then grouped by where that step ended up.
         /// </summary>
         private void BuildPermutation(int[] permutation)
         {
             int n = _size;
             int steps = _steps;
+
+            // This has to be taken first, because charging the remaining nodes to a step
+            // below stops the steps telling which nodes were pivots.
+            int[] rank = RankStepsInPostorder();
+
             for (int i = 0; i < n; i++)
             {
                 if (_step[i] >= 0)
@@ -542,11 +632,11 @@ public static class ApproximateMinimumDegree
 
             int[] offsets = new int[steps + 1];
             for (int i = 0; i < n; i++)
-                offsets[_step[i] + 1]++;
+                offsets[rank[_step[i]] + 1]++;
             for (int s = 1; s <= steps; s++)
                 offsets[s] += offsets[s - 1];
             for (int i = 0; i < n; i++)
-                permutation[offsets[_step[i]]++] = i;
+                permutation[offsets[rank[_step[i]]]++] = i;
         }
 
         private void Absorb(int element, int into)
