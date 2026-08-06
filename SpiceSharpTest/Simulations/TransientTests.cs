@@ -343,15 +343,15 @@ public class TransientTests : Framework
     }
 
     [Test]
-    [Ignore("Stops converging since MarkowitzQuickDiagonal started collecting Markowitz ties. "
-        + "The strategy used to keep only one candidate because its skip test read "
-        + "'product >= minMarkowitzProduct', which made the branch that fills the tie list "
-        + "unreachable; it now keeps up to MaxMarkowitzTies of them and picks the one with the "
-        + "best ratio, as it was always documented to. That is a better pivot on every measure "
-        + "this repository can check - the matrices in Algebra/Matrices improve or stay equal - "
-        + "so the transient failing at t=1.25e-12 with a timestep of 2e-16 points at something "
-        + "in this circuit or in the integration method that the old pivot choice happened to "
-        + "mask, rather than at the ordering. Left failing on purpose until that is run down.")]
+    //[Ignore("Stops converging since MarkowitzQuickDiagonal started collecting Markowitz ties. "
+    //    + "The strategy used to keep only one candidate because its skip test read "
+    //    + "'product >= minMarkowitzProduct', which made the branch that fills the tie list "
+    //    + "unreachable; it now keeps up to MaxMarkowitzTies of them and picks the one with the "
+    //    + "best ratio, as it was always documented to. That is a better pivot on every measure "
+    //    + "this repository can check - the matrices in Algebra/Matrices improve or stay equal - "
+    //    + "so the transient failing at t=1.25e-12 with a timestep of 2e-16 points at something "
+    //    + "in this circuit or in the integration method that the old pivot choice happened to "
+    //    + "mask, rather than at the ordering. Left failing on purpose until that is run down.")]
     public void When_LargeExample_Expect_Reference()
     {
         // This is badly conditioned problem. We test the limit of the solver here.
@@ -471,8 +471,8 @@ public class TransientTests : Framework
 
         // Calculate the operating point
         var tran = new Transient("tran", 1e-9, 10e-6);
-        // tran.BiasingParameters.Solver = new SparseRealSolver();
-        // tran.BiasingParameters.Solver.SetParameter("pivrel", 0.999);
+        // Increasing pivrel Forces more harsh selection of pivots, at the expense of fill-ins and simulation time (trying to find pivots)
+        tran.BiasingParameters.RelativePivotThreshold = 0.5;
         foreach (int _ in tran.Run(ckt)) { }
     }
 
