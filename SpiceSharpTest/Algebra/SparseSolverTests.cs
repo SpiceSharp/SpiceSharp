@@ -73,6 +73,60 @@ public class SparseSolverTests : SolveFramework
     }
 
     [Test]
+    public void When_RhsReachesPastTheMatrix_Expect_Singular()
+    {
+        // The solver's size is the larger of the matrix and the right-hand side, so an
+        // equation that has a right-hand side but no matrix entry at all stretches the
+        // system past the matrix. Those rows and columns are empty, which makes the matrix
+        // singular, and the pivot search has to be able to walk over them to report that
+        // rather than running off the end of its own bookkeeping.
+        var solver = new SparseRealSolver();
+        solver.GetElement(new MatrixLocation(1, 1)).Value = 2.0;
+        solver.GetElement(new MatrixLocation(2, 2)).Value = 3.0;
+        solver.GetElement(4).Value = 1.0;
+
+        Assert.That(solver.Size, Is.EqualTo(4));
+        Assert.That(solver.OrderAndFactor(), Is.EqualTo(2));
+    }
+
+    [Test]
+    public void When_ComplexRhsReachesPastTheMatrix_Expect_Singular()
+    {
+        var solver = new SparseComplexSolver();
+        solver.GetElement(new MatrixLocation(1, 1)).Value = 2.0;
+        solver.GetElement(new MatrixLocation(2, 2)).Value = 3.0;
+        solver.GetElement(4).Value = 1.0;
+
+        Assert.That(solver.Size, Is.EqualTo(4));
+        Assert.That(solver.OrderAndFactor(), Is.EqualTo(2));
+    }
+
+    [Test]
+    public void When_RhsShorterThanMatrix_Expect_CorrectSolution()
+    {
+        // The other way around: nothing drives the last equation, which is ordinary and has
+        // to keep working.
+        var solver = new SparseRealSolver();
+        solver.GetElement(new MatrixLocation(1, 1)).Value = 2.0;
+        solver.GetElement(new MatrixLocation(1, 2)).Value = 1.0;
+        solver.GetElement(new MatrixLocation(2, 1)).Value = 1.0;
+        solver.GetElement(new MatrixLocation(2, 2)).Value = 3.0;
+        solver.GetElement(1).Value = 5.0;
+
+        Assert.That(solver.Size, Is.EqualTo(2));
+        Assert.That(solver.OrderAndFactor(), Is.EqualTo(2));
+
+        IVector<double> solution = new DenseVector<double>(2);
+        solver.ForwardSubstitute(solution);
+        solver.BackwardSubstitute(solution);
+        Assert.Multiple(() =>
+        {
+            Assert.That(solution[1], Is.EqualTo(3.0).Within(1e-12));
+            Assert.That(solution[2], Is.EqualTo(-1.0).Within(1e-12));
+        });
+    }
+
+    [Test]
     public void When_QuickDiagonalPivoting_Expect_NoException()
     {
         // Build the solver with only the quick diagonal pivoting

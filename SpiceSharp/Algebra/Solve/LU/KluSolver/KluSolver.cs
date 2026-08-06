@@ -50,8 +50,11 @@ public abstract partial class KluSolver<T> : SparsePivotingSolver<T>,
 
     /// <summary>
     /// Gets the number of nonzero entries in the factors that the last factorization
-    /// produced, the diagonal included. Comparing this against the number of entries in the
-    /// matrix says how much fill the ordering ended up causing.
+    /// produced. This counts everything the substitution has to walk over: the diagonal, the
+    /// two triangles, and the entries above the diagonal blocks that block triangular form
+    /// leaves outside them. Comparing this against <see cref="MatrixNonZeroCount"/> says how
+    /// much fill the ordering ended up causing, and cannot come out negative because every
+    /// entry of the matrix lands in exactly one of those places.
     /// </summary>
     /// <value>
     /// The number of nonzero entries in the factors.

@@ -171,7 +171,12 @@ public class KluSolverTests : SolveFramework
         Assert.That(solver.Symbolic.Blocks, Is.EqualTo(size));
 
         // Nothing has to be factored at all here, so there should be no fill whatsoever.
-        Assert.That(solver.FactorNonZeroCount, Is.EqualTo(size));
+        // Every entry is either the diagonal of a singleton block or sits above the blocks.
+        Assert.Multiple(() =>
+        {
+            Assert.That(solver.MatrixNonZeroCount, Is.EqualTo(size * (size + 1) / 2));
+            Assert.That(solver.FactorNonZeroCount, Is.EqualTo(solver.MatrixNonZeroCount));
+        });
 
         IVector<double> solution = new DenseVector<double>(size);
         solver.ForwardSubstitute(solution);

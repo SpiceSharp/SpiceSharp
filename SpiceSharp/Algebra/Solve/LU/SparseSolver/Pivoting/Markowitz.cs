@@ -159,11 +159,14 @@ public partial class Markowitz<T> : ParameterSet, ICloneable<Markowitz<T>>
     public void Initialize(IMatrix<T> matrix)
     {
         matrix.ThrowIfNull(nameof(matrix));
+        Allocate(matrix.Size);
+    }
 
-        // Allocate arrays
-        _markowitzRow = new int[matrix.Size + 1];
-        _markowitzColumn = new int[matrix.Size + 1];
-        _markowitzProduct = new int[matrix.Size + 2];
+    private void Allocate(int size)
+    {
+        _markowitzRow = new int[size + 1];
+        _markowitzColumn = new int[size + 1];
+        _markowitzProduct = new int[size + 2];
     }
 
     /// <summary>
@@ -250,9 +253,16 @@ public partial class Markowitz<T> : ParameterSet, ICloneable<Markowitz<T>>
         matrix.ThrowIfNull(nameof(matrix));
         rhs.ThrowIfNull(nameof(rhs));
 
+        // The counts are indexed by row and column up to max, which the solver derives from
+        // its own size. That size is the larger of the matrix and the right-hand side, so it
+        // can reach past the matrix when the last equations have a right-hand side but no
+        // matrix entry at all. Those rows and columns are empty, which makes the matrix
+        // singular, but the search still has to be able to walk over them to find that out.
+        int size = Math.Max(matrix.Size, max);
+
         // Initialize Markowitz row, column and product vectors if necessary
-        if (_markowitzRow == null || _markowitzRow.Length != matrix.Size + 1)
-            Initialize(matrix);
+        if (_markowitzRow == null || _markowitzRow.Length != size + 1)
+            Allocate(size);
         Count(matrix, rhs, eliminationStep, max);
         Products(eliminationStep, max);
     }

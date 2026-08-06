@@ -95,7 +95,13 @@ public partial class KluComplexSolver : KluSolver<Complex>
             return eliminated;
 
         BuildRefactorPlan();
-        FactorNonZeroCount = _lowerCount + _upperCount + size;
+
+        // The entries above the diagonal blocks count too. They are never factored, but they
+        // are part of what the substitution walks over, and every entry of the matrix ends up
+        // in exactly one of L, U, the diagonal or there. Leaving them out made the count come
+        // out below the number of entries in the matrix for anything that block triangular
+        // form actually managed to split up.
+        FactorNonZeroCount = _lowerCount + _upperCount + size + _offCount;
         IsFactored = true;
         NeedsReordering = false;
         return size;
