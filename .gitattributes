@@ -4,6 +4,14 @@
 * text=auto
 
 ###############################################################################
+# Compressed test data
+#
+# The test matrices in SpiceSharpTest/Algebra/Matrices are gzipped. Line ending
+# normalization would corrupt them, so do not leave that to content sniffing.
+###############################################################################
+*.gz     binary
+
+###############################################################################
 # Set default behavior for command prompt diff.
 #
 # This is need for earlier builds of msysgit that does not have it on by
