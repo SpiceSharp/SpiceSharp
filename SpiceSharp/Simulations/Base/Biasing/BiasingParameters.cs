@@ -155,18 +155,23 @@ public partial class BiasingParameters : ParameterSet, ICloneable<BiasingParamet
     /// <returns>A solver that can be used to solve equations.</returns>
     public ISparsePivotingSolver<double> CreateSolver()
     {
-        if (Solver == SolverTypes.Klu)
+        switch (Solver)
         {
-            var klu = new KluRealSolver();
-            klu.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
-            klu.Parameters.RelativePivotThreshold = RelativePivotThreshold;
-            return klu;
-        }
+            case SolverTypes.Klu:
+                var klu = new KluRealSolver();
+                klu.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+                klu.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+                return klu;
 
-        var solver = new SparseRealSolver();
-        solver.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
-        solver.Parameters.RelativePivotThreshold = RelativePivotThreshold;
-        return solver;
+            case SolverTypes.Sparse:
+                var sparse = new SparseRealSolver();
+                sparse.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+                sparse.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+                return sparse;
+
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc/>

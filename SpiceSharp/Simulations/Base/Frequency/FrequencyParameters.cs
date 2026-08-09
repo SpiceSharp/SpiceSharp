@@ -71,18 +71,23 @@ public partial class FrequencyParameters : ParameterSet, ICloneable<FrequencyPar
     /// <returns>A solver that can be used to solve equations.</returns>
     public ISparsePivotingSolver<Complex> CreateSolver()
     {
-        if (Solver == SolverTypes.Klu)
+        switch (Solver)
         {
-            var klu = new KluComplexSolver();
-            klu.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
-            klu.Parameters.RelativePivotThreshold = RelativePivotThreshold;
-            return klu;
-        }
+            case SolverTypes.Klu:
+                var klu = new KluComplexSolver();
+                klu.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+                klu.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+                return klu;
 
-        var solver = new SparseComplexSolver();
-        solver.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
-        solver.Parameters.RelativePivotThreshold = RelativePivotThreshold;
-        return solver;
+            case SolverTypes.Sparse:
+                var sparse = new SparseComplexSolver();
+                sparse.Parameters.AbsolutePivotThreshold = AbsolutePivotThreshold;
+                sparse.Parameters.RelativePivotThreshold = RelativePivotThreshold;
+                return sparse;
+
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     /// <inheritdoc/>
