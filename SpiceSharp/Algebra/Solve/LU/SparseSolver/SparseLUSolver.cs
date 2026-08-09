@@ -56,14 +56,14 @@ public abstract partial class SparseLUSolver<T> : SparsePivotingSolver<T>,
         {
             var pivot = Matrix.FindDiagonalElement(step);
 
-            // We don't consult the pivoting strategy, we just need to know if we can eliminate this row
-            if (pivot == null || Parameters.Magnitude(pivot.Value).Equals(0.0))
-                return false;
-            Eliminate(Matrix.FindDiagonalElement(step));
+                // We don't consult the pivoting strategy, we just need to know if we can eliminate this row
+                if (pivot == null || Parameters.Magnitude(pivot.Value).Equals(0.0))
+                    return false;
+                Eliminate(pivot);
+            }
+            IsFactored = true;
+            return true;
         }
-        IsFactored = true;
-        return true;
-    }
 
     /// <inheritdoc/>
     public override int OrderAndFactor()
