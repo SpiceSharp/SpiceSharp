@@ -51,11 +51,41 @@ caveat.
 | `ElementSet<double>` RHS stamping | `CurrentSource.Biasing` | inject the noise current |
 | `Rerun` / `Repeat` / `CurrentRun` | [Simulation.cs](../SpiceSharp/Simulations/Simulation.cs) | Monte-Carlo loop reusing setup |
 | AC `Noise` analysis | [Noise.cs](../SpiceSharp/Simulations/Implementations/Noise/Noise.cs) | ground truth for validation |
+| `NoisePoint` on `INoiseSimulationState` | [NoisePoint.cs](../SpiceSharp/Simulations/Implementations/Noise/NoisePoint.cs) | **the template for §4** — see below |
+| `NoiseSource` + `NoiseThermal`/`NoiseShot`/`NoiseGain` | [NoiseSource.cs](../SpiceSharp/Simulations/Implementations/Noise/NoiseSource.cs), [Components/Noise](../SpiceSharp/Components/Noise) | the shape the time-domain primitives copy |
+| `OnePort<double>` | [OnePort.cs](../SpiceSharp/Components/Common/OnePort.cs) | the two terminals a source is connected between |
+
+The AC noise path already solves the "don't recompute expensive things per source" problem, and
+it is worth naming the mechanism explicitly because §4 reuses it wholesale.
+[NoisePoint](../SpiceSharp/Simulations/Implementations/Noise/NoisePoint.cs) is a readonly struct
+that, at construction, evaluates `Log(Frequency)` and `Log(InverseGainSquared)` — the only
+transcendentals the integration in
+[NoiseSource.Integrate](../SpiceSharp/Simulations/Implementations/Noise/NoiseSource.cs:54) needs
+that depend on the sweep point rather than on the source. `Noise.Execute` builds **one**
+`NoisePoint` per frequency ([Noise.cs:162](../SpiceSharp/Simulations/Implementations/Noise/Noise.cs:162))
+and hands it to every source through `INoiseSimulationState.Point`. Sources contribute only
+their own per-source math on top.
+
+The transient case has the same split, with `Δt` in place of frequency: the shaping-filter
+propagator and its noise Cholesky factor depend on `Δt` and `f_max` alone, both global, while
+`σ_∞` depends on the source's operating point alone. So the same division of labour applies,
+and it is worth strictly more here — the AC state saves two `Log` per point, the time-domain
+state saves an `Exp`, three `Sqrt` and (with flicker) a whole pole ladder *per source* per
+timepoint. §4.4 quantifies it.
 
 Relevant properties of the existing code:
 
 - `Transient.Probe()` calls `_method.Probe()` *before* the behaviors, so `Time` and `BaseTime`
   are both current and `Δt = Time − BaseTime` is available inside a behavior's `Probe()`.
+- `Transient.Probe()` and `Transient.Accept()`
+  ([Transient.cs:456](../SpiceSharp/Simulations/Implementations/Time/Transient.cs:456)) are
+  `protected` but **not `virtual`**. `NoiseTransient` needs to update the shared point *before*
+  the behaviors run, so both must become `protected virtual`. That one-word change is the only
+  modification this design makes to existing code.
+- `IHistory<T>.Accept()` rotates ([ArrayHistory.cs:70](../SpiceSharp/Simulations/States/Histories/ArrayHistory.cs:70)),
+  so after an accepted step `Value` holds a stale rotated-out entry. Every `Probe()` must
+  therefore write `Value` as a function of `GetPreviousValue(1)`, never read `Value` as the
+  previous state. This is what makes rejection rollback free, and it is easy to get wrong.
 - `Transient.Accept()` calls behaviors first, then `_method.Accept()`, which walks
   `RegisteredStates` and calls `Accept()` on each. A `StateValue<double>` written during
   `Probe()` therefore rolls back for free on rejection: the retry overwrites `Value` while the
@@ -130,7 +160,7 @@ negative**: shrink the step, see less jaggedness, relax the step. It self-stabil
 
 Everything the grid existed to support therefore goes away: no `ITruncatingBehavior`, no
 landing-vs-capping problem, no ZOH discontinuity for trapezoidal to straddle, no `Δt_n`
-selection rule, and no counter-based RNG (§4.4).
+selection rule, and no counter-based RNG (§4.6).
 
 ### Residual cost: LTE order, not stability
 
@@ -146,7 +176,7 @@ buys back a full order:
 | 3 | C² | 2.5 |
 
 **Make the order configurable and default it to 2.** The exact-transition property survives;
-see §4.5.
+see §4.7.
 
 ### Choosing f_max
 
@@ -173,11 +203,34 @@ the grid machinery and its failure modes, plus a knob a user can reason about ph
 
 ## 4. Architecture
 
+The whole section is a transposition of the AC noise architecture from the frequency axis to
+the time axis. The correspondence is one-to-one and deliberate:
+
+| AC noise | Transient noise | What it holds |
+|---|---|---|
+| `INoiseSimulationState` | `ITimeNoiseSimulationState` | everything shared by all sources at the current point |
+| `NoisePoint` (`Log f`, `Log 1/G²`) | `TimeNoisePoint` (propagator, Cholesky) | the point-dependent transcendentals, computed **once** |
+| `INoiseSource` / `NoiseSource` | `ITimeNoiseSource` / `TimeNoiseSource` | per-source name, density, running state |
+| `NoiseThermal(name, pos, neg)` | `TimeNoiseThermal(name, …, pos, neg)` | a source across two terminals |
+| `INoiseBehavior : INoiseSource` | `ITimeNoiseBehavior : ITimeNoiseSource` | device aggregate, exports its sources by `[ParameterName]` |
+| `Load()` / `Compute()` | `Inject()` / `Probe()` | stamp, then evaluate |
+
+Two things do *not* transpose, and both are simplifications:
+
+- There is no adjoint solve and therefore no gain factor. AC's `NoiseThermal.Compute` fuses the
+  PSD with `|ΔV|²` from the adjoint solution
+  ([NoiseThermal.cs:36](../SpiceSharp/Components/Noise/NoiseThermal.cs:36)); the time-domain
+  primitives produce a raw PSD and stamp a current. This fusion is exactly why the AC sources
+  cannot simply be reused.
+- Because there is no gain factor, **a bias-independent source is genuinely constant.** In AC,
+  `Compute` must run at every frequency even for a linear resistor, because the gain moved. In
+  transient, a linear resistor's `σ_∞` is fixed for the whole run and `Compute` runs once. §4.4.
+
 ### 4.1 New behavior interface
 
 ```csharp
 [SimulationBehavior]
-public interface ITimeNoiseBehavior : IBehavior
+public interface ITimeNoiseBehavior : ITimeNoiseSource, IBehavior
 {
     /// Refresh noise densities from the last accepted operating point and advance
     /// the shaping state by the probed step. Called once per probed timepoint,
@@ -189,6 +242,29 @@ public interface ITimeNoiseBehavior : IBehavior
     void Inject();
 }
 ```
+
+with
+
+```csharp
+public interface ITimeNoiseSource
+{
+    /// The name of the noise source.
+    string Name { get; }
+
+    /// The one-sided power spectral density at the last accepted operating point, in A²/Hz.
+    double NoiseDensity { get; }
+
+    /// The frozen current realization for the probed timepoint, in A.
+    double Current { get; }
+}
+```
+
+`ITimeNoiseBehavior` inheriting `ITimeNoiseSource` mirrors `INoiseBehavior : INoiseSource`
+exactly: a device sums its sources' `NoiseDensity` and `Current`, and exposes each individual
+source as an `ITimeNoiseSource` property with `[ParameterName]`, the way
+[Diodes/Noise.cs](../SpiceSharp/Components/Semiconductors/Diodes/Noise.cs) exposes `rs`, `id`
+and `flicker`. Densities add, and currents into the same node pair add, so both aggregates are
+physically meaningful and come for free as export quantities.
 
 Freezing the realization at probe time, outside the Newton loop, matters for three reasons:
 the Newton iteration needs a fixed target to converge onto; the PSD must not be modulated by
@@ -215,8 +291,115 @@ Consequences, all of them wanted:
   sequence. That makes it unit-testable without a circuit (§7.1).
 - Correlated sources (§9) become straightforward: `u` becomes a vector and the per-device
   Cholesky factor applies at stamping time, not inside the state update.
+- **It is what makes §4.4 possible.** With `σ_∞` out of the state update, the update
+  coefficients contain nothing device-specific — only `λ` and `Δt`, both global. They can
+  therefore be computed once per timepoint and shared. Folding `σ_∞` in would make every
+  source's propagator different and the sharing would collapse.
 
-### 4.3 Time-domain noise source primitives
+### 4.3 The shared simulation state
+
+The state is where every transcendental that does not depend on a specific source lives.
+
+```csharp
+public interface ITimeNoiseSimulationState : ISimulationState
+{
+    /// The noise bandwidth limit, in Hz.
+    double MaximumNoiseFrequency { get; }
+
+    /// The number of shaping poles (1..3). See §3.
+    int BandLimitOrder { get; }
+
+    /// Band-limit shaping coefficients for the currently probed step. Shared by every source.
+    TimeNoisePoint Point { get; }
+
+    /// Shaping coefficients and amplitude weights for the flicker pole ladder, for the
+    /// currently probed step. Shared by every flicker source. See §5.3.
+    IReadOnlyList<TimeNoiseSection> FlickerLadder { get; }
+
+    /// sqrt(k_n * f_max). Converts sqrt(PSD) to a stationary standard deviation.
+    double AmplitudeScale { get; }
+
+    /// Registers a source: allocates its shaping state with the integration method and
+    /// seeds its RNG stream from hash(Seed, source.Name). See §4.6.
+    void Register(TimeNoiseSource source);
+}
+```
+
+`TimeNoisePoint` is the direct analogue of
+[NoisePoint](../SpiceSharp/Simulations/Implementations/Noise/NoisePoint.cs) — a readonly struct
+that does its expensive work in the constructor and is then read many times:
+
+```csharp
+public readonly struct TimeNoisePoint
+{
+    public double Decay { get; }      // e^{-z}
+    public double Coupling { get; }   // z·e^{-z}, the propagator off-diagonal (0 at order 1)
+    public double L11 { get; }        // Cholesky factor of Q(z)
+    public double L21 { get; }
+    public double L22 { get; }
+
+    public TimeNoisePoint(double z, int order) { /* §4.7 */ }
+}
+```
+
+Order 1 is order 2 with the second row dropped — `Q₁₁ = 1 − e^{−2z}` is the same expression in
+both — so one struct covers every order and the `order` switch is confined to its constructor.
+
+Unlike AC there is no `IHistory<TimeNoisePoint>`: nothing needs the previous point's
+coefficients, because rollback lives in the per-source `StateValue` instead (§4.8). A plain
+property is enough.
+
+`FlickerLadder` is the payoff that most justifies a dedicated state. A flicker source is a sum
+of `N` OU sections with distinct poles (§5.3); each section needs its own `Decay`/`L11` at the
+probed `Δt`. But the pole ladder is a property of the *simulation* — `f_min` from `StopTime`,
+`f_max` from the parameters — not of the device. So the `N` exponentials are computed once per
+timepoint for the whole circuit:
+
+```csharp
+public readonly struct TimeNoiseSection
+{
+    public TimeNoisePoint Point { get; }   // coefficients for this section's pole
+    public double Weight { get; }          // sqrt of the bias-independent section weight
+}
+```
+
+`Weight` is fixed for the run and computed at setup.
+
+### 4.4 What this actually costs
+
+Per **probed** timepoint, with `M` noise sources of which `V` sit at a moving operating point
+and `M_f` are flicker sources, order-2 shaping, and an `N`-section flicker ladder. Write
+`c(order)` for the cost of one `TimeNoisePoint`: 1 `Exp` + 1 `Sqrt` at order 1, 1 `Exp` +
+3 `Sqrt` at order 2.
+
+| | shared, on the state | per source | naive per-source design |
+|---|---|---|---|
+| Band-limit coefficients | `c(order)` | — | `M`·`c(order)` |
+| Flicker ladder | `N`·`c(order)` | — | `M_f`·`N`·`c(order)` |
+| Gaussian draws | — | 1 `Log`, 1 `Sqrt`, 1 `SinCos` | same |
+| `σ_∞` refresh | — | `V`·(1 `Sqrt`) | `M`·(1 `Sqrt`) |
+| Flicker `\|I\|^(AF/2)` | — | `M_f`·(1 `Log` + 1 `Exp`) | `M_f`·`N`·(1 `Log` + 1 `Exp`) |
+
+Three things are doing the work:
+
+1. **Coefficients are shared** — the first two rows go from `O(M)` to `O(1)`.
+2. **`σ_∞` is only refreshed when the bias moved.** `Compute` is called by the device from its
+   own `Probe()`, so the device decides. A `Resistor` calls it once, from `InitializeStates`,
+   and never pays a `Sqrt` again — the `V` in the table, not `M`. This is the direct benefit of
+   there being no gain factor to re-fuse, and it is why `Compute` stays on the device side
+   rather than being driven generically by the state.
+3. **Order 2 consumes exactly one Box-Muller call per source per step.** `L·Z` needs `Z ∈ R²`,
+   and trigonometric Box-Muller produces two normals from one `Log`, one `Sqrt` and one
+   `SinCos`. No spare to carry, no cache, no branch — and the RNG consumption pattern is a
+   fixed 2 uniforms per source per step, which keeps §4.6's reproducibility argument trivial.
+   At order 1 the spare must be cached, which is a small argument for the order-2 default on
+   top of the LTE one in §3.
+
+Constant folding happens in each primitive's constructor, once, not per call. `TimeNoiseThermal`
+stores `_scale = state.AmplitudeScale · √(4·k)` at construction, so `Compute(G, T)` is
+`σ_∞ = _scale · √(G·T)` — one `Sqrt` and one multiply, and only when the bias moved.
+
+### 4.5 Time-domain noise source primitives
 
 Mirroring `NoiseSource` / `NoiseThermal` / `NoiseShot` / `NoiseGain`, but operating on
 `IVariable<double>` from `IBiasingSimulationState` and owning an `ElementSet<double>`:
@@ -229,13 +412,90 @@ TimeNoiseSource            (abstract: shaping state, RNG stream, stamping)
 └── TimeNoiseFlicker       Compute(coefficient, exponent, current)   // §5.3
 ```
 
-Note the deliberate difference from the AC sources: these produce a **raw PSD**, with no
-transfer-function factor. In the AC path, `NoiseThermal.Compute` multiplies by the adjoint
-gain `|ΔV|²`, fusing PSD and transfer function into one number
-([NoiseThermal.cs:36](../SpiceSharp/Components/Noise/NoiseThermal.cs:36)). That fusion is why
-the AC sources cannot be reused here.
+Like `NoiseThermal`, a source is **connected between two terminals given to its constructor**,
+held as a `OnePort<double>`:
 
-### 4.4 Random number generation
+```csharp
+public class TimeNoiseThermal : TimeNoiseSource
+{
+    private readonly double _scale;
+
+    public TimeNoiseThermal(string name, ITimeNoiseSimulationState noise,
+        IBiasingSimulationState biasing, IVariable<double> pos, IVariable<double> neg)
+        : base(name, noise, biasing, pos, neg)
+    {
+        _scale = noise.AmplitudeScale * Math.Sqrt(4.0 * Constants.Boltzmann);
+    }
+
+    /// Thermal noise, S = 4·k·T·G.
+    public void Compute(double conductance, double temperature)
+    {
+        NoiseDensity = 4.0 * Constants.Boltzmann * temperature * conductance;
+        Amplitude = _scale * Math.Sqrt(conductance * temperature);
+    }
+}
+```
+
+The base class holds the `OnePort<double>`, builds its `ElementSet<double>` from
+`biasing.Solver` and `_variables.GetRhsIndices(biasing.Map)` exactly as
+[CurrentSource.Biasing](../SpiceSharp/Components/Currentsources/ISRC/Biasing.cs:84) does, calls
+`noise.Register(this)`, and provides:
+
+```csharp
+protected double Amplitude { get; set; }      // σ_∞, set by Compute
+public double NoiseDensity { get; protected set; }
+public double Current { get; private set; }
+
+public virtual void Probe();    // u ← propagate(state.Point, u_prev) + L·Z; Current = Amplitude·u
+public void Inject();           // _elements.Add(-Current, Current)
+```
+
+`Probe()` is the only virtual: `TimeNoiseFlicker` overrides it to walk `state.FlickerLadder`
+instead of the single `state.Point`. Everything else — stamping, registration, seeding — is
+shared.
+
+Note the deliberate difference from the AC sources: these produce a **raw PSD**, with no
+transfer-function factor, per the table at the head of §4.
+
+Device behaviors then read like their AC counterparts. Compare
+[Resistors/Noise.cs](../SpiceSharp/Components/RLC/Resistors/Noise.cs):
+
+```csharp
+[BehaviorFor(typeof(Resistor)), AddBehaviorIfNo(typeof(ITimeNoiseBehavior))]
+[GeneratedParameters]
+public partial class TimeNoise : Biasing, ITimeNoiseBehavior
+{
+    private readonly TimeNoiseThermal _thermal;
+
+    public double NoiseDensity => _thermal.NoiseDensity;
+    public double Current => _thermal.Current;
+
+    [ParameterName("thermal"), ParameterInfo("The thermal noise source")]
+    public ITimeNoiseSource Thermal => _thermal;
+
+    public TimeNoise(IComponentBindingContext context) : base(context)
+    {
+        var biasing = context.GetState<IBiasingSimulationState>();
+        var noise = context.GetState<ITimeNoiseSimulationState>();
+        _thermal = new TimeNoiseThermal($"{Name}/r", noise, biasing,
+            biasing.GetSharedVariable(context.Nodes[0]),
+            biasing.GetSharedVariable(context.Nodes[1]));
+    }
+
+    void ITimeBehavior.InitializeStates()
+        => _thermal.Compute(Conductance, Parameters.Temperature);   // once, for the whole run
+
+    void ITimeNoiseBehavior.Probe() => _thermal.Probe();
+    void ITimeNoiseBehavior.Inject() => _thermal.Inject();
+}
+```
+
+The one deliberate deviation from AC: the source is given a **circuit-unique** name
+(`$"{Name}/r"`) rather than the bare local name AC uses (`"r"`), because §4.6 seeds the RNG
+stream from it. The `[ParameterName("thermal")]` export is unaffected and stays the user-facing
+handle.
+
+### 4.6 Random number generation
 
 A **per-source sequential stream**, seeded `hash(seed, sourceId)` at setup. The narrow
 reproducibility contract (§1) means the stream no longer has to be indexable by time — a
@@ -255,7 +515,12 @@ and the stream is easy to reason about.
 Per-run seed for the Monte-Carlo driver: derive from `CurrentRun`, which `Simulation` already
 exposes.
 
-### 4.5 Exact discretization, order 2
+Seeding is centralized in `ITimeNoiseSimulationState.Register`, which hashes the master seed
+with `source.Name`. Hashing the *name* rather than a registration index is what makes the
+stream independent of netlist order, so adding an unrelated device does not shift anybody
+else's realization.
+
+### 4.7 Exact discretization, order 2
 
 Two cascaded identical poles, `λ = 2π f_max`, state `x = (v, u)`:
 
@@ -295,7 +560,11 @@ Q₂₂ =           (2/3)z³ −      z⁴
 The Cholesky residual is the dangerous one: `Q₂₂ − Q₁₂²/Q₁₁ → (1/6)z³`, a cancellation between
 two `O(z³)` terms. Compute it from the series in that regime rather than from the closed form.
 
-### 4.6 New simulation
+All of this lives in the `TimeNoisePoint` constructor and runs once per timepoint for the whole
+circuit (§4.3), which is the main reason the closed-form/series branch is affordable at all:
+the branch is taken once, not once per source.
+
+### 4.8 New simulation and state lifecycle
 
 ```csharp
 public partial class NoiseTransient : Transient,
@@ -305,34 +574,94 @@ public partial class NoiseTransient : Transient,
 ```
 
 `NoiseTransientParameters` carries `MaximumNoiseFrequency` (`f_max`), `BandLimitOrder`
-(default 2), `Seed`, and flicker configuration. `ITimeNoiseSimulationState` owns the master
-seed and the source registry.
+(default 2), `Seed`, and flicker configuration.
 
-`Execute` hooks `AfterLoad` to call `Inject()` on every behavior, and calls `Probe()` on each
-behavior from the probe phase, passing `Δt = Time − BaseTime`. Each source registers its
-shaping state as a `StateValue<double>` via `IIntegrationMethod.RegisterState`, which gives
+Lifecycle, mirroring `Noise` ([Noise.cs:100](../SpiceSharp/Simulations/Implementations/Noise/Noise.cs:100)):
+
+- **`CreateStates`** — after `base.CreateStates()`, so `_method` already exists. Constructs
+  `TimeNoiseSimulationState`, which precomputes `AmplitudeScale = √(k_n·f_max)` and the flicker
+  ladder's poles and weights (`f_min` from `TimeParameters.StopTime`, per §5.3), and takes the
+  `IIntegrationMethod` so it can register shaping states on behalf of sources.
+- **`CreateBehaviors`** — after `base.CreateBehaviors()`, grab
+  `EntityBehaviors.GetBehaviorList<ITimeNoiseBehavior>()`. Source constructors have by now
+  called `Register`, so every stream is seeded and every shaping state is registered.
+- **`Execute`** — hook `AfterLoad` to call `Inject()` on every behavior.
+- **`Probe`** — override (see §2; requires making the base method `virtual`):
+
+  ```csharp
+  protected override void Probe()
+  {
+      base.Probe();                                   // _method.Probe(), then IAcceptBehavior.Probe()
+      _state.SetCurrentPoint(Time - _method.BaseTime); // one Exp + 3 Sqrt, for everybody
+      foreach (var behavior in _noiseBehaviors)
+          behavior.Probe();
+  }
+  ```
+
+  The ordering is the whole point and it is the same ordering as
+  [Noise.Execute](../SpiceSharp/Simulations/Implementations/Noise/Noise.cs:162): the state
+  publishes the point first, then every source consumes it. `SetCurrentPoint(Δt)` is the
+  analogue of `NoiseSimulationState.SetCurrentPoint(NoisePoint)`.
+
+Each source registers its shaping state via `IIntegrationMethod.RegisterState`, which gives
 rollback on rejection for free and — because `StateValue<T>` is not `ITruncatable` — keeps the
 noise state out of the LTE estimator. Everything else is inherited.
 
+**One trap with the shaping state.** Order-2 and flicker sources hold more than one scalar.
+Do *not* use a `StateValue<double[]>`: `IHistory<T>.Accept()` rotates the array *references*, so
+writing `Value[i]` during `Probe()` would mutate the last accepted array and destroy the
+rollback. Either register one `StateValue<double>` per scalar component, or — preferred —
+add a small `IIntegrationState` holding two `double[]` and swapping them on `Accept()`, so an
+`N`-section flicker source costs one registration instead of `N`.
+
+### 4.9 File layout
+
+Placed alongside the AC equivalents so the correspondence is visible in the tree:
+
+```
+SpiceSharp/Simulations/Implementations/NoiseTransient/
+  ITimeNoiseBehavior.cs                     ← Noise/INoiseBehavior.cs
+  ITimeNoiseSource.cs                       ← Noise/INoiseSource.cs
+  ITimeNoiseSimulationState.cs              ← Noise/INoiseSimulationState.cs
+  TimeNoisePoint.cs                         ← Noise/NoisePoint.cs
+  TimeNoiseSection.cs
+  TimeNoiseSource.cs                        ← Noise/NoiseSource.cs
+  NoiseTransient.cs                         ← Noise/Noise.cs
+  NoiseTransient.TimeNoiseSimulationState.cs ← Noise/Noise.NoiseSimulationState.cs
+  NoiseTransientParameters.cs               ← Noise/NoiseParameters.cs
+  Rng/                                      (splitmix64 / xoshiro256**, Box-Muller)
+
+SpiceSharp/Components/Noise/
+  TimeNoiseThermal.cs  TimeNoiseShot.cs  TimeNoiseGain.cs  TimeNoiseFlicker.cs
+  (namespace SpiceSharp.Components.NoiseSources, next to NoiseThermal.cs etc.)
+
+SpiceSharp/Components/**/TimeNoise.cs       ← **/Noise.cs, one per device
+```
+
 ## 5. Implementation phases
 
-### Phase 0 — Shaping state, RNG, and the validation harness
+### Phase 0 — `TimeNoisePoint`, RNG, and the validation harness
 
-No device changes, no circuit. Unit-test the OU update directly against its analytic stationary
-variance and autocorrelation over a deliberately irregular step sequence (§7.1) — this is the
-sharpest and cheapest test in the plan and it needs none of the rest of the feature. Then a
-hand-placed noise current source on an RC for the `kT/C` test (§7.2).
+No device changes, no circuit. `TimeNoisePoint` is a pure function of `(z, order)`, so it can
+be tested standalone: check the propagator and Cholesky factor against the closed forms, and
+exercise the series crossover of §4.7 from both sides. Then unit-test the OU update driven by a
+sequence of `TimeNoisePoint`s against its analytic stationary variance and autocorrelation over
+a deliberately irregular step sequence (§7.1) — this is the sharpest and cheapest test in the
+plan and it needs none of the rest of the feature. Then a hand-placed noise current source on an
+RC for the `kT/C` test (§7.2).
 
 ### Phase 1 — Vertical slice
 
-`ITimeNoiseBehavior`, `TimeNoiseSource` + `TimeNoiseThermal`, `NoiseTransient`,
-`NoiseTransientParameters`, and the `Resistor` time-noise behavior. Order-1 shaping only.
-End-to-end on one device.
+`ITimeNoiseSource` / `ITimeNoiseBehavior`, `ITimeNoiseSimulationState` + its implementation,
+`TimeNoiseSource` + `TimeNoiseThermal`, `NoiseTransient`, `NoiseTransientParameters`, the
+`protected virtual` change on `Transient.Probe`/`Accept` (§2), and the `Resistor` time-noise
+behavior. Order-1 shaping only. End-to-end on one device.
 
 ### Phase 2 — Order-2 shaping and device coverage
 
-The 2×2 propagator of §4.5, then Diode, BJT, MOSFET levels 1/2/3 — the set that currently has
-an `INoiseBehavior`. Thermal and shot only at this stage; flicker stubbed.
+The 2×2 propagator of §4.7 — which is confined to the `TimeNoisePoint` constructor, so no source
+or device code changes — then Diode, BJT, MOSFET levels 1/2/3, the set that currently has an
+`INoiseBehavior`. Thermal and shot only at this stage; flicker stubbed.
 
 ### Phase 3 — Flicker
 
@@ -344,7 +673,11 @@ Time-domain counterparts of
 [Subcircuits/Behaviors/Noise.cs](../SpiceSharp/Components/Subcircuits/Behaviors/Noise.cs) and
 `ParallelComponents/Behaviors/Noise.cs`. Simpler than the AC versions, since there is no
 adjoint solve to mirror through a local solver — sources just stamp into the parent RHS. The
-per-source RNG streams of §4.4 are what make the parallel case safe.
+per-source RNG streams of §4.6 are what make the parallel case safe.
+
+The shared state needs one thought here: `TimeNoisePoint` is a readonly struct published once
+per timepoint before any behavior runs, so concurrent readers are safe by construction. The
+mutable per-source shaping state is not shared, so it is safe too. Nothing in §4.3 needs a lock.
 
 ### Phase 5 — Monte-Carlo driver and statistics
 
@@ -362,6 +695,27 @@ white samples. The generator is a **sum of OU sections with logarithmically spac
 which is to say, the same primitive as the band limit in §3, instantiated `N` times with
 different `τ` and weights. Gives `1/f` to within a few percent over roughly one decade per 1.5
 sections, and inherits arbitrary-`Δt` exactness for free.
+
+The ladder is a property of the simulation, not of the device: poles log-spaced from
+`f_min = 1/StopTime` to `f_max`, with weights `w_i` fixed by the pole spacing alone. Both the
+weights and the per-step coefficients therefore live on the shared state as
+`ITimeNoiseSimulationState.FlickerLadder` (§4.3), computed once per timepoint for the whole
+circuit rather than `N` exponentials per flicker source. `TimeNoiseFlicker` holds only its `N`
+unit-variance states and one scalar amplitude.
+
+That amplitude is `√(KF·|I|^AF)`, shared across all `N` sections of the source — one `Log` and
+one `Exp` per source per timepoint via `|I|^(AF/2) = exp(0.5·AF·log|I|)`, not per section.
+Special-case the common exponents: `AF = 1` is `√|I|`, `AF = 2` is `|I|`, both free of
+transcendentals.
+
+**Decide the ladder's section order when Phase 3 starts.** A ladder of first-order sections has
+its fastest pole at `f_max`, so the flicker contribution is Hölder-½ and drags the whole
+solution back to the order-1 LTE behaviour of §3 even when `BandLimitOrder = 2`. Two ways out:
+give each section the configured order — which is free in the code, since `TimeNoiseSection`
+already holds a full `TimeNoisePoint`, but changes the weights that fit `1/f` — or pass the
+summed first-order ladder through the band-limiting shaper. Both are cheap; the second keeps
+the `1/f` fit unchanged and is the likely answer, but it needs its transfer function worked out
+before the weights are fitted, not after.
 
 The FFT-filtering alternative considered in the earlier revision is dropped. It needed `T_sim`
 known upfront and `O(M log M)` memory for the whole run, and bought spectral accuracy that the
@@ -405,9 +759,10 @@ intended purpose. If a user wants a number to 1 %, point them at the AC `Noise` 
 1. **Exactness of the transition.** No circuit. Drive the shaping state over a deliberately
    irregular step sequence spanning several decades of `λΔt`, and check the sample variance
    against 1 and the sample autocorrelation at lag `Δt` against `e^{−λΔt}`. Also exercise the
-   closed-form/series crossover of §4.5 from both sides. **Write this first, in Phase 0** — it
+   closed-form/series crossover of §4.7 from both sides. **Write this first, in Phase 0** — it
    catches a wrong variance law, a wrong propagator, and the `z³` cancellation, all without any
-   of the rest of the feature existing.
+   of the rest of the feature existing. `TimeNoisePoint` being a pure struct over `(z, order)`
+   is what makes this test a plain unit test with no simulation in it.
 2. **`kT/C` on an RC lowpass.** Monte-Carlo output variance must converge to `kT/C` times the
    captured fraction of §3 — `kT/C · f_max/(f_max + f_p)` at order 1. Exact closed form, so this
    is a tight test rather than an asymptotic one.
@@ -425,6 +780,13 @@ intended purpose. If a user wants a number to 1 %, point them at the AC `Noise` 
    `Rerun`, mirroring `When_NoiseRerun_Expect_Same` in
    [NoiseTests.cs:13](../SpiceSharpTest/Simulations/NoiseTests.cs:13).
 7. **Shot noise on a diode.** Independent check of a second source type against AC noise.
+8. **Sharing is coefficients, not state.** `M` identical resistors in parallel must give each
+   source an independent realization with the correct individual statistics, and a total
+   variance `M×` a single one. The failure this guards against is specific to §4.3: sharing a
+   `TimeNoisePoint` is correct, accidentally sharing an RNG stream or a shaping state is not,
+   and both mistakes still produce plausible-looking noise. Also assert that inserting an
+   unrelated device leaves every other source's realization bit-identical, which is what §4.6's
+   hash-by-name buys.
 
 ## 8. Cost
 
@@ -445,21 +807,28 @@ failure.
 
 ## 9. Open questions
 
-- **Per-source `f_max`.** A single global value is assumed, but nothing in the design requires
-  it — the shaping state is per-source already, so a per-source override is parameter plumbing
-  rather than a design change. Worth doing if devices with wildly different bandwidths turn out
-  to be common.
+- **Per-source `f_max`.** A single global value is assumed, and §4.3 now leans on it: the shared
+  `TimeNoisePoint` is only shareable because `λ` is global. A per-source override would still
+  work — the shaping state is per-source already — but it would move that source off the shared
+  point and onto its own `Exp`/`Sqrt` per step, exactly the cost §4.4 exists to avoid. The
+  natural shape is a small cache keyed by `f_max`, so a handful of distinct bandwidths still
+  costs a handful of points rather than one per source. Worth doing only if devices with wildly
+  different bandwidths turn out to be common.
 - **Inferring `f_max`.** Less pressing than inferring the old `Δt_n`, because `f_max` is a
   physical specification a user can state directly rather than a solver tuning number. A default
   derived from a pole estimate would still be friendlier, but it needs an eigenvalue estimate
   the framework does not currently produce.
 - **Shaping order above 2.** The `n`-pole propagator generalizes (`e^{AΔ}` stays closed-form for
   a repeated real pole), but `Q(Δ)` grows and the small-`z` cancellation worsens with each order.
-  Order 3 is probably the practical ceiling without a more careful reformulation.
-- **Correlated sources.** `INoiseSource` yields a scalar and there is no covariance between
+  Order 3 is probably the practical ceiling without a more careful reformulation. Cheap to try,
+  at least: the change is contained in the `TimeNoisePoint` constructor and the loop bound in
+  `TimeNoiseSource.Probe`.
+- **Correlated sources.** `ITimeNoiseSource` yields a scalar and there is no covariance between
   sources, so induced gate noise has no representation. Per §4.2 the vector-`u` shape leaves
   room for a per-device Cholesky factor at stamping time; retrofitting correlation onto
-  independent streams is much harder than leaving room for it.
+  independent streams is much harder than leaving room for it. Note this factor is a *device*
+  property, not a step property, so it belongs on the source next to `σ_∞` and not on the
+  shared state.
 - **Reproducibility across tolerance changes.** Explicitly not promised (§1). If users turn out
   to want it — e.g. to compare a fast and an accurate run of the same realization — it requires
   going back to a time-indexed construction, which for OU means a bridge rather than a grid.
