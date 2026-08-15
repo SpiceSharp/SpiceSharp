@@ -453,7 +453,7 @@ public partial class Transient : BiasingSimulation,
     /// <summary>
     /// Accepts the current simulation state as a valid timepoint.
     /// </summary>
-    protected void Accept()
+    protected virtual void Accept()
     {
         foreach (var behavior in _acceptBehaviors)
             behavior.Accept();
@@ -464,7 +464,7 @@ public partial class Transient : BiasingSimulation,
     /// <summary>
     /// Probe for a new time point.
     /// </summary>
-    protected void Probe()
+    protected virtual void Probe()
     {
         _method.Probe();
         foreach (var behavior in _acceptBehaviors)

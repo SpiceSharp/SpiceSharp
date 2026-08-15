@@ -608,7 +608,16 @@ public class Resources {
             return ResourceManager.GetString("Simulations.NoEntities", resourceCulture);
         }
     }
-    
+
+    /// <summary>
+    ///   Looks up a localized string similar to {0}: a transient noise analysis needs a maximum noise frequency..
+    /// </summary>
+    public static string Simulations_NoiseTransient_NoMaximumFrequency {
+        get {
+            return ResourceManager.GetString("Simulations.NoiseTransient.NoMaximumFrequency", resourceCulture);
+        }
+    }
+
     /// <summary>
     ///   Looks up a localized string similar to Could not find a property with name &apos;{1}&apos; on an entity with name &apos;{0}&apos;..
     /// </summary>

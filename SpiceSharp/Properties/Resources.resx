@@ -300,6 +300,9 @@
   <data name="Simulations.NoEntities" xml:space="preserve">
     <value>{0}: there are no entities.</value>
   </data>
+  <data name="Simulations.NoiseTransient.NoMaximumFrequency" xml:space="preserve">
+    <value>{0}: a transient noise analysis needs a maximum noise frequency.</value>
+  </data>
   <data name="Simulations.PropertyNotfound" xml:space="preserve">
     <value>Could not find a property with name '{1}' on an entity with name '{0}'.</value>
   </data>

@@ -1,6 +1,6 @@
 # Transient noise analysis — design plan
 
-Status: Phase 0 implemented, Phases 1-5 still a proposal.
+Status: Phases 0-1 implemented, Phases 2-5 still a proposal.
 
 ## 1. Goal
 
@@ -395,51 +395,21 @@ Three things are doing the work:
    At order 1 the spare must be cached, which is a small argument for the order-2 default on
    top of the LTE one in §3.
 
-Constant folding happens in each primitive's constructor, once, not per call. `TimeNoiseThermal`
-stores `_scale = state.AmplitudeScale · √(4·k)` at construction, so `Compute(G, T)` is
-`σ_∞ = _scale · √(G·T)` — one `Sqrt` and one multiply, and only when the bias moved.
+Constant folding happens in each primitive's constructor, once, not per call.
 
 ### 4.5 Time-domain noise source primitives
 
-Mirroring `NoiseSource` / `NoiseThermal` / `NoiseShot` / `NoiseGain`, but operating on
-`IVariable<double>` from `IBiasingSimulationState` and owning an `ElementSet<double>`:
+Mirroring `NoiseSource` / `NoiseThermal` / `NoiseShot` / `NoiseGain`:
 
 ```
-TimeNoiseSource            (abstract: shaping state, RNG stream, stamping)
+TimeNoiseSource            (abstract: shaping state, RNG stream, registration)
 ├── TimeNoiseThermal       Compute(conductance, temperature)
 ├── TimeNoiseShot          Compute(current)
 ├── TimeNoiseGain          Compute(density)          // caller supplies S directly
 └── TimeNoiseFlicker       Compute(coefficient, exponent, current)   // §5.3
 ```
 
-Like `NoiseThermal`, a source is **connected between two terminals given to its constructor**,
-held as a `OnePort<double>`:
-
-```csharp
-public class TimeNoiseThermal : TimeNoiseSource
-{
-    private readonly double _scale;
-
-    public TimeNoiseThermal(string name, ITimeNoiseSimulationState noise,
-        IBiasingSimulationState biasing, IVariable<double> pos, IVariable<double> neg)
-        : base(name, noise, biasing, pos, neg)
-    {
-        _scale = noise.AmplitudeScale * Math.Sqrt(4.0 * Constants.Boltzmann);
-    }
-
-    /// Thermal noise, S = 4·k·T·G.
-    public void Compute(double conductance, double temperature)
-    {
-        NoiseDensity = 4.0 * Constants.Boltzmann * temperature * conductance;
-        Amplitude = _scale * Math.Sqrt(conductance * temperature);
-    }
-}
-```
-
-The base class holds the `OnePort<double>`, builds its `ElementSet<double>` from
-`biasing.Solver` and `_variables.GetRhsIndices(biasing.Map)` exactly as
-[CurrentSource.Biasing](../SpiceSharp/Components/Currentsources/ISRC/Biasing.cs:84) does, calls
-`noise.Register(this)`, and provides:
+The base class takes only a name and the noise state, calls `noise.Register(this)`, and provides:
 
 ```csharp
 protected double Amplitude { get; set; }      // σ_∞, set by Compute
@@ -447,11 +417,46 @@ public double NoiseDensity { get; protected set; }
 public double Current { get; private set; }
 
 public virtual void Probe();    // u ← propagate(state.Point, u_prev) + L·Z; Current = Amplitude·u
-public void Inject();           // _elements.Add(-Current, Current)
+public abstract void Inject();  // how the realization reaches the circuit
 ```
 
+**`Inject()` is abstract, and the wiring lives in the primitive.** The base class deliberately
+knows nothing about `OnePort<double>`, `ElementSet<double>` or `IBiasingSimulationState`: it holds
+the shaping machinery and nothing else, so a source that is not a current between two nodes needs
+no special case here. Like `NoiseThermal`, `TimeNoiseThermal` *is* connected between two terminals
+given to its constructor, so it holds the one-port and the element set itself:
+
+```csharp
+public class TimeNoiseThermal : TimeNoiseSource
+{
+    private readonly double _scale;
+    private readonly ElementSet<double> _elements;
+
+    public TimeNoiseThermal(string name, ITimeNoiseSimulationState noise,
+        IBiasingSimulationState biasing, IVariable<double> pos, IVariable<double> neg)
+        : base(name, noise)
+    {
+        var variables = new OnePort<double>(pos, neg);
+        _elements = new ElementSet<double>(biasing.Solver, null, variables.GetRhsIndices(biasing.Map));
+        _scale = noise.AmplitudeScale;
+    }
+
+    /// Thermal noise, S = 4·k·T·G.
+    public void Compute(double conductance, double temperature)
+    {
+        NoiseDensity = 4.0 * Constants.Boltzmann * temperature * conductance;
+        Amplitude = _scale * Math.Sqrt(NoiseDensity);
+    }
+
+    public override void Inject() => _elements.Add(-Current, Current);
+}
+```
+
+The element set is built from `biasing.Solver` and `variables.GetRhsIndices(biasing.Map)` exactly
+as [CurrentSource.Biasing](../SpiceSharp/Components/Currentsources/ISRC/Biasing.cs:84) does.
+
 `Probe()` is the only virtual: `TimeNoiseFlicker` overrides it to walk `state.FlickerLadder`
-instead of the single `state.Point`. Everything else — stamping, registration, seeding — is
+instead of the single `state.Point`. Everything else — registration, seeding, rollback — is
 shared.
 
 Note the deliberate difference from the AC sources: these produce a **raw PSD**, with no
@@ -677,18 +682,68 @@ The `kT/C` test is the loose one, at ±15 % on a Monte-Carlo estimate over ~2000
 It is wide enough to reject an unbanded `kT/C`, a two-sided density or a missing `k_n`, and not much
 more; §7.2 becomes a tight test only once Phase 5 can average over runs.
 
-### Phase 1 — Vertical slice
+### Phase 1 — Vertical slice — **done**
 
 `ITimeNoiseSource` / `ITimeNoiseBehavior`, `ITimeNoiseSimulationState` + its implementation,
 `TimeNoiseSource` + `TimeNoiseThermal`, `NoiseTransient`, `NoiseTransientParameters`, the
 `protected virtual` change on `Transient.Probe`/`Accept` (§2), and the `Resistor` time-noise
-behavior. Order-1 shaping only. End-to-end on one device.
+behavior. End-to-end on one device.
 
-### Phase 2 — Order-2 shaping and device coverage
+Delivered, in the layout of §4.9:
 
-The 2×2 propagator of §4.7 — which is confined to the `TimeNoisePoint` constructor, so no source
-or device code changes — then Diode, BJT, MOSFET levels 1/2/3, the set that currently has an
-`INoiseBehavior`. Thermal and shot only at this stage; flicker stubbed.
+- [ITimeNoiseSource.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/ITimeNoiseSource.cs),
+  [ITimeNoiseBehavior.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/ITimeNoiseBehavior.cs),
+  [ITimeNoiseSimulationState.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/ITimeNoiseSimulationState.cs) —
+  as sketched in §4.1 and §4.3, minus `FlickerLadder`, which arrives with Phase 3 rather than
+  standing empty until then.
+- [TimeNoiseSource.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/TimeNoiseSource.cs),
+  [TimeNoiseThermal.cs](../SpiceSharp/Components/Noise/TimeNoiseThermal.cs),
+  [Resistors/TimeNoise.cs](../SpiceSharp/Components/RLC/Resistors/TimeNoise.cs).
+- [NoiseTransient.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/NoiseTransient.cs),
+  [NoiseTransient.TimeNoiseSimulationState.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/NoiseTransient.TimeNoiseSimulationState.cs),
+  [NoiseTransientParameters.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/NoiseTransientParameters.cs).
+- Tests: [NoiseTransientTests.cs](../SpiceSharpTest/Simulations/NoiseTransientTests.cs).
+
+Five deviations from what §4 originally sketched, all of them narrowing rather than widening:
+
+- **Stamping moved out of the base class**, per §4.5 as it now reads: `TimeNoiseSource` holds the
+  shaping state, the stream and the registration, and `Inject()` is abstract. `TimeNoiseThermal`
+  owns the `OnePort<double>` and the `ElementSet<double>`. The base class therefore never assumes
+  that a noise source is a current between two nodes.
+- **Both orders ship now.** §4.7's propagator was already delivered in Phase 0, and
+  `TimeNoisePoint.Propagate` covers both orders in one call signature, so restricting Phase 1 to
+  order 1 would have cost code rather than saved it. The default is 2, per §4.8. Phase 2 is
+  therefore device coverage only.
+- **The source *is* its own integration state.** §4.8 proposed a separate small `IIntegrationState`
+  holding two arrays. Making `TimeNoiseSource` implement `IIntegrationState` itself is the same
+  thing with one fewer type: one registration per source, the arrays never leave the object so
+  nothing can alias the last accepted state, and `Accept()` swaps the two references.
+- **`MaximumNoiseFrequency` has no default and refuses to be skipped.** A band limit of zero makes
+  every source silent rather than white, so `CreateStates` throws instead of quietly running a
+  noiseless transient analysis. This adds one resource string, which is the only modification to
+  existing code beyond the two `virtual` keywords of §2.
+- **`Accept` is virtual but not overridden.** Registering the shaping state with the integration
+  method already gives the accept/rollback behaviour, so `NoiseTransient` only overrides `Probe`.
+  `Accept` is made virtual anyway, because a source whose density depends on the accepted solution
+  is the natural place for a subclass to hook in.
+
+Validation coverage: §7.2 (`kT/C`, at both orders, now with a real device rather than a hand-placed
+source, at ±12 %), §7.8 (four parallel resistors of 4R must give the variance of one R — a shared
+stream or a shared shaping state would make them perfectly correlated and inflate it fourfold; plus
+the bit-identical realization after inserting an unrelated device), and same-seed/different-seed
+reproducibility.
+
+**§7.6 could not be written as specified.** It asks for reproducibility across `Rerun`, but
+`Transient` never reinitializes its integration method outside `CreateBehaviors`, so a reran
+transient sees `Time` already at `StopTime` and terminates immediately. That is pre-existing and
+untouched here; reproducibility is instead asserted across two freshly constructed simulations.
+Phase 5 depends on `Rerun` working, so it has to fix this first.
+
+### Phase 2 — Device coverage
+
+Diode, BJT, MOSFET levels 1/2/3, the set that currently has an `INoiseBehavior`. Thermal and shot
+only at this stage; flicker stubbed. `TimeNoiseShot` and `TimeNoiseGain` join `TimeNoiseThermal`
+here.
 
 ### Phase 3 — Flicker
 

@@ -205,7 +205,7 @@ public class TimeNoiseShapingTests
                 // that are then discarded.
                 _probed1 = _accepted1;
                 _probed2 = _accepted2;
-                var point = new TimeNoisePoint(_lambda * (_method.Time - _method.BaseTime), _order);
+                var point = new TimeNoisePoint(_lambda * _method.GetPreviousTimestep(0), _order);
                 _stream.NextNormals(out double normal1, out double normal2);
                 Value = _amplitude * point.Propagate(ref _probed1, ref _probed2, normal1, normal2);
             }
