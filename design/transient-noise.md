@@ -1,6 +1,6 @@
 # Transient noise analysis — design plan
 
-Status: proposal, nothing implemented.
+Status: Phase 0 implemented, Phases 1-5 still a proposal.
 
 ## 1. Goal
 
@@ -640,7 +640,7 @@ SpiceSharp/Components/**/TimeNoise.cs       ← **/Noise.cs, one per device
 
 ## 5. Implementation phases
 
-### Phase 0 — `TimeNoisePoint`, RNG, and the validation harness
+### Phase 0 — `TimeNoisePoint`, RNG, and the validation harness — **done**
 
 No device changes, no circuit. `TimeNoisePoint` is a pure function of `(z, order)`, so it can
 be tested standalone: check the propagator and Cholesky factor against the closed forms, and
@@ -649,6 +649,33 @@ sequence of `TimeNoisePoint`s against its analytic stationary variance and autoc
 a deliberately irregular step sequence (§7.1) — this is the sharpest and cheapest test in the
 plan and it needs none of the rest of the feature. Then a hand-placed noise current source on an
 RC for the `kT/C` test (§7.2).
+
+Delivered:
+
+- [TimeNoisePoint.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/TimeNoisePoint.cs) —
+  orders 1 and 2, closed form from `z = 1e-2` upward and the series below it. Two additions to the
+  shape sketched in §4.3: an `Order` property, because the output scaling differs per order, and a
+  `Propagate` method, which is the `propagate(state.Point, u_prev)` of §4.5. Putting it on the
+  struct is what lets the Phase-0 tests exercise the same code `TimeNoiseSource.Probe` will.
+  `Stationary(order)` is the `z = ∞` point, for the stationary initialization of §5.3.
+- [Rng/](../SpiceSharp/Simulations/Implementations/NoiseTransient/Rng) — `SplitMix64`,
+  `Xoshiro256StarStar` and `NoiseRandomStream` (Box-Muller, plus the seed-and-name hash of §4.6).
+  `NextNormals` yields the pair and there is deliberately no cached spare, so an order-1 caller
+  discards the second variate and consumption stays a fixed two uniforms per source per step.
+- Tests: [TimeNoisePointTests.cs](../SpiceSharpTest/Simulations/TimeNoisePointTests.cs),
+  [NoiseRandomStreamTests.cs](../SpiceSharpTest/Simulations/NoiseRandomStreamTests.cs),
+  [TimeNoiseShapingTests.cs](../SpiceSharpTest/Simulations/TimeNoiseShapingTests.cs).
+
+Two deterministic tests turned out sharper than the Monte-Carlo one §7.1 asks for, and both are
+worth keeping as the series regresses. Propagating the covariance over an irregular step sequence
+must leave the stationary `[[1, ½], [½, ½]]` a fixed point. And the covariance accumulated from
+zero over `K` small steps must equal the single-step `Q(z)` — that is the one that pins the `z³`
+cancellation of §4.7, because the second state's whole variance is built out of the residual while
+the small steps sit in the series branch and the reference sits in the closed-form one.
+
+The `kT/C` test is the loose one, at ±15 % on a Monte-Carlo estimate over ~2000 correlation times.
+It is wide enough to reject an unbanded `kT/C`, a two-sided density or a missing `k_n`, and not much
+more; §7.2 becomes a tight test only once Phase 5 can average over runs.
 
 ### Phase 1 — Vertical slice
 
