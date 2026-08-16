@@ -141,7 +141,7 @@ Concretely, at first order:
 |---|---|---|
 | Thermal | `4kTG` | `2π·kTG·f_max` |
 | Shot | `2q·\|I\|` | `π·q·\|I\|·f_max` |
-| Flicker | `KF·I^AF / f` | sum of OU sections, §5.3 |
+| Flicker | `KF·I^AF / f^β` | sum of OU sections, §5.3 |
 
 ### Why this replaces the fixed-grid design
 
@@ -318,9 +318,13 @@ public interface ITimeNoiseSimulationState : ISimulationState
     /// Band-limit shaping coefficients for the currently probed step. Shared by every source.
     TimeNoisePoint Point { get; }
 
-    /// Shaping coefficients and amplitude weights for the flicker pole ladder, for the
-    /// currently probed step. Shared by every flicker source. See §5.3.
-    IReadOnlyList<TimeNoiseSection> FlickerLadder { get; }
+    /// Shaping coefficients for the flicker pole ladder, one per pole, for the currently
+    /// probed step. Shared by every flicker source whatever its roll-off exponent. See §5.3.
+    IReadOnlyList<TimeNoisePoint> FlickerLadder { get; }
+
+    /// The per-section amplitude weights realizing a `1/f^β` roll-off on that ladder.
+    /// Fixed for the run and cached per distinct `β`. See §5.3.
+    FlickerWeights GetFlickerWeights(double beta);
 
     /// sqrt(k_n * f_max). Converts sqrt(PSD) to a stationary standard deviation.
     double AmplitudeScale { get; }
@@ -357,19 +361,40 @@ property is enough.
 
 `FlickerLadder` is the payoff that most justifies a dedicated state. A flicker source is a sum
 of `N` OU sections with distinct poles (§5.3); each section needs its own `Decay`/`L11` at the
-probed `Δt`. But the pole ladder is a property of the *simulation* — `f_min` from `StopTime`,
-`f_max` from the parameters — not of the device. So the `N` exponentials are computed once per
-timepoint for the whole circuit:
+probed `Δt`. But the pole *positions* are a property of the *simulation* — `f_min` from
+`StopTime`, `f_max` from the parameters — not of the device. So the `N` exponentials are
+computed once per timepoint for the whole circuit.
+
+**The weights are the one part that is per-device, and they are deliberately split off.** The
+roll-off exponent `β` of `S ∝ 1/f^β` is a model parameter (§5.3), so two devices in the same
+circuit can want two different ladders' worth of weights. Pairing a weight with a
+`TimeNoisePoint` in one struct — which an earlier revision did, as `TimeNoiseSection` — would
+have forced the whole ladder to be rebuilt per `β` and destroyed the sharing. Separating them
+costs nothing, because the two live on opposite sides of the expensive/cheap divide:
+
+| | depends on | recomputed |
+|---|---|---|
+| `FlickerLadder` — `N` × `TimeNoisePoint` | pole positions, `Δt`, `order` | once per **timepoint**, for the whole circuit |
+| `FlickerWeights` — `N` × `√w_i` | pole positions, `β` | once per **run**, per distinct `β` |
 
 ```csharp
-public readonly struct TimeNoiseSection
+public sealed class FlickerWeights
 {
-    public TimeNoisePoint Point { get; }   // coefficients for this section's pole
-    public double Weight { get; }          // sqrt of the bias-independent section weight
+    /// The roll-off exponent these weights realize.
+    public double Exponent { get; }
+
+    /// sqrt(w_i), one per pole of FlickerLadder and in the same order. See §5.3.
+    public IReadOnlyList<double> Amplitudes { get; }
 }
 ```
 
-`Weight` is fixed for the run and computed at setup.
+`GetFlickerWeights` caches by `β`, so a circuit whose devices all use the SPICE default
+`β = 1` allocates exactly one vector, and a mixed circuit pays one small array per distinct
+value. `TimeNoiseFlicker` resolves its `FlickerWeights` once, in its constructor, and holds the
+reference — it never looks the exponent up again. This is the same shape §9 proposes for a
+per-source `f_max`, and it is worth noting that `β` gets the treatment now and `f_max` does not:
+`β` is genuinely per-model and costs only a setup-time array, whereas a per-source `f_max` would
+move a source off the shared per-timepoint point and onto its own `Exp`/`Sqrt` per step.
 
 ### 4.4 What this actually costs
 
@@ -388,7 +413,10 @@ and `M_f` are flicker sources, order-2 shaping, and an `N`-section flicker ladde
 
 Three things are doing the work:
 
-1. **Coefficients are shared** — the first two rows go from `O(M)` to `O(1)`.
+1. **Coefficients are shared** — the first two rows go from `O(M)` to `O(1)`. The flicker row
+   stays `O(1)` even when devices disagree about the roll-off exponent, because §4.3 puts `β`
+   in the setup-time weights rather than in the per-timepoint coefficients. A second `β` in the
+   circuit costs one array at setup and nothing per step.
 2. **`σ_∞` is only refreshed when the bias moved.** `Compute` is called by the device from its
    own `Probe()`, so the device decides. A `Resistor` calls it once, from `InitializeStates`,
    and never pays a `Sqrt` again — the `V` in the table, not `M`. This is the direct benefit of
@@ -412,8 +440,16 @@ TimeNoiseSource                  (abstract: shaping state, RNG stream, registrat
 └── TimeNoiseCurrentSource       (abstract: one-port, element set, Inject)
     ├── TimeNoiseThermal         Compute(conductance, temperature)
     ├── TimeNoiseShot            Compute(current)
-    └── TimeNoiseFlicker         Compute(coefficient, exponent, current)   // §5.3
+    └── TimeNoiseFlicker         ctor(…, β); Compute(coefficient, currentExponent, current)  // §5.3
 ```
+
+`TimeNoiseFlicker` takes its roll-off exponent `β` in the **constructor**, not in `Compute`.
+`β` selects the `FlickerWeights` vector (§4.3), which is fixed for the run, while `Compute` runs
+per timepoint and carries only what the operating point moved. Note the two exponents are
+different things and the naming has to keep them apart: `currentExponent` is SPICE's `af`, the
+exponent on `|I|`, which every device in the framework already has
+([Diodes/ModelParameters.cs](../SpiceSharp/Components/Semiconductors/Diodes/ModelParameters.cs)),
+and `β` is the exponent on `f`, which none of them has yet — see §5.3.
 
 `TimeNoiseCurrentSource` arrived with Phase 2; the paragraphs below describe the split between the
 two abstract classes as it now stands. It is also the extension point: a device whose noise follows
@@ -593,7 +629,10 @@ public partial class NoiseTransient : Transient,
 ```
 
 `NoiseTransientParameters` carries `MaximumNoiseFrequency` (`f_max`), `BandLimitOrder`
-(default 2), `Seed`, and flicker configuration.
+(default 2), `Seed`, and flicker ladder configuration — the pole range and the sections per
+decade, which set the ladder every flicker source shares. The roll-off exponent `β` is
+deliberately *not* here: it is a model parameter of the device, so it arrives per source and
+selects a cached weight vector instead (§4.3, §5.3).
 
 Lifecycle, mirroring `Noise` ([Noise.cs:100](../SpiceSharp/Simulations/Implementations/Noise/Noise.cs:100)):
 
@@ -643,7 +682,7 @@ SpiceSharp/Simulations/Implementations/NoiseTransient/
   ITimeNoiseSource.cs                       ← Noise/INoiseSource.cs
   ITimeNoiseSimulationState.cs              ← Noise/INoiseSimulationState.cs
   TimeNoisePoint.cs                         ← Noise/NoisePoint.cs
-  TimeNoiseSection.cs
+  FlickerWeights.cs                         (the per-β weight vector of §4.3/§5.3)
   TimeNoiseSource.cs                        ← Noise/NoiseSource.cs
   NoiseTransient.cs                         ← Noise/Noise.cs
   NoiseTransient.TimeNoiseSimulationState.cs ← Noise/Noise.NoiseSimulationState.cs
@@ -877,7 +916,15 @@ mean. Phase 5 computes ensemble statistics for the user and will hit exactly thi
 
 ### Phase 3 — Flicker
 
-See §5.3.
+`FlickerWeights`, the shared `FlickerLadder` on the state, `TimeNoiseFlicker`, and the flicker
+source on each of the five devices that has one in AC. See §5.3 for the weight law and §7.9 for
+what to test.
+
+The exponent `β` ships with the ladder even though every present device passes the default 1
+(§9). That is deliberate rather than speculative generality: the weight law, the guard-decade
+budget and the acceptance criterion of §7.9 are all `β`-dependent, so deriving them once for
+`β = 1` and again later is strictly more work than deriving them once in general — and the
+runtime cost of carrying `β` is zero by §4.4.
 
 ### Phase 4 — Composition
 
@@ -906,43 +953,130 @@ of Phase 2, where this went wrong first.
 
 ### 5.3 Flicker noise
 
-`1/f` has unbounded power at DC and long-range correlation, so it cannot be produced by scaling
-white samples. The generator is a **sum of OU sections with logarithmically spaced poles** —
-which is to say, the same primitive as the band limit in §3, instantiated `N` times with
-different `τ` and weights. Gives `1/f` to within a few percent over roughly one decade per 1.5
-sections, and inherits arbitrary-`Δt` exactness for free.
+The target density is
 
-The ladder is a property of the simulation, not of the device: poles log-spaced from
-`f_min = 1/StopTime` to `f_max`, with weights `w_i` fixed by the pole spacing alone. Both the
-weights and the per-step coefficients therefore live on the shared state as
-`ITimeNoiseSimulationState.FlickerLadder` (§4.3), computed once per timepoint for the whole
-circuit rather than `N` exponentials per flicker source. `TimeNoiseFlicker` holds only its `N`
-unit-variance states and one scalar amplitude.
+```
+S(f) = KF · |I|^AF / f^β
+```
 
-That amplitude is `√(KF·|I|^AF)`, shared across all `N` sections of the source — one `Log` and
-one `Exp` per source per timepoint via `|I|^(AF/2) = exp(0.5·AF·log|I|)`, not per section.
-Special-case the common exponents: `AF = 1` is `√|I|`, `AF = 2` is `|I|`, both free of
-transcendentals.
+with **two independent exponents**, and the document is careful to keep them apart because
+SPICE's naming does not: `AF` is the exponent on the bias current (SPICE's `af`,
+`FlickerNoiseExponent`) and `β` is the roll-off exponent on frequency (SPICE's `ef` where it
+exists at all).
+
+`1/f^β` has unbounded power at DC and long-range correlation, so it cannot be produced by
+scaling white samples. The generator is a **sum of OU sections with logarithmically spaced
+poles** — which is to say, the same primitive as the band limit in §3, instantiated `N` times
+with different `τ` and weights. It inherits arbitrary-`Δt` exactness for free, and `β` enters
+only through the weights.
+
+#### Why `β` is a parameter rather than 1
+
+Nothing in the framework needs it today. All five AC flicker sources divide by the frequency
+literally — [Diodes/Noise.cs:94](../SpiceSharp/Components/Semiconductors/Diodes/Noise.cs:94),
+[Bipolars/Noise.cs:136](../SpiceSharp/Components/Semiconductors/Bipolars/Noise.cs:136) and the
+three mosfet levels — and there is no `ef` model parameter anywhere in the repo. But BSIM-class
+models carry one, the next mosfet levels will want it, and retrofitting it later is not a
+one-line change: the weight law, the sections-per-decade rule, the guard-decade budget and the
+validation criterion all move together. Going in now, it is one scalar and one cached array
+(§4.3), so it goes in now. **`β` defaults to 1**, which is what every present device asks for.
+
+#### Poles and weights
+
+Poles are log-spaced from `f_min = 1/StopTime` to `f_max`: `λ_i = λ_min·rⁱ`, `i = 0 … N−1`.
+Section `i` is an OU with rate `λ_i` and stationary variance `σ_i²`, so its one-sided PSD is
+`4σ_i²λ_i/(λ_i² + ω²)`. Put
+
+```
+σ_i² = A · w_i,      w_i = (ln r) · sin(πβ/2) · (2π)^(β−1) · λ_i^(1−β),      A = KF·|I|^AF
+```
+
+Replacing the sum by `(1/ln r)∫dλ/λ` and using `∫₀^∞ x^(1−β)/(1+x²) dx = π/(2·sin(πβ/2))`,
+
+```
+Σ_i 4σ_i²λ_i/(λ_i² + ω²)  ≈  A / f^β
+```
+
+which is the target. Three things follow directly:
+
+- **`β = 1` is the equal-weight ladder.** `sin(π/2) = 1` and `λ_i^0 = 1`, so `w_i = ln r`,
+  independent of `i` — the ladder as it was originally specified. The generalization is strictly
+  additive; it does not change the default behaviour by a bit.
+- **`β` factors out of the runtime.** `w_i` depends on the pole positions and `β` alone, both
+  fixed for the run, so it is the `FlickerWeights` array of §4.3 and never touches the per-step
+  arithmetic. Per timepoint a flicker source still walks `FlickerLadder`, multiplies each section
+  by its `√w_i`, and scales the sum by one amplitude.
+- **`0 < β < 2`, strictly.** The integral above is the Mellin transform of the Lorentzian kernel
+  and diverges outside that interval. `β = 2` is a genuine integrator, not a ladder; `β = 0` is
+  white noise and belongs to §3. Both endpoints degrade gradually rather than failing sharply —
+  see the band-edge note below — so range-check the parameter rather than trusting the arithmetic
+  to blow up.
+
+The shared amplitude is `√A = √KF · |I|^(AF/2)`, applied once to the summed ladder rather than
+per section — one `Log` and one `Exp` per source per timepoint via
+`|I|^(AF/2) = exp(0.5·AF·log|I|)`. Special-case the common exponents: `AF = 1` is `√|I|`,
+`AF = 2` is `|I|`, both free of transcendentals.
+
+**`TimeNoiseFlicker` must not use `SetNoiseDensity`.** That helper applies
+`Amplitude = AmplitudeScale·√S` (§4.5), and `AmplitudeScale = √(k_n·f_max)` is the
+equivalent-noise-bandwidth factor for a *white* source pushed through the band-limit shaper. A
+flicker source's variance is already fully determined by `A` and the weights, so applying it
+again would scale every flicker source by `√(k_n·f_max)`. The override of `Probe()` that walks
+the ladder is also the override that sets `Amplitude` directly.
+
+#### What changes when `β ≠ 1`, and what does not
+
+The in-band PSD is `A/f^β` to within the ripple, at any admissible `β`. What moves is everything
+about the band *edges*, and it moves asymmetrically, because the log-domain kernel
+`λ^(2−β)/(λ² + ω²)` decays as `λ^(2−β)` below the corner and `λ^(−β)` above it — symmetric only
+at `β = 1`.
+
+- **The power piles up at the opposite end.** For `β < 1` the band integral is dominated by
+  `f_max`, for `β > 1` by `f_min`. So the guard decades go on whichever side is shallow: above
+  `f_max` for `β < 1`, below `f_min` for `β > 1`. Extending below `f_min` is cheap in flops and
+  is the only lever available, because `f_min = 1/StopTime` is fixed by the run.
+- **`β > 1` makes the finite-window limitation a first-order effect.** The note below has always
+  said a run of length `T` contains no `1/f` power below `1/T`. At `β = 1` that is a footnote —
+  the missing power grows as `ln T`. At `β > 1` it grows as `T^(β−1)`, so the observed variance
+  becomes a visible function of run length rather than a rounding error. This is physics of the
+  window, not a defect, but it has to be stated in the user-facing docs and it earns a row in §6.
+- **Total variance stops being a valid check.** `Σσ_i² = A·Σw_i` works out to `sin(πβ/2)` times
+  the naive band integral `∫_{f_min}^{f_max} A·f^(−β) df`. At `β = 1` the factor is 1 and the two
+  agree exactly — the log-domain kernel is symmetric, so the band-edge deficit and the
+  out-of-band leakage cancel. At `β = 0.5` or `1.5` it is 0.707, a 29 % discrepancy that is
+  *not* an error: the ladder has soft band edges and the integral has hard ones, and for `β ≠ 1`
+  most of the power sits in the decade nearest an edge. **Test the in-band PSD, not the total
+  variance** (§7.9). Getting this backwards would look like a broken weight law.
+- **Re-fit the sections-per-decade rule.** The existing "one decade per 1.5 sections for a few
+  percent" was measured at `β = 1`, where the kernel's kink is symmetric. Expect the ripple to
+  grow as `β` leaves 1, roughly with the shallow side's reciprocal decay rate, so treat 1.5 as a
+  `β = 1` number and fit the rest.
 
 **Decide the ladder's section order when Phase 3 starts.** A ladder of first-order sections has
 its fastest pole at `f_max`, so the flicker contribution is Hölder-½ and drags the whole
 solution back to the order-1 LTE behaviour of §3 even when `BandLimitOrder = 2`. Two ways out:
-give each section the configured order — which is free in the code, since `TimeNoiseSection`
-already holds a full `TimeNoisePoint`, but changes the weights that fit `1/f` — or pass the
+give each section the configured order — which is free in the code, since `FlickerLadder`
+already holds full `TimeNoisePoint`s, but changes the weights that fit `1/f^β` — or pass the
 summed first-order ladder through the band-limiting shaper. Both are cheap; the second keeps
-the `1/f` fit unchanged and is the likely answer, but it needs its transfer function worked out
-before the weights are fitted, not after.
+the fit unchanged and is the likely answer, but it needs its transfer function worked out
+before the weights are fitted, not after. Note that the choice interacts with `β`: the first
+option's correction to `w_i` is `β`-dependent, so it would have to be re-derived per exponent
+rather than tabulated once.
 
-The FFT-filtering alternative considered in the earlier revision is dropped. It needed `T_sim`
+The FFT-filtering alternative considered in an earlier revision is dropped. It needed `T_sim`
 known upfront and `O(M log M)` memory for the whole run, and bought spectral accuracy that the
-OU sections now largely match without those constraints.
+OU sections now largely match without those constraints. Note that it handles arbitrary `β`
+just as easily, so `β` is not an argument for revisiting it — the grid is still the objection.
 
 **Initialize every section to its stationary variance** — with unit-variance states that is
 just `u = Z` at `t = 0`. Zero-initialization biases the first ~10·τ_max of every run low, and it
 looks like a settling transient rather than a bug.
 
-Inherent limitation to document: a run of length `T` contains no `1/f` power below `1/T`. This
-is physics of the finite window, not an implementation defect.
+Inherent limitation to document: a run of length `T` contains no flicker power below `1/T`.
+This is physics of the finite window, not an implementation defect — but per the bullets above
+its size depends on `β`, growing as `ln T` at `β = 1` and as `T^(β−1)` beyond it. The
+user-facing wording has to say that, because at `β > 1` a user who doubles `StopTime` and sees
+the variance move will otherwise read it as nondeterminism.
 
 ## 6. Error budget
 
@@ -953,6 +1087,7 @@ is physics of the finite window, not an implementation defect.
 | Timepoint-selection bias | low, fixable | Rejection is triggered more often after large noise excursions, so accepted timepoints are correlated with noise history. Does not bias the source's law; does bias statistics computed on raw timepoints. Resample uniformly first |
 | LTE order loss | cost, not bias | `√Δt` at order 1, `Δt^1.5` at order 2. See §3 |
 | Flicker startup | low, transient | Initialize shaping sections to stationary variance (§5.3) |
+| Flicker window truncation | **low**, `β`-dependent | No power below `f_min = 1/StopTime`. Grows as `ln T` at `β = 1`, as `T^(β−1)` at `β > 1`. Real physics of the finite window, but at `β > 1` it makes the variance a visible function of run length. Mitigate by extending the ladder below `1/StopTime` (§5.3) |
 | Estimator variance | — | Relative standard error of `σ²` is `√(2/(N−1))`: 1 % needs `N ≈ 20 000` runs |
 | Itô vs Stratonovich | `O(Δt)` drift | Only for multiplicative noise (PSD evaluated from the noisy operating point). Freezing `σ_∞` at the last accepted point, per §4.1, fixes the convention explicitly |
 
@@ -1003,6 +1138,16 @@ intended purpose. If a user wants a number to 1 %, point them at the AC `Noise` 
    and both mistakes still produce plausible-looking noise. Also assert that inserting an
    unrelated device leaves every other source's realization bit-identical, which is what §4.6's
    hash-by-name buys.
+9. **Flicker ladder against `1/f^β`.** No circuit — the weight law of §5.3 is a pure function of
+   the poles and `β`, so evaluate `Σ 4σ_i²λ_i/(λ_i² + ω²)` analytically on a log-`f` grid and
+   check the slope and the ripple **strictly in-band**, over `β ∈ {0.8, 1.0, 1.2, 1.5}`. Assert
+   `β = 1` reproduces equal weights exactly, which is what pins the generalization to the
+   default. Deliberately **do not** assert total variance against the band integral: §5.3 shows
+   the two differ by `sin(πβ/2)` by construction, so that test would fail at every `β ≠ 1` for
+   no reason. A separate Monte-Carlo Welch estimate then confirms the realization matches the
+   analytic ladder PSD, which is the part that catches a wrong `√w_i` ordering between
+   `FlickerWeights` and `FlickerLadder` (§4.3) — the two arrays are indexed in lockstep and
+   nothing in the type system says so.
 
 ## 8. Cost
 
@@ -1039,6 +1184,21 @@ failure.
   Order 3 is probably the practical ceiling without a more careful reformulation. Cheap to try,
   at least: the change is contained in the `TimeNoisePoint` constructor and the loop bound in
   `TimeNoiseSource.Probe`.
+- **Where `β` comes from.** The weight law of §5.3 takes any `β ∈ (0, 2)`, but no device can
+  currently supply one: there is no `ef` model parameter in the framework, so every source
+  constructs with the default 1. The exponent becomes reachable either when a mosfet level with
+  a BSIM-style noise model lands, or — sooner and for free — through the `TimeNoiseCurrentSource`
+  extension point, since a user-defined device can already pass its own `β`. Adding `ef` to the
+  existing SPICE3 models is *not* proposed: they are ports of a reference implementation that
+  hardcodes `1/f`, and the AC `Noise` analysis would then disagree with `NoiseTransient` on the
+  same netlist.
+- **Arbitrary target densities.** `1/f^β` is a one-parameter family, and the ladder does not
+  actually need it to be: fitting `{w_i}` by non-negative least squares against a tabulated
+  target on a log-`f` grid costs nothing extra at runtime, and covers piecewise slopes,
+  generation-recombination bumps and measured data. The analytic law stays as the closed form
+  and as the initial guess. Worth doing only once a device asks for a shape a single exponent
+  cannot express — but §4.3's split between the shared `FlickerLadder` and the per-`β`
+  `FlickerWeights` is already the shape this needs, so nothing has to be undone first.
 - **Correlated sources.** `ITimeNoiseSource` yields a scalar and there is no covariance between
   sources, so induced gate noise has no representation. Per §4.2 the vector-`u` shape leaves
   room for a per-device Cholesky factor at stamping time; retrofitting correlation onto
