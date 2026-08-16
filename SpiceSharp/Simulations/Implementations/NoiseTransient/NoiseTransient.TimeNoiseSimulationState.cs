@@ -14,7 +14,7 @@ public partial class NoiseTransient
         private readonly IIntegrationMethod _method;
         private readonly List<TimeNoiseSource> _sources = [];
         private readonly double _lambda;
-        private readonly int _seed;
+        private readonly NoiseTransientParameters _parameters;
 
         /// <inheritdoc/>
         public string Name { get; }
@@ -43,11 +43,10 @@ public partial class NoiseTransient
         {
             Name = name.ThrowIfNull(nameof(name));
             _method = method.ThrowIfNull(nameof(method));
-            parameters.ThrowIfNull(nameof(parameters));
+            _parameters = parameters.ThrowIfNull(nameof(parameters));
 
             MaximumNoiseFrequency = parameters.MaximumNoiseFrequency;
             BandLimitOrder = parameters.BandLimitOrder;
-            _seed = parameters.Seed;
             _lambda = 2.0 * Math.PI * MaximumNoiseFrequency;
 
             // The equivalent noise bandwidth of an n-pole shape is k_n * fmax, with
@@ -73,7 +72,7 @@ public partial class NoiseTransient
         public void Initialize()
         {
             foreach (var source in _sources)
-                source.Initialize(NoiseRandomStream.CreateSeed(_seed, source.Name));
+                source.Initialize(NoiseRandomStream.CreateSeed(_parameters.Seed, source.Name));
         }
 
         /// <summary>

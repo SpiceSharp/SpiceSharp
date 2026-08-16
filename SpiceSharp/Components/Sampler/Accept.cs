@@ -27,7 +27,7 @@ public class Accept : Behavior,
     IParameterized<Parameters>
 {
     private readonly IIntegrationMethod _method;
-    private readonly IEnumerator<double> _points;
+    private IEnumerator<double> _points;
     private bool _continue;
 
     /// <inheritdoc />
@@ -42,17 +42,28 @@ public class Accept : Behavior,
     {
         Parameters = context.GetParameterSet<Parameters>();
         _method = context.GetState<IIntegrationMethod>();
+        Restart();
+    }
+
+    /// <summary>
+    /// Rewinds to the first timepoint that is eligible for targeting.
+    /// </summary>
+    private void Restart()
+    {
         _points = Parameters.Points.GetEnumerator();
         _continue = _points.MoveNext();
-
-        // Find the first timepoint that is eligible for targeting
         while (_continue && _points.Current < -Parameters.MinDelta)
             _continue = _points.MoveNext();
     }
 
     /// <inheritdoc/>
+    /// <remarks>
+    /// The points are consumed as the analysis walks through them, so a rerun has to start over
+    /// from the first one instead of continuing with an exhausted enumerator.
+    /// </remarks>
     void ITimeBehavior.InitializeStates()
     {
+        Restart();
     }
 
 

@@ -563,6 +563,40 @@ public class TransientTests : Framework
         int index = 0;
         foreach (int _ in tran.Rerun(Transient.ExportTransient))
             Assert.That(export.Value, Is.EqualTo(r[index++]).Within(1e-20));
+        Assert.That(index, Is.EqualTo(r.Count));
+    }
+
+    [Test]
+    public void When_TransientWithBreakpointsRerun_Expect_Same()
+    {
+        // A pulsed source puts breakpoints in the integration method, and there is no initial
+        // condition here so the operating point is recalculated from the previous solution. Both
+        // are state that a rerun has to rewind for the timepoints to line up again.
+        var ckt = new Circuit(
+            new VoltageSource("V1", "in", "0", new Pulse(0.0, 5.0, 1e-6, 1e-8, 1e-8, 1e-6, 2e-6)),
+            new Resistor("R1", "in", "out", 1e3),
+            new Capacitor("C1", "out", "0", 1e-9)
+        );
+
+        var tran = new Transient("tran 1", 1e-8, 5e-6);
+        var export = new RealVoltageExport(tran, "out");
+
+        // Run the simulation a first time for building the reference values
+        var r = new List<Tuple<double, double>>();
+        foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+            r.Add(Tuple.Create(tran.Time, export.Value));
+        Assert.That(r, Has.Count.GreaterThan(10));
+
+        // The rerun has to walk the exact same timepoints again
+        int index = 0;
+        foreach (int _ in tran.Rerun(Transient.ExportTransient))
+        {
+            Assert.That(index, Is.LessThan(r.Count), "too many timepoints");
+            Assert.That(tran.Time, Is.EqualTo(r[index].Item1).Within(1e-20), $"time at {index}");
+            Assert.That(export.Value, Is.EqualTo(r[index].Item2).Within(1e-20), $"value at {index} (t = {r[index].Item1})");
+            index++;
+        }
+        Assert.That(index, Is.EqualTo(r.Count));
     }
 
     [Test]

@@ -34,6 +34,17 @@ public partial class Accept : Time,
     /// <inheritdoc/>
     void IAcceptBehavior.Probe()
     {
+        // A timepoint is only probed at t = 0 when the analysis is (re)starting. The history of a
+        // previous run is not just useless here, it is in the future of what is about to be probed.
+        if (_method.Time.Equals(0.0))
+        {
+            _oldSlope1 = 0.0;
+            _oldSlope2 = 0.0;
+            _wasBreak = false;
+            Signals.Clear();
+            return;
+        }
+
         bool breakpoint = _wasBreak;
         if (_method is IBreakpointMethod method)
             breakpoint |= method.Break;

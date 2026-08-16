@@ -3,6 +3,7 @@ using SpiceSharp;
 using SpiceSharp.Components;
 using SpiceSharp.Simulations;
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace SpiceSharpTest.Models;
@@ -198,6 +199,35 @@ public class DelayTests : Framework
         // Analyze
         AnalyzeTransient(tran, ckt, exports, references);
         DestroyExports(exports);
+    }
+
+    [Test]
+    public void When_PulsedTransientRerun_Expect_Same()
+    {
+        // The delayed signal keeps a history of timepoints. A rerun goes back to t = 0, so that
+        // history is in the future of what is about to be probed and has to be dropped first.
+        var ckt = new Circuit(
+            new VoltageSource("V1", "in", "0", new Pulse(0, 5, 1e-7, 1e-7, 1e-7, 1e-5, 2e-5)),
+            new VoltageDelay("Delay1", "out", "0", "in", "0", 0.5e-5),
+            new Resistor("R1", "out", "0", 1e3));
+
+        var tran = new Transient("tran", 1e-7, 10e-5);
+        var export = new RealVoltageExport(tran, "out");
+
+        var r = new List<Tuple<double, double>>();
+        foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+            r.Add(Tuple.Create(tran.Time, export.Value));
+        Assert.That(r, Has.Count.GreaterThan(10));
+
+        int index = 0;
+        foreach (int _ in tran.Rerun(Transient.ExportTransient))
+        {
+            Assert.That(index, Is.LessThan(r.Count), "too many timepoints");
+            Assert.That(tran.Time, Is.EqualTo(r[index].Item1).Within(1e-20), $"time at {index}");
+            Assert.That(export.Value, Is.EqualTo(r[index].Item2).Within(1e-20), $"value at {index}");
+            index++;
+        }
+        Assert.That(index, Is.EqualTo(r.Count));
     }
 
     [Test]

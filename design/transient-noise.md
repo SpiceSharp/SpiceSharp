@@ -748,11 +748,39 @@ stream or a shared shaping state would make them perfectly correlated and inflat
 the bit-identical realization after inserting an unrelated device), and same-seed/different-seed
 reproducibility.
 
-**§7.6 could not be written as specified.** It asks for reproducibility across `Rerun`, but
-`Transient` never reinitializes its integration method outside `CreateBehaviors`, so a reran
-transient sees `Time` already at `StopTime` and terminates immediately. That is pre-existing and
-untouched here; reproducibility is instead asserted across two freshly constructed simulations.
-Phase 5 depends on `Rerun` working, so it has to fix this first.
+**§7.6 could not be written as specified at the time.** It asks for reproducibility across `Rerun`,
+which was broken for every transient analysis, so reproducibility was asserted across two freshly
+constructed simulations instead. That has since been fixed — see the note below — and §7.6 is now
+covered by `When_Rerun_Expect_SameRealization` in
+[NoiseTransientTests.cs](../SpiceSharpTest/Simulations/NoiseTransientTests.cs).
+
+### `Rerun` for transient analyses — **done**
+
+Phase 5 loops `Rerun` with `seed = f(CurrentRun)`, so it needed this first. Four pieces of state
+survived a run and were never rewound:
+
+- **The integration method.** `Transient` only called `IIntegrationMethod.Initialize()` from
+  `CreateBehaviors`, so a reran transient saw `Time` already at `StopTime` and terminated after a
+  single point. It is now called from `Execute`, where the rest of the per-run setup lives — the
+  same place `DC` creates its sweep enumerators.
+- **Waveform values.** The operating point of a transient loads `IWaveform.Value`, which is only
+  recomputed on `Probe()`. A rerun therefore biased the circuit with the source values of the
+  *previous* stop time and started from a wrong DC point that then decayed over the first time
+  constants. `Execute` now probes the accept behaviors once at t = 0, before the operating point.
+- **Delayed signals.** `VoltageDelay` and `LosslessTransmissionLine` keep a history of timepoints;
+  on a rerun that history lies in the future of what is about to be probed, and
+  `DelayedSignal.Probe` threw `Time points are not monotonically increasing`. Both now drop it on
+  the t = 0 probe, along with their breakpoint slope tracking.
+- **The `Sampler` point enumerator**, which the first run leaves exhausted. Restarted from
+  `InitializeStates`.
+
+One thing deliberately not reset is the biasing solution, so a rerun warm-starts its operating
+point from the previous one. That matches what `DC` and `AC` already do, and the reruns still
+reproduce the reference run's timepoints and values exactly.
+
+The master seed of a `NoiseTransient` is also no longer cached when the state is created — it is
+read in `TimeNoiseSimulationState.Initialize()`, so a driver can pick a new seed in between two
+`Rerun` calls.
 
 ### Phase 2 — Device coverage — **done**
 

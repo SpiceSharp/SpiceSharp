@@ -190,6 +190,41 @@ public class NoiseTransientTests
     }
 
     [Test]
+    public void When_Rerun_Expect_SameRealization()
+    {
+        // A Monte-Carlo driver reuses the setup of a single simulation over many runs, so a rerun
+        // has to restart the streams from the master seed rather than continue where it left off.
+        var tran = CreateSimulation(0x5EED);
+        var ckt = CreateRcCircuit();
+
+        var reference = new List<double>();
+        ITimeNoiseSource source = null;
+        foreach (int _ in tran.Run(ckt, Transient.ExportTransient))
+        {
+            source ??= tran.EntityBehaviors["R1"].GetValue<ITimeNoiseBehavior>();
+            reference.Add(source.Current);
+        }
+        Assert.That(reference, Has.Count.GreaterThan(100));
+
+        var same = new List<double>();
+        foreach (int _ in tran.Rerun(Transient.ExportTransient))
+            same.Add(source.Current);
+
+        // Picking a new master seed in between two runs is what makes the runs an ensemble
+        tran.NoiseParameters.Seed = 0x5EEE;
+        var other = new List<double>();
+        foreach (int _ in tran.Rerun(Transient.ExportTransient))
+            other.Add(source.Current);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(same, Is.EqualTo(reference), "same seed");
+            Assert.That(other, Has.Count.EqualTo(reference.Count), "different seed, count");
+            Assert.That(other, Is.Not.EqualTo(reference), "different seed");
+        });
+    }
+
+    [Test]
     public void When_NoMaximumNoiseFrequency_Expect_Exception()
     {
         // A band limit of zero would make every source silent rather than white, which is a much

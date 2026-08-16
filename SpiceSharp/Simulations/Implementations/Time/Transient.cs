@@ -139,7 +139,6 @@ public partial class Transient : BiasingSimulation,
         _transientBehaviors = EntityBehaviors.GetBehaviorList<ITimeBehavior>();
         _acceptBehaviors = EntityBehaviors.GetBehaviorList<IAcceptBehavior>();
         _truncatingBehaviors = EntityBehaviors.GetBehaviorList<ITruncatingBehavior>();
-        _method.Initialize();
 
         // Set up initial conditions
         var state = GetState<IBiasingSimulationState>();
@@ -174,6 +173,18 @@ public partial class Transient : BiasingSimulation,
     /// <inheritdoc/>
     protected override IEnumerable<int> Execute(int mask = Exports)
     {
+        // Rewind the integration method to t = 0. This has to happen for every execution and not
+        // just when the behaviors are created, or a Rerun() would start out at the stop time and
+        // finish immediately.
+        _method.Initialize();
+        _shouldReorder = true;
+
+        // Probing t = 0 rewinds everything that tracks time of its own: the waveform of a source
+        // has to be back at its value for t = 0 before the operating point is calculated, and a
+        // delayed signal has to forget the history of the previous run before it is probed again.
+        foreach (var behavior in _acceptBehaviors)
+            behavior.Probe();
+
         foreach (int exportType in base.Execute(mask))
             yield return exportType;
 
