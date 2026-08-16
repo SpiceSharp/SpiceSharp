@@ -51,6 +51,22 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     protected double Amplitude { get; set; }
 
     /// <summary>
+    /// Sets the one-sided power spectral density of the source, and the stationary standard
+    /// deviation that follows from it.
+    /// </summary>
+    /// <param name="density">The one-sided power spectral density, in A^2/Hz.</param>
+    /// <remarks>
+    /// A band-limited source of density <paramref name="density"/> injects a total power of
+    /// <c>k_n * density * fmax</c>, and <see cref="ITimeNoiseSimulationState.AmplitudeScale"/> is the
+    /// square root of the part of that which does not depend on the source.
+    /// </remarks>
+    protected void SetNoiseDensity(double density)
+    {
+        NoiseDensity = density;
+        Amplitude = _state.AmplitudeScale * Math.Sqrt(density);
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="TimeNoiseSource"/> class.
     /// </summary>
     /// <param name="name">The name of the noise source. It has to be unique within the circuit.</param>

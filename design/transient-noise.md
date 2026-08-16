@@ -1,6 +1,6 @@
 # Transient noise analysis — design plan
 
-Status: Phases 0-1 implemented, Phases 2-5 still a proposal.
+Status: Phases 0-2 implemented, Phases 3-5 still a proposal.
 
 ## 1. Goal
 
@@ -215,7 +215,7 @@ the time axis. The correspondence is one-to-one and deliberate:
 | `INoiseBehavior : INoiseSource` | `ITimeNoiseBehavior : ITimeNoiseSource` | device aggregate, exports its sources by `[ParameterName]` |
 | `Load()` / `Compute()` | `Inject()` / `Probe()` | stamp, then evaluate |
 
-Two things do *not* transpose, and both are simplifications:
+Three things do *not* transpose, and all three are simplifications:
 
 - There is no adjoint solve and therefore no gain factor. AC's `NoiseThermal.Compute` fuses the
   PSD with `|ΔV|²` from the adjoint solution
@@ -225,6 +225,12 @@ Two things do *not* transpose, and both are simplifications:
 - Because there is no gain factor, **a bias-independent source is genuinely constant.** In AC,
   `Compute` must run at every frequency even for a linear resistor, because the gain moved. In
   transient, a linear resistor's `σ_∞` is fixed for the whole run and `Compute` runs once. §4.4.
+- **`NoiseGain` has no counterpart at all.** It is the previous point taken to its limit: the class
+  has no density law of its own, only the fusion, and every one of its five users in the framework
+  is a flicker source handing over an `S(f)` it computed itself. Neither half survives — there is no
+  frequency to evaluate `S` at, and no transfer function to fuse it with — so removing the fusion
+  leaves an assignment. The `1/f` case it exists for becomes `TimeNoiseFlicker` and its pole ladder
+  (§5.3), and a device wanting some other density subclasses `TimeNoiseCurrentSource` directly.
 
 ### 4.1 New behavior interface
 
@@ -399,15 +405,20 @@ Constant folding happens in each primitive's constructor, once, not per call.
 
 ### 4.5 Time-domain noise source primitives
 
-Mirroring `NoiseSource` / `NoiseThermal` / `NoiseShot` / `NoiseGain`:
+Mirroring `NoiseSource` / `NoiseThermal` / `NoiseShot`, but not `NoiseGain` — see the head of §4:
 
 ```
-TimeNoiseSource            (abstract: shaping state, RNG stream, registration)
-├── TimeNoiseThermal       Compute(conductance, temperature)
-├── TimeNoiseShot          Compute(current)
-├── TimeNoiseGain          Compute(density)          // caller supplies S directly
-└── TimeNoiseFlicker       Compute(coefficient, exponent, current)   // §5.3
+TimeNoiseSource                  (abstract: shaping state, RNG stream, registration)
+└── TimeNoiseCurrentSource       (abstract: one-port, element set, Inject)
+    ├── TimeNoiseThermal         Compute(conductance, temperature)
+    ├── TimeNoiseShot            Compute(current)
+    └── TimeNoiseFlicker         Compute(coefficient, exponent, current)   // §5.3
 ```
+
+`TimeNoiseCurrentSource` arrived with Phase 2; the paragraphs below describe the split between the
+two abstract classes as it now stands. It is also the extension point: a device whose noise follows
+neither law subclasses it and calls `SetNoiseDensity`, which is the whole of what a transposed
+`NoiseGain` would have been.
 
 The base class takes only a name and the noise state, calls `noise.Register(this)`, and provides:
 
@@ -420,40 +431,43 @@ public virtual void Probe();    // u ← propagate(state.Point, u_prev) + L·Z; 
 public abstract void Inject();  // how the realization reaches the circuit
 ```
 
-**`Inject()` is abstract, and the wiring lives in the primitive.** The base class deliberately
-knows nothing about `OnePort<double>`, `ElementSet<double>` or `IBiasingSimulationState`: it holds
-the shaping machinery and nothing else, so a source that is not a current between two nodes needs
-no special case here. Like `NoiseThermal`, `TimeNoiseThermal` *is* connected between two terminals
-given to its constructor, so it holds the one-port and the element set itself:
+**`Inject()` is abstract on `TimeNoiseSource`, and the wiring lives below it.** That class
+deliberately knows nothing about `OnePort<double>`, `ElementSet<double>` or
+`IBiasingSimulationState`: it holds the shaping machinery and nothing else, so a source that is not
+a current between two nodes needs no special case there. Every primitive listed above *is* one,
+though — like `NoiseThermal`, each is connected between two terminals given to its constructor — so
+the one-port and the element set live once, in `TimeNoiseCurrentSource`:
 
 ```csharp
-public class TimeNoiseThermal : TimeNoiseSource
+public abstract class TimeNoiseCurrentSource : TimeNoiseSource
 {
-    private readonly double _scale;
     private readonly ElementSet<double> _elements;
 
-    public TimeNoiseThermal(string name, ITimeNoiseSimulationState noise,
+    protected TimeNoiseCurrentSource(string name, ITimeNoiseSimulationState noise,
         IBiasingSimulationState biasing, IVariable<double> pos, IVariable<double> neg)
         : base(name, noise)
     {
         var variables = new OnePort<double>(pos, neg);
         _elements = new ElementSet<double>(biasing.Solver, null, variables.GetRhsIndices(biasing.Map));
-        _scale = noise.AmplitudeScale;
-    }
-
-    /// Thermal noise, S = 4·k·T·G.
-    public void Compute(double conductance, double temperature)
-    {
-        NoiseDensity = 4.0 * Constants.Boltzmann * temperature * conductance;
-        Amplitude = _scale * Math.Sqrt(NoiseDensity);
     }
 
     public override void Inject() => _elements.Add(-Current, Current);
+}
+
+public class TimeNoiseThermal : TimeNoiseCurrentSource
+{
+    /* constructor forwards */
+
+    /// Thermal noise, S = 4·k·T·G.
+    public void Compute(double conductance, double temperature)
+        => SetNoiseDensity(4.0 * Constants.Boltzmann * temperature * conductance);
 }
 ```
 
 The element set is built from `biasing.Solver` and `variables.GetRhsIndices(biasing.Map)` exactly
 as [CurrentSource.Biasing](../SpiceSharp/Components/Currentsources/ISRC/Biasing.cs:84) does.
+`SetNoiseDensity` is on `TimeNoiseSource`, next to `Amplitude`: it stores `S` and applies
+`Amplitude = AmplitudeScale · √S`, which is the one piece of arithmetic every primitive shares.
 
 `Probe()` is the only virtual: `TimeNoiseFlicker` overrides it to walk `state.FlickerLadder`
 instead of the single `state.Point`. Everything else — registration, seeding, rollback — is
@@ -637,7 +651,8 @@ SpiceSharp/Simulations/Implementations/NoiseTransient/
   Rng/                                      (splitmix64 / xoshiro256**, Box-Muller)
 
 SpiceSharp/Components/Noise/
-  TimeNoiseThermal.cs  TimeNoiseShot.cs  TimeNoiseGain.cs  TimeNoiseFlicker.cs
+  TimeNoiseCurrentSource.cs
+  TimeNoiseThermal.cs  TimeNoiseShot.cs  TimeNoiseFlicker.cs
   (namespace SpiceSharp.Components.NoiseSources, next to NoiseThermal.cs etc.)
 
 SpiceSharp/Components/**/TimeNoise.cs       ← **/Noise.cs, one per device
@@ -739,11 +754,98 @@ transient sees `Time` already at `StopTime` and terminates immediately. That is 
 untouched here; reproducibility is instead asserted across two freshly constructed simulations.
 Phase 5 depends on `Rerun` working, so it has to fix this first.
 
-### Phase 2 — Device coverage
+### Phase 2 — Device coverage — **done**
 
 Diode, BJT, MOSFET levels 1/2/3, the set that currently has an `INoiseBehavior`. Thermal and shot
-only at this stage; flicker stubbed. `TimeNoiseShot` and `TimeNoiseGain` join `TimeNoiseThermal`
-here.
+only at this stage; flicker stubbed. `TimeNoiseShot` joins `TimeNoiseThermal` here.
+`TimeNoiseGain` does not — it turned out to have no time-domain counterpart at all, see the head
+of §4 and the note below.
+
+Delivered:
+
+- [TimeNoiseShot.cs](../SpiceSharp/Components/Noise/TimeNoiseShot.cs) and
+  [TimeNoiseCurrentSource.cs](../SpiceSharp/Components/Noise/TimeNoiseCurrentSource.cs).
+- [Diodes/TimeNoise.cs](../SpiceSharp/Components/Semiconductors/Diodes/TimeNoise.cs),
+  [Bipolars/TimeNoise.cs](../SpiceSharp/Components/Semiconductors/Bipolars/TimeNoise.cs),
+  [Mosfets/Level1/TimeNoise.cs](../SpiceSharp/Components/Semiconductors/Mosfets/Level1/TimeNoise.cs)
+  and its Level 2 and Level 3 counterparts — one per device, next to the `Noise.cs` they mirror.
+- Tests: [NoiseTransientDeviceTests.cs](../SpiceSharpTest/Simulations/NoiseTransientDeviceTests.cs),
+  [NoiseInjector.cs](../SpiceSharpTest/Simulations/NoiseInjector.cs).
+
+Six things worth recording:
+
+- **A `TimeNoiseCurrentSource` sits between `TimeNoiseSource` and the primitives.** §4.5 makes
+  the point that the base class must not assume a noise source is a current between two nodes, and
+  that stands — but every primitive of §4.5 *is*, so the one-port and the `ElementSet<double>`
+  moved into one abstract class in between rather than being written out once per primitive.
+  `Inject()` is implemented there and the primitives are left with nothing but their density law,
+  one line each. `TimeNoiseThermal` was retrofitted onto it. The other half of the same tidy-up is
+  `TimeNoiseSource.SetNoiseDensity`, which does the `Amplitude = AmplitudeScale · √S` that every
+  primitive would otherwise repeat.
+- **`TimeNoiseGain` was written, then deleted.** It shipped first as the transposition §4.9 asked
+  for, and reviewing it is what produced the third bullet at the head of §4: with the fusion gone
+  its `Compute` was `SetNoiseDensity(density)` and nothing else, and the `1/f` case that is the only
+  thing `NoiseGain` is ever used for goes to `TimeNoiseFlicker` instead. That left a public class
+  with no user in the framework, duplicating a three-line subclass of an extension point that
+  `TimeNoiseCurrentSource` already exposes and that does not presume the density is flat. Deleted
+  rather than renamed: the abstract class is the better extension point, so the concrete one has
+  nothing left to be.
+- **A device's `TimeNoise` derives from the deepest behavior it needs**, the way `Noise : Frequency`
+  does in AC: from `Time` for the diode and the bipolar, and from the level's `Biasing` for the
+  mosfets, whose transient behavior is a separate class that reaches the biasing behavior through
+  `IMosfetBiasingBehavior`. The dependency graph creates the derived-most behavior first, so in a
+  `NoiseTransient` the `TimeNoise` object *is* the device's time or biasing behavior, and in every
+  other analysis it is not created at all.
+- **The mosfet's `MosfetVariables<double>` had to become `protected`** on the three level `Biasing`
+  behaviors. The noise sources sit across `d`–`dp`, `s`–`sp` and `dp`–`sp`, and the internal nodes
+  are private variables that cannot be looked up again — constructing a second `MosfetVariables`
+  would silently create a *second* internal drain and source. This mirrors `Diodes.Biasing.Variables`
+  and `Mosfets.Frequency.Variables`, both of which are already protected, and it is the third and
+  last modification to existing code, after the two `virtual` keywords of §2 and the resource string
+  of Phase 1.
+- **§4.4's `V`-versus-`M` saving is not taken for the parasitic resistors.** A diode's `rs`, a
+  bipolar's `rc`/`re` and a mosfet's `rd`/`rs` are bias-independent and could be computed once, as
+  the resistor's is. They are not: every one of these devices also carries a source that *is*
+  bias-dependent, so it pays a `Probe()` regardless, and the only per-run hook available —
+  `ITimeBehavior.InitializeStates` — is an explicit interface implementation on the base behavior
+  that a derived class cannot extend without hiding it. Refreshing all of a device's densities
+  together costs one extra `Sqrt` per parasitic per timepoint and keeps the device's `Probe()`
+  readable. The saving is still real for a device that has *no* bias-dependent source, which is
+  exactly the resistor case §4.4 describes.
+- **The diode's shot noise uses the conduction current, not `LocalCurrent`.** `Diodes.Time.Load`
+  folds the capacitor current into `LocalCurrent`, and a displacement current carries no shot noise,
+  so the behavior subtracts `CapCurrent` again. The bipolar needs no such correction — its
+  `CollectorCurrent` and `BaseCurrent` are set by `Biasing.Load` and left alone by `Time.Load`.
+
+Validation coverage. Each device is biased by an ideal, and therefore noiseless, current source and
+loaded by a capacitor, so its node has a single pole and the captured fraction of §3 applies
+unchanged:
+
+- A current-biased diode charges its load to `q·Vte/(2C)` — half of the `kT/C` that a resistor of
+  the same conductance would give, because `2q·I = 2kT·gd` rather than `4kT·gd`. Both orders.
+- A diode-connected bipolar injects `2q(Ic + Ib)` into a node of conductance `gpi + gm + go`, which
+  is `(Ic + Ib)/Vt` again, so it also lands on `kT/(2C)` — independently of the bias.
+- A diode-connected mosfet lands on `(2/3)·kT/C`, which is the factor 2/3 of the channel noise and
+  nothing else. All three levels, all three agreeing to a tenth of a percent, as they must: the
+  three circuits are the same problem in normalized time and share a seed.
+- Every source of every device is checked against the closed form evaluated at the device's own
+  exported operating point, which is what pins the mapping from operating point to noise law.
+- A test-local component ([NoiseInjector.cs](../SpiceSharpTest/Simulations/NoiseInjector.cs)) built
+  only out of the public API injects a user-specified density on top of a resistor's thermal noise,
+  and the two powers add to `3·kT/C`. It subclasses `TimeNoiseCurrentSource` for its density and
+  implements `ITimeNoiseBehavior` for the rest, so it is the check that a device outside the
+  framework can take part in the analysis, and the only coverage the extension point has.
+
+§7.7 asked for the diode to be checked against the AC `Noise` analysis. It is checked against the
+closed form instead, which is sharper: AC's `NoiseThermal.Compute` has already fused the density
+with `|ΔV|²` from the adjoint solve, so recovering a bare density from it to compare against would
+mean dividing that factor back out.
+
+**One trap on the measuring side, and it is not confined to the tests.** These devices sit at a bias
+of volts while the noise on them is microvolts, so `E[v²] − E[v]²` cancels away every significant
+digit of the answer — the first version of these tests was wrong by up to 20 %, erratically, and
+looked like estimator scatter. Any statistic has to be accumulated relative to a reference near the
+mean. Phase 5 computes ensemble statistics for the user and will hit exactly this.
 
 ### Phase 3 — Flicker
 
@@ -769,6 +871,10 @@ users doing jitter extraction will want the raw sample paths.
 
 **Statistics must be computed on a uniform resample grid, not on raw accepted timepoints.**
 See §6, timepoint-selection bias.
+
+**And they must be accumulated relative to a reference near the mean.** A node at a bias of volts
+carrying microvolts of noise loses the whole answer to cancellation in `E[v²] − E[v]²`; see the end
+of Phase 2, where this went wrong first.
 
 ### 5.3 Flicker noise
 

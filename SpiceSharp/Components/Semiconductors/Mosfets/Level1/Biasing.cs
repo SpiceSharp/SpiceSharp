@@ -22,11 +22,15 @@ public partial class Biasing : Temperature,
     private readonly ITimeSimulationState _time;
     private readonly IIntegrationMethod _method;
     private readonly IIterationSimulationState _iteration;
-    private readonly MosfetVariables<double> _variables;
     private readonly ElementSet<double> _elements;
     private readonly BiasingParameters _config;
     private readonly Contributions<double> _contributions = new();
     private readonly MosfetContributionEventArgs _args;
+
+    /// <summary>
+    /// The variables used by the behavior.
+    /// </summary>
+    protected readonly MosfetVariables<double> Variables;
 
     /// <inheritdoc/>
     TemperatureProperties IMosfetBiasingBehavior.Properties => Properties;
@@ -115,12 +119,12 @@ public partial class Biasing : Temperature,
         Vdsat = 0;
         Von = 0;
         Mode = 1;
-        _variables = new MosfetVariables<double>(context, state);
+        Variables = new MosfetVariables<double>(context, state);
 
         // Get matrix pointers
         _elements = new ElementSet<double>(state.Solver,
-            _variables.GetMatrixLocations(state.Map),
-            _variables.GetRhsIndices(state.Map));
+            Variables.GetMatrixLocations(state.Map),
+            Variables.GetRhsIndices(state.Map));
     }
 
     /// <inheritdoc/>
@@ -337,9 +341,9 @@ public partial class Biasing : Temperature,
             _iteration.Mode == IterationModes.Fix && !Parameters.Off)
         {
             // General iteration
-            vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - _variables.SourcePrime.Value);
-            vgs = ModelParameters.MosfetType * (_variables.Gate.Value - _variables.SourcePrime.Value);
-            vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - _variables.SourcePrime.Value);
+            vbs = ModelParameters.MosfetType * (Variables.Bulk.Value - Variables.SourcePrime.Value);
+            vgs = ModelParameters.MosfetType * (Variables.Gate.Value - Variables.SourcePrime.Value);
+            vds = ModelParameters.MosfetType * (Variables.DrainPrime.Value - Variables.SourcePrime.Value);
 
             // now some common crunching for some more useful quantities
             double vbd = vbs - vds;
@@ -409,10 +413,10 @@ public partial class Biasing : Temperature,
     {
         double cdhat;
 
-        double vs = _variables.SourcePrime.Value;
-        double vbs = ModelParameters.MosfetType * (_variables.Bulk.Value - vs);
-        double vgs = ModelParameters.MosfetType * (_variables.Gate.Value - vs);
-        double vds = ModelParameters.MosfetType * (_variables.DrainPrime.Value - vs);
+        double vs = Variables.SourcePrime.Value;
+        double vbs = ModelParameters.MosfetType * (Variables.Bulk.Value - vs);
+        double vgs = ModelParameters.MosfetType * (Variables.Gate.Value - vs);
+        double vds = ModelParameters.MosfetType * (Variables.DrainPrime.Value - vs);
         double vbd = vbs - vds;
         double vgd = vgs - vds;
         double vgdo = Vgs - Vds;
