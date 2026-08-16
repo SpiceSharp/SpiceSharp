@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace SpiceSharp.Simulations;
 
 /// <summary>
@@ -32,6 +34,32 @@ public interface ITimeNoiseSimulationState : ISimulationState
     /// Shared by every noise source in the circuit.
     /// </remarks>
     TimeNoisePoint Point { get; }
+
+    /// <summary>
+    /// Gets the rates of the sections of the flicker noise ladder, in rad/s.
+    /// </summary>
+    /// <value>
+    /// The rates of the ladder sections.
+    /// </value>
+    IReadOnlyList<double> FlickerRates { get; }
+
+    /// <summary>
+    /// Gets the shaping coefficients of every section of the flicker noise ladder for the currently
+    /// probed timestep, indexed in lockstep with <see cref="FlickerRates"/>.
+    /// </summary>
+    /// <value>
+    /// The shaping coefficients of the ladder sections.
+    /// </value>
+    IReadOnlyList<TimeNoisePoint> FlickerLadder { get; }
+
+    /// <summary>
+    /// Gets the amplitude weights that realize a <c>1/f^beta</c> roll-off on
+    /// <see cref="FlickerLadder"/>, and activates the ladder.
+    /// </summary>
+    /// <param name="exponent">The roll-off exponent <c>beta</c>. It has to lie strictly between <see cref="FlickerWeights.MinimumExponent"/> and <see cref="FlickerWeights.MaximumExponent"/>.</param>
+    /// <returns>The weights.</returns>
+    /// <exception cref="System.ArgumentOutOfRangeException">Thrown if <paramref name="exponent"/> is out of range.</exception>
+    FlickerWeights GetFlickerWeights(double exponent);
 
     /// <summary>
     /// Gets the factor that converts the square root of a power spectral density into a stationary

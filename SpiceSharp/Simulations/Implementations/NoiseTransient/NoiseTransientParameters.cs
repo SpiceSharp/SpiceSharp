@@ -38,6 +38,31 @@ public partial class NoiseTransientParameters : ParameterSet, ICloneable<NoiseTr
     private int _bandLimitOrder = 2;
 
     /// <summary>
+    /// Gets or sets the number of sections per decade of the ladder that flicker noise sources are
+    /// built from. More sections make the density follow its <c>1/f^beta</c> target more closely, at
+    /// the cost of one shaping section per source per timepoint.
+    /// </summary>
+    /// <value>
+    /// The number of ladder sections per decade.
+    /// </value>
+    /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the value is not positive.</exception>
+    [ParameterName("flickersections"), ParameterInfo("The number of flicker noise ladder sections per decade.")]
+    [GreaterThan(0), Finite]
+    private double _flickerSectionsPerDecade = 2.0;
+
+    /// <summary>
+    /// Gets or sets the number of decades that the flicker noise ladder extends below the reciprocal
+    /// of the run length.
+    /// </summary>
+    /// <value>
+    /// The number of guard decades.
+    /// </value>
+    /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the value is negative.</exception>
+    [ParameterName("flickerguard"), ParameterInfo("The number of decades the flicker noise ladder extends below 1/StopTime.")]
+    [GreaterThanOrEquals(0), Finite]
+    private double _flickerGuardDecades = 1.0;
+
+    /// <summary>
     /// Gets or sets the master seed of the analysis.
     /// </summary>
     /// <value>

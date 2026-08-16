@@ -25,7 +25,6 @@ namespace SpiceSharp.Simulations;
 /// <seealso cref="IIntegrationState" />
 public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
 {
-    private readonly ITimeNoiseSimulationState _state;
     private double[] _accepted, _probed;
     private NoiseRandomStream _stream;
 
@@ -36,7 +35,24 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     public double NoiseDensity { get; protected set; }
 
     /// <inheritdoc/>
-    public double Current { get; private set; }
+    public double Current { get; protected set; }
+
+    /// <summary>
+    /// Gets the transient noise simulation state that this source draws its shaping coefficients
+    /// from.
+    /// </summary>
+    /// <value>
+    /// The transient noise simulation state.
+    /// </value>
+    protected ITimeNoiseSimulationState State { get; }
+
+    /// <summary>
+    /// Gets the number of shaping sections that this source holds.
+    /// </summary>
+    /// <value>
+    /// The number of shaping sections.
+    /// </value>
+    protected int Sections { get; }
 
     /// <summary>
     /// Gets or sets the stationary standard deviation of the noise current, in A.
@@ -58,12 +74,27 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// <remarks>
     /// A band-limited source of density <paramref name="density"/> injects a total power of
     /// <c>k_n * density * fmax</c>, and <see cref="ITimeNoiseSimulationState.AmplitudeScale"/> is the
-    /// square root of the part of that which does not depend on the source.
+    /// square root of the part of that which does not depend on the source. It is therefore only
+    /// meaningful for a source whose density is flat before the band limit shapes it, and a source
+    /// with a density of its own sets <see cref="Amplitude"/> directly instead.
     /// </remarks>
     protected void SetNoiseDensity(double density)
     {
         NoiseDensity = density;
-        Amplitude = _state.AmplitudeScale * Math.Sqrt(density);
+        Amplitude = State.AmplitudeScale * Math.Sqrt(density);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TimeNoiseSource"/> class with a single shaping
+    /// section.
+    /// </summary>
+    /// <param name="name">The name of the noise source. It has to be unique within the circuit.</param>
+    /// <param name="noise">The transient noise simulation state.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or
+    /// <paramref name="noise"/> is <c>null</c>.</exception>
+    protected TimeNoiseSource(string name, ITimeNoiseSimulationState noise)
+        : this(name, noise, 1)
+    {
     }
 
     /// <summary>
@@ -71,17 +102,21 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// </summary>
     /// <param name="name">The name of the noise source. It has to be unique within the circuit.</param>
     /// <param name="noise">The transient noise simulation state.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or
-    /// <paramref name="noise"/> is <c>null</c>.</exception>
-    protected TimeNoiseSource(string name, ITimeNoiseSimulationState noise)
+    /// <param name="sections">The number of shaping sections of the source.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="name"/> or <paramref name="noise"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="sections"/> is not positive.</exception>
+    protected TimeNoiseSource(string name, ITimeNoiseSimulationState noise, int sections)
     {
         Name = name.ThrowIfNull(nameof(name));
-        _state = noise.ThrowIfNull(nameof(noise));
+        State = noise.ThrowIfNull(nameof(noise));
+        if (sections < 1)
+            throw new ArgumentOutOfRangeException(nameof(sections));
+        Sections = sections;
 
-        _accepted = new double[TimeNoisePoint.MaximumOrder];
-        _probed = new double[TimeNoisePoint.MaximumOrder];
+        _accepted = new double[sections * TimeNoisePoint.MaximumOrder];
+        _probed = new double[_accepted.Length];
         _stream = new NoiseRandomStream(0ul);
-        _state.Register(this);
+        State.Register(this);
     }
 
     /// <summary>
@@ -97,11 +132,10 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     {
         _stream = new NoiseRandomStream(seed);
         Array.Clear(_accepted, 0, _accepted.Length);
-        _stream.NextNormals(out double normal1, out double normal2);
-        double value = TimeNoisePoint.Stationary(_state.BandLimitOrder)
-            .Propagate(ref _accepted[0], ref _accepted[1], normal1, normal2);
-        _accepted.CopyTo(_probed, 0);
-        Current = Amplitude * value;
+        Current = Amplitude * Shape(true);
+
+        // The drawn state is the one that the first probed timepoint propagates from.
+        Array.Copy(_probed, _accepted, _probed.Length);
     }
 
     /// <summary>
@@ -110,12 +144,37 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// </summary>
     public virtual void Probe()
     {
-        // Always propagate the last accepted state: the draws of a rejected timepoint are simply
-        // discarded, and the retry starts over from the same state.
+        Current = Amplitude * Shape(false);
+    }
+
+    /// <summary>
+    /// Draws the next unit-variance output of the shaping filter of this source.
+    /// </summary>
+    /// <param name="initialize">If <c>true</c>, every section is drawn from its stationary
+    /// distribution instead of being propagated over the probed timestep.</param>
+    /// <returns>
+    /// The unit-variance output of the shaping filter.
+    /// </returns>
+    protected virtual double Shape(bool initialize)
+        => Propagate(0, initialize ? TimeNoisePoint.Stationary(State.BandLimitOrder) : State.Point);
+
+    /// <summary>
+    /// Advances one shaping section of this source over a point, and returns its unit-variance
+    /// output.
+    /// </summary>
+    /// <param name="section">The index of the section.</param>
+    /// <param name="point">The shaping coefficients of the section for the probed timestep.</param>
+    /// <returns>
+    /// The unit-variance output of the section.
+    /// </returns>
+
+    protected double Propagate(int section, in TimeNoisePoint point)
+    {
+        int index = section * TimeNoisePoint.MaximumOrder;
+        _probed[index] = _accepted[index];
+        _probed[index + 1] = _accepted[index + 1];
         _stream.NextNormals(out double normal1, out double normal2);
-        _probed[0] = _accepted[0];
-        _probed[1] = _accepted[1];
-        Current = Amplitude * _state.Point.Propagate(ref _probed[0], ref _probed[1], normal1, normal2);
+        return point.Propagate(ref _probed[index], ref _probed[index + 1], normal1, normal2);
     }
 
     /// <summary>

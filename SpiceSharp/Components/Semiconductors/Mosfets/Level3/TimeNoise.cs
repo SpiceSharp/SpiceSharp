@@ -17,16 +17,19 @@ public partial class TimeNoise : Biasing,
     ITimeNoiseBehavior
 {
     private readonly TimeNoiseThermal _rd, _rs, _id;
+    private readonly TimeNoiseFlicker _flicker;
+    private readonly ModelProperties _properties;
 
     /// <inheritdoc/>
-    public double NoiseDensity => _rd.NoiseDensity + _rs.NoiseDensity + _id.NoiseDensity;
+    public double NoiseDensity => _rd.NoiseDensity + _rs.NoiseDensity + _id.NoiseDensity +
+        _flicker.NoiseDensity;
 
     /// <inheritdoc/>
     /// <remarks>
     /// The sources sit across different node pairs, so the sum is an export convenience rather than
     /// a current that is injected anywhere.
     /// </remarks>
-    public double Current => _rd.Current + _rs.Current + _id.Current;
+    public double Current => _rd.Current + _rs.Current + _id.Current + _flicker.Current;
 
     /// <include file='../common/docs.xml' path='docs/members/ThermalDrain/*'/>
     [ParameterName("rd"), ParameterInfo("The thermal noise of the drain resistor")]
@@ -50,6 +53,10 @@ public partial class TimeNoise : Biasing,
     [ParameterName("id"), ParameterInfo("The channel noise of the drain current")]
     public ITimeNoiseSource ChannelDrainCurrent => _id;
 
+    /// <include file='../common/docs.xml' path='docs/members/FlickerNoise/*'/>
+    [ParameterName("flicker"), ParameterInfo("The flicker noise")]
+    public ITimeNoiseSource Flicker => _flicker;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="TimeNoise"/> class.
     /// </summary>
@@ -60,26 +67,37 @@ public partial class TimeNoise : Biasing,
     {
         var biasing = context.GetState<IBiasingSimulationState>();
         var noise = context.GetState<ITimeNoiseSimulationState>();
+        _properties = context.ModelBehaviors.GetValue<ModelTemperature>().Properties;
 
         // The names are unique within the circuit, unlike the local names that the frequency-domain
         // noise sources use, because the random stream of a source is seeded from it.
         _rd = new TimeNoiseThermal(Name.Combine("rd"), noise, biasing, Variables.Drain, Variables.DrainPrime);
         _rs = new TimeNoiseThermal(Name.Combine("rs"), noise, biasing, Variables.Source, Variables.SourcePrime);
         _id = new TimeNoiseThermal(Name.Combine("id"), noise, biasing, Variables.DrainPrime, Variables.SourcePrime);
+        _flicker = new TimeNoiseFlicker(Name.Combine("flicker"), noise, biasing, Variables.DrainPrime, Variables.SourcePrime);
     }
 
     /// <inheritdoc/>
     void ITimeNoiseBehavior.Probe()
     {
         // The two parasitic resistors do not depend on the operating point, but the channel noise
-        // does, so the device pays for the refresh of all three either way.
+        // does, so the device pays for the refresh of all four either way.
         _rd.Compute(Properties.DrainConductance, Parameters.Temperature);
         _rs.Compute(Properties.SourceConductance, Parameters.Temperature);
         _id.Compute(2.0 / 3.0 * Math.Abs(Gm), Parameters.Temperature);
 
+        // The flicker noise of a mosfet is referred to the gate oxide, so the coefficient carries
+        // the channel area and the oxide capacitance.
+        _flicker.Compute(
+            ModelParameters.FlickerNoiseCoefficient /
+            (Parameters.Width * (Parameters.Length - (2 * ModelParameters.LateralDiffusion)) *
+            _properties.OxideCapFactor * _properties.OxideCapFactor),
+            ModelParameters.FlickerNoiseExponent, Id);
+
         _rd.Probe();
         _rs.Probe();
         _id.Probe();
+        _flicker.Probe();
     }
 
     /// <inheritdoc/>
@@ -88,5 +106,6 @@ public partial class TimeNoise : Biasing,
         _rd.Inject();
         _rs.Inject();
         _id.Inject();
+        _flicker.Inject();
     }
 }

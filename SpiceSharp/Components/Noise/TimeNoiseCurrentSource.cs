@@ -24,7 +24,25 @@ public abstract class TimeNoiseCurrentSource : TimeNoiseSource
     /// <exception cref="ArgumentNullException">Thrown if any of the arguments is <c>null</c>.</exception>
     protected TimeNoiseCurrentSource(string name, ITimeNoiseSimulationState noise, IBiasingSimulationState biasing,
         IVariable<double> pos, IVariable<double> neg)
-        : base(name, noise)
+        : this(name, noise, biasing, pos, neg, 1)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TimeNoiseCurrentSource" /> class.
+    /// </summary>
+    /// <param name="name">The name of the noise source. It has to be unique within the circuit.</param>
+    /// <param name="noise">The transient noise simulation state.</param>
+    /// <param name="biasing">The biasing simulation state.</param>
+    /// <param name="pos">The positive node.</param>
+    /// <param name="neg">The negative node.</param>
+    /// <param name="sections">The number of shaping sections of the source.</param>
+    /// <exception cref="ArgumentNullException">Thrown if any of the arguments is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="sections"/> is not
+    /// positive.</exception>
+    protected TimeNoiseCurrentSource(string name, ITimeNoiseSimulationState noise, IBiasingSimulationState biasing,
+        IVariable<double> pos, IVariable<double> neg, int sections)
+        : base(name, noise, sections)
     {
         biasing.ThrowIfNull(nameof(biasing));
         var variables = new OnePort<double>(pos, neg);

@@ -300,6 +300,12 @@
   <data name="Simulations.NoEntities" xml:space="preserve">
     <value>{0}: there are no entities.</value>
   </data>
+  <data name="Simulations.NoiseTransient.FlickerLadderInvalidRate" xml:space="preserve">
+    <value>A flicker noise ladder can only have positive section rates.</value>
+  </data>
+  <data name="Simulations.NoiseTransient.FlickerLadderTooShort" xml:space="preserve">
+    <value>A flicker noise ladder needs at least two sections.</value>
+  </data>
   <data name="Simulations.NoiseTransient.NoMaximumFrequency" xml:space="preserve">
     <value>{0}: a transient noise analysis needs a maximum noise frequency.</value>
   </data>

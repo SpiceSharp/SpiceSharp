@@ -85,7 +85,10 @@ public partial class NoiseTransient : Transient,
             throw new SpiceSharpException(Properties.Resources.Simulations_NoiseTransient_NoMaximumFrequency.FormatString(Name));
 
         _method = GetState<IIntegrationMethod>();
-        _state = new TimeNoiseSimulationState(Name, _method, NoiseParameters);
+
+        // The run length is what sets the lowest frequency of the flicker noise ladder: a run cannot
+        // show any power below its own reciprocal.
+        _state = new TimeNoiseSimulationState(Name, _method, NoiseParameters, TimeParameters.StopTime);
     }
 
     /// <inheritdoc />

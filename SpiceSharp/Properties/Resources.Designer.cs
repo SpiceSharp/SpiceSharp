@@ -610,6 +610,24 @@ public class Resources {
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to A flicker noise ladder can only have positive section rates..
+    /// </summary>
+    public static string Simulations_NoiseTransient_FlickerLadderInvalidRate {
+        get {
+            return ResourceManager.GetString("Simulations.NoiseTransient.FlickerLadderInvalidRate", resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to A flicker noise ladder needs at least two sections..
+    /// </summary>
+    public static string Simulations_NoiseTransient_FlickerLadderTooShort {
+        get {
+            return ResourceManager.GetString("Simulations.NoiseTransient.FlickerLadderTooShort", resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to {0}: a transient noise analysis needs a maximum noise frequency..
     /// </summary>
     public static string Simulations_NoiseTransient_NoMaximumFrequency {

@@ -1,6 +1,6 @@
 # Transient noise analysis — design plan
 
-Status: Phases 0-2 implemented, Phases 3-5 still a proposal.
+Status: Phases 0-3 implemented, Phases 4-5 still a proposal.
 
 ## 1. Goal
 
@@ -318,6 +318,9 @@ public interface ITimeNoiseSimulationState : ISimulationState
     /// Band-limit shaping coefficients for the currently probed step. Shared by every source.
     TimeNoisePoint Point { get; }
 
+    /// The pole positions of the flicker ladder, in rad/s. Fixed for the run. See §5.3.
+    IReadOnlyList<double> FlickerRates { get; }
+
     /// Shaping coefficients for the flicker pole ladder, one per pole, for the currently
     /// probed step. Shared by every flicker source whatever its roll-off exponent. See §5.3.
     IReadOnlyList<TimeNoisePoint> FlickerLadder { get; }
@@ -505,9 +508,11 @@ as [CurrentSource.Biasing](../SpiceSharp/Components/Currentsources/ISRC/Biasing.
 `SetNoiseDensity` is on `TimeNoiseSource`, next to `Amplitude`: it stores `S` and applies
 `Amplitude = AmplitudeScale · √S`, which is the one piece of arithmetic every primitive shares.
 
-`Probe()` is the only virtual: `TimeNoiseFlicker` overrides it to walk `state.FlickerLadder`
-instead of the single `state.Point`. Everything else — registration, seeding, rollback — is
-shared.
+A source with a shaping filter of its own overrides one protected method to build its output from
+the sections it holds — `TimeNoiseFlicker` walks `state.FlickerLadder` there instead of the single
+`state.Point`. Everything else — registration, seeding, rollback, the promotion of the initial
+draw — is shared. Phase 3 records why that method is `Shape`, not `Probe` as this section first
+proposed.
 
 Note the deliberate difference from the AC sources: these produce a **raw PSD**, with no
 transfer-function factor, per the table at the head of §4.
@@ -692,6 +697,7 @@ SpiceSharp/Simulations/Implementations/NoiseTransient/
 SpiceSharp/Components/Noise/
   TimeNoiseCurrentSource.cs
   TimeNoiseThermal.cs  TimeNoiseShot.cs  TimeNoiseFlicker.cs
+  (TimeNoiseGain.cs was written and deleted, see Phase 2)
   (namespace SpiceSharp.Components.NoiseSources, next to NoiseThermal.cs etc.)
 
 SpiceSharp/Components/**/TimeNoise.cs       ← **/Noise.cs, one per device
@@ -914,7 +920,7 @@ digit of the answer — the first version of these tests was wrong by up to 20 %
 looked like estimator scatter. Any statistic has to be accumulated relative to a reference near the
 mean. Phase 5 computes ensemble statistics for the user and will hit exactly this.
 
-### Phase 3 — Flicker
+### Phase 3 — Flicker — **done**
 
 `FlickerWeights`, the shared `FlickerLadder` on the state, `TimeNoiseFlicker`, and the flicker
 source on each of the five devices that has one in AC. See §5.3 for the weight law and §7.9 for
@@ -925,6 +931,88 @@ The exponent `β` ships with the ladder even though every present device passes 
 budget and the acceptance criterion of §7.9 are all `β`-dependent, so deriving them once for
 `β = 1` and again later is strictly more work than deriving them once in general — and the
 runtime cost of carrying `β` is zero by §4.4.
+
+Delivered:
+
+- [FlickerWeights.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/FlickerWeights.cs) —
+  the weight law of §5.3, generalized to a section of either order, see below.
+- `FlickerRates`, `FlickerLadder` and `GetFlickerWeights` on
+  [ITimeNoiseSimulationState.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/ITimeNoiseSimulationState.cs)
+  and its implementation; `FlickerSectionsPerDecade` and `FlickerGuardDecades` on
+  [NoiseTransientParameters.cs](../SpiceSharp/Simulations/Implementations/NoiseTransient/NoiseTransientParameters.cs).
+- [TimeNoiseFlicker.cs](../SpiceSharp/Components/Noise/TimeNoiseFlicker.cs), and the flicker source
+  on the diode, the bipolar and the three mosfet levels.
+- Tests: [FlickerNoiseTests.cs](../SpiceSharpTest/Simulations/FlickerNoiseTests.cs),
+  [FlickerInjector.cs](../SpiceSharpTest/Simulations/FlickerInjector.cs).
+
+**The section order is the configured one, which is the first of the two options §5.3 left open,
+not the second one it expected to take.** Each ladder section is a full `TimeNoisePoint` at the
+configured `BandLimitOrder`, so the flicker contribution is as smooth as every other source's and
+the LTE argument of §3 survives. §5.3 leaned toward passing a first-order ladder through the
+band-limit shaper instead, on the grounds that it would leave the weights alone — but that means
+discretizing a cascade, whose exact propagator and conditional covariance are `(N + n)`-dimensional
+rather than one 2×2 per section, and the whole design rests on that update being closed-form. The
+correction to the weights that the other option needs turned out to be one scalar:
+
+```
+w_i = ln(r) · c · λ_i^(1−β),    c = sin(πβ/2)·(2π)^(β−1) · m_n(β),    m_1 = 1,  m_2 = 1/(2−β)
+```
+
+because the Mellin transform of the two-pole kernel is
+`∫₀^∞ x^(3−β)/(1+x²)² dx = π(2−β)/(4·sin(πβ/2))` against the one-pole
+`∫₀^∞ x^(1−β)/(1+x²) dx = π/(2·sin(πβ/2))`. The two coincide at `β = 1`, so the equal-weight ladder
+of §5.3 is the answer at either order and the `β`-dependence §5.3 worried about costs one division
+in a setup-time loop.
+
+Four more things worth recording:
+
+- **The sections-per-decade rule of §5.3 does not survive the order change, and 1.5 was optimistic
+  even before it.** The default is **2**. A two-pole section is narrower in `log λ` than a one-pole
+  one, so it needs the denser ladder: measured worst-case in-band deviation from `A/f^β`, over
+  `β ∈ {0.8, 1, 1.2, 1.5}` and three decades inside a ten-decade ladder, is 22 % at one section per
+  decade, 4 % at 1.5 and 0.6 % at 2. At order 1 the same numbers are 5.6 %, 0.8 % and 0.2 %, so
+  §5.3's "1.5 sections per decade for a few percent" was a fair description of the *first*-order
+  ladder and of nothing else.
+- **§7.9's in-band window has to be wide.** The band edges of a ladder are soft over rather more
+  than the one decade that reads as natural: at one decade of margin the deficit is still 21 % at
+  `β = 1.5`, at two decades 6.6 %, at three 2.1 %. The test uses three, which then leaves the
+  inter-pole ripple as the thing being measured — which is the point, and is what makes the
+  sections-per-decade numbers above meaningful.
+- **A source whose coefficient is zero does not walk its ladder.** `KF` defaults to 0 in every SPICE
+  model, so the silent flicker source is the common case, not an edge one, and walking a dozen
+  sections per timepoint to multiply the result by zero would be most of what a transistor pays for
+  noise. `Compute` floors `|I|` at 1e-38 exactly as the frequency-domain behaviors do, which makes
+  the amplitude vanish if and only if the coefficient does, so the skip is unambiguous. The
+  stationary initialization is deliberately not skipped: it runs once per run, and at that point the
+  devices have not computed their densities yet.
+- **`NoiseDensity` of a flicker source is the density at 1 Hz.** There is no frequency to report one
+  at, and the coefficient `A` is the only frequency-free number the source has. It means a device's
+  aggregate `NoiseDensity` adds a 1 Hz-referred number to white ones, which is an export convenience
+  and is documented as such on each device.
+
+Two deviations from the shape §4 sketched, both of them narrowing:
+
+- **`Probe()` is not the virtual that flicker overrides.** `TimeNoiseSource` gained a protected
+  `Shape(bool initialize)` instead, which returns the unit-variance output of the source's shaping
+  filter, plus a `Propagate(section, point)` that advances one section from the last accepted state.
+  `Probe()` and `Initialize()` then both reduce to `Current = Amplitude · Shape(…)` and the reseeding,
+  the rollback bookkeeping and the promotion of the drawn state stay written once. Overriding
+  `Probe()` as §4.5 proposed would have duplicated all three in `TimeNoiseFlicker`.
+- **The ladder is not maintained until somebody reads it.** `GetFlickerWeights` allocates it, so a
+  circuit of resistors does not pay one `Exp` per section per timepoint for coefficients nobody
+  consumes. `FlickerRates` is populated either way, because it describes the poles rather than the
+  step, and it is what makes the ladder inspectable from a test and constructible by a source
+  outside the framework.
+
+Validation coverage: §7.9 in full — the analytic ladder against `1/f^β` over
+`β ∈ {0.8, 1, 1.2, 1.5}` at both orders, the exact equality of the `β = 1` weights, the total
+variance against the band integral **at `β = 1` only**, and a periodogram of a real realization
+against the analytic ladder density in two bands a decade apart. That last one is what pins the
+lockstep indexing between `FlickerWeights` and `FlickerLadder`: reversing the weight array turns
+`1/f^β` into `1/f^(2−β)`, which the band powers reject at every exponent except 1, where the
+reversal is a genuine no-op. Plus the ladder geometry on the state, the exponent range check, the
+silent zero-coefficient source, reproducibility across `Rerun` for a multi-section source, and the
+flicker coefficient of each of the five devices against the closed form at its own operating point.
 
 ### Phase 4 — Composition
 
@@ -1047,21 +1135,38 @@ at `β = 1`.
   *not* an error: the ladder has soft band edges and the integral has hard ones, and for `β ≠ 1`
   most of the power sits in the decade nearest an edge. **Test the in-band PSD, not the total
   variance** (§7.9). Getting this backwards would look like a broken weight law.
-- **Re-fit the sections-per-decade rule.** The existing "one decade per 1.5 sections for a few
-  percent" was measured at `β = 1`, where the kernel's kink is symmetric. Expect the ripple to
-  grow as `β` leaves 1, roughly with the shallow side's reciprocal decay rate, so treat 1.5 as a
-  `β = 1` number and fit the rest.
+- **Re-fit the sections-per-decade rule.** Done, and the dominant variable turned out to be the
+  section order rather than `β`: well inside the band the worst deviation over
+  `β ∈ {0.8, 1, 1.2, 1.5}` is 5.6 / 0.8 / 0.2 % at 1 / 1.5 / 2 sections per decade for one-pole
+  sections, and 22 / 4 / 0.6 % for two-pole ones. `β` moves it by well under a factor of two at any
+  fixed spacing. The default is 2 sections per decade.
 
-**Decide the ladder's section order when Phase 3 starts.** A ladder of first-order sections has
-its fastest pole at `f_max`, so the flicker contribution is Hölder-½ and drags the whole
-solution back to the order-1 LTE behaviour of §3 even when `BandLimitOrder = 2`. Two ways out:
-give each section the configured order — which is free in the code, since `FlickerLadder`
-already holds full `TimeNoisePoint`s, but changes the weights that fit `1/f^β` — or pass the
-summed first-order ladder through the band-limiting shaper. Both are cheap; the second keeps
-the fit unchanged and is the likely answer, but it needs its transfer function worked out
-before the weights are fitted, not after. Note that the choice interacts with `β`: the first
-option's correction to `w_i` is `β`-dependent, so it would have to be re-derived per exponent
-rather than tabulated once.
+**The ladder's section order is the configured one** — the first of the two options this paragraph
+originally left open. A ladder of first-order sections has its fastest pole at `f_max`, so the
+flicker contribution would be Hölder-½ and would drag the whole solution back to the order-1 LTE
+behaviour of §3 even at `BandLimitOrder = 2`. Giving each section the configured order fixes that
+and is free in the code, since `FlickerLadder` already holds full `TimeNoisePoint`s. The
+alternative — passing a summed first-order ladder through the band-limiting shaper, which would
+have left the weights alone — was dropped: it means discretizing a cascade, and the exact
+propagator and conditional covariance of `N` sections feeding one shaper are `(N + n)`-dimensional
+rather than one 2×2 per section, which is the one thing §3 cannot give up.
+
+The `β`-dependent correction that the chosen option needs, and that this paragraph flagged as
+having to be re-derived per exponent, is a single scalar factor on `c`:
+
+```
+m_n(β):    m_1 = 1,    m_2 = 1/(2 − β)
+```
+
+from `∫₀^∞ x^(3−β)/(1+x²)² dx = π(2−β)/(4·sin(πβ/2))`. `FlickerWeights` is built per `β` at setup
+anyway (§4.3), so "per exponent rather than tabulated once" costs one division. The two orders
+coincide at `β = 1`, so the equal-weight ladder remains the answer for every device in the
+framework.
+
+What the order change does move is the sections-per-decade rule, in the direction the next
+paragraph warns about but for a different reason: a two-pole section is narrower in `log λ`, so at
+one section per decade the in-band ripple is 22 % rather than the 5.6 % a one-pole ladder gives.
+Two sections per decade brings it to 0.6 %, and is the default.
 
 The FFT-filtering alternative considered in an earlier revision is dropped. It needed `T_sim`
 known upfront and `O(M log M)` memory for the whole run, and bought spectral accuracy that the
