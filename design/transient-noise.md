@@ -1,6 +1,6 @@
 # Transient noise analysis — design plan
 
-Status: Phases 0-4 implemented, Phase 5 still a proposal.
+Status: implemented, phases 0-4.
 
 ## 1. Goal
 
@@ -17,7 +17,7 @@ noise *transfer* analysis.
 - A new behavior interface for devices to expose their power spectral densities in the time domain.
 - Time-domain noise source primitives (thermal, shot, flicker) mirroring the existing AC ones.
 - Per-device PSD definitions for every device in the framework that currently has an `INoiseBehavior`.
-- A reproducible, seedable random stream, and a Monte-Carlo driver over `Rerun`.
+- A reproducible, seedable random stream, and enough of `Rerun` for a caller to loop over it.
 
 ### Out of scope
 
@@ -25,6 +25,12 @@ noise *transfer* analysis.
 - Covariance/Lyapunov propagation, PSS/PNoise, SDE-specific integrators.
 - Any change to the existing AC `Noise` analysis, which stays the tool of choice for
   precise noise floors.
+- **Anything that consumes the sample paths.** No Monte-Carlo driver, no ensemble mean or
+  variance, no percentile envelope, no spectrum estimator. The analysis produces realizations
+  and stops there; what to measure on them is the caller's, and there is no one answer — jitter
+  extraction, an eye diagram and a noise floor want three different things out of the same run.
+  What the framework owes that caller is the reproducibility contract below and a `Rerun` that
+  restarts cleanly, and it delivers both. §6 records the two traps to sidestep on the way.
 
 ### Non-goal, stated explicitly
 
@@ -49,7 +55,7 @@ caveat.
 | `StateValue<T>` over `IHistory<T>` | [StateValue.cs](../SpiceSharp/Simulations/Implementations/Time/IntegrationMethods/States/StateValue.cs) | rollback-safe noise state, free |
 | `IIntegrationMethod.RegisterState` | [IIntegrationMethod.cs:57](../SpiceSharp/Simulations/Implementations/Time/IntegrationMethods/IIntegrationMethod.cs:57) | the method commits the state on `Accept()` |
 | `ElementSet<double>` RHS stamping | `CurrentSource.Biasing` | inject the noise current |
-| `Rerun` / `Repeat` / `CurrentRun` | [Simulation.cs](../SpiceSharp/Simulations/Simulation.cs) | Monte-Carlo loop reusing setup |
+| `Rerun` / `Repeat` / `CurrentRun` | [Simulation.cs](../SpiceSharp/Simulations/Simulation.cs) | the caller's Monte-Carlo loop, reusing setup |
 | AC `Noise` analysis | [Noise.cs](../SpiceSharp/Simulations/Implementations/Noise/Noise.cs) | ground truth for validation |
 | `NoisePoint` on `INoiseSimulationState` | [NoisePoint.cs](../SpiceSharp/Simulations/Implementations/Noise/NoisePoint.cs) | **the template for §4** — see below |
 | `NoiseSource` + `NoiseThermal`/`NoiseShot`/`NoiseGain` | [NoiseSource.cs](../SpiceSharp/Simulations/Implementations/Noise/NoiseSource.cs), [Components/Noise](../SpiceSharp/Components/Noise) | the shape the time-domain primitives copy |
@@ -578,8 +584,10 @@ in-repo `splitmix64` or `xoshiro256**`. For the Gaussian, prefer a non-rejection
 (trigonometric Box-Muller, or an inverse CDF) so the number of draws consumed per step is fixed
 and the stream is easy to reason about.
 
-Per-run seed for the Monte-Carlo driver: derive from `CurrentRun`, which `Simulation` already
-exposes.
+Per-run seed for a caller's ensemble: the master seed is read when a run starts, not when the
+state is created, so a new `Seed` can be assigned in between two `Rerun` calls. Deriving it from
+`CurrentRun`, which `Simulation` already exposes, keeps the whole ensemble inside the contract of
+§1 rather than only its individual runs.
 
 Seeding is centralized in `ITimeNoiseSimulationState.Register`, which hashes the master seed
 with the name the source registers under. Hashing the *name* rather than a registration index is
@@ -760,7 +768,8 @@ the small steps sit in the series branch and the reference sits in the closed-fo
 
 The `kT/C` test is the loose one, at ±15 % on a Monte-Carlo estimate over ~2000 correlation times.
 It is wide enough to reject an unbanded `kT/C`, a two-sided density or a missing `k_n`, and not much
-more; §7.2 becomes a tight test only once Phase 5 can average over runs.
+more. It stays loose: tightening it means averaging over an ensemble, and building one is the
+caller's, per §1.
 
 ### Phase 1 — Vertical slice — **done**
 
@@ -821,8 +830,9 @@ covered by `When_Rerun_Expect_SameRealization` in
 
 ### `Rerun` for transient analyses — **done**
 
-Phase 5 loops `Rerun` with `seed = f(CurrentRun)`, so it needed this first. Four pieces of state
-survived a run and were never rewound:
+An ensemble is a loop over `Rerun` with a new seed per run, and §1 promises the caller that much
+even though it builds the loop itself. `Rerun` did not hold up its end: four pieces of state
+survived a run and were never rewound.
 
 - **The integration method.** `Transient` only called `IIntegrationMethod.Initialize()` from
   `CreateBehaviors`, so a reran transient saw `Time` already at `StopTime` and terminated after a
@@ -938,7 +948,9 @@ mean dividing that factor back out.
 of volts while the noise on them is microvolts, so `E[v²] − E[v]²` cancels away every significant
 digit of the answer — the first version of these tests was wrong by up to 20 %, erratically, and
 looked like estimator scatter. Any statistic has to be accumulated relative to a reference near the
-mean. Phase 5 computes ensemble statistics for the user and will hit exactly this.
+mean. Since §1 leaves the statistics to the caller, this is written down rather than solved: it is
+the first thing anybody measuring a noise voltage on a biased node walks into, and it looks like
+estimator scatter rather than like a bug. It earns a row in §6 for that reason.
 
 ### Phase 3 — Flicker — **done**
 
@@ -1156,18 +1168,24 @@ with and without work distributors; `kT/C` through a parallel component under al
 configurations; a parallel component inside a local-solver subcircuit; and the aggregate `NoiseDensity`
 and `Current` exports of a subcircuit against the source inside it.
 
-### Phase 5 — Monte-Carlo driver and statistics
+### Measuring a run — deliberately not a phase
 
-A thin driver looping `Rerun` with `seed = f(CurrentRun)`, plus ensemble exports (mean,
-variance, percentile envelopes) and a Welch PSD estimator for validation. Keep it optional —
-users doing jitter extraction will want the raw sample paths.
+An earlier revision of this document had a sixth phase here: a driver looping `Rerun` with
+`seed = f(CurrentRun)`, ensemble mean, variance and percentile envelopes, and a Welch spectrum
+estimator. It is not being built, per the last bullet of §1 — the analysis produces sample paths
+and a caller decides what to measure on them. Two things are owed to that caller instead of a
+driver, and both are already in place:
 
-**Statistics must be computed on a uniform resample grid, not on raw accepted timepoints.**
-See §6, timepoint-selection bias.
+- **`Rerun` restarts cleanly and the master seed can move in between two runs**, so the loop is
+  four lines and the ensemble as a whole falls under the reproducibility contract of §1. That is
+  the section above and §4.6.
+- **The two traps are written down rather than hidden behind an API.** Statistics belong on a
+  uniform resample grid and not on raw accepted timepoints (§6, timepoint-selection bias), and
+  they have to be accumulated relative to a reference near the mean or `E[v²] − E[v]²` cancels
+  away the whole answer (§6, and the end of Phase 2 where it went wrong first).
 
-**And they must be accumulated relative to a reference near the mean.** A node at a bias of volts
-carrying microvolts of noise loses the whole answer to cancellation in `E[v²] − E[v]²`; see the end
-of Phase 2, where this went wrong first.
+The cost of the decision is recorded honestly at the end of §7: three of the nine validation
+items wanted an ensemble to be sharp, and stay uncovered.
 
 ### 5.3 Flicker noise
 
@@ -1324,6 +1342,7 @@ the variance move will otherwise read it as nondeterminism.
 | Flicker startup | low, transient | Initialize shaping sections to stationary variance (§5.3) |
 | Flicker window truncation | **low**, `β`-dependent | No power below `f_min = 1/StopTime`. Grows as `ln T` at `β = 1`, as `T^(β−1)` at `β > 1`. Real physics of the finite window, but at `β > 1` it makes the variance a visible function of run length. Mitigate by extending the ladder below `1/StopTime` (§5.3) |
 | Estimator variance | — | Relative standard error of `σ²` is `√(2/(N−1))`: 1 % needs `N ≈ 20 000` runs |
+| Cancellation in the statistic | **catastrophic**, silent | A node at a bias of volts carrying microvolts of noise loses every significant digit of `E[v²] − E[v]²`. Not a property of the analysis at all, but of the arithmetic downstream of it, and it reads as estimator scatter rather than as a bug. Accumulate relative to a reference near the mean |
 | Itô vs Stratonovich | `O(Δt)` drift | Only for multiplicative noise (PSD evaluated from the noisy operating point). Freezing `σ_∞` at the last accepted point, per §4.1, fixes the convention explicitly |
 
 The nonlinear-rectification row is the reason `f_max` has a useful range rather than a
@@ -1335,7 +1354,11 @@ grid, and it is subtle: the noise process itself remains exactly distributed —
 is the exact OU transition for whatever `Δ₂` the controller settled on, and the discarded draw
 from a rejected attempt is independent of the retry. What is biased is the *sampling grid* of
 the output waveform, because the controller's choice of `Δ₂` did depend on the rejected draw.
-Uniform resampling in Phase 5 removes it.
+Resampling onto a uniform grid before computing anything removes it.
+
+That row and the cancellation row below it are the two the caller inherits along with the sample
+paths, per §1. Neither is expensive to sidestep and both are invisible if you do not know they
+are there, which is why they are stated as part of the design rather than left in the tests.
 
 The estimator-variance row is what determines whether this feature is being used for its
 intended purpose. If a user wants a number to 1 %, point them at the AC `Noise` analysis.
@@ -1383,6 +1406,19 @@ intended purpose. If a user wants a number to 1 %, point them at the AC `Noise` 
    analytic ladder PSD, which is the part that catches a wrong `√w_i` ordering between
    `FlickerWeights` and `FlickerLadder` (§4.3) — the two arrays are indexed in lockstep and
    nothing in the type system says so.
+
+**What is covered, and what the §1 scope decision costs.** Items 1, 6, 8 and 9 are covered in full,
+by Phase 0, Phase 1 and Phase 3; item 2 is covered loosely, at ±12 % on a single run's time average;
+item 7 is covered against the closed form rather than against AC noise, which Phase 2 argues is
+sharper. Items **3, 4 and 5 are not covered**. All three want a variance or a spectrum estimated
+well enough to be compared against a closed form, which one run cannot deliver and an ensemble can —
+and building the ensemble is exactly what §1 leaves to the caller. Item 4 is the one worth naming:
+it is described above as the central correctness test, and it is the one guarding against a `Δt`
+dependence reintroduced by a later change. What stands in for it today is a structural argument
+rather than a measurement — `σ_∞` contains no `Δt` (§3), the shaping update is exact at any step
+(§4.7), and the timestep reaches a source only through `TimeNoisePoint`, whose own tests do span
+several decades of `λΔt` (Phase 0). That is weaker than the test, and it is the price of the scope
+decision rather than an oversight.
 
 ## 8. Cost
 
