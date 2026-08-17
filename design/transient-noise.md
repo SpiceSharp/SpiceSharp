@@ -76,19 +76,19 @@ timepoint. §4.4 quantifies it.
 Relevant properties of the existing code:
 
 - `Transient.Probe()` calls `_method.Probe()` *before* the behaviors, so `Time` and `BaseTime`
-  are both current and `Δt = Time − BaseTime` is available inside a behavior's `Probe()`.
+  are both current and `Δt = Time − BaseTime` is available inside a behavior's `ProbeNoise()`.
 - `Transient.Probe()` and `Transient.Accept()`
   ([Transient.cs:456](../SpiceSharp/Simulations/Implementations/Time/Transient.cs:456)) are
   `protected` but **not `virtual`**. `NoiseTransient` needs to update the shared point *before*
   the behaviors run, so both must become `protected virtual`. That one-word change is the only
   modification this design makes to existing code.
 - `IHistory<T>.Accept()` rotates ([ArrayHistory.cs:70](../SpiceSharp/Simulations/States/Histories/ArrayHistory.cs:70)),
-  so after an accepted step `Value` holds a stale rotated-out entry. Every `Probe()` must
+  so after an accepted step `Value` holds a stale rotated-out entry. Every probe must
   therefore write `Value` as a function of `GetPreviousValue(1)`, never read `Value` as the
   previous state. This is what makes rejection rollback free, and it is easy to get wrong.
 - `Transient.Accept()` calls behaviors first, then `_method.Accept()`, which walks
   `RegisteredStates` and calls `Accept()` on each. A `StateValue<double>` written during
-  `Probe()` therefore rolls back for free on rejection: the retry overwrites `Value` while the
+  `ProbeNoise()` therefore rolls back for free on rejection: the retry overwrites `Value` while the
   last accepted value stays at `GetPreviousValue(1)`.
 - `RegisterState` only adds a state to `TruncatableStates` if it implements `ITruncatable`.
   `StateValue<T>` does not, so the noise state stays out of the LTE estimator. This is what we
@@ -213,7 +213,7 @@ the time axis. The correspondence is one-to-one and deliberate:
 | `INoiseSource` / `NoiseSource` | `ITimeNoiseSource` / `TimeNoiseSource` | per-source name, density, running state |
 | `NoiseThermal(name, pos, neg)` | `TimeNoiseThermal(name, …, pos, neg)` | a source across two terminals |
 | `INoiseBehavior : INoiseSource` | `ITimeNoiseBehavior : ITimeNoiseSource, IBiasingBehavior` | device aggregate, exports its sources by `[ParameterName]` |
-| `Load()` / `Compute()` | `Load()` / `Probe()` | stamp, then evaluate |
+| `Load()` / `Compute()` | `Load()` / `ProbeNoise()` | stamp, then evaluate |
 
 Three things do *not* transpose, and all three are simplifications:
 
@@ -240,8 +240,9 @@ public interface ITimeNoiseBehavior : ITimeNoiseSource, IBiasingBehavior
 {
     /// Refresh noise densities from the last accepted operating point and advance
     /// the shaping state by the probed step. Called once per probed timepoint,
-    /// never inside the Newton loop.
-    void Probe();
+    /// never inside the Newton loop. Named ProbeNoise rather than Probe because
+    /// a behavior can be an IAcceptBehavior too, which already has a Probe().
+    void ProbeNoise();
 
     // Stamping is not a method of its own: the frozen realization goes into the
     // right-hand side from IBiasingBehavior.Load, along with everything else the
@@ -421,7 +422,7 @@ Three things are doing the work:
    in the setup-time weights rather than in the per-timepoint coefficients. A second `β` in the
    circuit costs one array at setup and nothing per step.
 2. **`σ_∞` is only refreshed when the bias moved.** `Compute` is called by the device from its
-   own `Probe()`, so the device decides. A `Resistor` calls it once, from `InitializeStates`,
+   own `ProbeNoise()`, so the device decides. A `Resistor` calls it once, from `InitializeStates`,
    and never pays a `Sqrt` again — the `V` in the table, not `M`. This is the direct benefit of
    there being no gain factor to re-fuse, and it is why `Compute` stays on the device side
    rather than being driven generically by the state.
@@ -440,7 +441,7 @@ Mirroring `NoiseSource` / `NoiseThermal` / `NoiseShot`, but not `NoiseGain` — 
 
 ```
 TimeNoiseSource                  (abstract: shaping state, RNG stream, registration)
-└── TimeNoiseCurrentSource       (abstract: one-port, element set, Inject)
+└── TimeNoiseCurrentSource       (abstract: one-port, element set, InjectNoise)
     ├── TimeNoiseThermal         Compute(conductance, temperature)
     ├── TimeNoiseShot            Compute(current)
     └── TimeNoiseFlicker         ctor(…, β); Compute(coefficient, currentExponent, current)  // §5.3
@@ -466,11 +467,11 @@ protected double Amplitude { get; set; }      // σ_∞, set by Compute
 public double NoiseDensity { get; protected set; }
 public double Current { get; private set; }
 
-public virtual void Probe();    // u ← propagate(state.Point, u_prev) + L·Z; Current = Amplitude·u
-public abstract void Inject();  // how the realization reaches the circuit
+public virtual void ProbeNoise();   // u ← propagate(state.Point, u_prev) + L·Z; Current = Amplitude·u
+public abstract void InjectNoise(); // how the realization reaches the circuit
 ```
 
-**`Inject()` is abstract on `TimeNoiseSource`, and the wiring lives below it.** That class
+**`InjectNoise()` is abstract on `TimeNoiseSource`, and the wiring lives below it.** That class
 deliberately knows nothing about `OnePort<double>`, `ElementSet<double>` or
 `IBiasingSimulationState`: it holds the shaping machinery and nothing else, so a source that is not
 a current between two nodes needs no special case there. Every primitive listed above *is* one,
@@ -490,7 +491,7 @@ public abstract class TimeNoiseCurrentSource : TimeNoiseSource
         _elements = new ElementSet<double>(biasing.Solver, null, variables.GetRhsIndices(biasing.Map));
     }
 
-    public override void Inject() => _elements.Add(-Current, Current);
+    public override void InjectNoise() => _elements.Add(-Current, Current);
 }
 
 public class TimeNoiseThermal : TimeNoiseCurrentSource
@@ -511,7 +512,7 @@ as [CurrentSource.Biasing](../SpiceSharp/Components/Currentsources/ISRC/Biasing.
 A source with a shaping filter of its own overrides one protected method to build its output from
 the sections it holds — `TimeNoiseFlicker` walks `state.FlickerLadder` there instead of the single
 `state.Point`. Everything else — registration, seeding, rollback, the promotion of the initial
-draw — is shared. Phase 3 records why that method is `Shape`, not `Probe` as this section first
+draw — is shared. Phase 3 records why that method is `Shape`, not `ProbeNoise` as this section first
 proposed.
 
 Note the deliberate difference from the AC sources: these produce a **raw PSD**, with no
@@ -545,12 +546,12 @@ public partial class TimeNoise : Biasing, ITimeNoiseBehavior
     void ITimeBehavior.InitializeStates()
         => _thermal.Compute(Conductance, Parameters.Temperature);   // once, for the whole run
 
-    void ITimeNoiseBehavior.Probe() => _thermal.Probe();
+    void ITimeNoiseBehavior.ProbeNoise() => _thermal.ProbeNoise();
 
     public override void Load()          // the deterministic stamp, then the noise current
     {
         base.Load();
-        _thermal.Inject();
+        _thermal.InjectNoise();
     }
 }
 ```
@@ -585,6 +586,12 @@ with the name the source registers under. Hashing the *name* rather than a regis
 what makes the stream independent of netlist order, so adding an unrelated device does not shift
 anybody else's realization. The name is a parameter of `Register` rather than read off the source,
 because a composite state qualifies it — see Phase 4.
+
+Uniqueness of that name is therefore load-bearing, and `Register` enforces it: a name that is
+already registered throws rather than silently handing two sources the same stream and correlating
+them perfectly. That is the §7.8 failure mode, and it is not hypothetical — Phase 4 walked into it
+from the subcircuit direction. Cheap to check, and the alternative is a variance that comes out
+wrong with nothing to point at.
 
 ### 4.7 Exact discretization, order 2
 
@@ -664,7 +671,7 @@ Lifecycle, mirroring `Noise` ([Noise.cs:100](../SpiceSharp/Simulations/Implement
       base.Probe();                                   // _method.Probe(), then IAcceptBehavior.Probe()
       _state.SetCurrentPoint(Time - _method.BaseTime); // one Exp + 3 Sqrt, for everybody
       foreach (var behavior in _noiseBehaviors)
-          behavior.Probe();
+          behavior.ProbeNoise();
   }
   ```
 
@@ -679,7 +686,7 @@ noise state out of the LTE estimator. Everything else is inherited.
 
 **One trap with the shaping state.** Order-2 and flicker sources hold more than one scalar.
 Do *not* use a `StateValue<double[]>`: `IHistory<T>.Accept()` rotates the array *references*, so
-writing `Value[i]` during `Probe()` would mutate the last accepted array and destroy the
+writing `Value[i]` during `ProbeNoise()` would mutate the last accepted array and destroy the
 rollback. Either register one `StateValue<double>` per scalar component, or — preferred —
 add a small `IIntegrationState` holding two `double[]` and swapping them on `Accept()`, so an
 `N`-section flicker source costs one registration instead of `N`.
@@ -734,7 +741,7 @@ Delivered:
   orders 1 and 2, closed form from `z = 1e-2` upward and the series below it. Two additions to the
   shape sketched in §4.3: an `Order` property, because the output scaling differs per order, and a
   `Propagate` method, which is the `propagate(state.Point, u_prev)` of §4.5. Putting it on the
-  struct is what lets the Phase-0 tests exercise the same code `TimeNoiseSource.Probe` will.
+  struct is what lets the Phase-0 tests exercise the same code `TimeNoiseSource.ProbeNoise` will.
   `Stationary(order)` is the `z = ∞` point, for the stationary initialization of §5.3.
 - [Rng/](../SpiceSharp/Simulations/Implementations/NoiseTransient/Rng) — `SplitMix64`,
   `Xoshiro256StarStar` and `NoiseRandomStream` (Box-Muller, plus the seed-and-name hash of §4.6).
@@ -780,7 +787,7 @@ Delivered, in the layout of §4.9:
 Five deviations from what §4 originally sketched, all of them narrowing rather than widening:
 
 - **Stamping moved out of the base class**, per §4.5 as it now reads: `TimeNoiseSource` holds the
-  shaping state, the stream and the registration, and `Inject()` is abstract. `TimeNoiseThermal`
+  shaping state, the stream and the registration, and `InjectNoise()` is abstract. `TimeNoiseThermal`
   owns the `OnePort<double>` and the `ElementSet<double>`. The base class therefore never assumes
   that a noise source is a current between two nodes.
 - **Both orders ship now.** §4.7's propagator was already delivered in Phase 0, and
@@ -864,7 +871,7 @@ Six things worth recording:
   the point that the base class must not assume a noise source is a current between two nodes, and
   that stands — but every primitive of §4.5 *is*, so the one-port and the `ElementSet<double>`
   moved into one abstract class in between rather than being written out once per primitive.
-  `Inject()` is implemented there and the primitives are left with nothing but their density law,
+  `InjectNoise()` is implemented there and the primitives are left with nothing but their density law,
   one line each. `TimeNoiseThermal` was retrofitted onto it. The other half of the same tidy-up is
   `TimeNoiseSource.SetNoiseDensity`, which does the `Amplitude = AmplitudeScale · √S` that every
   primitive would otherwise repeat.
@@ -892,10 +899,10 @@ Six things worth recording:
 - **§4.4's `V`-versus-`M` saving is not taken for the parasitic resistors.** A diode's `rs`, a
   bipolar's `rc`/`re` and a mosfet's `rd`/`rs` are bias-independent and could be computed once, as
   the resistor's is. They are not: every one of these devices also carries a source that *is*
-  bias-dependent, so it pays a `Probe()` regardless, and the only per-run hook available —
+  bias-dependent, so it pays a `ProbeNoise()` regardless, and the only per-run hook available —
   `ITimeBehavior.InitializeStates` — is an explicit interface implementation on the base behavior
   that a derived class cannot extend without hiding it. Refreshing all of a device's densities
-  together costs one extra `Sqrt` per parasitic per timepoint and keeps the device's `Probe()`
+  together costs one extra `Sqrt` per parasitic per timepoint and keeps the device's `ProbeNoise()`
   readable. The saving is still real for a device that has *no* bias-dependent source, which is
   exactly the resistor case §4.4 describes.
 - **The diode's shot noise uses the conduction current, not `LocalCurrent`.** `Diodes.Time.Load`
@@ -1005,12 +1012,12 @@ Four more things worth recording:
 
 Two deviations from the shape §4 sketched, both of them narrowing:
 
-- **`Probe()` is not the virtual that flicker overrides.** `TimeNoiseSource` gained a protected
+- **`ProbeNoise()` is not the virtual that flicker overrides.** `TimeNoiseSource` gained a protected
   `Shape(bool initialize)` instead, which returns the unit-variance output of the source's shaping
   filter, plus a `Propagate(section, point)` that advances one section from the last accepted state.
-  `Probe()` and `Initialize()` then both reduce to `Current = Amplitude · Shape(…)` and the reseeding,
-  the rollback bookkeeping and the promotion of the drawn state stay written once. Overriding
-  `Probe()` as §4.5 proposed would have duplicated all three in `TimeNoiseFlicker`.
+  `ProbeNoise()` and `Initialize()` then both reduce to `Current = Amplitude · Shape(…)` and the
+  reseeding, the rollback bookkeeping and the promotion of the drawn state stay written once.
+  Overriding `ProbeNoise()` as §4.5 proposed would have duplicated all three in `TimeNoiseFlicker`.
 - **The ladder is not maintained until somebody reads it.** `GetFlickerWeights` allocates it, so a
   circuit of resistors does not pay one `Exp` per section per timepoint for coefficients nobody
   consumes. `FlickerRates` is populated either way, because it describes the poles rather than the
@@ -1051,9 +1058,10 @@ Delivered:
   and the registration of both in `Subcircuit.CreateBehaviors` / `Parallel.CreateBehaviors`.
 - Tests: [NoiseTransientCompositionTests.cs](../SpiceSharpTest/Simulations/NoiseTransientCompositionTests.cs).
 
-**`Inject()` is too late for a composite, so `Inject()` is gone.** This is what carried the phase, and
-it ended up rewriting §4.1 rather than working around it. The parent simulation used to call
-`Inject()` on every behavior from `AfterLoad`, by which point a subcircuit with a local solver has
+**Stamping is too late for a composite when it is a pass of its own, so that pass is gone.** This is
+what carried the phase, and it ended up rewriting §4.1 rather than working around it. The parent
+simulation used to call `Inject()` on every behavior from `AfterLoad`, by which point a subcircuit
+with a local solver has
 already run [LocalSolverState.Apply](../SpiceSharp/Components/Subcircuits/Common/LocalSolverState.cs:191)
 and a parallel component has already applied its bridge elements — a right-hand side contribution
 added after either of those is silently dropped, and re-applying to catch it would double every other
@@ -1061,8 +1069,8 @@ contribution. AC does not have this problem because its `Load` is a standalone p
 already-factored matrix (§2), so it can afford to reset the local right-hand side and
 forward-substitute on its own; a transient stamp has to land while the load is still open.
 
-The first fix was to keep `Inject()` for devices and let the two composites stamp their contents from
-inside their own load instead, leaving `ITimeNoiseBehavior.Inject()` empty in both. That works, but it
+The first fix was to keep the `Inject()` pass for devices and let the two composites stamp their
+contents from inside their own load instead, leaving `Inject()` empty in both. That works, but it
 puts two rules in the codebase where there is only one fact: *a noise current is a contribution to the
 load like any other.* The second fix, which is what shipped, is to say that once and only once —
 `ITimeNoiseBehavior` extends `IBiasingBehavior`, and every device stamps from `Load`:
@@ -1071,7 +1079,7 @@ load like any other.* The second fix, which is what shipped, is to say that once
 public override void Load()
 {
     base.Load();
-    _thermal.Inject();
+    _thermal.InjectNoise();
 }
 ```
 
@@ -1081,9 +1089,19 @@ but `Probe`, so the simulation has one job left — freeze the realization once 
 a subcircuit's noise sources are already in the `IBiasingBehavior` list its `LoadBehaviors` walks, and
 a parallel component's are already in the distributed load workload that runs in between resetting and
 applying the parallel solver. `Subcircuits.TimeNoise` and `ParallelComponents.TimeNoise` are left
-forwarding `Probe()` and aggregating the exports, and the parallel one no longer needs a second
+forwarding `ProbeNoise()` and aggregating the exports, and the parallel one no longer needs a second
 workload for stamping. The empty-`Inject()` rule that used to need explaining in both classes does not
 exist to explain.
+
+**The methods are `ProbeNoise` / `InjectNoise`, not `Probe` / `Inject`.** Once an
+`ITimeNoiseBehavior` is an `IBiasingBehavior`, a noise behavior sits on the same chain as everything
+else a device implements — and `IAcceptBehavior` already has a `Probe()` that means something else
+(§2). A device implementing both would have had to disambiguate two `Probe()`s that fire at different
+points for different reasons, which is a footgun for exactly the readers §2's table is written for.
+`Inject` is renamed alongside it, on `TimeNoiseSource` as well as on the behavior, so the pair still
+reads as a pair. `TimeNoiseSource.InjectNoise` stays — folding stamping into `Load` is a statement
+about behaviors, not about sources, and a source still has to say how its realization reaches the
+circuit (§4.5).
 
 The cost is one `virtual` per device biasing behavior, which is a seam three of the five devices
 already had: `Diodes.Biasing` and `Bipolars.Biasing` were already `protected virtual void Load()` with
@@ -1092,7 +1110,8 @@ already had: `Diodes.Biasing` and `Bipolars.Biasing` were already `protected vir
 `void IBiasingBehavior.Load() => Load();` pair the other semiconductors already use. That is the
 fourth and last modification to existing code, after the two `virtual` keywords of §2, the resource
 string of Phase 1 and the mosfet's `protected` variables of Phase 2 — and `ParallelComponents.Biasing`,
-which the first fix had opened a `LoadBehaviors` seam in, went back to how it was.
+which the first fix had opened a `LoadBehaviors` seam in, went back to how it was. The one thing this
+phase added that is not a seam is a second resource string, for the duplicate-name check of §4.6.
 
 The one thing this does constrain: a transient noise behavior is now necessarily *the* biasing
 behavior of its entity, since a container holds one `IBiasingBehavior`. Every device already worked
@@ -1109,7 +1128,8 @@ and the same realization — the §7.8 failure mode, arrived at from a direction
 reading `source.Name`, and the subcircuit installs a local state whose only job is to qualify it with
 the instance name. That composes for nesting, and it is the same thing
 [SubcircuitSolverState](../SpiceSharp/Components/Subcircuits/Common/SubcircuitSolverState.cs:63) does
-for variables.
+for variables. `Register` now also refuses a name it has already seen, so the next thing that breaks
+the uniqueness §4.6 depends on says so instead of quietly correlating two sources.
 
 **A `Parallel` deliberately does not qualify.** It renames no variables either — it is a grouping for
 execution, not a scope — so wrapping devices in one leaves every realization bit-identical to the flat
@@ -1127,7 +1147,7 @@ Two smaller things worth recording:
   component already does with `IBiasingBehavior`. That is also the only configuration in which
   concurrent right-hand side writes are safe, since the parallel solver's write-once elements only
   exist when `IBiasingBehavior` has a work distributor. A distributor on `ITimeNoiseBehavior` alone
-  still distributes `Probe()`, which touches nothing shared.
+  still distributes `ProbeNoise()`, which touches nothing shared.
 
 Validation coverage: `kT/C` through a subcircuit with and without a local solver; four instances of one
 definition, and a two-level nesting of the same, which must give the variance of a single resistor
@@ -1219,7 +1239,7 @@ per section — one `Log` and one `Exp` per source per timepoint via
 `Amplitude = AmplitudeScale·√S` (§4.5), and `AmplitudeScale = √(k_n·f_max)` is the
 equivalent-noise-bandwidth factor for a *white* source pushed through the band-limit shaper. A
 flicker source's variance is already fully determined by `A` and the weights, so applying it
-again would scale every flicker source by `√(k_n·f_max)`. The override of `Probe()` that walks
+again would scale every flicker source by `√(k_n·f_max)`. The override of `ProbeNoise()` that walks
 the ladder is also the override that sets `Amplitude` directly.
 
 #### What changes when `β ≠ 1`, and what does not
@@ -1398,7 +1418,7 @@ failure.
   a repeated real pole), but `Q(Δ)` grows and the small-`z` cancellation worsens with each order.
   Order 3 is probably the practical ceiling without a more careful reformulation. Cheap to try,
   at least: the change is contained in the `TimeNoisePoint` constructor and the loop bound in
-  `TimeNoiseSource.Probe`.
+  `TimeNoiseSource.ProbeNoise`.
 - **Where `β` comes from.** The weight law of §5.3 takes any `β ∈ (0, 2)`, but no device can
   currently supply one: there is no `ef` model parameter in the framework, so every source
   constructs with the default 1. The exponent becomes reachable either when a mosfet level with
