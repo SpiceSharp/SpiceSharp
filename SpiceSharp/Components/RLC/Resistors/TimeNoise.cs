@@ -64,8 +64,12 @@ public partial class TimeNoise : Biasing,
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Probe() => _thermal.Probe();
+    void ITimeNoiseBehavior.ProbeNoise() => _thermal.ProbeNoise();
 
-    /// <inheritdoc/>
-    void ITimeNoiseBehavior.Inject() => _thermal.Inject();
+    /// <inheritdoc />
+    public override void Load()
+    {
+        base.Load();
+        _thermal.InjectNoise();
+    }
 }

@@ -5,22 +5,8 @@ namespace SpiceSharp.Simulations;
 /// <summary>
 /// A basic implementation of a <see cref="ITimeNoiseSource"/>. It owns the shaping state and the
 /// random stream of one noise source, and leaves it to the deriving class to decide how the
-/// realization reaches the circuit.
+/// realization reaches the circuit. The state is kept at unit variance.
 /// </summary>
-/// <remarks>
-/// <para>
-/// The shaping state is kept at unit variance, and the stationary standard deviation of the source
-/// is only applied when stamping. A moving operating point then does not look like a settling
-/// artifact, and - more importantly - the coefficients of the state update contain nothing that is
-/// specific to the source, which is what allows them to be shared through
-/// <see cref="ITimeNoiseSimulationState.Point"/>.
-/// </para>
-/// <para>
-/// The source registers itself as an <see cref="IIntegrationState"/>, so a rejected timepoint rolls
-/// back for free: a probed timepoint is always propagated from the last accepted state, and only an
-/// accepted timepoint promotes it.
-/// </para>
-/// </remarks>
 /// <seealso cref="ITimeNoiseSource" />
 /// <seealso cref="IIntegrationState" />
 public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
@@ -60,10 +46,6 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// <value>
     /// The stationary standard deviation.
     /// </value>
-    /// <remarks>
-    /// Computed by the deriving class from the operating point of the device. It does not contain
-    /// the timestep: the injected power is a property of the source and of the band limit alone.
-    /// </remarks>
     protected double Amplitude { get; set; }
 
     /// <summary>
@@ -71,13 +53,6 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// deviation that follows from it.
     /// </summary>
     /// <param name="density">The one-sided power spectral density, in A^2/Hz.</param>
-    /// <remarks>
-    /// A band-limited source of density <paramref name="density"/> injects a total power of
-    /// <c>k_n * density * fmax</c>, and <see cref="ITimeNoiseSimulationState.AmplitudeScale"/> is the
-    /// square root of the part of that which does not depend on the source. It is therefore only
-    /// meaningful for a source whose density is flat before the band limit shapes it, and a source
-    /// with a density of its own sets <see cref="Amplitude"/> directly instead.
-    /// </remarks>
     protected void SetNoiseDensity(double density)
     {
         NoiseDensity = density;
@@ -116,7 +91,7 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
         _accepted = new double[sections * TimeNoisePoint.MaximumOrder];
         _probed = new double[_accepted.Length];
         _stream = new NoiseRandomStream(0ul);
-        State.Register(this);
+        State.Register(this, Name);
     }
 
     /// <summary>
@@ -124,10 +99,6 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// the stationary distribution of the shaping filter.
     /// </summary>
     /// <param name="seed">The seed of the random stream of this noise source.</param>
-    /// <remarks>
-    /// Starting from the stationary distribution rather than from zero avoids a startup transient
-    /// that would look like a settling artifact over the first time constants of the shaping filter.
-    /// </remarks>
     public virtual void Initialize(ulong seed)
     {
         _stream = new NoiseRandomStream(seed);
@@ -142,7 +113,7 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// Advances the shaping state over the probed timestep, and freezes the noise current that is
     /// stamped until the next timepoint is probed.
     /// </summary>
-    public virtual void Probe()
+    public virtual void ProbeNoise()
     {
         Current = Amplitude * Shape(false);
     }
@@ -152,9 +123,7 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// </summary>
     /// <param name="initialize">If <c>true</c>, every section is drawn from its stationary
     /// distribution instead of being propagated over the probed timestep.</param>
-    /// <returns>
-    /// The unit-variance output of the shaping filter.
-    /// </returns>
+    /// <returns>The unit-variance output of the shaping filter.</returns>
     protected virtual double Shape(bool initialize)
         => Propagate(0, initialize ? TimeNoisePoint.Stationary(State.BandLimitOrder) : State.Point);
 
@@ -164,10 +133,7 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// </summary>
     /// <param name="section">The index of the section.</param>
     /// <param name="point">The shaping coefficients of the section for the probed timestep.</param>
-    /// <returns>
-    /// The unit-variance output of the section.
-    /// </returns>
-
+    /// <returns>The unit-variance output of the section.</returns>
     protected double Propagate(int section, in TimeNoisePoint point)
     {
         int index = section * TimeNoisePoint.MaximumOrder;
@@ -180,12 +146,7 @@ public abstract class TimeNoiseSource : ITimeNoiseSource, IIntegrationState
     /// <summary>
     /// Stamps the frozen noise realization into the circuit.
     /// </summary>
-    /// <remarks>
-    /// How the source is wired into the circuit is left to the deriving class, so that the shaping
-    /// machinery here does not have to assume that every noise source is a current between two
-    /// nodes.
-    /// </remarks>
-    public abstract void Inject();
+    public abstract void InjectNoise();
 
     /// <inheritdoc/>
     void IIntegrationState.Accept()

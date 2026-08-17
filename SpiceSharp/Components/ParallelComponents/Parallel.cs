@@ -12,17 +12,6 @@ namespace SpiceSharp.Components;
 /// <summary>
 /// A component that can execute multiple behaviors created by <see cref="IEntity"/> instances in parallel.
 /// </summary>
-/// <remarks>
-/// <para>Running entity behaviors in parallel requires shared resources to be locked. Running entities
-/// in parallel are not a good idea if the entities spend a lot of time accessing these
-/// shared resources compared to the time they spend actually computing. Especially since
-/// there is also some overhead in setting up these resources and structures for executing
-/// behaviors in parallel.</para>
-/// <para>It is possible to combine entities into a <see cref="Subcircuit"/> first, and having them use
-/// a local solver. This keeps the shared resources very limited, allowing each subcircuit to do
-/// its work without interference from read-write locking. This option is very advantageous if the
-/// subcircuits are large, but have only a few voltage nodes common with the outside.</para>
-/// </remarks>
 /// <seealso cref="Entity" />
 /// <seealso cref="IComponent" />
 /// <seealso cref="IParameterized{P}"/>
@@ -86,6 +75,7 @@ public class Parallel : Entity<Parameters>,
             behaviors.Add(new EntitiesBehavior(context));
             behaviors.Build(simulation, context)
                 .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
+                .AddIfNo<ITimeNoiseBehavior>(context => new TimeNoise(context))
                 .AddIfNo<IConvergenceBehavior>(context => new Convergence(context))
                 .AddIfNo<IBiasingBehavior>(context => new Biasing(context))
                 .AddIfNo<IBiasingUpdateBehavior>(context => new BiasingUpdate(context))
@@ -96,7 +86,7 @@ public class Parallel : Entity<Parameters>,
                 .AddIfNo<IAcceptBehavior>(context => new Accept(context));
 
             // Run the simulation
-            foreach (var _ in localSim.Run(Parameters.Entities))
+            foreach (int _ in localSim.Run(Parameters.Entities))
             { }
 
             // Allow the behaviors to fetch the behaviors if they want

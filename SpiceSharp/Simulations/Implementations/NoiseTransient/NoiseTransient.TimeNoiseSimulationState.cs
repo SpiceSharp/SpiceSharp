@@ -12,7 +12,7 @@ public partial class NoiseTransient
     protected class TimeNoiseSimulationState : ITimeNoiseSimulationState
     {
         private readonly IIntegrationMethod _method;
-        private readonly List<TimeNoiseSource> _sources = [];
+        private readonly Dictionary<string, TimeNoiseSource> _sources = [];
         private readonly Dictionary<double, FlickerWeights> _weights = [];
         private readonly double[] _rates;
         private readonly double _lambda;
@@ -116,33 +116,30 @@ public partial class NoiseTransient
         }
 
         /// <inheritdoc/>
-        public void Register(TimeNoiseSource source)
+        public void Register(TimeNoiseSource source, string name)
         {
             source.ThrowIfNull(nameof(source));
-            _sources.Add(source);
+            name.ThrowIfNull(nameof(name));
+            if (_sources.ContainsKey(name))
+                throw new SpiceSharpException(Properties.Resources.Simulation_Noise_SameNoiseName.FormatString(name));
+            _sources.Add(name, source);
             _method.RegisterState(source);
         }
 
         /// <summary>
         /// Restarts every registered noise source. The seed of a source is derived from the master
-        /// seed and from the name of the source, so that adding an unrelated device to the circuit
-        /// leaves the realization of every other source untouched.
+        /// seed and from the name that the source was registered under.
         /// </summary>
         public void Initialize()
         {
             foreach (var source in _sources)
-                source.Initialize(NoiseRandomStream.CreateSeed(_parameters.Seed, source.Name));
+                source.Value.Initialize(NoiseRandomStream.CreateSeed(_parameters.Seed, source.Key));
         }
 
         /// <summary>
         /// Computes the band-limit shaping coefficients for the timestep that is being probed.
         /// </summary>
         /// <param name="delta">The probed timestep, in seconds.</param>
-        /// <remarks>
-        /// The analogue of the frequency-domain <c>SetCurrentPoint</c> of a <see cref="Noise"/>
-        /// analysis: the transcendentals that only depend on the point are evaluated once here, and
-        /// every noise source of the circuit then reads them from <see cref="Point"/> and <see cref="FlickerLadder"/>.
-        /// </remarks>
         public void SetCurrentPoint(double delta)
         {
             Point = new TimeNoisePoint(_lambda * delta, BandLimitOrder);

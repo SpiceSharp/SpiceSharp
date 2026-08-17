@@ -50,5 +50,5 @@ public abstract class TimeNoiseCurrentSource : TimeNoiseSource
     }
 
     /// <inheritdoc/>
-    public override void Inject() => _elements.Add(-Current, Current);
+    public override void InjectNoise() => _elements.Add(-Current, Current);
 }

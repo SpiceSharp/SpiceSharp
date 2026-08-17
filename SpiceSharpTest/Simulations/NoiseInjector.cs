@@ -128,8 +128,8 @@ public class NoiseInjectorBehavior : Behavior,
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Probe() => _source.Probe();
+    void ITimeNoiseBehavior.ProbeNoise() => _source.ProbeNoise();
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Inject() => _source.Inject();
+    void IBiasingBehavior.Load() => _source.InjectNoise();
 }

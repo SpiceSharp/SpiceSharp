@@ -1,9 +1,6 @@
 using SpiceSharp.Behaviors;
 using SpiceSharp.Entities;
 using SpiceSharp.ParameterSets;
-using SpiceSharp.Simulations.Time;
-using System.Collections.Generic;
-
 namespace SpiceSharp.Simulations;
 
 /// <summary>
@@ -99,21 +96,6 @@ public partial class NoiseTransient : Transient,
     }
 
     /// <inheritdoc/>
-    protected override IEnumerable<int> Execute(int mask = Exports)
-    {
-        AfterLoad += InjectNoise;
-        try
-        {
-            foreach (int exportType in base.Execute(mask))
-                yield return exportType;
-        }
-        finally
-        {
-            AfterLoad -= InjectNoise;
-        }
-    }
-
-    /// <inheritdoc/>
     protected override void InitializeStates()
     {
         // The devices compute their noise densities from the operating point first, so that the
@@ -130,17 +112,6 @@ public partial class NoiseTransient : Transient,
         // Set noise shaping coefficients, then pass this to all noise sources
         _state.SetCurrentPoint(_method.GetPreviousTimestep(0));
         foreach (var behavior in _noiseBehaviors)
-            behavior.Probe();
-    }
-
-    /// <summary>
-    /// Stamps the frozen noise realization of every device into the right-hand side vector.
-    /// </summary>
-    /// <param name="sender">The sender.</param>
-    /// <param name="e">The arguments.</param>
-    private void InjectNoise(object sender, LoadStateEventArgs e)
-    {
-        foreach (var behavior in _noiseBehaviors)
-            behavior.Inject();
+            behavior.ProbeNoise();
     }
 }

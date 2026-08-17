@@ -110,7 +110,7 @@ public partial class TimeNoise : Time,
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Probe()
+    void ITimeNoiseBehavior.ProbeNoise()
     {
         // The base resistance is modulated by the operating point, and both shot noise densities
         // are, so all six densities are refreshed at every probed timepoint.
@@ -122,22 +122,23 @@ public partial class TimeNoise : Time,
         _flicker.Compute(ModelParameters.FlickerNoiseCoefficient,
             ModelParameters.FlickerNoiseExponent, BaseCurrent);
 
-        _rc.Probe();
-        _rb.Probe();
-        _re.Probe();
-        _ic.Probe();
-        _ib.Probe();
-        _flicker.Probe();
+        _rc.ProbeNoise();
+        _rb.ProbeNoise();
+        _re.ProbeNoise();
+        _ic.ProbeNoise();
+        _ib.ProbeNoise();
+        _flicker.ProbeNoise();
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Inject()
+    protected override void Load()
     {
-        _rc.Inject();
-        _rb.Inject();
-        _re.Inject();
-        _ic.Inject();
-        _ib.Inject();
-        _flicker.Inject();
+        base.Load();
+        _rc.InjectNoise();
+        _rb.InjectNoise();
+        _re.InjectNoise();
+        _ic.InjectNoise();
+        _ib.InjectNoise();
+        _flicker.InjectNoise();
     }
 }

@@ -381,4 +381,7 @@
   <data name="Waveforms.Pwl.TimeValueLength" xml:space="preserve">
     <value>The piece-wise linear function requires the same amount of time and value points.</value>
   </data>
+  <data name="Simulation_Noise_SameNoiseName" xml:space="preserve">
+    <value>The noise source "{0}" appears multiple times.</value>
+  </data>
 </root>

@@ -53,7 +53,7 @@ public partial class Biasing : Temperature,
     }
 
     /// <inheritdoc/>
-    void IBiasingBehavior.Load()
+    public virtual void Load()
     {
         _elements.Add(Conductance, -Conductance, -Conductance, Conductance);
     }

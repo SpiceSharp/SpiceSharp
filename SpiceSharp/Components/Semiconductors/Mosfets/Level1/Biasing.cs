@@ -128,7 +128,7 @@ public partial class Biasing : Temperature,
     }
 
     /// <inheritdoc/>
-    void IBiasingBehavior.Load()
+    public virtual void Load()
     {
         var con = _contributions;
         con.Reset();

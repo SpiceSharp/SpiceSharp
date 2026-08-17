@@ -6,7 +6,7 @@ namespace SpiceSharp.Simulations;
 public interface ITimeNoiseSource
 {
     /// <summary>
-    /// Gets the name of the noise source (must be unique for unique random streams).
+    /// Gets the name of the noise source. Must be unique within the current scope.
     /// </summary>
     /// <value>
     /// The name of the noise source.

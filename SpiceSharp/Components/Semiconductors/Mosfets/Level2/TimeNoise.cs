@@ -78,7 +78,7 @@ public partial class TimeNoise : Biasing,
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Probe()
+    void ITimeNoiseBehavior.ProbeNoise()
     {
         // The two parasitic resistors do not depend on the operating point, but the channel noise
         // does, so the device pays for the refresh of all four either way.
@@ -95,18 +95,19 @@ public partial class TimeNoise : Biasing,
             _properties.OxideCapFactor * _properties.OxideCapFactor),
             ModelParameters.FlickerNoiseExponent, Id);
 
-        _rd.Probe();
-        _rs.Probe();
-        _id.Probe();
-        _flicker.Probe();
+        _rd.ProbeNoise();
+        _rs.ProbeNoise();
+        _id.ProbeNoise();
+        _flicker.ProbeNoise();
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Inject()
+    public override void Load()
     {
-        _rd.Inject();
-        _rs.Inject();
-        _id.Inject();
-        _flicker.Inject();
+        base.Load();
+        _rd.InjectNoise();
+        _rs.InjectNoise();
+        _id.InjectNoise();
+        _flicker.InjectNoise();
     }
 }

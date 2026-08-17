@@ -90,6 +90,7 @@ public partial class Subcircuit : Entity, IParameterized<Parameters>,
             behaviors.Build(simulation, context)
                 .AddIfNo<ITemperatureBehavior>(context => new Temperature(context))
                 .AddIfNo<IAcceptBehavior>(context => new Accept(context))
+                .AddIfNo<ITimeNoiseBehavior>(context => new TimeNoise(context))
                 .AddIfNo<ITimeBehavior>(context => new Time(context))
                 .AddIfNo<IBiasingBehavior>(context => new Biasing(context))
                 .AddIfNo<IFrequencyBehavior>(context => new Frequency(context))

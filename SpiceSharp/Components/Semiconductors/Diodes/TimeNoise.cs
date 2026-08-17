@@ -77,7 +77,7 @@ public partial class TimeNoise : Time,
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Probe()
+    void ITimeNoiseBehavior.ProbeNoise()
     {
         double m = Parameters.ParallelMultiplier;
         double n = Parameters.SeriesMultiplier;
@@ -97,16 +97,17 @@ public partial class TimeNoise : Time,
         _flicker.Compute(ModelParameters.FlickerNoiseCoefficient * m / n,
             ModelParameters.FlickerNoiseExponent, conduction);
 
-        _rs.Probe();
-        _id.Probe();
-        _flicker.Probe();
+        _rs.ProbeNoise();
+        _id.ProbeNoise();
+        _flicker.ProbeNoise();
     }
 
     /// <inheritdoc/>
-    void ITimeNoiseBehavior.Inject()
+    protected override void Load()
     {
-        _rs.Inject();
-        _id.Inject();
-        _flicker.Inject();
+        base.Load();
+        _rs.InjectNoise();
+        _id.InjectNoise();
+        _flicker.InjectNoise();
     }
 }

@@ -76,9 +76,10 @@ public interface ITimeNoiseSimulationState : ISimulationState
 
     /// <summary>
     /// Registers a noise source with the simulation. This allocates the shaping state of the source
-    /// with the integration method, and seeds its random stream from the master seed and the name
-    /// of the source.
+    /// with the integration method, and seeds its random stream from the master seed and
+    /// <paramref name="name"/>.
     /// </summary>
     /// <param name="source">The noise source.</param>
-    void Register(TimeNoiseSource source);
+    /// <param name="name">The name that the random stream is seeded from. Must be unique.</param>
+    void Register(TimeNoiseSource source, string name);
 }

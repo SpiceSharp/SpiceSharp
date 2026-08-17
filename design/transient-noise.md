@@ -1,6 +1,6 @@
 # Transient noise analysis — design plan
 
-Status: Phases 0-3 implemented, Phases 4-5 still a proposal.
+Status: Phases 0-4 implemented, Phase 5 still a proposal.
 
 ## 1. Goal
 
@@ -212,8 +212,8 @@ the time axis. The correspondence is one-to-one and deliberate:
 | `NoisePoint` (`Log f`, `Log 1/G²`) | `TimeNoisePoint` (propagator, Cholesky) | the point-dependent transcendentals, computed **once** |
 | `INoiseSource` / `NoiseSource` | `ITimeNoiseSource` / `TimeNoiseSource` | per-source name, density, running state |
 | `NoiseThermal(name, pos, neg)` | `TimeNoiseThermal(name, …, pos, neg)` | a source across two terminals |
-| `INoiseBehavior : INoiseSource` | `ITimeNoiseBehavior : ITimeNoiseSource` | device aggregate, exports its sources by `[ParameterName]` |
-| `Load()` / `Compute()` | `Inject()` / `Probe()` | stamp, then evaluate |
+| `INoiseBehavior : INoiseSource` | `ITimeNoiseBehavior : ITimeNoiseSource, IBiasingBehavior` | device aggregate, exports its sources by `[ParameterName]` |
+| `Load()` / `Compute()` | `Load()` / `Probe()` | stamp, then evaluate |
 
 Three things do *not* transpose, and all three are simplifications:
 
@@ -236,16 +236,16 @@ Three things do *not* transpose, and all three are simplifications:
 
 ```csharp
 [SimulationBehavior]
-public interface ITimeNoiseBehavior : ITimeNoiseSource, IBehavior
+public interface ITimeNoiseBehavior : ITimeNoiseSource, IBiasingBehavior
 {
     /// Refresh noise densities from the last accepted operating point and advance
     /// the shaping state by the probed step. Called once per probed timepoint,
     /// never inside the Newton loop.
     void Probe();
 
-    /// Stamp the frozen realization into the right-hand side.
-    /// Called on every Load().
-    void Inject();
+    // Stamping is not a method of its own: the frozen realization goes into the
+    // right-hand side from IBiasingBehavior.Load, along with everything else the
+    // device contributes. See Phase 4.
 }
 ```
 
@@ -333,8 +333,8 @@ public interface ITimeNoiseSimulationState : ISimulationState
     double AmplitudeScale { get; }
 
     /// Registers a source: allocates its shaping state with the integration method and
-    /// seeds its RNG stream from hash(Seed, source.Name). See §4.6.
-    void Register(TimeNoiseSource source);
+    /// seeds its RNG stream from hash(Seed, name). See §4.6.
+    void Register(TimeNoiseSource source, string name);
 }
 ```
 
@@ -546,7 +546,12 @@ public partial class TimeNoise : Biasing, ITimeNoiseBehavior
         => _thermal.Compute(Conductance, Parameters.Temperature);   // once, for the whole run
 
     void ITimeNoiseBehavior.Probe() => _thermal.Probe();
-    void ITimeNoiseBehavior.Inject() => _thermal.Inject();
+
+    public override void Load()          // the deterministic stamp, then the noise current
+    {
+        base.Load();
+        _thermal.Inject();
+    }
 }
 ```
 
@@ -576,9 +581,10 @@ Per-run seed for the Monte-Carlo driver: derive from `CurrentRun`, which `Simula
 exposes.
 
 Seeding is centralized in `ITimeNoiseSimulationState.Register`, which hashes the master seed
-with `source.Name`. Hashing the *name* rather than a registration index is what makes the
-stream independent of netlist order, so adding an unrelated device does not shift anybody
-else's realization.
+with the name the source registers under. Hashing the *name* rather than a registration index is
+what makes the stream independent of netlist order, so adding an unrelated device does not shift
+anybody else's realization. The name is a parameter of `Register` rather than read off the source,
+because a composite state qualifies it — see Phase 4.
 
 ### 4.7 Exact discretization, order 2
 
@@ -648,7 +654,8 @@ Lifecycle, mirroring `Noise` ([Noise.cs:100](../SpiceSharp/Simulations/Implement
 - **`CreateBehaviors`** — after `base.CreateBehaviors()`, grab
   `EntityBehaviors.GetBehaviorList<ITimeNoiseBehavior>()`. Source constructors have by now
   called `Register`, so every stream is seeded and every shaping state is registered.
-- **`Execute`** — hook `AfterLoad` to call `Inject()` on every behavior.
+- **Loading** — nothing. Stamping is not a pass of the simulation: a device puts its noise current
+  into the right-hand side from its own `Load`, see §4.1 and Phase 4.
 - **`Probe`** — override (see §2; requires making the base method `virtual`):
 
   ```csharp
@@ -701,6 +708,12 @@ SpiceSharp/Components/Noise/
   (namespace SpiceSharp.Components.NoiseSources, next to NoiseThermal.cs etc.)
 
 SpiceSharp/Components/**/TimeNoise.cs       ← **/Noise.cs, one per device
+
+SpiceSharp/Components/Subcircuits/Behaviors/
+  TimeNoise.cs                              ← Subcircuits/Behaviors/Noise.cs
+  TimeNoise.TimeNoiseSimulationState.cs     (the name-qualifying state of Phase 4)
+SpiceSharp/Components/ParallelComponents/Behaviors/
+  TimeNoise.cs                              ← ParallelComponents/Behaviors/Noise.cs
 ```
 
 ## 5. Implementation phases
@@ -1014,17 +1027,114 @@ reversal is a genuine no-op. Plus the ladder geometry on the state, the exponent
 silent zero-coefficient source, reproducibility across `Rerun` for a multi-section source, and the
 flicker coefficient of each of the five devices against the closed form at its own operating point.
 
-### Phase 4 — Composition
+### Phase 4 — Composition — **done**
 
 Time-domain counterparts of
 [Subcircuits/Behaviors/Noise.cs](../SpiceSharp/Components/Subcircuits/Behaviors/Noise.cs) and
-`ParallelComponents/Behaviors/Noise.cs`. Simpler than the AC versions, since there is no
-adjoint solve to mirror through a local solver — sources just stamp into the parent RHS. The
-per-source RNG streams of §4.6 are what make the parallel case safe.
+[ParallelComponents/Behaviors/Noise.cs](../SpiceSharp/Components/ParallelComponents/Behaviors/Noise.cs).
+Simpler than the AC versions in the way this section expected — there is no adjoint solve to mirror
+through a local solver, so a source just stamps a current — but two things it did not expect turned
+out to carry the phase, and both are below.
 
-The shared state needs one thought here: `TimeNoisePoint` is a readonly struct published once
-per timepoint before any behavior runs, so concurrent readers are safe by construction. The
-mutable per-source shaping state is not shared, so it is safe too. Nothing in §4.3 needs a lock.
+The shared state needs one thought here, and it came out the way this section predicted:
+`TimeNoisePoint` is a readonly struct published once per timepoint before any behavior runs, so
+concurrent readers are safe by construction. The mutable per-source shaping state is not shared, so
+it is safe too. Nothing in §4.3 needs a lock, and unlike
+[Noise.NoiseSimulationState](../SpiceSharp/Components/ParallelComponents/Behaviors/Noise.NoiseSimulationState.cs)
+the parallel behavior wraps no state for the sake of one.
+
+Delivered:
+
+- [Subcircuits/TimeNoise.cs](../SpiceSharp/Components/Subcircuits/Behaviors/TimeNoise.cs) and
+  [its state](../SpiceSharp/Components/Subcircuits/Behaviors/TimeNoise.TimeNoiseSimulationState.cs),
+  [ParallelComponents/TimeNoise.cs](../SpiceSharp/Components/ParallelComponents/Behaviors/TimeNoise.cs),
+  and the registration of both in `Subcircuit.CreateBehaviors` / `Parallel.CreateBehaviors`.
+- Tests: [NoiseTransientCompositionTests.cs](../SpiceSharpTest/Simulations/NoiseTransientCompositionTests.cs).
+
+**`Inject()` is too late for a composite, so `Inject()` is gone.** This is what carried the phase, and
+it ended up rewriting §4.1 rather than working around it. The parent simulation used to call
+`Inject()` on every behavior from `AfterLoad`, by which point a subcircuit with a local solver has
+already run [LocalSolverState.Apply](../SpiceSharp/Components/Subcircuits/Common/LocalSolverState.cs:191)
+and a parallel component has already applied its bridge elements — a right-hand side contribution
+added after either of those is silently dropped, and re-applying to catch it would double every other
+contribution. AC does not have this problem because its `Load` is a standalone pass over an
+already-factored matrix (§2), so it can afford to reset the local right-hand side and
+forward-substitute on its own; a transient stamp has to land while the load is still open.
+
+The first fix was to keep `Inject()` for devices and let the two composites stamp their contents from
+inside their own load instead, leaving `ITimeNoiseBehavior.Inject()` empty in both. That works, but it
+puts two rules in the codebase where there is only one fact: *a noise current is a contribution to the
+load like any other.* The second fix, which is what shipped, is to say that once and only once —
+`ITimeNoiseBehavior` extends `IBiasingBehavior`, and every device stamps from `Load`:
+
+```csharp
+public override void Load()
+{
+    base.Load();
+    _thermal.Inject();
+}
+```
+
+Everything else follows from it. `NoiseTransient` no longer touches `AfterLoad` and overrides nothing
+but `Probe`, so the simulation has one job left — freeze the realization once per timepoint — and the
+`Execute` override that scoped the event handler is gone with it. Neither composite needs a load hook:
+a subcircuit's noise sources are already in the `IBiasingBehavior` list its `LoadBehaviors` walks, and
+a parallel component's are already in the distributed load workload that runs in between resetting and
+applying the parallel solver. `Subcircuits.TimeNoise` and `ParallelComponents.TimeNoise` are left
+forwarding `Probe()` and aggregating the exports, and the parallel one no longer needs a second
+workload for stamping. The empty-`Inject()` rule that used to need explaining in both classes does not
+exist to explain.
+
+The cost is one `virtual` per device biasing behavior, which is a seam three of the five devices
+already had: `Diodes.Biasing` and `Bipolars.Biasing` were already `protected virtual void Load()` with
+`Time` overriding them, so the diode and the bipolar cost nothing. `Resistors.Biasing` became
+`public virtual void Load()`, and the three mosfet levels got the `protected virtual void Load()` +
+`void IBiasingBehavior.Load() => Load();` pair the other semiconductors already use. That is the
+fourth and last modification to existing code, after the two `virtual` keywords of §2, the resource
+string of Phase 1 and the mosfet's `protected` variables of Phase 2 — and `ParallelComponents.Biasing`,
+which the first fix had opened a `LoadBehaviors` seam in, went back to how it was.
+
+The one thing this does constrain: a transient noise behavior is now necessarily *the* biasing
+behavior of its entity, since a container holds one `IBiasingBehavior`. Every device already worked
+that way — Phase 2's rule that a `TimeNoise` derives from the deepest behavior of its own biasing
+chain says exactly this — so the constraint is the rule made checkable by the compiler rather than a
+new restriction. A device outside the framework sees it as one extra `Load()` to write, which
+[NoiseInjector.cs](../SpiceSharpTest/Simulations/NoiseInjector.cs) covers.
+
+**Behavior names are not unique across subcircuit instances, and §4.6 seeds from them.** Two instances
+of the same `SubcircuitDefinition` hold behaviors of the same name in two separate containers, so
+every source in both would have hashed to the same seed and the two instances would have carried one
+and the same realization — the §7.8 failure mode, arrived at from a direction §7.8 does not cover.
+`ITimeNoiseSimulationState.Register` therefore takes the name to seed from as a parameter instead of
+reading `source.Name`, and the subcircuit installs a local state whose only job is to qualify it with
+the instance name. That composes for nesting, and it is the same thing
+[SubcircuitSolverState](../SpiceSharp/Components/Subcircuits/Common/SubcircuitSolverState.cs:63) does
+for variables.
+
+**A `Parallel` deliberately does not qualify.** It renames no variables either — it is a grouping for
+execution, not a scope — so wrapping devices in one leaves every realization bit-identical to the flat
+netlist, which is asserted rather than assumed.
+
+Two smaller things worth recording:
+
+- **Each composite derives from the deepest behavior of its own biasing chain**, the rule Phase 2 states
+  for devices. For a subcircuit that is `Time`; for a parallel component it is `Convergence`, not
+  `Biasing`, because `Convergence` derives from `Biasing` there. Getting that wrong does not fail at the
+  seam — it produces a second `IBiasingBehavior` in the container and fails much later, on an
+  `AmbiguousTypeException` from the behavior list.
+- **Stamping is distributed exactly when the biasing behaviors are**, and that falls out rather than
+  being arranged: a source stamps from the load of its device, so it rides whatever the parallel
+  component already does with `IBiasingBehavior`. That is also the only configuration in which
+  concurrent right-hand side writes are safe, since the parallel solver's write-once elements only
+  exist when `IBiasingBehavior` has a work distributor. A distributor on `ITimeNoiseBehavior` alone
+  still distributes `Probe()`, which touches nothing shared.
+
+Validation coverage: `kT/C` through a subcircuit with and without a local solver; four instances of one
+definition, and a two-level nesting of the same, which must give the variance of a single resistor
+rather than four times it; a parallel component whose realization is bit-identical to the flat netlist,
+with and without work distributors; `kT/C` through a parallel component under all three distributor
+configurations; a parallel component inside a local-solver subcircuit; and the aggregate `NoiseDensity`
+and `Current` exports of a subcircuit against the source inside it.
 
 ### Phase 5 — Monte-Carlo driver and statistics
 
